@@ -40,7 +40,6 @@ namespace AntPlusDeviceProfiles
         }
 
         private byte lastBeatCount;
-        private int previousAccumulatedBeatCount;
         private ushort lastBeatEventTime;
         private ushort lastPreviousBeatEventTime;
 
@@ -96,7 +95,6 @@ namespace AntPlusDeviceProfiles
             AccumulatedHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(payload, 4), ref lastBeatEventTime, AccumulatedHeartBeatEventTime);
             AccumulatedHeartBeatCount = UpdateAccumulatedValue(payload[6], ref lastBeatCount, AccumulatedHeartBeatCount);
             ComputedHeartRate = payload[7];
-            previousAccumulatedBeatCount = AccumulatedHeartBeatCount;
 
             switch ((DataPage)(payload[0] & 0x7F))
             {

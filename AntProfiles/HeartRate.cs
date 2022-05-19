@@ -39,9 +39,14 @@ namespace AntPlusDeviceProfiles
             Swimming = 5,
         }
 
+        private byte lastBeatCount;
+        private int previousAccumulatedBeatCount;
+        private ushort lastBeatEventTime;
+        private ushort lastPreviousBeatEventTime;
+
         // common to all heart rate messages
-        public ushort HeartBeatEventTime { get; private set; }
-        public byte HeartBeatCount { get; private set; }
+        public int AccumulatedHeartBeatEventTime { get; private set; }
+        public int AccumulatedHeartBeatCount { get; private set; }
         public byte ComputedHeartRate { get; private set; }
 
         public TimeSpan CumulativeOperatingTime { get; private set; }
@@ -57,7 +62,8 @@ namespace AntPlusDeviceProfiles
 
         // previous heart beat
         public byte ManufacturerSpecific { get; private set; }
-        public ushort PreviousHeartBeatEventTime { get; private set; }
+        public int AccumulatedPreviousHeartBeatEventTime { get; private set; }
+        public int RRInterval { get; private set; }
 
         // swim interval
         public byte IntervalAverageHeartRate { get; private set; }
@@ -87,9 +93,10 @@ namespace AntPlusDeviceProfiles
             }
 
             // this data is present in all pages
-            HeartBeatEventTime = BitConverter.ToUInt16(payload, 4);
-            HeartBeatCount = payload[6];
+            AccumulatedHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(payload, 4), ref lastBeatEventTime, AccumulatedHeartBeatEventTime);
+            AccumulatedHeartBeatCount = UpdateAccumulatedValue(payload[6], ref lastBeatCount, AccumulatedHeartBeatCount);
             ComputedHeartRate = payload[7];
+            previousAccumulatedBeatCount = AccumulatedHeartBeatCount;
 
             switch ((DataPage)(payload[0] & 0x7F))
             {
@@ -107,7 +114,8 @@ namespace AntPlusDeviceProfiles
                     break;
                 case DataPage.PreviousHeartBeat:
                     ManufacturerSpecific = payload[1];
-                    PreviousHeartBeatEventTime = BitConverter.ToUInt16(payload, 2);
+                    AccumulatedPreviousHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(payload, 2), ref lastPreviousBeatEventTime, AccumulatedPreviousHeartBeatEventTime);
+                    RRInterval = CalculateRRInverval(AccumulatedPreviousHeartBeatEventTime, AccumulatedHeartBeatEventTime);
                     break;
                 case DataPage.SwimInterval:
                     IntervalAverageHeartRate = payload[1];
@@ -132,6 +140,12 @@ namespace AntPlusDeviceProfiles
                     }
                     break;
             }
+            isFirstDataMessage = false;
+        }
+
+        private int CalculateRRInverval(int previousHeartBeatEventTime, int heartBeatEventTime)
+        {
+            return (heartBeatEventTime - previousHeartBeatEventTime) * 1000 / 1024;
         }
     }
 }

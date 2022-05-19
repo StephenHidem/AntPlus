@@ -26,7 +26,7 @@
     /// </summary>
     public class AntDevice
     {
-        private bool isFirstDataMessage = true;     // used for accumulated values
+        protected bool isFirstDataMessage = true;     // used for accumulated values
 
 
         /// <summary>
@@ -51,9 +51,8 @@
         {
             if (isFirstDataMessage)
             {
-                isFirstDataMessage = false;
                 lastValue = value;
-                return accumulatedValue;
+                return 0;
             }
 
             accumulatedValue += value - lastValue;
@@ -71,9 +70,8 @@
         {
             if (isFirstDataMessage)
             {
-                isFirstDataMessage = false;
                 lastValue = value;
-                return accumulatedValue;
+                return 0;
             }
 
             accumulatedValue += value - lastValue;
@@ -86,6 +84,5 @@
             lastValue = value;
             return accumulatedValue;
         }
-
     }
 }

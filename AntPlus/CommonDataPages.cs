@@ -92,6 +92,15 @@ namespace AntPlus
         MaximumOperatingTemperature
     }
 
+    public enum CommandType
+    {
+        Unknown,
+        DataPage,
+        AntFSSesion,
+        DataPageFromSlave,
+        DataPageSet
+    }
+
     public class CommonDataPages
     {
         // ANT-FS Client Beacon
@@ -162,8 +171,6 @@ namespace AntPlus
                 case CommonDataPageType.AntFSClientBeacon:
                     break;
                 case CommonDataPageType.AntFSCommandResponse:
-                    break;
-                case CommonDataPageType.RequestDataPage:
                     break;
                 case CommonDataPageType.CommandStatus:
                     LastCommandReceived = payload[1];

@@ -141,6 +141,22 @@ namespace AntPlusDeviceProfiles
             isFirstDataMessage = false;
         }
 
+        /// <summary>
+        /// Requests the capabilities.
+        /// </summary>
+        /// <param name="numberOfTimesToTransmit">The number of times to transmit.</param>
+        public void RequestCapabilities(byte numberOfTimesToTransmit = 4)
+        {
+            RequestDataPage((byte)DataPage.Capabilities, numberOfTimesToTransmit);
+        }
+
+        // TODO: IMPLEMENT SET SPORT MODE
+        public void SetSportMode(SportMode sportMode)
+        {
+            byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)sportMode };
+            SendAcknowledgedMessage(msg);
+        }
+
         private int CalculateRRInverval(int previousHeartBeatEventTime, int heartBeatEventTime)
         {
             return (heartBeatEventTime - previousHeartBeatEventTime) * 1000 / 1024;

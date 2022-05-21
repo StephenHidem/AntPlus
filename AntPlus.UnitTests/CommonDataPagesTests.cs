@@ -46,7 +46,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_ManufacturerInfo_ExpectedBehavior(byte[] payload, byte hwRev, ushort manId, ushort modelNumber)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -63,7 +63,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_MultiComponentProductInfo_ExpectedBehavior(byte[] payload, int numberOfComponents, int componentId)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -83,7 +83,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_ProductInfo_ExpectedBehavior(byte[] payload, string swVersion, uint serialNumber)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -106,7 +106,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_BatteryStatus_ExpectedBehavior(byte[] payload, int numberOfBatt, int battId, int seconds, double voltage, BatteryStatus batteryStatus)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -126,7 +126,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_TimeAndDate_ExpectedBehavior(byte[] payload, string dateTime)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -144,7 +144,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_SubfieldData_ExpectedBehavior(byte[] payload, double temperature, double pressure, double humidity, double windSpeed, double windDirection, int chargingCycles, double minTemp, double maxTem)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -167,7 +167,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_MemoryLevel_ExpectedBehavior(byte[] payload, double used, double total, MemorySizeUnit memorySizeUnit)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -188,7 +188,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_PairedDevices_ExpectedBehavior(byte[] payload, int index, int total, bool paired, ConnectionState connectionState, NetworkKey networkKey, uint deviceId)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(
@@ -210,7 +210,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_ErrorDescription_ExpectedBehavior(byte[] payload, int componentIndex, ErrorLevel errorLevel, int profileErrorCode, uint manufacturerErrorCode)
         {
             // Arrange
-            var commonDataPages = new CommonDataPages();
+            CommonDataPages commonDataPages = new();
 
             // Act
             commonDataPages.ParseCommonDataPage(

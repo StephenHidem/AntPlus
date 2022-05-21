@@ -1,4 +1,6 @@
-﻿namespace AntPlus
+﻿using System;
+
+namespace AntPlus
 {
     /// <summary>
     /// ANT channel sharing enumeration. This is obtained from the transmission type in the channel ID.
@@ -83,6 +85,17 @@
 
             lastValue = value;
             return accumulatedValue;
+        }
+
+        public void RequestDataPage(byte pageNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
+        {
+            byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, pageNumber, (byte)commandType };
+            BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
+        }
+
+        public void SendAcknowledgedMessage(byte[] message)
+        {
+
         }
     }
 }

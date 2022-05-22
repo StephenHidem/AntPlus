@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AntPlus
 {
@@ -21,6 +22,14 @@ namespace AntPlus
         /// The shared channel two byte address
         /// </summary>
         SharedChannelTwoByteAddress = 3,
+    }
+
+    public enum MessageId
+
+    {
+        ExtBroadcastData = 0x5D,
+        ExtAcknowledgedData = 0x5E,
+        ExtBurstData = 0x5F
     }
 
     /// <summary>
@@ -87,15 +96,25 @@ namespace AntPlus
             return accumulatedValue;
         }
 
+        // TODO: FIX CHANNEL NUMBER
         public void RequestDataPage(byte pageNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
         {
             byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, pageNumber, (byte)commandType };
             BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
+            SendExtendedAcknowledgedMessage(0, msg);
         }
 
-        public void SendAcknowledgedMessage(byte[] message)
+        public void SendExtendedAcknowledgedMessage(byte channelNumber, byte[] message)
         {
+            byte[] msg = new byte[] { 13, (byte)MessageId.ExtAcknowledgedData, channelNumber };
+            msg = msg.Concat(BitConverter.GetBytes(ChannelId)).Concat(message).ToArray();
+            SendMessage(msg);
+        }
 
+        public byte[] Message { get; set; }
+        private void SendMessage(byte[] msg)
+        {
+            Message = msg;
         }
     }
 }

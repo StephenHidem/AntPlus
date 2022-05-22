@@ -154,7 +154,7 @@ namespace AntPlusDeviceProfiles
         public void SetSportMode(SportMode sportMode)
         {
             byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)sportMode };
-            SendAcknowledgedMessage(msg);
+            SendExtendedAcknowledgedMessage(0, msg);
         }
 
         private int CalculateRRInverval(int previousHeartBeatEventTime, int heartBeatEventTime)

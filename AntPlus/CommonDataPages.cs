@@ -182,8 +182,6 @@ namespace AntPlus
                     break;
                 case CommonDataPageType.OpenChannelCommand:
                     break;
-                case CommonDataPageType.ModeSettingsPage:
-                    break;
                 case CommonDataPageType.MultiComponentManufacturerInfo:
                     // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
                     NumberOfComponents = payload[2] & 0x0F;

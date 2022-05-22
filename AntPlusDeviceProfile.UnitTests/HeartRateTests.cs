@@ -163,5 +163,33 @@ namespace AntPlusDeviceProfile.UnitTests
             Assert.AreEqual(voltage, heartRate.BatteryVoltage, "Battery voltage");
             Assert.AreEqual(batteryStatus, heartRate.BatteryStatus, "Battery status");
         }
+
+        [TestMethod]
+        public void Parse_RequestCapabilies_ExpectedBehavior()
+        {
+            // Arrange
+            var heartRate = new HeartRate(new byte[8], 0x33221100);
+
+            // Act
+            heartRate.RequestCapabilities();
+
+            // Assert
+            byte[] expected = new byte[] { 0x0D, 0x5E, 0, 0x00, 0x11, 0x22, 0x33, (byte)CommonDataPageType.RequestDataPage, 0xFF, 0xFF, 0xFF, 0xFF, 4, (byte)HeartRate.DataPage.Capabilities, (byte)CommandType.DataPage };
+            Assert.IsTrue(expected.SequenceEqual(heartRate.Message), "RequestCapabilities expected = {0}, actual = {1}", BitConverter.ToString(expected), BitConverter.ToString(heartRate.Message));
+        }
+
+        [TestMethod]
+        public void Parse_SetSportMode_ExpectedBehavior()
+        {
+            // Arrange
+            var heartRate = new HeartRate(new byte[8], 0x33221100);
+
+            // Act
+            heartRate.SetSportMode(HeartRate.SportMode.Swimming);
+
+            // Assert
+            byte[] expected = new byte[] { 0x0D, 0x5E, 0, 0x00, 0x11, 0x22, 0x33, (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)HeartRate.SportMode.Swimming };
+            Assert.IsTrue(expected.SequenceEqual(heartRate.Message), "SetSportMode expected = {0}, actual = {1}", BitConverter.ToString(expected), BitConverter.ToString(heartRate.Message));
+        }
     }
 }

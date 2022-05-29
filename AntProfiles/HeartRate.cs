@@ -1,5 +1,6 @@
 ﻿using AntPlus;
 using System;
+using System.Linq;
 
 // TODO: PAGE DATA TOGGLE
 // TODO: MANUFACTURING SPECIFIC PAGES
@@ -39,9 +40,9 @@ namespace AntPlusDeviceProfiles
             Swimming = 5,
         }
 
+        private byte[] lastDataPage = new byte[8];
         private byte lastBeatCount;
         private ushort lastBeatEventTime;
-        private ushort lastPreviousBeatEventTime;
 
         // common to all heart rate messages
         public int AccumulatedHeartBeatEventTime { get; private set; }
@@ -61,7 +62,6 @@ namespace AntPlusDeviceProfiles
 
         // previous heart beat
         public byte ManufacturerSpecific { get; private set; }
-        public int AccumulatedPreviousHeartBeatEventTime { get; private set; }
         public int RRInterval { get; private set; }
 
         // swim interval
@@ -83,56 +83,63 @@ namespace AntPlusDeviceProfiles
         {
         }
 
-        public void Parse(byte[] payload)
+        public void Parse(byte[] dataPage)
         {
-            // check for valid payload
-            if (payload == null || payload.Length != 8)
+            // ignore invalid data pages
+            if (dataPage == null || dataPage.Length != 8)
             {
                 return;
             }
 
-            // this data is present in all pages
-            AccumulatedHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(payload, 4), ref lastBeatEventTime, AccumulatedHeartBeatEventTime);
-            AccumulatedHeartBeatCount = UpdateAccumulatedValue(payload[6], ref lastBeatCount, AccumulatedHeartBeatCount);
-            ComputedHeartRate = payload[7];
+            // ignore duplicate/unchanged data pages
+            if (lastDataPage.SequenceEqual(dataPage))
+            {
+                return;
+            }
+            lastDataPage = dataPage;
 
-            switch ((DataPage)(payload[0] & 0x7F))
+            // this data is present in all data pages
+            AccumulatedHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime, AccumulatedHeartBeatEventTime);
+            AccumulatedHeartBeatCount = UpdateAccumulatedValue(dataPage[6], ref lastBeatCount, AccumulatedHeartBeatCount);
+            ComputedHeartRate = dataPage[7];
+
+            // TODO: CONTINUE IF DATA PAGE TOGGLE HAS BEEN OBSERVED
+            switch ((DataPage)(dataPage[0] & 0x7F))
             {
                 case DataPage.CumulativeOperatingTime:
-                    CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(payload, 1) & 0x00FFFFFF) * 2.0);
+                    CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
                     break;
                 case DataPage.ManufacturerInfo:
-                    ManufacturingIdLsb = payload[1];
-                    SerialNumber = (uint)((BitConverter.ToUInt16(payload, 2) << 16) + (DeviceNumber & 0x0000FFFF));
+                    ManufacturingIdLsb = dataPage[1];
+                    SerialNumber = (uint)((BitConverter.ToUInt16(dataPage, 2) << 16) + (DeviceNumber & 0x0000FFFF));
                     break;
                 case DataPage.ProductInfo:
-                    HardwareVersion = payload[1];
-                    SoftwareVersion = payload[2];
-                    ModelNumber = payload[3];
+                    HardwareVersion = dataPage[1];
+                    SoftwareVersion = dataPage[2];
+                    ModelNumber = dataPage[3];
                     break;
                 case DataPage.PreviousHeartBeat:
-                    ManufacturerSpecific = payload[1];
-                    AccumulatedPreviousHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(payload, 2), ref lastPreviousBeatEventTime, AccumulatedPreviousHeartBeatEventTime);
-                    RRInterval = CalculateRRInverval(AccumulatedPreviousHeartBeatEventTime, AccumulatedHeartBeatEventTime);
+                    ManufacturerSpecific = dataPage[1];
+                    RRInterval = CalculateRRInverval(BitConverter.ToUInt16(dataPage, 2), BitConverter.ToUInt16(dataPage, 4));
                     break;
                 case DataPage.SwimInterval:
-                    IntervalAverageHeartRate = payload[1];
-                    IntervalMaximumHeartRate = payload[2];
-                    SessionAverageHeartRate = payload[3];
+                    IntervalAverageHeartRate = dataPage[1];
+                    IntervalMaximumHeartRate = dataPage[2];
+                    SessionAverageHeartRate = dataPage[3];
                     break;
                 case DataPage.Capabilities:
-                    Enabled = (Features)(payload[2] & 0x07);
-                    Supported = (Features)(payload[3] & 0x07);
-                    ManufacturerSpecificFeatures = payload[3] >> 6;
+                    Enabled = (Features)(dataPage[2] & 0x07);
+                    Supported = (Features)(dataPage[3] & 0x07);
+                    ManufacturerSpecificFeatures = dataPage[3] >> 6;
                     break;
                 case DataPage.BatteryStatus:
-                    BatteryLevel = payload[1];
-                    BatteryVoltage = (payload[3] & 0x0F) + (payload[2] / 256.0);
-                    BatteryStatus = (BatteryStatus)((payload[3] & 0x70) >> 4);
+                    BatteryLevel = dataPage[1];
+                    BatteryVoltage = (dataPage[3] & 0x0F) + (dataPage[2] / 256.0);
+                    BatteryStatus = (BatteryStatus)((dataPage[3] & 0x70) >> 4);
                     break;
                 default:
                     // range check manufacturer specific pages
-                    if (payload[0] >= 112 && payload[0] < 128)
+                    if (dataPage[0] >= 112 && dataPage[0] < 128)
                     {
                         // TODO: let manufacturer parse
                     }
@@ -157,9 +164,17 @@ namespace AntPlusDeviceProfiles
             SendExtendedAcknowledgedMessage(0, msg);
         }
 
-        private int CalculateRRInverval(int previousHeartBeatEventTime, int heartBeatEventTime)
+        private int CalculateRRInverval(ushort previousHeartBeatEventTime, ushort heartBeatEventTime)
         {
-            return (heartBeatEventTime - previousHeartBeatEventTime) * 1000 / 1024;
+            // calculate delta event time
+            var deltaEventTime = heartBeatEventTime - previousHeartBeatEventTime;
+
+            // handle rollover
+            if (deltaEventTime < 0)
+                deltaEventTime += 0x10000;
+
+            // convert to milliseconds
+            return deltaEventTime * 1000 / 1024;
         }
     }
 }

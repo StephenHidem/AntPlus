@@ -39,7 +39,6 @@ namespace AntPlusDeviceProfile.UnitTests
             // Assert
             Assert.AreEqual(2, heartRate.AccumulatedHeartBeatEventTime, "AccumulatedHeartBeatEventTime");
             Assert.AreEqual(1, heartRate.AccumulatedHeartBeatCount, "AccumulatedHeartBeatCount");
-            Assert.AreEqual(3, heartRate.AccumulatedPreviousHeartBeatEventTime, "AccumulatedPreviousHeartBeatEventTime");
         }
 
         [TestMethod]
@@ -93,21 +92,19 @@ namespace AntPlusDeviceProfile.UnitTests
         }
 
         [TestMethod]
-        public void Parse_PreviousHeartBeat_ExpectedBehavior()
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x88, 0x06, 0xDD, 0x07, 0x83, 0xB4 }, 333)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x88, 0xFE, 0x15, 0x00, 0x83, 0xB4 }, 387)]
+        public void Parse_PreviousHeartBeat_ExpectedBehavior(byte[] payload, int rrInterval)
         {
             // Arrange
             var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0);
 
             // Act
             heartRate.Parse(
-                new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
-            heartRate.Parse(
-                new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x88, 0x06, 0xDD, 0x07, 0x00, 0x00 });
+                payload);
 
             // Assert
-            Assert.AreEqual(2013, heartRate.AccumulatedHeartBeatEventTime, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(1672, heartRate.AccumulatedPreviousHeartBeatEventTime, "AccumulatedPreviousHeartBeatEventTime");
-            Assert.AreEqual(333, heartRate.RRInterval, "RRInterval");
+            Assert.AreEqual(rrInterval, heartRate.RRInterval, "RRInterval");
         }
 
         [TestMethod]

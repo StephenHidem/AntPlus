@@ -27,6 +27,9 @@ namespace AntPlus
     public enum MessageId
 
     {
+        BroadcastData = 0x4E,
+        AcknowledgedData = 0x4F,
+        BurstData = 0x50,
         ExtBroadcastData = 0x5D,
         ExtAcknowledgedData = 0x5E,
         ExtBurstData = 0x5F

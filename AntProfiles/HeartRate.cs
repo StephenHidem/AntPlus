@@ -43,6 +43,7 @@ namespace AntPlusDeviceProfiles
         private byte[] lastDataPage = new byte[8];
         private byte lastBeatCount;
         private ushort lastBeatEventTime;
+        private bool pageToggle;
 
         // common to all heart rate messages
         public int AccumulatedHeartBeatEventTime { get; private set; }
@@ -99,8 +100,8 @@ namespace AntPlusDeviceProfiles
             lastDataPage = dataPage;
 
             // this data is present in all data pages
-            AccumulatedHeartBeatEventTime = UpdateAccumulatedValue(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime, AccumulatedHeartBeatEventTime);
-            AccumulatedHeartBeatCount = UpdateAccumulatedValue(dataPage[6], ref lastBeatCount, AccumulatedHeartBeatCount);
+            AccumulatedHeartBeatEventTime += UpdateAccumulatedValue(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
+            AccumulatedHeartBeatCount += UpdateAccumulatedValue(dataPage[6], ref lastBeatCount);
             ComputedHeartRate = dataPage[7];
 
             // TODO: CONTINUE IF DATA PAGE TOGGLE HAS BEEN OBSERVED

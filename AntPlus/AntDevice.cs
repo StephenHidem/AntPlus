@@ -61,8 +61,10 @@ namespace AntPlus
             ChannelId = channelId;
         }
 
-        protected int UpdateAccumulatedValue(byte value, ref byte lastValue, int accumulatedValue)
+        protected int UpdateAccumulatedValue(byte value, ref byte lastValue)
         {
+            int accumulatedValue = 0;
+
             if (isFirstDataMessage)
             {
                 lastValue = value;
@@ -80,8 +82,10 @@ namespace AntPlus
             return accumulatedValue;
         }
 
-        protected int UpdateAccumulatedValue(ushort value, ref ushort lastValue, int accumulatedValue)
+        protected int UpdateAccumulatedValue(ushort value, ref ushort lastValue)
         {
+            int accumulatedValue = 0;
+
             if (isFirstDataMessage)
             {
                 lastValue = value;

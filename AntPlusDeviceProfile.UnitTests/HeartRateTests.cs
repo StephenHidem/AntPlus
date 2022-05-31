@@ -28,17 +28,15 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_AccumulatedValueRollover_ExpectedBehavior()
         {
             // Arrange
-            var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0);
+            var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default | 0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x40 }, 0);
 
             // Act
             heartRate.Parse(
-                new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00 });
-            heartRate.Parse(
-                new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00 });
+                new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0x02, 0x00, 0x02, 0x00, 0x01, 0x46 });
 
             // Assert
-            Assert.AreEqual(2, heartRate.AccumulatedHeartBeatEventTime, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(1, heartRate.AccumulatedHeartBeatCount, "AccumulatedHeartBeatCount");
+            Assert.AreEqual(3, heartRate.AccumulatedHeartBeatEventTime, "AccumulatedHeartBeatEventTime");
+            Assert.AreEqual(2, heartRate.AccumulatedHeartBeatCount, "AccumulatedHeartBeatCount");
         }
 
         [TestMethod]
@@ -47,7 +45,7 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_CumulativeOperatingTime_ExpectedBehavior(byte[] payload, int cumulativeOpTime)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0);
+            var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0);
 
             // Act
             heartRate.Parse(
@@ -59,11 +57,11 @@ namespace AntPlusDeviceProfile.UnitTests
 
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x80, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00 }, (byte)128, (uint)21930)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 08, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF }, (byte)8, 4294923690)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x08, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF }, (byte)8, 4294923690)]
         public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] payload, byte manId, uint sn)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0xF00055AA);
+            var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
 
             // Act
             heartRate.Parse(
@@ -79,7 +77,7 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_ProductInformation_ExpectedBehavior(byte[] payload, byte hwVersion, byte swVersion, byte modelNumber)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0xF00055AA);
+            var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
 
             // Act
             heartRate.Parse(
@@ -97,7 +95,7 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_PreviousHeartBeat_ExpectedBehavior(byte[] payload, int rrInterval)
         {
             // Arrange
-            var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0);
+            var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default | 0x80, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0);
 
             // Act
             heartRate.Parse(
@@ -112,7 +110,7 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_SwimInterval_ExpectedBehavior(byte[] payload, byte intervalAvgHr, byte intervalMaxHr, byte sessionAvgHr)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0xF00055AA);
+            var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
 
             // Act
             heartRate.Parse(
@@ -131,7 +129,7 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_Capabilities_ExpectedBehavior(byte[] payload, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0xF00055AA);
+            var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
 
             // Act
             heartRate.Parse(
@@ -149,7 +147,7 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_BatteryStatus_ExpectedBehavior(byte[] payload, int battPerCent, double voltage, BatteryStatus batteryStatus)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0);
+            HeartRate? heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0);
 
             // Act
             heartRate.Parse(

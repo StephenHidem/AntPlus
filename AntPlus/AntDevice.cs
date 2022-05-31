@@ -59,48 +59,63 @@ namespace AntPlus
         public AntDevice(byte[] payload, uint channelId)
         {
             ChannelId = channelId;
+            Parse(payload);
         }
 
-        protected int UpdateAccumulatedValue(byte value, ref byte lastValue)
+        public virtual void Parse(byte[] payload)
         {
-            int accumulatedValue = 0;
+        }
 
+        /// <summary>
+        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
+        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
+        /// </summary>
+        /// <param name="currentValue">The current value.</param>
+        /// <param name="lastValue">The last value.</param>
+        /// <returns>Positive delta of the current and previous values.</returns>
+        protected int CalculateDelta(byte currentValue, ref byte lastValue)
+        {
             if (isFirstDataMessage)
             {
-                lastValue = value;
+                lastValue = currentValue;
                 return 0;
             }
 
-            accumulatedValue += value - lastValue;
-            if (lastValue > value)
+            int delta = currentValue - lastValue;
+            if (lastValue > currentValue)
             {
                 // rollover
-                accumulatedValue += 256;
+                delta += 256;
             }
 
-            lastValue = value;
-            return accumulatedValue;
+            lastValue = currentValue;
+            return delta;
         }
 
-        protected int UpdateAccumulatedValue(ushort value, ref ushort lastValue)
+        /// <summary>
+        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
+        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
+        /// </summary>
+        /// <param name="currentValue">The current value.</param>
+        /// <param name="lastValue">The last value.</param>
+        /// <returns>Positive delta of the current and previous values.</returns>
+        protected int CalculateDelta(ushort currentValue, ref ushort lastValue)
         {
-            int accumulatedValue = 0;
-
             if (isFirstDataMessage)
             {
-                lastValue = value;
+                lastValue = currentValue;
                 return 0;
             }
 
-            accumulatedValue += value - lastValue;
-            if (lastValue > value)
+            int delta = currentValue - lastValue;
+            if (lastValue > currentValue)
             {
                 // rollover
-                accumulatedValue += 0x10000;
+                delta += 0x10000;
             }
 
-            lastValue = value;
-            return accumulatedValue;
+            lastValue = currentValue;
+            return delta;
         }
 
         // TODO: FIX CHANNEL NUMBER

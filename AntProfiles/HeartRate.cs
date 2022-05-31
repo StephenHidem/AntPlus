@@ -43,7 +43,8 @@ namespace AntPlusDeviceProfiles
         private byte[] lastDataPage = new byte[8];
         private byte lastBeatCount;
         private ushort lastBeatEventTime;
-        private bool pageToggle;
+        private bool pageToggle = false;
+        private int observedToggle;
 
         // common to all heart rate messages
         public int AccumulatedHeartBeatEventTime { get; private set; }
@@ -84,7 +85,7 @@ namespace AntPlusDeviceProfiles
         {
         }
 
-        public void Parse(byte[] dataPage)
+        public override void Parse(byte[] dataPage)
         {
             // ignore invalid data pages
             if (dataPage == null || dataPage.Length != 8)
@@ -100,11 +101,32 @@ namespace AntPlusDeviceProfiles
             lastDataPage = dataPage;
 
             // this data is present in all data pages
-            AccumulatedHeartBeatEventTime += UpdateAccumulatedValue(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
-            AccumulatedHeartBeatCount += UpdateAccumulatedValue(dataPage[6], ref lastBeatCount);
+            AccumulatedHeartBeatEventTime += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
+            AccumulatedHeartBeatCount += CalculateDelta(dataPage[6], ref lastBeatCount);
             ComputedHeartRate = dataPage[7];
 
-            // TODO: CONTINUE IF DATA PAGE TOGGLE HAS BEEN OBSERVED
+            // handle data page toggle
+            if (isFirstDataMessage)
+            {
+                observedToggle = dataPage[0] & 0x80;
+                isFirstDataMessage = false;
+                return;
+            }
+            else
+            {
+                if (!pageToggle)
+                {
+                    if ((dataPage[0] & 0x80) != observedToggle)
+                    {
+                        pageToggle = true;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
             switch ((DataPage)(dataPage[0] & 0x7F))
             {
                 case DataPage.CumulativeOperatingTime:
@@ -146,7 +168,6 @@ namespace AntPlusDeviceProfiles
                     }
                     break;
             }
-            isFirstDataMessage = false;
         }
 
         /// <summary>

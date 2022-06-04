@@ -17,25 +17,25 @@ namespace AntPlusDeviceProfiles
         public static byte DeviceClass = 120;
 
         /// <summary>
-        ///   <br />
+        ///   Heart rate device data pages.
         /// </summary>
         public enum DataPage
         {
-            /// <summary>The default or unknown data page.</summary>
+            /// <summary>Default or unknown data page.</summary>
             Default,
-            /// <summary>The cumulative operating time</summary>
+            /// <summary>Cumulative operating time</summary>
             CumulativeOperatingTime,
-            /// <summary>The manufacturer information</summary>
+            /// <summary>Manufacturer information</summary>
             ManufacturerInfo,
-            /// <summary>The product information</summary>
+            /// <summary>Product information</summary>
             ProductInfo,
-            /// <summary>The previous heart beat</summary>
+            /// <summary>Previous heart beat</summary>
             PreviousHeartBeat,
-            /// <summary>The swim interval</summary>
+            /// <summary>Swim interval</summary>
             SwimInterval,
-            /// <summary>The capabilities</summary>
+            /// <summary>Capabilities</summary>
             Capabilities,
-            /// <summary>The battery status</summary>
+            /// <summary>Battery status</summary>
             BatteryStatus
         }
 
@@ -53,6 +53,8 @@ namespace AntPlusDeviceProfiles
             Cycling = 2,
             /// <summary>Swimming</summary>
             Swimming = 4,
+            /// <summary>All</summary>
+            All = 7
         }
 
         /// <summary>
@@ -72,13 +74,37 @@ namespace AntPlusDeviceProfiles
 
         private byte[] lastDataPage = new byte[8];
         private byte lastBeatCount;
+        private int accumHeartBeatCount;
         private ushort lastBeatEventTime;
+        private int accumHeartBeatEventTime;
         private bool pageToggle = false;
         private int observedToggle;
 
+        public struct CommonHeartRateData
+        {
+            /// <summary>Accumulated heart beat event time.</summary>
+            public int AccumulatedHeartBeatEventTime;
+            /// <summary>Accumulated heart beat count.</summary>
+            public int AccumulatedHeartBeatCount;
+            /// <summary>Computed heart rate as determined by the sensor.</summary>
+            public byte ComputedHeartRate;
+
+            internal CommonHeartRateData(int accumEventTime, int accumBeatCount, byte heartRate)
+            {
+                AccumulatedHeartBeatEventTime = accumEventTime;
+                AccumulatedHeartBeatCount = accumBeatCount;
+                ComputedHeartRate = heartRate;
+            }
+        }
+
+        /// <summary>
+        /// Manufacturer supplied info.
+        /// </summary>
         public struct ManufacturerInfoPage
         {
+            /// <summary>The manufacturing identifier LSB</summary>
             public byte ManufacturingIdLsb;
+            /// <summary>The serial number</summary>
             public uint SerialNumber;
 
             internal ManufacturerInfoPage(byte[] page, uint deviceNumber)
@@ -88,6 +114,9 @@ namespace AntPlusDeviceProfiles
             }
         }
 
+        /// <summary>
+        /// Product information
+        /// </summary>
         public struct ProductInfoPage
         {
             /// <summary>Gets the hardware version.</summary>
@@ -110,17 +139,11 @@ namespace AntPlusDeviceProfiles
         /// </summary>
         public struct PreviousHeartBeatPage
         {
-            /// <summary>
-            /// The manufacturer specific data for the previous heart beat page.
-            /// </summary>
+            /// <summary>The manufacturer specific data for the previous heart beat page.</summary>
             public byte ManufacturerSpecific;
             /// <summary>Gets the RR interval.</summary>
             public int RRInterval;
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="PreviousHeartBeatPage"/> struct.
-            /// </summary>
-            /// <param name="page">The page.</param>
             internal PreviousHeartBeatPage(byte[] page)
             {
                 ManufacturerSpecific = page[1];
@@ -128,6 +151,9 @@ namespace AntPlusDeviceProfiles
             }
         }
 
+        /// <summary>
+        /// Swim interval data
+        /// </summary>
         public struct SwimIntervalPage
         {
             /// <summary>Swim interval average heart rate.</summary>
@@ -145,19 +171,16 @@ namespace AntPlusDeviceProfiles
             }
         }
 
+        /// <summary>
+        /// Heart rate device capabilities
+        /// </summary>
         public struct CapabilitiesPage
         {
-            /// <summary>
-            /// Enabled features.
-            /// </summary>
+            /// <summary>Enabled features.</summary>
             public Features Enabled;
-            /// <summary>
-            /// Supported features.
-            /// </summary>
+            /// <summary>Supported features.</summary>
             public Features Supported;
-            /// <summary>
-            /// Manufacturer specific features.
-            /// </summary>
+            /// <summary>Manufacturer specific features.</summary>
             public int ManufacturerSpecificFeatures;
 
             internal CapabilitiesPage(byte[] page)
@@ -193,19 +216,11 @@ namespace AntPlusDeviceProfiles
         /// </summary>
         public struct ManufacturerSpecificPage
         {
-            /// <summary>
-            /// The manufacturer specific page number.
-            /// </summary>
+            /// <summary>The manufacturer specific page number.</summary>
             public byte Page;
-            /// <summary>
-            /// The manufacturer specific data.
-            /// </summary>
+            /// <summary>The manufacturer specific data.</summary>
             public byte[] Data;
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ManufacturerSpecificPage"/> struct.
-            /// </summary>
-            /// <param name="page">The page.</param>
             internal ManufacturerSpecificPage(byte[] page)
             {
                 Page = page[0];
@@ -213,35 +228,42 @@ namespace AntPlusDeviceProfiles
             }
         }
 
-        public event EventHandler<DataPage> DataPageChanged;
         /// <summary>
-        /// Occurs when [cumulative operating time page changed].
+        /// Occurs when heart rate changed. This data is common to all pages transmitted.
+        /// </summary>
+        public event EventHandler<CommonHeartRateData> HeartRateChanged;
+        /// <summary>
+        /// Occurs when cumulative operating time page changed.
         /// </summary>
         public event EventHandler<TimeSpan> CumulativeOperatingTimePageChanged;
+        /// <summary>
+        /// Occurs when manufacturer information page changed.
+        /// </summary>
         public event EventHandler<ManufacturerInfoPage> ManufacturerInfoPageChanged;
+        /// <summary>
+        /// Occurs when product information page changed.
+        /// </summary>
         public event EventHandler<ProductInfoPage> ProductInfoPageChanged;
         /// <summary>
-        /// Occurs when [previous heart beat page changed].
+        /// Occurs when previous heart beat page changed.
         /// </summary>
         public event EventHandler<PreviousHeartBeatPage> PreviousHeartBeatPageChanged;
+        /// <summary>
+        /// Occurs when swim interval page changed.
+        /// </summary>
         public event EventHandler<SwimIntervalPage> SwimIntervalPageChanged;
+        /// <summary>
+        /// Occurs when capabilities page changed.
+        /// </summary>
         public event EventHandler<CapabilitiesPage> CapabilitiesPageChanged;
+        /// <summary>
+        /// Occurs when battery status page changed.
+        /// </summary>
         public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
         /// <summary>
-        /// Occurs when [manufacturer specific page changed].
+        /// Occurs when manufacturer specific page changed.
         /// </summary>
         public event EventHandler<ManufacturerSpecificPage> ManufacturerSpecificPageChanged;
-
-        // common to all heart rate messages
-        /// <summary>Gets the accumulated heart beat event time.</summary>
-        /// <value>The accumulated heart beat event time.</value>
-        public int AccumulatedHeartBeatEventTime { get; private set; }
-        /// <summary>Gets the accumulated heart beat count.</summary>
-        /// <value>The accumulated heart beat count.</value>
-        public int AccumulatedHeartBeatCount { get; private set; }
-        /// <summary>Gets the computed heart rate as determined by the sensor.</summary>
-        /// <value>The computed heart rate.</value>
-        public byte ComputedHeartRate { get; private set; }
 
 
         /// <summary>
@@ -273,9 +295,9 @@ namespace AntPlusDeviceProfiles
             lastDataPage = dataPage;
 
             // this data is present in all data pages
-            AccumulatedHeartBeatEventTime += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
-            AccumulatedHeartBeatCount += CalculateDelta(dataPage[6], ref lastBeatCount);
-            ComputedHeartRate = dataPage[7];
+            accumHeartBeatEventTime += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
+            accumHeartBeatCount += CalculateDelta(dataPage[6], ref lastBeatCount);
+            HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, accumHeartBeatCount, dataPage[7]));
 
             // handle data page toggle
             if (isFirstDataMessage)

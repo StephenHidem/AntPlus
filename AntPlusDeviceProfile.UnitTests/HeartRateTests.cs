@@ -12,31 +12,45 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_CommonHRData_ExpectedBehavior(byte[] payload, int eventTime, int hrBeatCount, int computedHr)
         {
             // Arrange
-            var heartRate = new HeartRate(payload, 0);
+            int et = 0, ec = 0;
+            byte hr = 0;
+            var heartRate = new HeartRate(new byte[8], 0);
+            heartRate.HeartRateChanged += (sender, e) =>
+            {
+                et = e.AccumulatedHeartBeatEventTime;
+                ec = e.AccumulatedHeartBeatCount;
+                hr = e.ComputedHeartRate;
+            };
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(eventTime, heartRate.AccumulatedHeartBeatEventTime, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(hrBeatCount, heartRate.AccumulatedHeartBeatCount, "AccumulatedHeartBeatCount");
-            Assert.AreEqual(computedHr, heartRate.ComputedHeartRate, "ComputedHeartRate");
+            Assert.AreEqual(eventTime, et, "AccumulatedHeartBeatEventTime");
+            Assert.AreEqual(hrBeatCount, ec, "AccumulatedHeartBeatCount");
+            Assert.AreEqual(computedHr, hr, "ComputedHeartRate");
         }
 
         [TestMethod]
         public void Parse_AccumulatedValueRollover_ExpectedBehavior()
         {
             // Arrange
+            int et = 0, ec = 0;
             var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default | 0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x40 }, 0);
+            heartRate.HeartRateChanged += (sender, e) =>
+            {
+                et = e.AccumulatedHeartBeatEventTime;
+                ec = e.AccumulatedHeartBeatCount;
+            };
 
             // Act
             heartRate.Parse(
                 new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0x02, 0x00, 0x02, 0x00, 0x01, 0x46 });
 
             // Assert
-            Assert.AreEqual(3, heartRate.AccumulatedHeartBeatEventTime, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(2, heartRate.AccumulatedHeartBeatCount, "AccumulatedHeartBeatCount");
+            Assert.AreEqual(3, et, "AccumulatedHeartBeatEventTime");
+            Assert.AreEqual(2, ec, "AccumulatedHeartBeatCount");
         }
 
         [TestMethod]
@@ -148,9 +162,9 @@ namespace AntPlusDeviceProfile.UnitTests
         }
 
         [TestMethod]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x01, 0x01, 0, 0, 0, 0 }, HeartRate.Features.Running, HeartRate.Features.Running)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x02, 0x02, 0, 0, 0, 0 }, HeartRate.Features.Cycling, HeartRate.Features.Cycling)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x04, 0x04, 0, 0, 0, 0 }, HeartRate.Features.Swimming, HeartRate.Features.Swimming)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x07, 0x01, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Running)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x07, 0x02, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Cycling)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x07, 0x04, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Swimming)]
         public void Parse_Capabilities_ExpectedBehavior(byte[] payload, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
         {
             // Arrange

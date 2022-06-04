@@ -45,14 +45,16 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_CumulativeOperatingTime_ExpectedBehavior(byte[] payload, int cumulativeOpTime)
         {
             // Arrange
+            TimeSpan cot = TimeSpan.FromSeconds(0);
             var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0);
+            heartRate.CumulativeOperatingTimePageChanged += (sender, args) => cot = args;
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(cumulativeOpTime, heartRate.CumulativeOperatingTime.TotalSeconds, "CumulativeOperatingTime");
+            Assert.AreEqual(cumulativeOpTime, cot.TotalSeconds, "CumulativeOperatingTime");
         }
 
         [TestMethod]
@@ -62,14 +64,21 @@ namespace AntPlusDeviceProfile.UnitTests
         {
             // Arrange
             var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
+            byte mid = 0;
+            uint serNum = 0;
+            heartRate.ManufacturerInfoPageChanged += (sender, args) =>
+            {
+                mid = args.ManufacturingIdLsb;
+                serNum = args.SerialNumber;
+            };
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(manId, heartRate.ManufacturingIdLsb, "ManufacturingIdLsb");
-            Assert.AreEqual(sn, heartRate.SerialNumber, "SerialNumber");
+            Assert.AreEqual(manId, mid, "ManufacturingIdLsb");
+            Assert.AreEqual(sn, serNum, "SerialNumber");
         }
 
         [TestMethod]
@@ -77,16 +86,23 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_ProductInformation_ExpectedBehavior(byte[] payload, byte hwVersion, byte swVersion, byte modelNumber)
         {
             // Arrange
+            byte hv = 0, sv = 0, mn = 0;
             var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
+            heartRate.ProductInfoPageChanged += (sender, args) =>
+            {
+                hv = args.HardwareVersion;
+                sv = args.SoftwareVersion;
+                mn = args.ModelNumber;
+            };
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(hwVersion, heartRate.HardwareVersion, "HardwareVersion");
-            Assert.AreEqual(swVersion, heartRate.SoftwareVersion, "SoftwareVersion");
-            Assert.AreEqual(modelNumber, heartRate.ModelNumber, "ModelNumber");
+            Assert.AreEqual(hwVersion, hv, "HardwareVersion");
+            Assert.AreEqual(swVersion, sv, "SoftwareVersion");
+            Assert.AreEqual(modelNumber, mn, "ModelNumber");
         }
 
         [TestMethod]
@@ -95,14 +111,16 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_PreviousHeartBeat_ExpectedBehavior(byte[] payload, int rrInterval)
         {
             // Arrange
+            int rr = 0;
             var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default | 0x80, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0);
+            heartRate.PreviousHeartBeatPageChanged += (sender, eventArgs) => rr = eventArgs.RRInterval;
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(rrInterval, heartRate.RRInterval, "RRInterval");
+            Assert.AreEqual(rrInterval, rr, "RRInterval");
         }
 
         [TestMethod]
@@ -110,16 +128,23 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_SwimInterval_ExpectedBehavior(byte[] payload, byte intervalAvgHr, byte intervalMaxHr, byte sessionAvgHr)
         {
             // Arrange
+            byte iahr = 0, imhr = 0, sahr = 0;
             var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
+            heartRate.SwimIntervalPageChanged += (sender, args) =>
+            {
+                iahr = args.IntervalAverageHeartRate;
+                imhr = args.IntervalMaximumHeartRate;
+                sahr = args.SessionAverageHeartRate;
+            };
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(intervalAvgHr, heartRate.IntervalAverageHeartRate, "IntervalAverageHeartRate");
-            Assert.AreEqual(intervalMaxHr, heartRate.IntervalMaximumHeartRate, "IntervalMaximumHeartRate");
-            Assert.AreEqual(sessionAvgHr, heartRate.SessionAverageHeartRate, "SessionAverageHeartRate");
+            Assert.AreEqual(intervalAvgHr, iahr, "IntervalAverageHeartRate");
+            Assert.AreEqual(intervalMaxHr, imhr, "IntervalMaximumHeartRate");
+            Assert.AreEqual(sessionAvgHr, sahr, "SessionAverageHeartRate");
         }
 
         [TestMethod]
@@ -129,16 +154,21 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_Capabilities_ExpectedBehavior(byte[] payload, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
         {
             // Arrange
+            HeartRate.Features enabled = HeartRate.Features.None, supported = HeartRate.Features.None;
             var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
+            heartRate.CapabilitiesPageChanged += (sender, args) =>
+            {
+                enabled = args.Enabled;
+                supported = args.Supported;
+            };
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(supportedFeatures, heartRate.Supported, "Supported features");
-            Assert.AreEqual(enabledFeatures, heartRate.Enabled, "Enabled features");
-            //Assert.AreEqual(enabledFeatures, heartRate.ManufacturerSpecificFeatures, "Manufacturer specific features");
+            Assert.AreEqual(supportedFeatures, supported, "Supported features");
+            Assert.AreEqual(enabledFeatures, enabled, "Enabled features");
         }
 
         [TestMethod]
@@ -147,16 +177,25 @@ namespace AntPlusDeviceProfile.UnitTests
         public void Parse_BatteryStatus_ExpectedBehavior(byte[] payload, int battPerCent, double voltage, BatteryStatus batteryStatus)
         {
             // Arrange
-            HeartRate? heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0);
+            byte bl = 0;
+            double bv = 0;
+            BatteryStatus bs = BatteryStatus.Unknown;
+            var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0);
+            heartRate.BatteryStatusPageChanged += (sender, e) =>
+            {
+                bl = e.BatteryLevel;
+                bv = e.BatteryVoltage;
+                bs = e.BatteryStatus;
+            };
 
             // Act
             heartRate.Parse(
                 payload);
 
             // Assert
-            Assert.AreEqual(battPerCent, heartRate.BatteryLevel, "Battery level");
-            Assert.AreEqual(voltage, heartRate.BatteryVoltage, "Battery voltage");
-            Assert.AreEqual(batteryStatus, heartRate.BatteryStatus, "Battery status");
+            Assert.AreEqual(battPerCent, bl, "Battery level");
+            Assert.AreEqual(voltage, bv, "Battery voltage");
+            Assert.AreEqual(batteryStatus, bs, "Battery status");
         }
 
         [TestMethod]

@@ -6,8 +6,26 @@ namespace AntPlusDeviceProfiles
 {
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document
-    /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.1.
+    /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.1, © 2006-2016 Dynastream Innovations Inc. All Rights Reserved.
+    /// 
+    /// © 2022 Stephen Hidem.
     /// </summary>
+    /// <remarks>
+    /// This is purely an event driven class. Any pages received will generate a <see cref="HeartRateChanged"/> and the appropriate page event
+    /// once the page toggle has been observed. Consumers shoud attach event handlers to the pages of interest.
+    /// 
+    /// Due to the ubiquity of heart rate monitors and manufacturers, several problems present themselves with regard to this specification.
+    /// This primarily relates to group workout environments (clubs). These issues do not exist for individual workout environments (homes).
+    /// 
+    /// Because of the limitations posed by the channel ID it is a distinct possibility that different HRM's will have the same channel ID.
+    /// 1. There is no guarantee the channel ID is unique to a specific device.
+    /// 2. There is no guarantee the background page sent is unique to a specific device.
+    /// 3. RequestCapabilities will be broadcast to all devices with the same channel ID. You may receive multiple contradictory replies.
+    /// 4. SetSportMode will be broadcast to all devices with the same channel ID. This is not an issue if the invocation is local to the group involved.
+    /// 
+    /// Keep these caveats in mind when designing your application. Applications designed for group environments may choose to only attach
+    /// to the manufacturer event and ignore other background pages.
+    /// </remarks>
     /// <seealso cref="AntPlus.AntDevice" />
     public class HeartRate : AntDevice
     {
@@ -17,7 +35,7 @@ namespace AntPlusDeviceProfiles
         public static byte DeviceClass = 120;
 
         /// <summary>
-        ///   Heart rate device data pages.
+        /// Heart rate device data pages.
         /// </summary>
         public enum DataPage
         {
@@ -80,25 +98,29 @@ namespace AntPlusDeviceProfiles
         private bool pageToggle = false;
         private int observedToggle;
 
+        /// <summary>
+        /// Heart rate data common to all data pages.
+        /// </summary>
         public struct CommonHeartRateData
         {
-            /// <summary>Accumulated heart beat event time.</summary>
+            /// <summary>Accumulated heart beat event time in milliseconds.</summary>
             public int AccumulatedHeartBeatEventTime;
             /// <summary>Accumulated heart beat count.</summary>
             public int AccumulatedHeartBeatCount;
-            /// <summary>Computed heart rate as determined by the sensor.</summary>
+            /// <summary>Computed heart rate as determined by the sensor in beats per minute.</summary>
             public byte ComputedHeartRate;
 
             internal CommonHeartRateData(int accumEventTime, int accumBeatCount, byte heartRate)
             {
-                AccumulatedHeartBeatEventTime = accumEventTime;
+                AccumulatedHeartBeatEventTime = (int)((long)accumEventTime * 1000 / 1024);
                 AccumulatedHeartBeatCount = accumBeatCount;
                 ComputedHeartRate = heartRate;
             }
         }
 
         /// <summary>
-        /// Manufacturer supplied info.
+        /// Manufacturer supplied info. It may be sent as a main page or background page. The heart beat event time and count are
+        /// provided as-is from this data page. It is up to the application if these values should be accumulated or utilized.
         /// </summary>
         public struct ManufacturerInfoPage
         {
@@ -106,16 +128,25 @@ namespace AntPlusDeviceProfiles
             public byte ManufacturingIdLsb;
             /// <summary>The serial number</summary>
             public uint SerialNumber;
+            /// <summary>Heart beat event time in 1/1024 of a second. Rollover at 65536 (64 seconds).</summary>
+            public ushort HeartBeatEventTime;
+            /// <summary>Heart beat count. Rollover at 256.</summary>
+            public byte HeartBeatCount;
+            /// <summary>Computed heart rate as determined by the sensor in beats per minute.</summary>
+            public byte ComputedHeartRate;
 
             internal ManufacturerInfoPage(byte[] page, uint deviceNumber)
             {
                 ManufacturingIdLsb = page[1];
                 SerialNumber = (uint)((BitConverter.ToUInt16(page, 2) << 16) + (deviceNumber & 0x0000FFFF));
+                HeartBeatEventTime = BitConverter.ToUInt16(page, 4);
+                HeartBeatCount = page[6];
+                ComputedHeartRate = page[7];
             }
         }
 
         /// <summary>
-        /// Product information
+        /// Product information. Sent as a background page. All fields are manufacturer specific.
         /// </summary>
         public struct ProductInfoPage
         {
@@ -135,13 +166,13 @@ namespace AntPlusDeviceProfiles
         }
 
         /// <summary>
-        /// This structure provides the RR interval and manufacturer specific data. It is typically sent a main page.
+        /// This structure provides the RR interval and manufacturer specific data. It is typically sent as a main page.
         /// </summary>
         public struct PreviousHeartBeatPage
         {
-            /// <summary>The manufacturer specific data for the previous heart beat page.</summary>
+            /// <summary>Manufacturer specific data. Set to 0xFF if not used.</summary>
             public byte ManufacturerSpecific;
-            /// <summary>Gets the RR interval.</summary>
+            /// <summary>RR interval in milliseconds.</summary>
             public int RRInterval;
 
             internal PreviousHeartBeatPage(byte[] page)
@@ -379,7 +410,7 @@ namespace AntPlusDeviceProfiles
         /// </summary>
         /// <param name="previousHeartBeatEventTime">The previous heart beat event time.</param>
         /// <param name="heartBeatEventTime">The heart beat event time.</param>
-        /// <returns></returns>
+        /// <returns>RR interval in milliseconds.</returns>
         private static int CalculateRRInverval(ushort previousHeartBeatEventTime, ushort heartBeatEventTime)
         {
             // calculate delta event time

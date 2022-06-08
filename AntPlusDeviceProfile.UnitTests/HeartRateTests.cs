@@ -37,20 +37,23 @@ namespace AntPlusDeviceProfile.UnitTests
         {
             // Arrange
             int et = 0, ec = 0;
+            byte hr = 0;
             var heartRate = new HeartRate(new byte[] { (byte)HeartRate.DataPage.Default | 0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x40 }, 0);
             heartRate.HeartRateChanged += (sender, e) =>
             {
                 et = e.AccumulatedHeartBeatEventTime;
                 ec = e.AccumulatedHeartBeatCount;
+                hr = e.ComputedHeartRate;
             };
 
             // Act
             heartRate.Parse(
-                new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0x02, 0x00, 0x02, 0x00, 0x01, 0x46 });
+                new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0x02, 0x00, 0x03, 0x00, 0x01, 0x46 });
 
             // Assert
             Assert.AreEqual(3, et, "AccumulatedHeartBeatEventTime");
             Assert.AreEqual(2, ec, "AccumulatedHeartBeatCount");
+            Assert.AreEqual(70, hr, "Computed HR");
         }
 
         [TestMethod]
@@ -72,18 +75,24 @@ namespace AntPlusDeviceProfile.UnitTests
         }
 
         [TestMethod]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x80, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00 }, (byte)128, (uint)21930)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x08, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF }, (byte)8, 4294923690)]
-        public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] payload, byte manId, uint sn)
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x80, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 }, (byte)128, (uint)21930, 8721, 51, 68)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x08, 0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44 }, (byte)8, 4294923690, 8721, 51, 68)]
+        public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] payload, byte manId, uint sn, int eventTime, int hrBeatCount, int computedHr)
         {
             // Arrange
             var heartRate = new HeartRate(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 }, 0xF00055AA);
             byte mid = 0;
             uint serNum = 0;
+            ushort et = 0;
+            byte beatCount = 0;
+            byte hr = 0;
             heartRate.ManufacturerInfoPageChanged += (sender, args) =>
             {
                 mid = args.ManufacturingIdLsb;
                 serNum = args.SerialNumber;
+                et = args.HeartBeatEventTime;
+                beatCount = args.HeartBeatCount;
+                hr = args.ComputedHeartRate;
             };
 
             // Act
@@ -93,6 +102,9 @@ namespace AntPlusDeviceProfile.UnitTests
             // Assert
             Assert.AreEqual(manId, mid, "ManufacturingIdLsb");
             Assert.AreEqual(sn, serNum, "SerialNumber");
+            Assert.AreEqual(eventTime, et, "EventTime");
+            Assert.AreEqual(hrBeatCount, beatCount, "BeatCount");
+            Assert.AreEqual(computedHr, hr, "ComputedHeartRate");
         }
 
         [TestMethod]

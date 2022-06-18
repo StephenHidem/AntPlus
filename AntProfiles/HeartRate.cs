@@ -386,13 +386,12 @@ namespace AntPlusDeviceProfiles
             }
         }
 
-        /// <summary>
-        /// Requests the capabilities.
-        /// </summary>
-        /// <param name="numberOfTimesToTransmit">The number of times to transmit.</param>
-        public void RequestCapabilities(byte numberOfTimesToTransmit = 4)
+        /// <summary>Requests the capabilities.</summary>
+        /// <param name="channelNumber">Channel to send message. Default is channel 0.</param>
+        /// <param name="numberOfTimesToTransmit">The number of times to transmit. Default is 4 times.</param>
+        public void RequestCapabilities(byte channelNumber = 0, byte numberOfTimesToTransmit = 4)
         {
-            RequestDataPage((byte)DataPage.Capabilities, numberOfTimesToTransmit);
+            RequestDataPage((byte)DataPage.Capabilities, channelNumber, numberOfTimesToTransmit);
         }
 
         /// <summary>

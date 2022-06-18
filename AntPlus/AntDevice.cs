@@ -43,25 +43,38 @@ namespace AntPlus
         protected bool isFirstDataMessage = true;     // used for accumulated values
 
 
-        /// <summary>
-        /// Gets the channel identifier.
-        /// </summary>
-        /// <value>
-        /// The channel identifier.
-        /// </value>
+        /// <summary>Gets the channel identifier.</summary>
+        /// <value>The channel identifier.</value>
         public uint ChannelId { get; private set; }
+        /// <summary>Gets the type of the device.</summary>
+        /// <value>The type of the device.</value>
         public byte DeviceType => (byte)(ChannelId >> 16 & 0x0000007F);
+        /// <summary>Gets the device number.</summary>
+        /// <value>The device number.</value>
         public uint DeviceNumber => (ChannelId & 0x0000FFFF) + (ChannelId >> 12 & 0x000F0000);
+        /// <summary>Gets a value indicating whether this instance has the pairing bit set.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance has pairing bit set; otherwise, <c>false</c>.</value>
         public bool IsPairingBitSet => (ChannelId & 0x00800000) == 0x00800000;
+        /// <summary>Gets the type of the transmission.</summary>
+        /// <value>The type of the transmission.</value>
         public ChannelSharing TransmissionType => (ChannelSharing)(ChannelId >> 24 & 0x00000003);
+        /// <summary>Gets a value indicating whether global data pages are used.</summary>
+        /// <value>
+        ///   <c>true</c> if global data pages are used; otherwise, <c>false</c>.</value>
         public bool AreGlobalDataPagesUsed => (ChannelId & 0x04000000) == 0x04000000;
 
+        /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
+        /// <param name="payload">The payload.</param>
+        /// <param name="channelId">The channel identifier.</param>
         public AntDevice(byte[] payload, uint channelId)
         {
             ChannelId = channelId;
             Parse(payload);
         }
 
+        /// <summary>Parses the specified payload.</summary>
+        /// <param name="payload">The payload.</param>
         public virtual void Parse(byte[] payload)
         {
         }
@@ -118,14 +131,24 @@ namespace AntPlus
             return delta;
         }
 
-        // TODO: FIX CHANNEL NUMBER
-        public void RequestDataPage(byte pageNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
+        /// <summary>Requests the data page.</summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="channelNumber">The channel number.</param>
+        /// <param name="transmissionResponse">The transmission response.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="slaveSerialNumber">The slave serial number.</param>
+        /// <param name="decriptor1">The decriptor1.</param>
+        /// <param name="descriptor2">The descriptor2.</param>
+        public void RequestDataPage(byte pageNumber, byte channelNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
         {
             byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, pageNumber, (byte)commandType };
             BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-            SendExtendedAcknowledgedMessage(0, msg);
+            SendExtendedAcknowledgedMessage(channelNumber, msg);
         }
 
+        /// <summary>Sends the extended acknowledged message.</summary>
+        /// <param name="channelNumber">The channel number.</param>
+        /// <param name="message">The message.</param>
         public void SendExtendedAcknowledgedMessage(byte channelNumber, byte[] message)
         {
             byte[] msg = new byte[] { 13, (byte)MessageId.ExtAcknowledgedData, channelNumber };

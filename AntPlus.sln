@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntPlus", "AntPlus\AntPlus.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntPlus.UnitTests", "AntPlus.UnitTests\AntPlus.UnitTests.csproj", "{F0BF2083-BA18-4CD3-997E-E31AFC7211EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntPlusDeviceProfiles", "AntProfiles\AntPlusDeviceProfiles.csproj", "{7DA7ACDE-7BB5-4779-B5F3-58C285FB098F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntPlusDeviceProfile.UnitTests", "AntPlusDeviceProfile.UnitTests\AntPlusDeviceProfile.UnitTests.csproj", "{BED30161-6CBD-4A41-9F0A-DD7AA617073F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{F0BF2083-BA18-4CD3-997E-E31AFC7211EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0BF2083-BA18-4CD3-997E-E31AFC7211EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0BF2083-BA18-4CD3-997E-E31AFC7211EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DA7ACDE-7BB5-4779-B5F3-58C285FB098F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DA7ACDE-7BB5-4779-B5F3-58C285FB098F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DA7ACDE-7BB5-4779-B5F3-58C285FB098F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DA7ACDE-7BB5-4779-B5F3-58C285FB098F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BED30161-6CBD-4A41-9F0A-DD7AA617073F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BED30161-6CBD-4A41-9F0A-DD7AA617073F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BED30161-6CBD-4A41-9F0A-DD7AA617073F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BED30161-6CBD-4A41-9F0A-DD7AA617073F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

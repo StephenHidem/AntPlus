@@ -38,7 +38,7 @@ namespace AntPlus
     /// <summary>
     /// Base class for all ANT devices.
     /// </summary>
-    public class AntDevice
+    public abstract class AntDevice
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
 
@@ -65,19 +65,15 @@ namespace AntPlus
         public bool AreGlobalDataPagesUsed => (ChannelId & 0x04000000) == 0x04000000;
 
         /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
-        /// <param name="payload">The payload.</param>
         /// <param name="channelId">The channel identifier.</param>
-        public AntDevice(byte[] payload, uint channelId)
+        protected AntDevice(uint channelId)
         {
             ChannelId = channelId;
-            Parse(payload);
         }
 
-        /// <summary>Parses the specified payload.</summary>
-        /// <param name="payload">The payload.</param>
-        public virtual void Parse(byte[] payload)
-        {
-        }
+        /// <summary>Parses the specified data page.</summary>
+        /// <param name="payload">The data page.</param>
+        public abstract void Parse(byte[] dataPage);
 
         /// <summary>
         /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.

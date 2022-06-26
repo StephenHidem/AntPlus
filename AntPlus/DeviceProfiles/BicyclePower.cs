@@ -1,7 +1,7 @@
 ﻿using AntPlus;
 using System;
 
-namespace AntPlusDeviceProfiles
+namespace DeviceProfiles
 {
     public class BicyclePower : AntDevice
     {
@@ -53,19 +53,19 @@ namespace AntPlusDeviceProfiles
         public double AverageTorque { get; private set; }
 
 
-        public BicyclePower(byte[] payload, uint channelId) : base(payload, channelId)
+        public BicyclePower(uint channelId) : base(channelId)
         {
         }
 
-        public void Parse(byte[] payload)
+        public override void Parse(byte[] dataPage)
         {
             // check for valid payload
-            if (payload == null || payload.Length != 8)
+            if (dataPage == null || dataPage.Length != 8)
             {
                 return;
             }
 
-            switch ((DataPage)payload[0])
+            switch ((DataPage)dataPage[0])
             {
                 case DataPage.Unknown:
                     break;
@@ -76,21 +76,21 @@ namespace AntPlusDeviceProfiles
                 case DataPage.MeasurementOutput:
                     break;
                 case DataPage.PowerOnly:
-                    AccumulatedEventCount += CalculateDelta(payload[1], ref lastEventCount);
-                    PedalPower = payload[2];
-                    InstantaneousCadence = payload[3];
-                    AccumulatedPower += CalculateDelta(BitConverter.ToUInt16(payload, 4), ref lastPower);
-                    InstantaneousPower = BitConverter.ToUInt16(payload, 6);
+                    AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
+                    PedalPower = dataPage[2];
+                    InstantaneousCadence = dataPage[3];
+                    AccumulatedPower += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
+                    InstantaneousPower = BitConverter.ToUInt16(dataPage, 6);
                     AveragePower = (AccumulatedPower - previousAccumulatedPower) / (AccumulatedEventCount - previousAccumulatedEventCount);
                     previousAccumulatedEventCount = AccumulatedEventCount;
                     previousAccumulatedPower = AccumulatedPower;
                     break;
                 case DataPage.WheelTorque:
-                    AccumulatedEventCount += CalculateDelta(payload[1], ref lastEventCount);
-                    AccumulatedTicks += CalculateDelta(payload[2], ref lastTicks);
-                    InstantaneousCadence = payload[3];
-                    AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(payload, 4), ref lastPeriod);
-                    AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(payload, 6), ref lastTorque);
+                    AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
+                    AccumulatedTicks += CalculateDelta(dataPage[2], ref lastTicks);
+                    InstantaneousCadence = dataPage[3];
+                    AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
+                    AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
                     AverageAngularVelocity = ComputeAveAngularVelocity();
                     AverageTorque = ComputeAveTorque();
                     AveragePower = AverageTorque * AverageAngularVelocity;
@@ -99,11 +99,11 @@ namespace AntPlusDeviceProfiles
                     previousAccumulatedTorque = AccumulatedTorque;
                     break;
                 case DataPage.CrankTorque:
-                    AccumulatedEventCount += CalculateDelta(payload[1], ref lastEventCount);
-                    AccumulatedTicks += CalculateDelta(payload[2], ref lastTicks);
-                    InstantaneousCadence = payload[3];
-                    AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(payload, 4), ref lastPeriod);
-                    AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(payload, 6), ref lastTorque);
+                    AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
+                    AccumulatedTicks += CalculateDelta(dataPage[2], ref lastTicks);
+                    InstantaneousCadence = dataPage[3];
+                    AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
+                    AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
                     AverageAngularVelocity = ComputeAveAngularVelocity();
                     AverageTorque = ComputeAveTorque();
                     AveragePower = AverageTorque * AverageAngularVelocity;

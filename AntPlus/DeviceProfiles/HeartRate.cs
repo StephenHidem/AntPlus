@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace AntPlusDeviceProfiles
+namespace DeviceProfiles
 {
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document
@@ -300,9 +300,8 @@ namespace AntPlusDeviceProfiles
         /// <summary>
         /// Initializes a new instance of the <see cref="HeartRate"/> class.
         /// </summary>
-        /// <param name="payload">The payload.</param>
         /// <param name="channelId">The channel identifier.</param>
-        public HeartRate(byte[] payload, uint channelId) : base(payload, channelId)
+        public HeartRate(uint channelId) : base(channelId)
         {
         }
 

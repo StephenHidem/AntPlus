@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DeviceProfiles;
 
 namespace AntPlus.UnitTests
 {
@@ -11,7 +11,7 @@ namespace AntPlus.UnitTests
         public void TestDeviceNumber(uint channelId, uint expectedDeviceNumber)
         {
             // Arrange
-            var antDevice = new AntDevice(new byte[8], channelId);
+            var antDevice = new UnknownDevice(channelId);
 
             // Act
 
@@ -25,7 +25,7 @@ namespace AntPlus.UnitTests
         public void TestDeviceType(uint channelId, byte expectedDeviceType)
         {
             // Arrange
-            var antDevice = new AntDevice(new byte[8], channelId);
+            var antDevice = new UnknownDevice(channelId);
 
             // Act
 
@@ -39,7 +39,7 @@ namespace AntPlus.UnitTests
         public void TestPairingBit(uint channelId, bool expectedResult)
         {
             // Arrange
-            var antDevice = new AntDevice(new byte[8], channelId);
+            var antDevice = new UnknownDevice(channelId);
 
             // Act
 
@@ -53,7 +53,7 @@ namespace AntPlus.UnitTests
         public void TestAreGlobalPageUsed(uint channelId, bool expectedResult)
         {
             // Arrange
-            var antDevice = new AntDevice(new byte[8], channelId);
+            var antDevice = new UnknownDevice(channelId);
 
             // Act
 
@@ -73,7 +73,7 @@ namespace AntPlus.UnitTests
         public void TestTransmissionType(uint channelId, ChannelSharing expectedTranmissonType)
         {
             // Arrange
-            var antDevice = new AntDevice(new byte[8], channelId);
+            var antDevice = new UnknownDevice(channelId);
 
             // Act
 

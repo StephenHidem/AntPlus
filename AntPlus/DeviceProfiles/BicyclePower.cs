@@ -59,12 +59,6 @@ namespace DeviceProfiles
 
         public override void Parse(byte[] dataPage)
         {
-            // check for valid payload
-            if (dataPage == null || dataPage.Length != 8)
-            {
-                return;
-            }
-
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.Unknown:

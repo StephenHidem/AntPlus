@@ -32,7 +32,7 @@ namespace DeviceProfiles
         /// <summary>
         /// The heart rate device class ID.
         /// </summary>
-        public static byte DeviceClass = 120;
+        public const byte DeviceClass = 120;
 
         /// <summary>
         /// Heart rate device data pages.
@@ -311,12 +311,6 @@ namespace DeviceProfiles
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
-            // ignore invalid data pages
-            if (dataPage == null || dataPage.Length != 8)
-            {
-                return;
-            }
-
             // ignore duplicate/unchanged data pages
             if (lastDataPage.SequenceEqual(dataPage))
             {

@@ -50,9 +50,14 @@ namespace AntPlus
             }
         }
 
+
         public void HandleDataMessage(uint channelId, byte[] dataPage)
         {
-            AntDevice device = this.FirstOrDefault(ant => ant.ChannelId == channelId);
+            AntDevice device;
+            lock (collectionLock)
+            {
+                device = this.FirstOrDefault(ant => ant.ChannelId == channelId);
+            }
             if (device == null)
             {
                 device = CreateAntDevice(channelId);

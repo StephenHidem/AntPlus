@@ -11,9 +11,9 @@ namespace AntPlus.UnitTests
         {
             // Arrange
             var antDeviceCollection = new AntDeviceCollection();
-            uint hrmCid = 0x01782211;
-            uint bpCid = 0x050B4433;
-            uint unkCid = 0x05016655;
+            ChannelId hrmCid = new(0x01782211);
+            ChannelId bpCid = new(0x050B4433);
+            ChannelId unkCid = new(0x05016655);
             byte[] dataPage = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
             // Act
@@ -26,9 +26,9 @@ namespace AntPlus.UnitTests
 
             // Assert
             Assert.AreEqual(3, antDeviceCollection.Count, "Count");
-            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId == hrmCid), "Has HRM");
-            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId == bpCid), "Has Bike Power");
-            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId == unkCid), "Has Unknown");
+            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId.Id == hrmCid.Id), "Has HRM");
+            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId.Id == bpCid.Id), "Has Bike Power");
+            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId.Id == unkCid.Id), "Has Unknown");
         }
 
         [TestMethod]
@@ -36,9 +36,9 @@ namespace AntPlus.UnitTests
         {
             // Arrange
             var antDeviceCollection = new AntDeviceCollection();
-            uint hrmCid = 0x01782211;
-            uint bpCid = 0x050B4433;
-            uint unkCid = 0x05016655;
+            ChannelId hrmCid = new(0x01782211);
+            ChannelId bpCid = new(0x050B4433);
+            ChannelId unkCid = new(0x05016655);
             byte[] dataPage = { 0, 0, 0, 0, 0, 0, 0, 0 };
             antDeviceCollection.HandleDataMessage(hrmCid, dataPage);
             antDeviceCollection.HandleDataMessage(bpCid, dataPage);
@@ -67,9 +67,9 @@ namespace AntPlus.UnitTests
                     }
                 }
             };
-            uint hrmCid = 0x01782211;
-            uint bpCid = 0x050B4433;
-            uint unkCid = 0x05016655;
+            ChannelId hrmCid = new(0x01782211);
+            ChannelId bpCid = new(0x050B4433);
+            ChannelId unkCid = new(0x05016655);
             byte[] dataPage = { 0, 0, 0, 0, 0, 0, 0, 0 };
             antDeviceCollection.HandleDataMessage(hrmCid, dataPage);
             antDeviceCollection.HandleDataMessage(bpCid, dataPage);
@@ -80,9 +80,9 @@ namespace AntPlus.UnitTests
 
             // Assert
             Assert.IsTrue(result, "Remove Result");
-            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId == hrmCid), "Has HRM");
-            Assert.IsFalse(antDeviceCollection.Any(d => d.ChannelId == bpCid), "Has Bike Power");
-            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId == unkCid), "Has Unknown");
+            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId.Id == hrmCid.Id), "Has HRM");
+            Assert.IsFalse(antDeviceCollection.Any(d => d.ChannelId.Id == bpCid.Id), "Has Bike Power");
+            Assert.IsTrue(antDeviceCollection.Any(d => d.ChannelId.Id == unkCid.Id), "Has Unknown");
         }
     }
 }

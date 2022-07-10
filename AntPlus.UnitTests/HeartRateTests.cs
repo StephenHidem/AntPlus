@@ -8,7 +8,7 @@ namespace DeviceProfile.UnitTests
     [TestClass]
     public class HeartRateTests
     {
-        private const uint hrmCid = 0x01782211;
+        private ChannelId hrmCid = new(0x01782211);
 
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0, 0, 0)]

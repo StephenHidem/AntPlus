@@ -11,12 +11,12 @@ namespace AntPlus.UnitTests
         public void TestDeviceNumber(uint channelId, uint expectedDeviceNumber)
         {
             // Arrange
-            var antDevice = new UnknownDevice(channelId);
+            var antDevice = new UnknownDevice(new ChannelId(channelId));
 
             // Act
 
             // Assert
-            Assert.AreEqual(expectedDeviceNumber, antDevice.DeviceNumber);
+            Assert.AreEqual(expectedDeviceNumber, antDevice.ChannelId.DeviceNumber);
         }
 
         [TestMethod]
@@ -25,12 +25,12 @@ namespace AntPlus.UnitTests
         public void TestDeviceType(uint channelId, byte expectedDeviceType)
         {
             // Arrange
-            var antDevice = new UnknownDevice(channelId);
+            var antDevice = new UnknownDevice(new ChannelId(channelId));
 
             // Act
 
             // Assert
-            Assert.AreEqual(expectedDeviceType, antDevice.DeviceType);
+            Assert.AreEqual(expectedDeviceType, antDevice.ChannelId.DeviceType);
         }
 
         [TestMethod]
@@ -39,12 +39,12 @@ namespace AntPlus.UnitTests
         public void TestPairingBit(uint channelId, bool expectedResult)
         {
             // Arrange
-            var antDevice = new UnknownDevice(channelId);
+            var antDevice = new UnknownDevice(new ChannelId(channelId));
 
             // Act
 
             // Assert
-            Assert.AreEqual(expectedResult, antDevice.IsPairingBitSet);
+            Assert.AreEqual(expectedResult, antDevice.ChannelId.IsPairingBitSet);
         }
 
         [TestMethod]
@@ -53,12 +53,12 @@ namespace AntPlus.UnitTests
         public void TestAreGlobalPageUsed(uint channelId, bool expectedResult)
         {
             // Arrange
-            var antDevice = new UnknownDevice(channelId);
+            var antDevice = new UnknownDevice(new ChannelId(channelId));
 
             // Act
 
             // Assert
-            Assert.AreEqual(expectedResult, antDevice.AreGlobalDataPagesUsed);
+            Assert.AreEqual(expectedResult, antDevice.ChannelId.AreGlobalDataPagesUsed);
         }
 
         [TestMethod]
@@ -73,12 +73,12 @@ namespace AntPlus.UnitTests
         public void TestTransmissionType(uint channelId, ChannelSharing expectedTranmissonType)
         {
             // Arrange
-            var antDevice = new UnknownDevice(channelId);
+            var antDevice = new UnknownDevice(new ChannelId(channelId));
 
             // Act
 
             // Assert
-            Assert.AreEqual(expectedTranmissonType, antDevice.TransmissionType);
+            Assert.AreEqual(expectedTranmissonType, antDevice.ChannelId.TransmissionType);
         }
     }
 }

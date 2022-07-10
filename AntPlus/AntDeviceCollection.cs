@@ -1,5 +1,4 @@
 ﻿using DeviceProfiles;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -51,12 +50,12 @@ namespace AntPlus
         }
 
 
-        public void HandleDataMessage(uint channelId, byte[] dataPage)
+        public void HandleDataMessage(ChannelId channelId, byte[] dataPage)
         {
             AntDevice device;
             lock (collectionLock)
             {
-                device = this.FirstOrDefault(ant => ant.ChannelId == channelId);
+                device = this.FirstOrDefault(ant => ant.ChannelId.Id == channelId.Id);
             }
             if (device == null)
             {
@@ -66,10 +65,9 @@ namespace AntPlus
             device.Parse(dataPage);
         }
 
-        private AntDevice CreateAntDevice(uint channelId)
+        private AntDevice CreateAntDevice(ChannelId channelId)
         {
-            byte deviceType = (byte)(BitConverter.GetBytes(channelId)[2] & 0x7F);
-            switch (deviceType)
+            switch (channelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
                     return new HeartRate(channelId);

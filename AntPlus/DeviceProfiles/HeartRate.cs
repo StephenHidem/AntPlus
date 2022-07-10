@@ -301,7 +301,7 @@ namespace DeviceProfiles
         /// Initializes a new instance of the <see cref="HeartRate"/> class.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
-        public HeartRate(uint channelId) : base(channelId)
+        public HeartRate(ChannelId channelId) : base(channelId)
         {
         }
 
@@ -351,7 +351,7 @@ namespace DeviceProfiles
                     CumulativeOperatingTimePageChanged?.Invoke(this, TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0));
                     break;
                 case DataPage.ManufacturerInfo:
-                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(dataPage, DeviceNumber));
+                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber));
                     break;
                 case DataPage.ProductInfo:
                     ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(dataPage));

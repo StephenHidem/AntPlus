@@ -1,4 +1,5 @@
 ﻿using AntPlus;
+using AntRadioInterface;
 using System;
 using System.Linq;
 
@@ -71,8 +72,11 @@ namespace DeviceProfiles
             Cycling = 2,
             /// <summary>Swimming</summary>
             Swimming = 4,
-            /// <summary>All</summary>
-            All = 7
+            /// <summary>Manufacture defined feature</summary>
+            ManufacturerFeature1 = 0x40,
+            /// <summary>Manufacture defined feature</summary>
+            ManufacturerFeature2 = 0x80,
+            All = 0xC7
         }
 
         /// <summary>
@@ -101,14 +105,14 @@ namespace DeviceProfiles
         /// <summary>
         /// Heart rate data common to all data pages.
         /// </summary>
-        public struct CommonHeartRateData
+        public readonly struct CommonHeartRateData
         {
             /// <summary>Accumulated heart beat event time in milliseconds.</summary>
-            public int AccumulatedHeartBeatEventTime;
+            public int AccumulatedHeartBeatEventTime { get; }
             /// <summary>Accumulated heart beat count.</summary>
-            public int AccumulatedHeartBeatCount;
+            public int AccumulatedHeartBeatCount { get; }
             /// <summary>Computed heart rate as determined by the sensor in beats per minute.</summary>
-            public byte ComputedHeartRate;
+            public byte ComputedHeartRate { get; }
 
             internal CommonHeartRateData(int accumEventTime, int accumBeatCount, byte heartRate)
             {
@@ -122,40 +126,31 @@ namespace DeviceProfiles
         /// Manufacturer supplied info. It may be sent as a main page or background page. The heart beat event time and count are
         /// provided as-is from this data page. It is up to the application if these values should be accumulated or utilized.
         /// </summary>
-        public struct ManufacturerInfoPage
+        public readonly struct ManufacturerInfoPage
         {
             /// <summary>The manufacturing identifier LSB</summary>
-            public byte ManufacturingIdLsb;
+            public byte ManufacturingIdLsb { get; }
             /// <summary>The serial number</summary>
-            public uint SerialNumber;
-            /// <summary>Heart beat event time in 1/1024 of a second. Rollover at 65536 (64 seconds).</summary>
-            public ushort HeartBeatEventTime;
-            /// <summary>Heart beat count. Rollover at 256.</summary>
-            public byte HeartBeatCount;
-            /// <summary>Computed heart rate as determined by the sensor in beats per minute.</summary>
-            public byte ComputedHeartRate;
+            public uint SerialNumber { get; }
 
             internal ManufacturerInfoPage(byte[] page, uint deviceNumber)
             {
                 ManufacturingIdLsb = page[1];
                 SerialNumber = (uint)((BitConverter.ToUInt16(page, 2) << 16) + (deviceNumber & 0x0000FFFF));
-                HeartBeatEventTime = BitConverter.ToUInt16(page, 4);
-                HeartBeatCount = page[6];
-                ComputedHeartRate = page[7];
             }
         }
 
         /// <summary>
         /// Product information. Sent as a background page. All fields are manufacturer specific.
         /// </summary>
-        public struct ProductInfoPage
+        public readonly struct ProductInfoPage
         {
             /// <summary>Gets the hardware version.</summary>
-            public byte HardwareVersion;
+            public byte HardwareVersion { get; }
             /// <summary>Gets the software version.</summary>
-            public byte SoftwareVersion;
+            public byte SoftwareVersion { get; }
             /// <summary>Gets the model number.</summary>
-            public byte ModelNumber;
+            public byte ModelNumber { get; }
 
             internal ProductInfoPage(byte[] page)
             {
@@ -168,12 +163,12 @@ namespace DeviceProfiles
         /// <summary>
         /// This structure provides the RR interval and manufacturer specific data. It is typically sent as a main page.
         /// </summary>
-        public struct PreviousHeartBeatPage
+        public readonly struct PreviousHeartBeatPage
         {
             /// <summary>Manufacturer specific data. Set to 0xFF if not used.</summary>
-            public byte ManufacturerSpecific;
+            public byte ManufacturerSpecific { get; }
             /// <summary>RR interval in milliseconds.</summary>
-            public int RRInterval;
+            public int RRInterval { get; }
 
             internal PreviousHeartBeatPage(byte[] page)
             {
@@ -185,14 +180,14 @@ namespace DeviceProfiles
         /// <summary>
         /// Swim interval data
         /// </summary>
-        public struct SwimIntervalPage
+        public readonly struct SwimIntervalPage
         {
             /// <summary>Swim interval average heart rate.</summary>
-            public byte IntervalAverageHeartRate;
+            public byte IntervalAverageHeartRate { get; }
             /// <summary>Swim interval maximum heart rate.</summary>
-            public byte IntervalMaximumHeartRate;
+            public byte IntervalMaximumHeartRate { get; }
             /// <summary>Swim session average heart rate.</summary>
-            public byte SessionAverageHeartRate;
+            public byte SessionAverageHeartRate { get; }
 
             internal SwimIntervalPage(byte[] page)
             {
@@ -205,34 +200,31 @@ namespace DeviceProfiles
         /// <summary>
         /// Heart rate device capabilities
         /// </summary>
-        public struct CapabilitiesPage
+        public readonly struct CapabilitiesPage
         {
             /// <summary>Enabled features.</summary>
-            public Features Enabled;
+            public Features Enabled { get; }
             /// <summary>Supported features.</summary>
-            public Features Supported;
-            /// <summary>Manufacturer specific features.</summary>
-            public int ManufacturerSpecificFeatures;
+            public Features Supported { get; }
 
             internal CapabilitiesPage(byte[] page)
             {
-                Supported = (Features)(page[2] & 0x07);
-                Enabled = (Features)(page[3] & 0x07);
-                ManufacturerSpecificFeatures = page[3] >> 6;
+                Supported = (Features)(page[2] & 0xC7);
+                Enabled = (Features)(page[3] & 0xC7);
             }
         }
 
         /// <summary>
         /// The battery status page. Sent as a background page.
         /// </summary>
-        public struct BatteryStatusPage
+        public readonly struct BatteryStatusPage
         {
             /// <summary>Battery level.</summary>
-            public byte BatteryLevel { get; private set; }
+            public byte BatteryLevel { get; }
             /// <summary>Battery voltage.</summary>
-            public double BatteryVoltage { get; private set; }
+            public double BatteryVoltage { get; }
             /// <summary>Battery status.</summary>
-            public BatteryStatus BatteryStatus { get; private set; }
+            public BatteryStatus BatteryStatus { get; }
 
             internal BatteryStatusPage(byte[] page)
             {
@@ -245,12 +237,12 @@ namespace DeviceProfiles
         /// <summary>
         /// This structure provides manufacturer specific data. Sent as a background page.
         /// </summary>
-        public struct ManufacturerSpecificPage
+        public readonly struct ManufacturerSpecificPage
         {
             /// <summary>The manufacturer specific page number.</summary>
-            public byte Page;
+            public byte Page { get; }
             /// <summary>The manufacturer specific data.</summary>
-            public byte[] Data;
+            public byte[] Data { get; }
 
             internal ManufacturerSpecificPage(byte[] page)
             {
@@ -379,14 +371,6 @@ namespace DeviceProfiles
             }
         }
 
-        /// <summary>Requests the capabilities.</summary>
-        /// <param name="channelNumber">Channel to send message. Default is channel 0.</param>
-        /// <param name="numberOfTimesToTransmit">The number of times to transmit. Default is 4 times.</param>
-        public void RequestCapabilities(byte channelNumber = 0, byte numberOfTimesToTransmit = 4)
-        {
-            RequestDataPage((byte)DataPage.Capabilities, channelNumber, numberOfTimesToTransmit);
-        }
-
         /// <summary>
         /// Sets the sport mode.
         /// </summary>
@@ -414,6 +398,16 @@ namespace DeviceProfiles
 
             // convert to milliseconds
             return deltaEventTime * 1000 / 1024;
+        }
+
+        public override void ChannelEventHandler(EventMsgId eventMsgId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

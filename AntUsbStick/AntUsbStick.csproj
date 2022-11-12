@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AntRadioInterface\AntRadioInterface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ANT_NET">
+      <HintPath>..\..\ANT-SDK_PC.3.5\ANT-SDK_PC.3.5\Release\ANT_NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

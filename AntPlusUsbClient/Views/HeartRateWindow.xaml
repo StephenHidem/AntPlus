@@ -1,0 +1,35 @@
+﻿<Window x:Class="AntPlusUsbClient.Views.HeartRateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AntPlusUsbClient.Views"
+        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:HeartRateViewModel}"
+        mc:Ignorable="d"
+        Title="HeartRateWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="{Binding HeartRateData.ComputedHeartRate, StringFormat=Heart Rate {0}}" d:Text="TextBlock"/>
+            <TextBlock Text="{Binding HeartRateData.AccumulatedHeartBeatCount, StringFormat=Accumulated Heartbeat Count {0}}"/>
+            <TextBlock Text="{Binding HeartRateData.AccumulatedHeartBeatEventTime, StringFormat=Accumulated Heartbeat Event Time {0}}"/>
+            <TextBlock Text="{Binding CumulativeOperatingTime, StringFormat=Cumulative Operating Time {0}}"/>
+            <TextBlock Text="{Binding SwimInterval.IntervalAverageHeartRate, StringFormat=IntervalAverageHeartRate {0}}"/>
+            <TextBlock Text="{Binding SwimInterval.IntervalMaximumHeartRate, StringFormat=IntervalMaximumHeartRate {0}}"/>
+            <TextBlock Text="{Binding SwimInterval.SessionAverageHeartRate, StringFormat=SessionAverageHeartRate {0}}"/>
+            <TextBlock Text="{Binding Capabilities.Supported, StringFormat=Capabilities Supported {0}}"/>
+            <TextBlock Text="{Binding Capabilities.Enabled, StringFormat=Capabilities Enabled {0}}"/>
+            <TextBlock Text="{Binding ManufacturerInfo.ManufacturingIdLsb, StringFormat=Man ID LSB {0}}"/>
+            <TextBlock Text="{Binding ManufacturerInfo.SerialNumber, StringFormat=Serial Number {0}}"/>
+            <TextBlock Text="{Binding ProductInfo.HardwareVersion, StringFormat=Hardware Version {0}}"/>
+            <TextBlock Text="{Binding ProductInfo.SoftwareVersion, StringFormat=Software Version {0}}"/>
+            <TextBlock Text="{Binding ProductInfo.ModelNumber, StringFormat=Model Number {0}}"/>
+            <TextBlock Text="{Binding PreviousHeartBeat.ManufacturerSpecific, StringFormat=Previous Manufacturer Specific {0}}"/>
+            <TextBlock Text="{Binding PreviousHeartBeat.RRInterval, StringFormat=RR Interval {0}}"/>
+            <TextBlock Text="{Binding BatteryStatus.BatteryLevel, StringFormat=Battery Level {0}}"/>
+            <TextBlock Text="{Binding BatteryStatus.BatteryStatus, StringFormat=Battery Status {0}}"/>
+            <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat=Battery Voltage {0}}"/>
+            <TextBlock Text="{Binding ManufacturerSpecific.Page, StringFormat=Manufacturer Specific Page {0}}"/>
+            <TextBlock Text="{Binding ManufacturerSpecific.Data, StringFormat=Manufacturer Specific Data {0}}"/>
+        </StackPanel>
+    </Grid>
+</Window>

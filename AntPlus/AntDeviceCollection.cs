@@ -1,4 +1,5 @@
-﻿using DeviceProfiles;
+﻿using AntRadioInterface;
+using DeviceProfiles;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,7 +8,29 @@ namespace AntPlus
     /// <summary>This is a thread safe observable collection of ANT devices.</summary>
     public class AntDeviceCollection : ObservableCollection<AntDevice>
     {
-        private object collectionLock = new object();
+        public object collectionLock = new object();
+        private readonly IAntChannel _channel;
+
+        public AntDeviceCollection(IAntChannel channel)
+        {
+            _channel = channel;
+            _channel.ChannelResponse += Channel_ChannelResponse;
+        }
+
+        private void Channel_ChannelResponse(object sender, IAntResponse e)
+        {
+            AntDevice device;
+            lock (collectionLock)
+            {
+                device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+                if (device == null)
+                {
+                    device = CreateAntDevice(e.ChannelId);
+                    Add(device);
+                }
+            }
+            device.Parse(e.Payload);
+        }
 
         protected override void ClearItems()
         {
@@ -47,22 +70,6 @@ namespace AntPlus
             {
                 base.SetItem(index, item);
             }
-        }
-
-
-        public void HandleDataMessage(ChannelId channelId, byte[] dataPage)
-        {
-            AntDevice device;
-            lock (collectionLock)
-            {
-                device = this.FirstOrDefault(ant => ant.ChannelId.Id == channelId.Id);
-            }
-            if (device == null)
-            {
-                device = CreateAntDevice(channelId);
-                Add(device);
-            }
-            device.Parse(dataPage);
         }
 
         private AntDevice CreateAntDevice(ChannelId channelId)

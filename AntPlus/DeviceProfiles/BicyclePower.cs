@@ -1,4 +1,5 @@
 ﻿using AntPlus;
+using AntRadioInterface;
 using System;
 
 namespace DeviceProfiles
@@ -128,6 +129,16 @@ namespace DeviceProfiles
         private double ComputeAveTorque()
         {
             return (AccumulatedTorque - previousAccumulatedTorque) / (32 * (AccumulatedEventCount - previousAccumulatedEventCount));
+        }
+
+        public override void ChannelEventHandler(EventMsgId eventMsgId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

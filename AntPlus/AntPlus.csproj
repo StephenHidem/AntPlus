@@ -4,4 +4,24 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="AntRadio.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Images\BicyclePower.png" />
+    <None Remove="Images\CrankTorqueFrequency.png" />
+    <None Remove="Images\HeartRate.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\BicyclePower.png" />
+    <EmbeddedResource Include="Images\CrankTorqueFrequency.png" />
+    <EmbeddedResource Include="Images\HeartRate.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AntRadioInterface\AntRadioInterface.csproj" />
+  </ItemGroup>
+
 </Project>

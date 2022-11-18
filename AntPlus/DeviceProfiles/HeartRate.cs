@@ -369,11 +369,6 @@ namespace DeviceProfiles
             }
         }
 
-        public void RequestDataPage(DataPage page, byte transmissionResponse)
-        {
-            base.RequestDataPage((byte)page, transmissionResponse);
-        }
-
         /// <summary>
         /// Sets the sport mode.
         /// </summary>

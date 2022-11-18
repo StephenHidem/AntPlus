@@ -96,18 +96,26 @@ namespace AntPlus
         }
 
         /// <summary>Requests the data page.</summary>
-        /// <param name="channelNumber">The channel number.</param>
-        /// <param name="pageNumber">The page number.</param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page">The requested page.</param>
         /// <param name="transmissionResponse">The transmission response.</param>
         /// <param name="commandType">Type of the command.</param>
         /// <param name="slaveSerialNumber">The slave serial number.</param>
         /// <param name="decriptor1">The decriptor1.</param>
         /// <param name="descriptor2">The descriptor2.</param>
-        public void RequestDataPage(byte pageNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
+        /// <exception cref="System.ArgumentException">Invalid data page requested.</exception>
+        public void RequestDataPage<T>(T page, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF) where T : Enum
         {
-            byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, pageNumber, (byte)commandType };
-            BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-            SendAcknowledgedMessage(msg);
+            if (Enum.IsDefined(typeof(T), page))
+            {
+                byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
+                BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
+                SendAcknowledgedMessage(msg);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid data page requested.");
+            }
         }
 
         /// <summary>Sends the acknowledged message.</summary>

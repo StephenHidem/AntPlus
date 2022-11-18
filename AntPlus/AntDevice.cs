@@ -1,30 +1,8 @@
 ﻿using AntRadioInterface;
 using System;
-using System.Linq;
 
 namespace AntPlus
 {
-    /// <summary>
-    /// ANT channel sharing enumeration. This is obtained from the transmission type in the channel ID.
-    /// </summary>
-    public enum ChannelSharing
-    {
-        /// <summary>The reserved</summary>
-        Reserved = 0,
-        /// <summary>
-        /// The independent channel
-        /// </summary>
-        IndependentChannel = 1,
-        /// <summary>
-        /// The shared channel one byte address
-        /// </summary>
-        SharedChannelOneByteAddress = 2,
-        /// <summary>
-        /// The shared channel two byte address
-        /// </summary>
-        SharedChannelTwoByteAddress = 3,
-    }
-
     /// <summary>
     /// Base class for all ANT devices.
     /// </summary>
@@ -32,6 +10,7 @@ namespace AntPlus
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte[] message;
+        private readonly IAntChannel antChannel;
 
 
         /// <summary>Gets the channel identifier.</summary>
@@ -40,9 +19,11 @@ namespace AntPlus
 
         /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
-        protected AntDevice(ChannelId channelId)
+        /// <param name="antChannel">Channel to send messages to.</param>
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel)
         {
             ChannelId = channelId;
+            this.antChannel = antChannel;
         }
 
         /// <summary>Parses the specified data page.</summary>
@@ -122,21 +103,21 @@ namespace AntPlus
         /// <param name="slaveSerialNumber">The slave serial number.</param>
         /// <param name="decriptor1">The decriptor1.</param>
         /// <param name="descriptor2">The descriptor2.</param>
-        public void RequestDataPage(byte channelNumber, byte pageNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
+        public void RequestDataPage(byte pageNumber, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF)
         {
             byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, pageNumber, (byte)commandType };
             BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-            SendExtendedAcknowledgedMessage(channelNumber, msg);
+            SendAcknowledgedMessage(msg);
         }
 
-        /// <summary>Sends the extended acknowledged message.</summary>
-        /// <param name="channelNumber">The channel number.</param>
+        /// <summary>Sends the acknowledged message.</summary>
         /// <param name="message">The message.</param>
-        public void SendExtendedAcknowledgedMessage(byte channelNumber, byte[] message)
+        public void SendAcknowledgedMessage(byte[] message)
         {
-            byte[] msg = new byte[] { 13, (byte)MessageId.ExtAcknowledgedData, channelNumber };
-            msg = msg.Concat(BitConverter.GetBytes(ChannelId.Id)).Concat(message).ToArray();
-            SendMessage(msg);
+            //byte[] msg = BitConverter.GetBytes(ChannelId.Id).Concat(message).ToArray();
+            //SendMessage(msg);
+            antChannel.SetChannelID(ChannelId, 500);
+            antChannel.SendAcknowledgedData(message, 500);
         }
     }
 }

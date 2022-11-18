@@ -8,7 +8,7 @@ namespace DeviceProfiles
     {
         public event EventHandler<byte[]> DeviceChanged;
 
-        public UnknownDevice(ChannelId channelId) : base(channelId)
+        public UnknownDevice(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 

@@ -9,7 +9,7 @@ namespace DeviceProfile.UnitTests
     [TestClass]
     public class HeartRateTests
     {
-        private ChannelId hrmCid = new(0x01782211);
+        private readonly ChannelId hrmCid = new(0x01782211);
 
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0, 0, 0)]
@@ -19,7 +19,7 @@ namespace DeviceProfile.UnitTests
             // Arrange
             int et = 0, ec = 0;
             byte hr = 0;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.HeartRateChanged += (sender, e) =>
             {
                 et = e.AccumulatedHeartBeatEventTime;
@@ -42,7 +42,7 @@ namespace DeviceProfile.UnitTests
             // Arrange
             int et = 0, ec = 0;
             byte hr = 0;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.HeartRateChanged += (sender, e) =>
             {
                 et = e.AccumulatedHeartBeatEventTime;
@@ -67,7 +67,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             TimeSpan cot = TimeSpan.FromSeconds(0);
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.CumulativeOperatingTimePageChanged += (sender, args) => cot = args;
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -84,12 +84,9 @@ namespace DeviceProfile.UnitTests
         public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] payload, byte manId, uint sn, int eventTime, int hrBeatCount, int computedHr)
         {
             // Arrange
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             byte mid = 0;
             uint serNum = 0;
-            ushort et = 0;
-            byte beatCount = 0;
-            byte hr = 0;
             heartRate.ManufacturerInfoPageChanged += (sender, args) =>
             {
                 mid = args.ManufacturingIdLsb;
@@ -103,9 +100,6 @@ namespace DeviceProfile.UnitTests
             // Assert
             Assert.AreEqual(manId, mid, "ManufacturingIdLsb");
             Assert.AreEqual(sn, serNum, "SerialNumber");
-            Assert.AreEqual(eventTime, et, "EventTime");
-            Assert.AreEqual(hrBeatCount, beatCount, "BeatCount");
-            Assert.AreEqual(computedHr, hr, "ComputedHeartRate");
         }
 
         [TestMethod]
@@ -114,7 +108,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             byte hv = 0, sv = 0, mn = 0;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.ProductInfoPageChanged += (sender, args) =>
             {
                 hv = args.HardwareVersion;
@@ -139,7 +133,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             int rr = 0;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.PreviousHeartBeatPageChanged += (sender, eventArgs) => rr = eventArgs.RRInterval;
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -156,7 +150,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             byte iahr = 0, imhr = 0, sahr = 0;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.SwimIntervalPageChanged += (sender, args) =>
             {
                 iahr = args.IntervalAverageHeartRate;
@@ -175,14 +169,14 @@ namespace DeviceProfile.UnitTests
         }
 
         [TestMethod]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x07, 0x01, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Running)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x07, 0x02, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Cycling)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0x07, 0x04, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Swimming)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xC7, 0x01, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Running)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xC7, 0x02, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Cycling)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xC7, 0x04, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Swimming)]
         public void Parse_Capabilities_ExpectedBehavior(byte[] payload, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
         {
             // Arrange
             HeartRate.Features enabled = HeartRate.Features.None, supported = HeartRate.Features.None;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.CapabilitiesPageChanged += (sender, args) =>
             {
                 enabled = args.Enabled;
@@ -207,7 +201,7 @@ namespace DeviceProfile.UnitTests
             byte bl = 0;
             double bv = 0;
             BatteryStatus bs = BatteryStatus.Unknown;
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.BatteryStatusPageChanged += (sender, e) =>
             {
                 bl = e.BatteryLevel;
@@ -231,7 +225,7 @@ namespace DeviceProfile.UnitTests
             // Arrange
             byte page = 0;
             byte[] data = { 0, 0, 0 };
-            var heartRate = new HeartRate(hrmCid);
+            var heartRate = new HeartRate(hrmCid, null);
             heartRate.ManufacturerSpecificPageChanged += (sender, e) =>
             {
                 page = e.Page;
@@ -244,7 +238,7 @@ namespace DeviceProfile.UnitTests
 
             // Assert
             Assert.AreEqual(112, page, "Page");
-            Assert.IsTrue(data.SequenceEqual(new byte[] { 0x11, 0x22, 0x33 }), "Data");
+            Assert.IsTrue(data.SequenceEqual(new byte[] { 0x11, 0x22, 0x33 }, null), "Data");
         }
 
         //[TestMethod]

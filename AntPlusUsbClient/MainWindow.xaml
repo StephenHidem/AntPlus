@@ -23,7 +23,6 @@
                     </ListView.View>
                 </ListView>
             </Expander>
-            <Button FontSize="30" Click="Button_Click_1" Height="43" >Request HR</Button>
         </StackPanel>
     </Grid>
 </Window>

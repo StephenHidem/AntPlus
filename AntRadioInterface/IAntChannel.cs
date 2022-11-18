@@ -152,18 +152,12 @@ namespace AntRadioInterface
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
         bool UnassignChannel(UInt32 responseWaitTime);
 
-        /// <overloads>Set the Channel ID</overloads>
-        /// <summary>
-        /// Set the Channel ID of this channel.
-        /// Throws exception if device type is > 127.
-        /// </summary>
-        /// <param name="deviceNumber">Device number to assign to channel. Set to 0 for receiver wild card matching</param>
-        /// <param name="pairingEnabled">Device pairing bit.</param>
-        /// <param name="deviceTypeID">Device type to assign to channel. Must be less than 128. Set to 0 for receiver wild card matching</param>
-        /// <param name="transmissionTypeID">Transmission type to assign to channel. Set to 0 for receiver wild card matching</param>
+        /// <summary>Set the Channel ID of this channel.
+        /// Throws exception if device type is &gt; 127.</summary>
+        /// <param name="channelId"></param>
         /// <param name="responseWaitTime">Time to wait for device success response</param>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
-        bool SetChannelID(UInt16 deviceNumber, bool pairingEnabled, byte deviceTypeID, byte transmissionTypeID, UInt32 responseWaitTime);
+        bool SetChannelID(ChannelId channelId, uint responseWaitTime);
 
         /// <overloads>Sets the Channel ID, using serial number as device number</overloads>
         /// <summary>

@@ -54,7 +54,7 @@ namespace DeviceProfiles
         public double AverageTorque { get; private set; }
 
 
-        public BicyclePower(ChannelId channelId) : base(channelId)
+        public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 

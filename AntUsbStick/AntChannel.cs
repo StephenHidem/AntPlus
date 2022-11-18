@@ -7,7 +7,7 @@ namespace AntUsbStick
 {
     public class AntChannel : IAntChannel
     {
-        private ANT_Channel antChannel;
+        private readonly ANT_Channel antChannel;
 
         public event EventHandler<IAntResponse> ChannelResponse;
 
@@ -106,9 +106,14 @@ namespace AntUsbStick
             return antChannel.setChannelFreq(RFFreqOffset, responseWaitTime);
         }
 
-        public bool SetChannelID(ushort deviceNumber, bool pairingEnabled, byte deviceTypeID, byte transmissionTypeID, uint responseWaitTime)
+        /// <summary>Set the channel ID of this channel.
+        /// Throws exception if device type is &gt; 127.</summary>
+        /// <param name="channelId"></param>
+        /// <param name="responseWaitTime">Time to wait for device success response</param>
+        /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
+        public bool SetChannelID(ChannelId channelId, uint responseWaitTime)
         {
-            return antChannel.setChannelID(deviceNumber, pairingEnabled, deviceTypeID, transmissionTypeID, responseWaitTime);
+            return antChannel.setChannelID((ushort)channelId.DeviceNumber, channelId.IsPairingBitSet, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], responseWaitTime);
         }
 
         public bool SetChannelID_UsingSerial(bool pairingEnabled, byte deviceTypeID, byte transmissionTypeID, uint waitResponseTime)

@@ -9,12 +9,14 @@ namespace AntPlus
     public class AntDeviceCollection : ObservableCollection<AntDevice>
     {
         public object collectionLock = new object();
-        private readonly IAntChannel _channel;
+        private readonly IAntRadio antRadio;
+        private readonly IAntChannel channel;
 
-        public AntDeviceCollection(IAntChannel channel)
+        public AntDeviceCollection(IAntRadio antRadio)
         {
-            _channel = channel;
-            _channel.ChannelResponse += Channel_ChannelResponse;
+            this.antRadio = antRadio;
+            channel = antRadio.GetChannel(0);
+            channel.ChannelResponse += Channel_ChannelResponse;
         }
 
         private void Channel_ChannelResponse(object sender, IAntResponse e)
@@ -77,11 +79,11 @@ namespace AntPlus
             switch (channelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
-                    return new HeartRate(channelId);
+                    return new HeartRate(channelId, antRadio.GetChannel(1));
                 case BicyclePower.DeviceClass:
-                    return new BicyclePower(channelId);
+                    return new BicyclePower(channelId, antRadio.GetChannel(1));
                 default:
-                    return new UnknownDevice(channelId);
+                    return new UnknownDevice(channelId, antRadio.GetChannel(1));
             }
         }
     }

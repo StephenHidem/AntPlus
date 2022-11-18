@@ -288,12 +288,10 @@ namespace DeviceProfiles
         /// </summary>
         public event EventHandler<ManufacturerSpecificPage> ManufacturerSpecificPageChanged;
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeartRate"/> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
-        public HeartRate(ChannelId channelId) : base(channelId)
+        /// <param name="antChannel"></param>
+        public HeartRate(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
@@ -371,6 +369,11 @@ namespace DeviceProfiles
             }
         }
 
+        public void RequestDataPage(DataPage page, byte transmissionResponse)
+        {
+            base.RequestDataPage((byte)page, transmissionResponse);
+        }
+
         /// <summary>
         /// Sets the sport mode.
         /// </summary>
@@ -378,7 +381,7 @@ namespace DeviceProfiles
         public void SetSportMode(SportMode sportMode)
         {
             byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)sportMode };
-            SendExtendedAcknowledgedMessage(0, msg);
+            SendAcknowledgedMessage(msg);
         }
 
         /// <summary>

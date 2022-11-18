@@ -1,12 +1,15 @@
 ﻿using DeviceProfiles;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Input;
 
 namespace AntPlusUsbClient.ViewModels
 {
     internal class HeartRateViewModel : INotifyPropertyChanged
     {
-        private HeartRate HeartRate;
+        private readonly HeartRate HeartRate;
 
         public HeartRate.CommonHeartRateData HeartRateData { get; private set; }
         public TimeSpan CumulativeOperatingTime { get; private set; }
@@ -17,6 +20,13 @@ namespace AntPlusUsbClient.ViewModels
         public HeartRate.PreviousHeartBeatPage PreviousHeartBeat { get; private set; }
         public HeartRate.BatteryStatusPage BatteryStatus { get; private set; }
         public HeartRate.ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
+
+        public RoutedCommand PageRequest { get; private set; } = new RoutedCommand();
+        public RoutedCommand SetSportMode { get; private set; } = new RoutedCommand();
+        public CommandBinding PageRequestBinding { get; private set; }
+        public CommandBinding SetSportModeBinding { get; private set; }
+        public IEnumerable<HeartRate.DataPage> DataPageValues => Enum.GetValues(typeof(HeartRate.DataPage)).Cast<HeartRate.DataPage>();
+        public IEnumerable<HeartRate.SportMode> SportModeValues => Enum.GetValues(typeof(HeartRate.SportMode)).Cast<HeartRate.SportMode>();
 
         public HeartRateViewModel(HeartRate heartRate)
         {
@@ -32,6 +42,9 @@ namespace AntPlusUsbClient.ViewModels
             HeartRate.CapabilitiesPageChanged += HeartRate_CapabilitiesPageChanged;
             HeartRate.BatteryStatusPageChanged += HeartRate_BatteryStatusPageChanged;
             HeartRate.ManufacturerSpecificPageChanged += HeartRate_ManufacturerSpecificPageChanged;
+
+            PageRequestBinding = new CommandBinding(PageRequest, PageRequestExecuted, PageRequestCanExecute);
+            SetSportModeBinding = new CommandBinding(SetSportMode, SetSportModeExecuted, SetSportModeCanExecute);
         }
 
         private void HeartRate_HeartRateChanged(object sender, HeartRate.CommonHeartRateData e)
@@ -74,6 +87,7 @@ namespace AntPlusUsbClient.ViewModels
         {
             Capabilities = e;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Capabilities"));
+
         }
 
         private void HeartRate_BatteryStatusPageChanged(object sender, HeartRate.BatteryStatusPage e)
@@ -89,5 +103,77 @@ namespace AntPlusUsbClient.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void PageRequestExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            HeartRate.RequestDataPage((HeartRate.DataPage)e.Parameter, 0x80);
+        }
+
+        private void PageRequestCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.Parameter == null)
+            {
+                return;
+            }
+            switch ((HeartRate.DataPage)e.Parameter)
+            {
+                case HeartRate.DataPage.Default:
+                    e.CanExecute = false;
+                    break;
+                case HeartRate.DataPage.CumulativeOperatingTime:
+                    e.CanExecute = true;
+                    break;
+                case HeartRate.DataPage.ManufacturerInfo:
+                    e.CanExecute = true;
+                    break;
+                case HeartRate.DataPage.ProductInfo:
+                    e.CanExecute = true;
+                    break;
+                case HeartRate.DataPage.PreviousHeartBeat:
+                    e.CanExecute = false;
+                    break;
+                case HeartRate.DataPage.SwimInterval:
+                    e.CanExecute = true;
+                    break;
+                case HeartRate.DataPage.Capabilities:
+                    e.CanExecute = true;
+                    break;
+                case HeartRate.DataPage.BatteryStatus:
+                    e.CanExecute = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetSportModeExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            HeartRate.SetSportMode((HeartRate.SportMode)e.Parameter);
+        }
+
+        private void SetSportModeCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.Parameter == null)
+            {
+                return;
+            }
+            switch ((HeartRate.SportMode)e.Parameter)
+            {
+                case HeartRate.SportMode.None:
+                    e.CanExecute = !Capabilities.Enabled.Equals(HeartRate.Features.None);
+                    break;
+                case HeartRate.SportMode.Running:
+                    e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Running);
+                    break;
+                case HeartRate.SportMode.Cycling:
+                    e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Cycling);
+                    break;
+                case HeartRate.SportMode.Swimming:
+                    e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Swimming);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

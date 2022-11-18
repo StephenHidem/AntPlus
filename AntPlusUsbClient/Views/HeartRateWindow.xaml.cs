@@ -14,7 +14,10 @@ namespace AntPlusUsbClient.Views
         {
             InitializeComponent();
             HeartRate item = (HeartRate)listView.SelectedItem;
-            DataContext = new HeartRateViewModel(item);
+            HeartRateViewModel hrvm = new HeartRateViewModel(item);
+            CommandBindings.Add(hrvm.PageRequestBinding);
+            CommandBindings.Add(hrvm.SetSportModeBinding);
+            DataContext = hrvm;
         }
     }
 }

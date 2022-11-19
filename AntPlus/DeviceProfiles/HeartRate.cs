@@ -376,7 +376,7 @@ namespace DeviceProfiles
         public void SetSportMode(SportMode sportMode)
         {
             byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)sportMode };
-            SendAcknowledgedMessage(msg);
+            SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>

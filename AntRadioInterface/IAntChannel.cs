@@ -261,18 +261,13 @@ namespace AntRadioInterface
         /// <param name="data">data to send (length 8 or less)</param>
         bool SendExtBroadcastData(UInt16 deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data);
 
-        /// <overloads>Sends extended acknowledged message</overloads>
-        /// <summary>
-        /// Sends the given data as an extended acknowledged transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
-        /// Throws exception if data > 8-bytes in length
-        /// </summary>
-        /// <param name="deviceNumber">Device number of channel ID to send to</param>
-        /// <param name="deviceTypeID">Device type of channel ID to send to</param>
-        /// <param name="transmissionTypeID">Transmission type of channel ID to send to</param>
-        /// <param name="data">data to send (length 8 or less)</param>
+        /// <summary>Sends the given data as an extended acknowledged transmission.
+        /// Throws exception if data &gt; 8-bytes in length</summary>
+        /// <param name="channelId">Channel ID assigned to a device</param>
+        /// <param name="data">Data to send (length 8 or less)</param>
         /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
-        MessagingReturnCode SendExtAcknowledgedData(UInt16 deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data, UInt32 ackWaitTime);
+        MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime);
 
         /// <overloads>Sends extended burst data</overloads>
         /// <summary>

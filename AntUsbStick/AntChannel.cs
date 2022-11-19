@@ -86,9 +86,10 @@ namespace AntUsbStick
             return (MessagingReturnCode)antChannel.sendBurstTransfer(data, completeWaitTime);
         }
 
-        public MessagingReturnCode SendExtAcknowledgedData(ushort deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data, uint ackWaitTime)
+        public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            return (MessagingReturnCode)antChannel.sendExtAcknowledgedData(deviceNumber, deviceTypeID, transmissionTypeID, data, ackWaitTime);
+            byte[] id = BitConverter.GetBytes(channelId.Id);
+            return (MessagingReturnCode)antChannel.sendExtAcknowledgedData(BitConverter.ToUInt16(id, 0), id[2], id[3], data, ackWaitTime);
         }
 
         public bool SendExtBroadcastData(ushort deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data)

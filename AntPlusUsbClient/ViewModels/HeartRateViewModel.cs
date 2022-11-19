@@ -106,7 +106,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void PageRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            HeartRate.RequestDataPage<HeartRate.DataPage>((HeartRate.DataPage)e.Parameter, 0x80);
+            HeartRate.RequestDataPage((HeartRate.DataPage)e.Parameter);
         }
 
         private void PageRequestCanExecute(object sender, CanExecuteRoutedEventArgs e)

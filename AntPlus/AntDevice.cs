@@ -96,7 +96,7 @@ namespace AntPlus
         }
 
         /// <summary>Requests the data page.</summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The data page enumeration of the derived ANT device class.</typeparam>
         /// <param name="page">The requested page.</param>
         /// <param name="transmissionResponse">The transmission response.</param>
         /// <param name="commandType">Type of the command.</param>
@@ -104,13 +104,13 @@ namespace AntPlus
         /// <param name="decriptor1">The decriptor1.</param>
         /// <param name="descriptor2">The descriptor2.</param>
         /// <exception cref="System.ArgumentException">Invalid data page requested.</exception>
-        public void RequestDataPage<T>(T page, byte transmissionResponse = 0x04, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF) where T : Enum
+        public void RequestDataPage<T>(T page, byte transmissionResponse = 0x80, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF) where T : Enum
         {
             if (Enum.IsDefined(typeof(T), page))
             {
                 byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
                 BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-                SendAcknowledgedMessage(msg);
+                antChannel.SendExtAcknowledgedData(ChannelId, msg, 500);
             }
             else
             {
@@ -120,12 +120,9 @@ namespace AntPlus
 
         /// <summary>Sends the acknowledged message.</summary>
         /// <param name="message">The message.</param>
-        public void SendAcknowledgedMessage(byte[] message)
+        public void SendExtAcknowledgedMessage(byte[] message)
         {
-            //byte[] msg = BitConverter.GetBytes(ChannelId.Id).Concat(message).ToArray();
-            //SendMessage(msg);
-            antChannel.SetChannelID(ChannelId, 500);
-            antChannel.SendAcknowledgedData(message, 500);
+            antChannel.SendExtAcknowledgedData(ChannelId, message, 500);
         }
     }
 }

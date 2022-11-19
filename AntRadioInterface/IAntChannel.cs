@@ -166,7 +166,7 @@ namespace AntRadioInterface
         /// Throws exception if device type is > 127.
         /// </summary>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
-        bool SetChannelID_UsingSerial(bool pairingEnabled, byte deviceTypeID, byte transmissionTypeID, UInt32 waitResponseTime);
+        bool SetChannelID_UsingSerial(ChannelId channelId, UInt32 waitResponseTime);
 
         /// <overloads>Sets channel message period</overloads>
         /// <summary>
@@ -250,16 +250,12 @@ namespace AntRadioInterface
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
         MessagingReturnCode SendBurstTransfer(byte[] data, UInt32 completeWaitTime);
 
-        /// <overloads>Sends extended broadcast message</overloads>
-        /// <summary>
-        /// Sends the given data as an extended broadcast transmission.
-        /// Throws exception if data > 8-bytes in length
-        /// </summary>
-        /// <param name="deviceNumber">Device number of channel ID to send to</param>
-        /// <param name="deviceTypeID">Device type of channel ID to send to</param>
-        /// <param name="transmissionTypeID">Transmission type of channel ID to send to</param>
+        /// <summary>Sends the given data as an extended broadcast transmission.
+        /// Throws exception if data &gt; 8-bytes in length</summary>
+        /// <param name="channelId">The channel ID of the ANT device</param>
         /// <param name="data">data to send (length 8 or less)</param>
-        bool SendExtBroadcastData(UInt16 deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data);
+        /// <overloads>Sends extended broadcast message</overloads>
+        bool SendExtBroadcastData(ChannelId channelId, byte[] data);
 
         /// <summary>Sends the given data as an extended acknowledged transmission.
         /// Throws exception if data &gt; 8-bytes in length</summary>
@@ -269,17 +265,13 @@ namespace AntRadioInterface
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
         MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime);
 
-        /// <overloads>Sends extended burst data</overloads>
-        /// <summary>
-        /// Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
-        /// </summary>
-        /// <param name="deviceNumber">Device number of channel ID to send to</param>
-        /// <param name="deviceTypeID">Device type of channel ID to send to</param>
-        /// <param name="transmissionTypeID">Transmission type of channel ID to send to</param>
+        /// <summary>Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled</summary>
+        /// <param name="channelId">Channel ID assigned to a device</param>
         /// <param name="data">data to send, can be any length</param>
         /// <param name="completeWaitTime">Time in ms to wait for completion of transfer</param>
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
-        MessagingReturnCode SendExtBurstTransfer(UInt16 deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data, UInt32 completeWaitTime);
+        /// <overloads>Sends extended burst data</overloads>
+        MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, UInt32 completeWaitTime);
 
         /// <overloads>Closes the channel</overloads>
         /// <summary>
@@ -300,19 +292,17 @@ namespace AntRadioInterface
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
         bool SetLowPrioritySearchTimeout(byte lowPriorityTimeout, UInt32 responseWaitTime);
 
-        /// <overloads>Adds a channel ID to the device inclusion/exclusion list</overloads>
         /// <summary>
         /// Add the given channel ID to the channel's inclusion/exclusion list.
         /// The channelID is then included or excluded from the wild card search depending on how the list is configured.
-        /// Throws exception if listIndex > 3.
+        /// Throws exception if listIndex &gt; 3.
         /// </summary>
-        /// <param name="deviceNumber">deviceNumber of the channelID to add</param>
-        /// <param name="deviceTypeID">deviceType of the channelID to add</param>
-        /// <param name="transmissionTypeID">transmissionType of the channelID to add</param>
+        /// <param name="channelId">Channel ID assigned to a device</param>
         /// <param name="listIndex">position in inclusion/exclusion list to add channelID at (Max size of list is 4)</param>
         /// <param name="responseWaitTime">Time to wait for device success response</param>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
-        bool IncludeExcludeListAddChannel(UInt16 deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte listIndex, UInt32 responseWaitTime);
+        /// <overloads>Adds a channel ID to the device inclusion/exclusion list</overloads>
+        bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, UInt32 responseWaitTime);
 
         /// <overloads>Configures the device inclusion/exclusion list</overloads>
         /// <summary>

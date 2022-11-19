@@ -42,9 +42,10 @@ namespace AntUsbStick
             return antChannel.configFrequencyAgility(freq1, freq2, freq3, responseWaitTime);
         }
 
-        public bool IncludeExcludeListAddChannel(ushort deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte listIndex, uint responseWaitTime)
+        public bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, uint responseWaitTime)
         {
-            return antChannel.includeExcludeList_addChannel(deviceNumber, deviceTypeID, transmissionTypeID, listIndex, responseWaitTime);
+            byte[] id = BitConverter.GetBytes(channelId.Id);
+            return antChannel.includeExcludeList_addChannel(BitConverter.ToUInt16(id, 0), id[2], id[3], listIndex, responseWaitTime);
         }
 
         public bool IncludeExcludeListConfigure(byte listSize, bool isExclusionList, uint responseWaitTime)
@@ -92,14 +93,16 @@ namespace AntUsbStick
             return (MessagingReturnCode)antChannel.sendExtAcknowledgedData(BitConverter.ToUInt16(id, 0), id[2], id[3], data, ackWaitTime);
         }
 
-        public bool SendExtBroadcastData(ushort deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data)
+        public bool SendExtBroadcastData(ChannelId channelId, byte[] data)
         {
-            return antChannel.sendExtBroadcastData(deviceNumber, deviceTypeID, transmissionTypeID, data);
+            byte[] id = BitConverter.GetBytes(channelId.Id);
+            return antChannel.sendExtBroadcastData(BitConverter.ToUInt16(id, 0), id[2], id[3], data);
         }
 
-        public MessagingReturnCode SendExtBurstTransfer(ushort deviceNumber, byte deviceTypeID, byte transmissionTypeID, byte[] data, uint completeWaitTime)
+        public MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, uint completeWaitTime)
         {
-            return (MessagingReturnCode)antChannel.sendExtBurstTransfer(deviceNumber, deviceTypeID, transmissionTypeID, data, completeWaitTime);
+            byte[] id = BitConverter.GetBytes(channelId.Id);
+            return (MessagingReturnCode)antChannel.sendExtBurstTransfer(BitConverter.ToUInt16(id, 0), id[2], id[3], data, completeWaitTime);
         }
 
         public bool SetChannelFreq(byte RFFreqOffset, uint responseWaitTime)
@@ -117,9 +120,9 @@ namespace AntUsbStick
             return antChannel.setChannelID((ushort)channelId.DeviceNumber, channelId.IsPairingBitSet, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], responseWaitTime);
         }
 
-        public bool SetChannelID_UsingSerial(bool pairingEnabled, byte deviceTypeID, byte transmissionTypeID, uint waitResponseTime)
+        public bool SetChannelID_UsingSerial(ChannelId channelId, uint waitResponseTime)
         {
-            return antChannel.setChannelID_UsingSerial(pairingEnabled, deviceTypeID, transmissionTypeID, waitResponseTime);
+            return antChannel.setChannelID_UsingSerial(channelId.IsPairingBitSet, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], waitResponseTime);
         }
 
         public bool SetChannelPeriod(ushort messagePeriod_32768unitspersecond, uint responseWaitTime)

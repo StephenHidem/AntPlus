@@ -44,8 +44,7 @@ namespace AntUsbStick
 
         public bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, uint responseWaitTime)
         {
-            byte[] id = BitConverter.GetBytes(channelId.Id);
-            return antChannel.includeExcludeList_addChannel(BitConverter.ToUInt16(id, 0), id[2], id[3], listIndex, responseWaitTime);
+            return antChannel.includeExcludeList_addChannel((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], listIndex, responseWaitTime);
         }
 
         public bool IncludeExcludeListConfigure(byte listSize, bool isExclusionList, uint responseWaitTime)
@@ -89,20 +88,17 @@ namespace AntUsbStick
 
         public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            byte[] id = BitConverter.GetBytes(channelId.Id);
-            return (MessagingReturnCode)antChannel.sendExtAcknowledgedData(BitConverter.ToUInt16(id, 0), id[2], id[3], data, ackWaitTime);
+            return (MessagingReturnCode)antChannel.sendExtAcknowledgedData((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
         }
 
         public bool SendExtBroadcastData(ChannelId channelId, byte[] data)
         {
-            byte[] id = BitConverter.GetBytes(channelId.Id);
-            return antChannel.sendExtBroadcastData(BitConverter.ToUInt16(id, 0), id[2], id[3], data);
+            return antChannel.sendExtBroadcastData((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data);
         }
 
         public MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, uint completeWaitTime)
         {
-            byte[] id = BitConverter.GetBytes(channelId.Id);
-            return (MessagingReturnCode)antChannel.sendExtBurstTransfer(BitConverter.ToUInt16(id, 0), id[2], id[3], data, completeWaitTime);
+            return (MessagingReturnCode)antChannel.sendExtBurstTransfer((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data, completeWaitTime);
         }
 
         public bool SetChannelFreq(byte RFFreqOffset, uint responseWaitTime)

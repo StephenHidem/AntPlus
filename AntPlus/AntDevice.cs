@@ -9,6 +9,7 @@ namespace AntPlus
     public abstract class AntDevice
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
+        protected byte[] lastDataPage = new byte[8];
         private byte[] message;
         private readonly IAntChannel antChannel;
 

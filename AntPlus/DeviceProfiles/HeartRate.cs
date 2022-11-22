@@ -94,7 +94,6 @@ namespace DeviceProfiles
             Swimming = 5,
         }
 
-        private byte[] lastDataPage = new byte[8];
         private byte lastBeatCount;
         private int accumHeartBeatCount;
         private ushort lastBeatEventTime;
@@ -123,8 +122,7 @@ namespace DeviceProfiles
         }
 
         /// <summary>
-        /// Manufacturer supplied info. It may be sent as a main page or background page. The heart beat event time and count are
-        /// provided as-is from this data page. It is up to the application if these values should be accumulated or utilized.
+        /// Manufacturer supplied info. It may be sent as a main page or background page.
         /// </summary>
         public readonly struct ManufacturerInfoPage
         {

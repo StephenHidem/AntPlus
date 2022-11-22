@@ -33,17 +33,6 @@ namespace AntPlus
         public abstract void ChannelEventHandler(EventMsgId eventMsgId);
         public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
 
-        protected void SendMessage(byte[] msg)
-        {
-            message = msg;
-            // TODO: QUEUE UP ANT RADIO TO SEND MESSAGE
-        }
-
-        public byte[] GetMessage()
-        {
-            return message;
-        }
-
         /// <summary>
         /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
         /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.

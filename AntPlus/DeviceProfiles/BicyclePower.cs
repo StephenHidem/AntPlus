@@ -1,4 +1,5 @@
 ﻿using AntPlus;
+using AntPlus.DeviceProfiles;
 using AntRadioInterface;
 using System;
 using System.Linq;
@@ -26,37 +27,21 @@ namespace DeviceProfiles
             PedalPosition
         }
 
-        private byte lastEventCount;
-        private int previousAccumulatedEventCount;
 
-        private ushort lastPower;
-        private int previousAccumulatedPower;
-
-        private byte lastTicks;
-        private ushort lastPeriod;
-        private int previousAccumulatedPeriod;
-        private ushort lastTorque;
-        private int previousAccumulatedTorque;
-
-        public int AccumulatedEventCount { get; private set; }
-        public double AveragePower { get; private set; }
 
         // Standard Power-Only Main Data Page (0x10)
-        public byte PedalPower { get; private set; }
-        public byte InstantaneousCadence { get; private set; }
-        public int AccumulatedPower { get; private set; }
-        public ushort InstantaneousPower { get; private set; }
 
-        // Standard Wheel Torque Main Data Page (0x11) and Crank Torque Main Data Page (0x12)
-        public int AccumulatedTicks { get; private set; }
-        public int AccumulatedPeriod { get; private set; }
-        public int AccumulatedTorque { get; private set; }
-        public double AverageAngularVelocity { get; private set; }
-        public double AverageTorque { get; private set; }
+        public StandardPowerOnly PowerOnlySensor { get; private set; }
+        public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
+        public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
 
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
+            // since we don't know the sensor type we create all
+            PowerOnlySensor = new StandardPowerOnly(channelId, antChannel);
+            WheelTorqueSensor = new StandardWheelTorqueSensor(channelId, antChannel);
+            CrankTorqueSensor = new StandardCrankTorqueSensor(channelId, antChannel);
         }
 
         public override void Parse(byte[] dataPage)
@@ -79,40 +64,13 @@ namespace DeviceProfiles
                 case DataPage.MeasurementOutput:
                     break;
                 case DataPage.PowerOnly:
-                    AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
-                    PedalPower = dataPage[2];
-                    InstantaneousCadence = dataPage[3];
-                    AccumulatedPower += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
-                    InstantaneousPower = BitConverter.ToUInt16(dataPage, 6);
-                    AveragePower = (AccumulatedPower - previousAccumulatedPower) / (AccumulatedEventCount - previousAccumulatedEventCount);
-                    previousAccumulatedEventCount = AccumulatedEventCount;
-                    previousAccumulatedPower = AccumulatedPower;
+                    PowerOnlySensor.Parse(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
-                    AccumulatedTicks += CalculateDelta(dataPage[2], ref lastTicks);
-                    InstantaneousCadence = dataPage[3];
-                    AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
-                    AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
-                    AverageAngularVelocity = ComputeAveAngularVelocity();
-                    AverageTorque = ComputeAveTorque();
-                    AveragePower = AverageTorque * AverageAngularVelocity;
-                    previousAccumulatedEventCount = AccumulatedEventCount;
-                    previousAccumulatedPeriod = AccumulatedPeriod;
-                    previousAccumulatedTorque = AccumulatedTorque;
+                    WheelTorqueSensor.Parse(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
-                    AccumulatedTicks += CalculateDelta(dataPage[2], ref lastTicks);
-                    InstantaneousCadence = dataPage[3];
-                    AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
-                    AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
-                    AverageAngularVelocity = ComputeAveAngularVelocity();
-                    AverageTorque = ComputeAveTorque();
-                    AveragePower = AverageTorque * AverageAngularVelocity;
-                    previousAccumulatedEventCount = AccumulatedEventCount;
-                    previousAccumulatedPeriod = AccumulatedPeriod;
-                    previousAccumulatedTorque = AccumulatedTorque;
+                    CrankTorqueSensor.Parse(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
                     break;
@@ -129,15 +87,15 @@ namespace DeviceProfiles
             }
         }
 
-        private double ComputeAveAngularVelocity()
-        {
-            return 2 * Math.PI * (AccumulatedEventCount - previousAccumulatedEventCount) / ((AccumulatedPeriod - previousAccumulatedPeriod) / 2048);
-        }
+        //private double ComputeAveAngularVelocity()
+        //{
+        //    return 2 * Math.PI * (AccumulatedEventCount - previousAccumulatedEventCount) / ((AccumulatedPeriod - previousAccumulatedPeriod) / 2048);
+        //}
 
-        private double ComputeAveTorque()
-        {
-            return (AccumulatedTorque - previousAccumulatedTorque) / (32 * (AccumulatedEventCount - previousAccumulatedEventCount));
-        }
+        //private double ComputeAveTorque()
+        //{
+        //    return (AccumulatedTorque - previousAccumulatedTorque) / (32 * (AccumulatedEventCount - previousAccumulatedEventCount));
+        //}
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)
         {

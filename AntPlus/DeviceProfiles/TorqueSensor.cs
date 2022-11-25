@@ -62,7 +62,7 @@ namespace AntPlus.DeviceProfiles
 
         private double ComputeAveAngularVelocity()
         {
-            return 2 * Math.PI * (AccumulatedEventCount - previousAccumulatedEventCount) / ((AccumulatedPeriod - previousAccumulatedPeriod) / 2048);
+            return 2 * Math.PI * (AccumulatedEventCount - previousAccumulatedEventCount) / ((AccumulatedPeriod - previousAccumulatedPeriod) / 2048.0);
         }
 
         private double ComputeAveTorque()

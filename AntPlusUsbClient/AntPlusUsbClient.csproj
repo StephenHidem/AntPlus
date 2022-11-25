@@ -55,7 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
+    <Compile Include="Views\BicyclePowerWindow.xaml.cs">
+      <DependentUpon>BicyclePowerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HeartRateWindow.xaml.cs">
       <DependentUpon>HeartRateWindow.xaml</DependentUpon>
     </Compile>
@@ -71,6 +75,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\BicyclePowerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HeartRateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

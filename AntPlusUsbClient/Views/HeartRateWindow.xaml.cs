@@ -1,7 +1,6 @@
 ﻿using AntPlusUsbClient.ViewModels;
 using DeviceProfiles;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Views
 {
@@ -10,11 +9,10 @@ namespace AntPlusUsbClient.Views
     /// </summary>
     public partial class HeartRateWindow : Window
     {
-        public HeartRateWindow(ListView listView)
+        public HeartRateWindow(HeartRate heartRate)
         {
             InitializeComponent();
-            HeartRate item = (HeartRate)listView.SelectedItem;
-            HeartRateViewModel hrvm = new HeartRateViewModel(item);
+            HeartRateViewModel hrvm = new HeartRateViewModel(heartRate);
             CommandBindings.Add(hrvm.PageRequestBinding);
             CommandBindings.Add(hrvm.SetSportModeBinding);
             DataContext = hrvm;

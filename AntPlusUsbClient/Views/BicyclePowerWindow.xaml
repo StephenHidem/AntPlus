@@ -1,0 +1,57 @@
+﻿<Window x:Class="AntPlusUsbClient.Views.BicyclePowerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AntPlusUsbClient.Views"
+        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
+        mc:Ignorable="d"
+        Title="BicyclePowerWindow" Height="450" Width="280">
+    <Grid>
+        <StackPanel>
+            <Expander ExpandDirection="Down" IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding PowerOnly.AccumulatedEventCount, StringFormat='Accumulated Event Count {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.PedalPower, StringFormat='Pedal Power {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.AccumulatedPower, StringFormat='Accumulated Power {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.AveragePower, StringFormat='Average Power {0}'}"/>
+                </StackPanel>
+            </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Text="Crank Torque Sensor" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding CrankTorque.AccumulatedEventCount, StringFormat='Accumulated Event Count {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AccumulatedPeriod, StringFormat='Accumulated Period {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AccumulatedTicks, StringFormat='Accumulated Ticks {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AccumulatedTorque, StringFormat='Accumulated Torque {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AveragePower, StringFormat='Average Power {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                </StackPanel>
+            </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Text="Wheel Torque Sensor" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding WheelTorque.AccumulatedEventCount, StringFormat='Accumulated Event Count {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AccumulatedPeriod, StringFormat='Accumulated Period {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AccumulatedTicks, StringFormat='Accumulated Ticks {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AccumulatedTorque, StringFormat='Accumulated Torque {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AveragePower, StringFormat='Average Power {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </Grid>
+</Window>

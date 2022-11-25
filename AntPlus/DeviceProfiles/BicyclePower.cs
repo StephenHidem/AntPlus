@@ -27,14 +27,13 @@ namespace DeviceProfiles
             PedalPosition
         }
 
-
-
-        // Standard Power-Only Main Data Page (0x10)
-
         public StandardPowerOnly PowerOnlySensor { get; private set; }
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
 
+        public event EventHandler<StandardPowerOnly> PowerOnlyChanged;
+        public event EventHandler<StandardWheelTorqueSensor> WheelTorquePageChanged;
+        public event EventHandler<StandardCrankTorqueSensor> CrankTorquePageChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -65,12 +64,15 @@ namespace DeviceProfiles
                     break;
                 case DataPage.PowerOnly:
                     PowerOnlySensor.Parse(dataPage);
+                    PowerOnlyChanged?.Invoke(this, PowerOnlySensor);
                     break;
                 case DataPage.WheelTorque:
                     WheelTorqueSensor.Parse(dataPage);
+                    WheelTorquePageChanged?.Invoke(this, WheelTorqueSensor);
                     break;
                 case DataPage.CrankTorque:
                     CrankTorqueSensor.Parse(dataPage);
+                    CrankTorquePageChanged?.Invoke(this, CrankTorqueSensor);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
                     break;

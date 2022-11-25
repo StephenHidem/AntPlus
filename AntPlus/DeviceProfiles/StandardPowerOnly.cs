@@ -1,10 +1,10 @@
-﻿using AntRadioInterface;
-using System;
+﻿using System;
 
 namespace AntPlus.DeviceProfiles
 {
-    public class StandardPowerOnly : AntDevice
+    public class StandardPowerOnly
     {
+        protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastEventCount;
         private int previousAccumulatedEventCount;
 
@@ -18,21 +18,7 @@ namespace AntPlus.DeviceProfiles
         public int AccumulatedPower { get; private set; }
         public ushort InstantaneousPower { get; private set; }
 
-        public StandardPowerOnly(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
-        {
-        }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Parse(byte[] dataPage)
+        public void Parse(byte[] dataPage)
         {
             if (dataPage[1] != lastEventCount)
             {
@@ -50,6 +36,58 @@ namespace AntPlus.DeviceProfiles
                 previousAccumulatedEventCount = AccumulatedEventCount;
                 previousAccumulatedPower = AccumulatedPower;
             }
+        }
+
+        /// <summary>
+        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
+        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
+        /// </summary>
+        /// <param name="currentValue">The current value.</param>
+        /// <param name="lastValue">The last value.</param>
+        /// <returns>Positive delta of the current and previous values.</returns>
+        private int CalculateDelta(byte currentValue, ref byte lastValue)
+        {
+            if (isFirstDataMessage)
+            {
+                lastValue = currentValue;
+                return 0;
+            }
+
+            int delta = currentValue - lastValue;
+            if (lastValue > currentValue)
+            {
+                // rollover
+                delta += 256;
+            }
+
+            lastValue = currentValue;
+            return delta;
+        }
+
+        /// <summary>
+        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
+        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
+        /// </summary>
+        /// <param name="currentValue">The current value.</param>
+        /// <param name="lastValue">The last value.</param>
+        /// <returns>Positive delta of the current and previous values.</returns>
+        private int CalculateDelta(ushort currentValue, ref ushort lastValue)
+        {
+            if (isFirstDataMessage)
+            {
+                lastValue = currentValue;
+                return 0;
+            }
+
+            int delta = currentValue - lastValue;
+            if (lastValue > currentValue)
+            {
+                // rollover
+                delta += 0x10000;
+            }
+
+            lastValue = currentValue;
+            return delta;
         }
     }
 }

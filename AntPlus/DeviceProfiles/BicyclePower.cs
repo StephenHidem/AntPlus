@@ -38,9 +38,9 @@ namespace DeviceProfiles
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
             // since we don't know the sensor type we create all
-            PowerOnlySensor = new StandardPowerOnly(channelId, antChannel);
-            WheelTorqueSensor = new StandardWheelTorqueSensor(channelId, antChannel);
-            CrankTorqueSensor = new StandardCrankTorqueSensor(channelId, antChannel);
+            PowerOnlySensor = new StandardPowerOnly();
+            WheelTorqueSensor = new StandardWheelTorqueSensor();
+            CrankTorqueSensor = new StandardCrankTorqueSensor();
         }
 
         public override void Parse(byte[] dataPage)

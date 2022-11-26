@@ -30,10 +30,12 @@ namespace DeviceProfiles
         public StandardPowerOnly PowerOnlySensor { get; private set; }
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
+        public TEPS TorqueEffectivenessPedalSmoothness { get; private set; }
 
         public event EventHandler<StandardPowerOnly> PowerOnlyChanged;
         public event EventHandler<StandardWheelTorqueSensor> WheelTorquePageChanged;
         public event EventHandler<StandardCrankTorqueSensor> CrankTorquePageChanged;
+        public event EventHandler<TEPS> TEPSPageChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -41,6 +43,7 @@ namespace DeviceProfiles
             PowerOnlySensor = new StandardPowerOnly();
             WheelTorqueSensor = new StandardWheelTorqueSensor();
             CrankTorqueSensor = new StandardCrankTorqueSensor();
+            TorqueEffectivenessPedalSmoothness = new TEPS();
         }
 
         public override void Parse(byte[] dataPage)
@@ -75,6 +78,8 @@ namespace DeviceProfiles
                     CrankTorquePageChanged?.Invoke(this, CrankTorqueSensor);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
+                    TorqueEffectivenessPedalSmoothness.Parse(dataPage);
+                    TEPSPageChanged?.Invoke(this, TorqueEffectivenessPedalSmoothness);
                     break;
                 case DataPage.CrankTorqueFrequency:
                     break;

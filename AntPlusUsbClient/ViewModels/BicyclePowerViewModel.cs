@@ -13,6 +13,7 @@ namespace AntPlusUsbClient.ViewModels
         public StandardPowerOnly PowerOnly => BicyclePower.PowerOnlySensor;
         public StandardWheelTorqueSensor WheelTorque => BicyclePower.WheelTorqueSensor;
         public StandardCrankTorqueSensor CrankTorque => BicyclePower.CrankTorqueSensor;
+        public TEPS TorqueEffectivenessPedalSmootness => BicyclePower.TorqueEffectivenessPedalSmoothness;
 
         public BicyclePowerViewModel(BicyclePower bicyclePower)
         {
@@ -22,6 +23,12 @@ namespace AntPlusUsbClient.ViewModels
             BicyclePower.PowerOnlyChanged += BicyclePower_PowerOnlyChanged;
             BicyclePower.CrankTorquePageChanged += BicyclePower_CrankTorquePageChanged;
             BicyclePower.WheelTorquePageChanged += BicyclePower_WheelTorquePageChanged;
+            BicyclePower.TEPSPageChanged += BicyclePower_TEPSPageChanged;
+        }
+
+        private void BicyclePower_TEPSPageChanged(object sender, TEPS e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TorqueEffectivenessPedalSmootness"));
         }
 
         private void BicyclePower_WheelTorquePageChanged(object sender, StandardWheelTorqueSensor e)

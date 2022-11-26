@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
         mc:Ignorable="d"
-        Title="BicyclePowerWindow" Height="450" Width="280">
+        Title="BicyclePowerWindow" Height="450" Width="301">
     <Grid>
         <StackPanel>
             <Expander ExpandDirection="Down" IsExpanded="True">
@@ -43,6 +43,18 @@
                     <TextBlock Text="{Binding WheelTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
                     <TextBlock Text="{Binding WheelTorque.AverageSpeed, StringFormat='Average Speed {0}'}"/>
                     <TextBlock Text="{Binding WheelTorque.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
+                </StackPanel>
+            </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Text="Torque Effectiveness and Pedal Smootness" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness {0}'}"/>
+                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.LeftPedalSmoothness, StringFormat='Left Pedal Smoothness {0}'}"/>
+                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.RightPedalSmoothness, StringFormat='Right Pedal Smoothness {0}'}"/>
+                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.LeftTorqueEffectivenes, StringFormat='Left Torque Effectivenes {0}'}"/>
+                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.RightTorqueEffectivenes, StringFormat='Right Torque Effectivenes {0}'}"/>
                 </StackPanel>
             </Expander>
         </StackPanel>

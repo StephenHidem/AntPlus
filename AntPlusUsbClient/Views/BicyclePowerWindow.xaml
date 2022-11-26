@@ -29,6 +29,7 @@
                     <TextBlock Text="{Binding CrankTorque.AveragePower, StringFormat='Average Power {0}'}"/>
                     <TextBlock Text="{Binding CrankTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
                     <TextBlock Text="{Binding CrankTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorque.AverageCadence, StringFormat='AverageCadence {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="True">

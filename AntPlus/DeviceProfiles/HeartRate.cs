@@ -94,6 +94,7 @@ namespace DeviceProfiles
             Swimming = 5,
         }
 
+        private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastBeatCount;
         private int accumHeartBeatCount;
         private ushort lastBeatEventTime;
@@ -299,6 +300,17 @@ namespace DeviceProfiles
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
+            if (isFirstDataMessage)
+            {
+                isFirstDataMessage = false;
+                observedToggle = dataPage[0] & 0x80;
+                lastBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
+                lastBeatCount = dataPage[6];
+                lastDataPage = dataPage;
+                HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, accumHeartBeatCount, dataPage[7]));
+                return;
+            }
+
             // ignore duplicate/unchanged data pages
             if (lastDataPage.SequenceEqual(dataPage))
             {
@@ -307,30 +319,15 @@ namespace DeviceProfiles
             lastDataPage = dataPage;
 
             // this data is present in all data pages
-            accumHeartBeatEventTime += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
-            accumHeartBeatCount += CalculateDelta(dataPage[6], ref lastBeatCount);
+            accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
+            accumHeartBeatCount += Utils.CalculateDelta(dataPage[6], ref lastBeatCount);
             HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, accumHeartBeatCount, dataPage[7]));
 
             // handle data page toggle
-            if (isFirstDataMessage)
+            if (!pageToggle)
             {
-                observedToggle = dataPage[0] & 0x80;
-                isFirstDataMessage = false;
-                return;
-            }
-            else
-            {
-                if (!pageToggle)
-                {
-                    if ((dataPage[0] & 0x80) != observedToggle)
-                    {
-                        pageToggle = true;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
+                pageToggle = (dataPage[0] & 0x80) != observedToggle;
+                if (!pageToggle) return;
             }
 
             switch ((DataPage)(dataPage[0] & 0x7F))

@@ -24,19 +24,26 @@ namespace AntPlus.DeviceProfiles
 
         public void Parse(byte[] dataPage)
         {
+            InstantaneousCadence = dataPage[3];
+
+            if (isFirstDataMessage)
+            {
+                // initialize if first data message
+                isFirstDataMessage = false;
+                lastEventCount = dataPage[1];
+                lastTicks = dataPage[2];
+                lastPeriod = BitConverter.ToUInt16(dataPage, 4);
+                lastTorque = BitConverter.ToUInt16(dataPage, 6);
+                return;
+            }
+
             if (dataPage[1] != lastEventCount)
             {
-                AccumulatedEventCount += CalculateDelta(dataPage[1], ref lastEventCount);
-                AccumulatedTicks += CalculateDelta(dataPage[2], ref lastTicks);
-                InstantaneousCadence = dataPage[3];
-                AccumulatedPeriod += CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
-                AccumulatedTorque += CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
-
-                if (isFirstDataMessage)
-                {
-                    isFirstDataMessage = false;
-                    return;
-                }
+                // handle new events
+                AccumulatedEventCount += Utils.CalculateDelta(dataPage[1], ref lastEventCount);
+                AccumulatedTicks += Utils.CalculateDelta(dataPage[2], ref lastTicks);
+                AccumulatedPeriod += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
+                AccumulatedTorque += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
                 AverageAngularVelocity = ComputeAveAngularVelocity();
                 AverageTorque = ComputeAveTorque();
                 AveragePower = AverageTorque * AverageAngularVelocity;
@@ -53,59 +60,7 @@ namespace AntPlus.DeviceProfiles
 
         private double ComputeAveTorque()
         {
-            return (AccumulatedTorque - previousAccumulatedTorque) / (32 * (AccumulatedEventCount - previousAccumulatedEventCount));
-        }
-
-        /// <summary>
-        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
-        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
-        /// </summary>
-        /// <param name="currentValue">The current value.</param>
-        /// <param name="lastValue">The last value.</param>
-        /// <returns>Positive delta of the current and previous values.</returns>
-        protected int CalculateDelta(byte currentValue, ref byte lastValue)
-        {
-            if (isFirstDataMessage)
-            {
-                lastValue = currentValue;
-                return 0;
-            }
-
-            int delta = currentValue - lastValue;
-            if (lastValue > currentValue)
-            {
-                // rollover
-                delta += 256;
-            }
-
-            lastValue = currentValue;
-            return delta;
-        }
-
-        /// <summary>
-        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
-        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
-        /// </summary>
-        /// <param name="currentValue">The current value.</param>
-        /// <param name="lastValue">The last value.</param>
-        /// <returns>Positive delta of the current and previous values.</returns>
-        protected int CalculateDelta(ushort currentValue, ref ushort lastValue)
-        {
-            if (isFirstDataMessage)
-            {
-                lastValue = currentValue;
-                return 0;
-            }
-
-            int delta = currentValue - lastValue;
-            if (lastValue > currentValue)
-            {
-                // rollover
-                delta += 0x10000;
-            }
-
-            lastValue = currentValue;
-            return delta;
+            return (AccumulatedTorque - previousAccumulatedTorque) / (32.0 * (AccumulatedEventCount - previousAccumulatedEventCount));
         }
     }
 }

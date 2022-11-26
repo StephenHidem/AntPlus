@@ -8,7 +8,6 @@ namespace AntPlus
     /// </summary>
     public abstract class AntDevice
     {
-        protected bool isFirstDataMessage = true;     // used for accumulated values
         protected byte[] lastDataPage = new byte[8];
         private readonly IAntChannel antChannel;
 
@@ -31,58 +30,6 @@ namespace AntPlus
         public abstract void Parse(byte[] dataPage);
         public abstract void ChannelEventHandler(EventMsgId eventMsgId);
         public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
-
-        /// <summary>
-        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
-        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
-        /// </summary>
-        /// <param name="currentValue">The current value.</param>
-        /// <param name="lastValue">The last value.</param>
-        /// <returns>Positive delta of the current and previous values.</returns>
-        protected int CalculateDelta(byte currentValue, ref byte lastValue)
-        {
-            if (isFirstDataMessage)
-            {
-                lastValue = currentValue;
-                return 0;
-            }
-
-            int delta = currentValue - lastValue;
-            if (lastValue > currentValue)
-            {
-                // rollover
-                delta += 256;
-            }
-
-            lastValue = currentValue;
-            return delta;
-        }
-
-        /// <summary>
-        /// Calculates the delta of the current and previous values. Rollover is accounted for and a positive integer is always returned.
-        /// Add the returned value to the accumulated value in the derived class. The last value is updated with the current value.
-        /// </summary>
-        /// <param name="currentValue">The current value.</param>
-        /// <param name="lastValue">The last value.</param>
-        /// <returns>Positive delta of the current and previous values.</returns>
-        protected int CalculateDelta(ushort currentValue, ref ushort lastValue)
-        {
-            if (isFirstDataMessage)
-            {
-                lastValue = currentValue;
-                return 0;
-            }
-
-            int delta = currentValue - lastValue;
-            if (lastValue > currentValue)
-            {
-                // rollover
-                delta += 0x10000;
-            }
-
-            lastValue = currentValue;
-            return delta;
-        }
 
         /// <summary>Requests the data page.</summary>
         /// <typeparam name="T">The data page enumeration of the derived ANT device class.</typeparam>

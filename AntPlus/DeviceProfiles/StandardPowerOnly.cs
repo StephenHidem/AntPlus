@@ -6,16 +6,13 @@ namespace AntPlus.DeviceProfiles
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastEventCount;
-        private int previousAccumulatedEventCount;
-
+        private int deltaEventCount;
         private ushort lastPower;
-        private int previousAccumulatedPower;
+        private int deltaPower;
 
-        public int AccumulatedEventCount { get; private set; }
         public double AveragePower { get; private set; }
         public byte PedalPower { get; private set; }
         public byte InstantaneousCadence { get; private set; }
-        public int AccumulatedPower { get; private set; }
         public ushort InstantaneousPower { get; private set; }
 
         public void Parse(byte[] dataPage)
@@ -36,11 +33,9 @@ namespace AntPlus.DeviceProfiles
             if (dataPage[1] != lastEventCount)
             {
                 // handle new events
-                AccumulatedEventCount += Utils.CalculateDelta(dataPage[1], ref lastEventCount);
-                AccumulatedPower += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
-                AveragePower = (AccumulatedPower - previousAccumulatedPower) / (AccumulatedEventCount - previousAccumulatedEventCount);
-                previousAccumulatedEventCount = AccumulatedEventCount;
-                previousAccumulatedPower = AccumulatedPower;
+                deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
+                deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
+                AveragePower = deltaPower / deltaEventCount;
             }
         }
     }

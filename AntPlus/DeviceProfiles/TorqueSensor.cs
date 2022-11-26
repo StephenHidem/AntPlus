@@ -6,23 +6,20 @@ namespace AntPlus.DeviceProfiles
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
+        protected int deltaTicks;
         private byte lastEventCount;
+        protected int deltaEventCount;
         private ushort lastPeriod;
+        protected int deltaPeriod;
         private ushort lastTorque;
-        private int previousAccumulatedEventCount;
-        private int previousAccumulatedPeriod;
-        private int previousAccumulatedTorque;
+        protected int deltaTorque;
 
         public byte InstantaneousCadence { get; private set; }
-        public int AccumulatedEventCount { get; private set; }
-        public int AccumulatedTicks { get; private set; }
-        public int AccumulatedPeriod { get; private set; }
-        public int AccumulatedTorque { get; private set; }
         public double AverageAngularVelocity { get; private set; }
         public double AverageTorque { get; private set; }
         public double AveragePower { get; private set; }
 
-        public void Parse(byte[] dataPage)
+        public virtual void Parse(byte[] dataPage)
         {
             InstantaneousCadence = dataPage[3];
 
@@ -40,27 +37,25 @@ namespace AntPlus.DeviceProfiles
             if (dataPage[1] != lastEventCount)
             {
                 // handle new events
-                AccumulatedEventCount += Utils.CalculateDelta(dataPage[1], ref lastEventCount);
-                AccumulatedTicks += Utils.CalculateDelta(dataPage[2], ref lastTicks);
-                AccumulatedPeriod += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
-                AccumulatedTorque += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
-                AverageAngularVelocity = ComputeAveAngularVelocity();
-                AverageTorque = ComputeAveTorque();
+                deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
+                deltaTicks = Utils.CalculateDelta(dataPage[2], ref lastTicks);
+                deltaPeriod = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
+                deltaTorque = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
+
+                AverageAngularVelocity = ComputeAvgAngularVelocity();
+                AverageTorque = ComputeAvgTorque();
                 AveragePower = AverageTorque * AverageAngularVelocity;
-                previousAccumulatedEventCount = AccumulatedEventCount;
-                previousAccumulatedPeriod = AccumulatedPeriod;
-                previousAccumulatedTorque = AccumulatedTorque;
             }
         }
 
-        private double ComputeAveAngularVelocity()
+        private double ComputeAvgAngularVelocity()
         {
-            return 2 * Math.PI * (AccumulatedEventCount - previousAccumulatedEventCount) / ((AccumulatedPeriod - previousAccumulatedPeriod) / 2048.0);
+            return 2 * Math.PI * deltaEventCount / (deltaPeriod / 2048.0);
         }
 
-        private double ComputeAveTorque()
+        private double ComputeAvgTorque()
         {
-            return (AccumulatedTorque - previousAccumulatedTorque) / (32.0 * (AccumulatedEventCount - previousAccumulatedEventCount));
+            return deltaTorque / (32.0 * deltaEventCount);
         }
     }
 }

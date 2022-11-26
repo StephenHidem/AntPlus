@@ -14,10 +14,8 @@
                     <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding PowerOnly.AccumulatedEventCount, StringFormat='Accumulated Event Count {0}'}"/>
                     <TextBlock Text="{Binding PowerOnly.PedalPower, StringFormat='Pedal Power {0}'}"/>
                     <TextBlock Text="{Binding PowerOnly.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.AccumulatedPower, StringFormat='Accumulated Power {0}'}"/>
                     <TextBlock Text="{Binding PowerOnly.InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
                     <TextBlock Text="{Binding PowerOnly.AveragePower, StringFormat='Average Power {0}'}"/>
                 </StackPanel>
@@ -27,10 +25,6 @@
                     <TextBlock Text="Crank Torque Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding CrankTorque.AccumulatedEventCount, StringFormat='Accumulated Event Count {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.AccumulatedPeriod, StringFormat='Accumulated Period {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.AccumulatedTicks, StringFormat='Accumulated Ticks {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.AccumulatedTorque, StringFormat='Accumulated Torque {0}'}"/>
                     <TextBlock Text="{Binding CrankTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
                     <TextBlock Text="{Binding CrankTorque.AveragePower, StringFormat='Average Power {0}'}"/>
                     <TextBlock Text="{Binding CrankTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
@@ -42,14 +36,12 @@
                     <TextBlock Text="Wheel Torque Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding WheelTorque.AccumulatedEventCount, StringFormat='Accumulated Event Count {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AccumulatedPeriod, StringFormat='Accumulated Period {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AccumulatedTicks, StringFormat='Accumulated Ticks {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AccumulatedTorque, StringFormat='Accumulated Torque {0}'}"/>
                     <TextBlock Text="{Binding WheelTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
                     <TextBlock Text="{Binding WheelTorque.AveragePower, StringFormat='Average Power {0}'}"/>
                     <TextBlock Text="{Binding WheelTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
                     <TextBlock Text="{Binding WheelTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AverageSpeed, StringFormat='Average Speed {0}'}"/>
+                    <TextBlock Text="{Binding WheelTorque.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
                 </StackPanel>
             </Expander>
         </StackPanel>

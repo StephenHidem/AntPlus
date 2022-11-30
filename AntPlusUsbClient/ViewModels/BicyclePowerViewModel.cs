@@ -1,6 +1,7 @@
 ﻿using AntPlus.DeviceProfiles;
 using DeviceProfiles;
 using System.ComponentModel;
+using static DeviceProfiles.BicyclePower;
 
 namespace AntPlusUsbClient.ViewModels
 {
@@ -13,7 +14,8 @@ namespace AntPlusUsbClient.ViewModels
         public StandardPowerOnly PowerOnly => BicyclePower.PowerOnlySensor;
         public StandardWheelTorqueSensor WheelTorque => BicyclePower.WheelTorqueSensor;
         public StandardCrankTorqueSensor CrankTorque => BicyclePower.CrankTorqueSensor;
-        public TEPS TorqueEffectivenessPedalSmootness => BicyclePower.TorqueEffectivenessPedalSmoothness;
+        public TorqueEffectivenessAndPedalSmoothness TEPS => BicyclePower.TEPS;
+        public BicycleCalibrationData CalibrationData => BicyclePower.CalibrationData;
 
         public BicyclePowerViewModel(BicyclePower bicyclePower)
         {
@@ -24,9 +26,15 @@ namespace AntPlusUsbClient.ViewModels
             BicyclePower.CrankTorquePageChanged += BicyclePower_CrankTorquePageChanged;
             BicyclePower.WheelTorquePageChanged += BicyclePower_WheelTorquePageChanged;
             BicyclePower.TEPSPageChanged += BicyclePower_TEPSPageChanged;
+            BicyclePower.BicycleCalibrationPageChanged += BicyclePower_BicycleCalibrationPageChanged;
         }
 
-        private void BicyclePower_TEPSPageChanged(object sender, TEPS e)
+        private void BicyclePower_BicycleCalibrationPageChanged(object sender, BicyclePower.BicycleCalibrationData e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CalibrationData"));
+        }
+
+        private void BicyclePower_TEPSPageChanged(object sender, TorqueEffectivenessAndPedalSmoothness e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TorqueEffectivenessPedalSmootness"));
         }

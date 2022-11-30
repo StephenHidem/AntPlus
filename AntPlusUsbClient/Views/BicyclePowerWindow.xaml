@@ -20,7 +20,7 @@
                     <TextBlock Text="{Binding PowerOnly.AveragePower, StringFormat='Average Power {0}'}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="True">
+            <Expander ExpandDirection="Down" IsExpanded="False">
                 <Expander.Header>
                     <TextBlock Text="Crank Torque Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -32,7 +32,7 @@
                     <TextBlock Text="{Binding CrankTorque.AverageCadence, StringFormat='AverageCadence {0}'}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="True">
+            <Expander ExpandDirection="Down" IsExpanded="False">
                 <Expander.Header>
                     <TextBlock Text="Wheel Torque Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -45,16 +45,26 @@
                     <TextBlock Text="{Binding WheelTorque.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="True">
+            <Expander ExpandDirection="Down" IsExpanded="False">
                 <Expander.Header>
                     <TextBlock Text="Torque Effectiveness and Pedal Smootness" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness {0}'}"/>
-                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.LeftPedalSmoothness, StringFormat='Left Pedal Smoothness {0}'}"/>
-                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.RightPedalSmoothness, StringFormat='Right Pedal Smoothness {0}'}"/>
-                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.LeftTorqueEffectivenes, StringFormat='Left Torque Effectivenes {0}'}"/>
-                    <TextBlock Text="{Binding TorqueEffectivenessPedalSmootness.RightTorqueEffectivenes, StringFormat='Right Torque Effectivenes {0}'}"/>
+                    <TextBlock Text="{Binding TEPS.CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness {0}'}"/>
+                    <TextBlock Text="{Binding TEPS.LeftPedalSmoothness, StringFormat='Left Pedal Smoothness {0}'}"/>
+                    <TextBlock Text="{Binding TEPS.RightPedalSmoothness, StringFormat='Right Pedal Smoothness {0}'}"/>
+                    <TextBlock Text="{Binding TEPS.LeftTorqueEffectivenes, StringFormat='Left Torque Effectivenes {0}'}"/>
+                    <TextBlock Text="{Binding TEPS.RightTorqueEffectivenes, StringFormat='Right Torque Effectivenes {0}'}"/>
+                </StackPanel>
+            </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="False">
+                <Expander.Header>
+                    <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding CalibrationData.AutoZeroEnable, StringFormat='Auto Zero Enable {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData.CalibrationData, StringFormat='Calibration Data {0}'}"/>
                 </StackPanel>
             </Expander>
         </StackPanel>

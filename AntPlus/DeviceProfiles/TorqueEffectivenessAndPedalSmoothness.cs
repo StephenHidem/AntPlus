@@ -1,6 +1,6 @@
 ﻿namespace AntPlus.DeviceProfiles
 {
-    public class TEPS
+    public class TorqueEffectivenessAndPedalSmoothness
     {
         public double LeftTorqueEffectivenes { get; private set; }
         public double RightTorqueEffectivenes { get; private set; }

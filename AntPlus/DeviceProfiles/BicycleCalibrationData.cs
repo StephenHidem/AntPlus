@@ -19,7 +19,8 @@ namespace DeviceProfiles
 
             private enum CalibrationResponseId
             {
-                AutoZeroStatus = 0x12,
+                CTFDefinedMsg = 0x10,
+                AutoZeroSupport = 0x12,
                 Success = 0xAC,
                 Failed = 0xAF,
                 CustomCalibration = 0xBB,
@@ -36,7 +37,7 @@ namespace DeviceProfiles
             public bool Succeeded { get; private set; }
             public AutoZero AutoZeroStatus { get; private set; }
             public short CalibrationData { get; private set; }
-            public bool AutoZeroEnable { get; private set; }
+            public bool AutoZeroSupported { get; private set; }
             public byte[] CustomCalibrationParameters { get; private set; }
 
             public BicycleCalibrationData(BicyclePower bp)
@@ -48,8 +49,11 @@ namespace DeviceProfiles
             {
                 switch ((CalibrationResponseId)page[1])
                 {
-                    case CalibrationResponseId.AutoZeroStatus:
-                        AutoZeroEnable = (page[2] & 0x01) == 0x01;
+                    case CalibrationResponseId.CTFDefinedMsg:
+                        bp.CrankTorqueFrequency.ParseCalibrationMessage(page);
+                        break;
+                    case CalibrationResponseId.AutoZeroSupport:
+                        AutoZeroSupported = (page[2] & 0x01) == 0x01;
                         AutoZeroStatus = (page[2] & 0x02) == 0x02 ? AutoZero.On : AutoZero.Off;
                         break;
                     case CalibrationResponseId.Success:
@@ -75,9 +79,26 @@ namespace DeviceProfiles
                 }
             }
 
+            public void ManualCalibrationRequest()
+            {
+                bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            }
+
             public void SetAutoZeroConfiguration(AutoZero autoZero)
             {
-                bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0, 0, 0, 0, 0 });
+                bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            }
+
+            public void CustomParametersRequest()
+            {
+                bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            }
+
+            public void SetCustomParameters(byte[] customParameters)
+            {
+                byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };
+                msg = msg.Concat(customParameters).ToArray();
+                bp.SendExtAcknowledgedMessage(msg);
             }
         }
     }

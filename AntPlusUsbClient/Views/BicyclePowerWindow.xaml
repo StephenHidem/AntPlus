@@ -62,9 +62,34 @@
                     <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding CalibrationData.AutoZeroEnable, StringFormat='Auto Zero Enable {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
                     <TextBlock Text="{Binding CalibrationData.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
                     <TextBlock Text="{Binding CalibrationData.CalibrationData, StringFormat='Calibration Data {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
+                    <TextBlock Text="{Binding MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of types {0}'}"/>
+                    <TextBlock Text="{Binding MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
+                    <TextBlock Text="{Binding MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>
+                    <TextBlock Text="{Binding MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
+                    <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
+                    <Button Content="Set Auto Zero Configuration" Command="{Binding SetAutoZeroConfig}"/>
+                    <Button Content="Custom Parameters Request" Command="{Binding GetCustomParameters}"/>
+                    <Button Content="Set Custom Parameters" Command="{Binding SetCustomParameters}"/>
+                </StackPanel>
+            </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="False">
+                <Expander.Header>
+                    <TextBlock Text="Crank Torque Frequency Sensor" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding CrankTorqueFrequency.Offset, StringFormat='Offset {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorqueFrequency.Slope, StringFormat='Slope {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorqueFrequency.Cadence, StringFormat='Cadence {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorqueFrequency.Torque, StringFormat='Torque {0}'}"/>
+                    <TextBlock Text="{Binding CrankTorqueFrequency.Power, StringFormat='Power {0}'}"/>
+                    <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
+                    <Button Content="Save Slope" Command="{Binding SaveSlope}"/>
+                    <Button Content="Save Serial Number" Command="{Binding SaveSerialNumber}"/>
                 </StackPanel>
             </Expander>
         </StackPanel>

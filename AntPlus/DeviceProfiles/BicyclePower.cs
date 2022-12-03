@@ -194,6 +194,7 @@ namespace DeviceProfiles
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public BicycleCalibrationData CalibrationData { get; private set; }
+        public CrankTorqueFrequencySensor CrankTorqueFrequency { get; private set; }
 
         public event EventHandler<CrankParameters> CrankParametersChanged;
         public event EventHandler<double> PeakTorqueThresholdChanged;
@@ -209,6 +210,7 @@ namespace DeviceProfiles
         public event EventHandler<StandardCrankTorqueSensor> CrankTorquePageChanged;
         public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
         public event EventHandler<BicycleCalibrationData> BicycleCalibrationPageChanged;
+        public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -219,6 +221,7 @@ namespace DeviceProfiles
             TEPS = new TorqueEffectivenessAndPedalSmoothness();
 
             CalibrationData = new BicycleCalibrationData(this);
+            CrankTorqueFrequency = new CrankTorqueFrequencySensor(this);
         }
 
         public override void Parse(byte[] dataPage)
@@ -283,6 +286,8 @@ namespace DeviceProfiles
                     TorqueBarycenterAngleChanged?.Invoke(this, dataPage[2] * 0.5 + 30.0);
                     break;
                 case DataPage.CrankTorqueFrequency:
+                    CrankTorqueFrequency.Parse(dataPage);
+                    CrankTorqueFrequencyPageChanged?.Invoke(this, CrankTorqueFrequency);
                     break;
                 case DataPage.RightForceAngle:
                     break;

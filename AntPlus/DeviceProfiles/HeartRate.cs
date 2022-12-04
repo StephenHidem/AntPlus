@@ -7,7 +7,7 @@ namespace DeviceProfiles
 {
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document
-    /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.1, © 2006-2016 Dynastream Innovations Inc. All Rights Reserved.
+    /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.5, © 2006-2022 Dynastream Innovations Inc. All Rights Reserved.
     /// 
     /// © 2022 Stephen Hidem.
     /// </summary>
@@ -55,7 +55,15 @@ namespace DeviceProfiles
             /// <summary>Capabilities</summary>
             Capabilities,
             /// <summary>Battery status</summary>
-            BatteryStatus
+            BatteryStatus,
+            /// <summary>
+            /// Device Information
+            /// </summary>
+            DeviceInformation = 9,
+            /// <summary>
+            /// Heart feature. Sent from display.
+            /// </summary>
+            HRFeature = 32
         }
 
         /// <summary>
@@ -72,11 +80,13 @@ namespace DeviceProfiles
             Cycling = 2,
             /// <summary>Swimming</summary>
             Swimming = 4,
+            /// <summary>Gym mode</summary>
+            GymMode = 8,
             /// <summary>Manufacture defined feature</summary>
             ManufacturerFeature1 = 0x40,
             /// <summary>Manufacture defined feature</summary>
             ManufacturerFeature2 = 0x80,
-            All = 0xC7
+            All = 0xCF
         }
 
         /// <summary>
@@ -94,13 +104,19 @@ namespace DeviceProfiles
             Swimming = 5,
         }
 
+        public enum HeartbeatEventType
+        {
+            MeasuredTimestamp,
+            ComputedTimestamp
+        }
+
         private bool isFirstDataMessage = true;     // used for accumulated values
-        private byte lastBeatCount;
-        private int accumHeartBeatCount;
-        private ushort lastBeatEventTime;
+        private byte prevBeatCount;
+        private ushort prevBeatEventTime;
         private int accumHeartBeatEventTime;
         private bool pageToggle = false;
         private int observedToggle;
+        private int rrInterval;
 
         /// <summary>
         /// Heart rate data common to all data pages.
@@ -109,16 +125,16 @@ namespace DeviceProfiles
         {
             /// <summary>Accumulated heart beat event time in milliseconds.</summary>
             public int AccumulatedHeartBeatEventTime { get; }
-            /// <summary>Accumulated heart beat count.</summary>
-            public int AccumulatedHeartBeatCount { get; }
             /// <summary>Computed heart rate as determined by the sensor in beats per minute.</summary>
             public byte ComputedHeartRate { get; }
+            /// <summary>RR interval in milliseconds.</summary>
+            public int RRInterval { get; }
 
-            internal CommonHeartRateData(int accumEventTime, int accumBeatCount, byte heartRate)
+            internal CommonHeartRateData(int accumEventTime, byte heartRate, int rrInverval)
             {
-                AccumulatedHeartBeatEventTime = (int)((long)accumEventTime * 1000 / 1024);
-                AccumulatedHeartBeatCount = accumBeatCount;
+                AccumulatedHeartBeatEventTime = accumEventTime * 1000 / 1024;
                 ComputedHeartRate = heartRate;
+                RRInterval = rrInverval;
             }
         }
 
@@ -208,8 +224,8 @@ namespace DeviceProfiles
 
             internal CapabilitiesPage(byte[] page)
             {
-                Supported = (Features)(page[2] & 0xC7);
-                Enabled = (Features)(page[3] & 0xC7);
+                Supported = (Features)(page[2] & (byte)Features.All);
+                Enabled = (Features)(page[3] & (byte)Features.All);
             }
         }
 
@@ -282,9 +298,9 @@ namespace DeviceProfiles
         /// Occurs when battery status page changed.
         /// </summary>
         public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
-        /// <summary>
-        /// Occurs when manufacturer specific page changed.
-        /// </summary>
+        /// <summary>Occurs when heartbeat event type change.</summary>
+        public event EventHandler<HeartbeatEventType> HeartbeatEventTypeChanged;
+        /// <summary>Occurs when manufacturer specific page changed.</summary>
         public event EventHandler<ManufacturerSpecificPage> ManufacturerSpecificPageChanged;
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
@@ -304,10 +320,10 @@ namespace DeviceProfiles
             {
                 isFirstDataMessage = false;
                 observedToggle = dataPage[0] & 0x80;
-                lastBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
-                lastBeatCount = dataPage[6];
+                prevBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
+                prevBeatCount = dataPage[6];
                 lastDataPage = dataPage;
-                HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, accumHeartBeatCount, dataPage[7]));
+                HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval));
                 return;
             }
 
@@ -319,9 +335,14 @@ namespace DeviceProfiles
             lastDataPage = dataPage;
 
             // this data is present in all data pages
-            accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastBeatEventTime);
-            accumHeartBeatCount += Utils.CalculateDelta(dataPage[6], ref lastBeatCount);
-            HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, accumHeartBeatCount, dataPage[7]));
+            // calculate RR interval if delta beat count is 1
+            int deltaHeartBeatCount = Utils.CalculateDelta(dataPage[6], ref prevBeatCount);
+            if (deltaHeartBeatCount == 1)
+            {
+                rrInterval = CalculateRRInverval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
+            }
+            accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
+            HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval));
 
             // handle data page toggle
             if (!pageToggle)
@@ -352,6 +373,9 @@ namespace DeviceProfiles
                     break;
                 case DataPage.BatteryStatus:
                     BatteryStatusPageChanged?.Invoke(this, new BatteryStatusPage(dataPage));
+                    break;
+                case DataPage.DeviceInformation:
+                    HeartbeatEventTypeChanged?.Invoke(this, (HeartbeatEventType)(dataPage[1] & 0x03));
                     break;
                 default:
                     // range check manufacturer specific pages

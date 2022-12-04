@@ -17,13 +17,13 @@ namespace DeviceProfile.UnitTests
         public void Parse_CommonHRData_ExpectedBehavior(byte[] payload, int eventTime, int hrBeatCount, int computedHr)
         {
             // Arrange
-            int et = 0, ec = 0;
+            int et = 0, rr = 0;
             byte hr = 0;
             var heartRate = new HeartRate(hrmCid, null);
             heartRate.HeartRateChanged += (sender, e) =>
             {
                 et = e.AccumulatedHeartBeatEventTime;
-                ec = e.AccumulatedHeartBeatCount;
+                rr = e.RRInterval;
                 hr = e.ComputedHeartRate;
             };
 
@@ -32,7 +32,7 @@ namespace DeviceProfile.UnitTests
 
             // Assert
             Assert.AreEqual(eventTime, et, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(hrBeatCount, ec, "AccumulatedHeartBeatCount");
+            Assert.AreEqual(hrBeatCount, rr, "RRInterval");
             Assert.AreEqual(computedHr, hr, "ComputedHeartRate");
         }
 
@@ -40,13 +40,13 @@ namespace DeviceProfile.UnitTests
         public void Parse_AccumulatedValueRollover_ExpectedBehavior()
         {
             // Arrange
-            int et = 0, ec = 0;
+            int et = 0, rr = 0;
             byte hr = 0;
             var heartRate = new HeartRate(hrmCid, null);
             heartRate.HeartRateChanged += (sender, e) =>
             {
                 et = e.AccumulatedHeartBeatEventTime;
-                ec = e.AccumulatedHeartBeatCount;
+                rr = e.RRInterval;
                 hr = e.ComputedHeartRate;
             };
 
@@ -56,7 +56,7 @@ namespace DeviceProfile.UnitTests
 
             // Assert
             Assert.AreEqual(3, et, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(2, ec, "AccumulatedHeartBeatCount");
+            Assert.AreEqual(2, rr, "RRInterval");
             Assert.AreEqual(70, hr, "Computed HR");
         }
 

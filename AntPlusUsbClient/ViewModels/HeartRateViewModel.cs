@@ -19,6 +19,7 @@ namespace AntPlusUsbClient.ViewModels
         public HeartRate.ProductInfoPage ProductInfo { get; private set; }
         public HeartRate.PreviousHeartBeatPage PreviousHeartBeat { get; private set; }
         public HeartRate.BatteryStatusPage BatteryStatus { get; private set; }
+        public HeartRate.HeartbeatEventType HeartbeatEventType { get; private set; }
         public HeartRate.ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
 
         public RoutedCommand PageRequest { get; private set; } = new RoutedCommand();
@@ -33,73 +34,24 @@ namespace AntPlusUsbClient.ViewModels
             HeartRate = heartRate;
 
             // hook up events
-            HeartRate.HeartRateChanged += HeartRate_HeartRateChanged;
-            HeartRate.CumulativeOperatingTimePageChanged += HeartRate_CumulativeOperatingTimePageChanged;
-            HeartRate.ManufacturerInfoPageChanged += HeartRate_ManufacturerInfoPageChanged;
-            HeartRate.ProductInfoPageChanged += HeartRate_ProductInfoPageChanged;
-            HeartRate.PreviousHeartBeatPageChanged += HeartRate_PreviousHeartBeatPageChanged;
-            HeartRate.SwimIntervalPageChanged += HeartRate_SwimIntervalPageChanged;
-            HeartRate.CapabilitiesPageChanged += HeartRate_CapabilitiesPageChanged;
-            HeartRate.BatteryStatusPageChanged += HeartRate_BatteryStatusPageChanged;
-            HeartRate.ManufacturerSpecificPageChanged += HeartRate_ManufacturerSpecificPageChanged;
+            HeartRate.HeartRateChanged += (s, e) => { HeartRateData = e; RaisePropertyChange("HeartRateData"); };
+            HeartRate.CumulativeOperatingTimePageChanged += (s, e) => { CumulativeOperatingTime = e; RaisePropertyChange("CumulativeOperatingTime"); };
+            HeartRate.ManufacturerInfoPageChanged += (s, e) => { ManufacturerInfo = e; RaisePropertyChange("ManufacturerInfo"); };
+            HeartRate.ProductInfoPageChanged += (s, e) => { ProductInfo = e; RaisePropertyChange("ProductInfo"); };
+            HeartRate.PreviousHeartBeatPageChanged += (s, e) => { PreviousHeartBeat = e; RaisePropertyChange("PreviousHeartBeat"); };
+            HeartRate.SwimIntervalPageChanged += (s, e) => { SwimInterval = e; RaisePropertyChange("SwimInterval"); };
+            HeartRate.CapabilitiesPageChanged += (s, e) => { Capabilities = e; RaisePropertyChange("Capabilities"); };
+            HeartRate.BatteryStatusPageChanged += (s, e) => { BatteryStatus = e; RaisePropertyChange("BatteryStatus"); };
+            HeartRate.HeartbeatEventTypeChanged += (s, e) => { HeartbeatEventType = e; RaisePropertyChange("HeartbeatEventType"); };
+            HeartRate.ManufacturerSpecificPageChanged += (s, e) => { ManufacturerSpecific = e; RaisePropertyChange("ManufacturerSpecific"); };
 
             PageRequestBinding = new CommandBinding(PageRequest, PageRequestExecuted, PageRequestCanExecute);
             SetSportModeBinding = new CommandBinding(SetSportMode, SetSportModeExecuted, SetSportModeCanExecute);
         }
 
-        private void HeartRate_HeartRateChanged(object sender, HeartRate.CommonHeartRateData e)
+        private void RaisePropertyChange(string propertyName)
         {
-            HeartRateData = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HeartRateData"));
-        }
-
-        private void HeartRate_CumulativeOperatingTimePageChanged(object sender, TimeSpan e)
-        {
-            CumulativeOperatingTime = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CumulativeOperatingTime"));
-        }
-
-        private void HeartRate_ManufacturerInfoPageChanged(object sender, HeartRate.ManufacturerInfoPage e)
-        {
-            ManufacturerInfo = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ManufacturerInfo"));
-        }
-
-        private void HeartRate_ProductInfoPageChanged(object sender, HeartRate.ProductInfoPage e)
-        {
-            ProductInfo = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProductInfo"));
-        }
-
-        private void HeartRate_PreviousHeartBeatPageChanged(object sender, HeartRate.PreviousHeartBeatPage e)
-        {
-            PreviousHeartBeat = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PreviousHeartBeat"));
-        }
-
-        private void HeartRate_SwimIntervalPageChanged(object sender, HeartRate.SwimIntervalPage e)
-        {
-            SwimInterval = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SwimInterval"));
-        }
-
-        private void HeartRate_CapabilitiesPageChanged(object sender, HeartRate.CapabilitiesPage e)
-        {
-            Capabilities = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Capabilities"));
-
-        }
-
-        private void HeartRate_BatteryStatusPageChanged(object sender, HeartRate.BatteryStatusPage e)
-        {
-            BatteryStatus = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BatteryStatus"));
-        }
-
-        private void HeartRate_ManufacturerSpecificPageChanged(object sender, HeartRate.ManufacturerSpecificPage e)
-        {
-            ManufacturerSpecific = e;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ManufacturerSpecific"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

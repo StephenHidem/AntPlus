@@ -7,7 +7,7 @@ namespace DeviceProfiles
 {
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document
-    /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.5, © 2006-2022 Dynastream Innovations Inc. All Rights Reserved.
+    /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.5, © 2006-2022 Garmin Canada Inc. All Rights Reserved.
     /// 
     /// © 2022 Stephen Hidem.
     /// </summary>
@@ -72,8 +72,8 @@ namespace DeviceProfiles
         [Flags]
         public enum Features
         {
-            /// <summary>No capabilities</summary>
-            None = 0,
+            /// <summary>Generic capabilities</summary>
+            Generic = 0,
             /// <summary>Running</summary>
             Running = 1,
             /// <summary>Cycling</summary>
@@ -94,14 +94,23 @@ namespace DeviceProfiles
         /// </summary>
         public enum SportMode
         {
-            /// <summary>Clear sport mode setting</summary>
-            None,
+            /// <summary>Default behavior</summary>
+            Generic,
             /// <summary>Running</summary>
             Running,
             /// <summary>Cycling</summary>
             Cycling,
             /// <summary>Swimming</summary>
             Swimming = 5,
+        }
+
+        public enum SubSportMode
+        {
+            Generic = 0,
+            Treadmill = 1,
+            Spin = 5,
+            LapSwimming = 17,
+            None = 0xFF
         }
 
         public enum HeartbeatEventType
@@ -266,37 +275,21 @@ namespace DeviceProfiles
             }
         }
 
-        /// <summary>
-        /// Occurs when heart rate changed. This data is common to all pages transmitted.
-        /// </summary>
+        /// <summary>Occurs when heart rate changed. This data is common to all pages transmitted.</summary>
         public event EventHandler<CommonHeartRateData> HeartRateChanged;
-        /// <summary>
-        /// Occurs when cumulative operating time page changed.
-        /// </summary>
+        /// <summary>Occurs when cumulative operating time page changed.</summary>
         public event EventHandler<TimeSpan> CumulativeOperatingTimePageChanged;
-        /// <summary>
-        /// Occurs when manufacturer information page changed.
-        /// </summary>
+        /// <summary>Occurs when manufacturer information page changed.</summary>
         public event EventHandler<ManufacturerInfoPage> ManufacturerInfoPageChanged;
-        /// <summary>
-        /// Occurs when product information page changed.
-        /// </summary>
+        /// <summary>Occurs when product information page changed.</summary>
         public event EventHandler<ProductInfoPage> ProductInfoPageChanged;
-        /// <summary>
-        /// Occurs when previous heart beat page changed.
-        /// </summary>
+        /// <summary>Occurs when previous heart beat page changed.</summary>
         public event EventHandler<PreviousHeartBeatPage> PreviousHeartBeatPageChanged;
-        /// <summary>
-        /// Occurs when swim interval page changed.
-        /// </summary>
+        /// <summary>Occurs when swim interval page changed.</summary>
         public event EventHandler<SwimIntervalPage> SwimIntervalPageChanged;
-        /// <summary>
-        /// Occurs when capabilities page changed.
-        /// </summary>
+        /// <summary>Occurs when capabilities page changed.</summary>
         public event EventHandler<CapabilitiesPage> CapabilitiesPageChanged;
-        /// <summary>
-        /// Occurs when battery status page changed.
-        /// </summary>
+        /// <summary>Occurs when battery status page changed.</summary>
         public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
         /// <summary>Occurs when heartbeat event type change.</summary>
         public event EventHandler<HeartbeatEventType> HeartbeatEventTypeChanged;
@@ -335,14 +328,19 @@ namespace DeviceProfiles
             lastDataPage = dataPage;
 
             // this data is present in all data pages
-            // calculate RR interval if delta beat count is 1
+            // fire heart rate event if beat count has changed
             int deltaHeartBeatCount = Utils.CalculateDelta(dataPage[6], ref prevBeatCount);
-            if (deltaHeartBeatCount == 1)
+            if (deltaHeartBeatCount > 0)
             {
-                rrInterval = CalculateRRInverval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
+                // calculate RR interval if delta beat count is 1
+                if (deltaHeartBeatCount == 1)
+                {
+                    rrInterval = CalculateRRInverval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
+                }
+
+                accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
+                HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval));
             }
-            accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
-            HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval));
 
             // handle data page toggle
             if (!pageToggle)
@@ -363,7 +361,11 @@ namespace DeviceProfiles
                     ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(dataPage));
                     break;
                 case DataPage.PreviousHeartBeat:
-                    PreviousHeartBeatPageChanged?.Invoke(this, new PreviousHeartBeatPage(dataPage));
+                    // fire event if beat count has changed
+                    if (deltaHeartBeatCount > 0)
+                    {
+                        PreviousHeartBeatPageChanged?.Invoke(this, new PreviousHeartBeatPage(dataPage));
+                    }
                     break;
                 case DataPage.SwimInterval:
                     SwimIntervalPageChanged?.Invoke(this, new SwimIntervalPage(dataPage));
@@ -392,9 +394,26 @@ namespace DeviceProfiles
         /// Sets the sport mode.
         /// </summary>
         /// <param name="sportMode">The sport mode.</param>
-        public void SetSportMode(SportMode sportMode)
+        public void SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
-            byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)sportMode };
+            byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode };
+            SendExtAcknowledgedMessage(msg);
+        }
+
+        /// <summary>
+        /// Updates the heart rate sensor feature. The HR Feature command page is sent from a display to a heart rate monitor when the display
+        /// wants to update the enabled status of a HR feature.
+        /// </summary>
+        /// <remarks>
+        /// Gym mode helps a single group receiver running a continuous scan differentiate between many
+        /// transmitting heart rate monitors; a common problem encountered in gym-based group fitness
+        /// applications.This is achieved by transmitting data page 2 as a main data page.
+        /// </remarks>
+        /// <param name="applyGymMode">if set to <c>true</c> apply gym mode. Displays cannot rely on this field as older sensors do not decode it. The Gym Mode bit shall be set to the last received value from the capabilities page if Apply Gym Mode is set to false.</param>
+        /// <param name="gymMode">if set to <c>true</c> gym mode is enabled.</param>
+        public void SetHRFeature(bool applyGymMode, bool gymMode)
+        {
+            byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(applyGymMode ? 0xFF : 0x7F), (byte)(gymMode ? 0xFF : 0x7F) };
             SendExtAcknowledgedMessage(msg);
         }
 

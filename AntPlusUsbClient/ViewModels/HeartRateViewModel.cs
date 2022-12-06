@@ -22,10 +22,15 @@ namespace AntPlusUsbClient.ViewModels
         public HeartRate.HeartbeatEventType HeartbeatEventType { get; private set; }
         public HeartRate.ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
 
+        public bool ApplyFeature { get; set; }
+        public bool EnableGymMode { get; set; }
+
         public RoutedCommand PageRequest { get; private set; } = new RoutedCommand();
         public RoutedCommand SetSportMode { get; private set; } = new RoutedCommand();
+        public RoutedCommand SetHRFeature { get; private set; } = new RoutedCommand();
         public CommandBinding PageRequestBinding { get; private set; }
         public CommandBinding SetSportModeBinding { get; private set; }
+        public CommandBinding SetHRFeatureBinding { get; private set; }
         public IEnumerable<HeartRate.DataPage> DataPageValues => Enum.GetValues(typeof(HeartRate.DataPage)).Cast<HeartRate.DataPage>();
         public IEnumerable<HeartRate.SportMode> SportModeValues => Enum.GetValues(typeof(HeartRate.SportMode)).Cast<HeartRate.SportMode>();
 
@@ -47,6 +52,7 @@ namespace AntPlusUsbClient.ViewModels
 
             PageRequestBinding = new CommandBinding(PageRequest, PageRequestExecuted, PageRequestCanExecute);
             SetSportModeBinding = new CommandBinding(SetSportMode, SetSportModeExecuted, SetSportModeCanExecute);
+            SetHRFeatureBinding = new CommandBinding(SetHRFeature, SetHRFeatureExecuted, SetHRFeatureCanExecute);
         }
 
         private void RaisePropertyChange(string propertyName)
@@ -111,8 +117,8 @@ namespace AntPlusUsbClient.ViewModels
             }
             switch ((HeartRate.SportMode)e.Parameter)
             {
-                case HeartRate.SportMode.None:
-                    e.CanExecute = !Capabilities.Enabled.Equals(HeartRate.Features.None);
+                case HeartRate.SportMode.Generic:
+                    e.CanExecute = !Capabilities.Enabled.Equals(HeartRate.Features.Generic);
                     break;
                 case HeartRate.SportMode.Running:
                     e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Running);
@@ -126,6 +132,16 @@ namespace AntPlusUsbClient.ViewModels
                 default:
                     break;
             }
+        }
+
+        private void SetHRFeatureExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            HeartRate.SetHRFeature(ApplyFeature, EnableGymMode);
+        }
+
+        private void SetHRFeatureCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
     }
 }

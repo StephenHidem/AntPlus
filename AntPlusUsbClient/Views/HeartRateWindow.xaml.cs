@@ -15,6 +15,7 @@ namespace AntPlusUsbClient.Views
             HeartRateViewModel hrvm = new HeartRateViewModel(heartRate);
             CommandBindings.Add(hrvm.PageRequestBinding);
             CommandBindings.Add(hrvm.SetSportModeBinding);
+            CommandBindings.Add(hrvm.SetHRFeatureBinding);
             DataContext = hrvm;
         }
     }

@@ -52,11 +52,11 @@ namespace DeviceProfile.UnitTests
 
             // Act
             heartRate.Parse(new byte[] { (byte)HeartRate.DataPage.Default | 0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x40 });
-            heartRate.Parse(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0x02, 0x00, 0x03, 0x00, 0x01, 0x46 });
+            heartRate.Parse(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0x02, 0x00, 0x03, 0x00, 0x00, 0x46 });
 
             // Assert
             Assert.AreEqual(3, et, "AccumulatedHeartBeatEventTime");
-            Assert.AreEqual(2, rr, "RRInterval");
+            Assert.AreEqual(3, rr, "RRInterval");
             Assert.AreEqual(70, hr, "Computed HR");
         }
 
@@ -169,13 +169,13 @@ namespace DeviceProfile.UnitTests
         }
 
         [TestMethod]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xC7, 0x01, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Running)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xC7, 0x02, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Cycling)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xC7, 0x04, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Swimming)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xCF, 0x01, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Running)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xCF, 0x02, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Cycling)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xCF, 0x04, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Swimming)]
         public void Parse_Capabilities_ExpectedBehavior(byte[] payload, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
         {
             // Arrange
-            HeartRate.Features enabled = HeartRate.Features.None, supported = HeartRate.Features.None;
+            HeartRate.Features enabled = HeartRate.Features.Generic, supported = HeartRate.Features.Generic;
             var heartRate = new HeartRate(hrmCid, null);
             heartRate.CapabilitiesPageChanged += (sender, args) =>
             {

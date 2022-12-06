@@ -88,6 +88,11 @@
                 <Button Command="{Binding SetSportMode}" CommandParameter="{Binding ElementName=SetSportMode, Path=SelectedItem}">Set Sport Mode</Button>
                 <ComboBox Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedIndex="0"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding SetHRFeature}">Set HR Feature</Button>
+                <CheckBox IsChecked="{Binding ApplyFeature}" IsThreeState="False">Apply</CheckBox>
+                <CheckBox IsChecked="{Binding EnableGymMode}" IsThreeState="False">Enable Gym Mode</CheckBox>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

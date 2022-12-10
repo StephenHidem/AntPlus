@@ -50,7 +50,7 @@ namespace DeviceProfiles
                 switch ((CalibrationResponseId)page[1])
                 {
                     case CalibrationResponseId.CTFDefinedMsg:
-                        bp.CrankTorqueFrequency.ParseCalibrationMessage(page);
+                        bp.CTFSensor.ParseCalibrationMessage(page);
                         break;
                     case CalibrationResponseId.AutoZeroSupport:
                         AutoZeroSupported = (page[2] & 0x01) == 0x01;
@@ -79,7 +79,7 @@ namespace DeviceProfiles
                 }
             }
 
-            public void ManualCalibrationRequest()
+            public void RequestManualCalibration()
             {
                 bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
             }

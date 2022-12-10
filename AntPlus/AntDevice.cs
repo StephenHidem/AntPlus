@@ -34,13 +34,13 @@ namespace AntPlus
         /// <summary>Requests the data page.</summary>
         /// <typeparam name="T">The data page enumeration of the derived ANT device class.</typeparam>
         /// <param name="page">The requested page.</param>
+        /// <param name="decriptor1">The decriptor1.</param>
+        /// <param name="descriptor2">The descriptor2.</param>
         /// <param name="transmissionResponse">The transmission response. The default is to send 4 messages.</param>
         /// <param name="commandType">Type of the command.</param>
         /// <param name="slaveSerialNumber">The slave serial number.</param>
-        /// <param name="decriptor1">The decriptor1.</param>
-        /// <param name="descriptor2">The descriptor2.</param>
         /// <exception cref="System.ArgumentException">Invalid data page requested.</exception>
-        public void RequestDataPage<T>(T page, byte transmissionResponse = 4, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF) where T : Enum
+        public void RequestDataPage<T>(T page, byte decriptor1 = 0xFF, byte descriptor2 = 0xFF, byte transmissionResponse = 4, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF) where T : Enum
         {
             if (Enum.IsDefined(typeof(T), page))
             {

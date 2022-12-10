@@ -27,126 +27,14 @@ namespace DeviceProfiles
             PedalPosition
         }
 
-        public enum ParameterSubpage
+        public enum SensorType
         {
-            CrankParameters = 0x01,
-            PowerPhaseConfiguration = 0x02,
-            RiderPositionConfiguration = 0x04,
-            AdvancedCapabilities1 = 0xFD,
-            AdvancedCapabilities2 = 0xFE
+            PowerOnly,
+            WheelTorque,
+            CrankTorque,
+            CrankTorqueFrequency
         }
 
-        public readonly struct CrankParameters
-        {
-            public enum CrankLengthStatus
-            {
-                Invalid = 0,
-                Default = 1,
-                ManuallySet = 2,
-                AutoOrFixed = 3
-            }
-
-            public enum SensorMisMatchStatus
-            {
-                Undefined = 0,
-                RightSensorOlder = 0x04,
-                LeftSensorOlder = 0x08,
-                Identical = 0x0C
-            }
-
-            public enum SensorAvailabilityStatus
-            {
-                Undefined = 0,
-                LeftPresent = 0x10,
-                RightPresent = 0x20,
-                BothPresent = 0x30
-            }
-
-            public enum CustomCalibrationStatus
-            {
-                NotSupported = 0,
-                NotRequired = 0x40,
-                Required = 0x80
-            }
-
-            /// <summary>The crank length in millimeters.</summary>
-            public double CrankLength { get; }
-            public CrankLengthStatus CrankStatus { get; }
-            public SensorMisMatchStatus MismatchStatus { get; }
-            public SensorAvailabilityStatus AvailabilityStatus { get; }
-            public CustomCalibrationStatus CustomCalibration { get; }
-            public bool AutoCrankLength { get; }
-
-            internal CrankParameters(byte[] page)
-            {
-                CrankLength = page[4] * 0.5 + 110.0;
-                CrankStatus = (CrankLengthStatus)(page[5] & 0x03);
-                MismatchStatus = (SensorMisMatchStatus)(page[5] & 0x0C);
-                AvailabilityStatus = (SensorAvailabilityStatus)(page[5] & 0x30);
-                CustomCalibration = (CustomCalibrationStatus)(page[5] & 0xC0);
-                AutoCrankLength = (page[6] & 0x01) != 0;
-            }
-        }
-        public readonly struct AdvancedCapabilities1
-        {
-            [Flags]
-            public enum InteropProp
-            {
-                DefaultCrankLength = 1,
-                RequiresCrankLength = 2,
-            }
-
-            [Flags]
-            public enum InteroperableCapabilies
-            {
-                None = 0,
-                FourHz = 1,
-                EightHz = 2,
-                AutoZero = 16,
-                AutoCrankLength = 32,
-                TEandPS = 64,
-            }
-
-            public InteropProp InteroperableProperties { get; }
-            public byte CustomProperties { get; }
-            public InteroperableCapabilies Mask { get; }
-            public byte CustomCapabilitiesMask { get; }
-            public InteroperableCapabilies Value { get; }
-            public byte CustomCapabilitiesValue { get; }
-
-            internal AdvancedCapabilities1(byte[] page)
-            {
-                InteroperableProperties = (InteropProp)(page[2] & 0x03);
-                CustomProperties = page[3];
-                Mask = (InteroperableCapabilies)page[4];
-                CustomCapabilitiesMask = page[5];
-                Value = (InteroperableCapabilies)page[6];
-                CustomCapabilitiesValue = page[7];
-            }
-        }
-        public readonly struct AdvancedCapabilities2
-        {
-            [Flags]
-            public enum InteroperableCapabilies
-            {
-                None = 0,
-                FourHz = 1,
-                EightHz = 2,
-                PowerPhase8Hz = 8,
-                PCO8Hz = 16,
-                RiderPosition8Hz = 32,
-                TorqueBarycenter8Hz = 64,
-            }
-
-            public InteroperableCapabilies Mask { get; }
-            public InteroperableCapabilies Value { get; }
-
-            internal AdvancedCapabilities2(byte[] page)
-            {
-                Mask = (InteroperableCapabilies)page[4];
-                Value = (InteroperableCapabilies)page[6];
-            }
-        }
         public readonly struct MeasurementOutputData
         {
             public enum DataType
@@ -189,28 +77,27 @@ namespace DeviceProfiles
             }
         }
 
+        public SensorType Sensor { get; private set; } = SensorType.PowerOnly;
         public StandardPowerOnly PowerOnlySensor { get; private set; }
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
+        public CrankTorqueFrequencySensor CTFSensor { get; private set; }
+        public BicyclePowerParameters Parameters { get; private set; }
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public BicycleCalibrationData CalibrationData { get; private set; }
-        public CrankTorqueFrequencySensor CrankTorqueFrequency { get; private set; }
 
-        public event EventHandler<CrankParameters> CrankParametersChanged;
-        public event EventHandler<double> PeakTorqueThresholdChanged;
-        public event EventHandler<int> RiderPositionTimeOffsetChaged;
-        public event EventHandler<AdvancedCapabilities1> AdvancedCapabilities1Changed;
-        public event EventHandler<AdvancedCapabilities2> AdvancedCapabilities2Changed;
+        // events - transient or value change
         public event EventHandler<double> TorqueBarycenterAngleChanged;
         public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
 
-
+        // events - class related
         public event EventHandler<StandardPowerOnly> PowerOnlyChanged;
         public event EventHandler<StandardWheelTorqueSensor> WheelTorquePageChanged;
         public event EventHandler<StandardCrankTorqueSensor> CrankTorquePageChanged;
+        public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
         public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
         public event EventHandler<BicycleCalibrationData> BicycleCalibrationPageChanged;
-        public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
+        public event EventHandler<BicyclePowerParameters> ParametersChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -218,10 +105,10 @@ namespace DeviceProfiles
             PowerOnlySensor = new StandardPowerOnly();
             WheelTorqueSensor = new StandardWheelTorqueSensor();
             CrankTorqueSensor = new StandardCrankTorqueSensor();
+            CTFSensor = new CrankTorqueFrequencySensor(this);
             TEPS = new TorqueEffectivenessAndPedalSmoothness();
-
             CalibrationData = new BicycleCalibrationData(this);
-            CrankTorqueFrequency = new CrankTorqueFrequencySensor(this);
+            Parameters = new BicyclePowerParameters(this);
         }
 
         public override void Parse(byte[] dataPage)
@@ -242,26 +129,8 @@ namespace DeviceProfiles
                     BicycleCalibrationPageChanged?.Invoke(this, CalibrationData);
                     break;
                 case DataPage.GetSetParameters:
-                    switch ((ParameterSubpage)dataPage[1])
-                    {
-                        case ParameterSubpage.CrankParameters:
-                            CrankParametersChanged?.Invoke(this, new CrankParameters(dataPage));
-                            break;
-                        case ParameterSubpage.PowerPhaseConfiguration:
-                            PeakTorqueThresholdChanged?.Invoke(this, dataPage[2] * 0.5);
-                            break;
-                        case ParameterSubpage.RiderPositionConfiguration:
-                            RiderPositionTimeOffsetChaged?.Invoke(this, dataPage[2]);
-                            break;
-                        case ParameterSubpage.AdvancedCapabilities1:
-                            AdvancedCapabilities1Changed?.Invoke(this, new AdvancedCapabilities1(dataPage));
-                            break;
-                        case ParameterSubpage.AdvancedCapabilities2:
-                            AdvancedCapabilities2Changed?.Invoke(this, new AdvancedCapabilities2(dataPage));
-                            break;
-                        default:
-                            break;
-                    }
+                    Parameters.Parse(dataPage);
+                    ParametersChanged?.Invoke(this, Parameters);
                     break;
                 case DataPage.MeasurementOutput:
                     MeasurementOutputDataChanged?.Invoke(this, new MeasurementOutputData(dataPage));
@@ -271,10 +140,12 @@ namespace DeviceProfiles
                     PowerOnlyChanged?.Invoke(this, PowerOnlySensor);
                     break;
                 case DataPage.WheelTorque:
+                    Sensor = SensorType.WheelTorque;
                     WheelTorqueSensor.Parse(dataPage);
                     WheelTorquePageChanged?.Invoke(this, WheelTorqueSensor);
                     break;
                 case DataPage.CrankTorque:
+                    Sensor = SensorType.CrankTorque;
                     CrankTorqueSensor.Parse(dataPage);
                     CrankTorquePageChanged?.Invoke(this, CrankTorqueSensor);
                     break;
@@ -286,8 +157,9 @@ namespace DeviceProfiles
                     TorqueBarycenterAngleChanged?.Invoke(this, dataPage[2] * 0.5 + 30.0);
                     break;
                 case DataPage.CrankTorqueFrequency:
-                    CrankTorqueFrequency.Parse(dataPage);
-                    CrankTorqueFrequencyPageChanged?.Invoke(this, CrankTorqueFrequency);
+                    Sensor = SensorType.CrankTorqueFrequency;
+                    CTFSensor.Parse(dataPage);
+                    CrankTorqueFrequencyPageChanged?.Invoke(this, CTFSensor);
                     break;
                 case DataPage.RightForceAngle:
                     break;

@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
-        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
+        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
+        xmlns:dp="clr-namespace:AntPlus.DeviceProfiles;assembly=AntPlus"
         mc:Ignorable="d"
-        Title="BicyclePowerWindow" Height="450" Width="301">
+        Title="Bicycle Power Window" Height="450" Width="301">
     <Grid>
         <StackPanel>
+            <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
             <Expander ExpandDirection="Down" IsExpanded="True">
                 <Expander.Header>
                     <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
@@ -73,8 +76,8 @@
                     <TextBlock Text="{Binding MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
                     <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
                     <Button Content="Set Auto Zero Configuration" Command="{Binding SetAutoZeroConfig}"/>
-                    <Button Content="Custom Parameters Request" Command="{Binding GetCustomParameters}"/>
-                    <Button Content="Set Custom Parameters" Command="{Binding SetCustomParameters}"/>
+                    <Button Content="Custom Calibration Parameters Request" Command="{Binding GetCustomCalibrationParameters}"/>
+                    <Button Content="Set Custom Calibration Parameters" Command="{Binding SetCustomCalibrationParameters}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -90,6 +93,32 @@
                     <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
                     <Button Content="Save Slope" Command="{Binding SaveSlope}"/>
                     <Button Content="Save Serial Number" Command="{Binding SaveSerialNumber}"/>
+                </StackPanel>
+            </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="False">
+                <Expander.Header>
+                    <TextBlock Text="Get/Set Parameters" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Get Crank" Command="{Binding GetParameters}"
+                                />
+                        <Button Content="Get Peak Torque Threshold" Command="{Binding GetParameters}"/>
+                        <Button Content="Get Rider Position Time Offset" Command="{Binding GetParameters}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Parameters.Crank.CrankLength, StringFormat='Crank Length {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.Crank.CrankStatus, StringFormat='Crank Status {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.Crank.MismatchStatus, StringFormat='Mismatch Status {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.Crank.AvailabilityStatus, StringFormat='Availability Status {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.Crank.CustomCalibration, StringFormat='Custom Calibration {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.Crank.AutoCrankLength, StringFormat='Auto Crank Length {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.PeakTorqueThreshold, StringFormat='Peak Torque Threshold {0}'}"/>
+                    <TextBlock Text="{Binding Parameters.RiderPositionTimeOffset, StringFormat='Rider Position Time Offset {0}'}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Set Crank Length" Command="{Binding SetCrankLength}" CommandParameter="{Binding ElementName=CrankLength, Path=Text}"/>
+                        <TextBox x:Name="CrankLength" Text="110" Width="50"/>
+                        <CheckBox Content="Auto Crank Length" IsChecked="False" IsThreeState="False"/>
+                    </StackPanel>
                 </StackPanel>
             </Expander>
         </StackPanel>

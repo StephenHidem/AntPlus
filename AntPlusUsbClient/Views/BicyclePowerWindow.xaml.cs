@@ -13,12 +13,6 @@ namespace AntPlusUsbClient.Views
         {
             InitializeComponent();
             BicyclePowerViewModel bicyclePowerViewModel = new BicyclePowerViewModel(bicyclePower);
-            //CommandBindings.Add(bicyclePowerViewModel.ManualCalRequestBinding);
-            //CommandBindings.Add(bicyclePowerViewModel.SetAutoZeroConfigBinding);
-            //CommandBindings.Add(bicyclePowerViewModel.GetCustomParametersBinding);
-            //CommandBindings.Add(bicyclePowerViewModel.SetCustomParametersBinding);
-            //CommandBindings.Add(bicyclePowerViewModel.SaveSerialNumberBinding);
-            //CommandBindings.Add(bicyclePowerViewModel.SaveSlopeBinding);
             CommandBindings.AddRange(bicyclePowerViewModel.CommandBindings);
             DataContext = bicyclePowerViewModel;
         }

@@ -1,4 +1,4 @@
-﻿namespace AntPlus.DeviceProfiles
+﻿namespace DeviceProfiles
 {
     public class StandardWheelTorqueSensor : TorqueSensor
     {

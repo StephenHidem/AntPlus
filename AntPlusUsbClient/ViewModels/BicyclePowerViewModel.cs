@@ -1,9 +1,8 @@
-﻿using AntPlus.DeviceProfiles;
-using DeviceProfiles;
+﻿using DeviceProfiles;
 using System.ComponentModel;
 using System.Windows.Input;
 using static DeviceProfiles.BicyclePower;
-using static DeviceProfiles.BicyclePower.BicyclePowerParameters;
+using static DeviceProfiles.BicyclePower.BPParameters;
 
 namespace AntPlusUsbClient.ViewModels
 {
@@ -21,7 +20,7 @@ namespace AntPlusUsbClient.ViewModels
         public BicycleCalibrationData CalibrationData => BicyclePower.CalibrationData;
         public MeasurementOutputData MeasurementOutput { get; private set; }
         public CrankTorqueFrequencySensor CrankTorqueFrequency => BicyclePower.CTFSensor;
-        public BicyclePowerParameters Parameters => BicyclePower.Parameters;
+        public BPParameters Parameters => BicyclePower.Parameters;
 
         public RoutedCommand ManualCalRequest { get; private set; } = new RoutedCommand();
         public RoutedCommand SetAutoZeroConfig { get; private set; } = new RoutedCommand();
@@ -127,11 +126,9 @@ namespace AntPlusUsbClient.ViewModels
 
         private void GetParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            BicyclePower.Parameters.GetParameters(ParameterSubpage.CrankParameters);
-            BicyclePower.Parameters.GetParameters(ParameterSubpage.PowerPhaseConfiguration);
-            BicyclePower.Parameters.GetParameters(ParameterSubpage.RiderPositionConfiguration);
-            BicyclePower.Parameters.GetParameters(ParameterSubpage.AdvancedCapabilities1);
-            BicyclePower.Parameters.GetParameters(ParameterSubpage.AdvancedCapabilities2);
+            BicyclePower.Parameters.GetParameters((Subpage)e.Parameter);
+            //BicyclePower.Parameters.GetParameters(Subpage.AdvancedCapabilities1);
+            //BicyclePower.Parameters.GetParameters(Subpage.AdvancedCapabilities2);
         }
 
         private void GetParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
-        xmlns:dp="clr-namespace:AntPlus.DeviceProfiles;assembly=AntPlus"
+        xmlns:dp="clr-namespace:DeviceProfiles;assembly=AntPlus"
         mc:Ignorable="d"
         Title="Bicycle Power Window" Height="450" Width="301">
     <Grid>
@@ -102,9 +102,11 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Get Crank" Command="{Binding GetParameters}"
-                                />
-                        <Button Content="Get Peak Torque Threshold" Command="{Binding GetParameters}"/>
-                        <Button Content="Get Rider Position Time Offset" Command="{Binding GetParameters}"/>
+                                CommandParameter="{x:Static dp:BicyclePower+BPParameters+Subpage.CrankParameters}"/>
+                        <Button Content="Get Peak Torque Threshold" Command="{Binding GetParameters}"
+                                CommandParameter="{x:Static dp:BicyclePower+BPParameters+Subpage.PowerPhaseConfiguration}"/>
+                        <Button Content="Get Rider Position Time Offset" Command="{Binding GetParameters}"
+                                CommandParameter="{x:Static dp:BicyclePower+BPParameters+Subpage.RiderPositionConfiguration}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding Parameters.Crank.CrankLength, StringFormat='Crank Length {0}'}"/>
                     <TextBlock Text="{Binding Parameters.Crank.CrankStatus, StringFormat='Crank Status {0}'}"/>

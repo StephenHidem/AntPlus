@@ -2,19 +2,19 @@
 
 namespace DeviceProfiles
 {
-    public enum ParameterSubpage
-    {
-        CrankParameters = 0x01,
-        PowerPhaseConfiguration = 0x02,
-        RiderPositionConfiguration = 0x04,
-        AdvancedCapabilities1 = 0xFD,
-        AdvancedCapabilities2 = 0xFE
-    }
-
     public partial class BicyclePower
     {
-        public class BicyclePowerParameters
+        public class BPParameters
         {
+            public enum Subpage
+            {
+                CrankParameters = 0x01,
+                PowerPhaseConfiguration = 0x02,
+                RiderPositionConfiguration = 0x04,
+                AdvancedCapabilities1 = 0xFD,
+                AdvancedCapabilities2 = 0xFE
+            }
+
             public readonly struct CrankParameters
             {
                 public enum CrankLengthStatus
@@ -135,28 +135,28 @@ namespace DeviceProfiles
             public AdvCapabilities1 AdvancedCapabilities1 { get; private set; }
             public AdvCapabilities2 AdvancedCapabilities2 { get; private set; }
 
-            public BicyclePowerParameters(BicyclePower bp)
+            public BPParameters(BicyclePower bp)
             {
                 this.bp = bp;
             }
 
             public void Parse(byte[] page)
             {
-                switch ((ParameterSubpage)page[1])
+                switch ((Subpage)page[1])
                 {
-                    case ParameterSubpage.CrankParameters:
+                    case Subpage.CrankParameters:
                         Crank = new CrankParameters(page);
                         break;
-                    case ParameterSubpage.PowerPhaseConfiguration:
+                    case Subpage.PowerPhaseConfiguration:
                         PeakTorqueThreshold = page[2] * 0.5;
                         break;
-                    case ParameterSubpage.RiderPositionConfiguration:
+                    case Subpage.RiderPositionConfiguration:
                         RiderPositionTimeOffset = page[2];
                         break;
-                    case ParameterSubpage.AdvancedCapabilities1:
+                    case Subpage.AdvancedCapabilities1:
                         AdvancedCapabilities1 = new AdvCapabilities1(page);
                         break;
-                    case ParameterSubpage.AdvancedCapabilities2:
+                    case Subpage.AdvancedCapabilities2:
                         AdvancedCapabilities2 = new AdvCapabilities2(page);
                         break;
                     default:
@@ -164,7 +164,7 @@ namespace DeviceProfiles
                 }
             }
 
-            public void GetParameters(ParameterSubpage parameterSubpage)
+            public void GetParameters(Subpage parameterSubpage)
             {
                 bp.RequestDataPage(DataPage.GetSetParameters, (byte)parameterSubpage);
             }
@@ -175,19 +175,19 @@ namespace DeviceProfiles
                 if (length >= 237)
                 {
                     // set crank length to auto
-                    msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)ParameterSubpage.CrankParameters, 0xFF, 0xFF, 0xFE, 0x00, 0x00, 0xFF };
+                    msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0xFE, 0x00, 0x00, 0xFF };
                 }
                 else
                 {
                     byte cl = (byte)((length - 110) / 0.5);
-                    msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)ParameterSubpage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
+                    msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
                 }
                 bp.SendExtAcknowledgedMessage(msg);
             }
 
             public void SetTransitionTimeOffset(byte offset)
             {
-                byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)ParameterSubpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+                byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
                 bp.SendExtAcknowledgedMessage(msg);
             }
 
@@ -199,7 +199,7 @@ namespace DeviceProfiles
                     throw new ArgumentOutOfRangeException("Parameter threshold range is 0 to 100 percent.");
                 }
                 byte peak = (byte)((threshold / 0.5));
-                byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)ParameterSubpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+                byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
                 bp.SendExtAcknowledgedMessage(msg);
             }
         }

@@ -1,5 +1,4 @@
 ﻿using AntPlus;
-using AntPlus.DeviceProfiles;
 using AntRadioInterface;
 using System;
 using System.Linq;
@@ -82,7 +81,7 @@ namespace DeviceProfiles
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
-        public BicyclePowerParameters Parameters { get; private set; }
+        public BPParameters Parameters { get; private set; }
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public BicycleCalibrationData CalibrationData { get; private set; }
 
@@ -97,7 +96,7 @@ namespace DeviceProfiles
         public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
         public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
         public event EventHandler<BicycleCalibrationData> BicycleCalibrationPageChanged;
-        public event EventHandler<BicyclePowerParameters> ParametersChanged;
+        public event EventHandler<BPParameters> ParametersChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -108,7 +107,7 @@ namespace DeviceProfiles
             CTFSensor = new CrankTorqueFrequencySensor(this);
             TEPS = new TorqueEffectivenessAndPedalSmoothness();
             CalibrationData = new BicycleCalibrationData(this);
-            Parameters = new BicyclePowerParameters(this);
+            Parameters = new BPParameters(this);
         }
 
         public override void Parse(byte[] dataPage)

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using AntPlus;
+using System;
 
-namespace AntPlus.DeviceProfiles
+namespace DeviceProfiles
 {
     public class TorqueSensor
     {

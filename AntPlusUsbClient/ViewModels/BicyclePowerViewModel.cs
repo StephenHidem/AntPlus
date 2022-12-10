@@ -86,7 +86,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void GetCustomCalibrationParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            CalibrationData.CustomParametersRequest();
+            CalibrationData.RequestCustomParameters();
         }
 
         private void GetCustomCalibrationParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -127,8 +127,6 @@ namespace AntPlusUsbClient.ViewModels
         private void GetParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             BicyclePower.Parameters.GetParameters((Subpage)e.Parameter);
-            //BicyclePower.Parameters.GetParameters(Subpage.AdvancedCapabilities1);
-            //BicyclePower.Parameters.GetParameters(Subpage.AdvancedCapabilities2);
         }
 
         private void GetParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)

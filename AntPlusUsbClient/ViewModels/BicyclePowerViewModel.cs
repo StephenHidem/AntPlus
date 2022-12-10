@@ -127,8 +127,6 @@ namespace AntPlusUsbClient.ViewModels
         private void GetParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             BicyclePower.Parameters.GetParameters((Subpage)e.Parameter);
-            //BicyclePower.Parameters.GetParameters(Subpage.AdvancedCapabilities1);
-            //BicyclePower.Parameters.GetParameters(Subpage.AdvancedCapabilities2);
         }
 
         private void GetParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)

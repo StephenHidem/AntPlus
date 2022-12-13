@@ -12,10 +12,13 @@ namespace AntPlusUsbClient.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public bool ShowCrankTorque => CrankTorque != null;
+        public bool ShowWheelTorque => WheelTorque != null;
+
         public SensorType SensorType => BicyclePower.Sensor;
-        public StandardPowerOnly PowerOnly => BicyclePower.PowerOnlySensor;
-        public StandardWheelTorqueSensor WheelTorque => BicyclePower.WheelTorqueSensor;
-        public StandardCrankTorqueSensor CrankTorque => BicyclePower.CrankTorqueSensor;
+        public BicyclePowerSensor PowerOnly => BicyclePower.BicyclePowerSensor;
+        public StandardWheelTorqueSensor WheelTorque => BicyclePower.BicyclePowerSensor as StandardWheelTorqueSensor;
+        public StandardCrankTorqueSensor CrankTorque => BicyclePower.BicyclePowerSensor as StandardCrankTorqueSensor;
         public TorqueEffectivenessAndPedalSmoothness TEPS => BicyclePower.TEPS;
         public BicycleCalibrationData CalibrationData => BicyclePower.CalibrationData;
         public MeasurementOutputData MeasurementOutput { get; private set; }
@@ -38,9 +41,15 @@ namespace AntPlusUsbClient.ViewModels
             BicyclePower = bicyclePower;
 
             // hook up events
-            BicyclePower.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
-            BicyclePower.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");
-            BicyclePower.WheelTorquePageChanged += (s, e) => RaisePropertyChange("WheelTorque");
+            PowerOnly.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
+            if (CrankTorque != null)
+            {
+                CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");
+            }
+            if (WheelTorque != null)
+            {
+                WheelTorque.WheelTorquePageChanged += (s, e) => RaisePropertyChange("WheelTorque");
+            }
             BicyclePower.TEPSPageChanged += (s, e) => RaisePropertyChange("TEPS");
             BicyclePower.BicycleCalibrationPageChanged += (s, e) => RaisePropertyChange("CalibrationData");
             BicyclePower.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };

@@ -1,7 +1,11 @@
-﻿namespace DeviceProfiles
+﻿using System;
+
+namespace DeviceProfiles
 {
     public class StandardWheelTorqueSensor : TorqueSensor
     {
+        public event EventHandler<StandardWheelTorqueSensor> WheelTorquePageChanged;
+
         /// <summary>
         /// Wheel circumference in meters. The default is 2.2 meters.
         /// </summary>
@@ -15,15 +19,16 @@
         /// </summary>
         public double AccumulatedDistance { get; private set; }
 
-        public override void Parse(byte[] dataPage)
+        public override void ParseTorque(byte[] dataPage)
         {
             bool firstPage = isFirstDataMessage; // save first message flag for later use
-            base.Parse(dataPage);
+            base.ParseTorque(dataPage);
             if (!firstPage)
             {
                 AverageSpeed = ComputeAvgSpeed();
                 AccumulatedDistance += ComputeDeltaDistance();
             }
+            WheelTorquePageChanged?.Invoke(this, null);
         }
 
         private double ComputeAvgSpeed()

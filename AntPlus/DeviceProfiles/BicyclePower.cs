@@ -76,11 +76,11 @@ namespace DeviceProfiles
             }
         }
 
+        // supported sensors
         public SensorType Sensor { get; private set; } = SensorType.PowerOnly;
-        public StandardPowerOnly PowerOnlySensor { get; private set; }
-        public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
-        public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
+        public BicyclePowerSensor BicyclePowerSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
+
         public BPParameters Parameters { get; private set; }
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public BicycleCalibrationData CalibrationData { get; private set; }
@@ -90,9 +90,6 @@ namespace DeviceProfiles
         public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
 
         // events - class related
-        public event EventHandler<StandardPowerOnly> PowerOnlyChanged;
-        public event EventHandler<StandardWheelTorqueSensor> WheelTorquePageChanged;
-        public event EventHandler<StandardCrankTorqueSensor> CrankTorquePageChanged;
         public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
         public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
         public event EventHandler<BicycleCalibrationData> BicycleCalibrationPageChanged;
@@ -100,11 +97,7 @@ namespace DeviceProfiles
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            // since we don't know the sensor type we create all
-            PowerOnlySensor = new StandardPowerOnly();
-            WheelTorqueSensor = new StandardWheelTorqueSensor();
-            CrankTorqueSensor = new StandardCrankTorqueSensor();
-            CTFSensor = new CrankTorqueFrequencySensor(this);
+            BicyclePowerSensor = new BicyclePowerSensor();
             TEPS = new TorqueEffectivenessAndPedalSmoothness();
             CalibrationData = new BicycleCalibrationData(this);
             Parameters = new BPParameters(this);
@@ -135,18 +128,23 @@ namespace DeviceProfiles
                     MeasurementOutputDataChanged?.Invoke(this, new MeasurementOutputData(dataPage));
                     break;
                 case DataPage.PowerOnly:
-                    PowerOnlySensor.Parse(dataPage);
-                    PowerOnlyChanged?.Invoke(this, PowerOnlySensor);
+                    BicyclePowerSensor.Parse(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    Sensor = SensorType.WheelTorque;
-                    WheelTorqueSensor.Parse(dataPage);
-                    WheelTorquePageChanged?.Invoke(this, WheelTorqueSensor);
+                    if (Sensor == SensorType.PowerOnly || BicyclePowerSensor == null)
+                    {
+                        Sensor = SensorType.WheelTorque;
+                        BicyclePowerSensor = new StandardWheelTorqueSensor();
+                    }
+                    ((StandardWheelTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    Sensor = SensorType.CrankTorque;
-                    CrankTorqueSensor.Parse(dataPage);
-                    CrankTorquePageChanged?.Invoke(this, CrankTorqueSensor);
+                    if (Sensor == SensorType.PowerOnly || BicyclePowerSensor == null)
+                    {
+                        Sensor = SensorType.CrankTorque;
+                        BicyclePowerSensor = new StandardCrankTorqueSensor();
+                    }
+                    ((StandardCrankTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
                     TEPS.Parse(dataPage);
@@ -157,6 +155,10 @@ namespace DeviceProfiles
                     break;
                 case DataPage.CrankTorqueFrequency:
                     Sensor = SensorType.CrankTorqueFrequency;
+                    if (CTFSensor == null)
+                    {
+                        CTFSensor = new CrankTorqueFrequencySensor(this);
+                    }
                     CTFSensor.Parse(dataPage);
                     CrankTorqueFrequencyPageChanged?.Invoke(this, CTFSensor);
                     break;

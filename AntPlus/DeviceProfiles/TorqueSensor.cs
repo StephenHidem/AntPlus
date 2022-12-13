@@ -3,7 +3,7 @@ using System;
 
 namespace DeviceProfiles
 {
-    public class TorqueSensor
+    public abstract class TorqueSensor : BicyclePowerSensor
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
@@ -20,7 +20,7 @@ namespace DeviceProfiles
         public double AverageTorque { get; private set; }
         public double AveragePower { get; private set; }
 
-        public virtual void Parse(byte[] dataPage)
+        public virtual void ParseTorque(byte[] dataPage)
         {
             InstantaneousCadence = dataPage[3];
 

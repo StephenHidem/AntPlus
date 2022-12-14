@@ -1,5 +1,6 @@
 ﻿using AntRadioInterface;
 using DeviceProfiles;
+using DeviceProfiles.BicyclePower;
 using System.Collections.ObjectModel;
 using System.Linq;
 

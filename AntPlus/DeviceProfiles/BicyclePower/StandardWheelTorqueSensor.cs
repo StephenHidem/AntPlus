@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeviceProfiles
+namespace DeviceProfiles.BicyclePower
 {
     public class StandardWheelTorqueSensor : TorqueSensor
     {
@@ -18,6 +18,10 @@ namespace DeviceProfiles
         /// Distance in meters.
         /// </summary>
         public double AccumulatedDistance { get; private set; }
+
+        public StandardWheelTorqueSensor(BicyclePower bp) : base(bp)
+        {
+        }
 
         public override void ParseTorque(byte[] dataPage)
         {

@@ -3,104 +3,55 @@ using AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace DeviceProfiles
+namespace DeviceProfiles.BicyclePower
 {
-    public partial class BicyclePower : AntDevice
+    public enum SensorType
+    {
+        PowerOnly,
+        WheelTorque,
+        CrankTorque,
+        CrankTorqueFrequency
+    }
+
+    public enum DataPage
+    {
+        Unknown,
+        Calibration,
+        GetSetParameters,
+        MeasurementOutput,
+        PowerOnly = 0x10,
+        WheelTorque,
+        CrankTorque,
+        TorqueEffectivenessAndPedalSmoothness,
+        TorqueBarycenter,
+        CrankTorqueFrequency = 0x20,
+        RightForceAngle = 0xE0,
+        LeftForceAngle,
+        PedalPosition
+    }
+
+    public class BicyclePower : AntDevice
     {
         public const byte DeviceClass = 11;
-
-        public enum DataPage
-        {
-            Unknown,
-            Calibration,
-            GetSetParameters,
-            MeasurementOutput,
-            PowerOnly = 0x10,
-            WheelTorque,
-            CrankTorque,
-            TorqueEffectivenessAndPedalSmoothness,
-            TorqueBarycenter,
-            CrankTorqueFrequency = 0x20,
-            RightForceAngle = 0xE0,
-            LeftForceAngle,
-            PedalPosition
-        }
-
-        public enum SensorType
-        {
-            PowerOnly,
-            WheelTorque,
-            CrankTorque,
-            CrankTorqueFrequency
-        }
-
-        public readonly struct MeasurementOutputData
-        {
-            public enum DataType
-            {
-                ProgressCountdown = 0,
-                TimeCountdown = 1,
-                WholeSensorTorque = 8,
-                LeftTorque = 9,
-                RightTorque = 10,
-                TorqueYAxis = 11,
-                TorqueOutboardness = 12,
-                WholeSensorForce = 16,
-                LeftForce = 17,
-                RightForce = 18,
-                CrankAngle = 20,
-                LeftCrankAngle = 21,
-                RightCrankAngle = 22,
-                ZeroOffset = 24,
-                Temperature = 25,
-                Voltage = 26,
-                LeftForceForward = 32,
-                RightForceForward = 33,
-                LeftForceDownward = 34,
-                RightForceDownward = 35,
-                LeftPedalAngle = 40,
-                RightPedalAngle = 41
-            }
-
-            public int NumberOfMeasurementTypes { get; }
-            public DataType MeasurementType { get; }
-            public double Timestamp { get; }
-            public double Measurement { get; }
-
-            internal MeasurementOutputData(byte[] page)
-            {
-                NumberOfMeasurementTypes = page[1];
-                MeasurementType = (DataType)page[2];
-                Timestamp = BitConverter.ToUInt16(page, 4) / 2048.0;
-                Measurement = BitConverter.ToUInt16(page, 6) * Math.Pow(2, (sbyte)page[3]);
-            }
-        }
 
         // supported sensors
         public SensorType Sensor { get; private set; } = SensorType.PowerOnly;
         public BicyclePowerSensor BicyclePowerSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
 
-        public BPParameters Parameters { get; private set; }
-        public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public BicycleCalibrationData CalibrationData { get; private set; }
 
         // events - transient or value change
         public event EventHandler<double> TorqueBarycenterAngleChanged;
-        public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
 
         // events - class related
         public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
-        public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
         public event EventHandler<BicycleCalibrationData> BicycleCalibrationPageChanged;
-        public event EventHandler<BPParameters> ParametersChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            BicyclePowerSensor = new BicyclePowerSensor();
-            TEPS = new TorqueEffectivenessAndPedalSmoothness();
+            BicyclePowerSensor = new BicyclePowerSensor(this);
             CalibrationData = new BicycleCalibrationData(this);
-            Parameters = new BPParameters(this);
         }
 
         public override void Parse(byte[] dataPage)
@@ -121,11 +72,10 @@ namespace DeviceProfiles
                     BicycleCalibrationPageChanged?.Invoke(this, CalibrationData);
                     break;
                 case DataPage.GetSetParameters:
-                    Parameters.Parse(dataPage);
-                    ParametersChanged?.Invoke(this, Parameters);
+                    ((TorqueSensor)BicyclePowerSensor).ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
-                    MeasurementOutputDataChanged?.Invoke(this, new MeasurementOutputData(dataPage));
+                    BicyclePowerSensor.ParseMeasurementOutputData(dataPage);
                     break;
                 case DataPage.PowerOnly:
                     BicyclePowerSensor.Parse(dataPage);
@@ -134,7 +84,7 @@ namespace DeviceProfiles
                     if (Sensor == SensorType.PowerOnly || BicyclePowerSensor == null)
                     {
                         Sensor = SensorType.WheelTorque;
-                        BicyclePowerSensor = new StandardWheelTorqueSensor();
+                        BicyclePowerSensor = new StandardWheelTorqueSensor(this);
                     }
                     ((StandardWheelTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
                     break;
@@ -142,13 +92,12 @@ namespace DeviceProfiles
                     if (Sensor == SensorType.PowerOnly || BicyclePowerSensor == null)
                     {
                         Sensor = SensorType.CrankTorque;
-                        BicyclePowerSensor = new StandardCrankTorqueSensor();
+                        BicyclePowerSensor = new StandardCrankTorqueSensor(this);
                     }
                     ((StandardCrankTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    TEPS.Parse(dataPage);
-                    TEPSPageChanged?.Invoke(this, TEPS);
+                    BicyclePowerSensor.ParseTEPS(dataPage);
                     break;
                 case DataPage.TorqueBarycenter:
                     TorqueBarycenterAngleChanged?.Invoke(this, dataPage[2] * 0.5 + 30.0);

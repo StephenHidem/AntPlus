@@ -1,8 +1,7 @@
 ﻿using DeviceProfiles;
+using DeviceProfiles.BicyclePower;
 using System.ComponentModel;
 using System.Windows.Input;
-using static DeviceProfiles.BicyclePower;
-using static DeviceProfiles.BicyclePower.BPParameters;
 
 namespace AntPlusUsbClient.ViewModels
 {
@@ -19,11 +18,12 @@ namespace AntPlusUsbClient.ViewModels
         public BicyclePowerSensor PowerOnly => BicyclePower.BicyclePowerSensor;
         public StandardWheelTorqueSensor WheelTorque => BicyclePower.BicyclePowerSensor as StandardWheelTorqueSensor;
         public StandardCrankTorqueSensor CrankTorque => BicyclePower.BicyclePowerSensor as StandardCrankTorqueSensor;
-        public TorqueEffectivenessAndPedalSmoothness TEPS => BicyclePower.TEPS;
-        public BicycleCalibrationData CalibrationData => BicyclePower.CalibrationData;
+
+        public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public MeasurementOutputData MeasurementOutput { get; private set; }
+        public BicycleCalibrationData CalibrationData => BicyclePower.CalibrationData;
         public CrankTorqueFrequencySensor CrankTorqueFrequency => BicyclePower.CTFSensor;
-        public BPParameters Parameters => BicyclePower.Parameters;
+        public Parameters Parameters => (BicyclePower.BicyclePowerSensor as TorqueSensor).Parameters;
 
         public RoutedCommand ManualCalRequest { get; private set; } = new RoutedCommand();
         public RoutedCommand SetAutoZeroConfig { get; private set; } = new RoutedCommand();
@@ -45,16 +45,17 @@ namespace AntPlusUsbClient.ViewModels
             if (CrankTorque != null)
             {
                 CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");
+                CrankTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
             }
             if (WheelTorque != null)
             {
                 WheelTorque.WheelTorquePageChanged += (s, e) => RaisePropertyChange("WheelTorque");
+                WheelTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
             }
-            BicyclePower.TEPSPageChanged += (s, e) => RaisePropertyChange("TEPS");
+            BicyclePower.BicyclePowerSensor.TEPSPageChanged += (s, e) => { TEPS = e; RaisePropertyChange("TEPS"); };
             BicyclePower.BicycleCalibrationPageChanged += (s, e) => RaisePropertyChange("CalibrationData");
-            BicyclePower.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
+            BicyclePower.BicyclePowerSensor.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
             BicyclePower.CrankTorqueFrequencyPageChanged += (s, e) => RaisePropertyChange("CrankTorqueFrequency");
-            BicyclePower.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
 
             CommandBindings = new CommandBinding[] {
                 new CommandBinding(ManualCalRequest, ManualCalRequestExecuted, RequestManualCalCanExecute),
@@ -135,7 +136,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void GetParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            BicyclePower.Parameters.GetParameters((Subpage)e.Parameter);
+            Parameters.GetParameters((Subpage)e.Parameter);
         }
 
         private void GetParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -145,7 +146,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void SetCrankLengthExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            BicyclePower.Parameters.SetCrankLength(double.Parse(e.Parameter.ToString()));
+            Parameters.SetCrankLength(double.Parse(e.Parameter.ToString()));
         }
 
         private void SetCrankLengthCanExecute(object sender, CanExecuteRoutedEventArgs e)

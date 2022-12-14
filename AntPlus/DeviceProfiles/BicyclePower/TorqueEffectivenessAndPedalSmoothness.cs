@@ -1,6 +1,6 @@
 ﻿namespace DeviceProfiles
 {
-    public class TorqueEffectivenessAndPedalSmoothness
+    public struct TorqueEffectivenessAndPedalSmoothness
     {
         public double LeftTorqueEffectivenes { get; private set; }
         public double RightTorqueEffectivenes { get; private set; }
@@ -8,10 +8,12 @@
         public double RightPedalSmoothness { get; private set; }
         public bool CombinedPedalSmoothness { get; private set; }
 
-        /// <summary>Parses the torque effectiveness and pedal smoothness data page.
-        /// Note that if the right and left pedal smootness is combined, the right and left values will be the same.</summary>
+        /// <summary>
+        /// Parses the torque effectiveness and pedal smoothness data page.
+        /// Note that if the right and left pedal smootness is combined, the right and left values will be the same.
+        /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void Parse(byte[] dataPage)
+        public TorqueEffectivenessAndPedalSmoothness(byte[] dataPage)
         {
             if (dataPage[2] != 0xFF) { LeftTorqueEffectivenes = dataPage[2] * 0.5; }
             else { LeftTorqueEffectivenes = 0; }
@@ -26,6 +28,7 @@
             {
                 if (dataPage[5] != 0xFE)
                 {
+                    CombinedPedalSmoothness = false;
                     RightPedalSmoothness = dataPage[5] * 0.5;
                 }
                 else
@@ -34,7 +37,11 @@
                     RightPedalSmoothness = dataPage[4] * 0.5;
                 }
             }
-            else { RightPedalSmoothness = 0; }
+            else
+            {
+                CombinedPedalSmoothness = false;
+                RightPedalSmoothness = 0;
+            }
         }
     }
 }

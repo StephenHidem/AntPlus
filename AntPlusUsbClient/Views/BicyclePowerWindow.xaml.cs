@@ -1,5 +1,5 @@
 ﻿using AntPlusUsbClient.ViewModels;
-using DeviceProfiles;
+using DeviceProfiles.BicyclePower;
 using System.Windows;
 
 namespace AntPlusUsbClient.Views

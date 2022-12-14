@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeviceProfiles
+namespace DeviceProfiles.BicyclePower
 {
     public class StandardCrankTorqueSensor : TorqueSensor
     {
@@ -9,6 +9,10 @@ namespace DeviceProfiles
         /// <summary>Gets the average cadence in rotations per minute.</summary>
         /// <value>The average cadence.</value>
         public double AverageCadence { get; private set; }
+
+        public StandardCrankTorqueSensor(BicyclePower bp) : base(bp)
+        {
+        }
 
         public override void ParseTorque(byte[] dataPage)
         {

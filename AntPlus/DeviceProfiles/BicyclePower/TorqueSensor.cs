@@ -1,7 +1,7 @@
 ﻿using AntPlus;
 using System;
 
-namespace DeviceProfiles
+namespace DeviceProfiles.BicyclePower
 {
     public abstract class TorqueSensor : BicyclePowerSensor
     {
@@ -15,10 +15,18 @@ namespace DeviceProfiles
         private ushort lastTorque;
         protected int deltaTorque;
 
+        public event EventHandler<Parameters> ParametersChanged;
+
         public byte InstantaneousCadence { get; private set; }
         public double AverageAngularVelocity { get; private set; }
         public double AverageTorque { get; private set; }
         public double AveragePower { get; private set; }
+        public Parameters Parameters { get; private set; }
+
+        protected TorqueSensor(BicyclePower bp) : base(bp)
+        {
+            Parameters = new Parameters(bp);
+        }
 
         public virtual void ParseTorque(byte[] dataPage)
         {
@@ -47,6 +55,12 @@ namespace DeviceProfiles
                 AverageTorque = ComputeAvgTorque();
                 AveragePower = AverageTorque * AverageAngularVelocity;
             }
+        }
+
+        public void ParseParameters(byte[] dataPage)
+        {
+            Parameters.Parse(dataPage);
+            ParametersChanged?.Invoke(this, Parameters);
         }
 
         private double ComputeAvgAngularVelocity()

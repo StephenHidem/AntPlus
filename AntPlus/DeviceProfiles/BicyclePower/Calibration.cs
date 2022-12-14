@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace DeviceProfiles.BicyclePower
 {
-    public class BicycleCalibrationData
+    public class Calibration
     {
         private readonly BicyclePower bp;
 
@@ -38,7 +38,7 @@ namespace DeviceProfiles.BicyclePower
         public bool AutoZeroSupported { get; private set; }
         public byte[] CustomCalibrationParameters { get; private set; }
 
-        public BicycleCalibrationData(BicyclePower bp)
+        public Calibration(BicyclePower bp)
         {
             this.bp = bp;
         }

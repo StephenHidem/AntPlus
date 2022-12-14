@@ -39,19 +39,19 @@ namespace DeviceProfiles.BicyclePower
         public BicyclePowerSensor BicyclePowerSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
 
-        public BicycleCalibrationData CalibrationData { get; private set; }
+        public Calibration Calibration { get; private set; }
 
         // events - transient or value change
         public event EventHandler<double> TorqueBarycenterAngleChanged;
 
         // events - class related
         public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
-        public event EventHandler<BicycleCalibrationData> BicycleCalibrationPageChanged;
+        public event EventHandler<Calibration> BicycleCalibrationPageChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
             BicyclePowerSensor = new BicyclePowerSensor(this);
-            CalibrationData = new BicycleCalibrationData(this);
+            Calibration = new Calibration(this);
         }
 
         public override void Parse(byte[] dataPage)
@@ -68,8 +68,8 @@ namespace DeviceProfiles.BicyclePower
                 case DataPage.Unknown:
                     break;
                 case DataPage.Calibration:
-                    CalibrationData.Parse(dataPage);
-                    BicycleCalibrationPageChanged?.Invoke(this, CalibrationData);
+                    Calibration.Parse(dataPage);
+                    BicycleCalibrationPageChanged?.Invoke(this, Calibration);
                     break;
                 case DataPage.GetSetParameters:
                     ((TorqueSensor)BicyclePowerSensor).ParseParameters(dataPage);

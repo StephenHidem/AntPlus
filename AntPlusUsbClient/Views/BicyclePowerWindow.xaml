@@ -65,11 +65,11 @@
                     <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding CalibrationData.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
-                    <TextBlock Text="{Binding CalibrationData.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
-                    <TextBlock Text="{Binding CalibrationData.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
-                    <TextBlock Text="{Binding CalibrationData.CalibrationData, StringFormat='Calibration Data {0}'}"/>
-                    <TextBlock Text="{Binding CalibrationData.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
+                    <TextBlock Text="{Binding Calibration.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
+                    <TextBlock Text="{Binding Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
+                    <TextBlock Text="{Binding Calibration.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
+                    <TextBlock Text="{Binding Calibration.CalibrationData, StringFormat='Calibration Data {0}'}"/>
+                    <TextBlock Text="{Binding Calibration.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
                     <TextBlock Text="{Binding MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of types {0}'}"/>
                     <TextBlock Text="{Binding MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
                     <TextBlock Text="{Binding MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>

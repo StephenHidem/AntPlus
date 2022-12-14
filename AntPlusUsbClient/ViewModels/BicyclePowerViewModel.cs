@@ -21,7 +21,7 @@ namespace AntPlusUsbClient.ViewModels
 
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public MeasurementOutputData MeasurementOutput { get; private set; }
-        public BicycleCalibrationData CalibrationData => BicyclePower.CalibrationData;
+        public Calibration Calibration => BicyclePower.Calibration;
         public CrankTorqueFrequencySensor CrankTorqueFrequency => BicyclePower.CTFSensor;
         public Parameters Parameters => (BicyclePower.BicyclePowerSensor as TorqueSensor).Parameters;
 
@@ -53,7 +53,7 @@ namespace AntPlusUsbClient.ViewModels
                 WheelTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
             }
             BicyclePower.BicyclePowerSensor.TEPSPageChanged += (s, e) => { TEPS = e; RaisePropertyChange("TEPS"); };
-            BicyclePower.BicycleCalibrationPageChanged += (s, e) => RaisePropertyChange("CalibrationData");
+            BicyclePower.BicycleCalibrationPageChanged += (s, e) => RaisePropertyChange("Calibration");
             BicyclePower.BicyclePowerSensor.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
             BicyclePower.CrankTorqueFrequencyPageChanged += (s, e) => RaisePropertyChange("CrankTorqueFrequency");
 
@@ -96,7 +96,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void GetCustomCalibrationParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            CalibrationData.RequestCustomParameters();
+            Calibration.RequestCustomParameters();
         }
 
         private void GetCustomCalibrationParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -106,7 +106,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void SetCustomCalibrationParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            CalibrationData.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
+            Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
         }
 
         private void SetCustomCalibrationParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -116,7 +116,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void ManualCalRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            CalibrationData.RequestManualCalibration();
+            Calibration.RequestManualCalibration();
         }
 
         private void RequestManualCalCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -126,7 +126,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void SetAutoZeroExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            CalibrationData.SetAutoZeroConfiguration(BicycleCalibrationData.AutoZero.On);
+            Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On);
         }
 
         private void SetAutoZeroCanExecute(object sender, CanExecuteRoutedEventArgs e)

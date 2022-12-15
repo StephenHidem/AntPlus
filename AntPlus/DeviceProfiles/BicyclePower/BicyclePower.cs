@@ -118,6 +118,7 @@ namespace DeviceProfiles.BicyclePower
                 case DataPage.PedalPosition:
                     break;
                 default:
+                    BicyclePowerSensor.ParseCommonDataPage(dataPage);
                     break;
             }
         }

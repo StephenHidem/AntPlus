@@ -396,7 +396,7 @@ namespace DeviceProfiles
         /// <param name="sportMode">The sport mode.</param>
         public void SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
-            byte[] msg = new byte[] { (byte)CommonDataPageType.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode };
+            byte[] msg = new byte[] { (byte)CommonDataPage.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode };
             SendExtAcknowledgedMessage(msg);
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AntPlus
 {
-    public enum CommonDataPageType
+    public enum CommonDataPage
     {
         AntFSClientBeacon = 0x43,
         AntFSCommandResponse = 0x44,
@@ -121,20 +121,71 @@ namespace AntPlus
         public int ComponentId { get; private set; }
 
         // Manufacturer Info
-        public byte HardwareRevision { get; private set; } = 0;
-        public ushort ManufactureId { get; private set; } = 0;
-        public ushort ModelNumber { get; private set; } = 0;
+        public readonly struct ManufacturerInfo
+        {
+            public byte HardwareRevision { get; }
+            public ushort ManufacturerId { get; }
+            public ushort ModelNumber { get; }
+
+            public ManufacturerInfo(byte[] payload)
+            {
+                HardwareRevision = payload[3];
+                ManufacturerId = BitConverter.ToUInt16(payload, 4);
+                ModelNumber = BitConverter.ToUInt16(payload, 6);
+            }
+        }
+        public ManufacturerInfo Manufacturer { get; private set; }
 
         // Product Info
-        public Version SoftwareRevision { get; private set; }
-        public uint SerialNumber { get; private set; } = 0xFFFFFFFF;
+        public readonly struct ProductInfo
+        {
+            public Version SoftwareRevision { get; }
+            public uint SerialNumber { get; }
+
+            public ProductInfo(byte[] payload)
+            {
+                if (payload[2] != 0xFF)
+                {
+                    // supplemental SW revision is valid
+                    SoftwareRevision = Version.Parse(((payload[3] * 100.0 + payload[2]) / 1000.0).ToString("N3"));
+                }
+                else
+                {
+                    // only main SW revision is present
+                    SoftwareRevision = Version.Parse((payload[3] / 10.0).ToString("N3"));
+                }
+                SerialNumber = BitConverter.ToUInt32(payload, 4);
+            }
+        }
+        public ProductInfo Product { get; private set; }
 
         // Battery Status
-        public byte NumberOfBatteries { get; private set; }
-        public byte Identifier { get; private set; }
-        public TimeSpan CumulativeOperatingTime { get; private set; }
-        public BatteryStatus BatteryStatus { get; private set; }
-        public double BatteryVoltage { get; private set; }
+        public readonly struct BatteryStatusPage
+        {
+            public byte NumberOfBatteries { get; }
+            public byte Identifier { get; }
+            public TimeSpan CumulativeOperatingTime { get; }
+            public BatteryStatus BatteryStatus { get; }
+            public double BatteryVoltage { get; }
+
+            public BatteryStatusPage(byte[] payload)
+            {
+                if (payload[2] != 0xFF)
+                {
+                    NumberOfBatteries = (byte)(payload[2] & 0x0F);
+                    Identifier = (byte)(payload[2] >> 4);
+                }
+                else
+                {
+                    NumberOfBatteries = 1; Identifier = 0;
+                }
+                CumulativeOperatingTime =
+                    TimeSpan.FromSeconds((BitConverter.ToInt32(payload, 3) & 0x00FFFFFF) * (((payload[7] & 0x80) == 0x80) ? 2.0 : 16.0));
+                BatteryVoltage = (payload[7] & 0x0F) + (payload[6] / 256.0);
+                BatteryStatus = (BatteryStatus)((payload[7] & 0x70) >> 4);
+            }
+        }
+        public BatteryStatusPage BatteryStatus { get; private set; }
 
         // Time and Date
         public DateTime TimeAndDate { get; private set; }
@@ -163,78 +214,65 @@ namespace AntPlus
         }
         public List<PairedDevice> PairedDevices { get; private set; } = new List<PairedDevice>();
 
+        public event EventHandler<ManufacturerInfo> ManufacturerInfoChanged;
+        public event EventHandler<ProductInfo> ProductInfoChanged;
+        public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
+
         public void ParseCommonDataPage(byte[] payload)
         {
-            CommonDataPageType pageType = (CommonDataPageType)payload[0];
+            CommonDataPage pageType = (CommonDataPage)payload[0];
             switch (pageType)
             {
-                case CommonDataPageType.AntFSClientBeacon:
+                case CommonDataPage.AntFSClientBeacon:
                     break;
-                case CommonDataPageType.AntFSCommandResponse:
+                case CommonDataPage.AntFSCommandResponse:
                     break;
-                case CommonDataPageType.CommandStatus:
+                case CommonDataPage.CommandStatus:
                     LastCommandReceived = payload[1];
                     SequenceNumber = payload[2];
                     CommandStatus = (CommandStatus)payload[3];
                     ResponseData = BitConverter.ToUInt32(payload, 4);
                     break;
-                case CommonDataPageType.GenericCommandPage:
+                case CommonDataPage.GenericCommandPage:
                     break;
-                case CommonDataPageType.OpenChannelCommand:
+                case CommonDataPage.OpenChannelCommand:
                     break;
-                case CommonDataPageType.MultiComponentManufacturerInfo:
+                case CommonDataPage.MultiComponentManufacturerInfo:
                     // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
                     NumberOfComponents = payload[2] & 0x0F;
                     ComponentId = payload[2] >> 4;
-                    goto case CommonDataPageType.ManufacturerInfo;
-                case CommonDataPageType.ManufacturerInfo:
-                    HardwareRevision = payload[3];
-                    ManufactureId = BitConverter.ToUInt16(payload, 4);
-                    ModelNumber = BitConverter.ToUInt16(payload, 6);
+                    goto case CommonDataPage.ManufacturerInfo;
+                case CommonDataPage.ManufacturerInfo:
+                    Manufacturer = new ManufacturerInfo(payload);
+                    ManufacturerInfoChanged?.Invoke(this, Manufacturer);
                     break;
-                case CommonDataPageType.MultiComponentProductInfo:
+                case CommonDataPage.MultiComponentProductInfo:
                     // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
                     NumberOfComponents = payload[1] & 0x0F;
                     ComponentId = payload[1] >> 4;
-                    goto case CommonDataPageType.ProductInfo;
-                case CommonDataPageType.ProductInfo:
-                    if (payload[2] != 0xFF)
-                    {
-                        // supplemental SW revision is valid
-                        SoftwareRevision = Version.Parse((((double)payload[3] * 100 + payload[2]) / 1000).ToString("N3"));
-                    }
-                    else
-                    {
-                        // only main SW revision is present
-                        SoftwareRevision = Version.Parse(((double)payload[3] / 10).ToString("N3"));
-                    }
-                    SerialNumber = BitConverter.ToUInt32(payload, 4);
+                    goto case CommonDataPage.ProductInfo;
+                case CommonDataPage.ProductInfo:
+                    Product = new ProductInfo(payload);
+                    ProductInfoChanged?.Invoke(this, Product);
                     break;
-                case CommonDataPageType.BatteryStatus:
-                    if (payload[2] != 0xFF)
-                    {
-                        NumberOfBatteries = (byte)(payload[2] & 0x0F);
-                        Identifier = (byte)(payload[2] >> 4);
-                    }
-                    CumulativeOperatingTime =
-                        TimeSpan.FromSeconds((BitConverter.ToInt32(payload, 3) & 0x00FFFFFF) * (((payload[7] & 0x80) == 0x80) ? 2.0 : 16.0));
-                    BatteryVoltage = (payload[7] & 0x0F) + (payload[6] / 256.0);
-                    BatteryStatus = (BatteryStatus)((payload[7] & 0x70) >> 4);
+                case CommonDataPage.BatteryStatus:
+                    BatteryStatus = new BatteryStatusPage(payload);
+                    BatteryStatusPageChanged?.Invoke(this, BatteryStatus);
                     break;
-                case CommonDataPageType.TimeAndDate:
+                case CommonDataPage.TimeAndDate:
                     // note that day of week is ignored in payload since the DateTime struct can provide this
                     TimeAndDate = new DateTime(2000 + payload[7], payload[6], payload[5] & 0x1F, payload[4], payload[3], payload[2], DateTimeKind.Utc);
                     break;
-                case CommonDataPageType.SubfieldData:
+                case CommonDataPage.SubfieldData:
                     ParseSubfieldData((SubfieldDataPage)payload[2], BitConverter.ToInt16(payload, 4));
                     ParseSubfieldData((SubfieldDataPage)payload[3], BitConverter.ToInt16(payload, 6));
                     break;
-                case CommonDataPageType.MemoryLevel:
+                case CommonDataPage.MemoryLevel:
                     PercentUsed = payload[4] * 0.5;
                     TotalSize = BitConverter.ToUInt16(payload, 5) * 0.1;
                     TotalSizeUnit = (MemorySizeUnit)(payload[7] & 0x83);
                     break;
-                case CommonDataPageType.PairedDevices:
+                case CommonDataPage.PairedDevices:
                     NumberOfConnectedDevices = payload[2];
                     IsPaired = (payload[3] & 0x80) == 0x80;
                     ConnectionState = (ConnectionState)((payload[3] & 0x38) >> 3);
@@ -245,7 +283,7 @@ namespace AntPlus
                         PairedDevices.Add(new PairedDevice(payload[1], BitConverter.ToUInt32(payload, 4)));
                     }
                     break;
-                case CommonDataPageType.ErrorDescription:
+                case CommonDataPage.ErrorDescription:
                     SystemComponentIndex = (byte)(payload[2] & 0x0F);
                     ErrorLevel = (ErrorLevel)((payload[2] & 0xC0) >> 6);
                     ProfileSpecificErrorCode = payload[3];

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntPlus;
+using System;
 namespace DeviceProfiles.BicyclePower
 {
     public class BicyclePowerSensor
@@ -10,11 +11,13 @@ namespace DeviceProfiles.BicyclePower
         public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
 
         public StandardPowerOnly PowerOnlySensor { get; private set; }
+        public CommonDataPages CommonDataPages { get; private set; }
 
         public BicyclePowerSensor(BicyclePower bp)
         {
             bicyclePower = bp;
             PowerOnlySensor = new StandardPowerOnly();
+            CommonDataPages = new CommonDataPages();
         }
 
         public virtual void Parse(byte[] dataPage)
@@ -31,6 +34,11 @@ namespace DeviceProfiles.BicyclePower
         public void ParseMeasurementOutputData(byte[] dataPage)
         {
             MeasurementOutputDataChanged?.Invoke(this, new MeasurementOutputData(dataPage));
+        }
+
+        public void ParseCommonDataPage(byte[] dataPage)
+        {
+            CommonDataPages.ParseCommonDataPage(dataPage);
         }
     }
 }

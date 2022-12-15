@@ -44,7 +44,7 @@ namespace AntPlus
         {
             if (Enum.IsDefined(typeof(T), page))
             {
-                byte[] msg = new byte[] { (byte)CommonDataPageType.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
+                byte[] msg = new byte[] { (byte)CommonDataPage.RequestDataPage, 0, 0, decriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
                 BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
                 antChannel.SendExtAcknowledgedData(ChannelId, msg, 500);
             }

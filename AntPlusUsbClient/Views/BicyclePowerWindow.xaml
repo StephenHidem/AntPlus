@@ -123,6 +123,44 @@
                     </StackPanel>
                 </StackPanel>
             </Expander>
+            <Expander ExpandDirection="Down" IsExpanded="False">
+                <Expander.Header>
+                    <TextBlock Text="Common Data Pages" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <Expander>
+                        <Expander.Header>
+                            <TextBlock Text="Manufacturer" FontWeight="DemiBold"/>
+                        </Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="{Binding CommonDataPages.Manufacturer.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.Manufacturer.ModelNumber, StringFormat='Model Number {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.Manufacturer.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <TextBlock Text="Product" FontWeight="DemiBold"/>
+                        </Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="{Binding CommonDataPages.Product.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.Product.SerialNumber, StringFormat='Serial Number {0}'}"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <TextBlock Text="Battery" FontWeight="DemiBold"/>
+                        </Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.Identifier, StringFormat='ID {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.BatteryVoltage, StringFormat='Voltage {0}'}"/>
+                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time {0}'}"/>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </Expander>
         </StackPanel>
     </Grid>
 </Window>

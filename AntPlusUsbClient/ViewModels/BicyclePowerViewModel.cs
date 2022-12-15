@@ -1,4 +1,5 @@
-﻿using DeviceProfiles;
+﻿using AntPlus;
+using DeviceProfiles;
 using DeviceProfiles.BicyclePower;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -18,6 +19,7 @@ namespace AntPlusUsbClient.ViewModels
         public BicyclePowerSensor PowerOnly => BicyclePower.BicyclePowerSensor;
         public StandardWheelTorqueSensor WheelTorque => BicyclePower.BicyclePowerSensor as StandardWheelTorqueSensor;
         public StandardCrankTorqueSensor CrankTorque => BicyclePower.BicyclePowerSensor as StandardCrankTorqueSensor;
+        public CommonDataPages CommonDataPages => BicyclePower.BicyclePowerSensor.CommonDataPages;
 
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public MeasurementOutputData MeasurementOutput { get; private set; }
@@ -42,6 +44,9 @@ namespace AntPlusUsbClient.ViewModels
 
             // hook up events
             PowerOnly.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
+            BicyclePower.BicyclePowerSensor.CommonDataPages.ManufacturerInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
+            BicyclePower.BicyclePowerSensor.CommonDataPages.ProductInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
+            BicyclePower.BicyclePowerSensor.CommonDataPages.BatteryStatusPageChanged += (s, e) => RaisePropertyChange("CommonDataPages");
             if (CrankTorque != null)
             {
                 CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");

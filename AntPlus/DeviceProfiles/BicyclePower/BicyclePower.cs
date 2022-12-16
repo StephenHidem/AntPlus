@@ -36,7 +36,7 @@ namespace DeviceProfiles.BicyclePower
 
         // supported sensors
         public SensorType Sensor { get; private set; } = SensorType.PowerOnly;
-        public BicyclePowerSensor BicyclePowerSensor { get; private set; }
+        public StandardPowerSensor BicyclePowerSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
 
         public Calibration Calibration { get; private set; }
@@ -50,7 +50,6 @@ namespace DeviceProfiles.BicyclePower
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            BicyclePowerSensor = new BicyclePowerSensor(this);
             Calibration = new Calibration(this);
         }
 
@@ -75,9 +74,14 @@ namespace DeviceProfiles.BicyclePower
                     ((TorqueSensor)BicyclePowerSensor).ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
-                    BicyclePowerSensor.ParseMeasurementOutputData(dataPage);
+                    BicyclePowerSensor?.ParseMeasurementOutputData(dataPage);
                     break;
                 case DataPage.PowerOnly:
+                    if (BicyclePowerSensor == null)
+                    {
+                        Sensor = SensorType.PowerOnly;
+                        BicyclePowerSensor = new StandardPowerSensor(this);
+                    }
                     BicyclePowerSensor.Parse(dataPage);
                     break;
                 case DataPage.WheelTorque:
@@ -97,7 +101,7 @@ namespace DeviceProfiles.BicyclePower
                     ((StandardCrankTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    BicyclePowerSensor.ParseTEPS(dataPage);
+                    BicyclePowerSensor?.ParseTEPS(dataPage);
                     break;
                 case DataPage.TorqueBarycenter:
                     TorqueBarycenterAngleChanged?.Invoke(this, dataPage[2] * 0.5 + 30.0);
@@ -118,7 +122,7 @@ namespace DeviceProfiles.BicyclePower
                 case DataPage.PedalPosition:
                     break;
                 default:
-                    BicyclePowerSensor.ParseCommonDataPage(dataPage);
+                    BicyclePowerSensor?.ParseCommonDataPage(dataPage);
                     break;
             }
         }

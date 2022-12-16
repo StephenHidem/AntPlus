@@ -1,5 +1,4 @@
-﻿using AntPlus;
-using DeviceProfiles;
+﻿using DeviceProfiles;
 using DeviceProfiles.BicyclePower;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -12,20 +11,20 @@ namespace AntPlusUsbClient.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool ShowCrankTorque => CrankTorque != null;
-        public bool ShowWheelTorque => WheelTorque != null;
+        public bool EnableCrankTorque => CrankTorque != null;
+        public bool EnableWheelTorque => WheelTorque != null;
+        public bool EnableCTFSensor => CrankTorqueFrequency != null;
 
         public SensorType SensorType => BicyclePower.Sensor;
-        public BicyclePowerSensor PowerOnly => BicyclePower.BicyclePowerSensor;
+        public StandardPowerSensor PowerOnly => BicyclePower.BicyclePowerSensor;
         public StandardWheelTorqueSensor WheelTorque => BicyclePower.BicyclePowerSensor as StandardWheelTorqueSensor;
         public StandardCrankTorqueSensor CrankTorque => BicyclePower.BicyclePowerSensor as StandardCrankTorqueSensor;
-        public CommonDataPages CommonDataPages => BicyclePower.BicyclePowerSensor.CommonDataPages;
+        public CrankTorqueFrequencySensor CrankTorqueFrequency => BicyclePower.CTFSensor;
 
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public MeasurementOutputData MeasurementOutput { get; private set; }
         public Calibration Calibration => BicyclePower.Calibration;
-        public CrankTorqueFrequencySensor CrankTorqueFrequency => BicyclePower.CTFSensor;
-        public Parameters Parameters => (BicyclePower.BicyclePowerSensor as TorqueSensor).Parameters;
+        public Parameters Parameters { get; private set; }
 
         public RoutedCommand ManualCalRequest { get; private set; } = new RoutedCommand();
         public RoutedCommand SetAutoZeroConfig { get; private set; } = new RoutedCommand();
@@ -43,23 +42,28 @@ namespace AntPlusUsbClient.ViewModels
             BicyclePower = bicyclePower;
 
             // hook up events
-            PowerOnly.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
-            BicyclePower.BicyclePowerSensor.CommonDataPages.ManufacturerInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
-            BicyclePower.BicyclePowerSensor.CommonDataPages.ProductInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
-            BicyclePower.BicyclePowerSensor.CommonDataPages.BatteryStatusPageChanged += (s, e) => RaisePropertyChange("CommonDataPages");
+            if (PowerOnly != null)
+            {
+                PowerOnly.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
+                PowerOnly.TEPSPageChanged += (s, e) => { TEPS = e; RaisePropertyChange("TEPS"); };
+                PowerOnly.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
+                PowerOnly.CommonDataPages.ManufacturerInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
+                PowerOnly.CommonDataPages.ProductInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
+                PowerOnly.CommonDataPages.BatteryStatusPageChanged += (s, e) => RaisePropertyChange("CommonDataPages");
+            }
             if (CrankTorque != null)
             {
+                Parameters = CrankTorque.Parameters;
                 CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");
                 CrankTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
             }
             if (WheelTorque != null)
             {
+                Parameters = WheelTorque.Parameters;
                 WheelTorque.WheelTorquePageChanged += (s, e) => RaisePropertyChange("WheelTorque");
                 WheelTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
             }
-            BicyclePower.BicyclePowerSensor.TEPSPageChanged += (s, e) => { TEPS = e; RaisePropertyChange("TEPS"); };
             BicyclePower.BicycleCalibrationPageChanged += (s, e) => RaisePropertyChange("Calibration");
-            BicyclePower.BicyclePowerSensor.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
             BicyclePower.CrankTorqueFrequencyPageChanged += (s, e) => RaisePropertyChange("CrankTorqueFrequency");
 
             CommandBindings = new CommandBinding[] {

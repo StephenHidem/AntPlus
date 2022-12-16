@@ -3,7 +3,7 @@ using System;
 
 namespace DeviceProfiles.BicyclePower
 {
-    public abstract class TorqueSensor : BicyclePowerSensor
+    public abstract class TorqueSensor : StandardPowerSensor
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
@@ -17,10 +17,10 @@ namespace DeviceProfiles.BicyclePower
 
         public event EventHandler<Parameters> ParametersChanged;
 
-        public byte InstantaneousCadence { get; private set; }
+        public new byte InstantaneousCadence { get; private set; }
         public double AverageAngularVelocity { get; private set; }
         public double AverageTorque { get; private set; }
-        public double AveragePower { get; private set; }
+        public new double AveragePower { get; private set; }
         public Parameters Parameters { get; private set; }
 
         protected TorqueSensor(BicyclePower bp) : base(bp)

@@ -52,9 +52,9 @@ namespace AntPlus.UnitTests
                 payload);
 
             // Assert
-            Assert.AreEqual(hwRev, commonDataPages.HardwareRevision, "HW revision");
-            Assert.AreEqual(manId, commonDataPages.ManufactureId, "Manufacture ID");
-            Assert.AreEqual(modelNumber, commonDataPages.ModelNumber, "Model number");
+            Assert.AreEqual(hwRev, commonDataPages.Manufacturer.HardwareRevision, "HW revision");
+            Assert.AreEqual(manId, commonDataPages.Manufacturer.ManufacturerId, "Manufacturer ID");
+            Assert.AreEqual(modelNumber, commonDataPages.Manufacturer.ModelNumber, "Model number");
         }
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.MultiComponentProductInfo, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 15, 0)]
@@ -89,8 +89,8 @@ namespace AntPlus.UnitTests
                 payload);
 
             // Assert
-            Assert.AreEqual(Version.Parse(swVersion), commonDataPages.SoftwareRevision, "Software version");
-            Assert.AreEqual(serialNumber, commonDataPages.SerialNumber, "Serial number");
+            Assert.AreEqual(Version.Parse(swVersion), commonDataPages.Product.SoftwareRevision, "Software version");
+            Assert.AreEqual(serialNumber, commonDataPages.Product.SerialNumber, "Serial number");
         }
 
         [TestMethod]
@@ -112,11 +112,11 @@ namespace AntPlus.UnitTests
                 payload);
 
             // Assert
-            Assert.AreEqual(numberOfBatt, commonDataPages.NumberOfBatteries, "Number of batteries");
-            Assert.AreEqual(battId, commonDataPages.Identifier, "Battery ID");
-            Assert.AreEqual(batteryStatus, commonDataPages.BatteryStatus, "Battery status");
-            Assert.AreEqual(voltage, commonDataPages.BatteryVoltage, "Battery voltage");
-            Assert.AreEqual(TimeSpan.FromSeconds(seconds), commonDataPages.CumulativeOperatingTime, "Cumulative operating time");
+            Assert.AreEqual(numberOfBatt, commonDataPages.BatteryStatus.NumberOfBatteries, "Number of batteries");
+            Assert.AreEqual(battId, commonDataPages.BatteryStatus.Identifier, "Battery ID");
+            Assert.AreEqual(batteryStatus, commonDataPages.BatteryStatus.BatteryStatus, "Battery status");
+            Assert.AreEqual(voltage, commonDataPages.BatteryStatus.BatteryVoltage, "Battery voltage");
+            Assert.AreEqual(TimeSpan.FromSeconds(seconds), commonDataPages.BatteryStatus.CumulativeOperatingTime, "Cumulative operating time");
         }
 
         [TestMethod]

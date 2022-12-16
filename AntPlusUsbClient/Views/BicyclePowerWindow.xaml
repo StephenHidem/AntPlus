@@ -8,22 +8,22 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
         xmlns:dp="clr-namespace:DeviceProfiles.BicyclePower;assembly=AntPlus"
         mc:Ignorable="d"
-        Title="Bicycle Power Window" Height="450" Width="301">
+        Title="Bicycle Power Window" Height="501" Width="301">
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
-            <Expander ExpandDirection="Down" IsExpanded="True">
+            <Expander ExpandDirection="Down" IsExpanded="False">
                 <Expander.Header>
                     <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding PowerOnly.PowerOnlySensor.PedalPower, StringFormat='Pedal Power {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.PowerOnlySensor.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.PowerOnlySensor.InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.PowerOnlySensor.AveragePower, StringFormat='Average Power {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.PedalPower, StringFormat='Pedal Power {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
+                    <TextBlock Text="{Binding PowerOnly.AveragePower, StringFormat='Average Power {0}'}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding ShowCrankTorque}">
+            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnableCrankTorque}">
                 <Expander.Header>
                     <TextBlock Text="Crank Torque Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -35,7 +35,7 @@
                     <TextBlock Text="{Binding CrankTorque.AverageCadence, StringFormat='AverageCadence {0}'}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding ShowWheelTorque}">
+            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnableWheelTorque}">
                 <Expander.Header>
                     <TextBlock Text="Wheel Torque Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -48,7 +48,7 @@
                     <TextBlock Text="{Binding WheelTorque.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False">
+            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding IsCTFSensor}">
                 <Expander.Header>
                     <TextBlock Text="Torque Effectiveness and Pedal Smootness" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -80,7 +80,7 @@
                     <Button Content="Set Custom Calibration Parameters" Command="{Binding SetCustomCalibrationParameters}"/>
                 </StackPanel>
             </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False">
+            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnableCTFSensor}">
                 <Expander.Header>
                     <TextBlock Text="Crank Torque Frequency Sensor" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -133,9 +133,9 @@
                             <TextBlock Text="Manufacturer" FontWeight="DemiBold"/>
                         </Expander.Header>
                         <StackPanel>
-                            <TextBlock Text="{Binding CommonDataPages.Manufacturer.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.Manufacturer.ModelNumber, StringFormat='Model Number {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.Manufacturer.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.Manufacturer.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.Manufacturer.ModelNumber, StringFormat='Model Number {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.Manufacturer.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
                         </StackPanel>
                     </Expander>
                     <Expander>
@@ -143,8 +143,8 @@
                             <TextBlock Text="Product" FontWeight="DemiBold"/>
                         </Expander.Header>
                         <StackPanel>
-                            <TextBlock Text="{Binding CommonDataPages.Product.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.Product.SerialNumber, StringFormat='Serial Number {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.Product.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.Product.SerialNumber, StringFormat='Serial Number {0}'}"/>
                         </StackPanel>
                     </Expander>
                     <Expander>
@@ -152,11 +152,11 @@
                             <TextBlock Text="Battery" FontWeight="DemiBold"/>
                         </Expander.Header>
                         <StackPanel>
-                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.Identifier, StringFormat='ID {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.BatteryVoltage, StringFormat='Voltage {0}'}"/>
-                            <TextBlock Text="{Binding CommonDataPages.BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.BatteryStatus.Identifier, StringFormat='ID {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.BatteryStatus.BatteryVoltage, StringFormat='Voltage {0}'}"/>
+                            <TextBlock Text="{Binding PowerOnly.CommonDataPages.BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time {0}'}"/>
                         </StackPanel>
                     </Expander>
                 </StackPanel>

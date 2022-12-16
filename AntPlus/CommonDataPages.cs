@@ -206,7 +206,7 @@ namespace AntPlus
         public bool IsPaired { get; private set; }
         public ConnectionState ConnectionState { get; private set; }
         public NetworkKey NetworkKey { get; private set; }
-        public struct PairedDevice
+        public readonly struct PairedDevice
         {
             public byte Index { get; }
             public uint PeripheralDeviceId { get; }

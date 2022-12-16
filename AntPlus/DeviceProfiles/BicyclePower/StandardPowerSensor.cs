@@ -1,15 +1,27 @@
 ﻿using AntPlus;
+using DeviceProfiles.BicyclePower;
 using System;
 
 namespace DeviceProfiles
 {
-    public class StandardPowerOnly
+    public class StandardPowerSensor
     {
-        protected bool isFirstDataMessage = true;     // used for accumulated values
+        private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastEventCount;
         private int deltaEventCount;
         private ushort lastPower;
         private int deltaPower;
+
+        public CommonDataPages CommonDataPages { get; private set; }
+
+        public event EventHandler<StandardPowerSensor> PowerOnlyChanged;
+        public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
+        public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
+
+        public StandardPowerSensor(BicyclePower.BicyclePower bp)
+        {
+            CommonDataPages = new CommonDataPages();
+        }
 
         public double AveragePower { get; private set; }
         public byte PedalPower { get; private set; }
@@ -38,6 +50,22 @@ namespace DeviceProfiles
                 deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
                 AveragePower = deltaPower / deltaEventCount;
             }
+            PowerOnlyChanged?.Invoke(this, null);
+        }
+
+        public void ParseMeasurementOutputData(byte[] dataPage)
+        {
+            MeasurementOutputDataChanged?.Invoke(this, new MeasurementOutputData(dataPage));
+        }
+
+        public void ParseTEPS(byte[] dataPage)
+        {
+            TEPSPageChanged?.Invoke(this, new TorqueEffectivenessAndPedalSmoothness(dataPage));
+        }
+
+        public void ParseCommonDataPage(byte[] dataPage)
+        {
+            CommonDataPages.ParseCommonDataPage(dataPage);
         }
     }
 }

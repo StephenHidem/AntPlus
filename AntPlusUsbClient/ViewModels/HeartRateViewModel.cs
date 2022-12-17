@@ -1,4 +1,4 @@
-﻿using DeviceProfiles;
+﻿using DeviceProfiles.HeartRate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

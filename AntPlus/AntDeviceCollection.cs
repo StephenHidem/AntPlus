@@ -1,6 +1,7 @@
 ﻿using AntRadioInterface;
 using DeviceProfiles;
 using DeviceProfiles.BicyclePower;
+using DeviceProfiles.HeartRate;
 using System.Collections.ObjectModel;
 using System.Linq;
 

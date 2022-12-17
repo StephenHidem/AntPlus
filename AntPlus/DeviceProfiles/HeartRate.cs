@@ -3,7 +3,7 @@ using AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace DeviceProfiles
+namespace DeviceProfiles.HeartRate
 {
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document

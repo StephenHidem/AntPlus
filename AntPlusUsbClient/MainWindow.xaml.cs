@@ -1,7 +1,7 @@
 ﻿using AntPlus;
 using AntPlusUsbClient.Views;
-using DeviceProfiles;
 using DeviceProfiles.BicyclePower;
+using DeviceProfiles.HeartRate;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;

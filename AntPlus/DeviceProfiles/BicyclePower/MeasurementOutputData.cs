@@ -35,12 +35,12 @@ namespace DeviceProfiles.BicyclePower
         public double Timestamp { get; }
         public double Measurement { get; }
 
-        internal MeasurementOutputData(byte[] page)
+        internal MeasurementOutputData(byte[] dataPage)
         {
-            NumberOfMeasurementTypes = page[1];
-            MeasurementType = (DataType)page[2];
-            Timestamp = BitConverter.ToUInt16(page, 4) / 2048.0;
-            Measurement = BitConverter.ToUInt16(page, 6) * Math.Pow(2, (sbyte)page[3]);
+            NumberOfMeasurementTypes = dataPage[1];
+            MeasurementType = (DataType)dataPage[2];
+            Timestamp = BitConverter.ToUInt16(dataPage, 4) / 2048.0;
+            Measurement = BitConverter.ToUInt16(dataPage, 6) * Math.Pow(2, (sbyte)dataPage[3]);
         }
     }
 }

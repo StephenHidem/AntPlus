@@ -14,7 +14,7 @@ namespace DeviceProfile.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0, 0, 0)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF }, 0, 0, 255)]
-        public void Parse_CommonHRData_ExpectedBehavior(byte[] payload, int eventTime, int hrBeatCount, int computedHr)
+        public void Parse_CommonHRData_ExpectedBehavior(byte[] dataPage, int eventTime, int hrBeatCount, int computedHr)
         {
             // Arrange
             int et = 0, rr = 0;
@@ -28,7 +28,7 @@ namespace DeviceProfile.UnitTests
             };
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(eventTime, et, "AccumulatedHeartBeatEventTime");
@@ -63,7 +63,7 @@ namespace DeviceProfile.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.CumulativeOperatingTime, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00 }, 0)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.CumulativeOperatingTime, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF }, 33554430)]
-        public void Parse_CumulativeOperatingTime_ExpectedBehavior(byte[] payload, int cumulativeOpTime)
+        public void Parse_CumulativeOperatingTime_ExpectedBehavior(byte[] dataPage, int cumulativeOpTime)
         {
             // Arrange
             TimeSpan cot = TimeSpan.FromSeconds(0);
@@ -72,7 +72,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(cumulativeOpTime, cot.TotalSeconds, "CumulativeOperatingTime");
@@ -81,7 +81,7 @@ namespace DeviceProfile.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x80, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 }, (byte)128, (uint)8721, 8721, 51, 68)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x08, 0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44 }, (byte)8, 4294910481, 8721, 51, 68)]
-        public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] payload, byte manId, uint sn, int eventTime, int hrBeatCount, int computedHr)
+        public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] dataPage, byte manId, uint sn, int eventTime, int hrBeatCount, int computedHr)
         {
             // Arrange
             var heartRate = new HeartRate(hrmCid, null);
@@ -95,7 +95,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(manId, mid, "ManufacturingIdLsb");
@@ -104,7 +104,7 @@ namespace DeviceProfile.UnitTests
 
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.ProductInfo, 0x11, 0x22, 0x33, 0, 0, 0, 0 }, (byte)17, (byte)34, (byte)51)]
-        public void Parse_ProductInformation_ExpectedBehavior(byte[] payload, byte hwVersion, byte swVersion, byte modelNumber)
+        public void Parse_ProductInformation_ExpectedBehavior(byte[] dataPage, byte hwVersion, byte swVersion, byte modelNumber)
         {
             // Arrange
             byte hv = 0, sv = 0, mn = 0;
@@ -118,7 +118,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(hwVersion, hv, "HardwareVersion");
@@ -129,7 +129,7 @@ namespace DeviceProfile.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x88, 0x06, 0xDD, 0x07, 0x83, 0xB4 }, 333)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.PreviousHeartBeat, 0xFF, 0x88, 0xFE, 0x15, 0x00, 0x83, 0xB4 }, 387)]
-        public void Parse_PreviousHeartBeat_ExpectedBehavior(byte[] payload, int rrInterval)
+        public void Parse_PreviousHeartBeat_ExpectedBehavior(byte[] dataPage, int rrInterval)
         {
             // Arrange
             int rr = 0;
@@ -138,7 +138,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(rrInterval, rr, "RRInterval");
@@ -146,7 +146,7 @@ namespace DeviceProfile.UnitTests
 
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.SwimInterval, 0x11, 0x22, 0x33, 0, 0, 0, 0 }, (byte)17, (byte)34, (byte)51)]
-        public void Parse_SwimInterval_ExpectedBehavior(byte[] payload, byte intervalAvgHr, byte intervalMaxHr, byte sessionAvgHr)
+        public void Parse_SwimInterval_ExpectedBehavior(byte[] dataPage, byte intervalAvgHr, byte intervalMaxHr, byte sessionAvgHr)
         {
             // Arrange
             byte iahr = 0, imhr = 0, sahr = 0;
@@ -160,7 +160,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(intervalAvgHr, iahr, "IntervalAverageHeartRate");
@@ -172,7 +172,7 @@ namespace DeviceProfile.UnitTests
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xCF, 0x01, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Running)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xCF, 0x02, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Cycling)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Capabilities, 0xFF, 0xCF, 0x04, 0, 0, 0, 0 }, HeartRate.Features.All, HeartRate.Features.Swimming)]
-        public void Parse_Capabilities_ExpectedBehavior(byte[] payload, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
+        public void Parse_Capabilities_ExpectedBehavior(byte[] dataPage, HeartRate.Features supportedFeatures, HeartRate.Features enabledFeatures)
         {
             // Arrange
             HeartRate.Features enabled = HeartRate.Features.Generic, supported = HeartRate.Features.Generic;
@@ -185,7 +185,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(supportedFeatures, supported, "Supported features");
@@ -195,7 +195,7 @@ namespace DeviceProfile.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.BatteryStatus, 50, 0xFF, 0x3F, 0x00, 0x00, 0xFF, 0x0F }, 50, 15.99609375, BatteryStatus.Ok)]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.BatteryStatus, 0, 0x00, 0x50, 0x00, 0x00, 0xFF, 0x0F }, 0, 0.0, BatteryStatus.Critical)]
-        public void Parse_BatteryStatus_ExpectedBehavior(byte[] payload, int battPerCent, double voltage, BatteryStatus batteryStatus)
+        public void Parse_BatteryStatus_ExpectedBehavior(byte[] dataPage, int battPerCent, double voltage, BatteryStatus batteryStatus)
         {
             // Arrange
             byte bl = 0;
@@ -211,7 +211,7 @@ namespace DeviceProfile.UnitTests
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
-            heartRate.Parse(payload);
+            heartRate.Parse(dataPage);
 
             // Assert
             Assert.AreEqual(battPerCent, bl, "Battery level");

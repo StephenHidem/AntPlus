@@ -101,12 +101,12 @@ namespace AntPlus
             public byte AuthenticationType { get; }
             public uint DeviceDescriptorOrHostSerialNumber { get; }
 
-            public AntFsClientBeaconPage(byte[] payload)
+            public AntFsClientBeaconPage(byte[] dataPage)
             {
-                StatusByte1 = payload[1];
-                StatusByte2 = payload[2];
-                AuthenticationType = payload[3];
-                DeviceDescriptorOrHostSerialNumber = BitConverter.ToUInt32(payload, 4);
+                StatusByte1 = dataPage[1];
+                StatusByte2 = dataPage[2];
+                AuthenticationType = dataPage[3];
+                DeviceDescriptorOrHostSerialNumber = BitConverter.ToUInt32(dataPage, 4);
             }
         }
 
@@ -115,10 +115,10 @@ namespace AntPlus
             public byte CommandResponseId { get; }
             public byte[] Parameters { get; }
 
-            public AntFsCommandResponsePage(byte[] payload)
+            public AntFsCommandResponsePage(byte[] dataPage)
             {
-                CommandResponseId = payload[1];
-                Parameters = payload.Skip(2).ToArray();
+                CommandResponseId = dataPage[1];
+                Parameters = dataPage.Skip(2).ToArray();
             }
         }
 
@@ -130,12 +130,12 @@ namespace AntPlus
             public CommandStatus Status { get; }
             public uint ResponseData { get; }
 
-            public CommandStatusPage(byte[] payload)
+            public CommandStatusPage(byte[] dataPage)
             {
-                LastCommandReceived = payload[1];
-                SequenceNumber = payload[2];
-                Status = (CommandStatus)payload[3];
-                ResponseData = BitConverter.ToUInt32(payload, 4);
+                LastCommandReceived = dataPage[1];
+                SequenceNumber = dataPage[2];
+                Status = (CommandStatus)dataPage[3];
+                ResponseData = BitConverter.ToUInt32(dataPage, 4);
             }
         }
 
@@ -151,11 +151,11 @@ namespace AntPlus
             public ushort ManufacturerId { get; }
             public ushort ModelNumber { get; }
 
-            public ManufacturerInfoPage(byte[] payload)
+            public ManufacturerInfoPage(byte[] dataPage)
             {
-                HardwareRevision = payload[3];
-                ManufacturerId = BitConverter.ToUInt16(payload, 4);
-                ModelNumber = BitConverter.ToUInt16(payload, 6);
+                HardwareRevision = dataPage[3];
+                ManufacturerId = BitConverter.ToUInt16(dataPage, 4);
+                ModelNumber = BitConverter.ToUInt16(dataPage, 6);
             }
         }
 
@@ -165,19 +165,19 @@ namespace AntPlus
             public Version SoftwareRevision { get; }
             public uint SerialNumber { get; }
 
-            public ProductInfoPage(byte[] payload)
+            public ProductInfoPage(byte[] dataPage)
             {
-                if (payload[2] != 0xFF)
+                if (dataPage[2] != 0xFF)
                 {
                     // supplemental SW revision is valid
-                    SoftwareRevision = Version.Parse(((payload[3] * 100.0 + payload[2]) / 1000.0).ToString("N3"));
+                    SoftwareRevision = Version.Parse(((dataPage[3] * 100.0 + dataPage[2]) / 1000.0).ToString("N3"));
                 }
                 else
                 {
                     // only main SW revision is present
-                    SoftwareRevision = Version.Parse((payload[3] / 10.0).ToString("N3"));
+                    SoftwareRevision = Version.Parse((dataPage[3] / 10.0).ToString("N3"));
                 }
-                SerialNumber = BitConverter.ToUInt32(payload, 4);
+                SerialNumber = BitConverter.ToUInt32(dataPage, 4);
             }
         }
 
@@ -190,21 +190,21 @@ namespace AntPlus
             public BatteryStatus BatteryStatus { get; }
             public double BatteryVoltage { get; }
 
-            public BatteryStatusPage(byte[] payload)
+            public BatteryStatusPage(byte[] dataPage)
             {
-                if (payload[2] != 0xFF)
+                if (dataPage[2] != 0xFF)
                 {
-                    NumberOfBatteries = (byte)(payload[2] & 0x0F);
-                    Identifier = (byte)(payload[2] >> 4);
+                    NumberOfBatteries = (byte)(dataPage[2] & 0x0F);
+                    Identifier = (byte)(dataPage[2] >> 4);
                 }
                 else
                 {
                     NumberOfBatteries = 1; Identifier = 0;
                 }
                 CumulativeOperatingTime =
-                    TimeSpan.FromSeconds((BitConverter.ToInt32(payload, 3) & 0x00FFFFFF) * (((payload[7] & 0x80) == 0x80) ? 2.0 : 16.0));
-                BatteryVoltage = (payload[7] & 0x0F) + (payload[6] / 256.0);
-                BatteryStatus = (BatteryStatus)((payload[7] & 0x70) >> 4);
+                    TimeSpan.FromSeconds((BitConverter.ToInt32(dataPage, 3) & 0x00FFFFFF) * (((dataPage[7] & 0x80) == 0x80) ? 2.0 : 16.0));
+                BatteryVoltage = (dataPage[7] & 0x0F) + (dataPage[6] / 256.0);
+                BatteryStatus = (BatteryStatus)((dataPage[7] & 0x70) >> 4);
             }
         }
 
@@ -228,12 +228,12 @@ namespace AntPlus
             public SubPage Subpage2 { get; }
             public double ComputedDataField2 { get; }
 
-            public SubfieldDataPage(byte[] payload)
+            public SubfieldDataPage(byte[] dataPage)
             {
-                Subpage1 = (SubPage)payload[2];
-                Subpage2 = (SubPage)payload[3];
-                ComputedDataField1 = ParseSubfieldData(Subpage1, BitConverter.ToInt16(payload, 4));
-                ComputedDataField2 = ParseSubfieldData(Subpage2, BitConverter.ToInt16(payload, 6));
+                Subpage1 = (SubPage)dataPage[2];
+                Subpage2 = (SubPage)dataPage[3];
+                ComputedDataField1 = ParseSubfieldData(Subpage1, BitConverter.ToInt16(dataPage, 4));
+                ComputedDataField2 = ParseSubfieldData(Subpage2, BitConverter.ToInt16(dataPage, 6));
             }
 
             private static double ParseSubfieldData(SubPage page, short value)
@@ -281,11 +281,11 @@ namespace AntPlus
             public double TotalSize { get; }
             public MemorySizeUnit TotalSizeUnit { get; }
 
-            public MemoryLevelPage(byte[] payload)
+            public MemoryLevelPage(byte[] dataPage)
             {
-                PercentUsed = payload[4] * 0.5;
-                TotalSize = BitConverter.ToUInt16(payload, 5) * 0.1;
-                TotalSizeUnit = (MemorySizeUnit)(payload[7] & 0x83);
+                PercentUsed = dataPage[4] * 0.5;
+                TotalSize = BitConverter.ToUInt16(dataPage, 5) * 0.1;
+                TotalSizeUnit = (MemorySizeUnit)(dataPage[7] & 0x83);
             }
         }
         public MemoryLevelPage MemoryLevel { get; private set; }
@@ -299,12 +299,12 @@ namespace AntPlus
             public byte ProfileSpecificErrorCode { get; }
             public uint ManufacturerSpecificErrorCode { get; }
 
-            public ErrorDescriptionPage(byte[] payload)
+            public ErrorDescriptionPage(byte[] dataPage)
             {
-                SystemComponentIndex = (byte)(payload[2] & 0x0F);
-                ErrorLevel = (ErrorLevel)((payload[2] & 0xC0) >> 6);
-                ProfileSpecificErrorCode = payload[3];
-                ManufacturerSpecificErrorCode = BitConverter.ToUInt32(payload, 4);
+                SystemComponentIndex = (byte)(dataPage[2] & 0x0F);
+                ErrorLevel = (ErrorLevel)((dataPage[2] & 0xC0) >> 6);
+                ProfileSpecificErrorCode = dataPage[3];
+                ManufacturerSpecificErrorCode = BitConverter.ToUInt32(dataPage, 4);
             }
         }
         public ErrorDescriptionPage ErrorDescription { get; private set; }
@@ -333,18 +333,18 @@ namespace AntPlus
         public event EventHandler<MemoryLevelPage> MemoryLevelPageChanged;
         public event EventHandler<ErrorDescriptionPage> ErrorDescriptionPageChanged;
 
-        public void ParseCommonDataPage(byte[] payload)
+        public void ParseCommonDataPage(byte[] dataPage)
         {
-            switch ((CommonDataPage)payload[0])
+            switch ((CommonDataPage)dataPage[0])
             {
                 case CommonDataPage.AntFSClientBeacon:
-                    AntFsClientBeaconPageChanged?.Invoke(this, new AntFsClientBeaconPage(payload));
+                    AntFsClientBeaconPageChanged?.Invoke(this, new AntFsClientBeaconPage(dataPage));
                     break;
                 case CommonDataPage.AntFSCommandResponse:
-                    AntFsCommandResponsePageChanged?.Invoke(this, new AntFsCommandResponsePage(payload));
+                    AntFsCommandResponsePageChanged?.Invoke(this, new AntFsCommandResponsePage(dataPage));
                     break;
                 case CommonDataPage.CommandStatus:
-                    CommandStatusPageChanged?.Invoke(this, new CommandStatusPage(payload));
+                    CommandStatusPageChanged?.Invoke(this, new CommandStatusPage(dataPage));
                     break;
                 case CommonDataPage.GenericCommandPage:
                     break;
@@ -352,49 +352,49 @@ namespace AntPlus
                     break;
                 case CommonDataPage.MultiComponentManufacturerInfo:
                     // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
-                    NumberOfComponents = payload[2] & 0x0F;
-                    ComponentId = payload[2] >> 4;
+                    NumberOfComponents = dataPage[2] & 0x0F;
+                    ComponentId = dataPage[2] >> 4;
                     goto case CommonDataPage.ManufacturerInfo;
                 case CommonDataPage.ManufacturerInfo:
-                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(payload));
+                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(dataPage));
                     break;
                 case CommonDataPage.MultiComponentProductInfo:
                     // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
-                    NumberOfComponents = payload[1] & 0x0F;
-                    ComponentId = payload[1] >> 4;
+                    NumberOfComponents = dataPage[1] & 0x0F;
+                    ComponentId = dataPage[1] >> 4;
                     goto case CommonDataPage.ProductInfo;
                 case CommonDataPage.ProductInfo:
-                    ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(payload));
+                    ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(dataPage));
                     break;
                 case CommonDataPage.BatteryStatus:
-                    BatteryStatusPageChanged?.Invoke(this, new BatteryStatusPage(payload));
+                    BatteryStatusPageChanged?.Invoke(this, new BatteryStatusPage(dataPage));
                     break;
                 case CommonDataPage.TimeAndDate:
-                    // note that day of week is ignored in payload since the DateTime struct can provide this
+                    // note that day of week is ignored in dataPage since the DateTime struct can provide this
                     DateTimeChanged?.Invoke(this,
-                        new DateTime(2000 + payload[7], payload[6], payload[5] & 0x1F, payload[4], payload[3], payload[2], DateTimeKind.Utc));
+                        new DateTime(2000 + dataPage[7], dataPage[6], dataPage[5] & 0x1F, dataPage[4], dataPage[3], dataPage[2], DateTimeKind.Utc));
                     break;
                 case CommonDataPage.SubfieldData:
-                    SubfieldData = new SubfieldDataPage(payload);
+                    SubfieldData = new SubfieldDataPage(dataPage);
                     SubfieldDataPageChanged?.Invoke(this, SubfieldData);
                     break;
                 case CommonDataPage.MemoryLevel:
-                    MemoryLevel = new MemoryLevelPage(payload);
+                    MemoryLevel = new MemoryLevelPage(dataPage);
                     MemoryLevelPageChanged?.Invoke(this, MemoryLevel);
                     break;
                 case CommonDataPage.PairedDevices:
-                    NumberOfConnectedDevices = payload[2];
-                    IsPaired = (payload[3] & 0x80) == 0x80;
-                    ConnectionState = (ConnectionState)((payload[3] & 0x38) >> 3);
-                    NetworkKey = (NetworkKey)(payload[3] & 0x07);
+                    NumberOfConnectedDevices = dataPage[2];
+                    IsPaired = (dataPage[3] & 0x80) == 0x80;
+                    ConnectionState = (ConnectionState)((dataPage[3] & 0x38) >> 3);
+                    NetworkKey = (NetworkKey)(dataPage[3] & 0x07);
                     // guard against adding the same device index
-                    if (PairedDevices.Count == 0 || !PairedDevices.Exists(item => item.Index == payload[1]))
+                    if (PairedDevices.Count == 0 || !PairedDevices.Exists(item => item.Index == dataPage[1]))
                     {
-                        PairedDevices.Add(new PairedDevice(payload[1], BitConverter.ToUInt32(payload, 4)));
+                        PairedDevices.Add(new PairedDevice(dataPage[1], BitConverter.ToUInt32(dataPage, 4)));
                     }
                     break;
                 case CommonDataPage.ErrorDescription:
-                    ErrorDescription = new ErrorDescriptionPage(payload);
+                    ErrorDescription = new ErrorDescriptionPage(dataPage);
                     ErrorDescriptionPageChanged?.Invoke(this, ErrorDescription);
                     break;
             }

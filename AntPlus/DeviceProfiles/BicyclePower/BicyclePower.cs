@@ -26,8 +26,8 @@ namespace DeviceProfiles.BicyclePower
         TorqueBarycenter,
         CrankTorqueFrequency = 0x20,
         RightForceAngle = 0xE0,
-        LeftForceAngle,
-        PedalPosition
+        LeftForceAngle = 0xE1,
+        PedalPosition = 0xE2
     }
 
     public class BicyclePower : AntDevice
@@ -40,9 +40,6 @@ namespace DeviceProfiles.BicyclePower
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
 
         public Calibration Calibration { get; private set; }
-
-        // events - transient or value change
-        public event EventHandler<double> TorqueBarycenterAngleChanged;
 
         // events - class related
         public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
@@ -103,9 +100,6 @@ namespace DeviceProfiles.BicyclePower
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
                     BicyclePowerSensor?.ParseTEPS(dataPage);
                     break;
-                case DataPage.TorqueBarycenter:
-                    TorqueBarycenterAngleChanged?.Invoke(this, dataPage[2] * 0.5 + 30.0);
-                    break;
                 case DataPage.CrankTorqueFrequency:
                     Sensor = SensorType.CrankTorqueFrequency;
                     if (CTFSensor == null)
@@ -116,10 +110,10 @@ namespace DeviceProfiles.BicyclePower
                     CrankTorqueFrequencyPageChanged?.Invoke(this, CTFSensor);
                     break;
                 case DataPage.RightForceAngle:
-                    break;
                 case DataPage.LeftForceAngle:
-                    break;
                 case DataPage.PedalPosition:
+                case DataPage.TorqueBarycenter:
+                    ((StandardCrankTorqueSensor)BicyclePowerSensor).ParseCyclingDynamics(dataPage);
                     break;
                 default:
                     BicyclePowerSensor?.ParseCommonDataPage(dataPage);

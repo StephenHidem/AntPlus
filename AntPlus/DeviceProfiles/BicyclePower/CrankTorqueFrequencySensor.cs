@@ -16,7 +16,7 @@ namespace DeviceProfiles.BicyclePower
 
         private readonly BicyclePower bp;
 
-        private bool isFirtPage = true;
+        private bool isFirstPage = true;
         private byte prevUpdateEventCount;
         private ushort prevTimeStamp;
         private ushort prevTorqueTicks;
@@ -32,19 +32,19 @@ namespace DeviceProfiles.BicyclePower
             this.bp = bp;
         }
 
-        public void Parse(byte[] page)
+        public void Parse(byte[] dataPage)
         {
-            byte updateEventCount = page[1];
+            byte updateEventCount = dataPage[1];
 
             // the data is in big endian order; this also flips the order of the fields
-            byte[] data = page.Skip(2).Reverse().ToArray();
+            byte[] data = dataPage.Skip(2).Reverse().ToArray();
             ushort torqueTicks = BitConverter.ToUInt16(data, 0);
             ushort timeStamp = BitConverter.ToUInt16(data, 2);
             Slope = BitConverter.ToUInt16(data, 4);
 
-            if (isFirtPage)
+            if (isFirstPage)
             {
-                isFirtPage = false;
+                isFirstPage = false;
                 prevTimeStamp = timeStamp;
                 prevTorqueTicks = torqueTicks;
                 return;

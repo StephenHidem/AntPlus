@@ -7,7 +7,7 @@ namespace AntPlus.UnitTests
     {
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.CommandStatus, 0xAA, 0x55, (byte)CommandStatus.Pass, 0x11, 0x22, 0x33, 0x44 }, (byte)0xAA, (byte)0x55, CommandStatus.Pass, (uint)0x44332211)]
-        public void ParseCommonDataPage_CommandStatus_ExpectedBehavior(byte[] payload, byte commandId, byte sequenceNumber, CommandStatus commandStatus, uint responseData)
+        public void ParseCommonDataPage_CommandStatus_ExpectedBehavior(byte[] dataPage, byte commandId, byte sequenceNumber, CommandStatus commandStatus, uint responseData)
         {
             // Arrange
             CommonDataPages.CommandStatusPage cs = new();
@@ -16,7 +16,7 @@ namespace AntPlus.UnitTests
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(commandId, cs.LastCommandReceived, "Command ID");
@@ -28,14 +28,14 @@ namespace AntPlus.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.MultiComponentManufacturerInfo, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00 }, 15, 0)]
         [DataRow(new byte[] { (byte)CommonDataPage.MultiComponentManufacturerInfo, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0, 15)]
-        public void ParseCommonDataPage_MultiComponentManufactureInfo_ExpectedBehavior(byte[] payload, int numberOfComponents, int componentId)
+        public void ParseCommonDataPage_MultiComponentManufactureInfo_ExpectedBehavior(byte[] dataPage, int numberOfComponents, int componentId)
         {
             // Arrange
             CommonDataPages cdp = new();
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(numberOfComponents, cdp.NumberOfComponents, "Multi-Component number of components");
@@ -44,7 +44,7 @@ namespace AntPlus.UnitTests
 
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.ManufacturerInfo, 0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44, 0x55 }, (byte)0x11, (ushort)0x3322, (ushort)0x5544)]
-        public void ParseCommonDataPage_ManufacturerInfo_ExpectedBehavior(byte[] payload, byte hwRev, ushort manId, ushort modelNumber)
+        public void ParseCommonDataPage_ManufacturerInfo_ExpectedBehavior(byte[] dataPage, byte hwRev, ushort manId, ushort modelNumber)
         {
             // Arrange
             CommonDataPages.ManufacturerInfoPage mi = new();
@@ -53,7 +53,7 @@ namespace AntPlus.UnitTests
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(hwRev, mi.HardwareRevision, "HW revision");
@@ -63,14 +63,14 @@ namespace AntPlus.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.MultiComponentProductInfo, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 15, 0)]
         [DataRow(new byte[] { (byte)CommonDataPage.MultiComponentProductInfo, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0, 15)]
-        public void ParseCommonDataPage_MultiComponentProductInfo_ExpectedBehavior(byte[] payload, int numberOfComponents, int componentId)
+        public void ParseCommonDataPage_MultiComponentProductInfo_ExpectedBehavior(byte[] dataPage, int numberOfComponents, int componentId)
         {
             // Arrange
             CommonDataPages cdp = new();
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(numberOfComponents, cdp.NumberOfComponents, "Multi-Component number of components");
@@ -83,7 +83,7 @@ namespace AntPlus.UnitTests
         [DataRow(new byte[] { (byte)CommonDataPage.ProductInfo, 0xFF, 0xFE, 0xFF, 0x11, 0x22, 0x33, 0x44 }, "25.754", (uint)0x44332211)]
         [DataRow(new byte[] { (byte)CommonDataPage.ProductInfo, 0xFF, 0xFF, 0x00, 0x11, 0x22, 0x33, 0x44 }, "0.0", (uint)0x44332211)]
         [DataRow(new byte[] { (byte)CommonDataPage.ProductInfo, 0xFF, 0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44 }, "25.500", (uint)0x44332211)]
-        public void ParseCommonDataPage_ProductInfo_ExpectedBehavior(byte[] payload, string swVersion, uint serialNumber)
+        public void ParseCommonDataPage_ProductInfo_ExpectedBehavior(byte[] dataPage, string swVersion, uint serialNumber)
         {
             // Arrange
             CommonDataPages.ProductInfoPage pi = new();
@@ -92,7 +92,7 @@ namespace AntPlus.UnitTests
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(Version.Parse(swVersion), pi.SoftwareRevision, "Software version");
@@ -108,7 +108,7 @@ namespace AntPlus.UnitTests
         [DataRow(new byte[] { (byte)CommonDataPage.BatteryStatus, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x80, 0xD2 }, 1, 0, 33554430, 2.5, BatteryStatus.Critical)]
         [DataRow(new byte[] { (byte)CommonDataPage.BatteryStatus, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x80, 0x61 }, 1, 0, 268435440, 1.5, BatteryStatus.Reserved)]
         [DataRow(new byte[] { (byte)CommonDataPage.BatteryStatus, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }, 1, 0, 33554430, 15.99609375, BatteryStatus.Invalid)]
-        public void ParseCommonDataPage_BatteryStatus_ExpectedBehavior(byte[] payload, int numberOfBatt, int battId, int seconds, double voltage, BatteryStatus batteryStatus)
+        public void ParseCommonDataPage_BatteryStatus_ExpectedBehavior(byte[] dataPage, int numberOfBatt, int battId, int seconds, double voltage, BatteryStatus batteryStatus)
         {
             // Arrange
             CommonDataPages.BatteryStatusPage bsp = new();
@@ -117,7 +117,7 @@ namespace AntPlus.UnitTests
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(numberOfBatt, bsp.NumberOfBatteries, "Number of batteries");
@@ -130,7 +130,7 @@ namespace AntPlus.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.TimeAndDate, 0xFF, 0, 0, 0, 1, 1, 0 }, "1/1/2000 0:0:0 AM")]
         [DataRow(new byte[] { (byte)CommonDataPage.TimeAndDate, 0xFF, 59, 59, 23, 31, 12, 255 }, "12/31/2255 11:59:59 PM")]
-        public void ParseCommonDataPage_TimeAndDate_ExpectedBehavior(byte[] payload, string dateTime)
+        public void ParseCommonDataPage_TimeAndDate_ExpectedBehavior(byte[] dataPage, string dateTime)
         {
             // Arrange
             DateTime dt = DateTime.Now;
@@ -139,7 +139,7 @@ namespace AntPlus.UnitTests
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(DateTime.Parse(dateTime), dt);
@@ -150,14 +150,14 @@ namespace AntPlus.UnitTests
         [DataRow(new byte[] { (byte)CommonDataPage.SubfieldData, 0xFF, 0x02, 0x06, 0xFF, 0xFF, 0xFF, 0x10 }, 655.35, 4351)]
         [DataRow(new byte[] { (byte)CommonDataPage.SubfieldData, 0xFF, 0x03, 0x07, 0x0F, 0x27, 0x00, 0x80 }, 99.99, -327.68)]
         [DataRow(new byte[] { (byte)CommonDataPage.SubfieldData, 0xFF, 0x04, 0x08, 0xFF, 0xFF, 0xFF, 0x7F }, 655.35, 327.67)]
-        public void ParseCommonDataPage_SubfieldData_ExpectedBehavior(byte[] payload, double field1, double field2)
+        public void ParseCommonDataPage_SubfieldData_ExpectedBehavior(byte[] dataPage, double field1, double field2)
         {
             // Arrange
             CommonDataPages cdp = new();
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(field1, cdp.SubfieldData.ComputedDataField1, cdp.SubfieldData.Subpage1.ToString());
@@ -167,14 +167,14 @@ namespace AntPlus.UnitTests
         [TestMethod]
         [DataRow(new byte[] { (byte)CommonDataPage.MemoryLevel, 0xFF, 0xFF, 0xFF, 1, 0x00, 0x01, 0x00 }, 0.5, 25.6, MemorySizeUnit.Bits)]
         [DataRow(new byte[] { (byte)CommonDataPage.MemoryLevel, 0xFF, 0xFF, 0xFF, 199, 0xFF, 0xFF, 0xFF }, 99.5, 6553.5, MemorySizeUnit.TeraBytes)]
-        public void ParseCommonDataPage_MemoryLevel_ExpectedBehavior(byte[] payload, double used, double total, MemorySizeUnit memorySizeUnit)
+        public void ParseCommonDataPage_MemoryLevel_ExpectedBehavior(byte[] dataPage, double used, double total, MemorySizeUnit memorySizeUnit)
         {
             // Arrange
             CommonDataPages cdp = new();
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(used, cdp.MemoryLevel.PercentUsed, "Percent used");
@@ -188,14 +188,14 @@ namespace AntPlus.UnitTests
         [DataRow(new byte[] { (byte)CommonDataPage.PairedDevices, 0x00, 0x00, 0x89, 0x00, 0x00, 0x00, 0x00 }, 0, 0, true, ConnectionState.Searching, NetworkKey.Private, (uint)0)]
         [DataRow(new byte[] { (byte)CommonDataPage.PairedDevices, 0x00, 0x00, 0x92, 0x00, 0x00, 0x00, 0x00 }, 0, 0, true, ConnectionState.Synchronized, NetworkKey.AntPlusManaged, (uint)0)]
         [DataRow(new byte[] { (byte)CommonDataPage.PairedDevices, 0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00 }, 0, 0, true, ConnectionState.Closed, NetworkKey.AntFS, (uint)0)]
-        public void ParseCommonDataPage_PairedDevices_ExpectedBehavior(byte[] payload, int index, int total, bool paired, ConnectionState connectionState, NetworkKey networkKey, uint deviceId)
+        public void ParseCommonDataPage_PairedDevices_ExpectedBehavior(byte[] dataPage, int index, int total, bool paired, ConnectionState connectionState, NetworkKey networkKey, uint deviceId)
         {
             // Arrange
             CommonDataPages cdp = new();
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(index, cdp.PairedDevices[0].Index, "Paired device index");
@@ -210,14 +210,14 @@ namespace AntPlus.UnitTests
         [DataRow(new byte[] { (byte)CommonDataPage.ErrorDescription, 0xFF, 0xCF, 0x00, 0x00, 0x00, 0x00, 0x00 }, 15, ErrorLevel.Reserved, 0, (uint)0)]
         [DataRow(new byte[] { (byte)CommonDataPage.ErrorDescription, 0xFF, 0x4F, 0x80, 0xFF, 0xFF, 0x00, 0x00 }, 15, ErrorLevel.Warning, 128, (uint)ushort.MaxValue)]
         [DataRow(new byte[] { (byte)CommonDataPage.ErrorDescription, 0xFF, 0x8F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }, 15, ErrorLevel.Critical, 255, uint.MaxValue)]
-        public void ParseCommonDataPage_ErrorDescription_ExpectedBehavior(byte[] payload, int componentIndex, ErrorLevel errorLevel, int profileErrorCode, uint manufacturerErrorCode)
+        public void ParseCommonDataPage_ErrorDescription_ExpectedBehavior(byte[] dataPage, int componentIndex, ErrorLevel errorLevel, int profileErrorCode, uint manufacturerErrorCode)
         {
             // Arrange
             CommonDataPages cdp = new();
 
             // Act
             cdp.ParseCommonDataPage(
-                payload);
+                dataPage);
 
             // Assert
             Assert.AreEqual(componentIndex, cdp.ErrorDescription.SystemComponentIndex, "Component index");

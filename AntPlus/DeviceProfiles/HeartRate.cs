@@ -157,10 +157,10 @@ namespace DeviceProfiles
             /// <summary>The serial number</summary>
             public uint SerialNumber { get; }
 
-            internal ManufacturerInfoPage(byte[] page, uint deviceNumber)
+            internal ManufacturerInfoPage(byte[] dataPage, uint deviceNumber)
             {
-                ManufacturingIdLsb = page[1];
-                SerialNumber = (uint)((BitConverter.ToUInt16(page, 2) << 16) + (deviceNumber & 0x0000FFFF));
+                ManufacturingIdLsb = dataPage[1];
+                SerialNumber = (uint)((BitConverter.ToUInt16(dataPage, 2) << 16) + (deviceNumber & 0x0000FFFF));
             }
         }
 
@@ -176,11 +176,11 @@ namespace DeviceProfiles
             /// <summary>Gets the model number.</summary>
             public byte ModelNumber { get; }
 
-            internal ProductInfoPage(byte[] page)
+            internal ProductInfoPage(byte[] dataPage)
             {
-                HardwareVersion = page[1];
-                SoftwareVersion = page[2];
-                ModelNumber = page[3];
+                HardwareVersion = dataPage[1];
+                SoftwareVersion = dataPage[2];
+                ModelNumber = dataPage[3];
             }
         }
 
@@ -194,10 +194,10 @@ namespace DeviceProfiles
             /// <summary>RR interval in milliseconds.</summary>
             public int RRInterval { get; }
 
-            internal PreviousHeartBeatPage(byte[] page)
+            internal PreviousHeartBeatPage(byte[] dataPage)
             {
-                ManufacturerSpecific = page[1];
-                RRInterval = CalculateRRInverval(BitConverter.ToUInt16(page, 2), BitConverter.ToUInt16(page, 4));
+                ManufacturerSpecific = dataPage[1];
+                RRInterval = CalculateRRInverval(BitConverter.ToUInt16(dataPage, 2), BitConverter.ToUInt16(dataPage, 4));
             }
         }
 
@@ -213,11 +213,11 @@ namespace DeviceProfiles
             /// <summary>Swim session average heart rate.</summary>
             public byte SessionAverageHeartRate { get; }
 
-            internal SwimIntervalPage(byte[] page)
+            internal SwimIntervalPage(byte[] dataPage)
             {
-                IntervalAverageHeartRate = page[1];
-                IntervalMaximumHeartRate = page[2];
-                SessionAverageHeartRate = page[3];
+                IntervalAverageHeartRate = dataPage[1];
+                IntervalMaximumHeartRate = dataPage[2];
+                SessionAverageHeartRate = dataPage[3];
             }
         }
 
@@ -231,10 +231,10 @@ namespace DeviceProfiles
             /// <summary>Supported features.</summary>
             public Features Supported { get; }
 
-            internal CapabilitiesPage(byte[] page)
+            internal CapabilitiesPage(byte[] dataPage)
             {
-                Supported = (Features)(page[2] & (byte)Features.All);
-                Enabled = (Features)(page[3] & (byte)Features.All);
+                Supported = (Features)(dataPage[2] & (byte)Features.All);
+                Enabled = (Features)(dataPage[3] & (byte)Features.All);
             }
         }
 
@@ -250,11 +250,11 @@ namespace DeviceProfiles
             /// <summary>Battery status.</summary>
             public BatteryStatus BatteryStatus { get; }
 
-            internal BatteryStatusPage(byte[] page)
+            internal BatteryStatusPage(byte[] dataPage)
             {
-                BatteryLevel = page[1];
-                BatteryVoltage = (page[3] & 0x0F) + (page[2] / 256.0);
-                BatteryStatus = (BatteryStatus)((page[3] & 0x70) >> 4);
+                BatteryLevel = dataPage[1];
+                BatteryVoltage = (dataPage[3] & 0x0F) + (dataPage[2] / 256.0);
+                BatteryStatus = (BatteryStatus)((dataPage[3] & 0x70) >> 4);
             }
         }
 
@@ -268,10 +268,10 @@ namespace DeviceProfiles
             /// <summary>The manufacturer specific data.</summary>
             public byte[] Data { get; }
 
-            internal ManufacturerSpecificPage(byte[] page)
+            internal ManufacturerSpecificPage(byte[] dataPage)
             {
-                Page = page[0];
-                Data = page.Skip(1).Take(3).ToArray();
+                Page = dataPage[0];
+                Data = dataPage.Skip(1).Take(3).ToArray();
             }
         }
 

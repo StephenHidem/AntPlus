@@ -43,34 +43,34 @@ namespace DeviceProfiles.BicyclePower
             this.bp = bp;
         }
 
-        public void Parse(byte[] page)
+        public void Parse(byte[] dataPage)
         {
-            switch ((CalibrationResponseId)page[1])
+            switch ((CalibrationResponseId)dataPage[1])
             {
                 case CalibrationResponseId.CTFDefinedMsg:
-                    bp.CTFSensor.ParseCalibrationMessage(page);
+                    bp.CTFSensor.ParseCalibrationMessage(dataPage);
                     break;
                 case CalibrationResponseId.AutoZeroSupport:
-                    AutoZeroSupported = (page[2] & 0x01) == 0x01;
-                    AutoZeroStatus = (page[2] & 0x02) == 0x02 ? AutoZero.On : AutoZero.Off;
+                    AutoZeroSupported = (dataPage[2] & 0x01) == 0x01;
+                    AutoZeroStatus = (dataPage[2] & 0x02) == 0x02 ? AutoZero.On : AutoZero.Off;
                     break;
                 case CalibrationResponseId.Success:
                     Succeeded = true;
-                    AutoZeroStatus = (AutoZero)page[2];
-                    CalibrationData = BitConverter.ToInt16(page, 6);
+                    AutoZeroStatus = (AutoZero)dataPage[2];
+                    CalibrationData = BitConverter.ToInt16(dataPage, 6);
                     break;
                 case CalibrationResponseId.Failed:
                     Succeeded = false;
-                    AutoZeroStatus = (AutoZero)page[2];
-                    CalibrationData = BitConverter.ToInt16(page, 6);
+                    AutoZeroStatus = (AutoZero)dataPage[2];
+                    CalibrationData = BitConverter.ToInt16(dataPage, 6);
                     break;
                 case CalibrationResponseId.CustomCalibration:
                     Succeeded = true;
-                    CustomCalibrationParameters = page.Skip(2).ToArray();
+                    CustomCalibrationParameters = dataPage.Skip(2).ToArray();
                     break;
                 case CalibrationResponseId.CustomCalibrationUpdate:
                     Succeeded = true;
-                    CustomCalibrationParameters = page.Skip(2).ToArray();
+                    CustomCalibrationParameters = dataPage.Skip(2).ToArray();
                     break;
                 default:
                     break;

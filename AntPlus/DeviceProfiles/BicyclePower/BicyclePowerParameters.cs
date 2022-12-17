@@ -54,14 +54,14 @@ namespace DeviceProfiles.BicyclePower
             public CustomCalibrationStatus CustomCalibration { get; }
             public bool AutoCrankLength { get; }
 
-            internal CrankParameters(byte[] page)
+            internal CrankParameters(byte[] dataPage)
             {
-                CrankLength = page[4] * 0.5 + 110.0;
-                CrankStatus = (CrankLengthStatus)(page[5] & 0x03);
-                MismatchStatus = (SensorMisMatchStatus)(page[5] & 0x0C);
-                AvailabilityStatus = (SensorAvailabilityStatus)(page[5] & 0x30);
-                CustomCalibration = (CustomCalibrationStatus)(page[5] & 0xC0);
-                AutoCrankLength = (page[6] & 0x01) != 0;
+                CrankLength = dataPage[4] * 0.5 + 110.0;
+                CrankStatus = (CrankLengthStatus)(dataPage[5] & 0x03);
+                MismatchStatus = (SensorMisMatchStatus)(dataPage[5] & 0x0C);
+                AvailabilityStatus = (SensorAvailabilityStatus)(dataPage[5] & 0x30);
+                CustomCalibration = (CustomCalibrationStatus)(dataPage[5] & 0xC0);
+                AutoCrankLength = (dataPage[6] & 0x01) != 0;
             }
         }
         public readonly struct AdvCapabilities1
@@ -91,14 +91,14 @@ namespace DeviceProfiles.BicyclePower
             public InteroperableCapabilies Value { get; }
             public byte CustomCapabilitiesValue { get; }
 
-            internal AdvCapabilities1(byte[] page)
+            internal AdvCapabilities1(byte[] dataPage)
             {
-                InteroperableProperties = (InteropProp)(page[2] & 0x03);
-                CustomProperties = page[3];
-                Mask = (InteroperableCapabilies)page[4];
-                CustomCapabilitiesMask = page[5];
-                Value = (InteroperableCapabilies)page[6];
-                CustomCapabilitiesValue = page[7];
+                InteroperableProperties = (InteropProp)(dataPage[2] & 0x03);
+                CustomProperties = dataPage[3];
+                Mask = (InteroperableCapabilies)dataPage[4];
+                CustomCapabilitiesMask = dataPage[5];
+                Value = (InteroperableCapabilies)dataPage[6];
+                CustomCapabilitiesValue = dataPage[7];
             }
         }
         public readonly struct AdvCapabilities2
@@ -118,10 +118,10 @@ namespace DeviceProfiles.BicyclePower
             public InteroperableCapabilies Mask { get; }
             public InteroperableCapabilies Value { get; }
 
-            internal AdvCapabilities2(byte[] page)
+            internal AdvCapabilities2(byte[] dataPage)
             {
-                Mask = (InteroperableCapabilies)page[4];
-                Value = (InteroperableCapabilies)page[6];
+                Mask = (InteroperableCapabilies)dataPage[4];
+                Value = (InteroperableCapabilies)dataPage[6];
             }
         }
 
@@ -138,24 +138,24 @@ namespace DeviceProfiles.BicyclePower
             this.bp = bp;
         }
 
-        public void Parse(byte[] page)
+        public void Parse(byte[] dataPage)
         {
-            switch ((Subpage)page[1])
+            switch ((Subpage)dataPage[1])
             {
                 case Subpage.CrankParameters:
-                    Crank = new CrankParameters(page);
+                    Crank = new CrankParameters(dataPage);
                     break;
                 case Subpage.PowerPhaseConfiguration:
-                    PeakTorqueThreshold = page[2] * 0.5;
+                    PeakTorqueThreshold = dataPage[2] * 0.5;
                     break;
                 case Subpage.RiderPositionConfiguration:
-                    RiderPositionTimeOffset = page[2];
+                    RiderPositionTimeOffset = dataPage[2];
                     break;
                 case Subpage.AdvancedCapabilities1:
-                    AdvancedCapabilities1 = new AdvCapabilities1(page);
+                    AdvancedCapabilities1 = new AdvCapabilities1(dataPage);
                     break;
                 case Subpage.AdvancedCapabilities2:
-                    AdvancedCapabilities2 = new AdvCapabilities2(page);
+                    AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
                     break;
                 default:
                     break;

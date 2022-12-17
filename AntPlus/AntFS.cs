@@ -120,27 +120,27 @@ namespace AntFileShare
 
         public EraseResponse EraseResponse { get; private set; }
 
-        public void ParseClientBeacon(byte[] payload)
+        public void ParseClientBeacon(byte[] dataPage)
         {
             // parse status byte 1
-            ChannelPeriod = (BeaconChannelPeriod)(payload[1] & 0x07);
-            DataAvailable = (payload[1] & 0x20) == 0x20;
-            UploadEnabled = (payload[1] & 0x10) == 0x10;
-            PairingEnabled = (payload[1] & 0x08) == 0x08;
+            ChannelPeriod = (BeaconChannelPeriod)(dataPage[1] & 0x07);
+            DataAvailable = (dataPage[1] & 0x20) == 0x20;
+            UploadEnabled = (dataPage[1] & 0x10) == 0x10;
+            PairingEnabled = (dataPage[1] & 0x08) == 0x08;
 
             // parse status byte 2
-            DeviceState = (ClientDeviceState)(payload[2] & 0x0F);
+            DeviceState = (ClientDeviceState)(dataPage[2] & 0x0F);
 
-            Authentication = (AuthenticationType)payload[3];
+            Authentication = (AuthenticationType)dataPage[3];
 
             switch (DeviceState)
             {
                 case ClientDeviceState.Link:
-                    DeviceDescriptor = BitConverter.ToUInt32(payload, 4);
+                    DeviceDescriptor = BitConverter.ToUInt32(dataPage, 4);
                     break;
                 case ClientDeviceState.Authentication:
                 case ClientDeviceState.Transport:
-                    HostSerialNumber = BitConverter.ToUInt32(payload, 4);
+                    HostSerialNumber = BitConverter.ToUInt32(dataPage, 4);
                     break;
                 case ClientDeviceState.Busy:
                     break;

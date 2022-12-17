@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AntPlus
 {
@@ -80,18 +81,6 @@ namespace AntPlus
         AntFS = 3
     }
 
-    public enum SubfieldDataPage
-    {
-        Temperature = 1,
-        BarometricPressure,
-        Humidity,
-        WindSpeed,
-        WindDirection,
-        ChargingCycles,
-        MinimumOperatingTemperature,
-        MaximumOperatingTemperature
-    }
-
     public enum CommandType
     {
         Unknown,
@@ -104,16 +93,51 @@ namespace AntPlus
     public class CommonDataPages
     {
         // ANT-FS Client Beacon
-        public byte StatusByte1 { get; private set; }
-        public byte StatusByte2 { get; private set; }
-        public byte AuthenticationType { get; private set; }
-        public uint DeviceDescriptorOrHostSerialNumber { get; private set; }
+        public readonly struct AntFsClientBeaconPage
+        {
+
+            public byte StatusByte1 { get; }
+            public byte StatusByte2 { get; }
+            public byte AuthenticationType { get; }
+            public uint DeviceDescriptorOrHostSerialNumber { get; }
+
+            public AntFsClientBeaconPage(byte[] payload)
+            {
+                StatusByte1 = payload[1];
+                StatusByte2 = payload[2];
+                AuthenticationType = payload[3];
+                DeviceDescriptorOrHostSerialNumber = BitConverter.ToUInt32(payload, 4);
+            }
+        }
+
+        public readonly struct AntFsCommandResponsePage
+        {
+            public byte CommandResponseId { get; }
+            public byte[] Parameters { get; }
+
+            public AntFsCommandResponsePage(byte[] payload)
+            {
+                CommandResponseId = payload[1];
+                Parameters = payload.Skip(2).ToArray();
+            }
+        }
 
         // Command Status
-        public byte LastCommandReceived { get; private set; }
-        public byte SequenceNumber { get; private set; } = 0;
-        public CommandStatus CommandStatus { get; private set; }
-        public uint ResponseData { get; private set; }
+        public readonly struct CommandStatusPage
+        {
+            public byte LastCommandReceived { get; }
+            public byte SequenceNumber { get; }
+            public CommandStatus Status { get; }
+            public uint ResponseData { get; }
+
+            public CommandStatusPage(byte[] payload)
+            {
+                LastCommandReceived = payload[1];
+                SequenceNumber = payload[2];
+                Status = (CommandStatus)payload[3];
+                ResponseData = BitConverter.ToUInt32(payload, 4);
+            }
+        }
 
         // Multiple components, both manufacture and product
         // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
@@ -121,28 +145,27 @@ namespace AntPlus
         public int ComponentId { get; private set; }
 
         // Manufacturer Info
-        public readonly struct ManufacturerInfo
+        public readonly struct ManufacturerInfoPage
         {
             public byte HardwareRevision { get; }
             public ushort ManufacturerId { get; }
             public ushort ModelNumber { get; }
 
-            public ManufacturerInfo(byte[] payload)
+            public ManufacturerInfoPage(byte[] payload)
             {
                 HardwareRevision = payload[3];
                 ManufacturerId = BitConverter.ToUInt16(payload, 4);
                 ModelNumber = BitConverter.ToUInt16(payload, 6);
             }
         }
-        public ManufacturerInfo Manufacturer { get; private set; }
 
         // Product Info
-        public readonly struct ProductInfo
+        public readonly struct ProductInfoPage
         {
             public Version SoftwareRevision { get; }
             public uint SerialNumber { get; }
 
-            public ProductInfo(byte[] payload)
+            public ProductInfoPage(byte[] payload)
             {
                 if (payload[2] != 0xFF)
                 {
@@ -157,7 +180,6 @@ namespace AntPlus
                 SerialNumber = BitConverter.ToUInt32(payload, 4);
             }
         }
-        public ProductInfo Product { get; private set; }
 
         // Battery Status
         public readonly struct BatteryStatusPage
@@ -185,21 +207,107 @@ namespace AntPlus
                 BatteryStatus = (BatteryStatus)((payload[7] & 0x70) >> 4);
             }
         }
-        public BatteryStatusPage BatteryStatus { get; private set; }
 
-        // Time and Date
-        public DateTime TimeAndDate { get; private set; }
+        public readonly struct SubfieldDataPage
+        {
+            public enum SubPage
+            {
+                Temperature = 1,
+                BarometricPressure,
+                Humidity,
+                WindSpeed,
+                WindDirection,
+                ChargingCycles,
+                MinimumOperatingTemperature,
+                MaximumOperatingTemperature,
+                Invalid = 0xFF
+            }
+
+            public SubPage Subpage1 { get; }
+            public double ComputedDataField1 { get; }
+            public SubPage Subpage2 { get; }
+            public double ComputedDataField2 { get; }
+
+            public SubfieldDataPage(byte[] payload)
+            {
+                Subpage1 = (SubPage)payload[2];
+                Subpage2 = (SubPage)payload[3];
+                ComputedDataField1 = ParseSubfieldData(Subpage1, BitConverter.ToInt16(payload, 4));
+                ComputedDataField2 = ParseSubfieldData(Subpage2, BitConverter.ToInt16(payload, 6));
+            }
+
+            private static double ParseSubfieldData(SubPage page, short value)
+            {
+                double retVal = 0;
+                switch (page)
+                {
+                    case SubPage.Temperature:
+                        retVal = value * 0.01;
+                        break;
+                    case SubPage.BarometricPressure:
+                        retVal = (ushort)value * 0.01;
+                        break;
+                    case SubPage.Humidity:
+                        retVal = value / 100.0;
+                        break;
+                    case SubPage.WindSpeed:
+                        retVal = (ushort)value * 0.01;
+                        break;
+                    case SubPage.WindDirection:
+                        retVal = value / 20.0;
+                        break;
+                    case SubPage.ChargingCycles:
+                        retVal = (ushort)value;
+                        break;
+                    case SubPage.MinimumOperatingTemperature:
+                        retVal = value / 100.0;
+                        break;
+                    case SubPage.MaximumOperatingTemperature:
+                        retVal = value / 100.0;
+                        break;
+                    default:
+                        break;
+                }
+                return retVal;
+            }
+        }
+        public SubfieldDataPage SubfieldData { get; private set; }
 
         // Memory Level
-        public double PercentUsed { get; private set; }
-        public double TotalSize { get; private set; }
-        public MemorySizeUnit TotalSizeUnit { get; private set; }
+        public readonly struct MemoryLevelPage
+        {
+
+            public double PercentUsed { get; }
+            public double TotalSize { get; }
+            public MemorySizeUnit TotalSizeUnit { get; }
+
+            public MemoryLevelPage(byte[] payload)
+            {
+                PercentUsed = payload[4] * 0.5;
+                TotalSize = BitConverter.ToUInt16(payload, 5) * 0.1;
+                TotalSizeUnit = (MemorySizeUnit)(payload[7] & 0x83);
+            }
+        }
+        public MemoryLevelPage MemoryLevel { get; private set; }
 
         // Error Description
-        public byte SystemComponentIndex { get; private set; }
-        public ErrorLevel ErrorLevel { get; private set; }
-        public byte ProfileSpecificErrorCode { get; private set; }
-        public uint ManufacturerSpecificErrorCode { get; private set; }
+        public readonly struct ErrorDescriptionPage
+        {
+
+            public byte SystemComponentIndex { get; }
+            public ErrorLevel ErrorLevel { get; }
+            public byte ProfileSpecificErrorCode { get; }
+            public uint ManufacturerSpecificErrorCode { get; }
+
+            public ErrorDescriptionPage(byte[] payload)
+            {
+                SystemComponentIndex = (byte)(payload[2] & 0x0F);
+                ErrorLevel = (ErrorLevel)((payload[2] & 0xC0) >> 6);
+                ProfileSpecificErrorCode = payload[3];
+                ManufacturerSpecificErrorCode = BitConverter.ToUInt32(payload, 4);
+            }
+        }
+        public ErrorDescriptionPage ErrorDescription { get; private set; }
 
         // Paired Devices
         public byte NumberOfConnectedDevices { get; private set; }
@@ -214,24 +322,29 @@ namespace AntPlus
         }
         public List<PairedDevice> PairedDevices { get; private set; } = new List<PairedDevice>();
 
-        public event EventHandler<ManufacturerInfo> ManufacturerInfoChanged;
-        public event EventHandler<ProductInfo> ProductInfoChanged;
+        public event EventHandler<AntFsClientBeaconPage> AntFsClientBeaconPageChanged;
+        public event EventHandler<AntFsCommandResponsePage> AntFsCommandResponsePageChanged;
+        public event EventHandler<CommandStatusPage> CommandStatusPageChanged;
+        public event EventHandler<ManufacturerInfoPage> ManufacturerInfoPageChanged;
+        public event EventHandler<ProductInfoPage> ProductInfoPageChanged;
         public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
+        public event EventHandler<DateTime> DateTimeChanged;
+        public event EventHandler<SubfieldDataPage> SubfieldDataPageChanged;
+        public event EventHandler<MemoryLevelPage> MemoryLevelPageChanged;
+        public event EventHandler<ErrorDescriptionPage> ErrorDescriptionPageChanged;
 
         public void ParseCommonDataPage(byte[] payload)
         {
-            CommonDataPage pageType = (CommonDataPage)payload[0];
-            switch (pageType)
+            switch ((CommonDataPage)payload[0])
             {
                 case CommonDataPage.AntFSClientBeacon:
+                    AntFsClientBeaconPageChanged?.Invoke(this, new AntFsClientBeaconPage(payload));
                     break;
                 case CommonDataPage.AntFSCommandResponse:
+                    AntFsCommandResponsePageChanged?.Invoke(this, new AntFsCommandResponsePage(payload));
                     break;
                 case CommonDataPage.CommandStatus:
-                    LastCommandReceived = payload[1];
-                    SequenceNumber = payload[2];
-                    CommandStatus = (CommandStatus)payload[3];
-                    ResponseData = BitConverter.ToUInt32(payload, 4);
+                    CommandStatusPageChanged?.Invoke(this, new CommandStatusPage(payload));
                     break;
                 case CommonDataPage.GenericCommandPage:
                     break;
@@ -243,8 +356,7 @@ namespace AntPlus
                     ComponentId = payload[2] >> 4;
                     goto case CommonDataPage.ManufacturerInfo;
                 case CommonDataPage.ManufacturerInfo:
-                    Manufacturer = new ManufacturerInfo(payload);
-                    ManufacturerInfoChanged?.Invoke(this, Manufacturer);
+                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(payload));
                     break;
                 case CommonDataPage.MultiComponentProductInfo:
                     // TODO: REVIEW. THIS SHOULD LIKELY ENTAIL A LIST.
@@ -252,25 +364,23 @@ namespace AntPlus
                     ComponentId = payload[1] >> 4;
                     goto case CommonDataPage.ProductInfo;
                 case CommonDataPage.ProductInfo:
-                    Product = new ProductInfo(payload);
-                    ProductInfoChanged?.Invoke(this, Product);
+                    ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(payload));
                     break;
                 case CommonDataPage.BatteryStatus:
-                    BatteryStatus = new BatteryStatusPage(payload);
-                    BatteryStatusPageChanged?.Invoke(this, BatteryStatus);
+                    BatteryStatusPageChanged?.Invoke(this, new BatteryStatusPage(payload));
                     break;
                 case CommonDataPage.TimeAndDate:
                     // note that day of week is ignored in payload since the DateTime struct can provide this
-                    TimeAndDate = new DateTime(2000 + payload[7], payload[6], payload[5] & 0x1F, payload[4], payload[3], payload[2], DateTimeKind.Utc);
+                    DateTimeChanged?.Invoke(this,
+                        new DateTime(2000 + payload[7], payload[6], payload[5] & 0x1F, payload[4], payload[3], payload[2], DateTimeKind.Utc));
                     break;
                 case CommonDataPage.SubfieldData:
-                    ParseSubfieldData((SubfieldDataPage)payload[2], BitConverter.ToInt16(payload, 4));
-                    ParseSubfieldData((SubfieldDataPage)payload[3], BitConverter.ToInt16(payload, 6));
+                    SubfieldData = new SubfieldDataPage(payload);
+                    SubfieldDataPageChanged?.Invoke(this, SubfieldData);
                     break;
                 case CommonDataPage.MemoryLevel:
-                    PercentUsed = payload[4] * 0.5;
-                    TotalSize = BitConverter.ToUInt16(payload, 5) * 0.1;
-                    TotalSizeUnit = (MemorySizeUnit)(payload[7] & 0x83);
+                    MemoryLevel = new MemoryLevelPage(payload);
+                    MemoryLevelPageChanged?.Invoke(this, MemoryLevel);
                     break;
                 case CommonDataPage.PairedDevices:
                     NumberOfConnectedDevices = payload[2];
@@ -284,52 +394,8 @@ namespace AntPlus
                     }
                     break;
                 case CommonDataPage.ErrorDescription:
-                    SystemComponentIndex = (byte)(payload[2] & 0x0F);
-                    ErrorLevel = (ErrorLevel)((payload[2] & 0xC0) >> 6);
-                    ProfileSpecificErrorCode = payload[3];
-                    ManufacturerSpecificErrorCode = BitConverter.ToUInt32(payload, 4);
-                    break;
-            }
-        }
-
-        public double Temperature { get; set; }
-        public double BarometricPressue { get; set; }
-        public double Humidity { get; set; }
-        public double WindSpeed { get; set; }
-        public double WindDirection { get; set; }
-        public ushort ChargingCycles { get; set; }
-        public double MinimumOperatingTemperature { get; set; }
-        public double MaximumOperatingTemperature { get; set; }
-
-        private void ParseSubfieldData(SubfieldDataPage page, short value)
-        {
-            switch (page)
-            {
-                case SubfieldDataPage.Temperature:
-                    Temperature = value * 0.01;
-                    break;
-                case SubfieldDataPage.BarometricPressure:
-                    BarometricPressue = (ushort)value * 0.01;
-                    break;
-                case SubfieldDataPage.Humidity:
-                    Humidity = value / 100.0;
-                    break;
-                case SubfieldDataPage.WindSpeed:
-                    WindSpeed = (ushort)value * 0.01;
-                    break;
-                case SubfieldDataPage.WindDirection:
-                    WindDirection = value / 20.0;
-                    break;
-                case SubfieldDataPage.ChargingCycles:
-                    ChargingCycles = (ushort)value;
-                    break;
-                case SubfieldDataPage.MinimumOperatingTemperature:
-                    MinimumOperatingTemperature = value / 100.0;
-                    break;
-                case SubfieldDataPage.MaximumOperatingTemperature:
-                    MaximumOperatingTemperature = value / 100.0;
-                    break;
-                default:
+                    ErrorDescription = new ErrorDescriptionPage(payload);
+                    ErrorDescriptionPageChanged?.Invoke(this, ErrorDescription);
                     break;
             }
         }

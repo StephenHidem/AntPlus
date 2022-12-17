@@ -15,17 +15,13 @@ namespace DeviceProfiles.BicyclePower
         private ushort lastTorque;
         protected int deltaTorque;
 
-        public event EventHandler<Parameters> ParametersChanged;
-
         public new byte InstantaneousCadence { get; private set; }
         public double AverageAngularVelocity { get; private set; }
         public double AverageTorque { get; private set; }
         public new double AveragePower { get; private set; }
-        public Parameters Parameters { get; private set; }
 
         protected TorqueSensor(BicyclePower bp) : base(bp)
         {
-            Parameters = new Parameters(bp);
         }
 
         public virtual void ParseTorque(byte[] dataPage)
@@ -55,12 +51,6 @@ namespace DeviceProfiles.BicyclePower
                 AverageTorque = ComputeAvgTorque();
                 AveragePower = AverageTorque * AverageAngularVelocity;
             }
-        }
-
-        public void ParseParameters(byte[] dataPage)
-        {
-            Parameters.Parse(dataPage);
-            ParametersChanged?.Invoke(this, Parameters);
         }
 
         private double ComputeAvgAngularVelocity()

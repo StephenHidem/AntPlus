@@ -2,6 +2,7 @@
 using DeviceProfiles.BicyclePower;
 using System.ComponentModel;
 using System.Windows.Input;
+using static AntPlus.CommonDataPages;
 
 namespace AntPlusUsbClient.ViewModels
 {
@@ -14,6 +15,7 @@ namespace AntPlusUsbClient.ViewModels
         public bool EnableCrankTorque => CrankTorque != null;
         public bool EnableWheelTorque => WheelTorque != null;
         public bool EnableCTFSensor => CrankTorqueFrequency != null;
+        public bool EnablePowerSensor => CrankTorqueFrequency == null;
 
         public SensorType SensorType => BicyclePower.Sensor;
         public StandardPowerSensor PowerOnly => BicyclePower.BicyclePowerSensor;
@@ -23,6 +25,10 @@ namespace AntPlusUsbClient.ViewModels
 
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public MeasurementOutputData MeasurementOutput { get; private set; }
+        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        public ProductInfoPage ProductInfo { get; private set; }
+        public BatteryStatusPage BatteryStatus { get; private set; }
+
         public Calibration Calibration => BicyclePower.Calibration;
         public Parameters Parameters { get; private set; }
 
@@ -44,24 +50,22 @@ namespace AntPlusUsbClient.ViewModels
             // hook up events
             if (PowerOnly != null)
             {
+                Parameters = PowerOnly.Parameters;
+                PowerOnly.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
                 PowerOnly.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
                 PowerOnly.TEPSPageChanged += (s, e) => { TEPS = e; RaisePropertyChange("TEPS"); };
                 PowerOnly.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
-                PowerOnly.CommonDataPages.ManufacturerInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
-                PowerOnly.CommonDataPages.ProductInfoChanged += (s, e) => RaisePropertyChange("CommonDataPages");
-                PowerOnly.CommonDataPages.BatteryStatusPageChanged += (s, e) => RaisePropertyChange("CommonDataPages");
-            }
-            if (CrankTorque != null)
-            {
-                Parameters = CrankTorque.Parameters;
-                CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");
-                CrankTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
-            }
-            if (WheelTorque != null)
-            {
-                Parameters = WheelTorque.Parameters;
-                WheelTorque.WheelTorquePageChanged += (s, e) => RaisePropertyChange("WheelTorque");
-                WheelTorque.ParametersChanged += (s, e) => RaisePropertyChange("Parameters");
+                PowerOnly.CommonDataPages.ManufacturerInfoPageChanged += (s, e) => { ManufacturerInfo = e; RaisePropertyChange("ManufacturerInfo"); };
+                PowerOnly.CommonDataPages.ProductInfoPageChanged += (s, e) => { ProductInfo = e; RaisePropertyChange("ProductInfo"); };
+                PowerOnly.CommonDataPages.BatteryStatusPageChanged += (s, e) => { BatteryStatus = e; RaisePropertyChange("BatteryStatus"); };
+                if (CrankTorque != null)
+                {
+                    CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");
+                }
+                if (WheelTorque != null)
+                {
+                    WheelTorque.WheelTorquePageChanged += (s, e) => RaisePropertyChange("WheelTorque");
+                }
             }
             BicyclePower.BicycleCalibrationPageChanged += (s, e) => RaisePropertyChange("Calibration");
             BicyclePower.CrankTorqueFrequencyPageChanged += (s, e) => RaisePropertyChange("CrankTorqueFrequency");

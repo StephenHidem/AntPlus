@@ -71,7 +71,7 @@ namespace DeviceProfiles.BicyclePower
                     BicycleCalibrationPageChanged?.Invoke(this, Calibration);
                     break;
                 case DataPage.GetSetParameters:
-                    ((TorqueSensor)BicyclePowerSensor).ParseParameters(dataPage);
+                    BicyclePowerSensor.ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
                     BicyclePowerSensor?.ParseMeasurementOutputData(dataPage);

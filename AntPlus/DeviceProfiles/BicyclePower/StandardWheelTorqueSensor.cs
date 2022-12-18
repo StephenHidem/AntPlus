@@ -4,7 +4,7 @@ namespace DeviceProfiles.BicyclePower
 {
     public class StandardWheelTorqueSensor : TorqueSensor
     {
-        public event EventHandler<StandardWheelTorqueSensor> WheelTorquePageChanged;
+        public event EventHandler WheelTorquePageChanged;
 
         /// <summary>
         /// Wheel circumference in meters. The default is 2.2 meters.
@@ -32,7 +32,7 @@ namespace DeviceProfiles.BicyclePower
                 AverageSpeed = ComputeAvgSpeed();
                 AccumulatedDistance += ComputeDeltaDistance();
             }
-            WheelTorquePageChanged?.Invoke(this, null);
+            WheelTorquePageChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private double ComputeAvgSpeed()

@@ -62,7 +62,7 @@ namespace DeviceProfiles.BicyclePower
             }
         }
 
-        public event EventHandler<StandardCrankTorqueSensor> CrankTorquePageChanged;
+        public event EventHandler CrankTorquePageChanged;
         public event EventHandler<double> TorqueBarycenterAngleChanged;
         public event EventHandler<ForceAngle> RightForceAngleChanged;
         public event EventHandler<ForceAngle> LeftForceAngleChanged;
@@ -84,7 +84,7 @@ namespace DeviceProfiles.BicyclePower
             {
                 AverageCadence = 60.0 * deltaEventCount / (deltaPeriod / 2048.0);
             }
-            CrankTorquePageChanged?.Invoke(this, null);
+            CrankTorquePageChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void ParseCyclingDynamics(byte[] dataPage)

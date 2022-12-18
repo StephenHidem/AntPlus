@@ -15,7 +15,7 @@ namespace DeviceProfiles
         public Parameters Parameters { get; private set; }
         public CommonDataPages CommonDataPages { get; private set; }
 
-        public event EventHandler<StandardPowerSensor> PowerOnlyChanged;
+        public event EventHandler PowerOnlyChanged;
         public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
         public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
         public event EventHandler<Parameters> ParametersChanged;
@@ -54,7 +54,7 @@ namespace DeviceProfiles
                 deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
                 AveragePower = deltaPower / deltaEventCount;
             }
-            PowerOnlyChanged?.Invoke(this, null);
+            PowerOnlyChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void ParseParameters(byte[] dataPage)

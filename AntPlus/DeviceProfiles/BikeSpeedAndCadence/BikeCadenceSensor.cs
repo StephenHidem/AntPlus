@@ -3,31 +3,16 @@ using System;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
-    internal class BikeCadenceSensor : AntDevice
+    internal class BikeCadenceSensor : CommonSpeedCadence
     {
         /// <summary>
         /// The BikeCadenceSensor device class ID.
         /// </summary>
         public const byte DeviceClass = 122;
 
-        /// <summary>
-        /// Bike cadence data pages.
-        /// </summary>
-        public enum DataPage
-        {
-            /// <summary>Default or unknown data page.</summary>
-            Default,
-            /// <summary>Cumulative operating time</summary>
-            CumulativeOperatingTime,
-            /// <summary>Manufacturer information</summary>
-            ManufacturerInfo,
-            /// <summary>Product information</summary>
-            ProductInfo,
-            /// <summary>Battery status</summary>
-            BatteryStatus,
-            /// <summary>Motion and cadence</summary>
-            MotionAndCadence,
-        }
+        public event EventHandler BikeCadenceSensorChanged;
+
+        public double InstantaneousCadence { get; private set; }
 
         public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -35,7 +20,15 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 
         public override void Parse(byte[] dataPage)
         {
-            throw new NotImplementedException();
+            base.Parse(dataPage);
+            if (!isFirstDataMessage)
+            {
+                // this data is present in all data pages
+                int deltaEventTime = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevEventTime);
+                int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
+                InstantaneousCadence = 60.0 * deltaRevCount * 1024.0 / deltaEventTime;
+                BikeCadenceSensorChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)

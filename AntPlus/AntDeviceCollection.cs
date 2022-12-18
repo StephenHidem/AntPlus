@@ -1,4 +1,5 @@
-﻿using AntRadioInterface;
+﻿using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+using AntRadioInterface;
 using DeviceProfiles;
 using DeviceProfiles.BicyclePower;
 using DeviceProfiles.HeartRate;
@@ -84,6 +85,12 @@ namespace AntPlus
                     return new HeartRate(channelId, antRadio.GetChannel(1));
                 case BicyclePower.DeviceClass:
                     return new BicyclePower(channelId, antRadio.GetChannel(1));
+                case BikeSpeedSensor.DeviceClass:
+                    return new BikeSpeedSensor(channelId, antRadio.GetChannel(1));
+                case BikeCadenceSensor.DeviceClass:
+                    return new BikeCadenceSensor(channelId, antRadio.GetChannel(1));
+                case CombinedSpeedAndCadenceSensor.DeviceClass:
+                    return new CombinedSpeedAndCadenceSensor(channelId, antRadio.GetChannel(1));
                 default:
                     return new UnknownDevice(channelId, antRadio.GetChannel(1));
             }

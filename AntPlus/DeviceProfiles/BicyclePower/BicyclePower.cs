@@ -1,9 +1,8 @@
-﻿using AntPlus;
-using AntRadioInterface;
+﻿using AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace DeviceProfiles.BicyclePower
+namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public enum SensorType
     {

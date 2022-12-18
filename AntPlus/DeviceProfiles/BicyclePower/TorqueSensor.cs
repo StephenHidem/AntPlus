@@ -1,7 +1,6 @@
-﻿using AntPlus;
-using System;
+﻿using System;
 
-namespace DeviceProfiles.BicyclePower
+namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public abstract class TorqueSensor : StandardPowerSensor
     {

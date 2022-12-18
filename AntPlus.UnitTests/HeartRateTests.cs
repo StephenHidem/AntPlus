@@ -1,6 +1,6 @@
 ﻿using AntPlus;
+using AntPlus.DeviceProfiles.HeartRate;
 using AntRadioInterface;
-using DeviceProfiles.HeartRate;
 using System;
 using System.Linq;
 

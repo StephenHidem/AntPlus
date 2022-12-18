@@ -1,5 +1,4 @@
-﻿using DeviceProfiles;
-using DeviceProfiles.BicyclePower;
+﻿using AntPlus.DeviceProfiles.BicyclePower;
 using System.ComponentModel;
 using System.Windows.Input;
 using static AntPlus.CommonDataPages;

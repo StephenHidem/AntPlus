@@ -1,4 +1,4 @@
-﻿namespace DeviceProfiles
+﻿namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public struct TorqueEffectivenessAndPedalSmoothness
     {

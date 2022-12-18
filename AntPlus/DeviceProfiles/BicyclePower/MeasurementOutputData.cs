@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeviceProfiles.BicyclePower
+namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public readonly struct MeasurementOutputData
     {

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
-        xmlns:dp="clr-namespace:DeviceProfiles.BicyclePower;assembly=AntPlus"
+        xmlns:dp="clr-namespace:AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
         mc:Ignorable="d"
         Title="Bicycle Power Window" Height="501" Width="301">
     <Grid>

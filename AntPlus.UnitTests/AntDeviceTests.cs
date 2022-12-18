@@ -1,5 +1,5 @@
-﻿using AntRadioInterface;
-using DeviceProfiles;
+﻿using AntPlus.DeviceProfiles;
+using AntRadioInterface;
 
 namespace AntPlus.UnitTests
 {

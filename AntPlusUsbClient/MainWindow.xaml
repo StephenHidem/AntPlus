@@ -11,7 +11,7 @@
         <StackPanel Orientation="Vertical">
             <Expander ExpandDirection="Down" IsExpanded="False" Height="206">
                 <Expander.Header>
-                    <TextBlock Text="{Binding Count, StringFormat=ANT Devices ({0})}" d:Text="ANT Devices"/>
+                    <TextBlock Text="{Binding Count, StringFormat='ANT Devices - {0}'}" d:Text="ANT Devices"/>
                 </Expander.Header>
                 <ListView x:Name="antDevices" ItemsSource="{Binding .}">
                     <ListView.View>

@@ -1,8 +1,7 @@
-﻿using AntPlus;
-using AntRadioInterface;
+﻿using AntRadioInterface;
 using System;
 
-namespace DeviceProfiles
+namespace AntPlus.DeviceProfiles
 {
     public class UnknownDevice : AntDevice
     {

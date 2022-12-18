@@ -1,8 +1,8 @@
-﻿using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+﻿using AntPlus.DeviceProfiles;
+using AntPlus.DeviceProfiles.BicyclePower;
+using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+using AntPlus.DeviceProfiles.HeartRate;
 using AntRadioInterface;
-using DeviceProfiles;
-using DeviceProfiles.BicyclePower;
-using DeviceProfiles.HeartRate;
 using System.Collections.ObjectModel;
 using System.Linq;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace DeviceProfiles.BicyclePower
+namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public class Calibration
     {

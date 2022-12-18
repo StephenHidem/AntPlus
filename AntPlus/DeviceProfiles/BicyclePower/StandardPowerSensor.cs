@@ -1,8 +1,6 @@
-﻿using AntPlus;
-using DeviceProfiles.BicyclePower;
-using System;
+﻿using System;
 
-namespace DeviceProfiles
+namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public class StandardPowerSensor
     {
@@ -21,7 +19,7 @@ namespace DeviceProfiles
         public event EventHandler<Parameters> ParametersChanged;
 
 
-        public StandardPowerSensor(BicyclePower.BicyclePower bp)
+        public StandardPowerSensor(BicyclePower bp)
         {
             Parameters = new Parameters(bp);
             CommonDataPages = new CommonDataPages();

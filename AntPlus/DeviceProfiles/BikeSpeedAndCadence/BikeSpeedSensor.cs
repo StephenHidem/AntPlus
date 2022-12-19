@@ -3,7 +3,7 @@ using System;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
-    internal class BikeSpeedSensor : CommonSpeedCadence
+    public class BikeSpeedSensor : CommonSpeedCadence
     {
         /// <summary>
         /// The BikeSpeedSensor device class ID.
@@ -28,10 +28,13 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
             {
                 // this data is present in all data pages
                 int deltaEventTime = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevEventTime);
-                int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
-                InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
-                AccumulatedDistance = WheelCircumference * deltaRevCount;
-                BikeSpeedSensorChanged?.Invoke(this, EventArgs.Empty);
+                if (deltaEventTime != 0)
+                {
+                    int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
+                    InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
+                    AccumulatedDistance += WheelCircumference * deltaRevCount;
+                    BikeSpeedSensorChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 

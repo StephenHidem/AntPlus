@@ -4,12 +4,14 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
-    internal class CombinedSpeedAndCadenceSensor : AntDevice
+    public class CombinedSpeedAndCadenceSensor : AntDevice
     {
         /// <summary>
         /// The CombinedSpeedAndCadenceSensor device class ID.
         /// </summary>
         public const byte DeviceClass = 121;
+
+        public event EventHandler CombinedSpeedAndCadenceSensorChanged;
 
         private bool isFirstDataMessage = true;     // used for accumulated values
         private ushort prevSpeedEventTime;
@@ -50,13 +52,20 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
             }
 
             deltaEventTime = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 0), ref prevCadenceEventTime);
-            deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 2), ref prevCadenceRevCount);
-            InstantaneousCadence = 60.0 * deltaRevCount * 1024.0 / deltaEventTime;
+            if (deltaEventTime != 0)
+            {
+                deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 2), ref prevCadenceRevCount);
+                InstantaneousCadence = 60.0 * deltaRevCount * 1024.0 / deltaEventTime;
+            }
 
             deltaEventTime = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevSpeedEventTime);
-            deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevSpeedRevCount);
-            InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
-            AccumulatedDistance = WheelCircumference * deltaRevCount;
+            if (deltaEventTime != 0)
+            {
+                deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevSpeedRevCount);
+                InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
+                AccumulatedDistance += WheelCircumference * deltaRevCount;
+            }
+            CombinedSpeedAndCadenceSensorChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)

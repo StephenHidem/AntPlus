@@ -56,9 +56,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
+    <Compile Include="ViewModels\BikeCadenceViewModel.cs" />
+    <Compile Include="ViewModels\BikeSpeedAndCadenceViewModel.cs" />
+    <Compile Include="ViewModels\BikeSpeedViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
     <Compile Include="Views\BicyclePowerWindow.xaml.cs">
       <DependentUpon>BicyclePowerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BikeCadenceWindow.xaml.cs">
+      <DependentUpon>BikeCadenceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BikeSpeedAndCadenceWindow.xaml.cs">
+      <DependentUpon>BikeSpeedAndCadenceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BikeSpeedWindow.xaml.cs">
+      <DependentUpon>BikeSpeedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HeartRateWindow.xaml.cs">
       <DependentUpon>HeartRateWindow.xaml</DependentUpon>
@@ -76,6 +88,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\BicyclePowerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BikeCadenceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BikeSpeedAndCadenceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BikeSpeedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

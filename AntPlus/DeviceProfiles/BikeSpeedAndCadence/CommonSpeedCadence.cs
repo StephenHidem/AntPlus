@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
-    internal class CommonSpeedCadence : AntDevice
+    public class CommonSpeedCadence : AntDevice
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private bool pageToggle;

@@ -35,7 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PropertyTools, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyTools.3.1.0\lib\net45\PropertyTools.dll</HintPath>
+    </Reference>
+    <Reference Include="PropertyTools.Wpf, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyTools.Wpf.3.1.0\lib\net45\PropertyTools.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,11 +62,36 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ClimberControl.xaml.cs">
+      <DependentUpon>ClimberControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EllipticalControl.xaml.cs">
+      <DependentUpon>EllipticalControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NordicSkierControl.xaml.cs">
+      <DependentUpon>NordicSkierControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RowerControl.xaml.cs">
+      <DependentUpon>RowerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TrainerStationaryBikeControl.xaml.cs">
+      <DependentUpon>TrainerStationaryBikeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TreadmillControl.xaml.cs">
+      <DependentUpon>TreadmillControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
     <Compile Include="ViewModels\BikeCadenceViewModel.cs" />
     <Compile Include="ViewModels\BikeSpeedAndCadenceViewModel.cs" />
     <Compile Include="ViewModels\BikeSpeedViewModel.cs" />
+    <Compile Include="ViewModels\ClimberViewModel.cs" />
+    <Compile Include="ViewModels\EllipticalViewModel.cs" />
+    <Compile Include="ViewModels\FitnessEquipmentViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
+    <Compile Include="ViewModels\NordicSkierViewModel.cs" />
+    <Compile Include="ViewModels\RowerViewModel.cs" />
+    <Compile Include="ViewModels\TrainerStationaryBikeViewModel.cs" />
+    <Compile Include="ViewModels\TreadmillViewModel.cs" />
     <Compile Include="Views\BicyclePowerWindow.xaml.cs">
       <DependentUpon>BicyclePowerWindow.xaml</DependentUpon>
     </Compile>
@@ -72,9 +104,36 @@
     <Compile Include="Views\BikeSpeedWindow.xaml.cs">
       <DependentUpon>BikeSpeedWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\FitnessEquipmentWindow.xaml.cs">
+      <DependentUpon>FitnessEquipmentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HeartRateWindow.xaml.cs">
       <DependentUpon>HeartRateWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ClimberControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EllipticalControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NordicSkierControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RowerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TrainerStationaryBikeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TreadmillControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +162,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\FitnessEquipmentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HeartRateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,6 +189,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

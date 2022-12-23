@@ -1,6 +1,7 @@
 ﻿using AntPlus;
 using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+using AntPlus.DeviceProfiles.FitnessEquipment;
 using AntPlus.DeviceProfiles.HeartRate;
 using AntPlusUsbClient.Views;
 using System.Windows;
@@ -46,6 +47,10 @@ namespace AntPlusUsbClient
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
                     BikeSpeedAndCadenceWindow speedAndCadenceWindow = new BikeSpeedAndCadenceWindow((CombinedSpeedAndCadenceSensor)antDevice);
                     speedAndCadenceWindow.Show();
+                    break;
+                case FitnessEquipment.DeviceClass:
+                    FitnessEquipmentWindow fitnessEquipmentWindow = new FitnessEquipmentWindow((FitnessEquipment)antDevice);
+                    fitnessEquipmentWindow.Show();
                     break;
                 default:
                     break;

@@ -143,6 +143,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         public Climber Climber { get; private set; }
         public NordicSkier NordicSkier { get; private set; }
         public TrainerStationaryBike TrainerStationaryBike { get; private set; }
+        public CommonDataPages CommonDataPages { get; private set; }
 
         public event EventHandler<GeneralDataPage> GeneralDataPageChanged;
         public event EventHandler<GeneralSettingsPage> GeneralSettingsPageChanged;
@@ -153,6 +154,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
             GeneralData = new GeneralDataPage();
             GeneralSettings = new GeneralSettingsPage();
             GeneralMetabolic = new GeneralMetabolicPage();
+            CommonDataPages = new CommonDataPages();
         }
 
         public override void Parse(byte[] dataPage)
@@ -202,6 +204,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
                     TrainerStationaryBike?.ParseTorque(dataPage);
                     break;
                 default:
+                    CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
         }

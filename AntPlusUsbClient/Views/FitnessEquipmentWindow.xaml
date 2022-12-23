@@ -44,6 +44,32 @@
                     <TextBlock Text="{Binding GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET {0}'}"/>
                 </StackPanel>
             </Expander>
+            <Expander ExpandDirection="Down">
+                <Expander.Header>
+                    <TextBlock Text="Common Data Pages" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <Expander IsExpanded="True">
+                        <Expander.Header>
+                            <TextBlock Text="Manufacturer" FontWeight="DemiBold"/>
+                        </Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="{Binding ManufacturerInfo.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
+                            <TextBlock Text="{Binding ManufacturerInfo.ModelNumber, StringFormat='Model Number {0}'}"/>
+                            <TextBlock Text="{Binding ManufacturerInfo.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander IsExpanded="True">
+                        <Expander.Header>
+                            <TextBlock Text="Product" FontWeight="DemiBold"/>
+                        </Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="{Binding ProductInfo.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
+                            <TextBlock Text="{Binding ProductInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </Expander>
         </StackPanel>
     </Grid>
 </Window>

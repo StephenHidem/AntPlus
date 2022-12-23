@@ -27,12 +27,16 @@ namespace AntPlusUsbClient.Views
                     control = new EllipticalControl(fitnessEquipment);
                     break;
                 case FitnessEquipment.FitnessEquipmentType.Rower:
+                    control = new RowerControl(fitnessEquipment);
                     break;
                 case FitnessEquipment.FitnessEquipmentType.Climber:
+                    control = new ClimberControl(fitnessEquipment);
                     break;
                 case FitnessEquipment.FitnessEquipmentType.NordicSkier:
+                    control = new NordicSkierControl(fitnessEquipment);
                     break;
                 case FitnessEquipment.FitnessEquipmentType.TrainerStationaryBike:
+                    control = new TrainerStationaryBikeControl(fitnessEquipment);
                     break;
                 default:
                     break;

@@ -88,6 +88,7 @@
     <Compile Include="ViewModels\EllipticalViewModel.cs" />
     <Compile Include="ViewModels\FitnessEquipmentViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
+    <Compile Include="ViewModels\MuscleOxygenViewModel.cs" />
     <Compile Include="ViewModels\NordicSkierViewModel.cs" />
     <Compile Include="ViewModels\RowerViewModel.cs" />
     <Compile Include="ViewModels\TrainerStationaryBikeViewModel.cs" />
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="Views\HeartRateWindow.xaml.cs">
       <DependentUpon>HeartRateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MuscleOxygenWindow.xaml.cs">
+      <DependentUpon>MuscleOxygenWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ClimberControl.xaml">
       <SubType>Designer</SubType>
@@ -167,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HeartRateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MuscleOxygenWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

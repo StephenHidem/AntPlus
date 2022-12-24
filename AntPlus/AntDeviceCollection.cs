@@ -94,6 +94,8 @@ namespace AntPlus
                     return new CombinedSpeedAndCadenceSensor(channelId, antRadio.GetChannel(1));
                 case FitnessEquipment.DeviceClass:
                     return new FitnessEquipment(channelId, antRadio.GetChannel(1));
+                case MuscleOxygen.DeviceClass:
+                    return new MuscleOxygen(channelId, antRadio.GetChannel(1));
                 default:
                     return new UnknownDevice(channelId, antRadio.GetChannel(1));
             }

@@ -1,4 +1,5 @@
 ﻿using AntPlus;
+using AntPlus.DeviceProfiles;
 using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using AntPlus.DeviceProfiles.FitnessEquipment;
@@ -51,6 +52,10 @@ namespace AntPlusUsbClient
                 case FitnessEquipment.DeviceClass:
                     FitnessEquipmentWindow fitnessEquipmentWindow = new FitnessEquipmentWindow((FitnessEquipment)antDevice);
                     fitnessEquipmentWindow.Show();
+                    break;
+                case MuscleOxygen.DeviceClass:
+                    MuscleOxygenWindow muscleOxygenWindow = new MuscleOxygenWindow((MuscleOxygen)antDevice);
+                    muscleOxygenWindow.Show();
                     break;
                 default:
                     break;

@@ -12,7 +12,9 @@ namespace AntPlusUsbClient.Views
         public MuscleOxygenWindow(MuscleOxygen muscleOxygen)
         {
             InitializeComponent();
-            DataContext = new MuscleOxygenViewModel(muscleOxygen);
+            MuscleOxygenViewModel moxy = new MuscleOxygenViewModel(muscleOxygen);
+            CommandBindings.AddRange(moxy.CommandBindings);
+            DataContext = moxy;
         }
     }
 }

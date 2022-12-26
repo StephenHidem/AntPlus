@@ -23,7 +23,7 @@ namespace AntPlus.DeviceProfiles
         {
             SetTime,
             StartSession,
-            StoopSession,
+            StopSession,
             Lap
         }
 
@@ -55,6 +55,7 @@ namespace AntPlus.DeviceProfiles
             public double PercentSaturated { get; set; }
         }
 
+        public byte EventCount { get; private set; }
         public bool UtcTimeRequired { get; private set; }
         public bool SupportsAntFs { get; private set; }
         public MeasurementInterval Interval { get; private set; }
@@ -80,6 +81,7 @@ namespace AntPlus.DeviceProfiles
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.MuscleOxygenData:
+                    EventCount = dataPage[1];
                     UtcTimeRequired = (dataPage[2] & 0x01) == 0x01;
                     SupportsAntFs = (dataPage[3] & 0x01) == 0x01;
                     Interval = (MeasurementInterval)((dataPage[3] >> 1) & 0x07);
@@ -99,7 +101,7 @@ namespace AntPlus.DeviceProfiles
                             break;
                     }
 
-                    val = (BitConverter.ToUInt16(dataPage, 5) & 0x3FF0) >> 4;
+                    val = (BitConverter.ToUInt16(dataPage, 5) >> 4) & 0x3FF;
                     switch (val)
                     {
                         case 0xFFE:
@@ -114,7 +116,7 @@ namespace AntPlus.DeviceProfiles
                             break;
                     }
 
-                    val = (BitConverter.ToUInt16(dataPage, 6) & 0xFFC0) >> 6;
+                    val = (BitConverter.ToUInt16(dataPage, 6) >> 6) & 0x03FF;
                     switch (val)
                     {
                         case 0xFFE:
@@ -137,12 +139,12 @@ namespace AntPlus.DeviceProfiles
             }
         }
 
-        public void SendCommand(CommandId command, DateTimeOffset localTimeOffest, DateTime currentTimeStamp)
+        public void SendCommand(CommandId command, TimeSpan localTimeOffest, DateTime currentTimeStamp)
         {
-            sbyte offset = (sbyte)(localTimeOffest.Minute / 4);
+            sbyte offset = (sbyte)(localTimeOffest.TotalMinutes / 15);
             int current = (int)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds;
             byte[] msg = { (byte)DataPage.Commands, 0xFF, (byte)command, (byte)offset };
-            msg.Concat(BitConverter.GetBytes(current));
+            msg = msg.Concat(BitConverter.GetBytes(current)).ToArray();
             SendExtAcknowledgedMessage(msg);
         }
 

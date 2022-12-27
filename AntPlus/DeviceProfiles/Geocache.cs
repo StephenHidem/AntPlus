@@ -1,4 +1,8 @@
-﻿namespace AntPlus.DeviceProfiles
+﻿using AntRadioInterface;
+using System;
+using System.Text;
+
+namespace AntPlus.DeviceProfiles
 {
     public class Geocache : AntDevice
     {

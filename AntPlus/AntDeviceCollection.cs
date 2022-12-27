@@ -96,6 +96,8 @@ namespace AntPlus
                     return new FitnessEquipment(channelId, antRadio.GetChannel(1));
                 case MuscleOxygen.DeviceClass:
                     return new MuscleOxygen(channelId, antRadio.GetChannel(1));
+                case Geocache.DeviceClass:
+                    return new Geocache(channelId, antRadio.GetChannel(1));
                 default:
                     return new UnknownDevice(channelId, antRadio.GetChannel(1));
             }

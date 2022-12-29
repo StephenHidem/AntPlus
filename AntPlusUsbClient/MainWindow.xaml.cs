@@ -57,6 +57,10 @@ namespace AntPlusUsbClient
                     MuscleOxygenWindow muscleOxygenWindow = new MuscleOxygenWindow((MuscleOxygen)antDevice);
                     muscleOxygenWindow.Show();
                     break;
+                case Geocache.DeviceClass:
+                    GeocacheWindow geocacheWindow = new GeocacheWindow((Geocache)antDevice);
+                    geocacheWindow.Show();
+                    break;
                 default:
                     break;
             }

@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\ClimberViewModel.cs" />
     <Compile Include="ViewModels\EllipticalViewModel.cs" />
     <Compile Include="ViewModels\FitnessEquipmentViewModel.cs" />
+    <Compile Include="ViewModels\GeocacheViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
     <Compile Include="ViewModels\MuscleOxygenViewModel.cs" />
     <Compile Include="ViewModels\NordicSkierViewModel.cs" />
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="Views\FitnessEquipmentWindow.xaml.cs">
       <DependentUpon>FitnessEquipmentWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GeocacheWindow.xaml.cs">
+      <DependentUpon>GeocacheWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HeartRateWindow.xaml.cs">
       <DependentUpon>HeartRateWindow.xaml</DependentUpon>
@@ -169,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FitnessEquipmentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GeocacheWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

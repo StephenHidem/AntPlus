@@ -1,5 +1,6 @@
 ﻿using AntPlus;
 using AntPlus.DeviceProfiles;
+using AntPlus.DeviceProfiles.AssetTracker;
 using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using AntPlus.DeviceProfiles.FitnessEquipment;
@@ -60,6 +61,10 @@ namespace AntPlusUsbClient
                 case Geocache.DeviceClass:
                     GeocacheWindow geocacheWindow = new GeocacheWindow((Geocache)antDevice);
                     geocacheWindow.Show();
+                    break;
+                case AssetTracker.DeviceClass:
+                    AssetTrackerWindow tracker = new AssetTrackerWindow((AssetTracker)antDevice);
+                    tracker.Show();
                     break;
                 default:
                     break;

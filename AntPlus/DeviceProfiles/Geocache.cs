@@ -8,8 +8,7 @@ namespace AntPlus.DeviceProfiles
 {
     public class Geocache : AntDevice
     {
-        /// The fitness equipment device class ID.
-        /// </summary>
+        /// The geocache device class ID.
         public const byte DeviceClass = 19;
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using AntPlus.DeviceProfiles;
+using AntPlus.DeviceProfiles.AssetTracker;
 using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using AntPlus.DeviceProfiles.FitnessEquipment;
@@ -98,6 +99,8 @@ namespace AntPlus
                     return new MuscleOxygen(channelId, antRadio.GetChannel(1));
                 case Geocache.DeviceClass:
                     return new Geocache(channelId, antRadio.GetChannel(1));
+                case AssetTracker.DeviceClass:
+                    return new AssetTracker(channelId, antRadio.GetChannel(1));
                 default:
                     return new UnknownDevice(channelId, antRadio.GetChannel(1));
             }

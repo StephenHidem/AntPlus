@@ -82,6 +82,7 @@
     <Compile Include="Controls\TreadmillControl.xaml.cs">
       <DependentUpon>TreadmillControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AssetTrackerViewModel.cs" />
     <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
     <Compile Include="ViewModels\BikeCadenceViewModel.cs" />
     <Compile Include="ViewModels\BikeSpeedAndCadenceViewModel.cs" />
@@ -96,6 +97,9 @@
     <Compile Include="ViewModels\RowerViewModel.cs" />
     <Compile Include="ViewModels\TrainerStationaryBikeViewModel.cs" />
     <Compile Include="ViewModels\TreadmillViewModel.cs" />
+    <Compile Include="Views\AssetTrackerWindow.xaml.cs">
+      <DependentUpon>AssetTrackerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BicyclePowerWindow.xaml.cs">
       <DependentUpon>BicyclePowerWindow.xaml</DependentUpon>
     </Compile>
@@ -156,6 +160,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\AssetTrackerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BicyclePowerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

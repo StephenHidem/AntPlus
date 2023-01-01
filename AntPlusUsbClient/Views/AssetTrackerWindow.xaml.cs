@@ -15,7 +15,6 @@ namespace AntPlusUsbClient.Views
             InitializeComponent();
             AssetTrackerViewModel vm = new AssetTrackerViewModel(assetTracker);
             BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.Assets.collectionLock);
-            //CommandBindings.AddRange(geo.CommandBindings);
             DataContext = vm;
         }
     }

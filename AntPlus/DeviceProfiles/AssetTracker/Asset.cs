@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
 
 namespace AntPlus.DeviceProfiles.AssetTracker
 {
-    public class Asset
+    public class Asset : INotifyPropertyChanged
     {
         private bool gotId;
+        private bool gotLoc1 = false;
+        private int lat;
 
         public enum AssetType
         {
@@ -13,7 +16,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             Dog
         }
 
-        public enum Situation
+        public enum AssetSituation
         {
             Sitting,
             Moving,
@@ -23,33 +26,36 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             Undefined = 0xFF
         }
 
-        public readonly struct AssetStatus
+        [Flags]
+        public enum AssetStatus
         {
-            private readonly byte stat;
-
-            public Situation Situation => (Situation)(stat & 0x07);
-            public bool LowBattery => (stat & 0x08) != 0;
-            public bool GPSLost => (stat & 0x10) != 0;
-            public bool CommunicationLost => (stat & 0x20) != 0;
-            public bool RemoveAsset => (stat & 0x40) != 0;
-
-            internal AssetStatus(byte status)
-            {
-                stat = status;
-            }
+            Good = 0x00,
+            LowBattery = 0x08,
+            GPSLost = 0x10,
+            CommunicationLost = 0x20,
+            RemoveAsset = 0x40,
         }
 
         public int Index { get; set; }
         public string Name { get; set; }
         public AssetType Type { get; set; }
         public byte Color { get; set; }
+        /// <summary>Gets the distance.</summary>
+        /// <value>The distance to the asset in meters.</value>
         public ushort Distance { get; private set; }
-        public byte Bearing { get; private set; }
+        /// <summary>Gets the bearing.</summary>
+        /// <value>The bearing of the asset in degrees.</value>
+        public double Bearing { get; private set; }
         public AssetStatus Status { get; private set; }
-        public int Latitude { get; private set; }
-        public int Longitude { get; private set; }
+        public AssetSituation Situation { get; private set; }
+        /// <summary>Gets the latitude.</summary>
+        /// <value>The latitude of the asset in degress.</value>
+        public double Latitude { get; private set; }
+        /// <summary>Gets the longitude.</summary>
+        /// <value>The longitude of the asset in degrees.</value>
+        public double Longitude { get; private set; }
 
-        public event EventHandler AssetChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Asset(byte[] data)
         {
@@ -71,15 +77,27 @@ namespace AntPlus.DeviceProfiles.AssetTracker
         public void ParseLocation1(byte[] data)
         {
             Distance = BitConverter.ToUInt16(data, 2);
-            Bearing = data[4];
-            Status = new AssetStatus(data[5]);
-            Latitude = BitConverter.ToUInt16(data, 6);
+            Bearing = 360.0 * data[4] / 256.0;
+            Situation = (AssetSituation)(data[5] & 0x07);
+            Status = (AssetStatus)(data[5] & 0x78);
+            lat = BitConverter.ToUInt16(data, 6);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Distance"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bearing"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Situation"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
+            gotLoc1 = true;
         }
         public void ParseLocation2(byte[] data)
         {
-            Latitude += BitConverter.ToUInt16(data, 2) << 16;
-            Longitude = BitConverter.ToInt32(data, 4);
-            AssetChanged?.Invoke(this, EventArgs.Empty);
+            if (gotLoc1)
+            {
+                lat += BitConverter.ToUInt16(data, 2) << 16;
+                Latitude = 180.0 * lat / Math.Pow(2, 31);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                gotLoc1 = false;
+            }
+            Longitude = 180.0 * BitConverter.ToInt32(data, 4) / Math.Pow(2, 31);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
         }
     }
 }

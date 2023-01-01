@@ -6,20 +6,66 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AssetTrackerViewModel}"
         mc:Ignorable="d"
-        Title="AssetTrackerWindow" Height="450" Width="309">
-    <Grid>
+        Title="AssetTrackerWindow" Height="450" Width="473">
+    <StackPanel>
         <Expander>
             <Expander.Header>
-                <TextBlock Text="{Binding AssetTracker.Assets.Count, StringFormat='Assets - {0}'}" d:Text="Assets - 0"/>
+                <TextBlock Text="{Binding AssetTracker.Assets.Count, StringFormat='Assets - {0}'}" d:Text="Assets - 0" FontWeight="ExtraBold"/>
             </Expander.Header>
             <ListView ItemsSource="{Binding AssetTracker.Assets}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Index" DisplayMemberBinding="{Binding Path=Index}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
+                        <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Path=Type}"/>
+                        <GridViewColumn Header="Color" DisplayMemberBinding="{Binding Path=Color}"/>
+                        <GridViewColumn Header="Distance" DisplayMemberBinding="{Binding Path=Distance}"/>
+                        <GridViewColumn Header="Bearing" DisplayMemberBinding="{Binding Path=Bearing}"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
+                        <GridViewColumn Header="Situation" DisplayMemberBinding="{Binding Path=Situation}"/>
+                        <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude}"/>
+                        <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude}"/>
+                    </GridView>
+                </ListView.View>
             </ListView>
-
         </Expander>
-    </Grid>
+        <Expander>
+            <Expander.Header>
+                <TextBlock Text="Common Data Pages" FontWeight="ExtraBold"/>
+            </Expander.Header>
+            <StackPanel>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <TextBlock Text="Manufacturer" FontWeight="DemiBold"/>
+                    </Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="{Binding ManufacturerInfo.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
+                        <TextBlock Text="{Binding ManufacturerInfo.ModelNumber, StringFormat='Model Number {0}'}"/>
+                        <TextBlock Text="{Binding ManufacturerInfo.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <TextBlock Text="Product" FontWeight="DemiBold"/>
+                    </Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="{Binding ProductInfo.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
+                        <TextBlock Text="{Binding ProductInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <TextBlock Text="Battery" FontWeight="DemiBold"/>
+                    </Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="{Binding BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.Identifier, StringFormat='ID {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time {0}'}"/>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </Expander>
+    </StackPanel>
 </Window>

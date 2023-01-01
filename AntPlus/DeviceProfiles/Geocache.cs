@@ -57,6 +57,7 @@ namespace AntPlus.DeviceProfiles
 
         public Geocache(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
+            CommonDataPages = new CommonDataPages();
         }
 
         public override void Parse(byte[] dataPage)

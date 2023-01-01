@@ -23,9 +23,11 @@ namespace AntPlus.DeviceProfiles.AssetTracker
         }
 
         public AssetCollection Assets { get; } = new AssetCollection();
+        public CommonDataPages CommonDataPages { get; private set; }
 
         public AssetTracker(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
+            CommonDataPages = new CommonDataPages();
         }
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)
@@ -74,6 +76,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
                 case DataPage.DisconnectCommand:
                     break;
                 default:
+                    CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
         }

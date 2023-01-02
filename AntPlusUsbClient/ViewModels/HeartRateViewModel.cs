@@ -1,4 +1,5 @@
-﻿using AntPlus.DeviceProfiles.HeartRate;
+﻿using AntPlus;
+using AntPlus.DeviceProfiles.HeartRate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,7 +33,7 @@ namespace AntPlusUsbClient.ViewModels
         public CommandBinding SetSportModeBinding { get; private set; }
         public CommandBinding SetHRFeatureBinding { get; private set; }
         public IEnumerable<HeartRate.DataPage> DataPageValues => Enum.GetValues(typeof(HeartRate.DataPage)).Cast<HeartRate.DataPage>();
-        public IEnumerable<HeartRate.SportMode> SportModeValues => Enum.GetValues(typeof(HeartRate.SportMode)).Cast<HeartRate.SportMode>();
+        public IEnumerable<SportMode> SportModeValues => Enum.GetValues(typeof(SportMode)).Cast<SportMode>();
 
         public HeartRateViewModel(HeartRate heartRate)
         {
@@ -106,7 +107,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void SetSportModeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            HeartRate.SetSportMode((HeartRate.SportMode)e.Parameter);
+            HeartRate.SetSportMode((SportMode)e.Parameter);
         }
 
         private void SetSportModeCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -115,18 +116,18 @@ namespace AntPlusUsbClient.ViewModels
             {
                 return;
             }
-            switch ((HeartRate.SportMode)e.Parameter)
+            switch ((SportMode)e.Parameter)
             {
-                case HeartRate.SportMode.Generic:
+                case SportMode.Generic:
                     e.CanExecute = !Capabilities.Enabled.Equals(HeartRate.Features.Generic);
                     break;
-                case HeartRate.SportMode.Running:
+                case SportMode.Running:
                     e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Running);
                     break;
-                case HeartRate.SportMode.Cycling:
+                case SportMode.Cycling:
                     e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Cycling);
                     break;
-                case HeartRate.SportMode.Swimming:
+                case SportMode.Swimming:
                     e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Swimming);
                     break;
                 default:

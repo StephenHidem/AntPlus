@@ -63,7 +63,7 @@ namespace AntPlus.DeviceProfiles
         public TotalHemoglobin TotalHemoglobinConcentration { get; private set; }
         public SaturatedHemoglobin PreviousSaturatedHemoglobin { get; private set; }
         public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
-        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
+        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

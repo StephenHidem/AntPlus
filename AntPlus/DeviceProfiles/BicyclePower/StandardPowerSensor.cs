@@ -11,7 +11,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private int deltaPower;
 
         public Parameters Parameters { get; private set; }
-        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
+        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
         public event EventHandler PowerOnlyChanged;
         public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;

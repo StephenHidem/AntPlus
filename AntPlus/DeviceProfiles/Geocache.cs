@@ -39,13 +39,13 @@ namespace AntPlus.DeviceProfiles
         public string TrackableId { get; set; }
         public uint ProgrammingPIN { get; private set; }
         public byte TotalPagesProgrammed { get; private set; }
-        public uint NextStageLatitude { get; private set; }
-        public uint NextStageLongitude { get; private set; }
+        public double NextStageLatitude { get; private set; }
+        public double NextStageLongitude { get; private set; }
         public string Hint { get; private set; } = string.Empty;
         public ushort NumberOfVisits { get; private set; }
         public DateTime LastVisitTimestamp { get; private set; }
         public byte[] AuthenticationToken { get; set; }
-        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
+        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -88,11 +88,11 @@ namespace AntPlus.DeviceProfiles
                         switch ((DataId)dataPage[1])
                         {
                             case DataId.Latitude:
-                                NextStageLatitude = BitConverter.ToUInt32(dataPage, 2);
+                                NextStageLatitude = 180.0 * BitConverter.ToInt32(dataPage, 2) / Math.Pow(2, 31);
                                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NextStageLatitude)));
                                 break;
                             case DataId.Longitude:
-                                NextStageLongitude = BitConverter.ToUInt32(dataPage, 2);
+                                NextStageLongitude = 180.0 * BitConverter.ToInt32(dataPage, 2) / Math.Pow(2, 31);
                                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NextStageLongitude)));
                                 break;
                             case DataId.Hint:

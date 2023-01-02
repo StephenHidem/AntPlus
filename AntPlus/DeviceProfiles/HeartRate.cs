@@ -88,30 +88,6 @@ namespace AntPlus.DeviceProfiles.HeartRate
             All = 0xCF
         }
 
-        /// <summary>
-        /// Use this enumeration to set the desired sport mode.
-        /// </summary>
-        public enum SportMode
-        {
-            /// <summary>Default behavior</summary>
-            Generic,
-            /// <summary>Running</summary>
-            Running,
-            /// <summary>Cycling</summary>
-            Cycling,
-            /// <summary>Swimming</summary>
-            Swimming = 5,
-        }
-
-        public enum SubSportMode
-        {
-            Generic = 0,
-            Treadmill = 1,
-            Spin = 5,
-            LapSwimming = 17,
-            None = 0xFF
-        }
-
         public enum HeartbeatEventType
         {
             MeasuredTimestamp,
@@ -395,8 +371,7 @@ namespace AntPlus.DeviceProfiles.HeartRate
         /// <param name="sportMode">The sport mode.</param>
         public void SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
-            byte[] msg = new byte[] { (byte)CommonDataPage.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode };
-            SendExtAcknowledgedMessage(msg);
+            SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));
         }
 
         /// <summary>

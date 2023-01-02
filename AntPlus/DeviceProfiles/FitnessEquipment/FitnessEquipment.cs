@@ -143,7 +143,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         public Climber Climber { get; private set; }
         public NordicSkier NordicSkier { get; private set; }
         public TrainerStationaryBike TrainerStationaryBike { get; private set; }
-        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
+        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
         public event EventHandler<GeneralDataPage> GeneralDataPageChanged;
         public event EventHandler<GeneralSettingsPage> GeneralSettingsPageChanged;

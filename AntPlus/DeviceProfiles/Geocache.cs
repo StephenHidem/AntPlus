@@ -1,12 +1,13 @@
 ﻿using AntRadioInterface;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace AntPlus.DeviceProfiles
 {
-    public class Geocache : AntDevice
+    public class Geocache : AntDevice, INotifyPropertyChanged
     {
         /// The geocache device class ID.
         public const byte DeviceClass = 19;
@@ -42,22 +43,15 @@ namespace AntPlus.DeviceProfiles
         public uint NextStageLongitude { get; private set; }
         public string Hint { get; private set; } = string.Empty;
         public ushort NumberOfVisits { get; private set; }
-
-
         public DateTime LastVisitTimestamp { get; private set; }
         public byte[] AuthenticationToken { get; set; }
-        public CommonDataPages CommonDataPages { get; private set; }
+        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
 
-        public event EventHandler HintChanged;
-        public event EventHandler LoggedVisitsChanged;
-        public event EventHandler PinPageChanged;
-        public event EventHandler AuthenticationPageChanged;
-        public event EventHandler LatitudePageChanged;
-        public event EventHandler LongitudePageChanged;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Geocache(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            CommonDataPages = new CommonDataPages();
         }
 
         public override void Parse(byte[] dataPage)
@@ -72,41 +66,45 @@ namespace AntPlus.DeviceProfiles
             {
                 case DataPage.TrackableId:
                     TrackableId = ParseId(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackableId)));
                     break;
                 case DataPage.PIN:
                     ProgrammingPIN = BitConverter.ToUInt32(dataPage, 2);
                     TotalPagesProgrammed = dataPage[6];
-                    PinPageChanged?.Invoke(this, EventArgs.Empty);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProgrammingPIN)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalPagesProgrammed)));
                     break;
                 case DataPage.AuthenticationPage:
                     if (authRequested)
                     {
                         authRequested = false;
                         AuthenticationToken = dataPage.Skip(1).ToArray();
-                        AuthenticationPageChanged?.Invoke(this, EventArgs.Empty);
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AuthenticationToken)));
                     }
                     break;
                 default:
-                    if (dataPage[0] >= 2 || dataPage[0] <= 31)
+                    if (dataPage[0] >= 2 && dataPage[0] <= 31)
                     {
                         switch ((DataId)dataPage[1])
                         {
                             case DataId.Latitude:
                                 NextStageLatitude = BitConverter.ToUInt32(dataPage, 2);
-                                LatitudePageChanged?.Invoke(this, EventArgs.Empty);
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NextStageLatitude)));
                                 break;
                             case DataId.Longitude:
                                 NextStageLongitude = BitConverter.ToUInt32(dataPage, 2);
-                                LongitudePageChanged?.Invoke(this, EventArgs.Empty);
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NextStageLongitude)));
                                 break;
                             case DataId.Hint:
                                 ParseHint(dataPage);
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Hint)));
                                 break;
                             case DataId.LoggedVisits:
                                 loggedVisitsPage = dataPage[0];
                                 LastVisitTimestamp = new DateTime(1989, 12, 31) + TimeSpan.FromSeconds(BitConverter.ToUInt32(dataPage, 2));
                                 NumberOfVisits = BitConverter.ToUInt16(dataPage, 6);
-                                LoggedVisitsChanged?.Invoke(this, EventArgs.Empty);
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastVisitTimestamp)));
+                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumberOfVisits)));
                                 break;
                             default:
                                 break;
@@ -127,21 +125,18 @@ namespace AntPlus.DeviceProfiles
                 // initial hint received, could be any datapage
                 firstHintPage = lastHintPage = dataPage[0];
                 Hint = Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0);
-                HintChanged?.Invoke(this, EventArgs.Empty);
             }
             else if (dataPage[0] < firstHintPage)
             {
                 // start over if we received later hint pages first
                 firstHintPage = lastHintPage = dataPage[0];
                 Hint = Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0);
-                HintChanged?.Invoke(this, EventArgs.Empty);
             }
             else if (dataPage[0] > lastHintPage)
             {
                 // append subsequent hint pages
                 lastHintPage = dataPage[0];
                 Hint += Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0);
-                HintChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="AntRadio.cs" />
+    <Compile Remove="CommonDataPages.cs" />
   </ItemGroup>
 
   <ItemGroup>

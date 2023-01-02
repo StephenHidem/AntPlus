@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Remove="AntDeviceCollectionTests.cs" />
+    <Compile Remove="CommonDataPagesTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

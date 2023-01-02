@@ -5,18 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:GeocacheViewModel}"
+        xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="GeocacheWindow" Height="450" Width="379">
     <Grid>
         <StackPanel>
-            <TextBlock Text="{Binding TrackableId, StringFormat='Trackable ID {0}'}"/>
-            <TextBlock Text="{Binding ProgrammingPIN, StringFormat='Programming PIN {0}'}"/>
-            <TextBlock Text="{Binding TotalPagesProgrammed, StringFormat='Total Pages Programmed {0}'}"/>
-            <TextBlock Text="{Binding NextStageLatitude, StringFormat='Next Stage Latitude {0}'}"/>
-            <TextBlock Text="{Binding NextStageLongitude, StringFormat='Next Stage Longitude {0}'}"/>
-            <TextBlock Text="{Binding Hint, StringFormat='Hint {0}'}"/>
-            <TextBlock Text="{Binding NumberOfVisits, StringFormat='Number of visits {0}'}"/>
-            <TextBlock Text="{Binding LastVisitTimestamp, StringFormat='Last visit {0}'}"/>
+            <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID {0}'}"/>
+            <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN {0}'}"/>
+            <TextBlock Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed {0}'}"/>
+            <TextBlock Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude {0}'}"/>
+            <TextBlock Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude {0}'}"/>
+            <TextBlock Text="{Binding Geocache.Hint, StringFormat='Hint {0}'}"/>
+            <TextBlock Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits {0}'}"/>
+            <TextBlock Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit {0}'}"/>
+
+            <uc:CommonDataPagesControl DataContext="{Binding Geocache}"/>
+            
             <Button Content="Request PIN" Command="{Binding RequestPIN}"/>
             <Button Content="Request Authentication" Command="{Binding RequestAuthentication}"/>
             <Button Content="Program Geocache" Command="{Binding ProgramGeocache}"/>

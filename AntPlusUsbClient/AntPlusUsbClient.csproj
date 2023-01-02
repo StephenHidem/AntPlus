@@ -67,6 +67,9 @@
     <Compile Include="Controls\ClimberControl.xaml.cs">
       <DependentUpon>ClimberControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CommonDataPagesControl.xaml.cs">
+      <DependentUpon>CommonDataPagesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EllipticalControl.xaml.cs">
       <DependentUpon>EllipticalControl.xaml</DependentUpon>
     </Compile>
@@ -125,6 +128,10 @@
       <DependentUpon>MuscleOxygenWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ClimberControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CommonDataPagesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

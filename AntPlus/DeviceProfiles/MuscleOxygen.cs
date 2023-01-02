@@ -1,10 +1,11 @@
 ﻿using AntRadioInterface;
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AntPlus.DeviceProfiles
 {
-    public class MuscleOxygen : AntDevice
+    public class MuscleOxygen : AntDevice, INotifyPropertyChanged
     {
         /// The fitness equipment device class ID.
         /// </summary>
@@ -62,16 +63,15 @@ namespace AntPlus.DeviceProfiles
         public TotalHemoglobin TotalHemoglobinConcentration { get; private set; }
         public SaturatedHemoglobin PreviousSaturatedHemoglobin { get; private set; }
         public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
-        public CommonDataPages CommonDataPages { get; private set; }
+        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
 
-        public event EventHandler MuscleOxygenChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MuscleOxygen(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
             TotalHemoglobinConcentration = new TotalHemoglobin();
             PreviousSaturatedHemoglobin = new SaturatedHemoglobin();
             CurrentSaturatedHemoglobin = new SaturatedHemoglobin();
-            CommonDataPages = new CommonDataPages();
         }
 
         public override void Parse(byte[] dataPage)
@@ -131,7 +131,7 @@ namespace AntPlus.DeviceProfiles
                             break;
                     }
 
-                    MuscleOxygenChanged?.Invoke(this, EventArgs.Empty);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

@@ -11,7 +11,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private int deltaPower;
 
         public Parameters Parameters { get; private set; }
-        public CommonDataPages CommonDataPages { get; private set; }
+        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
 
         public event EventHandler PowerOnlyChanged;
         public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
@@ -22,7 +22,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public StandardPowerSensor(BicyclePower bp)
         {
             Parameters = new Parameters(bp);
-            CommonDataPages = new CommonDataPages();
         }
 
         public double AveragePower { get; private set; }

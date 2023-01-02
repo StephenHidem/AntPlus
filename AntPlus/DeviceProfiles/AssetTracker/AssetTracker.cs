@@ -23,11 +23,10 @@ namespace AntPlus.DeviceProfiles.AssetTracker
         }
 
         public AssetCollection Assets { get; } = new AssetCollection();
-        public CommonDataPages CommonDataPages { get; private set; }
+        public CommonDataPages2 CommonDataPages { get; private set; } = new CommonDataPages2();
 
         public AssetTracker(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            CommonDataPages = new CommonDataPages();
         }
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)

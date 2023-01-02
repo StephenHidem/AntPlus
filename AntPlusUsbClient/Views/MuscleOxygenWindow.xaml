@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MuscleOxygenViewModel}"
+        xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="MuscleOxygenWindow" Height="450" Width="388">
     <Grid>
         <StackPanel>
-            <TextBlock Text="{Binding EventCount, StringFormat='Event Count {0}'}"/>
-            <TextBlock Text="{Binding UtcTimeRequired, StringFormat='UTC time required {0}'}"/>
-            <TextBlock Text="{Binding SupportsAntFs, StringFormat='Supports ANT-FS {0}'}"/>
-            <TextBlock Text="{Binding Interval, StringFormat='Measurement Interval {0}'}"/>
-            <TextBlock Text="{Binding TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration {0}'}"/>
-            <TextBlock Text="{Binding PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg {0}'}"/>
-            <TextBlock Text="{Binding CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.EventCount, StringFormat='Event Count {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg {0}'}"/>
             <StackPanel Orientation="Horizontal">
                 <Button Content="Set Time" Command="{Binding SetTime}"/>
                 <GroupBox Header="Local Time Offset">
@@ -30,32 +31,7 @@
             <Button Content="Start Session" Command="{Binding StartSession}"/>
             <Button Content="Stop Session" Command="{Binding StopSession}"/>
             <Button Content="Lap" Command="{Binding Lap}"/>
-            <Expander ExpandDirection="Down">
-                <Expander.Header>
-                    <TextBlock Text="Common Data Pages" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <Expander IsExpanded="True">
-                        <Expander.Header>
-                            <TextBlock Text="Manufacturer" FontWeight="DemiBold"/>
-                        </Expander.Header>
-                        <StackPanel>
-                            <TextBlock Text="{Binding ManufacturerInfo.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
-                            <TextBlock Text="{Binding ManufacturerInfo.ModelNumber, StringFormat='Model Number {0}'}"/>
-                            <TextBlock Text="{Binding ManufacturerInfo.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
-                        </StackPanel>
-                    </Expander>
-                    <Expander IsExpanded="True">
-                        <Expander.Header>
-                            <TextBlock Text="Product" FontWeight="DemiBold"/>
-                        </Expander.Header>
-                        <StackPanel>
-                            <TextBlock Text="{Binding ProductInfo.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
-                            <TextBlock Text="{Binding ProductInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
-                        </StackPanel>
-                    </Expander>
-                </StackPanel>
-            </Expander>
+            <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen}"/>
         </StackPanel>
     </Grid>
 </Window>

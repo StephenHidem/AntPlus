@@ -1,16 +1,16 @@
 ﻿using AntPlus.DeviceProfiles.BicyclePower;
 using System.ComponentModel;
 using System.Windows.Input;
-using static AntPlus.CommonDataPages;
 
 namespace AntPlusUsbClient.ViewModels
 {
     internal class BicyclePowerViewModel : INotifyPropertyChanged
     {
-        private readonly BicyclePower BicyclePower;
+        private readonly BicyclePower bicyclePower;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public BicyclePower BicyclePower => bicyclePower;
         public bool EnableCrankTorque => CrankTorque != null;
         public bool EnableWheelTorque => WheelTorque != null;
         public bool EnableCTFSensor => CrankTorqueFrequency != null;
@@ -24,9 +24,6 @@ namespace AntPlusUsbClient.ViewModels
 
         public TorqueEffectivenessAndPedalSmoothness TEPS { get; private set; }
         public MeasurementOutputData MeasurementOutput { get; private set; }
-        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
-        public ProductInfoPage ProductInfo { get; private set; }
-        public BatteryStatusPage BatteryStatus { get; private set; }
 
         public Calibration Calibration => BicyclePower.Calibration;
         public Parameters Parameters { get; private set; }
@@ -44,7 +41,7 @@ namespace AntPlusUsbClient.ViewModels
 
         public BicyclePowerViewModel(BicyclePower bicyclePower)
         {
-            BicyclePower = bicyclePower;
+            this.bicyclePower = bicyclePower;
 
             // hook up events
             if (PowerOnly != null)
@@ -54,9 +51,6 @@ namespace AntPlusUsbClient.ViewModels
                 PowerOnly.PowerOnlyChanged += (s, e) => RaisePropertyChange("PowerOnly");
                 PowerOnly.TEPSPageChanged += (s, e) => { TEPS = e; RaisePropertyChange("TEPS"); };
                 PowerOnly.MeasurementOutputDataChanged += (s, e) => { MeasurementOutput = e; RaisePropertyChange("MeasurementOutput"); };
-                PowerOnly.CommonDataPages.ManufacturerInfoPageChanged += (s, e) => { ManufacturerInfo = e; RaisePropertyChange("ManufacturerInfo"); };
-                PowerOnly.CommonDataPages.ProductInfoPageChanged += (s, e) => { ProductInfo = e; RaisePropertyChange("ProductInfo"); };
-                PowerOnly.CommonDataPages.BatteryStatusPageChanged += (s, e) => { BatteryStatus = e; RaisePropertyChange("BatteryStatus"); };
                 if (CrankTorque != null)
                 {
                     CrankTorque.CrankTorquePageChanged += (s, e) => RaisePropertyChange("CrankTorque");

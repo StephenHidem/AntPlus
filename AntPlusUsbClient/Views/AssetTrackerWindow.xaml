@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AssetTrackerViewModel}"
+        xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="AssetTrackerWindow" Height="450" Width="473">
     <StackPanel>
@@ -29,43 +30,6 @@
                 </ListView.View>
             </ListView>
         </Expander>
-        <Expander>
-            <Expander.Header>
-                <TextBlock Text="Common Data Pages" FontWeight="ExtraBold"/>
-            </Expander.Header>
-            <StackPanel>
-                <Expander IsExpanded="True">
-                    <Expander.Header>
-                        <TextBlock Text="Manufacturer" FontWeight="DemiBold"/>
-                    </Expander.Header>
-                    <StackPanel>
-                        <TextBlock Text="{Binding ManufacturerInfo.ManufacturerId, StringFormat='Manufacter ID {0}'}"/>
-                        <TextBlock Text="{Binding ManufacturerInfo.ModelNumber, StringFormat='Model Number {0}'}"/>
-                        <TextBlock Text="{Binding ManufacturerInfo.HardwareRevision, StringFormat='Hardware Revision {0}'}"/>
-                    </StackPanel>
-                </Expander>
-                <Expander IsExpanded="True">
-                    <Expander.Header>
-                        <TextBlock Text="Product" FontWeight="DemiBold"/>
-                    </Expander.Header>
-                    <StackPanel>
-                        <TextBlock Text="{Binding ProductInfo.SoftwareRevision, StringFormat='Software Revision {0}'}"/>
-                        <TextBlock Text="{Binding ProductInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
-                    </StackPanel>
-                </Expander>
-                <Expander IsExpanded="True">
-                    <Expander.Header>
-                        <TextBlock Text="Battery" FontWeight="DemiBold"/>
-                    </Expander.Header>
-                    <StackPanel>
-                        <TextBlock Text="{Binding BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries {0}'}"/>
-                        <TextBlock Text="{Binding BatteryStatus.Identifier, StringFormat='ID {0}'}"/>
-                        <TextBlock Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
-                        <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage {0}'}"/>
-                        <TextBlock Text="{Binding BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time {0}'}"/>
-                    </StackPanel>
-                </Expander>
-            </StackPanel>
-        </Expander>
+        <uc:CommonDataPagesControl DataContext="{Binding AssetTracker}"/>
     </StackPanel>
 </Window>

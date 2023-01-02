@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Enum Name="AntPlus.CommonDataPage" Collapsed="true">
+    <Position X="4.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAkCAgIBACAEAIAQAAAEAEgAAAIAAAAA=</HashCode>
+      <FileName>CommonDataPages2.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="AntPlus.CommandType" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAACAAAAAAAAAAgAAAAAAgAAAAAAAAAAAAABA=</HashCode>
+      <FileName>CommonDataPages2.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="AntPlus.BatteryStatus" Collapsed="true">
+    <Position X="4.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAEAgAACAAAAAAAAAAAAgAAAAAAAABAAAAABE=</HashCode>
+      <FileName>CommonDataPages2.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

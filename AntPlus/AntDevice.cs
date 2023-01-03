@@ -1,15 +1,22 @@
 ﻿using AntRadioInterface;
 using System;
+using System.ComponentModel;
 
 namespace AntPlus
 {
     /// <summary>
     /// Base class for all ANT devices.
     /// </summary>
-    public abstract class AntDevice
+    public abstract class AntDevice : INotifyPropertyChanged
     {
         protected byte[] lastDataPage = new byte[8];
         private readonly IAntChannel antChannel;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void RaisePropertyChange(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
 
         /// <summary>Gets the channel identifier.</summary>

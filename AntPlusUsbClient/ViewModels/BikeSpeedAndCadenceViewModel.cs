@@ -1,23 +1,16 @@
 ﻿using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
-using System.ComponentModel;
 
 namespace AntPlusUsbClient.ViewModels
 {
-    internal class BikeSpeedAndCadenceViewModel : INotifyPropertyChanged
+    internal class BikeSpeedAndCadenceViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly CombinedSpeedAndCadenceSensor combined;
 
-        public CombinedSpeedAndCadenceSensor CombinedSpeedAndCadenceSensor { get; private set; }
+        public CombinedSpeedAndCadenceSensor CombinedSpeedAndCadenceSensor => combined;
 
         public BikeSpeedAndCadenceViewModel(CombinedSpeedAndCadenceSensor combinedSpeedAndCadence)
         {
-            CombinedSpeedAndCadenceSensor = combinedSpeedAndCadence;
-            combinedSpeedAndCadence.CombinedSpeedAndCadenceSensorChanged += (s, e) => RaisePropertyChange("CombinedSpeedAndCadenceSensor");
-        }
-
-        private void RaisePropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            combined = combinedSpeedAndCadence;
         }
     }
 }

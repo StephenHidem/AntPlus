@@ -1,13 +1,12 @@
 ﻿using AntRadioInterface;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace AntPlus.DeviceProfiles
 {
-    public class Geocache : AntDevice, INotifyPropertyChanged
+    public class Geocache : AntDevice
     {
         /// The geocache device class ID.
         public const byte DeviceClass = 19;
@@ -47,9 +46,6 @@ namespace AntPlus.DeviceProfiles
         public byte[] AuthenticationToken { get; set; }
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public Geocache(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
@@ -66,20 +62,20 @@ namespace AntPlus.DeviceProfiles
             {
                 case DataPage.TrackableId:
                     TrackableId = ParseId(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackableId)));
+                    RaisePropertyChange(nameof(TrackableId));
                     break;
                 case DataPage.PIN:
                     ProgrammingPIN = BitConverter.ToUInt32(dataPage, 2);
                     TotalPagesProgrammed = dataPage[6];
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProgrammingPIN)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalPagesProgrammed)));
+                    RaisePropertyChange(nameof(ProgrammingPIN));
+                    RaisePropertyChange(nameof(TotalPagesProgrammed));
                     break;
                 case DataPage.AuthenticationPage:
                     if (authRequested)
                     {
                         authRequested = false;
                         AuthenticationToken = dataPage.Skip(1).ToArray();
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AuthenticationToken)));
+                        RaisePropertyChange(nameof(AuthenticationToken));
                     }
                     break;
                 default:
@@ -89,22 +85,22 @@ namespace AntPlus.DeviceProfiles
                         {
                             case DataId.Latitude:
                                 NextStageLatitude = 180.0 * BitConverter.ToInt32(dataPage, 2) / Math.Pow(2, 31);
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NextStageLatitude)));
+                                RaisePropertyChange(nameof(NextStageLatitude));
                                 break;
                             case DataId.Longitude:
                                 NextStageLongitude = 180.0 * BitConverter.ToInt32(dataPage, 2) / Math.Pow(2, 31);
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NextStageLongitude)));
+                                RaisePropertyChange(nameof(NextStageLongitude));
                                 break;
                             case DataId.Hint:
                                 ParseHint(dataPage);
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Hint)));
+                                RaisePropertyChange(nameof(Hint));
                                 break;
                             case DataId.LoggedVisits:
                                 loggedVisitsPage = dataPage[0];
                                 LastVisitTimestamp = new DateTime(1989, 12, 31) + TimeSpan.FromSeconds(BitConverter.ToUInt32(dataPage, 2));
                                 NumberOfVisits = BitConverter.ToUInt16(dataPage, 6);
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastVisitTimestamp)));
-                                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumberOfVisits)));
+                                RaisePropertyChange(nameof(LastVisitTimestamp));
+                                RaisePropertyChange(nameof(NumberOfVisits));
                                 break;
                             default:
                                 break;

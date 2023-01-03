@@ -11,8 +11,6 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         public const byte DeviceClass = 123;
 
 
-        public event EventHandler BikeSpeedSensorChanged;
-
         public double WheelCircumference { get; set; } = 2.2;
         public double InstantaneousSpeed { get; private set; }
         public double AccumulatedDistance { get; private set; }
@@ -33,7 +31,8 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
                     InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
                     AccumulatedDistance += WheelCircumference * deltaRevCount;
-                    BikeSpeedSensorChanged?.Invoke(this, EventArgs.Empty);
+                    RaisePropertyChange(nameof(InstantaneousSpeed));
+                    RaisePropertyChange(nameof(AccumulatedDistance));
                 }
             }
         }

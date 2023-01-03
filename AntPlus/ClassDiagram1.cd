@@ -1,25 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Enum Name="AntPlus.CommonDataPage" Collapsed="true">
-    <Position X="4.5" Y="2.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.BikeCadenceSensor" Collapsed="true">
+    <Position X="3.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAAAAAkCAgIBACAEAIAQAAAEAEgAAAIAAAAA=</HashCode>
-      <FileName>CommonDataPages2.cs</FileName>
+      <HashCode>AAAgAAAAAAAAAAAAAQAAAAAAAAEQIAAAAAAAAAQAAAA=</HashCode>
+      <FileName>DeviceProfiles\BikeSpeedAndCadence\BikeCadenceSensor.cs</FileName>
     </TypeIdentifier>
-  </Enum>
-  <Enum Name="AntPlus.CommandType" Collapsed="true">
-    <Position X="8" Y="1.75" Width="1.5" />
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.BikeSpeedSensor" Collapsed="true">
+    <Position X="6" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAACAAAAAAAAAAgAAAAAAgAAAAAAAAAAAAABA=</HashCode>
-      <FileName>CommonDataPages2.cs</FileName>
+      <HashCode>AAAgAAAAEAAAAAAAAAAAAAAAAAEQAAACAAIAAAQIAAA=</HashCode>
+      <FileName>DeviceProfiles\BikeSpeedAndCadence\BikeSpeedSensor.cs</FileName>
     </TypeIdentifier>
-  </Enum>
-  <Enum Name="AntPlus.BatteryStatus" Collapsed="true">
-    <Position X="4.5" Y="1.75" Width="1.5" />
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CombinedSpeedAndCadenceSensor" Collapsed="true">
+    <Position X="8.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAAEAgAACAAAAAAAAAAAAgAAAAAAAABAAAAABE=</HashCode>
-      <FileName>CommonDataPages2.cs</FileName>
+      <HashCode>AAAgAAAMEAAAAAAAAQAAAAAUCAEQAAACAAAAAAQIIAA=</HashCode>
+      <FileName>DeviceProfiles\BikeSpeedAndCadence\CombinedSpeedAndCadenceSensor.cs</FileName>
     </TypeIdentifier>
-  </Enum>
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence" Collapsed="true">
+    <Position X="5" Y="0.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence.DataPage" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BikeSpeedAndCadence\CommonSpeedCadence.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Struct Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence.ManufacturerInfoPage" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BikeSpeedAndCadence\CommonSpeedCadence.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence.ProductInfoPage" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BikeSpeedAndCadence\CommonSpeedCadence.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence.BatteryStatusPage" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BikeSpeedAndCadence\CommonSpeedCadence.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAgACEFAAAAA0AAAAAACAAAgAEAAEAAAAAAAAQAAAA=</HashCode>
+      <FileName>DeviceProfiles\BikeSpeedAndCadence\CommonSpeedCadence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

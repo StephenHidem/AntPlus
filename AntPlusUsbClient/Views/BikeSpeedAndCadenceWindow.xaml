@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeSpeedAndCadenceViewModel}"
         mc:Ignorable="d"
-        Title="Bike Speed And Cadence Window" Height="170" Width="292">
+        Title="Bike Speed And Cadence Window" Height="170" Width="240">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="{Binding CombinedSpeedAndCadenceSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-            <TextBlock Text="{Binding CombinedSpeedAndCadenceSensor.InstantaneousSpeed, StringFormat='Instantaneous Speed {0}'}"/>
-            <TextBlock Text="{Binding CombinedSpeedAndCadenceSensor.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
+        <StackPanel DataContext="{Binding CombinedSpeedAndCadenceSensor}">
+            <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+            <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed {0}'}"/>
+            <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
         </StackPanel>
     </Grid>
 </Window>

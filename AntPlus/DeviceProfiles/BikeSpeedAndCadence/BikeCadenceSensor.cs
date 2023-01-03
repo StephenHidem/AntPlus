@@ -10,8 +10,6 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         public const byte DeviceClass = 122;
 
-        public event EventHandler BikeCadenceSensorChanged;
-
         public double InstantaneousCadence { get; private set; }
 
         public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
@@ -29,7 +27,7 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 {
                     int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
                     InstantaneousCadence = 60.0 * deltaRevCount * 1024.0 / deltaEventTime;
-                    BikeCadenceSensorChanged?.Invoke(this, EventArgs.Empty);
+                    RaisePropertyChange(nameof(InstantaneousCadence));
                 }
             }
         }

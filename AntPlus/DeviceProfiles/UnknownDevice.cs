@@ -5,7 +5,7 @@ namespace AntPlus.DeviceProfiles
 {
     public class UnknownDevice : AntDevice
     {
-        public event EventHandler<byte[]> DeviceChanged;
+        public byte[] DataPage;
 
         public UnknownDevice(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -13,7 +13,7 @@ namespace AntPlus.DeviceProfiles
 
         public override void Parse(byte[] dataPage)
         {
-            DeviceChanged?.Invoke(this, dataPage);
+            RaisePropertyChange(nameof(DataPage));
         }
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)

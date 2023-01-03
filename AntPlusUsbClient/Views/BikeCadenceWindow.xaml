@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="BikeCadenceWindow" Height="289" Width="268">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="{Binding BikeCadenceSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+        <StackPanel DataContext="{Binding BikeCadenceSensor}">
+            <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
             <TextBlock Text="{Binding Stopped, StringFormat='Stopped {0}'}"/>
             <Label Content="Manufacturer Info" FontWeight="ExtraBold"/>
             <TextBlock Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id {0}'}"/>

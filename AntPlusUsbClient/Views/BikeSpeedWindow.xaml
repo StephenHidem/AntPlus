@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="BikeSpeedWindow" Height="315" Width="311">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="{Binding BikeSpeedSensor.InstantaneousSpeed, StringFormat='Instantaneous Speed {0}'}"/>
-            <TextBlock Text="{Binding BikeSpeedSensor.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
+        <StackPanel DataContext="{Binding BikeSpeedSensor}">
+            <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed {0}'}"/>
+            <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
             <TextBlock Text="{Binding Stopped, StringFormat='Stopped {0}'}"/>
             <Label Content="Manufacturer Info" FontWeight="ExtraBold"/>
             <TextBlock Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id {0}'}"/>

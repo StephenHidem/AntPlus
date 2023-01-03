@@ -11,8 +11,6 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         public const byte DeviceClass = 121;
 
-        public event EventHandler CombinedSpeedAndCadenceSensorChanged;
-
         private bool isFirstDataMessage = true;     // used for accumulated values
         private ushort prevSpeedEventTime;
         private ushort prevSpeedRevCount;
@@ -65,7 +63,7 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
                 AccumulatedDistance += WheelCircumference * deltaRevCount;
             }
-            CombinedSpeedAndCadenceSensorChanged?.Invoke(this, EventArgs.Empty);
+            RaisePropertyChange(string.Empty);
         }
 
         public override void ChannelEventHandler(EventMsgId eventMsgId)

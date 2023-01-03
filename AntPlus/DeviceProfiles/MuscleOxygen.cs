@@ -1,11 +1,10 @@
 ﻿using AntRadioInterface;
 using System;
-using System.ComponentModel;
 using System.Linq;
 
 namespace AntPlus.DeviceProfiles
 {
-    public class MuscleOxygen : AntDevice, INotifyPropertyChanged
+    public class MuscleOxygen : AntDevice
     {
         /// The fitness equipment device class ID.
         /// </summary>
@@ -65,7 +64,6 @@ namespace AntPlus.DeviceProfiles
         public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MuscleOxygen(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -131,7 +129,7 @@ namespace AntPlus.DeviceProfiles
                             break;
                     }
 
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+                    RaisePropertyChange(string.Empty);
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

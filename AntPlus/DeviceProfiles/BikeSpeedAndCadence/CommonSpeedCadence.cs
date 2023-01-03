@@ -83,17 +83,11 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
             }
         }
 
-
-        /// <summary>Occurs when cumulative operating time page changed.</summary>
-        public event EventHandler<TimeSpan> CumulativeOperatingTimePageChanged;
-        /// <summary>Occurs when manufacturer information page changed.</summary>
-        public event EventHandler<ManufacturerInfoPage> ManufacturerInfoPageChanged;
-        /// <summary>Occurs when product information page changed.</summary>
-        public event EventHandler<ProductInfoPage> ProductInfoPageChanged;
-        /// <summary>Occurs when battery status page changed.</summary>
-        public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
-        /// <summary>Occurs when stop indicator has changed.</summary>
-        public event EventHandler<bool> StopIndicatorChanged;
+        public TimeSpan CumulativeOperatingTime { get; private set; }
+        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        public ProductInfoPage ProductInfo { get; private set; }
+        public BatteryStatusPage BatteryStatus { get; private set; }
+        public bool Stopped { get; private set; }
 
         public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -128,19 +122,24 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.CumulativeOperatingTime:
-                    CumulativeOperatingTimePageChanged?.Invoke(this, TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0));
+                    CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
+                    RaisePropertyChange(nameof(CumulativeOperatingTime));
                     break;
                 case DataPage.ManufacturerInfo:
-                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber));
+                    ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
+                    RaisePropertyChange(nameof(ManufacturerInfo));
                     break;
                 case DataPage.ProductInfo:
-                    ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(dataPage));
+                    ProductInfo = new ProductInfoPage(dataPage);
+                    RaisePropertyChange(nameof(ProductInfo));
                     break;
                 case DataPage.BatteryStatus:
-                    BatteryStatusPageChanged?.Invoke(this, new BatteryStatusPage(dataPage));
+                    BatteryStatus = new BatteryStatusPage(dataPage);
+                    RaisePropertyChange(nameof(BatteryStatus));
                     break;
                 case DataPage.Motion:
-                    StopIndicatorChanged?.Invoke(this, dataPage[1] == 0x01);
+                    Stopped = dataPage[1] == 0x01;
+                    RaisePropertyChange(nameof(Stopped));
                     break;
                 default:
                     break;

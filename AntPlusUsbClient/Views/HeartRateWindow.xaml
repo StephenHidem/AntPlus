@@ -9,18 +9,18 @@
         Title="HeartRateWindow" Height="450" Width="287">
     <Grid>
         <StackPanel>
-            <TextBlock Text="{Binding HeartRateData.ComputedHeartRate, StringFormat='Heart Rate {0}'}"/>
-            <TextBlock Text="{Binding HeartRateData.RRInterval, StringFormat='RR Interval {0}'}"/>
-            <TextBlock Text="{Binding HeartRateData.AccumulatedHeartBeatEventTime, StringFormat='Accumulated Heartbeat Event Time {0}'}"/>
-            <TextBlock Text="{Binding CumulativeOperatingTime, StringFormat='Cumulative Operating Time {0}'}"/>
-            <TextBlock Text="{Binding HeartbeatEventType, StringFormat='Heartbeat Event Type {0}'}"/>
+            <TextBlock Text="{Binding HeartRate.HeartRateData.ComputedHeartRate, StringFormat='Heart Rate {0}'}"/>
+            <TextBlock Text="{Binding HeartRate.HeartRateData.RRInterval, StringFormat='RR Interval {0}'}"/>
+            <TextBlock Text="{Binding HeartRate.HeartRateData.AccumulatedHeartBeatEventTime, StringFormat='Accumulated Heartbeat Event Time {0}'}"/>
+            <TextBlock Text="{Binding HeartRate.CumulativeOperatingTime, StringFormat='Cumulative Operating Time {0}'}"/>
+            <TextBlock Text="{Binding HeartRate.EventType, StringFormat='Heartbeat Event Type {0}'}"/>
             <Expander ExpandDirection="Down" IsExpanded="False">
                 <Expander.Header>
                     <TextBlock Text="RR Interval" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding PreviousHeartBeat.RRInterval, StringFormat='RR Interval {0}'}"/>
-                    <TextBlock Text="{Binding PreviousHeartBeat.ManufacturerSpecific, StringFormat='Previous Manufacturer Specific {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.PreviousHeartBeat.RRInterval, StringFormat='RR Interval {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.PreviousHeartBeat.ManufacturerSpecific, StringFormat='Previous Manufacturer Specific {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -28,9 +28,9 @@
                     <TextBlock Text="Swim Interval" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding SwimInterval.IntervalAverageHeartRate, StringFormat='IntervalAverageHeartRate {0}'}"/>
-                    <TextBlock Text="{Binding SwimInterval.IntervalMaximumHeartRate, StringFormat='IntervalMaximumHeartRate {0}'}"/>
-                    <TextBlock Text="{Binding SwimInterval.SessionAverageHeartRate, StringFormat='SessionAverageHeartRate {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.SwimInterval.IntervalAverageHeartRate, StringFormat='IntervalAverageHeartRate {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.SwimInterval.IntervalMaximumHeartRate, StringFormat='IntervalMaximumHeartRate {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.SwimInterval.SessionAverageHeartRate, StringFormat='SessionAverageHeartRate {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -38,8 +38,8 @@
                     <TextBlock Text="Capabilities" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding Capabilities.Supported, StringFormat='Capabilities Supported {0}'}"/>
-                    <TextBlock Text="{Binding Capabilities.Enabled, StringFormat='Capabilities Enabled {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.Capabilities.Supported, StringFormat='Capabilities Supported {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.Capabilities.Enabled, StringFormat='Capabilities Enabled {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -47,8 +47,8 @@
                     <TextBlock Text="Manufacturer Info" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding ManufacturerInfo.ManufacturingIdLsb, StringFormat='Man ID LSB {0}'}"/>
-                    <TextBlock Text="{Binding ManufacturerInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ManufacturerInfo.ManufacturingIdLsb, StringFormat='Man ID LSB {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ManufacturerInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -56,9 +56,9 @@
                     <TextBlock Text="Product Info" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding ProductInfo.HardwareVersion, StringFormat='Hardware Version {0}'}"/>
-                    <TextBlock Text="{Binding ProductInfo.SoftwareVersion, StringFormat='Software Version {0}'}"/>
-                    <TextBlock Text="{Binding ProductInfo.ModelNumber, StringFormat='Model Number {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ProductInfo.HardwareVersion, StringFormat='Hardware Version {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ProductInfo.SoftwareVersion, StringFormat='Software Version {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ProductInfo.ModelNumber, StringFormat='Model Number {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -66,9 +66,9 @@
                     <TextBlock Text="Battery Status" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding BatteryStatus.BatteryLevel, StringFormat='Battery Level {0}'}"/>
-                    <TextBlock Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
-                    <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Battery Voltage {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.BatteryStatus.BatteryLevel, StringFormat='Battery Level {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.BatteryStatus.BatteryStatus, StringFormat='Battery Status {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.BatteryStatus.BatteryVoltage, StringFormat='Battery Voltage {0}'}"/>
                 </StackPanel>
             </Expander>
             <Expander ExpandDirection="Down" IsExpanded="False">
@@ -76,8 +76,8 @@
                     <TextBlock Text="Manufacturer Specific Data Page" FontWeight="ExtraBold"/>
                 </Expander.Header>
                 <StackPanel>
-                    <TextBlock Text="{Binding ManufacturerSpecific.Page, StringFormat='Manufacturer Specific Page {0}'}"/>
-                    <TextBlock Text="{Binding ManufacturerSpecific.Data, StringFormat='Manufacturer Specific Data {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Page, StringFormat='Manufacturer Specific Page {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Data, StringFormat='Manufacturer Specific Data {0}'}"/>
                 </StackPanel>
             </Expander>
             <StackPanel Orientation="Horizontal">

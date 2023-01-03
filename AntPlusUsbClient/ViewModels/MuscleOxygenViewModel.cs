@@ -1,30 +1,20 @@
 ﻿using AntPlus.DeviceProfiles;
 using AntPlusUsbClient.Views;
 using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using static AntPlus.DeviceProfiles.MuscleOxygen;
 
 namespace AntPlusUsbClient.ViewModels
 {
-    internal class MuscleOxygenViewModel : INotifyPropertyChanged
+    internal class MuscleOxygenViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private readonly MuscleOxygen muscleOxygen;
 
         public MuscleOxygen MuscleOxygen => muscleOxygen;
 
         public int[] HoursOffset => Enumerable.Range(-15, 31).ToArray();
         public int[] MinuteOffset { get; } = { 0, 15, 30, 45 };
-        //public byte EventCount => muscleOxygen.EventCount;
-        //public bool UtcTimeRequired => muscleOxygen.UtcTimeRequired;
-        //public bool SupportsAntFs => muscleOxygen.SupportsAntFs;
-        //public MeasurementInterval Interval => muscleOxygen.Interval;
-        //public TotalHemoglobin TotalHemoglobinConcentration => muscleOxygen.TotalHemoglobinConcentration;
-        //public SaturatedHemoglobin PreviousSaturatedHemoglobin => muscleOxygen.PreviousSaturatedHemoglobin;
-        //public SaturatedHemoglobin CurrentSaturatedHemoglobin => muscleOxygen.CurrentSaturatedHemoglobin;
 
         public RoutedCommand SetTime { get; private set; } = new RoutedCommand();
         public RoutedCommand StartSession { get; private set; } = new RoutedCommand();

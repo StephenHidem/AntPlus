@@ -10,18 +10,9 @@ namespace AntPlusUsbClient.ViewModels
 {
     internal class HeartRateViewModel : INotifyPropertyChanged
     {
-        private readonly HeartRate HeartRate;
+        private readonly HeartRate heartRate;
 
-        public HeartRate.CommonHeartRateData HeartRateData { get; private set; }
-        public TimeSpan CumulativeOperatingTime { get; private set; }
-        public HeartRate.SwimIntervalPage SwimInterval { get; private set; }
-        public HeartRate.CapabilitiesPage Capabilities { get; private set; }
-        public HeartRate.ManufacturerInfoPage ManufacturerInfo { get; private set; }
-        public HeartRate.ProductInfoPage ProductInfo { get; private set; }
-        public HeartRate.PreviousHeartBeatPage PreviousHeartBeat { get; private set; }
-        public HeartRate.BatteryStatusPage BatteryStatus { get; private set; }
-        public HeartRate.HeartbeatEventType HeartbeatEventType { get; private set; }
-        public HeartRate.ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
+        public HeartRate HeartRate => heartRate;
 
         public bool ApplyFeature { get; set; }
         public bool EnableGymMode { get; set; }
@@ -37,19 +28,7 @@ namespace AntPlusUsbClient.ViewModels
 
         public HeartRateViewModel(HeartRate heartRate)
         {
-            HeartRate = heartRate;
-
-            // hook up events
-            HeartRate.HeartRateChanged += (s, e) => { HeartRateData = e; RaisePropertyChange("HeartRateData"); };
-            HeartRate.CumulativeOperatingTimePageChanged += (s, e) => { CumulativeOperatingTime = e; RaisePropertyChange("CumulativeOperatingTime"); };
-            HeartRate.ManufacturerInfoPageChanged += (s, e) => { ManufacturerInfo = e; RaisePropertyChange("ManufacturerInfo"); };
-            HeartRate.ProductInfoPageChanged += (s, e) => { ProductInfo = e; RaisePropertyChange("ProductInfo"); };
-            HeartRate.PreviousHeartBeatPageChanged += (s, e) => { PreviousHeartBeat = e; RaisePropertyChange("PreviousHeartBeat"); };
-            HeartRate.SwimIntervalPageChanged += (s, e) => { SwimInterval = e; RaisePropertyChange("SwimInterval"); };
-            HeartRate.CapabilitiesPageChanged += (s, e) => { Capabilities = e; RaisePropertyChange("Capabilities"); };
-            HeartRate.BatteryStatusPageChanged += (s, e) => { BatteryStatus = e; RaisePropertyChange("BatteryStatus"); };
-            HeartRate.HeartbeatEventTypeChanged += (s, e) => { HeartbeatEventType = e; RaisePropertyChange("HeartbeatEventType"); };
-            HeartRate.ManufacturerSpecificPageChanged += (s, e) => { ManufacturerSpecific = e; RaisePropertyChange("ManufacturerSpecific"); };
+            this.heartRate = heartRate;
 
             PageRequestBinding = new CommandBinding(PageRequest, PageRequestExecuted, PageRequestCanExecute);
             SetSportModeBinding = new CommandBinding(SetSportMode, SetSportModeExecuted, SetSportModeCanExecute);
@@ -65,7 +44,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void PageRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            HeartRate.RequestDataPage((HeartRate.DataPage)e.Parameter);
+            heartRate.RequestDataPage((HeartRate.DataPage)e.Parameter);
         }
 
         private void PageRequestCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -107,7 +86,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void SetSportModeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            HeartRate.SetSportMode((SportMode)e.Parameter);
+            heartRate.SetSportMode((SportMode)e.Parameter);
         }
 
         private void SetSportModeCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -119,16 +98,16 @@ namespace AntPlusUsbClient.ViewModels
             switch ((SportMode)e.Parameter)
             {
                 case SportMode.Generic:
-                    e.CanExecute = !Capabilities.Enabled.Equals(HeartRate.Features.Generic);
+                    e.CanExecute = !HeartRate.Capabilities.Enabled.Equals(HeartRate.Features.Generic);
                     break;
                 case SportMode.Running:
-                    e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Running);
+                    e.CanExecute = HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Running);
                     break;
                 case SportMode.Cycling:
-                    e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Cycling);
+                    e.CanExecute = HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Cycling);
                     break;
                 case SportMode.Swimming:
-                    e.CanExecute = Capabilities.Supported.HasFlag(HeartRate.Features.Swimming);
+                    e.CanExecute = HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Swimming);
                     break;
                 default:
                     break;
@@ -137,7 +116,7 @@ namespace AntPlusUsbClient.ViewModels
 
         private void SetHRFeatureExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            HeartRate.SetHRFeature(ApplyFeature, EnableGymMode);
+            heartRate.SetHRFeature(ApplyFeature, EnableGymMode);
         }
 
         private void SetHRFeatureCanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using AntRadioInterface;
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AntPlus.DeviceProfiles.HeartRate
@@ -27,7 +28,7 @@ namespace AntPlus.DeviceProfiles.HeartRate
     /// to the manufacturer event and ignore other background pages.
     /// </remarks>
     /// <seealso cref="AntPlus.AntDevice" />
-    public class HeartRate : AntDevice
+    public class HeartRate : AntDevice, INotifyPropertyChanged
     {
         /// <summary>
         /// The heart rate device class ID.
@@ -250,26 +251,18 @@ namespace AntPlus.DeviceProfiles.HeartRate
             }
         }
 
-        /// <summary>Occurs when heart rate changed. This data is common to all pages transmitted.</summary>
-        public event EventHandler<CommonHeartRateData> HeartRateChanged;
-        /// <summary>Occurs when cumulative operating time page changed.</summary>
-        public event EventHandler<TimeSpan> CumulativeOperatingTimePageChanged;
-        /// <summary>Occurs when manufacturer information page changed.</summary>
-        public event EventHandler<ManufacturerInfoPage> ManufacturerInfoPageChanged;
-        /// <summary>Occurs when product information page changed.</summary>
-        public event EventHandler<ProductInfoPage> ProductInfoPageChanged;
-        /// <summary>Occurs when previous heart beat page changed.</summary>
-        public event EventHandler<PreviousHeartBeatPage> PreviousHeartBeatPageChanged;
-        /// <summary>Occurs when swim interval page changed.</summary>
-        public event EventHandler<SwimIntervalPage> SwimIntervalPageChanged;
-        /// <summary>Occurs when capabilities page changed.</summary>
-        public event EventHandler<CapabilitiesPage> CapabilitiesPageChanged;
-        /// <summary>Occurs when battery status page changed.</summary>
-        public event EventHandler<BatteryStatusPage> BatteryStatusPageChanged;
-        /// <summary>Occurs when heartbeat event type change.</summary>
-        public event EventHandler<HeartbeatEventType> HeartbeatEventTypeChanged;
-        /// <summary>Occurs when manufacturer specific page changed.</summary>
-        public event EventHandler<ManufacturerSpecificPage> ManufacturerSpecificPageChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public CommonHeartRateData HeartRateData { get; private set; }
+        public TimeSpan CumulativeOperatingTime { get; private set; }
+        public HeartbeatEventType EventType { get; private set; }
+        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        public ProductInfoPage ProductInfo { get; private set; }
+        public PreviousHeartBeatPage PreviousHeartBeat { get; private set; }
+        public SwimIntervalPage SwimInterval { get; private set; }
+        public CapabilitiesPage Capabilities { get; private set; }
+        public BatteryStatusPage BatteryStatus { get; private set; }
+        public ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
@@ -291,7 +284,8 @@ namespace AntPlus.DeviceProfiles.HeartRate
                 prevBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
                 prevBeatCount = dataPage[6];
                 lastDataPage = dataPage;
-                HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval));
+                HeartRateData = new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HeartRateData)));
                 return;
             }
 
@@ -314,7 +308,8 @@ namespace AntPlus.DeviceProfiles.HeartRate
                 }
 
                 accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
-                HeartRateChanged?.Invoke(this, new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval));
+                HeartRateData = new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HeartRateData)));
             }
 
             // handle data page toggle
@@ -327,39 +322,48 @@ namespace AntPlus.DeviceProfiles.HeartRate
             switch ((DataPage)(dataPage[0] & 0x7F))
             {
                 case DataPage.CumulativeOperatingTime:
-                    CumulativeOperatingTimePageChanged?.Invoke(this, TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0));
+                    CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CumulativeOperatingTime)));
                     break;
                 case DataPage.ManufacturerInfo:
-                    ManufacturerInfoPageChanged?.Invoke(this, new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber));
+                    ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ManufacturerInfo)));
                     break;
                 case DataPage.ProductInfo:
-                    ProductInfoPageChanged?.Invoke(this, new ProductInfoPage(dataPage));
+                    ProductInfo = new ProductInfoPage(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProductInfo)));
                     break;
                 case DataPage.PreviousHeartBeat:
                     // fire event if beat count has changed
                     if (deltaHeartBeatCount > 0)
                     {
-                        PreviousHeartBeatPageChanged?.Invoke(this, new PreviousHeartBeatPage(dataPage));
+                        PreviousHeartBeat = new PreviousHeartBeatPage(dataPage);
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PreviousHeartBeat)));
                     }
                     break;
                 case DataPage.SwimInterval:
-                    SwimIntervalPageChanged?.Invoke(this, new SwimIntervalPage(dataPage));
+                    SwimInterval = new SwimIntervalPage(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SwimInterval)));
                     break;
                 case DataPage.Capabilities:
-                    CapabilitiesPageChanged?.Invoke(this, new CapabilitiesPage(dataPage));
+                    Capabilities = new CapabilitiesPage(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Capabilities)));
                     break;
                 case DataPage.BatteryStatus:
-                    BatteryStatusPageChanged?.Invoke(this, new BatteryStatusPage(dataPage));
+                    BatteryStatus = new BatteryStatusPage(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BatteryStatus)));
                     break;
                 case DataPage.DeviceInformation:
-                    HeartbeatEventTypeChanged?.Invoke(this, (HeartbeatEventType)(dataPage[1] & 0x03));
+                    EventType = (HeartbeatEventType)(dataPage[1] & 0x03);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EventType)));
                     break;
                 default:
                     // range check manufacturer specific pages
                     if (dataPage[0] >= 112 && dataPage[0] < 128)
                     {
                         // let application parse
-                        ManufacturerSpecificPageChanged?.Invoke(this, new ManufacturerSpecificPage(dataPage));
+                        ManufacturerSpecific = new ManufacturerSpecificPage(dataPage);
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ManufacturerSpecific)));
                     }
                     break;
             }

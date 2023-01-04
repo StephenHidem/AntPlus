@@ -1,5 +1,4 @@
 ﻿using AntPlus.DeviceProfiles.FitnessEquipment;
-using AntPlusUsbClient.ViewModels;
 using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Controls
@@ -12,7 +11,7 @@ namespace AntPlusUsbClient.Controls
         public EllipticalControl(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
-            DataContext = new EllipticalViewModel(fitnessEquipment);
+            DataContext = fitnessEquipment.Elliptical;
         }
     }
 }

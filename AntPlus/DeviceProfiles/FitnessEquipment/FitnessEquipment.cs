@@ -145,10 +145,6 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         public TrainerStationaryBike TrainerStationaryBike { get; private set; }
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
-        public event EventHandler<GeneralDataPage> GeneralDataPageChanged;
-        public event EventHandler<GeneralSettingsPage> GeneralSettingsPageChanged;
-        public event EventHandler<GeneralMetabolicPage> GeneralMetabolicPageChanged;
-
         public FitnessEquipment(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
             GeneralData = new GeneralDataPage();
@@ -170,15 +166,15 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
                     {
                         CreateSpecificEquipment(GeneralData.EquipmentType);
                     }
-                    GeneralDataPageChanged?.Invoke(this, GeneralData);
+                    RaisePropertyChange(nameof(GeneralData));
                     break;
                 case DataPage.GeneralSettings:
                     GeneralSettings.Parse(dataPage);
-                    GeneralSettingsPageChanged?.Invoke(this, GeneralSettings);
+                    RaisePropertyChange(nameof(GeneralSettings));
                     break;
                 case DataPage.GeneralMetabolicData:
                     GeneralMetabolic.Parse(dataPage);
-                    GeneralMetabolicPageChanged?.Invoke(this, GeneralMetabolic);
+                    RaisePropertyChange(nameof(GeneralMetabolic));
                     break;
                 // handle specific FE pages
                 case DataPage.TreadmillData:

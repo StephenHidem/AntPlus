@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
-    public class NordicSkier
+    public class NordicSkier : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;
         private byte prevStride;
@@ -11,7 +12,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         public byte Cadence { get; private set; }
         public int InstantaneousPower { get; private set; }
 
-        public event EventHandler NordicSkierChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Parse(byte[] dataPage)
         {
@@ -26,7 +27,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
             }
             Cadence = dataPage[4];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
-            NordicSkierChanged?.Invoke(this, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

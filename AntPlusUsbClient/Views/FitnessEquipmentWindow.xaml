@@ -17,7 +17,7 @@
                 <Expander.Header>
                     <TextBlock Text="General Data" FontWeight="ExtraBold"/>
                 </Expander.Header>
-                <StackPanel>
+                <StackPanel DataContext="{Binding FitnessEquipment}">
                     <TextBlock Text="{Binding GeneralData.EquipmentType, StringFormat='Equipment Type {0}'}"/>
                     <TextBlock Text="{Binding GeneralData.ElapsedTime, StringFormat='Elapsed Time {0}'}"/>
                     <TextBlock Text="{Binding GeneralData.DistanceTraveled, StringFormat='Distance Traveled {0}'}"/>
@@ -29,7 +29,7 @@
                 <Expander.Header>
                     <TextBlock Text="General Settings" FontWeight="ExtraBold"/>
                 </Expander.Header>
-                <StackPanel>
+                <StackPanel DataContext="{Binding FitnessEquipment}">
                     <TextBlock Text="{Binding GeneralSettings.CycleLength, StringFormat='Cycle Length {0}'}"/>
                     <TextBlock Text="{Binding GeneralSettings.Incline, StringFormat='Incline {0}'}"/>
                     <TextBlock Text="{Binding GeneralSettings.ResistanceLevel, StringFormat='Resistance Level {0}'}"/>
@@ -39,7 +39,7 @@
                 <Expander.Header>
                     <TextBlock Text="General Metabolic" FontWeight="ExtraBold"/>
                 </Expander.Header>
-                <StackPanel>
+                <StackPanel DataContext="{Binding FitnessEquipment}">
                     <TextBlock Text="{Binding GeneralMetabolic.AccumulatedCalories, StringFormat='Cycle Length {0}'}"/>
                     <TextBlock Text="{Binding GeneralMetabolic.CaloricBurnRate, StringFormat='Caloric Burn Rate {0}'}"/>
                     <TextBlock Text="{Binding GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET {0}'}"/>

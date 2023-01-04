@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
-    public class Climber
+    public class Climber : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;
         private byte prevStride;
@@ -11,7 +12,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         public byte Cadence { get; private set; }
         public int InstantaneousPower { get; private set; }
 
-        public event EventHandler ClimberChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Parse(byte[] dataPage)
         {
@@ -26,7 +27,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
             }
             Cadence = dataPage[4];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
-            ClimberChanged?.Invoke(this, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

@@ -1,18 +1,18 @@
-﻿using System;
+﻿using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
-    public class Treadmill
+    public class Treadmill : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;
         private byte prevPos;
         private byte prevNeg;
 
-        public event EventHandler TreadmillChanged;
-
         public byte Cadence { get; private set; }
         public double NegVerticalDistance { get; private set; }
         public double PosVerticalDistance { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Parse(byte[] dataPage)
         {
@@ -28,7 +28,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
                 NegVerticalDistance += Utils.CalculateDelta(dataPage[5], ref prevNeg);
                 PosVerticalDistance += Utils.CalculateDelta(dataPage[6], ref prevPos);
             }
-            TreadmillChanged?.Invoke(this, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

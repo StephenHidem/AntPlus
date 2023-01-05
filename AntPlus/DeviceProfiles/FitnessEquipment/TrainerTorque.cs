@@ -33,10 +33,8 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         /// </summary>
         public double AccumulatedDistance { get; private set; }
 
-        public void ParseTorque(byte[] dataPage)
+        public void Parse(byte[] dataPage)
         {
-            bool firstPage = isFirstDataMessage; // save first message flag for later use
-
             if (isFirstDataMessage)
             {
                 // initialize if first data message
@@ -59,14 +57,10 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
                 AverageAngularVelocity = Utils.ComputeAvgAngularVelocity(deltaEventCount, deltaPeriod);
                 AverageTorque = Utils.ComputeAvgTorque(deltaTorque, deltaEventCount);
                 AveragePower = AverageTorque * AverageAngularVelocity;
-            }
-
-            if (!firstPage)
-            {
                 AverageSpeed = Utils.ComputeAvgSpeed(WheelCircumference, deltaEventCount, deltaPeriod);
                 AccumulatedDistance += Utils.ComputeDeltaDistance(WheelCircumference, deltaTicks);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

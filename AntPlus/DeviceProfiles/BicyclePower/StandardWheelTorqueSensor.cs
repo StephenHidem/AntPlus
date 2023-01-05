@@ -25,14 +25,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         public override void ParseTorque(byte[] dataPage)
         {
-            bool firstPage = isFirstDataMessage; // save first message flag for later use
             base.ParseTorque(dataPage);
-            if (!firstPage)
+            if (deltaEventCount != 0)
             {
                 AverageSpeed = Utils.ComputeAvgSpeed(WheelCircumference, deltaEventCount, deltaPeriod);
                 AccumulatedDistance += Utils.ComputeDeltaDistance(WheelCircumference, deltaTicks);
+                WheelTorquePageChanged?.Invoke(this, EventArgs.Empty);
             }
-            WheelTorquePageChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

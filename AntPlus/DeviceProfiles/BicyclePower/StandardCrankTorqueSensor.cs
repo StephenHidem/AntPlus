@@ -78,13 +78,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         public override void ParseTorque(byte[] dataPage)
         {
-            bool firstPage = isFirstDataMessage; // save first message flag for later use
             base.ParseTorque(dataPage);
-            if (!firstPage)
+            if (deltaEventCount != 0)
             {
                 AverageCadence = 60.0 * deltaEventCount / (deltaPeriod / 2048.0);
+                CrankTorquePageChanged?.Invoke(this, EventArgs.Empty);
             }
-            CrankTorquePageChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void ParseCyclingDynamics(byte[] dataPage)

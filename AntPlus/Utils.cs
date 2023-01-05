@@ -1,4 +1,6 @@
-﻿namespace AntPlus
+﻿using System;
+
+namespace AntPlus
 {
     public static class Utils
     {
@@ -40,6 +42,26 @@
 
             lastValue = currentValue;
             return delta;
+        }
+
+        public static double ComputeAvgAngularVelocity(int deltaEventCount, int deltaPeriod)
+        {
+            return 2 * Math.PI * deltaEventCount / (deltaPeriod / 2048.0);
+        }
+
+        public static double ComputeAvgTorque(int deltaTorque, int deltaEventCount)
+        {
+            return deltaTorque / (32.0 * deltaEventCount);
+        }
+
+        public static double ComputeAvgSpeed(double wheelCircumference, int deltaEventCount, int deltaPeriod)
+        {
+            return (3600.0 / 1000.0) * wheelCircumference * deltaEventCount / (deltaPeriod / 2048.0);
+        }
+
+        public static double ComputeDeltaDistance(double wheelCircumference, int deltaTicks)
+        {
+            return wheelCircumference * deltaTicks;
         }
     }
 }

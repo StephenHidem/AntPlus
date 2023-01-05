@@ -29,20 +29,10 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             base.ParseTorque(dataPage);
             if (!firstPage)
             {
-                AverageSpeed = ComputeAvgSpeed();
-                AccumulatedDistance += ComputeDeltaDistance();
+                AverageSpeed = Utils.ComputeAvgSpeed(WheelCircumference, deltaEventCount, deltaPeriod);
+                AccumulatedDistance += Utils.ComputeDeltaDistance(WheelCircumference, deltaTicks);
             }
             WheelTorquePageChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private double ComputeAvgSpeed()
-        {
-            return (3600.0 / 1000.0) * WheelCircumference * deltaEventCount / (deltaPeriod / 2048.0);
-        }
-
-        private double ComputeDeltaDistance()
-        {
-            return WheelCircumference * deltaTicks;
         }
     }
 }

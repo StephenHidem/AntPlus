@@ -46,20 +46,10 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 deltaPeriod = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPeriod);
                 deltaTorque = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref lastTorque);
 
-                AverageAngularVelocity = ComputeAvgAngularVelocity();
-                AverageTorque = ComputeAvgTorque();
+                AverageAngularVelocity = Utils.ComputeAvgAngularVelocity(deltaEventCount, deltaPeriod);
+                AverageTorque = Utils.ComputeAvgTorque(deltaTorque, deltaEventCount);
                 AveragePower = AverageTorque * AverageAngularVelocity;
             }
-        }
-
-        private double ComputeAvgAngularVelocity()
-        {
-            return 2 * Math.PI * deltaEventCount / (deltaPeriod / 2048.0);
-        }
-
-        private double ComputeAvgTorque()
-        {
-            return deltaTorque / (32.0 * deltaEventCount);
         }
     }
 }

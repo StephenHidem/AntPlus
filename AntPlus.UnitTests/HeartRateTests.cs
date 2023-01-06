@@ -18,13 +18,13 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             int et = 0, rr = 0;
-            byte hr = 0;
+            byte chr = 0;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.HeartRateChanged += (sender, e) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                et = e.AccumulatedHeartBeatEventTime;
-                rr = e.RRInterval;
-                hr = e.ComputedHeartRate;
+                et = heartRate.HeartRateData.AccumulatedHeartBeatEventTime;
+                rr = heartRate.HeartRateData.RRInterval;
+                chr = heartRate.HeartRateData.ComputedHeartRate;
             };
 
             // Act
@@ -33,7 +33,7 @@ namespace DeviceProfile.UnitTests
             // Assert
             Assert.AreEqual(eventTime, et, "AccumulatedHeartBeatEventTime");
             Assert.AreEqual(hrBeatCount, rr, "RRInterval");
-            Assert.AreEqual(computedHr, hr, "ComputedHeartRate");
+            Assert.AreEqual(computedHr, chr, "ComputedHeartRate");
         }
 
         [TestMethod]
@@ -41,13 +41,13 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             int et = 0, rr = 0;
-            byte hr = 0;
+            byte chr = 0;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.HeartRateChanged += (sender, e) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                et = e.AccumulatedHeartBeatEventTime;
-                rr = e.RRInterval;
-                hr = e.ComputedHeartRate;
+                et = heartRate.HeartRateData.AccumulatedHeartBeatEventTime;
+                rr = heartRate.HeartRateData.RRInterval;
+                chr = heartRate.HeartRateData.ComputedHeartRate;
             };
 
             // Act
@@ -57,7 +57,7 @@ namespace DeviceProfile.UnitTests
             // Assert
             Assert.AreEqual(3, et, "AccumulatedHeartBeatEventTime");
             Assert.AreEqual(3, rr, "RRInterval");
-            Assert.AreEqual(70, hr, "Computed HR");
+            Assert.AreEqual(70, chr, "Computed HR");
         }
 
         [TestMethod]
@@ -68,7 +68,10 @@ namespace DeviceProfile.UnitTests
             // Arrange
             TimeSpan cot = TimeSpan.FromSeconds(0);
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.CumulativeOperatingTimePageChanged += (sender, args) => cot = args;
+            heartRate.PropertyChanged += (sender, e) =>
+            {
+                cot = heartRate.CumulativeOperatingTime;
+            };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
@@ -79,18 +82,18 @@ namespace DeviceProfile.UnitTests
         }
 
         [TestMethod]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x80, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 }, (byte)128, (uint)8721, 8721, 51, 68)]
-        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x08, 0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44 }, (byte)8, 4294910481, 8721, 51, 68)]
-        public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] dataPage, byte manId, uint sn, int eventTime, int hrBeatCount, int computedHr)
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x80, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 }, (byte)128, (uint)8721)]
+        [DataRow(new byte[] { (byte)HeartRate.DataPage.ManufacturerInfo, 0x08, 0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44 }, (byte)8, 4294910481)]
+        public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] dataPage, byte manId, uint sn)
         {
             // Arrange
             var heartRate = new HeartRate(hrmCid, null);
             byte mid = 0;
             uint serNum = 0;
-            heartRate.ManufacturerInfoPageChanged += (sender, args) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                mid = args.ManufacturingIdLsb;
-                serNum = args.SerialNumber;
+                mid = heartRate.ManufacturerInfo.ManufacturingIdLsb;
+                serNum = heartRate.ManufacturerInfo.SerialNumber;
             };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -109,11 +112,11 @@ namespace DeviceProfile.UnitTests
             // Arrange
             byte hv = 0, sv = 0, mn = 0;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.ProductInfoPageChanged += (sender, args) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                hv = args.HardwareVersion;
-                sv = args.SoftwareVersion;
-                mn = args.ModelNumber;
+                hv = heartRate.ProductInfo.HardwareVersion;
+                sv = heartRate.ProductInfo.SoftwareVersion;
+                mn = heartRate.ProductInfo.ModelNumber;
             };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -134,7 +137,10 @@ namespace DeviceProfile.UnitTests
             // Arrange
             int rr = 0;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.PreviousHeartBeatPageChanged += (sender, eventArgs) => rr = eventArgs.RRInterval;
+            heartRate.PropertyChanged += (sender, e) =>
+            {
+                rr = heartRate.PreviousHeartBeat.RRInterval;
+            };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
             // Act
@@ -151,11 +157,11 @@ namespace DeviceProfile.UnitTests
             // Arrange
             byte iahr = 0, imhr = 0, sahr = 0;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.SwimIntervalPageChanged += (sender, args) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                iahr = args.IntervalAverageHeartRate;
-                imhr = args.IntervalMaximumHeartRate;
-                sahr = args.SessionAverageHeartRate;
+                iahr = heartRate.SwimInterval.IntervalAverageHeartRate;
+                imhr = heartRate.SwimInterval.IntervalMaximumHeartRate;
+                sahr = heartRate.SwimInterval.SessionAverageHeartRate;
             };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -177,10 +183,10 @@ namespace DeviceProfile.UnitTests
             // Arrange
             HeartRate.Features enabled = HeartRate.Features.Generic, supported = HeartRate.Features.Generic;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.CapabilitiesPageChanged += (sender, args) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                enabled = args.Enabled;
-                supported = args.Supported;
+                enabled = heartRate.Capabilities.Enabled;
+                supported = heartRate.Capabilities.Supported;
             };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -202,11 +208,11 @@ namespace DeviceProfile.UnitTests
             double bv = 0;
             BatteryStatus bs = BatteryStatus.Unknown;
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.BatteryStatusPageChanged += (sender, e) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                bl = e.BatteryLevel;
-                bv = e.BatteryVoltage;
-                bs = e.BatteryStatus;
+                bl = heartRate.BatteryStatus.BatteryLevel;
+                bv = heartRate.BatteryStatus.BatteryVoltage;
+                bs = heartRate.BatteryStatus.BatteryStatus;
             };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 
@@ -226,10 +232,10 @@ namespace DeviceProfile.UnitTests
             byte page = 0;
             byte[] data = { 0, 0, 0 };
             var heartRate = new HeartRate(hrmCid, null);
-            heartRate.ManufacturerSpecificPageChanged += (sender, e) =>
+            heartRate.PropertyChanged += (sender, e) =>
             {
-                page = e.Page;
-                data = e.Data;
+                page = heartRate.ManufacturerSpecific.Page;
+                data = heartRate.ManufacturerSpecific.Data;
             };
             heartRate.Parse(new byte[] { 0x80, 0, 0, 0, 0, 0, 0, 0 });
 

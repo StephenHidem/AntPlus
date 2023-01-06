@@ -1,5 +1,6 @@
 ﻿using AntRadioInterface;
 using System;
+using System.Linq;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
@@ -24,7 +25,13 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
             ClimberData = 0x17,
             NordicSkierData = 0x18,
             TrainerStationaryBikeData = 0x19,
-            TrainerTorqueData = 0x1A
+            TrainerTorqueData = 0x1A,
+            BasicResistance = 0x30,
+            TargetPower = 0x31,
+            WindResistance = 0x32,
+            TrackResistance = 0x33,
+            FECapabilities = 0x36,
+            UserConfiguration = 0x37
         }
 
         public enum FitnessEquipmentType
@@ -51,6 +58,14 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
             Ready,
             InUse,
             FinishedOrPaused
+        }
+
+        [Flags]
+        public enum SupportedTrainingModes
+        {
+            BasicResistance = 0x01,
+            TargetPower = 0x02,
+            Simulation = 0x04
         }
 
         public class GeneralDataPage
@@ -143,6 +158,8 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         public Climber Climber { get; private set; }
         public NordicSkier NordicSkier { get; private set; }
         public TrainerStationaryBike TrainerStationaryBike { get; private set; }
+        public ushort MaxTrainerResistance { get; private set; }
+        public SupportedTrainingModes Capabilities { get; private set; }
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
         public FitnessEquipment(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
@@ -198,10 +215,73 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.TrainerTorqueData:
                     TrainerStationaryBike?.ParseTorque(dataPage);
                     break;
+                case DataPage.FECapabilities:
+                    MaxTrainerResistance = BitConverter.ToUInt16(dataPage, 5);
+                    Capabilities = (SupportedTrainingModes)dataPage[7];
+                    RaisePropertyChange(nameof(MaxTrainerResistance));
+                    RaisePropertyChange(nameof(Capabilities));
+                    break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
+        }
+
+        public void SetBasicResistance(double resistance)
+        {
+            byte[] res = new byte[] { (byte)(resistance / 0.5) };
+            byte[] msg = (new byte[] { (byte)DataPage.BasicResistance, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }).
+                Concat(res).ToArray();
+            SendExtAcknowledgedMessage(msg);
+        }
+
+        public void SetTargetPower(double power)
+        {
+            byte[] pow = BitConverter.GetBytes((ushort)(power / 0.25));
+            byte[] msg = (new byte[] { (byte)DataPage.TargetPower, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }).
+                Concat(pow).ToArray();
+            SendExtAcknowledgedMessage(msg);
+        }
+
+        public void SetWindResistance(double windResistanceCoefficient, sbyte windSpeed, double draftingFactor)
+        {
+            byte[] wrc = new byte[] { (byte)(windResistanceCoefficient / 0.01) };
+            byte[] df = new byte[] { (byte)(draftingFactor / 0.01) };
+            byte[] msg = (new byte[] { (byte)DataPage.WindResistance, 0xFF, 0xFF, 0xFF, 0xFF }).
+                Concat(wrc).
+                Concat(new byte[] { (byte)(windSpeed + 127) }).
+                Concat(df).ToArray();
+            SendExtAcknowledgedMessage(msg);
+        }
+
+        public void SetTrackResistance(double grade, double rollingResistanceCoefficient = 0.004)
+        {
+            byte[] grd = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
+            byte[] rrc = new byte[] { (byte)(rollingResistanceCoefficient / 0.00005) };
+            byte[] msg = (new byte[] { (byte)DataPage.TrackResistance, 0xFF, 0xFF, 0xFF, 0xFF }).
+                Concat(grd).
+                Concat(rrc).ToArray();
+            SendExtAcknowledgedMessage(msg);
+        }
+
+        public void SetUserConfiguration(double userWeight, byte wheelDiameterOffset, double bikeWeight, double wheelDiameter, double gearRatio)
+        {
+            byte[] uw = BitConverter.GetBytes((ushort)(userWeight / 0.01));
+            byte[] wdo_bw = BitConverter.GetBytes((ushort)((ushort)(bikeWeight / 0.05) << 4 | (wheelDiameterOffset & 0x0F)));
+            byte[] wd = new byte[] { (byte)(wheelDiameter / 0.01) };
+            byte[] gr = new byte[] { (byte)(gearRatio / 0.03) };
+            byte[] msg = (new byte[] { (byte)DataPage.UserConfiguration }).
+                Concat(uw).
+                Concat(new byte[] { 0xFF }).
+                Concat(wdo_bw).
+                Concat(wd).
+                Concat(gr).ToArray();
+            SendExtAcknowledgedMessage(msg);
+        }
+
+        public void RequestFECapabilities()
+        {
+            RequestDataPage(DataPage.FECapabilities);
         }
 
         private bool IsKnownEquipmentType(FitnessEquipmentType equipmentType)

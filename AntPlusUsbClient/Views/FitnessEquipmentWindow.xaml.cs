@@ -43,6 +43,7 @@ namespace AntPlusUsbClient.Views
             }
 
             FESpecific.Children.Add(control);
+            CommandBindings.AddRange(fevm.CommandBindings);
             DataContext = fevm;
         }
     }

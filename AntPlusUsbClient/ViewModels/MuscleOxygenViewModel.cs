@@ -28,10 +28,10 @@ namespace AntPlusUsbClient.ViewModels
             this.muscleOxygen = muscleOxygen;
 
             CommandBindings = new CommandBinding[] {
-                new CommandBinding(SetTime, SetTimeExecuted, SetTimeCanExecute),
-                new CommandBinding(StartSession, StartSessionExecuted, StartSessionCanExecute),
-                new CommandBinding(StopSession, StopSessionParametersExecuted, StopSessionCanExecute),
-                new CommandBinding(Lap, LapExecuted, LapCanExecute),
+                new CommandBinding(SetTime, SetTimeExecuted),
+                new CommandBinding(StartSession, StartSessionExecuted),
+                new CommandBinding(StopSession, StopSessionParametersExecuted),
+                new CommandBinding(Lap, LapExecuted),
             };
         }
 
@@ -42,21 +42,11 @@ namespace AntPlusUsbClient.ViewModels
             muscleOxygen.SendCommand(CommandId.SetTime, ts, DateTime.UtcNow);
         }
 
-        private void SetTimeCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
         private void StartSessionExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             MuscleOxygenWindow mw = sender as MuscleOxygenWindow;
             TimeSpan ts = new TimeSpan((int)mw.HourOffset.SelectedValue, (int)mw.MinuteOffset.SelectedValue, 0);
             muscleOxygen.SendCommand(CommandId.StartSession, ts, DateTime.UtcNow);
-        }
-
-        private void StartSessionCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
         }
 
         private void StopSessionParametersExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -66,21 +56,11 @@ namespace AntPlusUsbClient.ViewModels
             muscleOxygen.SendCommand(CommandId.StopSession, ts, DateTime.UtcNow);
         }
 
-        private void StopSessionCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
         private void LapExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             MuscleOxygenWindow mw = sender as MuscleOxygenWindow;
             TimeSpan ts = new TimeSpan((int)mw.HourOffset.SelectedValue, (int)mw.MinuteOffset.SelectedValue, 0);
             muscleOxygen.SendCommand(CommandId.Lap, ts, DateTime.UtcNow);
-        }
-
-        private void LapCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
         }
     }
 }

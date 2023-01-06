@@ -13,6 +13,21 @@
         <StackPanel x:Name="FESpecific">
             <TextBlock Text="{Binding FitnessEquipment.State, StringFormat='State {0}'}"/>
             <TextBlock Text="{Binding FitnessEquipment.LapToggle, StringFormat='Lap Toggle {0}'}"/>
+            <Button Content="Set User Configuration" Command="{Binding SetUserConfig}"/>
+            <Button Content="Set Basic Resistance" Command="{Binding SetBasicResistance}"/>
+            <Button Content="Set Target Power" Command="{Binding SetTargetPower}"/>
+            <Button Content="Set Wind Resistance" Command="{Binding SetWindResistance}"/>
+            <Button Content="Set Track Resistance" Command="{Binding SetTrackResistance}"/>
+            <Expander>
+                <Expander.Header>
+                    <TextBlock Text="Capabilities" FontWeight="ExtraBold"/>
+                </Expander.Header>
+                <StackPanel>
+                    <Button Content="Request FE Capabilities" Command="{Binding FECapabilitiesRequest}"/>
+                    <TextBlock Text="{Binding FitnessEquipment.Capabilities}"/>
+                    <TextBlock Text="{Binding FitnessEquipment.MaxTrainerResistance}"/>
+                </StackPanel>
+            </Expander>
             <Expander>
                 <Expander.Header>
                     <TextBlock Text="General Data" FontWeight="ExtraBold"/>

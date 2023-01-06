@@ -141,12 +141,12 @@ namespace AntPlus.DeviceProfiles
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.Append((char)((dataPage[1] >> 2) + 0x20));
-            stringBuilder.Append((char)((RotateLeft(BitConverter.ToUInt16(dataPage, 1), 4) & 0x3F) + 0x20));
-            stringBuilder.Append((char)((RotateLeft(BitConverter.ToUInt16(dataPage, 2), 2) & 0x3F) + 0x20));
+            stringBuilder.Append((char)((Utils.RotateLeft(BitConverter.ToUInt16(dataPage, 1), 4) & 0x3F) + 0x20));
+            stringBuilder.Append((char)((Utils.RotateLeft(BitConverter.ToUInt16(dataPage, 2), 2) & 0x3F) + 0x20));
             stringBuilder.Append((char)((dataPage[3] & 0x3F) + 0x20));
             stringBuilder.Append((char)((dataPage[4] >> 2) + 0x20));
-            stringBuilder.Append((char)((RotateLeft(BitConverter.ToUInt16(dataPage, 4), 4) & 0x3F) + 0x20));
-            stringBuilder.Append((char)((RotateLeft(BitConverter.ToUInt16(dataPage, 5), 2) & 0x3F) + 0x20));
+            stringBuilder.Append((char)((Utils.RotateLeft(BitConverter.ToUInt16(dataPage, 4), 4) & 0x3F) + 0x20));
+            stringBuilder.Append((char)((Utils.RotateLeft(BitConverter.ToUInt16(dataPage, 5), 2) & 0x3F) + 0x20));
             stringBuilder.Append((char)((dataPage[6] & 0x3F) + 0x20));
             stringBuilder.Append((char)((dataPage[7] >> 2) + 0x20));
             return stringBuilder.ToString();
@@ -170,16 +170,6 @@ namespace AntPlus.DeviceProfiles
             ch2 |= (id[7] - 0x20) << 8;
             ch2 |= (id[8] - 0x20) << 2;
             return BitConverter.GetBytes(ch1).Take(3).Concat(BitConverter.GetBytes(ch2).Reverse()).ToArray();
-        }
-
-        private ushort RotateLeft(ushort value, int rotate)
-        {
-            return (ushort)((value << rotate) | (value >> (16 - rotate)));
-        }
-
-        private ushort RotateRight(ushort value, int rotate)
-        {
-            return (ushort)((value >> rotate) | (value << (16 - rotate)));
         }
 
         public void RequestPinPage()

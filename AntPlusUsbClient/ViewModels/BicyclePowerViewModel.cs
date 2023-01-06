@@ -64,100 +64,20 @@ namespace AntPlusUsbClient.ViewModels
             BicyclePower.CrankTorqueFrequencyPageChanged += (s, e) => RaisePropertyChange("CrankTorqueFrequency");
 
             CommandBindings = new CommandBinding[] {
-                new CommandBinding(ManualCalRequest, ManualCalRequestExecuted, RequestManualCalCanExecute),
-                new CommandBinding(SetAutoZeroConfig, SetAutoZeroExecuted, SetAutoZeroCanExecute),
-                new CommandBinding(GetCustomCalibrationParameters, GetCustomCalibrationParametersExecuted, GetCustomCalibrationParametersCanExecute),
-                new CommandBinding(SetCustomCalibrationParameters, SetCustomCalibrationParametersExecuted, SetCustomCalibrationParametersCanExecute),
-                new CommandBinding(SaveSlope, SaveSlopeExecuted, SaveSlopeCanExecute),
-                new CommandBinding(SaveSerialNumber, SaveSerialNumberExecuted, SaveSerialNumberCanExecute),
-                new CommandBinding(GetParameters, GetParametersExecuted, GetParametersCanExecute),
-                new CommandBinding(SetCrankLength, SetCrankLengthExecuted, SetCrankLengthCanExecute)
+                new CommandBinding(ManualCalRequest, (s, e) => Calibration.RequestManualCalibration()),
+                new CommandBinding(SetAutoZeroConfig, (s, e) => Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On)),
+                new CommandBinding(GetCustomCalibrationParameters, (s, e) => Calibration.RequestCustomParameters()),
+                new CommandBinding(SetCustomCalibrationParameters, (s, e) => Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 })),
+                new CommandBinding(SaveSlope, (s, e) => CrankTorqueFrequency.SaveSlopeToFlash(300)),
+                new CommandBinding(SaveSerialNumber, (s, e) => CrankTorqueFrequency.SaveSerialNumberToFlash(1122)),
+                new CommandBinding(GetParameters, (s, e) => Parameters.GetParameters((Subpage)e.Parameter)),
+                new CommandBinding(SetCrankLength, (s, e) => Parameters.SetCrankLength(double.Parse(e.Parameter.ToString())))
             };
         }
 
         private void RaisePropertyChange(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void SaveSlopeExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            CrankTorqueFrequency.SaveSlopeToFlash(300);
-        }
-
-        private void SaveSlopeCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void SaveSerialNumberExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            CrankTorqueFrequency.SaveSerialNumberToFlash(1122);
-        }
-
-        private void SaveSerialNumberCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void GetCustomCalibrationParametersExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            Calibration.RequestCustomParameters();
-        }
-
-        private void GetCustomCalibrationParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void SetCustomCalibrationParametersExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
-        }
-
-        private void SetCustomCalibrationParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void ManualCalRequestExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            Calibration.RequestManualCalibration();
-        }
-
-        private void RequestManualCalCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void SetAutoZeroExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On);
-        }
-
-        private void SetAutoZeroCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void GetParametersExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            Parameters.GetParameters((Subpage)e.Parameter);
-        }
-
-        private void GetParametersCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void SetCrankLengthExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            Parameters.SetCrankLength(double.Parse(e.Parameter.ToString()));
-        }
-
-        private void SetCrankLengthCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
         }
     }
 }

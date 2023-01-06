@@ -63,5 +63,15 @@ namespace AntPlus
         {
             return wheelCircumference * deltaTicks;
         }
+
+        public static ushort RotateLeft(ushort value, int rotate)
+        {
+            return (ushort)((value << rotate) | (value >> (16 - rotate)));
+        }
+
+        public static ushort RotateRight(ushort value, int rotate)
+        {
+            return (ushort)((value >> rotate) | (value << (16 - rotate)));
+        }
     }
 }

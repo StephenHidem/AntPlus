@@ -6,6 +6,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 {
     public enum SensorType
     {
+        Unknown,
         PowerOnly,
         WheelTorque,
         CrankTorque,
@@ -34,15 +35,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public const byte DeviceClass = 11;
 
         // supported sensors
-        public SensorType Sensor { get; private set; } = SensorType.PowerOnly;
-        public StandardPowerSensor BicyclePowerSensor { get; private set; }
+        public SensorType Sensor { get; private set; } = SensorType.Unknown;
+        public StandardPowerSensor PowerOnlySensor { get; private set; }
+        public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
+        public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
-
+        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
         public Calibration Calibration { get; private set; }
-
-        // events - class related
-        public event EventHandler<CrankTorqueFrequencySensor> CrankTorqueFrequencyPageChanged;
-        public event EventHandler<Calibration> BicycleCalibrationPageChanged;
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
@@ -64,40 +63,42 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     break;
                 case DataPage.Calibration:
                     Calibration.Parse(dataPage);
-                    BicycleCalibrationPageChanged?.Invoke(this, Calibration);
+                    RaisePropertyChange(nameof(Calibration));
                     break;
                 case DataPage.GetSetParameters:
-                    BicyclePowerSensor.ParseParameters(dataPage);
+                    PowerOnlySensor.ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
-                    BicyclePowerSensor?.ParseMeasurementOutputData(dataPage);
+                    PowerOnlySensor?.ParseMeasurementOutputData(dataPage);
                     break;
                 case DataPage.PowerOnly:
-                    if (BicyclePowerSensor == null)
+                    if (Sensor == SensorType.Unknown)
                     {
                         Sensor = SensorType.PowerOnly;
-                        BicyclePowerSensor = new StandardPowerSensor(this);
+                        PowerOnlySensor = new StandardPowerSensor(this);
                     }
-                    BicyclePowerSensor.Parse(dataPage);
+                    PowerOnlySensor?.Parse(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    if (Sensor == SensorType.PowerOnly || BicyclePowerSensor == null)
+                    if (Sensor == SensorType.Unknown || Sensor == SensorType.PowerOnly)
                     {
                         Sensor = SensorType.WheelTorque;
-                        BicyclePowerSensor = new StandardWheelTorqueSensor(this);
+                        WheelTorqueSensor = new StandardWheelTorqueSensor(this);
                     }
-                    ((StandardWheelTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
+                    WheelTorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    if (Sensor == SensorType.PowerOnly || BicyclePowerSensor == null)
+                    if (Sensor == SensorType.Unknown || Sensor == SensorType.PowerOnly)
                     {
                         Sensor = SensorType.CrankTorque;
-                        BicyclePowerSensor = new StandardCrankTorqueSensor(this);
+                        CrankTorqueSensor = new StandardCrankTorqueSensor(this);
                     }
-                    ((StandardCrankTorqueSensor)BicyclePowerSensor).ParseTorque(dataPage);
+                    CrankTorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    BicyclePowerSensor?.ParseTEPS(dataPage);
+                    PowerOnlySensor?.ParseTEPS(dataPage);
+                    WheelTorqueSensor?.ParseTEPS(dataPage);
+                    CrankTorqueSensor?.ParseTEPS(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
                     Sensor = SensorType.CrankTorqueFrequency;
@@ -106,16 +107,16 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                         CTFSensor = new CrankTorqueFrequencySensor(this);
                     }
                     CTFSensor.Parse(dataPage);
-                    CrankTorqueFrequencyPageChanged?.Invoke(this, CTFSensor);
+                    RaisePropertyChange(nameof(CTFSensor));
                     break;
                 case DataPage.RightForceAngle:
                 case DataPage.LeftForceAngle:
                 case DataPage.PedalPosition:
                 case DataPage.TorqueBarycenter:
-                    ((StandardCrankTorqueSensor)BicyclePowerSensor).ParseCyclingDynamics(dataPage);
+                    CrankTorqueSensor.ParseCyclingDynamics(dataPage);
                     break;
                 default:
-                    BicyclePowerSensor?.ParseCommonDataPage(dataPage);
+                    CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
         }

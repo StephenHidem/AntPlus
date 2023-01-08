@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.BicyclePower">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAQIAACAAABAAQAAAAAEQAAAAAAAAAAQACAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.Parameters" Collapsed="true">
+    <Position X="8" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAABAAAAEACAAAEABAAAAABAADgAAAAAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.Calibration" Collapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAggAAAAAIABAAAEAAgAAAAABAAAAAAAAAUBAAAAAIA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\Calibration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.CrankTorqueFrequencySensor" Collapsed="true">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJAgAAAJAAAAAAAAAAAACgAAgAAAAQABACABAAAAgEA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\CrankTorqueFrequencySensor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor" Collapsed="true">
+    <Position X="2.25" Y="3.25" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.PedalPositionPage" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.ForceAngle" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAEAAAIAAAIAAEAAACAAAAAIAAAAAAAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAhAAAEACAAAACAAQAAYAAAgAMgAEAAAIAAUACAAIA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\StandardPowerSensor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.StandardWheelTorqueSensor" Collapsed="true">
+    <Position X="4.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAEAAAAAAAAAEAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\StandardWheelTorqueSensor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.TorqueSensor" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAEAAEBAAAAMAAgQAAIACAAAIAAAAAAAAAACCAAIA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\TorqueSensor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="AntPlus.DeviceProfiles.BicyclePower.MeasurementOutputData" Collapsed="true">
+    <Position X="6.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACIAAIAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\MeasurementOutputData.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="AntPlus.DeviceProfiles.BicyclePower.TorqueEffectivenessAndPedalSmoothness" Collapsed="true">
+    <Position X="8" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAEAAAAAAAAAAAAAAAAAAAAAABQAAgAAAAAAAAAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\TorqueEffectivenessAndPedalSmoothness.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="AntPlus.DeviceProfiles.BicyclePower.SensorType" Collapsed="true">
+    <Position X="8" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgQAAAAAAIAAAQAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="AntPlus.DeviceProfiles.BicyclePower.DataPage" Collapsed="true">
+    <Position X="6.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABEAAAAAgQAAAAAAIIAAQAAAFAAACAAgAAAAAAAACBA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="AntPlus.DeviceProfiles.BicyclePower.Subpage" Collapsed="true">
+    <Position X="6.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAACAAAAAAAEAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

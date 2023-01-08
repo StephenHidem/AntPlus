@@ -34,7 +34,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        public readonly struct PedalPosition
+        public readonly struct PedalPositionPage
         {
             public enum Position
             {
@@ -52,7 +52,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             public sbyte RightPlatformCenterOffset { get; }
             public sbyte LeftPlatformCenterOffset { get; }
 
-            public PedalPosition(byte[] dataPage)
+            public PedalPositionPage(byte[] dataPage)
             {
                 CrankCycleCount = dataPage[1];
                 RiderPosition = (Position)(dataPage[2] >> 6);
@@ -62,15 +62,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        public event EventHandler CrankTorquePageChanged;
-        public event EventHandler<double> TorqueBarycenterAngleChanged;
-        public event EventHandler<ForceAngle> RightForceAngleChanged;
-        public event EventHandler<ForceAngle> LeftForceAngleChanged;
-        public event EventHandler<PedalPosition> PedalPositionChanged;
-
         /// <summary>Gets the average cadence.</summary>
         /// <value>The average cadence in rotations per minute.</value>
         public double AverageCadence { get; private set; }
+        public double TorqueBarycenterAngle { get; private set; }
+        public ForceAngle RightForceAngle { get; private set; }
+        public ForceAngle LeftForceAngle { get; private set; }
+        public PedalPositionPage PedalPosition { get; private set; }
 
         public StandardCrankTorqueSensor(BicyclePower bp) : base(bp)
         {
@@ -82,7 +80,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             if (deltaEventCount != 0)
             {
                 AverageCadence = 60.0 * deltaEventCount / (deltaPeriod / 2048.0);
-                CrankTorquePageChanged?.Invoke(this, EventArgs.Empty);
+                RaisePropertyChange(nameof(AverageCadence));
             }
         }
 
@@ -91,16 +89,20 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.TorqueBarycenter:
-                    TorqueBarycenterAngleChanged?.Invoke(this, dataPage[2] * 0.5 + 30.0);
+                    TorqueBarycenterAngle = dataPage[2] * 0.5 + 30.0;
+                    RaisePropertyChange(nameof(TorqueBarycenterAngle));
                     break;
                 case DataPage.RightForceAngle:
-                    RightForceAngleChanged?.Invoke(this, new ForceAngle(dataPage));
+                    RightForceAngle = new ForceAngle(dataPage);
+                    RaisePropertyChange(nameof(RightForceAngle));
                     break;
                 case DataPage.LeftForceAngle:
-                    LeftForceAngleChanged?.Invoke(this, new ForceAngle(dataPage));
+                    LeftForceAngle = new ForceAngle(dataPage);
+                    RaisePropertyChange(nameof(LeftForceAngle));
                     break;
                 case DataPage.PedalPosition:
-                    PedalPositionChanged?.Invoke(this, new PedalPosition(dataPage));
+                    PedalPosition = new PedalPositionPage(dataPage);
+                    RaisePropertyChange(nameof(PedalPosition));
                     break;
                 default:
                     break;

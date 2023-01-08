@@ -13,90 +13,8 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnablePowerSensor}">
-                <Expander.Header>
-                    <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding PowerOnly.PedalPower, StringFormat='Pedal Power {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
-                    <TextBlock Text="{Binding PowerOnly.AveragePower, StringFormat='Average Power {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnableCrankTorque}">
-                <Expander.Header>
-                    <TextBlock Text="Crank Torque Sensor" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding CrankTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.AveragePower, StringFormat='Average Power {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorque.AverageCadence, StringFormat='AverageCadence {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnableWheelTorque}">
-                <Expander.Header>
-                    <TextBlock Text="Wheel Torque Sensor" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding WheelTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AveragePower, StringFormat='Average Power {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AverageSpeed, StringFormat='Average Speed {0}'}"/>
-                    <TextBlock Text="{Binding WheelTorque.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnablePowerSensor}">
-                <Expander.Header>
-                    <TextBlock Text="Torque Effectiveness and Pedal Smootness" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding TEPS.CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness {0}'}"/>
-                    <TextBlock Text="{Binding TEPS.LeftPedalSmoothness, StringFormat='Left Pedal Smoothness {0}'}"/>
-                    <TextBlock Text="{Binding TEPS.RightPedalSmoothness, StringFormat='Right Pedal Smoothness {0}'}"/>
-                    <TextBlock Text="{Binding TEPS.LeftTorqueEffectivenes, StringFormat='Left Torque Effectivenes {0}'}"/>
-                    <TextBlock Text="{Binding TEPS.RightTorqueEffectivenes, StringFormat='Right Torque Effectivenes {0}'}"/>
-                </StackPanel>
-            </Expander>
+            <StackPanel x:Name="BicyclePowerControl"/>
             <Expander ExpandDirection="Down" IsExpanded="False">
-                <Expander.Header>
-                    <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding Calibration.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
-                    <TextBlock Text="{Binding Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
-                    <TextBlock Text="{Binding Calibration.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
-                    <TextBlock Text="{Binding Calibration.CalibrationData, StringFormat='Calibration Data {0}'}"/>
-                    <TextBlock Text="{Binding Calibration.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
-                    <TextBlock Text="{Binding MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of types {0}'}"/>
-                    <TextBlock Text="{Binding MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
-                    <TextBlock Text="{Binding MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>
-                    <TextBlock Text="{Binding MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
-                    <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
-                    <Button Content="Set Auto Zero Configuration" Command="{Binding SetAutoZeroConfig}"/>
-                    <Button Content="Custom Calibration Parameters Request" Command="{Binding GetCustomCalibrationParameters}"/>
-                    <Button Content="Set Custom Calibration Parameters" Command="{Binding SetCustomCalibrationParameters}"/>
-                </StackPanel>
-            </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnableCTFSensor}">
-                <Expander.Header>
-                    <TextBlock Text="Crank Torque Frequency Sensor" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding CrankTorqueFrequency.Offset, StringFormat='Offset {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorqueFrequency.Slope, StringFormat='Slope {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorqueFrequency.Cadence, StringFormat='Cadence {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorqueFrequency.Torque, StringFormat='Torque {0}'}"/>
-                    <TextBlock Text="{Binding CrankTorqueFrequency.Power, StringFormat='Power {0}'}"/>
-                    <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
-                    <Button Content="Save Slope" Command="{Binding SaveSlope}"/>
-                    <Button Content="Save Serial Number" Command="{Binding SaveSerialNumber}"/>
-                </StackPanel>
-            </Expander>
-            <Expander ExpandDirection="Down" IsExpanded="False" IsEnabled="{Binding EnablePowerSensor}">
                 <Expander.Header>
                     <TextBlock Text="Get/Set Parameters" FontWeight="ExtraBold"/>
                 </Expander.Header>
@@ -109,14 +27,14 @@
                         <Button Content="Get Rider Position Time Offset" Command="{Binding GetParameters}"
                                 CommandParameter="{x:Static dp:Subpage.RiderPositionConfiguration}"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Parameters.Crank.CrankLength, StringFormat='Crank Length {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.Crank.CrankStatus, StringFormat='Crank Status {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.Crank.MismatchStatus, StringFormat='Mismatch Status {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.Crank.AvailabilityStatus, StringFormat='Availability Status {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.Crank.CustomCalibration, StringFormat='Custom Calibration {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.Crank.AutoCrankLength, StringFormat='Auto Crank Length {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.PeakTorqueThreshold, StringFormat='Peak Torque Threshold {0}'}"/>
-                    <TextBlock Text="{Binding Parameters.RiderPositionTimeOffset, StringFormat='Rider Position Time Offset {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.CrankLength, StringFormat='Crank Length {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.CrankStatus, StringFormat='Crank Status {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.MismatchStatus, StringFormat='Mismatch Status {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.AvailabilityStatus, StringFormat='Availability Status {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.CustomCalibration, StringFormat='Custom Calibration {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.AutoCrankLength, StringFormat='Auto Crank Length {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.PeakTorqueThreshold, StringFormat='Peak Torque Threshold {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.RiderPositionTimeOffset, StringFormat='Rider Position Time Offset {0}'}"/>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Set Crank Length" Command="{Binding SetCrankLength}" CommandParameter="{Binding ElementName=CrankLength, Path=Text}"/>
                         <TextBox x:Name="CrankLength" Text="110" Width="50"/>
@@ -124,7 +42,7 @@
                     </StackPanel>
                 </StackPanel>
             </Expander>
-            <uc:CommonDataPagesControl DataContext="{Binding BicyclePower.BicyclePowerSensor}"/>
+            <uc:CommonDataPagesControl DataContext="{Binding BicyclePower}"/>
         </StackPanel>
     </Grid>
 </Window>

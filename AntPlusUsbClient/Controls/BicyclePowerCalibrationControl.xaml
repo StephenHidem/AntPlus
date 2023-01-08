@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="AntPlusUsbClient.Controls.BicyclePowerCalibrationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AntPlusUsbClient.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Expander>
+            <Expander.Header>
+                <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
+            </Expander.Header>
+            <StackPanel>
+                <TextBlock Text="{Binding Calibration.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
+                <TextBlock Text="{Binding Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
+                <TextBlock Text="{Binding Calibration.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
+                <TextBlock Text="{Binding Calibration.CalibrationData, StringFormat='Calibration Data {0}'}"/>
+                <TextBlock Text="{Binding Calibration.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
+                <Label Content="Measurement Output" FontWeight="DemiBold"/>
+                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of measurement types {0}'}"/>
+                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
+                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>
+                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
+
+                <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
+                <Button Content="Set Auto Zero Configuration" Command="{Binding Calibration.SetAutoZeroConfig}"/>
+                <Button Content="Custom Calibration Parameters Request" Command="{Binding Calibration.GetCustomCalibrationParameters}"/>
+                <Button Content="Set Custom Calibration Parameters" Command="{Binding Calibration.SetCustomCalibrationParameters}"/>
+            </StackPanel>
+        </Expander>
+    </Grid>
+</UserControl>

@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Climber" Collapsed="true">
-    <Position X="4.25" Y="0.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Climber" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAFAAAIAAAAAAAAAAAIgAAAAAAAAAAAQAAAAAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\Climber.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Elliptical" Collapsed="true">
-    <Position X="6" Y="0.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Elliptical" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEgAAAFDAAAAAAAAAAAAAAIgAAAAAAAAAAAQAAAAAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\Elliptical.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment">
-    <Position X="2" Y="0.5" Width="2" />
+    <Position X="2" Y="0.75" Width="1.5" />
     <NestedTypes>
       <Enum Name="AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment.DataPage" Collapsed="true">
         <TypeIdentifier>
@@ -39,6 +39,11 @@
           <NewMemberFileName>DeviceProfiles\FitnessEquipment\FitnessEquipment.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
+      <Enum Name="AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment.SupportedTrainingModes" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\FitnessEquipment\FitnessEquipment.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
       <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment.GeneralDataPage" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>DeviceProfiles\FitnessEquipment\FitnessEquipment.cs</NewMemberFileName>
@@ -56,41 +61,49 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAgAAAAAQAoAAAAABCgQAAgAAEQQAAEAAAABAQAZAA=</HashCode>
+      <HashCode>AAAgAAAAGQQoAAAAAJCgQAAgQAEQQAAECCAABAQAbAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\FitnessEquipment.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.NordicSkier" Collapsed="true">
-    <Position X="4.25" Y="1.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.NordicSkier" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEgAAAFAAAAAAAAAAAAAAAIgAAAAAAAAAAAQAAAAAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\NordicSkier.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Rower" Collapsed="true">
-    <Position X="6" Y="1.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Rower" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAFAAAAAAAAAAAAAAAAgAIACAAAAAAAQAAAAAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\Rower.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.TrainerStationaryBike" Collapsed="true">
-    <Position X="6" Y="2.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.TrainerStationaryBike" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEgAAAFAAAAAEAAAAAAAAAIgAAAAAAAAAAAQAAAAAA=</HashCode>
+      <HashCode>gAIgAAAEAgAAQECAAQAAAAAAgAIAAEAAAAAAQACAAAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\TrainerStationaryBike.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Treadmill">
-    <Position X="4.25" Y="2.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.TrainerTorque" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAgEAAEFAAAAIAAgAAAIACEgAIAAAAAAAAAACCIAIA=</HashCode>
+      <FileName>DeviceProfiles\FitnessEquipment\TrainerTorque.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AntPlus.DeviceProfiles.FitnessEquipment.Treadmill" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAFDAACAAAAAAAAAAAAgAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>DeviceProfiles\FitnessEquipment\Treadmill.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

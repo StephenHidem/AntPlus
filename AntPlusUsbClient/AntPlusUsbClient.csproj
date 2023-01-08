@@ -64,20 +64,41 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\BicycleCrankTorqueControl.xaml.cs">
+      <DependentUpon>BicycleCrankTorqueControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BicyclePowerCalibrationControl.xaml.cs">
+      <DependentUpon>BicyclePowerCalibrationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BicyclePowerOnlyControl.xaml.cs">
+      <DependentUpon>BicyclePowerOnlyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BicycleWheelTorqueControl.xaml.cs">
+      <DependentUpon>BicycleWheelTorqueControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ClimberControl.xaml.cs">
       <DependentUpon>ClimberControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CommonDataPagesControl.xaml.cs">
       <DependentUpon>CommonDataPagesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CTFControl.xaml.cs">
+      <DependentUpon>CTFControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EllipticalControl.xaml.cs">
       <DependentUpon>EllipticalControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MeasurementOutputControl.xaml.cs">
+      <DependentUpon>MeasurementOutputControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NordicSkierControl.xaml.cs">
       <DependentUpon>NordicSkierControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RowerControl.xaml.cs">
       <DependentUpon>RowerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TEPSControl.xaml.cs">
+      <DependentUpon>TEPSControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TrainerStationaryBikeControl.xaml.cs">
       <DependentUpon>TrainerStationaryBikeControl.xaml</DependentUpon>
@@ -121,6 +142,22 @@
     <Compile Include="Views\MuscleOxygenWindow.xaml.cs">
       <DependentUpon>MuscleOxygenWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\BicycleCrankTorqueControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BicyclePowerCalibrationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BicyclePowerOnlyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BicycleWheelTorqueControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ClimberControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,7 +166,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CTFControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\EllipticalControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MeasurementOutputControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RowerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TEPSControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

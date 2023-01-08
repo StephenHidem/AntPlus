@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
-    public class StandardPowerSensor
+    public class StandardPowerSensor : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastEventCount;
@@ -10,13 +11,20 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private ushort lastPower;
         private int deltaPower;
 
-        public Parameters Parameters { get; private set; }
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void RaisePropertyChange(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-        public event EventHandler PowerOnlyChanged;
-        public event EventHandler<MeasurementOutputData> MeasurementOutputDataChanged;
-        public event EventHandler<TorqueEffectivenessAndPedalSmoothness> TEPSPageChanged;
-        public event EventHandler<Parameters> ParametersChanged;
+        public double AveragePower { get; private set; }
+        public byte PedalPower { get; private set; }
+        public byte InstantaneousCadence { get; private set; }
+        public ushort InstantaneousPower { get; private set; }
+        public Parameters Parameters { get; private set; }
+        public MeasurementOutputData MeasurementOutput { get; private set; }
+        public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; }
+        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
 
         public StandardPowerSensor(BicyclePower bp)
@@ -24,16 +32,15 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             Parameters = new Parameters(bp);
         }
 
-        public double AveragePower { get; private set; }
-        public byte PedalPower { get; private set; }
-        public byte InstantaneousCadence { get; private set; }
-        public ushort InstantaneousPower { get; private set; }
 
         public void Parse(byte[] dataPage)
         {
             PedalPower = dataPage[2];
             InstantaneousCadence = dataPage[3];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 6);
+            RaisePropertyChange(nameof(PedalPower));
+            RaisePropertyChange(nameof(InstantaneousCadence));
+            RaisePropertyChange(nameof(InstantaneousPower));
 
             if (isFirstDataMessage)
             {
@@ -50,24 +57,26 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
                 deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
                 AveragePower = deltaPower / deltaEventCount;
+                RaisePropertyChange(nameof(AveragePower));
             }
-            PowerOnlyChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void ParseParameters(byte[] dataPage)
         {
             Parameters.Parse(dataPage);
-            ParametersChanged?.Invoke(this, Parameters);
+            RaisePropertyChange(nameof(Parameters));
         }
 
         public void ParseMeasurementOutputData(byte[] dataPage)
         {
-            MeasurementOutputDataChanged?.Invoke(this, new MeasurementOutputData(dataPage));
+            MeasurementOutput = new MeasurementOutputData(dataPage);
+            RaisePropertyChange(nameof(MeasurementOutput));
         }
 
         public void ParseTEPS(byte[] dataPage)
         {
-            TEPSPageChanged?.Invoke(this, new TorqueEffectivenessAndPedalSmoothness(dataPage));
+            TorqueEffectiveness = new TorqueEffectivenessAndPedalSmoothness(dataPage);
+            RaisePropertyChange(nameof(TorqueEffectiveness));
         }
 
         public void ParseCommonDataPage(byte[] dataPage)

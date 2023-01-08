@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
-    public class CrankTorqueFrequencySensor
+    public class CrankTorqueFrequencySensor : INotifyPropertyChanged
     {
         private enum CTFDefinedId
         {
@@ -19,6 +20,8 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private byte prevUpdateEventCount;
         private ushort prevTimeStamp;
         private ushort prevTorqueTicks;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public ushort Offset { get; private set; } = 0;
         public ushort Slope { get; private set; }
@@ -56,6 +59,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
             Torque = torqueFreq / (Slope / 10.0);
             Power = Torque * Cadence * Math.PI / 30.0;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
 
         public void ParseCalibrationMessage(byte[] message)

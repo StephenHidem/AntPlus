@@ -26,6 +26,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public virtual void ParseTorque(byte[] dataPage)
         {
             InstantaneousCadence = dataPage[3];
+            RaisePropertyChange(nameof(InstantaneousCadence));
 
             if (isFirstDataMessage)
             {
@@ -49,6 +50,9 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 AverageAngularVelocity = Utils.ComputeAvgAngularVelocity(deltaEventCount, deltaPeriod);
                 AverageTorque = Utils.ComputeAvgTorque(deltaTorque, deltaEventCount);
                 AveragePower = AverageTorque * AverageAngularVelocity;
+                RaisePropertyChange(nameof(AverageAngularVelocity));
+                RaisePropertyChange(nameof(AverageTorque));
+                RaisePropertyChange(nameof(AveragePower));
             }
         }
     }

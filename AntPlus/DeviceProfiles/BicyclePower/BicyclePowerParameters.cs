@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
@@ -11,7 +12,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         AdvancedCapabilities2 = 0xFE
     }
 
-    public class Parameters
+    public class Parameters : INotifyPropertyChanged
     {
         public readonly struct CrankParameters
         {
@@ -127,6 +128,8 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         private readonly BicyclePower bp;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public CrankParameters Crank { get; private set; }
         public double PeakTorqueThreshold { get; private set; }
         public byte RiderPositionTimeOffset { get; private set; }
@@ -144,18 +147,23 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             {
                 case Subpage.CrankParameters:
                     Crank = new CrankParameters(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Crank)));
                     break;
                 case Subpage.PowerPhaseConfiguration:
                     PeakTorqueThreshold = dataPage[2] * 0.5;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PeakTorqueThreshold)));
                     break;
                 case Subpage.RiderPositionConfiguration:
                     RiderPositionTimeOffset = dataPage[2];
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RiderPositionTimeOffset)));
                     break;
                 case Subpage.AdvancedCapabilities1:
                     AdvancedCapabilities1 = new AdvCapabilities1(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities1)));
                     break;
                 case Subpage.AdvancedCapabilities2:
                     AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities2)));
                     break;
                 default:
                     break;

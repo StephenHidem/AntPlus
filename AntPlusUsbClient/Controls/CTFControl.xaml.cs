@@ -8,7 +8,7 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class CTFControl : UserControl
     {
-        private CrankTorqueFrequencySensor sensor;
+        private readonly CrankTorqueFrequencySensor sensor;
         public CTFControl(CrankTorqueFrequencySensor ctf)
         {
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace AntPlusUsbClient.Controls
 
         private void Click_ManCalReq(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            sensor.RequestCalibration();
         }
     }
 }

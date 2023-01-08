@@ -63,7 +63,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     break;
                 case DataPage.Calibration:
                     Calibration.Parse(dataPage);
-                    RaisePropertyChange(nameof(Calibration));
                     break;
                 case DataPage.GetSetParameters:
                     PowerOnlySensor.ParseParameters(dataPage);
@@ -107,7 +106,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                         CTFSensor = new CrankTorqueFrequencySensor(this);
                     }
                     CTFSensor.Parse(dataPage);
-                    RaisePropertyChange(nameof(CTFSensor));
                     break;
                 case DataPage.RightForceAngle:
                 case DataPage.LeftForceAngle:

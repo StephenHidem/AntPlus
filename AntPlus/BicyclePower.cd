@@ -7,42 +7,73 @@
       <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.BicyclePower.Parameters" Collapsed="true">
-    <Position X="8" Y="1.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.Parameters">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.Parameters.CrankParameters" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.Parameters.AdvCapabilities1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.Parameters.AdvCapabilities2" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAgAAAAAAAAABAAAAEACAAAEABAAAAABAADgAAAAAA=</HashCode>
+      <HashCode>AAAgAAAAAAAAABAAAAEACAAAkABAAAAABAADgAAAAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.BicyclePower.Calibration" Collapsed="true">
-    <Position X="8" Y="0.5" Width="1.5" />
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.Calibration">
+    <Position X="9.75" Y="0.5" Width="2" />
+    <NestedTypes>
+      <Enum Name="AntPlus.DeviceProfiles.BicyclePower.Calibration.CalibrationRequestId" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\Calibration.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="AntPlus.DeviceProfiles.BicyclePower.Calibration.CalibrationResponseId" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\Calibration.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="AntPlus.DeviceProfiles.BicyclePower.Calibration.AutoZero" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\Calibration.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAggAAAAAIABAAAEAAgAAAAABAAAAAAAAAUBAAAAAIA=</HashCode>
+      <HashCode>AAggAAAAAIABAAAEAAgAAAAAhAAAAAAAAAUBAAAAAIA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\Calibration.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AntPlus.DeviceProfiles.BicyclePower.CrankTorqueFrequencySensor" Collapsed="true">
+  <Class Name="AntPlus.DeviceProfiles.BicyclePower.CrankTorqueFrequencySensor">
     <Position X="6.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="AntPlus.DeviceProfiles.BicyclePower.CrankTorqueFrequencySensor.CTFDefinedId" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\CrankTorqueFrequencySensor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AJAgAAAJAAAAAAAAAAAACgAAgAAAAQABACABAAAAgEA=</HashCode>
+      <HashCode>AJAgAAAJAAAAAAAAAAAACkAAgAAAAQABACABAAAAgEA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\CrankTorqueFrequencySensor.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor" Collapsed="true">
     <Position X="2.25" Y="3.25" Width="1.5" />
-    <NestedTypes>
-      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.PedalPositionPage" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.ForceAngle" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAEAAAAAAAAAAEAAAIAAAIAAEAAACAAAAAIAAAAAAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</FileName>
@@ -71,35 +102,35 @@
     </TypeIdentifier>
   </Class>
   <Struct Name="AntPlus.DeviceProfiles.BicyclePower.MeasurementOutputData" Collapsed="true">
-    <Position X="6.25" Y="2.75" Width="1.5" />
+    <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAACIAAIAAAAAAAAAAAQAAAAAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\MeasurementOutputData.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="AntPlus.DeviceProfiles.BicyclePower.TorqueEffectivenessAndPedalSmoothness" Collapsed="true">
-    <Position X="8" Y="2.75" Width="1.5" />
+    <Position X="12.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAIAEAAAAAAAAAAAAAAAAAAAAAABQAAgAAAAAAAAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\TorqueEffectivenessAndPedalSmoothness.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Enum Name="AntPlus.DeviceProfiles.BicyclePower.SensorType" Collapsed="true">
-    <Position X="8" Y="4" Width="1.5" />
+    <Position X="12.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgQAAAAAAIAAAQAAAAAAAAAAAAAAAAAAAABA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="AntPlus.DeviceProfiles.BicyclePower.DataPage" Collapsed="true">
-    <Position X="6.25" Y="4" Width="1.5" />
+    <Position X="12.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABEAAAAAgQAAAAAAIIAAQAAAFAAACAAgAAAAAAAACBA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="AntPlus.DeviceProfiles.BicyclePower.Subpage" Collapsed="true">
-    <Position X="6.25" Y="4.75" Width="1.5" />
+    <Position X="12.25" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAABAAAAACAAAAAAAEAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\BicyclePowerParameters.cs</FileName>

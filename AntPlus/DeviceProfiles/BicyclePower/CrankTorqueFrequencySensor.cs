@@ -43,6 +43,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             ushort torqueTicks = BitConverter.ToUInt16(data, 0);
             ushort timeStamp = BitConverter.ToUInt16(data, 2);
             Slope = BitConverter.ToUInt16(data, 4);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Slope)));
 
             if (isFirstPage)
             {
@@ -59,7 +60,9 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
             Torque = torqueFreq / (Slope / 10.0);
             Power = Torque * Cadence * Math.PI / 30.0;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cadence)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Torque)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Power)));
         }
 
         public void ParseCalibrationMessage(byte[] message)
@@ -68,12 +71,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             {
                 case CTFDefinedId.ZeroOffset:
                     Offset = BitConverter.ToUInt16(message.Skip(6).Reverse().ToArray(), 0);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Offset)));
                     break;
                 case CTFDefinedId.Ack:
+                    // TODO: NEED TO REPORT STATUS OF CTF SAVE FUNCS
                     switch ((CTFDefinedId)message[3])
                     {
-                        case CTFDefinedId.ZeroOffset:
-                            break;
                         case CTFDefinedId.Slope:
                             break;
                         case CTFDefinedId.SerialNumber:
@@ -85,6 +88,11 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 default:
                     break;
             }
+        }
+
+        public void RequestCalibration()
+        {
+            bp.Calibration.RequestManualCalibration();
         }
 
         public void SaveSlopeToFlash(ushort slope)

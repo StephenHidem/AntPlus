@@ -64,7 +64,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public void ParseParameters(byte[] dataPage)
         {
             Parameters.Parse(dataPage);
-            RaisePropertyChange(nameof(Parameters));
         }
 
         public void ParseMeasurementOutputData(byte[] dataPage)

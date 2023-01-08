@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
-    public class Calibration
+    public class Calibration : INotifyPropertyChanged
     {
         private readonly BicyclePower bp;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private enum CalibrationRequestId
         {
@@ -53,28 +56,37 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 case CalibrationResponseId.AutoZeroSupport:
                     AutoZeroSupported = (dataPage[2] & 0x01) == 0x01;
                     AutoZeroStatus = (dataPage[2] & 0x02) == 0x02 ? AutoZero.On : AutoZero.Off;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroSupported)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.Success:
                     Succeeded = true;
                     AutoZeroStatus = (AutoZero)dataPage[2];
                     CalibrationData = BitConverter.ToInt16(dataPage, 6);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationData)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.Failed:
                     Succeeded = false;
                     AutoZeroStatus = (AutoZero)dataPage[2];
                     CalibrationData = BitConverter.ToInt16(dataPage, 6);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationData)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.CustomCalibration:
                     Succeeded = true;
                     CustomCalibrationParameters = dataPage.Skip(2).ToArray();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 case CalibrationResponseId.CustomCalibrationUpdate:
                     Succeeded = true;
                     CustomCalibrationParameters = dataPage.Skip(2).ToArray();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 default:
                     break;
             }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Succeeded)));
         }
 
         public void RequestManualCalibration()

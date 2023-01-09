@@ -40,6 +40,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public short CalibrationData { get; private set; }
         public bool AutoZeroSupported { get; private set; }
         public byte[] CustomCalibrationParameters { get; private set; }
+        public MeasurementOutputData MeasurementOutput { get; private set; }
 
         public Calibration(BicyclePower bp)
         {
@@ -87,6 +88,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     break;
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Succeeded)));
+        }
+
+        public void ParseMeasurementOutputData(byte[] dataPage)
+        {
+            MeasurementOutput = new MeasurementOutputData(dataPage);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MeasurementOutput)));
         }
 
         public void RequestManualCalibration()

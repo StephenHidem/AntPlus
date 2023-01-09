@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles.BicyclePower;
+﻿using AntPlusUsbClient.ViewModels;
 using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Controls
@@ -8,7 +8,7 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicyclePowerCalibrationControl : UserControl
     {
-        public BicyclePowerCalibrationControl(BicyclePower bp)
+        public BicyclePowerCalibrationControl(BicyclePowerViewModel bp)
         {
             InitializeComponent();
             DataContext = bp;

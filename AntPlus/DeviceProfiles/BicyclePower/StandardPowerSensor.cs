@@ -22,7 +22,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public byte InstantaneousCadence { get; private set; }
         public ushort InstantaneousPower { get; private set; }
         public Parameters Parameters { get; private set; }
-        public MeasurementOutputData MeasurementOutput { get; private set; }
         public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; }
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
@@ -64,12 +63,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public void ParseParameters(byte[] dataPage)
         {
             Parameters.Parse(dataPage);
-        }
-
-        public void ParseMeasurementOutputData(byte[] dataPage)
-        {
-            MeasurementOutput = new MeasurementOutputData(dataPage);
-            RaisePropertyChange(nameof(MeasurementOutput));
         }
 
         public void ParseTEPS(byte[] dataPage)

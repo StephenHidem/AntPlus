@@ -68,7 +68,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     PowerOnlySensor.ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
-                    PowerOnlySensor?.ParseMeasurementOutputData(dataPage);
+                    Calibration.ParseMeasurementOutputData(dataPage);
                     break;
                 case DataPage.PowerOnly:
                     if (Sensor == SensorType.Unknown)

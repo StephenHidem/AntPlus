@@ -88,9 +88,6 @@
     <Compile Include="Controls\EllipticalControl.xaml.cs">
       <DependentUpon>EllipticalControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MeasurementOutputControl.xaml.cs">
-      <DependentUpon>MeasurementOutputControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\NordicSkierControl.xaml.cs">
       <DependentUpon>NordicSkierControl.xaml</DependentUpon>
     </Compile>
@@ -171,10 +168,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\EllipticalControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\MeasurementOutputControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -12,21 +12,21 @@
                 <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <TextBlock Text="{Binding Calibration.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
-                <TextBlock Text="{Binding Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
-                <TextBlock Text="{Binding Calibration.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
-                <TextBlock Text="{Binding Calibration.CalibrationData, StringFormat='Calibration Data {0}'}"/>
-                <TextBlock Text="{Binding Calibration.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.CalibrationData, StringFormat='Calibration Data {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
                 <Label Content="Measurement Output" FontWeight="DemiBold"/>
-                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of measurement types {0}'}"/>
-                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
-                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>
-                <TextBlock Text="{Binding PowerOnlySensor.MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of measurement types {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>
+                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
 
                 <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
-                <Button Content="Set Auto Zero Configuration" Command="{Binding Calibration.SetAutoZeroConfig}"/>
-                <Button Content="Custom Calibration Parameters Request" Command="{Binding Calibration.GetCustomCalibrationParameters}"/>
-                <Button Content="Set Custom Calibration Parameters" Command="{Binding Calibration.SetCustomCalibrationParameters}"/>
+                <Button Content="Set Auto Zero Configuration" Command="{Binding SetAutoZeroConfig}"/>
+                <Button Content="Custom Calibration Parameters Request" Command="{Binding GetCustomCalibrationParameters}"/>
+                <Button Content="Set Custom Calibration Parameters" Command="{Binding SetCustomCalibrationParameters}"/>
             </StackPanel>
         </Expander>
     </Grid>

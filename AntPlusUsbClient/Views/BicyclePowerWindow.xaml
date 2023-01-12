@@ -42,7 +42,6 @@
                     </StackPanel>
                 </StackPanel>
             </Expander>
-            <uc:CommonDataPagesControl DataContext="{Binding BicyclePower}"/>
         </StackPanel>
     </Grid>
 </Window>

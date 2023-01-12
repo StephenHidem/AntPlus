@@ -1,5 +1,6 @@
 ﻿using AntPlusUsbClient.ViewModels;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace AntPlusUsbClient.Controls
 {
@@ -8,8 +9,9 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicyclePowerCalibrationControl : UserControl
     {
-        public BicyclePowerCalibrationControl(BicyclePowerViewModel bp)
+        internal BicyclePowerCalibrationControl(BicyclePowerViewModel bp)
         {
+            BindingOperations.EnableCollectionSynchronization(bp.BicyclePower.Calibration.Measurements, bp.BicyclePower.Calibration.Measurements.collectionLock);
             InitializeComponent();
             DataContext = bp;
         }

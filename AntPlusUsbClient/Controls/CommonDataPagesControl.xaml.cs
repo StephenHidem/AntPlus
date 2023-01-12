@@ -11,5 +11,11 @@ namespace AntPlusUsbClient.Controls
         {
             InitializeComponent();
         }
+
+        public CommonDataPagesControl(object ctx)
+        {
+            InitializeComponent();
+            DataContext = ctx;
+        }
     }
 }

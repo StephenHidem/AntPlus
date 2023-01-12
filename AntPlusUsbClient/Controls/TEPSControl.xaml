@@ -14,8 +14,8 @@
             <StackPanel>
                 <TextBlock Text="{Binding CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness {0}'}"/>
                 <TextBlock Text="{Binding LeftPedalSmoothness, StringFormat='Left Pedal Smoothness {0}'}"/>
-                <TextBlock Text="{Binding RightPedalSmoothness, StringFormat='Right Pedal Smoothness {0}'}"/>
                 <TextBlock Text="{Binding LeftTorqueEffectivenes, StringFormat='Left Torque Effectivenes {0}'}"/>
+                <TextBlock Text="{Binding RightPedalSmoothness, StringFormat='Right Pedal Smoothness {0}'}"/>
                 <TextBlock Text="{Binding RightTorqueEffectivenes, StringFormat='Right Torque Effectivenes {0}'}"/>
             </StackPanel>
         </Expander>

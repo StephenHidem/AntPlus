@@ -28,6 +28,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             CustomCalibrationUpdate = 0xBD,
         }
 
+        public enum CalibrationResponse
+        {
+            InProgress,
+            Succeeded,
+            Failed,
+        }
+
         public enum AutoZero
         {
             Off = 0,
@@ -35,12 +42,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             NotSupported = 0xFF
         }
 
-        public bool Succeeded { get; private set; }
+        public CalibrationResponse CalibrationStatus { get; private set; }
         public AutoZero AutoZeroStatus { get; private set; }
         public short CalibrationData { get; private set; }
         public bool AutoZeroSupported { get; private set; }
         public byte[] CustomCalibrationParameters { get; private set; }
-        public MeasurementOutputData MeasurementOutput { get; private set; }
+        public MeasurementCollection Measurements { get; private set; } = new MeasurementCollection();
 
         public Calibration(BicyclePower bp)
         {
@@ -61,58 +68,68 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.Success:
-                    Succeeded = true;
+                    CalibrationStatus = CalibrationResponse.Succeeded;
                     AutoZeroStatus = (AutoZero)dataPage[2];
                     CalibrationData = BitConverter.ToInt16(dataPage, 6);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationData)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.Failed:
-                    Succeeded = false;
+                    CalibrationStatus = CalibrationResponse.Failed;
                     AutoZeroStatus = (AutoZero)dataPage[2];
                     CalibrationData = BitConverter.ToInt16(dataPage, 6);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationData)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.CustomCalibration:
-                    Succeeded = true;
+                    CalibrationStatus = CalibrationResponse.Succeeded;
                     CustomCalibrationParameters = dataPage.Skip(2).ToArray();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 case CalibrationResponseId.CustomCalibrationUpdate:
-                    Succeeded = true;
+                    CalibrationStatus = CalibrationResponse.Succeeded;
                     CustomCalibrationParameters = dataPage.Skip(2).ToArray();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 default:
                     break;
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Succeeded)));
         }
 
         public void ParseMeasurementOutputData(byte[] dataPage)
         {
-            MeasurementOutput = new MeasurementOutputData(dataPage);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MeasurementOutput)));
+            Measurements.Parse(dataPage);
         }
 
         public void RequestManualCalibration()
         {
+            CalibrationStatus = CalibrationResponse.InProgress;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         public void SetAutoZeroConfiguration(AutoZero autoZero)
         {
+            CalibrationStatus = CalibrationResponse.InProgress;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         public void RequestCustomParameters()
         {
+            CalibrationStatus = CalibrationResponse.InProgress;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         public void SetCustomParameters(byte[] customParameters)
         {
+            CalibrationStatus = CalibrationResponse.InProgress;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };
             msg = msg.Concat(customParameters).ToArray();
             bp.SendExtAcknowledgedMessage(msg);

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
-    public readonly struct MeasurementOutputData
+    public class MeasurementOutputData : INotifyPropertyChanged
     {
         public enum DataType
         {
@@ -30,17 +31,25 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             RightPedalAngle = 41
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public int NumberOfMeasurementTypes { get; }
         public DataType MeasurementType { get; }
-        public double Timestamp { get; }
-        public double Measurement { get; }
+        public double Timestamp { get; private set; }
+        public double Measurement { get; private set; }
 
         internal MeasurementOutputData(byte[] dataPage)
         {
             NumberOfMeasurementTypes = dataPage[1];
             MeasurementType = (DataType)dataPage[2];
+        }
+
+        internal void Parse(byte[] dataPage)
+        {
             Timestamp = BitConverter.ToUInt16(dataPage, 4) / 2048.0;
-            Measurement = BitConverter.ToUInt16(dataPage, 6) * Math.Pow(2, (sbyte)dataPage[3]);
+            Measurement = BitConverter.ToInt16(dataPage, 6) * Math.Pow(2, (sbyte)dataPage[3]);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Timestamp)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Measurement)));
         }
     }
 }

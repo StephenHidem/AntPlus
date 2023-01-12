@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AntPlusUsbClient.Controls"
+             xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -12,16 +13,23 @@
                 <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <TextBlock Text="{Binding BicyclePower.Calibration.Succeeded,StringFormat='Operation Succeeded {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.CalibrationData, StringFormat='Calibration Data {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
-                <Label Content="Measurement Output" FontWeight="DemiBold"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.NumberOfMeasurementTypes, StringFormat='Number of measurement types {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.MeasurementType, StringFormat='Measurement Type {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.Measurement, StringFormat='Measurement {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.Calibration.MeasurementOutput.Timestamp, StringFormat='Timestamp {0}'}"/>
+                <StackPanel DataContext="{Binding BicyclePower.Calibration}">
+                    <TextBlock Text="{Binding CalibrationStatus, StringFormat='Calibration Status {0}'}"/>
+                    <TextBlock Text="{Binding AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
+                    <TextBlock Text="{Binding AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData, StringFormat='Calibration Data {0}'}"/>
+                    <TextBlock Text="{Binding CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
+                    <Label Content="Measurement Output" FontWeight="DemiBold"/>
+                    <ListView ItemsSource="{Binding Measurements}">
+                        <ListView.View>
+                            <GridView >
+                                <GridViewColumn Header="Measurement Type" Width="100" DisplayMemberBinding="{Binding Path=MeasurementType}"/>
+                                <GridViewColumn Header="Timestamp" Width="100" DisplayMemberBinding="{Binding Path=Timestamp}"/>
+                                <GridViewColumn Header="Measurement" Width="200" DisplayMemberBinding="{Binding Path=Measurement}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
 
                 <Button Content="Manual Cal Request" Command="{Binding ManualCalRequest}"/>
                 <Button Content="Set Auto Zero Configuration" Command="{Binding SetAutoZeroConfig}"/>

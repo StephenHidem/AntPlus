@@ -8,10 +8,10 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicycleWheelTorqueControl : UserControl
     {
-        public BicycleWheelTorqueControl(BicyclePower bp)
+        public BicycleWheelTorqueControl(StandardWheelTorqueSensor wts)
         {
             InitializeComponent();
-            DataContext = bp.WheelTorqueSensor;
+            DataContext = wts;
         }
     }
 }

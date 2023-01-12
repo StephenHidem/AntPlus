@@ -65,7 +65,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     Calibration.Parse(dataPage);
                     break;
                 case DataPage.GetSetParameters:
-                    PowerOnlySensor.ParseParameters(dataPage);
+                    PowerOnlySensor?.ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
                     Calibration.ParseMeasurementOutputData(dataPage);
@@ -76,13 +76,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                         Sensor = SensorType.PowerOnly;
                         PowerOnlySensor = new StandardPowerSensor(this);
                     }
-                    PowerOnlySensor?.Parse(dataPage);
+                    PowerOnlySensor.Parse(dataPage);
                     break;
                 case DataPage.WheelTorque:
                     if (Sensor == SensorType.Unknown || Sensor == SensorType.PowerOnly)
                     {
                         Sensor = SensorType.WheelTorque;
-                        WheelTorqueSensor = new StandardWheelTorqueSensor(this);
+                        PowerOnlySensor = WheelTorqueSensor = new StandardWheelTorqueSensor(this);
                     }
                     WheelTorqueSensor.ParseTorque(dataPage);
                     break;
@@ -90,14 +90,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     if (Sensor == SensorType.Unknown || Sensor == SensorType.PowerOnly)
                     {
                         Sensor = SensorType.CrankTorque;
-                        CrankTorqueSensor = new StandardCrankTorqueSensor(this);
+                        PowerOnlySensor = CrankTorqueSensor = new StandardCrankTorqueSensor(this);
                     }
                     CrankTorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
                     PowerOnlySensor?.ParseTEPS(dataPage);
-                    WheelTorqueSensor?.ParseTEPS(dataPage);
-                    CrankTorqueSensor?.ParseTEPS(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
                     Sensor = SensorType.CrankTorqueFrequency;

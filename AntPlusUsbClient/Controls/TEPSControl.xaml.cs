@@ -8,10 +8,10 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class TEPSControl : UserControl
     {
-        public TEPSControl(StandardPowerSensor bp)
+        public TEPSControl(TorqueEffectivenessAndPedalSmoothness teps)
         {
             InitializeComponent();
-            DataContext = bp.TorqueEffectiveness;
+            DataContext = teps;
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿namespace AntPlus.DeviceProfiles.BicyclePower
+﻿using System.ComponentModel;
+
+namespace AntPlus.DeviceProfiles.BicyclePower
 {
-    public struct TorqueEffectivenessAndPedalSmoothness
+    public class TorqueEffectivenessAndPedalSmoothness : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public double LeftTorqueEffectivenes { get; private set; }
         public double RightTorqueEffectivenes { get; private set; }
         public double LeftPedalSmoothness { get; private set; }
@@ -13,7 +17,7 @@
         /// Note that if the right and left pedal smootness is combined, the right and left values will be the same.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public TorqueEffectivenessAndPedalSmoothness(byte[] dataPage)
+        public void Parse(byte[] dataPage)
         {
             if (dataPage[2] != 0xFF) { LeftTorqueEffectivenes = dataPage[2] * 0.5; }
             else { LeftTorqueEffectivenes = 0; }
@@ -42,6 +46,7 @@
                 CombinedPedalSmoothness = false;
                 RightPedalSmoothness = 0;
             }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

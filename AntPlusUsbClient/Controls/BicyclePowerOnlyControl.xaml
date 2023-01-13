@@ -22,6 +22,7 @@
                     <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
                     <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
                 </StackPanel>
+                <local:BicyclePowerParametersControl DataContext="{Binding .}"/>
                 <local:BicyclePowerCalibrationControl DataContext="{Binding .}"/>
             </StackPanel>
         </Expander>

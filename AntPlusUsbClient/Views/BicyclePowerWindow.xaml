@@ -14,34 +14,6 @@
         <StackPanel>
             <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
             <StackPanel x:Name="BicyclePowerControl"/>
-            <Expander ExpandDirection="Down" IsExpanded="False">
-                <Expander.Header>
-                    <TextBlock Text="Get/Set Parameters" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel>
-                    <StackPanel>
-                        <Button Content="Get Crank" Command="{Binding GetParameters}"
-                                CommandParameter="{x:Static dp:Subpage.CrankParameters}"/>
-                        <Button Content="Get Peak Torque Threshold" Command="{Binding GetParameters}"
-                                CommandParameter="{x:Static dp:Subpage.PowerPhaseConfiguration}"/>
-                        <Button Content="Get Rider Position Time Offset" Command="{Binding GetParameters}"
-                                CommandParameter="{x:Static dp:Subpage.RiderPositionConfiguration}"/>
-                    </StackPanel>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.CrankLength, StringFormat='Crank Length {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.CrankStatus, StringFormat='Crank Status {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.MismatchStatus, StringFormat='Mismatch Status {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.AvailabilityStatus, StringFormat='Availability Status {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.CustomCalibration, StringFormat='Custom Calibration {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.Crank.AutoCrankLength, StringFormat='Auto Crank Length {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.PeakTorqueThreshold, StringFormat='Peak Torque Threshold {0}'}"/>
-                    <TextBlock Text="{Binding BicyclePower.PowerOnlySensor.Parameters.RiderPositionTimeOffset, StringFormat='Rider Position Time Offset {0}'}"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Set Crank Length" Command="{Binding SetCrankLength}" CommandParameter="{Binding ElementName=CrankLength, Path=Text}"/>
-                        <TextBox x:Name="CrankLength" Text="110" Width="50"/>
-                        <CheckBox Content="Auto Crank Length" IsChecked="False" IsThreeState="False"/>
-                    </StackPanel>
-                </StackPanel>
-            </Expander>
         </StackPanel>
     </Grid>
 </Window>

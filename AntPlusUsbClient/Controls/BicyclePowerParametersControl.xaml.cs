@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace AntPlusUsbClient.Controls
 {
@@ -8,7 +7,6 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicyclePowerParametersControl : UserControl
     {
-        public RoutedCommand GetParmsRoutedCommand;
         public BicyclePowerParametersControl()
         {
             InitializeComponent();

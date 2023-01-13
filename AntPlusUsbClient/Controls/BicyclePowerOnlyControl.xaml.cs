@@ -8,10 +8,10 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicyclePowerOnlyControl : UserControl
     {
-        public BicyclePowerOnlyControl(BicyclePowerViewModel bp)
+        public BicyclePowerOnlyControl(BicyclePowerViewModel vm)
         {
             InitializeComponent();
-            DataContext = bp.BicyclePower.PowerOnlySensor;
+            DataContext = vm;
         }
     }
 }

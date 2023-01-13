@@ -9,11 +9,11 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicyclePowerCalibrationControl : UserControl
     {
-        internal BicyclePowerCalibrationControl(BicyclePowerViewModel bp)
+        internal BicyclePowerCalibrationControl(BicyclePowerViewModel vm)
         {
-            BindingOperations.EnableCollectionSynchronization(bp.BicyclePower.Calibration.Measurements, bp.BicyclePower.Calibration.Measurements.collectionLock);
+            BindingOperations.EnableCollectionSynchronization(vm.BicyclePower.Calibration.Measurements, vm.BicyclePower.Calibration.Measurements.collectionLock);
             InitializeComponent();
-            DataContext = bp;
+            DataContext = vm;
         }
     }
 }

@@ -11,7 +11,7 @@
             <Expander.Header>
                 <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
             </Expander.Header>
-            <StackPanel>
+            <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor}">
                 <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>

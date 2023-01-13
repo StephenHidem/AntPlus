@@ -18,13 +18,12 @@
             <TextBlock Text="{Binding Geocache.Hint, StringFormat='Hint {0}'}"/>
             <TextBlock Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits {0}'}"/>
             <TextBlock Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit {0}'}"/>
-
-            <uc:CommonDataPagesControl DataContext="{Binding Geocache}"/>
-            
             <Button Content="Request PIN" Command="{Binding RequestPIN}"/>
             <Button Content="Request Authentication" Command="{Binding RequestAuthentication}"/>
             <Button Content="Program Geocache" Command="{Binding ProgramGeocache}"/>
             <Button Content="Log Visit" Command="{Binding LogVisit}"/>
+
+            <uc:CommonDataPagesControl DataContext="{Binding Geocache}"/>
         </StackPanel>
     </Grid>
 </Window>

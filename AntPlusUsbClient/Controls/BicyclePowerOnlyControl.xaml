@@ -16,6 +16,8 @@
                 <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
                 <TextBlock Text="{Binding AveragePower, StringFormat='Average Power {0}'}"/>
+                <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
+                <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
             </StackPanel>
         </Expander>
     </Grid>

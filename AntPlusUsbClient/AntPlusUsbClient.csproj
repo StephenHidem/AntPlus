@@ -73,6 +73,9 @@
     <Compile Include="Controls\BicyclePowerOnlyControl.xaml.cs">
       <DependentUpon>BicyclePowerOnlyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BicyclePowerParametersControl.xaml.cs">
+      <DependentUpon>BicyclePowerParametersControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BicycleWheelTorqueControl.xaml.cs">
       <DependentUpon>BicycleWheelTorqueControl.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\BicyclePowerOnlyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BicyclePowerParametersControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

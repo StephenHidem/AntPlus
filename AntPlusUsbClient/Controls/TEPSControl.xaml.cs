@@ -8,6 +8,11 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class TEPSControl : UserControl
     {
+        public TEPSControl()
+        {
+            InitializeComponent();
+        }
+
         public TEPSControl(TorqueEffectivenessAndPedalSmoothness teps)
         {
             InitializeComponent();

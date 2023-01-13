@@ -40,7 +40,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
         public Calibration Calibration { get; private set; }
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
@@ -112,7 +111,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     CrankTorqueSensor.ParseCyclingDynamics(dataPage);
                     break;
                 default:
-                    CommonDataPages.ParseCommonDataPage(dataPage);
+                    PowerOnlySensor?.CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
         }

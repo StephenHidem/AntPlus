@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace AntPlusUsbClient.ViewModels
 {
-    internal class BicyclePowerViewModel
+    public class BicyclePowerViewModel
     {
         private readonly BicyclePower bicyclePower;
 

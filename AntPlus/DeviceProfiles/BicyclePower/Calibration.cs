@@ -30,6 +30,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         public enum CalibrationResponse
         {
+            Unknown,
             InProgress,
             Succeeded,
             Failed,

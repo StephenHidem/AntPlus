@@ -24,16 +24,16 @@ namespace AntPlusUsbClient.Views
                     //BicyclePowerControl.Children.Add(new CommonDataPagesControl(bicyclePower));
                     break;
                 case SensorType.WheelTorque:
-                    BicyclePowerControl.Children.Add(new BicycleWheelTorqueControl(bicyclePower.WheelTorqueSensor));
-                    BicyclePowerControl.Children.Add(new TEPSControl(bicyclePower.WheelTorqueSensor.TorqueEffectiveness));
+                    BicyclePowerControl.Children.Add(new BicycleWheelTorqueControl(bicyclePowerViewModel));
+                    //BicyclePowerControl.Children.Add(new TEPSControl(bicyclePower.WheelTorqueSensor.TorqueEffectiveness));
                     BicyclePowerControl.Children.Add(new BicyclePowerCalibrationControl(bicyclePowerViewModel));
-                    BicyclePowerControl.Children.Add(new CommonDataPagesControl(bicyclePower));
+                    //BicyclePowerControl.Children.Add(new CommonDataPagesControl(bicyclePower));
                     break;
                 case SensorType.CrankTorque:
-                    BicyclePowerControl.Children.Add(new BicycleCrankTorqueControl(bicyclePower.CrankTorqueSensor));
-                    BicyclePowerControl.Children.Add(new TEPSControl(bicyclePower.CrankTorqueSensor.TorqueEffectiveness));
+                    BicyclePowerControl.Children.Add(new BicycleCrankTorqueControl(bicyclePowerViewModel));
+                    //BicyclePowerControl.Children.Add(new TEPSControl(bicyclePower.CrankTorqueSensor.TorqueEffectiveness));
                     BicyclePowerControl.Children.Add(new BicyclePowerCalibrationControl(bicyclePowerViewModel));
-                    BicyclePowerControl.Children.Add(new CommonDataPagesControl(bicyclePower));
+                    //BicyclePowerControl.Children.Add(new CommonDataPagesControl(bicyclePower));
                     break;
                 case SensorType.CrankTorqueFrequency:
                     BicyclePowerControl.Children.Add(new CTFControl(bicyclePower.CTFSensor));

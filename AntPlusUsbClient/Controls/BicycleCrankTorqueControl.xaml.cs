@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles.BicyclePower;
+﻿using AntPlusUsbClient.ViewModels;
 using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Controls
@@ -8,10 +8,10 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicycleCrankTorqueControl : UserControl
     {
-        public BicycleCrankTorqueControl(StandardCrankTorqueSensor cts)
+        public BicycleCrankTorqueControl(BicyclePowerViewModel vm)
         {
             InitializeComponent();
-            DataContext = cts;
+            DataContext = vm.BicyclePower.CrankTorqueSensor;
         }
     }
 }

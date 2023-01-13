@@ -9,9 +9,14 @@ namespace AntPlusUsbClient.Controls
     /// </summary>
     public partial class BicyclePowerCalibrationControl : UserControl
     {
-        internal BicyclePowerCalibrationControl(BicyclePowerViewModel vm)
+        public BicyclePowerCalibrationControl()
         {
-            BindingOperations.EnableCollectionSynchronization(vm.BicyclePower.Calibration.Measurements, vm.BicyclePower.Calibration.Measurements.collectionLock);
+            InitializeComponent();
+        }
+
+        public BicyclePowerCalibrationControl(BicyclePowerViewModel vm)
+        {
+            BindingOperations.EnableCollectionSynchronization(vm.BicyclePower.PowerOnlySensor.Calibration.Measurements, vm.BicyclePower.PowerOnlySensor.Calibration.Measurements.collectionLock);
             InitializeComponent();
             DataContext = vm;
         }

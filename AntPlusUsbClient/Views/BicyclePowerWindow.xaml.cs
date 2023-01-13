@@ -19,7 +19,7 @@ namespace AntPlusUsbClient.Views
             {
                 case SensorType.PowerOnly:
                     BicyclePowerControl.Children.Add(new BicyclePowerOnlyControl(bicyclePowerViewModel));
-                    BicyclePowerControl.Children.Add(new BicyclePowerCalibrationControl(bicyclePowerViewModel));
+                    //BicyclePowerControl.Children.Add(new BicyclePowerCalibrationControl(bicyclePowerViewModel));
                     break;
                 case SensorType.WheelTorque:
                     BicyclePowerControl.Children.Add(new BicycleWheelTorqueControl(bicyclePowerViewModel));

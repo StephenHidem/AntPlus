@@ -24,11 +24,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public Parameters Parameters { get; private set; }
         public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; } = new TorqueEffectivenessAndPedalSmoothness();
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public Calibration Calibration { get; private set; }
 
 
         public StandardPowerSensor(BicyclePower bp)
         {
             Parameters = new Parameters(bp);
+            Calibration = new Calibration(bp);
         }
 
 

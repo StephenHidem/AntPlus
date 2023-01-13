@@ -40,11 +40,9 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
-        public Calibration Calibration { get; private set; }
 
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            Calibration = new Calibration(this);
         }
 
         public override void Parse(byte[] dataPage)
@@ -61,13 +59,13 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 case DataPage.Unknown:
                     break;
                 case DataPage.Calibration:
-                    Calibration.Parse(dataPage);
+                    PowerOnlySensor?.Calibration.Parse(dataPage);
                     break;
                 case DataPage.GetSetParameters:
                     PowerOnlySensor?.ParseParameters(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
-                    Calibration.ParseMeasurementOutputData(dataPage);
+                    PowerOnlySensor?.Calibration.ParseMeasurementOutputData(dataPage);
                     break;
                 case DataPage.PowerOnly:
                     if (Sensor == SensorType.Unknown)

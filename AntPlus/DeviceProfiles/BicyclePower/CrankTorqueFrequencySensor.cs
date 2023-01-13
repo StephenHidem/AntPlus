@@ -92,7 +92,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         public void RequestCalibration()
         {
-            bp.Calibration.RequestManualCalibration();
+            //bp.Calibration.RequestManualCalibration();
         }
 
         public void SaveSlopeToFlash(ushort slope)

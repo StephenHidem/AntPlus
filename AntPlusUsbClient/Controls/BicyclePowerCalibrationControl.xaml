@@ -13,7 +13,7 @@
                 <TextBlock Text="Calibration Data" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <StackPanel DataContext="{Binding BicyclePower.Calibration}">
+                <StackPanel>
                     <TextBlock Text="{Binding CalibrationStatus, StringFormat='Calibration Status {0}'}"/>
                     <TextBlock Text="{Binding AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
                     <TextBlock Text="{Binding AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>

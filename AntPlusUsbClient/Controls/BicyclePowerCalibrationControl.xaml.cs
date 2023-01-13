@@ -16,7 +16,7 @@ namespace AntPlusUsbClient.Controls
 
         public BicyclePowerCalibrationControl(BicyclePowerViewModel vm)
         {
-            BindingOperations.EnableCollectionSynchronization(vm.BicyclePower.PowerOnlySensor.Calibration.Measurements, vm.BicyclePower.PowerOnlySensor.Calibration.Measurements.collectionLock);
+            BindingOperations.EnableCollectionSynchronization(vm.BicyclePower.Calibration.Measurements, vm.BicyclePower.Calibration.Measurements.collectionLock);
             InitializeComponent();
             DataContext = vm;
         }

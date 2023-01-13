@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AntPlusUsbClient.Controls"
+             xmlns:vm="clr-namespace:AntPlusUsbClient.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -11,14 +13,16 @@
             <Expander.Header>
                 <TextBlock Text="Power Only" FontWeight="ExtraBold"/>
             </Expander.Header>
-            <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor}">
-                <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
-                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power {0}'}"/>
-                <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
-                <local:BicyclePowerCalibrationControl DataContext="{Binding Calibration}"/>
-                <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
+            <StackPanel>
+                <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor}">
+                    <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
+                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power {0}'}"/>
+                    <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
+                    <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
+                </StackPanel>
+                <local:BicyclePowerCalibrationControl DataContext="{Binding .}"/>
             </StackPanel>
         </Expander>
     </Grid>

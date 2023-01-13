@@ -115,7 +115,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         public void SetAutoZeroConfiguration(AutoZero autoZero)
         {
-            CalibrationStatus = CalibrationResponse.InProgress;
+            CalibrationStatus = CalibrationResponse.Unknown;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }

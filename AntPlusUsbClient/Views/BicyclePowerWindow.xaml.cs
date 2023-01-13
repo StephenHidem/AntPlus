@@ -2,6 +2,7 @@
 using AntPlusUsbClient.Controls;
 using AntPlusUsbClient.ViewModels;
 using System.Windows;
+using System.Windows.Data;
 
 namespace AntPlusUsbClient.Views
 {
@@ -14,6 +15,7 @@ namespace AntPlusUsbClient.Views
         {
             InitializeComponent();
             BicyclePowerViewModel bicyclePowerViewModel = new BicyclePowerViewModel(bicyclePower);
+            BindingOperations.EnableCollectionSynchronization(bicyclePowerViewModel.BicyclePower.Calibration.Measurements, bicyclePowerViewModel.BicyclePower.Calibration.Measurements.collectionLock);
 
             switch (bicyclePower.Sensor)
             {

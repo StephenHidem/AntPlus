@@ -11,7 +11,7 @@ namespace AntPlusUsbClient.Controls
         public BicycleCrankTorqueControl(BicyclePowerViewModel vm)
         {
             InitializeComponent();
-            DataContext = vm.BicyclePower.CrankTorqueSensor;
+            DataContext = vm;
         }
     }
 }

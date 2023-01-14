@@ -1,4 +1,5 @@
 ﻿using AntPlus.DeviceProfiles.BicyclePower;
+using AntPlusUsbClient.ViewModels;
 using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Controls
@@ -9,10 +10,10 @@ namespace AntPlusUsbClient.Controls
     public partial class CTFControl : UserControl
     {
         private readonly CrankTorqueFrequencySensor sensor;
-        public CTFControl(CrankTorqueFrequencySensor ctf)
+        public CTFControl(BicyclePowerViewModel vm)
         {
             InitializeComponent();
-            DataContext = sensor = ctf;
+            DataContext = vm;
         }
 
         private void Click_SaveSlope(object sender, System.Windows.RoutedEventArgs e)
@@ -23,11 +24,6 @@ namespace AntPlusUsbClient.Controls
         private void Click_SaveSerialNumber(object sender, System.Windows.RoutedEventArgs e)
         {
             sensor.SaveSerialNumberToFlash(0x1234);
-        }
-
-        private void Click_ManCalReq(object sender, System.Windows.RoutedEventArgs e)
-        {
-            sensor.RequestCalibration();
         }
     }
 }

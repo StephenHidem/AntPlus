@@ -25,9 +25,9 @@ namespace AntPlusUsbClient.ViewModels
 
             CommandBindings = new CommandBinding[] {
                 new CommandBinding(ManualCalRequest, (s, e) => BicyclePower.Calibration.RequestManualCalibration()),
-                new CommandBinding(SetAutoZeroConfig, (s, e) => BicyclePower.Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On)),
-                new CommandBinding(GetCustomCalibrationParameters, (s, e) => BicyclePower.Calibration.RequestCustomParameters()),
-                new CommandBinding(SetCustomCalibrationParameters, (s, e) => BicyclePower.Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 })),
+                new CommandBinding(SetAutoZeroConfig, (s, e) => BicyclePower.Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On), (s, e) => e.CanExecute = BicyclePower.Sensor != SensorType.CrankTorqueFrequency),
+                new CommandBinding(GetCustomCalibrationParameters, (s, e) => BicyclePower.Calibration.RequestCustomParameters(), (s, e) => e.CanExecute = BicyclePower.Sensor != SensorType.CrankTorqueFrequency),
+                new CommandBinding(SetCustomCalibrationParameters, (s, e) => BicyclePower.Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 }), (s, e) => e.CanExecute = BicyclePower.Sensor != SensorType.CrankTorqueFrequency),
                 new CommandBinding(GetParameters, (s, e) => BicyclePower.PowerOnlySensor.Parameters.GetParameters((Subpage)e.Parameter)),
                 new CommandBinding(SetCrankLength, (s, e) => BicyclePower.PowerOnlySensor.Parameters.SetCrankLength(double.Parse(e.Parameter.ToString())))
             };

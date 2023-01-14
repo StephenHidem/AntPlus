@@ -29,7 +29,7 @@ namespace AntPlusUsbClient.Views
                     BicyclePowerControl.Children.Add(new BicycleCrankTorqueControl(bicyclePowerViewModel));
                     break;
                 case SensorType.CrankTorqueFrequency:
-                    BicyclePowerControl.Children.Add(new CTFControl(bicyclePower.CTFSensor));
+                    BicyclePowerControl.Children.Add(new CTFControl(bicyclePowerViewModel));
                     break;
                 default:
                     break;

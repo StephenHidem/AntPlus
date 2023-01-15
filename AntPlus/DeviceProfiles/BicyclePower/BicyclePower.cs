@@ -1,6 +1,5 @@
 ﻿using AntRadioInterface;
 using System;
-using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
@@ -50,11 +49,11 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         public override void Parse(byte[] dataPage)
         {
             // ignore duplicate/unchanged data pages
-            if (lastDataPage.SequenceEqual(dataPage))
-            {
-                return;
-            }
-            lastDataPage = dataPage;
+            //if (lastDataPage.SequenceEqual(dataPage))
+            //{
+            //    return;
+            //}
+            //lastDataPage = dataPage;
 
             switch ((DataPage)dataPage[0])
             {

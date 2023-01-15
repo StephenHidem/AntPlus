@@ -20,11 +20,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private byte prevUpdateEventCount;
         private ushort prevTimeStamp;
         private ushort prevTorqueTicks;
+        private int stopCounter;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ushort Offset { get; private set; } = 0;
-        public ushort Slope { get; private set; }
+        public double Slope { get; private set; }
         public double Cadence { get; private set; }
         public double Torque { get; private set; }
         public double Power { get; private set; }
@@ -42,27 +43,31 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             byte[] data = dataPage.Skip(2).Reverse().ToArray();
             ushort torqueTicks = BitConverter.ToUInt16(data, 0);
             ushort timeStamp = BitConverter.ToUInt16(data, 2);
-            Slope = BitConverter.ToUInt16(data, 4);
+            Slope = BitConverter.ToUInt16(data, 4) / 10.0;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Slope)));
 
             if (isFirstPage)
             {
                 isFirstPage = false;
+                prevUpdateEventCount = updateEventCount;
                 prevTimeStamp = timeStamp;
                 prevTorqueTicks = torqueTicks;
                 return;
             }
 
-            // calculations
-            double elapsedTime = Utils.CalculateDelta(timeStamp, ref prevTimeStamp) * 0.0005;
-            double cadencePeriod = elapsedTime / Utils.CalculateDelta(updateEventCount, ref prevUpdateEventCount);
-            Cadence = Math.Round(60.0 / cadencePeriod, MidpointRounding.AwayFromZero);
-            double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
-            Torque = torqueFreq / (Slope / 10.0);
-            Power = Torque * Cadence * Math.PI / 30.0;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cadence)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Torque)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Power)));
+            if (prevUpdateEventCount != updateEventCount && prevTorqueTicks != torqueTicks)
+            {
+                // calculations
+                double elapsedTime = Utils.CalculateDelta(timeStamp, ref prevTimeStamp) * 0.0005;
+                double cadencePeriod = elapsedTime / Utils.CalculateDelta(updateEventCount, ref prevUpdateEventCount);
+                Cadence = 60.0 / cadencePeriod;
+                double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
+                Torque = torqueFreq / (Slope / 10.0);
+                Power = Torque * Cadence * Math.PI / 30.0;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cadence)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Torque)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Power)));
+            }
         }
 
         public void ParseCalibrationMessage(byte[] message)

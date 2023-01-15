@@ -48,13 +48,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
 
         public override void Parse(byte[] dataPage)
         {
-            // ignore duplicate/unchanged data pages
-            //if (lastDataPage.SequenceEqual(dataPage))
-            //{
-            //    return;
-            //}
-            //lastDataPage = dataPage;
-
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.Unknown:

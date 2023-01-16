@@ -67,6 +67,9 @@ namespace AntPlusUsbClient
                     tracker.Show();
                     break;
                 default:
+                    // unknown device
+                    UnknownDeviceWindow unknownDeviceWindow = new UnknownDeviceWindow((UnknownDevice)antDevice);
+                    unknownDeviceWindow.Show();
                     break;
             }
         }

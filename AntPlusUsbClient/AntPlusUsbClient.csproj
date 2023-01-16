@@ -106,6 +106,7 @@
     <Compile Include="Controls\TreadmillControl.xaml.cs">
       <DependentUpon>TreadmillControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ByteArrayToString.cs" />
     <Compile Include="ViewModels\AssetTrackerViewModel.cs" />
     <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
     <Compile Include="ViewModels\BikeCadenceViewModel.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="ViewModels\GeocacheViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
     <Compile Include="ViewModels\MuscleOxygenViewModel.cs" />
+    <Compile Include="ViewModels\UnknownDeviceViewModel.cs" />
     <Compile Include="Views\AssetTrackerWindow.xaml.cs">
       <DependentUpon>AssetTrackerWindow.xaml</DependentUpon>
     </Compile>
@@ -141,6 +143,9 @@
     </Compile>
     <Compile Include="Views\MuscleOxygenWindow.xaml.cs">
       <DependentUpon>MuscleOxygenWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UnknownDeviceWindow.xaml.cs">
+      <DependentUpon>UnknownDeviceWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\BicycleCrankTorqueControl.xaml">
       <SubType>Designer</SubType>
@@ -243,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MuscleOxygenWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UnknownDeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

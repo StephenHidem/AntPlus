@@ -410,15 +410,5 @@ namespace AntPlus.DeviceProfiles.HeartRate
             // convert to milliseconds
             return deltaEventTime * 1000 / 1024;
         }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

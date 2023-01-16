@@ -35,8 +35,8 @@ namespace AntPlus
         /// <summary>Parses the specified data page.</summary>
         /// <param name="payload">The data page.</param>
         public abstract void Parse(byte[] dataPage);
-        public abstract void ChannelEventHandler(EventMsgId eventMsgId);
-        public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
+        //public abstract void ChannelEventHandler(EventMsgId eventMsgId);
+        //public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
 
         /// <summary>Requests the data page.</summary>
         /// <typeparam name="T">The data page enumeration of the derived ANT device class.</typeparam>

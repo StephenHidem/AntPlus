@@ -36,15 +36,5 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 }
             }
         }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

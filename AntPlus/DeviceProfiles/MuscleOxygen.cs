@@ -145,15 +145,5 @@ namespace AntPlus.DeviceProfiles
             msg = msg.Concat(BitConverter.GetBytes(current)).ToArray();
             SendExtAcknowledgedMessage(msg);
         }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

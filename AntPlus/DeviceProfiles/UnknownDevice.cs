@@ -1,5 +1,4 @@
 ﻿using AntRadioInterface;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -22,16 +21,6 @@ namespace AntPlus.DeviceProfiles
                 DataPages.Add(new DataPage(dataPage));
             }
             else { page.Update(dataPage); }
-        }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
         }
     }
 

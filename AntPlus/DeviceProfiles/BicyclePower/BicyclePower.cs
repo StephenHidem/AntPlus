@@ -1,5 +1,4 @@
 ﻿using AntRadioInterface;
-using System;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
@@ -106,16 +105,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     PowerOnlySensor?.CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
-        }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

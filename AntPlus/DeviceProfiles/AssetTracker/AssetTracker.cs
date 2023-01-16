@@ -1,5 +1,4 @@
 ﻿using AntRadioInterface;
-using System;
 using System.Linq;
 
 namespace AntPlus.DeviceProfiles.AssetTracker
@@ -27,16 +26,6 @@ namespace AntPlus.DeviceProfiles.AssetTracker
 
         public AssetTracker(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-        }
-
-        public override void ChannelEventHandler(EventMsgId eventMsgId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId)
-        {
-            throw new NotImplementedException();
         }
 
         private bool idRequested;

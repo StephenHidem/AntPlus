@@ -1,6 +1,5 @@
 ﻿using AntPlusUsbClient.ViewModels;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace AntPlusUsbClient.Controls
 {
@@ -16,7 +15,6 @@ namespace AntPlusUsbClient.Controls
 
         public BicyclePowerCalibrationControl(BicyclePowerViewModel vm)
         {
-            BindingOperations.EnableCollectionSynchronization(vm.BicyclePower.Calibration.Measurements, vm.BicyclePower.Calibration.Measurements.collectionLock);
             InitializeComponent();
             DataContext = vm;
         }

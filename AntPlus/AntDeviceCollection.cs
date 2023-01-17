@@ -12,11 +12,18 @@ namespace AntPlus
 {
     /// <summary>
     /// This is a thread safe observable collection of ANT devices.
-    /// 
-    /// © 2022 Stephen Hidem.
     /// </summary>
     public class AntDeviceCollection : ObservableCollection<AntDevice>
     {
+        /// <summary>
+        /// The collection lock.
+        /// </summary>
+        /// <remarks>
+        /// An application should use the collection lock to ensure thread safe access to the
+        /// collection. For example, the code behind for a WPF window should include -
+        /// <code>BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.collectionLock);</code>
+        /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
+        /// </remarks>
         public object collectionLock = new object();
         private readonly IAntRadio antRadio;
         private readonly IAntChannel channel;

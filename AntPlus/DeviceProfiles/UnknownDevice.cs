@@ -7,14 +7,12 @@ namespace AntPlus.DeviceProfiles
 {
     /// <summary>
     /// This class supports unknown devices.
-    /// 
-    /// © 2022 Stephen Hidem.
     /// </summary>
     /// <seealso cref="AntPlus.AntDevice" />
     public class UnknownDevice : AntDevice
     {
         /// <summary>
-        /// Gets the data pages received from the unknown device.
+        /// Gets the collection of data pages received from the unknown device.
         /// </summary>
         /// <value>
         /// The data pages.
@@ -51,14 +49,39 @@ namespace AntPlus.DeviceProfiles
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class DataPage : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        /// <returns></returns>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Gets the data page.
+        /// </summary>
+        /// <value>
+        /// 8 byte array of the page.
+        /// </value>
         public byte[] Page { get; private set; }
+        /// <summary>
+        /// Gets the data page number.
+        /// </summary>
+        /// <value>
+        /// The page number.
+        /// </value>
         public byte PageNumber => Page[0];
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataPage"/> class.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public DataPage(byte[] dataPage)
         {
             Page = dataPage;
         }
+        /// <summary>
+        /// Updates the specified data page. The property changed notification is
+        /// raised if the data page has changed.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public void Update(byte[] dataPage)
         {
             if (!Page.SequenceEqual(dataPage))
@@ -70,11 +93,20 @@ namespace AntPlus.DeviceProfiles
     }
 
     /// <summary>
-    /// A collection of unknown data pages.
+    /// A thread safe collection of unknown data pages.
     /// </summary>
     /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.DataPage&gt;" />
     public class UnknownDataPages : ObservableCollection<DataPage>
     {
+        /// <summary>
+        /// The collection lock.
+        /// </summary>
+        /// <remarks>
+        /// An application should use the collection lock to ensure thread safe access to the
+        /// collection. For example, the code behind for a WPF window should include -
+        /// <code>BindingOperations.EnableCollectionSynchronization(unknownDevice.DataPages, unknownDevice.DataPages.collectionLock);</code>
+        /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
+        /// </remarks>
         public object collectionLock = new object();
 
         protected override void InsertItem(int index, DataPage item)

@@ -3,9 +3,16 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.AssetTracker
 {
+    /// <summary>
+    /// Tracks assets.
+    /// 
+    /// © 2022 Stephen Hidem.
+    /// </summary>
     public class AssetTracker : AntDevice
     {
+        /// <summary>
         /// The asset tracker device class ID.
+        /// </summary>
         public const byte DeviceClass = 41;
 
         /// <summary>
@@ -21,6 +28,8 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             DisconnectCommand = 0x20,
         }
 
+        /// <summary>Gets the assets.</summary>
+        /// <value>The assets being tracked.</value>
         public AssetCollection Assets { get; } = new AssetCollection();
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 

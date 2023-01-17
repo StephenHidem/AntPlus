@@ -4,9 +4,16 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles
 {
+    /// <summary>
+    /// This class supports muscle oxygen sensors.
+    /// 
+    /// © 2022 Stephen Hidem.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class MuscleOxygen : AntDevice
     {
-        /// The fitness equipment device class ID.
+        /// <summary>
+        /// The muscle oxygen device class ID.
         /// </summary>
         public const byte DeviceClass = 31;
 

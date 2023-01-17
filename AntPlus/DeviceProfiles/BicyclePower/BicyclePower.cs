@@ -2,6 +2,9 @@
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// The bicycle power sensor type.
+    /// </summary>
     public enum SensorType
     {
         Unknown,
@@ -11,6 +14,9 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         CrankTorqueFrequency
     }
 
+    /// <summary>
+    /// Main data pages.
+    /// </summary>
     public enum DataPage
     {
         Unknown,
@@ -28,8 +34,15 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         PedalPosition = 0xE2
     }
 
+    /// <summary>
+    /// The primary class managing bicycle power sensors.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class BicyclePower : AntDevice
     {
+        /// <summary>
+        /// The device class ID.
+        /// </summary>
         public const byte DeviceClass = 11;
 
         // supported sensors

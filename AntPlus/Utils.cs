@@ -2,6 +2,9 @@
 
 namespace AntPlus
 {
+    /// <summary>
+    /// A static class with useful methods for calculations.
+    /// </summary>
     public static class Utils
     {
         /// <summary>
@@ -44,31 +47,56 @@ namespace AntPlus
             return delta;
         }
 
+        /// <summary>Computes the average angular velocity.</summary>
+        /// <param name="deltaEventCount">The delta event count.</param>
+        /// <param name="deltaPeriod">The delta period.</param>
+        /// <returns>Average angular velocity in radians per second.</returns>
         public static double ComputeAvgAngularVelocity(int deltaEventCount, int deltaPeriod)
         {
             return 2 * Math.PI * deltaEventCount / (deltaPeriod / 2048.0);
         }
 
+        /// <summary>Computes the average torque over the event count interval.</summary>
+        /// <param name="deltaTorque">The delta torque.</param>
+        /// <param name="deltaEventCount">The delta event count.</param>
+        /// <returns>The average torque in Nm.</returns>
         public static double ComputeAvgTorque(int deltaTorque, int deltaEventCount)
         {
             return deltaTorque / (32.0 * deltaEventCount);
         }
 
+        /// <summary>Computes the average speed.</summary>
+        /// <param name="wheelCircumference">The wheel circumference in meters.</param>
+        /// <param name="deltaEventCount">The delta event count.</param>
+        /// <param name="deltaPeriod">The delta period.</param>
+        /// <returns>The average speed in kilometers per hour.</returns>
         public static double ComputeAvgSpeed(double wheelCircumference, int deltaEventCount, int deltaPeriod)
         {
             return (3600.0 / 1000.0) * wheelCircumference * deltaEventCount / (deltaPeriod / 2048.0);
         }
 
+        /// <summary>Computes the change in distance.</summary>
+        /// <param name="wheelCircumference">The wheel circumference in meters.</param>
+        /// <param name="deltaTicks">The delta ticks.</param>
+        /// <returns>Distance change in meters.</returns>
         public static double ComputeDeltaDistance(double wheelCircumference, int deltaTicks)
         {
             return wheelCircumference * deltaTicks;
         }
 
+        /// <summary>Rotates a 16 bit number to the left.</summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="rotate">The number of bits to rotate.</param>
+        /// <returns>The rotated value.</returns>
         public static ushort RotateLeft(ushort value, int rotate)
         {
             return (ushort)((value << rotate) | (value >> (16 - rotate)));
         }
 
+        /// <summary>Rotates a 16 bit number to the right.</summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="rotate">The number of bits to rotate.</param>
+        /// <returns>The rotated value.</returns>
         public static ushort RotateRight(ushort value, int rotate)
         {
             return (ushort)((value >> rotate) | (value << (16 - rotate)));

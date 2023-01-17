@@ -4,6 +4,10 @@ using System.Text;
 
 namespace AntPlus.DeviceProfiles.AssetTracker
 {
+    /// <summary>
+    /// This class represents an asset.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Asset : INotifyPropertyChanged
     {
         private bool gotId;

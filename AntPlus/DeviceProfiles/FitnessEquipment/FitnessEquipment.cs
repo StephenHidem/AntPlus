@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This is the primary support class for fitness equipment sensors.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class FitnessEquipment : AntDevice
     {
         /// <summary>
@@ -34,6 +38,9 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
             UserConfiguration = 0x37
         }
 
+        /// <summary>
+        /// Fitness equipment type.
+        /// </summary>
         public enum FitnessEquipmentType
         {
             Treadmill = 0x13,

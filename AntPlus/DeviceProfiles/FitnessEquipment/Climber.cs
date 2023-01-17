@@ -3,6 +3,10 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This class supports the climber fitness equipment type.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Climber : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

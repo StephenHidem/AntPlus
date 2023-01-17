@@ -3,6 +3,11 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// The standard power sensor class. Note that torque sensors report this data page for
+    /// displays that may not handle torque sensor messages.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class StandardPowerSensor : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;     // used for accumulated values

@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
+    /// <summary>
+    /// This class supports combined speed and cadence sensors.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class CombinedSpeedAndCadenceSensor : AntDevice
     {
         /// <summary>
@@ -18,6 +22,9 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         private ushort prevCadenceRevCount;
 
         public double InstantaneousCadence { get; private set; }
+        /// <summary>
+        /// The wheel circumference in meters. The default is 2.2 meters.
+        /// </summary>
         public double WheelCircumference { get; set; } = 2.2;
         public double InstantaneousSpeed { get; private set; }
         public double AccumulatedDistance { get; private set; }

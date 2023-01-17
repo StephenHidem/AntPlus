@@ -2,6 +2,10 @@
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// This class supports messages common to crank/wheel torque sensors.
+    /// </summary>
+    /// <seealso cref="AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor" />
     public abstract class TorqueSensor : StandardPowerSensor
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values

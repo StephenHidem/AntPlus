@@ -3,6 +3,10 @@ using System;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
+    /// <summary>
+    /// This class supports bike cadence sensors.
+    /// </summary>
+    /// <seealso cref="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence" />
     public class BikeCadenceSensor : CommonSpeedCadence
     {
         /// <summary>

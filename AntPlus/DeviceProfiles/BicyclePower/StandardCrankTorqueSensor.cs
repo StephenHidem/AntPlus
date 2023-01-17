@@ -2,6 +2,10 @@
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// The standard crank torque sensor class.
+    /// </summary>
+    /// <seealso cref="AntPlus.DeviceProfiles.BicyclePower.TorqueSensor" />
     public class StandardCrankTorqueSensor : TorqueSensor
     {
         public readonly struct ForceAngle

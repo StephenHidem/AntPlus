@@ -2,6 +2,10 @@
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// This class supports torque effectiveness and pedal smoothness messages.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class TorqueEffectivenessAndPedalSmoothness : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

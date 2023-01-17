@@ -3,6 +3,10 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This class supports the rower fitness equipment type.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Rower : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

@@ -3,6 +3,10 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This class supports the trainer torque messages.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class TrainerTorque : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

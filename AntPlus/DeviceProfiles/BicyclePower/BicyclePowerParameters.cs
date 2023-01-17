@@ -3,6 +3,9 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// Parameters sub-pages.
+    /// </summary>
     public enum Subpage
     {
         CrankParameters = 0x01,
@@ -12,6 +15,10 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         AdvancedCapabilities2 = 0xFE
     }
 
+    /// <summary>
+    /// Bicycle power parameters.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Parameters : INotifyPropertyChanged
     {
         public readonly struct CrankParameters

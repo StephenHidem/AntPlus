@@ -64,8 +64,16 @@ namespace AntPlus
         None = 0xFF
     }
 
+    /// <summary>
+    /// This class supports common data pages.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class CommonDataPages : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        /// <returns></returns>
         public event PropertyChangedEventHandler PropertyChanged;
 
         public enum CommandResult

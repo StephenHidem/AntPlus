@@ -10,13 +10,19 @@ using System.Linq;
 
 namespace AntPlus
 {
-    /// <summary>This is a thread safe observable collection of ANT devices.</summary>
+    /// <summary>
+    /// This is a thread safe observable collection of ANT devices.
+    /// 
+    /// © 2022 Stephen Hidem.
+    /// </summary>
     public class AntDeviceCollection : ObservableCollection<AntDevice>
     {
         public object collectionLock = new object();
         private readonly IAntRadio antRadio;
         private readonly IAntChannel channel;
 
+        /// <summary>Initializes a new instance of the <see cref="AntDeviceCollection" /> class.</summary>
+        /// <param name="antRadio">The ANT radio interface.</param>
         public AntDeviceCollection(IAntRadio antRadio)
         {
             this.antRadio = antRadio;

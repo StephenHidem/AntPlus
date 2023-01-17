@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// Bicycle power calibration class.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Calibration : INotifyPropertyChanged
     {
         private readonly BicyclePower bp;

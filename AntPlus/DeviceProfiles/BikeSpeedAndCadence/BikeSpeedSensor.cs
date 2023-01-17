@@ -3,6 +3,13 @@ using System;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
+    /// <summary>
+    /// This class supports bike speed sensors.
+    /// </summary>
+    /// <remarks>
+    /// Set the wheel circumference if the default value is incorrect. The calculations rely
+    /// on the wheel circumference.
+    /// </remarks>
     public class BikeSpeedSensor : CommonSpeedCadence
     {
         /// <summary>
@@ -10,7 +17,9 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         public const byte DeviceClass = 123;
 
-
+        /// <summary>
+        /// The wheel circumference in meters. The default is 2.2 meters.
+        /// </summary>
         public double WheelCircumference { get; set; } = 2.2;
         public double InstantaneousSpeed { get; private set; }
         public double AccumulatedDistance { get; private set; }

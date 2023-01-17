@@ -5,14 +5,35 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles
 {
+    /// <summary>
+    /// This class supports unknown devices.
+    /// 
+    /// © 2022 Stephen Hidem.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class UnknownDevice : AntDevice
     {
+        /// <summary>
+        /// Gets the data pages received from the unknown device.
+        /// </summary>
+        /// <value>
+        /// The data pages.
+        /// </value>
         public UnknownDataPages DataPages { get; private set; } = new UnknownDataPages();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnknownDevice"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         public UnknownDevice(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
+        /// <summary>
+        /// Parses/updates the specified data page.
+        /// </summary>
+        /// <param name="dataPage"></param>
         public override void Parse(byte[] dataPage)
         {
             DataPage page = DataPages.FirstOrDefault(p => p.PageNumber == dataPage[0]);
@@ -24,6 +45,10 @@ namespace AntPlus.DeviceProfiles
         }
     }
 
+    /// <summary>
+    /// This class encapsulates an unknown data page.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class DataPage : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -44,6 +69,10 @@ namespace AntPlus.DeviceProfiles
         }
     }
 
+    /// <summary>
+    /// A collection of unknown data pages.
+    /// </summary>
+    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.DataPage&gt;" />
     public class UnknownDataPages : ObservableCollection<DataPage>
     {
         public object collectionLock = new object();

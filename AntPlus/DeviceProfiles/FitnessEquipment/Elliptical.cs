@@ -3,6 +3,10 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This class supports the elliptical fitness equipment type.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Elliptical : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

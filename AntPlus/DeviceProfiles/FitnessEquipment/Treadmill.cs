@@ -2,6 +2,10 @@
 
 namespace AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This class supports the treadmill fitness equipment type.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Treadmill : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

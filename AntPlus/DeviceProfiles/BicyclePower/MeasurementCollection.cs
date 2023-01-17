@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// A collection of measurments reported during calibration.
+    /// </summary>
+    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.BicyclePower.MeasurementOutputData&gt;" />
     public class MeasurementCollection : ObservableCollection<MeasurementOutputData>
     {
         public object collectionLock = new object();

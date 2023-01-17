@@ -3,8 +3,15 @@ using System.ComponentModel;
 
 namespace AntPlus.DeviceProfiles.BicyclePower
 {
+    /// <summary>
+    /// Measurement data reported during calibration.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class MeasurementOutputData : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Data type of the measurement reported.
+        /// </summary>
         public enum DataType
         {
             ProgressCountdown = 0,

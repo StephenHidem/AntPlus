@@ -6,9 +6,17 @@ using System.Text;
 
 namespace AntPlus.DeviceProfiles
 {
+    /// <summary>
+    /// This class supports geocaches.
+    /// 
+    /// © 2022 Stephen Hidem.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class Geocache : AntDevice
     {
+        /// <summary>
         /// The geocache device class ID.
+        /// </summary>
         public const byte DeviceClass = 19;
 
         /// <summary>

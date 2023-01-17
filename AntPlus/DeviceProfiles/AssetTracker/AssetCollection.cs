@@ -2,6 +2,10 @@
 
 namespace AntPlus.DeviceProfiles.AssetTracker
 {
+    /// <summary>
+    /// A collection of assets.
+    /// </summary>
+    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.AssetTracker.Asset&gt;" />
     public class AssetCollection : ObservableCollection<Asset>
     {
         public object collectionLock = new object();

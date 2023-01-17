@@ -6,6 +6,8 @@ namespace AntPlus
 {
     /// <summary>
     /// Base class for all ANT devices.
+    /// 
+    /// © 2022 Stephen Hidem.
     /// </summary>
     public abstract class AntDevice : INotifyPropertyChanged
     {

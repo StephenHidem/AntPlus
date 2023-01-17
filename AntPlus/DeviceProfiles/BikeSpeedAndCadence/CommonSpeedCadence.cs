@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
+    /// <summary>
+    /// This class is common to all speed and cadence sensors.
+    /// </summary>
+    /// <seealso cref="AntPlus.AntDevice" />
     public class CommonSpeedCadence : AntDevice
     {
         protected bool isFirstDataMessage = true;     // used for accumulated values

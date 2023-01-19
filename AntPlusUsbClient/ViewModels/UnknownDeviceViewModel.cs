@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles;
+﻿using AntPlus.DeviceProfiles.UnknownDevice;
 
 namespace AntPlusUsbClient.ViewModels
 {

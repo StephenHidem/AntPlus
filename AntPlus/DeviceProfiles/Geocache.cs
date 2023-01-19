@@ -7,7 +7,7 @@ using System.Text;
 namespace AntPlus.DeviceProfiles.Geocache
 {
     /// <summary>
-    /// This class supports geocaches.
+    /// This class supports geocaches. This is specified in ANT+ Managed Network Document – Geocache Device Profile.
     /// </summary>
     /// <seealso cref="AntPlus.AntDevice" />
     public class Geocache : AntDevice

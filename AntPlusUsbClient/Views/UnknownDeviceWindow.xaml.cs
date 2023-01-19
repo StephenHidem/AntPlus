@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles;
+﻿using AntPlus.DeviceProfiles.UnknownDevice;
 using AntPlusUsbClient.ViewModels;
 using System.Windows;
 using System.Windows.Data;

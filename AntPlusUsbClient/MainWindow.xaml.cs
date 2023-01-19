@@ -1,5 +1,4 @@
 ﻿using AntPlus;
-using AntPlus.DeviceProfiles;
 using AntPlus.DeviceProfiles.AssetTracker;
 using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
@@ -7,6 +6,7 @@ using AntPlus.DeviceProfiles.FitnessEquipment;
 using AntPlus.DeviceProfiles.Geocache;
 using AntPlus.DeviceProfiles.HeartRate;
 using AntPlus.DeviceProfiles.MuscleOxygen;
+using AntPlus.DeviceProfiles.UnknownDevice;
 using AntPlusUsbClient.Views;
 using System.Windows;
 using System.Windows.Controls;

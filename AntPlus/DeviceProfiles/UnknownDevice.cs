@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles
+namespace AntPlus.DeviceProfiles.UnknownDevice
 {
     /// <summary>
     /// This class supports unknown devices.

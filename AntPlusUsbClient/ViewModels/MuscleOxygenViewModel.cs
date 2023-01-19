@@ -1,9 +1,8 @@
-﻿using AntPlus.DeviceProfiles;
+﻿using AntPlus.DeviceProfiles.MuscleOxygen;
 using AntPlusUsbClient.Views;
 using System;
 using System.Linq;
 using System.Windows.Input;
-using static AntPlus.DeviceProfiles.MuscleOxygen;
 
 namespace AntPlusUsbClient.ViewModels
 {
@@ -39,28 +38,28 @@ namespace AntPlusUsbClient.ViewModels
         {
             MuscleOxygenWindow mw = sender as MuscleOxygenWindow;
             TimeSpan ts = new TimeSpan((int)mw.HourOffset.SelectedValue, (int)mw.MinuteOffset.SelectedValue, 0);
-            muscleOxygen.SendCommand(CommandId.SetTime, ts, DateTime.UtcNow);
+            muscleOxygen.SendCommand(MuscleOxygen.CommandId.SetTime, ts, DateTime.UtcNow);
         }
 
         private void StartSessionExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             MuscleOxygenWindow mw = sender as MuscleOxygenWindow;
             TimeSpan ts = new TimeSpan((int)mw.HourOffset.SelectedValue, (int)mw.MinuteOffset.SelectedValue, 0);
-            muscleOxygen.SendCommand(CommandId.StartSession, ts, DateTime.UtcNow);
+            muscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
         }
 
         private void StopSessionParametersExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             MuscleOxygenWindow mw = sender as MuscleOxygenWindow;
             TimeSpan ts = new TimeSpan((int)mw.HourOffset.SelectedValue, (int)mw.MinuteOffset.SelectedValue, 0);
-            muscleOxygen.SendCommand(CommandId.StopSession, ts, DateTime.UtcNow);
+            muscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
         }
 
         private void LapExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             MuscleOxygenWindow mw = sender as MuscleOxygenWindow;
             TimeSpan ts = new TimeSpan((int)mw.HourOffset.SelectedValue, (int)mw.MinuteOffset.SelectedValue, 0);
-            muscleOxygen.SendCommand(CommandId.Lap, ts, DateTime.UtcNow);
+            muscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
         }
     }
 }

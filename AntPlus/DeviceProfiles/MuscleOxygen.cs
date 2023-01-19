@@ -2,10 +2,11 @@
 using System;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles
+namespace AntPlus.DeviceProfiles.MuscleOxygen
 {
     /// <summary>
-    /// This class supports muscle oxygen sensors.
+    /// This class supports muscle oxygen sensors. This profile is specified in
+    /// ANT+ Managed Network Document – Muscle Oxygen Device Profile, Rev 1.1.
     /// </summary>
     /// <seealso cref="AntPlus.AntDevice" />
     public class MuscleOxygen : AntDevice
@@ -65,22 +66,22 @@ namespace AntPlus.DeviceProfiles
             Invalid
         }
 
-        /// <summary>Total hemoglobin class.</summary>
-        public class TotalHemoglobin
+        /// <summary>Total hemoglobin structure.</summary>
+        public struct TotalHemoglobin
         {
             /// <summary>Gets or sets the measurement status.</summary>
-            public MeasuremantStatus Status { get; set; }
+            public MeasuremantStatus Status { get; internal set; }
             /// <summary>Gets or sets the concentration.</summary>
-            public double Concentration { get; set; }
+            public double Concentration { get; internal set; }
         }
 
-        /// <summary>Saturated hemoglobin class.</summary>
-        public class SaturatedHemoglobin
+        /// <summary>Saturated hemoglobin structure.</summary>
+        public struct SaturatedHemoglobin
         {
             /// <summary>Gets or sets the measurement status.</summary>
-            public MeasuremantStatus Status { set; get; }
+            public MeasuremantStatus Status { get; internal set; }
             /// <summary>Gets or sets the percent saturated.</summary>
-            public double PercentSaturated { get; set; }
+            public double PercentSaturated { get; internal set; }
         }
 
         /// <summary>Gets the event count.</summary>
@@ -118,6 +119,8 @@ namespace AntPlus.DeviceProfiles
         public override void Parse(byte[] dataPage)
         {
             int val;
+            TotalHemoglobin thg = new TotalHemoglobin();
+            SaturatedHemoglobin shg = new SaturatedHemoglobin();
 
             switch ((DataPage)dataPage[0])
             {
@@ -131,46 +134,49 @@ namespace AntPlus.DeviceProfiles
                     switch (val)
                     {
                         case 0xFFE:
-                            TotalHemoglobinConcentration.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            thg.Status = MeasuremantStatus.AmbientLightTooHigh;
                             break;
                         case 0xFFF:
-                            TotalHemoglobinConcentration.Status = MeasuremantStatus.Invalid;
+                            thg.Status = MeasuremantStatus.Invalid;
                             break;
                         default:
-                            TotalHemoglobinConcentration.Status = MeasuremantStatus.Valid;
-                            TotalHemoglobinConcentration.Concentration = val * 0.01;
+                            thg.Status = MeasuremantStatus.Valid;
+                            thg.Concentration = val * 0.01;
                             break;
                     }
+                    TotalHemoglobinConcentration = thg;
 
                     val = (BitConverter.ToUInt16(dataPage, 5) >> 4) & 0x3FF;
                     switch (val)
                     {
-                        case 0xFFE:
-                            PreviousSaturatedHemoglobin.Status = MeasuremantStatus.AmbientLightTooHigh;
+                        case 0x3FE:
+                            shg.Status = MeasuremantStatus.AmbientLightTooHigh;
                             break;
-                        case 0xFFF:
-                            PreviousSaturatedHemoglobin.Status = MeasuremantStatus.Invalid;
+                        case 0x3FF:
+                            shg.Status = MeasuremantStatus.Invalid;
                             break;
                         default:
-                            PreviousSaturatedHemoglobin.Status = MeasuremantStatus.Valid;
-                            PreviousSaturatedHemoglobin.PercentSaturated = val * 0.1;
+                            shg.Status = MeasuremantStatus.Valid;
+                            shg.PercentSaturated = val * 0.1;
                             break;
                     }
+                    PreviousSaturatedHemoglobin = shg;
 
                     val = (BitConverter.ToUInt16(dataPage, 6) >> 6) & 0x03FF;
                     switch (val)
                     {
-                        case 0xFFE:
-                            CurrentSaturatedHemoglobin.Status = MeasuremantStatus.AmbientLightTooHigh;
+                        case 0x3FE:
+                            shg.Status = MeasuremantStatus.AmbientLightTooHigh;
                             break;
-                        case 0xFFF:
-                            CurrentSaturatedHemoglobin.Status = MeasuremantStatus.Invalid;
+                        case 0x3FF:
+                            shg.Status = MeasuremantStatus.Invalid;
                             break;
                         default:
-                            CurrentSaturatedHemoglobin.Status = MeasuremantStatus.Valid;
-                            CurrentSaturatedHemoglobin.PercentSaturated = val * 0.1;
+                            shg.Status = MeasuremantStatus.Valid;
+                            shg.PercentSaturated = val * 0.1;
                             break;
                     }
+                    CurrentSaturatedHemoglobin = shg;
 
                     RaisePropertyChange(string.Empty);
                     break;
@@ -188,7 +194,7 @@ namespace AntPlus.DeviceProfiles
         {
             sbyte offset = (sbyte)(localTimeOffest.TotalMinutes / 15);
             int current = (int)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds;
-            byte[] msg = { (byte)DataPage.Commands, 0xFF, (byte)command, (byte)offset };
+            byte[] msg = { (byte)DataPage.Commands, (byte)command, 0xFF, (byte)offset };
             msg = msg.Concat(BitConverter.GetBytes(current)).ToArray();
             SendExtAcknowledgedMessage(msg);
         }

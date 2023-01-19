@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles;
+﻿using AntPlus.DeviceProfiles.MuscleOxygen;
 using AntPlusUsbClient.ViewModels;
 using System.Windows;
 

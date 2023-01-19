@@ -4,6 +4,7 @@ using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using AntPlus.DeviceProfiles.FitnessEquipment;
 using AntPlus.DeviceProfiles.HeartRate;
+using AntPlus.DeviceProfiles.MuscleOxygen;
 using AntRadioInterface;
 using System.Collections.ObjectModel;
 using System.Linq;

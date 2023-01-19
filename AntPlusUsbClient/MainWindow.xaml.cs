@@ -5,6 +5,7 @@ using AntPlus.DeviceProfiles.BicyclePower;
 using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using AntPlus.DeviceProfiles.FitnessEquipment;
 using AntPlus.DeviceProfiles.HeartRate;
+using AntPlus.DeviceProfiles.MuscleOxygen;
 using AntPlusUsbClient.Views;
 using System.Windows;
 using System.Windows.Controls;

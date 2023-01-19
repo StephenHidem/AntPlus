@@ -26,10 +26,7 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         {
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage">The data page.</param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);

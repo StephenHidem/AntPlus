@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AntPlus.DeviceProfiles
+namespace AntPlus.DeviceProfiles.Geocache
 {
     /// <summary>
     /// This class supports geocaches.

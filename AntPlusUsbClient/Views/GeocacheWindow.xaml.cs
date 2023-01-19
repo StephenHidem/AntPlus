@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles;
+﻿using AntPlus.DeviceProfiles.Geocache;
 using AntPlusUsbClient.ViewModels;
 using System.Windows;
 

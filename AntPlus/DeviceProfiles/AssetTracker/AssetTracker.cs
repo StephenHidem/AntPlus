@@ -35,14 +35,10 @@ namespace AntPlus.DeviceProfiles.AssetTracker
         }
 
         /// <summary>Gets the collection of assets being tracked.</summary>
-        /// <value>The assets being tracked.</value>
         public AssetCollection Assets { get; } = new AssetCollection();
         /// <summary>
         /// Gets the common data pages.
         /// </summary>
-        /// <value>
-        /// The common data pages.
-        /// </value>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
         /// <summary>

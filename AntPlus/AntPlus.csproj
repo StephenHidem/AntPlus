@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,12 +13,18 @@
   <ItemGroup>
     <None Remove="Images\BicyclePower.png" />
     <None Remove="Images\CrankTorqueFrequency.png" />
+    <None Remove="Images\FE-C.png" />
+    <None Remove="Images\FE.png" />
+    <None Remove="Images\Geocache.png" />
     <None Remove="Images\HeartRate.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Images\BicyclePower.png" />
     <EmbeddedResource Include="Images\CrankTorqueFrequency.png" />
+	<EmbeddedResource Include="Images\FE-C.png" />
+	<EmbeddedResource Include="Images\FE.png" />
+	<EmbeddedResource Include="Images\Geocache.png" />
     <EmbeddedResource Include="Images\HeartRate.png" />
   </ItemGroup>
 

@@ -6,8 +6,6 @@ namespace AntPlus.DeviceProfiles
 {
     /// <summary>
     /// This class supports muscle oxygen sensors.
-    /// 
-    /// © 2022 Stephen Hidem.
     /// </summary>
     /// <seealso cref="AntPlus.AntDevice" />
     public class MuscleOxygen : AntDevice
@@ -22,56 +20,90 @@ namespace AntPlus.DeviceProfiles
         /// </summary>
         private enum DataPage
         {
+            /// <summary>Muscle oxygen data</summary>
             MuscleOxygenData = 0x01,
+            /// <summary>Commands</summary>
             Commands = 0x10,
         }
 
+        /// <summary>Command identifiers.</summary>
         public enum CommandId
         {
+            /// <summary>Set time.</summary>
             SetTime,
+            /// <summary>Start session.</summary>
             StartSession,
+            /// <summary>Stop session.</summary>
             StopSession,
+            /// <summary>Mark lap.</summary>
             Lap
         }
 
+        /// <summary>The measurement interval used.</summary>
         public enum MeasurementInterval
         {
+            /// <summary>None</summary>
             None = 0,
+            /// <summary>Quarter second</summary>
             QuarterSecond = 1,
+            /// <summary>Half second</summary>
             HalfSecond = 2,
+            /// <summary>One second</summary>
             OneSecond = 3,
+            /// <summary>Two second</summary>
             TwoSecond = 4
         }
 
+        /// <summary>Measurement status.</summary>
         public enum MeasuremantStatus
         {
+            /// <summary>Valid</summary>
             Valid,
+            /// <summary>Ambient light too high</summary>
             AmbientLightTooHigh,
+            /// <summary>Invalid</summary>
             Invalid
         }
 
+        /// <summary>Total hemoglobin class.</summary>
         public class TotalHemoglobin
         {
+            /// <summary>Gets or sets the measurement status.</summary>
             public MeasuremantStatus Status { get; set; }
+            /// <summary>Gets or sets the concentration.</summary>
             public double Concentration { get; set; }
         }
 
+        /// <summary>Saturated hemoglobin class.</summary>
         public class SaturatedHemoglobin
         {
+            /// <summary>Gets or sets the measurement status.</summary>
             public MeasuremantStatus Status { set; get; }
+            /// <summary>Gets or sets the percent saturated.</summary>
             public double PercentSaturated { get; set; }
         }
 
+        /// <summary>Gets the event count.</summary>
         public byte EventCount { get; private set; }
+        /// <summary>Gets a value indicating whether UTC time required.</summary>
         public bool UtcTimeRequired { get; private set; }
+        /// <summary>Gets a value indicating whether ANT-FS is supported.</summary>
         public bool SupportsAntFs { get; private set; }
+        /// <summary>Gets the measurement interval.</summary>
         public MeasurementInterval Interval { get; private set; }
+        /// <summary>Gets the total hemoglobin concentration.</summary>
         public TotalHemoglobin TotalHemoglobinConcentration { get; private set; }
+        /// <summary>Gets the previous saturated hemoglobin.</summary>
         public SaturatedHemoglobin PreviousSaturatedHemoglobin { get; private set; }
+        /// <summary>Gets the current saturated hemoglobin.</summary>
         public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
+        /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
 
+        /// <summary>Initializes a new instance of the <see cref="MuscleOxygen" /> class.</summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         public MuscleOxygen(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
             TotalHemoglobinConcentration = new TotalHemoglobin();
@@ -79,6 +111,10 @@ namespace AntPlus.DeviceProfiles
             CurrentSaturatedHemoglobin = new SaturatedHemoglobin();
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage"></param>
         public override void Parse(byte[] dataPage)
         {
             int val;
@@ -144,6 +180,10 @@ namespace AntPlus.DeviceProfiles
             }
         }
 
+        /// <summary>Sends the command to the muscle oxygen sensor.</summary>
+        /// <param name="command">The command.</param>
+        /// <param name="localTimeOffest">The local time offest.</param>
+        /// <param name="currentTimeStamp">The current time stamp.</param>
         public void SendCommand(CommandId command, TimeSpan localTimeOffest, DateTime currentTimeStamp)
         {
             sbyte offset = (sbyte)(localTimeOffest.TotalMinutes / 15);

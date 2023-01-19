@@ -24,21 +24,32 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private byte prevUpdateEventCount;
         private ushort prevTimeStamp;
         private ushort prevTorqueTicks;
-        private int stopCounter;
 
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>Gets the zero offset in Hz.</summary>
         public ushort Offset { get; private set; } = 0;
+        /// <summary>Gets the slope. Slope ranges in value from 10.0Nm/Hz to 50.0Nm/Hz.</summary>
         public double Slope { get; private set; }
+        /// <summary>Gets the cadence in revolutions per minute.</summary>
         public double Cadence { get; private set; }
+        /// <summary>Gets the torque in Nm.</summary>
         public double Torque { get; private set; }
+        /// <summary>Gets the power in watts.</summary>
         public double Power { get; private set; }
 
+        /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
+        /// <param name="bp">The bp.</param>
         public CrankTorqueFrequencySensor(BicyclePower bp)
         {
             this.bp = bp;
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
             byte updateEventCount = dataPage[1];
@@ -74,7 +85,9 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        public void ParseCalibrationMessage(byte[] message)
+        /// <summary>Parses the calibration message.</summary>
+        /// <param name="message">The message.</param>
+        internal void ParseCalibrationMessage(byte[] message)
         {
             switch ((CTFDefinedId)message[2])
             {
@@ -99,11 +112,15 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <summary>Requests manual calibration.</summary>
         public void RequestCalibration()
         {
+            // TODO: FIX REQUEST
             //bp.Calibration.RequestManualCalibration();
         }
 
+        /// <summary>Saves the slope to flash.</summary>
+        /// <param name="slope">The slope.</param>
         public void SaveSlopeToFlash(ushort slope)
         {
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.Slope, 0xFF, 0xFF, 0xFF };
@@ -111,6 +128,8 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             bp.SendExtAcknowledgedMessage(msg);
         }
 
+        /// <summary>Saves the serial number to flash.</summary>
+        /// <param name="serialNumber">The serial number.</param>
         public void SaveSerialNumberToFlash(ushort serialNumber)
         {
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.SerialNumber, 0xFF, 0xFF, 0xFF };

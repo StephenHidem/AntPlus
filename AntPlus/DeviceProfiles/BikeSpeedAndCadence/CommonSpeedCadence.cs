@@ -10,10 +10,14 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <seealso cref="AntPlus.AntDevice" />
     public class CommonSpeedCadence : AntDevice
     {
+        /// <summary>The is first data message
+        /// received.</summary>
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private bool pageToggle;
         private int observedToggle;
+        /// <summary>The previous event time</summary>
         protected ushort prevEventTime;
+        /// <summary>The previous revolution count</summary>
         protected ushort prevRevCount;
 
         /// <summary>
@@ -87,16 +91,30 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
             }
         }
 
+        /// <summary>Gets the cumulative operating time.</summary>
         public TimeSpan CumulativeOperatingTime { get; private set; }
+        /// <summary>Gets the manufacturer information.</summary>
         public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        /// <summary>Gets the product information.</summary>
         public ProductInfoPage ProductInfo { get; private set; }
+        /// <summary>Gets the battery status.</summary>
         public BatteryStatusPage BatteryStatus { get; private set; }
+        /// <summary>Gets a value indicating whether this sensor has detected stopped condition.</summary>
         public bool Stopped { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommonSpeedCadence"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage"></param>
         public override void Parse(byte[] dataPage)
         {
             // ignore duplicate/unchanged data pages

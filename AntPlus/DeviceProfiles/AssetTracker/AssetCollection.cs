@@ -2,10 +2,7 @@
 
 namespace AntPlus.DeviceProfiles.AssetTracker
 {
-    /// <summary>
-    /// A thread safe collection of assets.
-    /// </summary>
-    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.AssetTracker.Asset&gt;" />
+    /// <summary>A thread safe collection of assets.</summary>
     public class AssetCollection : ObservableCollection<Asset>
     {
         /// <summary>
@@ -19,6 +16,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
         /// </remarks>
         public object collectionLock = new object();
 
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             lock (collectionLock)
@@ -27,6 +25,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             }
         }
 
+        /// <inheritdoc/>
         protected override void InsertItem(int index, Asset item)
         {
             lock (collectionLock)
@@ -35,6 +34,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             }
         }
 
+        /// <inheritdoc/>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             lock (collectionLock)
@@ -43,6 +43,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             }
         }
 
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             lock (collectionLock)
@@ -51,6 +52,7 @@ namespace AntPlus.DeviceProfiles.AssetTracker
             }
         }
 
+        /// <inheritdoc/>
         protected override void SetItem(int index, Asset item)
         {
             lock (collectionLock)

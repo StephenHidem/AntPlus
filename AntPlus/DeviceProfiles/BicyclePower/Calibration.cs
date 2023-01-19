@@ -12,6 +12,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
     {
         private readonly BicyclePower bp;
 
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private enum CalibrationRequestId
@@ -32,33 +33,54 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             CustomCalibrationUpdate = 0xBD,
         }
 
+        /// <summary>Response to a calibration operation.</summary>
         public enum CalibrationResponse
         {
+            /// <summary>Unknown</summary>
             Unknown,
+            /// <summary>In progress</summary>
             InProgress,
+            /// <summary>Succeeded</summary>
             Succeeded,
+            /// <summary>Failed</summary>
             Failed,
         }
 
+        /// <summary>Auto zero status.</summary>
         public enum AutoZero
         {
+            /// <summary>Off</summary>
             Off = 0,
+            /// <summary>On</summary>
             On = 1,
+            /// <summary>Not supported</summary>
             NotSupported = 0xFF
         }
 
+        /// <summary>Gets the calibration status.</summary>
         public CalibrationResponse CalibrationStatus { get; private set; }
+        /// <summary>Gets the automatic zero status.</summary>
         public AutoZero AutoZeroStatus { get; private set; }
+        /// <summary>Gets the manufacturer specific calibration data.</summary>
         public short CalibrationData { get; private set; }
+        /// <summary>Gets a value indicating whether automatic zero is supported.</summary>
         public bool AutoZeroSupported { get; private set; }
+        /// <summary>Gets the custom calibration parameters.</summary>
         public byte[] CustomCalibrationParameters { get; private set; }
+        /// <summary>Gets the reported measurements collection. There may be one or more measurement data types reported.</summary>
         public MeasurementCollection Measurements { get; private set; } = new MeasurementCollection();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Calibration"/> class.
+        /// </summary>
+        /// <param name="bp">The bp.</param>
         public Calibration(BicyclePower bp)
         {
             this.bp = bp;
         }
 
+        /// <summary>Parses the specified data page.</summary>
+        /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
             switch ((CalibrationResponseId)dataPage[1])
@@ -105,11 +127,12 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        public void ParseMeasurementOutputData(byte[] dataPage)
+        internal void ParseMeasurementOutputData(byte[] dataPage)
         {
             Measurements.Parse(dataPage);
         }
 
+        /// <summary>Requests manual calibration.</summary>
         public void RequestManualCalibration()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
@@ -117,6 +140,8 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
+        /// <summary>Sets the sensor automatic zero configuration.</summary>
+        /// <param name="autoZero">The automatic zero.</param>
         public void SetAutoZeroConfiguration(AutoZero autoZero)
         {
             CalibrationStatus = CalibrationResponse.Unknown;
@@ -124,6 +149,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
+        /// <summary>Requests the manufacturer specific custom calibration parameters.</summary>
         public void RequestCustomParameters()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
@@ -131,8 +157,16 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
+        /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
+        /// maximum of 6 bytes.</summary>
+        /// <param name="customParameters">The custom parameters. Defined by the manufacturer.</param>
+        /// <exception cref="System.ArgumentException">Custom parameters must be 6 bytes in length.</exception>
         public void SetCustomParameters(byte[] customParameters)
         {
+            if (customParameters.Length != 6)
+            {
+                throw new ArgumentException("Custom parameters must be 6 bytes in length.");
+            }
             CalibrationStatus = CalibrationResponse.InProgress;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };

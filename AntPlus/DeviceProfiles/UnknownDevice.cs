@@ -49,26 +49,19 @@ namespace AntPlus.DeviceProfiles
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class DataPage : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Gets the data page.
+        /// Gets the data page received from the unknown sensor.
         /// </summary>
         /// <value>
-        /// 8 byte array of the page.
+        /// 8 byte array of the page received from the unknown sensor.
         /// </value>
         public byte[] Page { get; private set; }
-        /// <summary>
-        /// Gets the data page number.
-        /// </summary>
-        /// <value>
-        /// The page number.
-        /// </value>
+        /// <summary>Gets the data page number.</summary>
         public byte PageNumber => Page[0];
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataPage"/> class.
         /// </summary>
@@ -77,6 +70,7 @@ namespace AntPlus.DeviceProfiles
         {
             Page = dataPage;
         }
+
         /// <summary>
         /// Updates the specified data page. The property changed notification is
         /// raised if the data page has changed.
@@ -95,7 +89,6 @@ namespace AntPlus.DeviceProfiles
     /// <summary>
     /// A thread safe collection of unknown data pages.
     /// </summary>
-    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.DataPage&gt;" />
     public class UnknownDataPages : ObservableCollection<DataPage>
     {
         /// <summary>
@@ -109,6 +102,7 @@ namespace AntPlus.DeviceProfiles
         /// </remarks>
         public object collectionLock = new object();
 
+        /// <inheritdoc/>
         protected override void InsertItem(int index, DataPage item)
         {
             lock (collectionLock)
@@ -117,6 +111,7 @@ namespace AntPlus.DeviceProfiles
             }
         }
 
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             lock (collectionLock)
@@ -125,6 +120,7 @@ namespace AntPlus.DeviceProfiles
             }
         }
 
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             lock (collectionLock)
@@ -133,6 +129,7 @@ namespace AntPlus.DeviceProfiles
             }
         }
 
+        /// <inheritdoc/>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             lock (collectionLock)
@@ -141,6 +138,7 @@ namespace AntPlus.DeviceProfiles
             }
         }
 
+        /// <inheritdoc/>
         protected override void SetItem(int index, DataPage item)
         {
             lock (collectionLock)

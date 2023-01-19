@@ -14,12 +14,22 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         public const byte DeviceClass = 122;
 
+        /// <summary>Gets the instantaneous cadence in rotations per minute.</summary>
         public double InstantaneousCadence { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BikeCadenceSensor"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">The ant channel.</param>
         public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);

@@ -19,14 +19,18 @@
         /// </summary>
         public double AverageSpeed { get; private set; }
         /// <summary>
-        /// Distance in meters.
+        /// Accumulated distance in meters.
         /// </summary>
         public double AccumulatedDistance { get; private set; }
 
+        /// <summary>Initializes a new instance of the <see cref="StandardWheelTorqueSensor" /> class.</summary>
+        /// <param name="bp">The bp.</param>
         public StandardWheelTorqueSensor(BicyclePower bp) : base(bp)
         {
         }
 
+        /// <summary>Parses the torque message.</summary>
+        /// <param name="dataPage">The data page.</param>
         public override void ParseTorque(byte[] dataPage)
         {
             base.ParseTorque(dataPage);

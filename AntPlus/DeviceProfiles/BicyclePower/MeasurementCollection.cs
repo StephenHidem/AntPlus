@@ -6,7 +6,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// A thread safe collection of measurments reported during calibration.
     /// </summary>
-    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;AntPlus.DeviceProfiles.BicyclePower.MeasurementOutputData&gt;" />
     public class MeasurementCollection : ObservableCollection<MeasurementOutputData>
     {
         /// <summary>
@@ -20,6 +19,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         /// </remarks>
         public object collectionLock = new object();
 
+        /// <inheritdoc/>
         protected override void InsertItem(int index, MeasurementOutputData item)
         {
             lock (collectionLock)
@@ -28,6 +28,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             lock (collectionLock)
@@ -36,6 +37,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             lock (collectionLock)
@@ -44,6 +46,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <inheritdoc/>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             lock (collectionLock)
@@ -52,6 +55,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <inheritdoc/>
         protected override void SetItem(int index, MeasurementOutputData item)
         {
             lock (collectionLock)
@@ -60,6 +64,10 @@ namespace AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         internal void Parse(byte[] dataPage)
         {
             MeasurementOutputData measurement = this.FirstOrDefault(m => m.MeasurementType == (MeasurementOutputData.DataType)dataPage[2]);

@@ -9,6 +9,7 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class TrainerTorque : INotifyPropertyChanged
     {
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private bool isFirstDataMessage = true;     // used for accumulated values
@@ -25,8 +26,11 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         /// Wheel circumference in meters. The default is 2.2 meters.
         /// </summary>
         public double WheelCircumference { get; set; } = 2.2;
+        /// <summary>Gets the average angular velocity in radians per second.</summary>
         public double AverageAngularVelocity { get; private set; }
+        /// <summary>Gets the average torque in Nm.</summary>
         public double AverageTorque { get; private set; }
+        /// <summary>Gets the average power in watts.</summary>
         public double AveragePower { get; private set; }
         /// <summary>
         /// Average speed in kilometers per hour.
@@ -37,6 +41,10 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         /// </summary>
         public double AccumulatedDistance { get; private set; }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
             if (isFirstDataMessage)

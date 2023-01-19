@@ -7,10 +7,15 @@ namespace AntPlus.DeviceProfiles.BicyclePower
     /// </summary>
     public enum SensorType
     {
+        /// <summary>Unknown</summary>
         Unknown,
+        /// <summary>Power only</summary>
         PowerOnly,
+        /// <summary>Wheel torque</summary>
         WheelTorque,
+        /// <summary>Crank torque</summary>
         CrankTorque,
+        /// <summary>Crank torque frequency</summary>
         CrankTorqueFrequency
     }
 
@@ -19,18 +24,31 @@ namespace AntPlus.DeviceProfiles.BicyclePower
     /// </summary>
     public enum DataPage
     {
+        /// <summary>Unknown</summary>
         Unknown,
+        /// <summary>Calibration</summary>
         Calibration,
+        /// <summary>Get/Set Parameters</summary>
         GetSetParameters,
+        /// <summary>Measurement Output</summary>
         MeasurementOutput,
+        /// <summary>Power Only</summary>
         PowerOnly = 0x10,
+        /// <summary>Wheel Torque</summary>
         WheelTorque,
+        /// <summary>Crank Torque</summary>
         CrankTorque,
+        /// <summary>Torque effectiveness and pedal smoothness</summary>
         TorqueEffectivenessAndPedalSmoothness,
+        /// <summary>Torque barycenter</summary>
         TorqueBarycenter,
+        /// <summary>Crank torque frequency</summary>
         CrankTorqueFrequency = 0x20,
+        /// <summary>Right force angle</summary>
         RightForceAngle = 0xE0,
+        /// <summary>Left force angle</summary>
         LeftForceAngle = 0xE1,
+        /// <summary>Pedal position</summary>
         PedalPosition = 0xE2
     }
 
@@ -45,19 +63,33 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         /// </summary>
         public const byte DeviceClass = 11;
 
-        // supported sensors
+        /// <summary>Gets the sensor type.</summary>
         public SensorType Sensor { get; private set; } = SensorType.Unknown;
+        /// <summary>Gets the power only sensor.</summary>
         public StandardPowerSensor PowerOnlySensor { get; private set; }
+        /// <summary>Gets the crank torque sensor.</summary>
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
+        /// <summary>Gets the wheel torque sensor.</summary>
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
+        /// <summary>Gets the crank torque frequency (CTF) sensor.</summary>
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
+        /// <summary>Gets the calibration class.</summary>
         public Calibration Calibration { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BicyclePower"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
             Calibration = new Calibration(this);
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage"></param>
         public override void Parse(byte[] dataPage)
         {
             switch ((DataPage)dataPage[0])
@@ -68,7 +100,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     Calibration.Parse(dataPage);
                     break;
                 case DataPage.GetSetParameters:
-                    PowerOnlySensor?.ParseParameters(dataPage);
+                    PowerOnlySensor?.Parameters.Parse(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
                     Calibration.ParseMeasurementOutputData(dataPage);
@@ -98,7 +130,7 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                     CrankTorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    PowerOnlySensor?.ParseTEPS(dataPage);
+                    PowerOnlySensor?.TorqueEffectiveness.Parse(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
                     Sensor = SensorType.CrankTorqueFrequency;

@@ -21,13 +21,24 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// The wheel circumference in meters. The default is 2.2 meters.
         /// </summary>
         public double WheelCircumference { get; set; } = 2.2;
+        /// <summary>Gets the instantaneous speed in meters per second.</summary>
         public double InstantaneousSpeed { get; private set; }
+        /// <summary>Gets the accumulated distance in meters. This value is accumulated since distance was first reported.</summary>
         public double AccumulatedDistance { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BikeSpeedSensor"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">The ant channel.</param>
         public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);

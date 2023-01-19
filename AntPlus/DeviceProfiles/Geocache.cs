@@ -8,8 +8,6 @@ namespace AntPlus.DeviceProfiles
 {
     /// <summary>
     /// This class supports geocaches.
-    /// 
-    /// © 2022 Stephen Hidem.
     /// </summary>
     /// <seealso cref="AntPlus.AntDevice" />
     public class Geocache : AntDevice
@@ -24,16 +22,24 @@ namespace AntPlus.DeviceProfiles
         /// </summary>
         public enum DataPage
         {
+            /// <summary>The trackable identifier</summary>
             TrackableId = 0x00,
+            /// <summary>The PIN number</summary>
             PIN = 0x01,
+            /// <summary>The authentication page</summary>
             AuthenticationPage = 0x20,
         }
 
-        public enum DataId
+        /// <summary>Data identifier of the geocache data page.</summary>
+        private enum DataId
         {
+            /// <summary>Latitude</summary>
             Latitude,
+            /// <summary>Longitude</summary>
             Longitude,
+            /// <summary>Hint or message</summary>
             Hint,
+            /// <summary>The number of logged visits</summary>
             LoggedVisits = 4
         }
 
@@ -43,21 +49,40 @@ namespace AntPlus.DeviceProfiles
         private bool programmingGeocache;
         private byte loggedVisitsPage;
 
-        public string TrackableId { get; set; }
+        /// <summary>Gets the trackable identifier.</summary>
+        public string TrackableId { get; private set; }
+        /// <summary>Gets the programming PIN.</summary>
         public uint ProgrammingPIN { get; private set; }
+        /// <summary>Gets the total pages programmed.</summary>
         public byte TotalPagesProgrammed { get; private set; }
+        /// <summary>Gets the next stage latitude in degrees.</summary>
         public double NextStageLatitude { get; private set; }
+        /// <summary>Gets the next stage longitude in degrees.</summary>
         public double NextStageLongitude { get; private set; }
+        /// <summary>Gets a message from the geocache device, or a next stage hint.</summary>
         public string Hint { get; private set; } = string.Empty;
+        /// <summary>Gets the number of visits logged.</summary>
         public ushort NumberOfVisits { get; private set; }
+        /// <summary>Gets the last visit timestamp.</summary>
         public DateTime LastVisitTimestamp { get; private set; }
-        public byte[] AuthenticationToken { get; set; }
+        /// <summary>Gets the authentication token.</summary>
+        public byte[] AuthenticationToken { get; private set; }
+        /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Geocache"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         public Geocache(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage"></param>
         public override void Parse(byte[] dataPage)
         {
             // don't parse if programming geocache
@@ -180,11 +205,15 @@ namespace AntPlus.DeviceProfiles
             return BitConverter.GetBytes(ch1).Take(3).Concat(BitConverter.GetBytes(ch2).Reverse()).ToArray();
         }
 
+        /// <summary>Requests the PIN page.
+        /// Do this first before performing any other operations on the geocache.</summary>
         public void RequestPinPage()
         {
             RequestDataPage(DataPage.PIN);
         }
 
+        /// <summary>Requests the authentication.</summary>
+        /// <param name="gpsSerialNumber">The GPS serial number.</param>
         public void RequestAuthentication(uint gpsSerialNumber)
         {
             authRequested = true;
@@ -196,6 +225,7 @@ namespace AntPlus.DeviceProfiles
             SendExtAcknowledgedMessage(msg);
         }
 
+        /// <summary>Updates the logged visits count and last visit timestamp.</summary>
         public void UpdateLoggedVisits()
         {
             ushort addVisit = (ushort)(NumberOfVisits + 1);
@@ -205,6 +235,12 @@ namespace AntPlus.DeviceProfiles
                 Concat(BitConverter.GetBytes(addVisit)).ToArray());
         }
 
+        /// <summary>Programs the geocache.</summary>
+        /// <param name="id">The trackable ID.</param>
+        /// <param name="pin">The PIN.</param>
+        /// <param name="latitude">The latitude in deqrees.</param>
+        /// <param name="longitude">The longitude in degrees.</param>
+        /// <param name="hint">The next stage hint or message.</param>
         public void ProgramGeocache(string id, uint pin, uint latitude, uint longitude, string hint)
         {
             programmingGeocache = true;

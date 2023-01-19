@@ -11,10 +11,19 @@ namespace AntPlus
     /// </summary>
     public abstract class AntDevice : INotifyPropertyChanged
     {
+        /// <summary>The last data page received.</summary>
         protected byte[] lastDataPage = new byte[8];
         private readonly IAntChannel antChannel;
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        /// <returns></returns>
         public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// Raises the property change event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected void RaisePropertyChange(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -35,7 +44,7 @@ namespace AntPlus
         }
 
         /// <summary>Parses the specified data page.</summary>
-        /// <param name="payload">The data page.</param>
+        /// <param name="dataPage">The data page.</param>
         public abstract void Parse(byte[] dataPage);
         //public abstract void ChannelEventHandler(EventMsgId eventMsgId);
         //public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);

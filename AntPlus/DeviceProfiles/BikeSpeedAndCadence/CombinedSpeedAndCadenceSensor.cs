@@ -21,18 +21,30 @@ namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
         private ushort prevCadenceEventTime;
         private ushort prevCadenceRevCount;
 
+        /// <summary>Gets the instantaneous cadence in revolutions per minute.</summary>
         public double InstantaneousCadence { get; private set; }
         /// <summary>
         /// The wheel circumference in meters. The default is 2.2 meters.
         /// </summary>
         public double WheelCircumference { get; set; } = 2.2;
+        /// <summary>Gets the instantaneous speed in meters per second.</summary>
         public double InstantaneousSpeed { get; private set; }
+        /// <summary>Gets the accumulated distance in meters.</summary>
         public double AccumulatedDistance { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CombinedSpeedAndCadenceSensor"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         public CombinedSpeedAndCadenceSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
         }
 
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage"></param>
         public override void Parse(byte[] dataPage)
         {
             int deltaEventTime;

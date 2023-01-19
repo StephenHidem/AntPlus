@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AntFS.cs" />
     <Compile Remove="AntRadio.cs" />
   </ItemGroup>
 

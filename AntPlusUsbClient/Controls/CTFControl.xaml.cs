@@ -13,6 +13,7 @@ namespace AntPlusUsbClient.Controls
         public CTFControl(BicyclePowerViewModel vm)
         {
             InitializeComponent();
+            sensor = vm.BicyclePower.CTFSensor;
             DataContext = vm;
         }
 

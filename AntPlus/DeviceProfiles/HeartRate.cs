@@ -7,13 +7,8 @@ namespace AntPlus.DeviceProfiles.HeartRate
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document
     /// ANT+ Managed Network Document – ANT+ Heart Rate Device Profile, Rev 2.5, © 2006-2022 Garmin Canada Inc. All Rights Reserved.
-    /// 
-    /// © 2022 Stephen Hidem.
     /// </summary>
     /// <remarks>
-    /// This is purely an event driven class. Any pages received will generate a <see cref="HeartRateChanged"/> and the appropriate page event
-    /// once the page toggle has been observed. Consumers shoud attach event handlers to the pages of interest.
-    /// 
     /// Due to the ubiquity of heart rate monitors and manufacturers, several problems present themselves with regard to this specification.
     /// This primarily relates to group workout environments (clubs). These issues do not exist for individual workout environments (homes).
     /// 
@@ -55,13 +50,9 @@ namespace AntPlus.DeviceProfiles.HeartRate
             Capabilities,
             /// <summary>Battery status</summary>
             BatteryStatus,
-            /// <summary>
-            /// Device Information
-            /// </summary>
+            /// <summary>Device information</summary>
             DeviceInformation = 9,
-            /// <summary>
-            /// Heart feature. Sent from display.
-            /// </summary>
+            /// <summary>Heart feature. Sent from display.</summary>
             HRFeature = 32
         }
 
@@ -85,12 +76,16 @@ namespace AntPlus.DeviceProfiles.HeartRate
             ManufacturerFeature1 = 0x40,
             /// <summary>Manufacture defined feature</summary>
             ManufacturerFeature2 = 0x80,
+            /// <summary>All</summary>
             All = 0xCF
         }
 
+        /// <summary>Heart beat event types.</summary>
         public enum HeartbeatEventType
         {
+            /// <summary>Measured timestamp</summary>
             MeasuredTimestamp,
+            /// <summary>Computed timestamp</summary>
             ComputedTimestamp
         }
 
@@ -250,15 +245,25 @@ namespace AntPlus.DeviceProfiles.HeartRate
             }
         }
 
+        /// <summary>Gets the heart rate data.</summary>
         public CommonHeartRateData HeartRateData { get; private set; }
+        /// <summary>Gets the cumulative operating time.</summary>
         public TimeSpan CumulativeOperatingTime { get; private set; }
+        /// <summary>Gets the type of the heart beat event.</summary>
         public HeartbeatEventType EventType { get; private set; }
+        /// <summary>Gets the manufacturer information.</summary>
         public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        /// <summary>Gets the product information.</summary>
         public ProductInfoPage ProductInfo { get; private set; }
+        /// <summary>Gets the previous heart beat data.</summary>
         public PreviousHeartBeatPage PreviousHeartBeat { get; private set; }
+        /// <summary>Gets the swim interval data.</summary>
         public SwimIntervalPage SwimInterval { get; private set; }
+        /// <summary>Gets the heart rate monitor capabilities.</summary>
         public CapabilitiesPage Capabilities { get; private set; }
+        /// <summary>Gets the battery status.</summary>
         public BatteryStatusPage BatteryStatus { get; private set; }
+        /// <summary>Gets the manufacturer specific data.</summary>
         public ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
@@ -370,6 +375,7 @@ namespace AntPlus.DeviceProfiles.HeartRate
         /// Sets the sport mode.
         /// </summary>
         /// <param name="sportMode">The sport mode.</param>
+        /// <param name="subSportMode"></param>
         public void SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
             SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));

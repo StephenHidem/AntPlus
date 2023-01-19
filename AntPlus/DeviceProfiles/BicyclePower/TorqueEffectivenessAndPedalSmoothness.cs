@@ -8,12 +8,18 @@ namespace AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class TorqueEffectivenessAndPedalSmoothness : INotifyPropertyChanged
     {
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public double LeftTorqueEffectivenes { get; private set; }
-        public double RightTorqueEffectivenes { get; private set; }
+        /// <summary>Gets the left leg torque effectiveness as a percentage.</summary>
+        public double LeftTorqueEffectiveness { get; private set; }
+        /// <summary>Gets the right leg torque effectiveness as a percentage.</summary>
+        public double RightTorqueEffectiveness { get; private set; }
+        /// <summary>Gets the left pedal smoothness as a percentage.</summary>
         public double LeftPedalSmoothness { get; private set; }
+        /// <summary>Gets the right pedal smoothness as a percentage.</summary>
         public double RightPedalSmoothness { get; private set; }
+        /// <summary>Set to true if left and right pedal smoothness is combined.</summary>
         public bool CombinedPedalSmoothness { get; private set; }
 
         /// <summary>
@@ -23,11 +29,11 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
-            if (dataPage[2] != 0xFF) { LeftTorqueEffectivenes = dataPage[2] * 0.5; }
-            else { LeftTorqueEffectivenes = 0; }
+            if (dataPage[2] != 0xFF) { LeftTorqueEffectiveness = dataPage[2] * 0.5; }
+            else { LeftTorqueEffectiveness = 0; }
 
-            if (dataPage[3] != 0xFF) { RightTorqueEffectivenes = dataPage[3] * 0.5; }
-            else { RightTorqueEffectivenes = 0; }
+            if (dataPage[3] != 0xFF) { RightTorqueEffectiveness = dataPage[3] * 0.5; }
+            else { RightTorqueEffectiveness = 0; }
 
             if (dataPage[4] != 0xFF) { LeftPedalSmoothness = dataPage[4] * 0.5; }
             else { LeftPedalSmoothness = 0; }

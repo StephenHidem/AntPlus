@@ -12,12 +12,20 @@ namespace AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevPos;
         private byte prevNeg;
 
-        public byte Cadence { get; private set; }
-        public double NegVerticalDistance { get; private set; }
-        public double PosVerticalDistance { get; private set; }
-
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>Gets the cadence in strides per minute.</summary>
+        public byte Cadence { get; private set; }
+        /// <summary>Gets the accumulated negative vertical distance traveled in meters.</summary>
+        public double NegVerticalDistance { get; private set; }
+        /// <summary>Gets the accumulated positive vertical distance traveled in meters.</summary>
+        public double PosVerticalDistance { get; private set; }
+
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
             Cadence = dataPage[4];

@@ -52,6 +52,7 @@ namespace AntPlus
             device.Parse(e.Payload);
         }
 
+        /// <inheritdoc/>
         protected override void ClearItems()
         {
             lock (collectionLock)
@@ -60,6 +61,7 @@ namespace AntPlus
             }
         }
 
+        /// <inheritdoc/>
         protected override void InsertItem(int index, AntDevice item)
         {
             lock (collectionLock)
@@ -68,6 +70,7 @@ namespace AntPlus
             }
         }
 
+        /// <inheritdoc/>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             lock (collectionLock)
@@ -76,6 +79,7 @@ namespace AntPlus
             }
         }
 
+        /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
             lock (collectionLock)
@@ -84,6 +88,7 @@ namespace AntPlus
             }
         }
 
+        /// <inheritdoc/>
         protected override void SetItem(int index, AntDevice item)
         {
             lock (collectionLock)

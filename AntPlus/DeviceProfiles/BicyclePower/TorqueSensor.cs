@@ -8,25 +8,39 @@ namespace AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor" />
     public abstract class TorqueSensor : StandardPowerSensor
     {
+        /// <summary>The is first data message
+        /// received</summary>
         protected bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
+        /// <summary>The delta ticks</summary>
         protected int deltaTicks;
         private byte lastEventCount;
+        /// <summary>The delta event count</summary>
         protected int deltaEventCount;
         private ushort lastPeriod;
+        /// <summary>The delta period</summary>
         protected int deltaPeriod;
         private ushort lastTorque;
+        /// <summary>The delta torque</summary>
         protected int deltaTorque;
 
+        /// <summary>Gets the instantaneous pedaling cadence in revolutions per minute.</summary>
         public new byte InstantaneousCadence { get; private set; }
+        /// <summary>Gets the average angular velocity in radians per second.</summary>
         public double AverageAngularVelocity { get; private set; }
+        /// <summary>Gets the average torque in Nm.</summary>
         public double AverageTorque { get; private set; }
+        /// <summary>Gets the average power in watts.</summary>
         public new double AveragePower { get; private set; }
 
+        /// <summary>Initializes a new instance of the <see cref="TorqueSensor" /> class.</summary>
+        /// <param name="bp">The bp.</param>
         protected TorqueSensor(BicyclePower bp) : base(bp)
         {
         }
 
+        /// <summary>Parses the torque message.</summary>
+        /// <param name="dataPage">The data page.</param>
         public virtual void ParseTorque(byte[] dataPage)
         {
             InstantaneousCadence = dataPage[3];

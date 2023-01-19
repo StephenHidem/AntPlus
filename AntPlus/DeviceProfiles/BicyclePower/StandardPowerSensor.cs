@@ -16,27 +16,44 @@ namespace AntPlus.DeviceProfiles.BicyclePower
         private ushort lastPower;
         private int deltaPower;
 
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>Raises the property change.</summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected void RaisePropertyChange(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>Gets the average power in watts.</summary>
         public double AveragePower { get; private set; }
+        /// <summary>Gets the pedal power in watts.</summary>
+        /// <value>The pedal power.</value>
         public byte PedalPower { get; private set; }
+        /// <summary>Gets the instantaneous pedaling cadence.</summary>
         public byte InstantaneousCadence { get; private set; }
+        /// <summary>Gets the instantaneous power in watts.</summary>
         public ushort InstantaneousPower { get; private set; }
+        /// <summary>Gets the parameters.</summary>
         public Parameters Parameters { get; private set; }
+        /// <summary>Gets the torque effectiveness and pedal smoothness.</summary>
         public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; } = new TorqueEffectivenessAndPedalSmoothness();
+        /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
+        /// </summary>
+        /// <param name="bp">The bp.</param>
         public StandardPowerSensor(BicyclePower bp)
         {
             Parameters = new Parameters(bp);
         }
 
-
+        /// <summary>
+        /// Parses the specified data page.
+        /// </summary>
+        /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
             PedalPower = dataPage[2];
@@ -63,21 +80,6 @@ namespace AntPlus.DeviceProfiles.BicyclePower
                 AveragePower = deltaPower / deltaEventCount;
                 RaisePropertyChange(nameof(AveragePower));
             }
-        }
-
-        public void ParseParameters(byte[] dataPage)
-        {
-            Parameters.Parse(dataPage);
-        }
-
-        public void ParseTEPS(byte[] dataPage)
-        {
-            TorqueEffectiveness.Parse(dataPage);
-        }
-
-        public void ParseCommonDataPage(byte[] dataPage)
-        {
-            CommonDataPages.ParseCommonDataPage(dataPage);
         }
     }
 }

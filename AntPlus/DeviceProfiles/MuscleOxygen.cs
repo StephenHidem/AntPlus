@@ -107,9 +107,6 @@ namespace AntPlus.DeviceProfiles.MuscleOxygen
         /// <param name="antChannel">Channel to send messages to.</param>
         public MuscleOxygen(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
         {
-            TotalHemoglobinConcentration = new TotalHemoglobin();
-            PreviousSaturatedHemoglobin = new SaturatedHemoglobin();
-            CurrentSaturatedHemoglobin = new SaturatedHemoglobin();
         }
 
         /// <summary>

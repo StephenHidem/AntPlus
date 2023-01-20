@@ -291,28 +291,16 @@ namespace SmallEarthTech.AntUsbStick
         public bool SetNetworkKey(byte netNumber, byte[] networkKey, uint responseWaitTime) => antDevice.setNetworkKey(netNumber, networkKey, responseWaitTime);
 
         /// <inheritdoc/>
-        public void SetTransmitPowerForAllChannels(TransmitPower transmitPower)
-        {
-            antDevice.setTransmitPowerForAllChannels((ANT_ReferenceLibrary.TransmitPower)transmitPower);
-        }
+        public void SetTransmitPowerForAllChannels(TransmitPower transmitPower) => antDevice.setTransmitPowerForAllChannels((ANT_ReferenceLibrary.TransmitPower)transmitPower);
 
         /// <inheritdoc/>
-        public bool SetTransmitPowerForAllChannels(TransmitPower transmitPower, uint responseWaitTime)
-        {
-            return antDevice.setTransmitPowerForAllChannels((ANT_ReferenceLibrary.TransmitPower)transmitPower, responseWaitTime);
-        }
+        public bool SetTransmitPowerForAllChannels(TransmitPower transmitPower, uint responseWaitTime) => antDevice.setTransmitPowerForAllChannels((ANT_ReferenceLibrary.TransmitPower)transmitPower, responseWaitTime);
 
         /// <inheritdoc/>
-        public void StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey)
-        {
-            antDevice.storeCryptoKeyToNVM(nonVolatileKeyIndex, encryptionKey);
-        }
+        public void StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey) => antDevice.storeCryptoKeyToNVM(nonVolatileKeyIndex, encryptionKey);
 
         /// <inheritdoc/>
-        public bool StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey, uint responseWaitTime)
-        {
-            return antDevice.storeCryptoKeyToNVM(nonVolatileKeyIndex, encryptionKey, responseWaitTime);
-        }
+        public bool StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey, uint responseWaitTime) => antDevice.storeCryptoKeyToNVM(nonVolatileKeyIndex, encryptionKey, responseWaitTime);
 
         /// <inheritdoc/>
         public bool WriteRawMessageToDevice(byte msgID, byte[] msgData) => antDevice.writeRawMessageToDevice(msgID, msgData);

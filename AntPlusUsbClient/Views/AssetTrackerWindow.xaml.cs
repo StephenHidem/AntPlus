@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.AssetTracker;
-using AntPlusUsbClient.ViewModels;
+﻿using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using System.Windows;
 using System.Windows.Data;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AntPlus.DeviceProfiles.FitnessEquipment
+namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
     /// This class supports the treadmill fitness equipment type.

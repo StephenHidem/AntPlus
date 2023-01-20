@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AntPlus.DeviceProfiles.BicyclePower
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// This class supports torque effectiveness and pedal smoothness messages.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace AntPlus.DeviceProfiles.BicyclePower
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// The standard power sensor class. Note that torque sensors report this data page for

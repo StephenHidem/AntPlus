@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.UnknownDevice;
-using AntPlusUsbClient.ViewModels;
+﻿using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
 using System.Windows;
 using System.Windows.Data;
 

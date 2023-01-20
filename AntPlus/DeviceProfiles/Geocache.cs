@@ -1,10 +1,10 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AntPlus.DeviceProfiles.Geocache
+namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
 {
     /// <summary>
     /// This class supports geocaches. This is specified in ANT+ Managed Network Document – Geocache Device Profile.

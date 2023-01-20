@@ -1,7 +1,7 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 
-namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
     /// <summary>
     /// This class supports bike cadence sensors.

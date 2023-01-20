@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles.FitnessEquipment;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System.Windows.Input;
 
 namespace AntPlusUsbClient.ViewModels

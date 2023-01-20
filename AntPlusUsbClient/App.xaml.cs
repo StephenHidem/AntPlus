@@ -1,6 +1,6 @@
-﻿using AntPlus;
-using AntRadioInterface;
-using AntUsbStick;
+﻿using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntRadioInterface;
+using SmallEarthTech.AntUsbStick;
 using System.Windows;
 
 namespace AntPlusUsbClient

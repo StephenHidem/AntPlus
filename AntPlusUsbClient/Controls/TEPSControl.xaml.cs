@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles.BicyclePower;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Controls

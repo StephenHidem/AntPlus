@@ -1,8 +1,8 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles.HeartRate
+namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
 {
     /// <summary>
     /// The HeartRate class provides full support for ANT+ heart rate monitors. This profile is specified in the document

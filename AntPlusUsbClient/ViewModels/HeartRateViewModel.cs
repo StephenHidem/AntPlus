@@ -1,5 +1,5 @@
-﻿using AntPlus;
-using AntPlus.DeviceProfiles.HeartRate;
+﻿using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

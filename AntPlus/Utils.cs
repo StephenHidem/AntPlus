@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AntPlus
+namespace SmallEarthTech.AntPlus
 {
     /// <summary>
     /// A static class with useful methods for calculations.

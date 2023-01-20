@@ -1,4 +1,4 @@
-﻿namespace AntPlus.DeviceProfiles.BicyclePower
+﻿namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// The standard wheel torque sensor.

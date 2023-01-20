@@ -1,8 +1,8 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles.MuscleOxygen
+namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
 {
     /// <summary>
     /// This class supports muscle oxygen sensors. This profile is specified in

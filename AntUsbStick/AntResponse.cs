@@ -1,9 +1,9 @@
 ﻿using ANT_Managed_Library;
-using AntRadioInterface;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace AntUsbStick
+namespace SmallEarthTech.AntUsbStick
 {
     public class AntResponse : IAntResponse
     {

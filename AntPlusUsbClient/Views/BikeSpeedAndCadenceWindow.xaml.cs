@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
-using AntPlusUsbClient.ViewModels;
+﻿using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using System.Windows;
 
 namespace AntPlusUsbClient.Views

@@ -1,8 +1,8 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles.FitnessEquipment
+namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
     /// This is the primary support class for fitness equipment sensors.

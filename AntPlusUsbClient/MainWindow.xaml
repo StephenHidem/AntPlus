@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AntPlusUsbClient"
-        xmlns:AntUsbStick="clr-namespace:AntUsbStick;assembly=AntUsbStick" x:Name="window" x:Class="AntPlusUsbClient.MainWindow"
+        xmlns:AntUsbStick="clr-namespace:SmallEarthTech.AntUsbStick;assembly=AntUsbStick" x:Name="window" x:Class="AntPlusUsbClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="375">
     <Grid>

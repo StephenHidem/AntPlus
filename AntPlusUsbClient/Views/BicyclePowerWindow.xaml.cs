@@ -1,6 +1,6 @@
-﻿using AntPlus.DeviceProfiles.BicyclePower;
-using AntPlusUsbClient.Controls;
+﻿using AntPlusUsbClient.Controls;
 using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using System.Windows;
 using System.Windows.Data;
 

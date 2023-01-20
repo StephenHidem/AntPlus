@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.MuscleOxygen;
-using AntPlusUsbClient.ViewModels;
+﻿using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
 using System.Windows;
 
 namespace AntPlusUsbClient.Views

@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace AntRadioInterface
+namespace SmallEarthTech.AntRadioInterface
 {
+    /// <summary>The ANT radio response interface.</summary>
     public interface IAntResponse
     {
         /// <summary>
@@ -24,13 +25,21 @@ namespace AntRadioInterface
         /// </summary>
         byte ResponseId { get; }
 
+        /// <summary>Gets the channel identifier.</summary>
+        /// <value>The channel identifier.</value>
+        ChannelId ChannelId { get; }
         /// <summary>
         /// The raw contents of the response message
         /// </summary>
-        ChannelId ChannelId { get; }
         byte[] Payload { get; }
+        /// <summary>Gets the RSSI in dBm.</summary>
+        /// <value>The rssi.</value>
         sbyte Rssi { get; }
+        /// <summary>Gets the threshold configuration value.</summary>
+        /// <value>The threshold configuration value.</value>
         sbyte ThresholdConfigurationValue { get; }
+        /// <summary>Gets the timestamp.</summary>
+        /// <value>The timestamp.</value>
         ushort Timestamp { get; }
     }
 }

@@ -1,8 +1,8 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
 
-namespace AntPlus
+namespace SmallEarthTech.AntPlus
 {
     /// <summary>
     /// Base class for all ANT devices.

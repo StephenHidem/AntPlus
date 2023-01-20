@@ -1,7 +1,7 @@
-﻿using AntPlus.DeviceProfiles.UnknownDevice;
-using AntRadioInterface;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
+using SmallEarthTech.AntRadioInterface;
 
-namespace AntPlus.UnitTests
+namespace SmallEarthTech.AntPlus.UnitTests
 {
     [TestClass]
     public class AntDeviceTests

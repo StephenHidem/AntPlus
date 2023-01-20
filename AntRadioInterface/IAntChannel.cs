@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AntRadioInterface
+namespace SmallEarthTech.AntRadioInterface
 {
     /// <summary>
     /// Channel Type flags. A valid channel type is one BASE parameter (Slave XOR Receive)
@@ -9,18 +9,27 @@ namespace AntRadioInterface
     [Flags]
     public enum ChannelType : byte
     {
+        /// <summary>The base slave receive</summary>
         BaseSlaveReceive = 0x00,
+        /// <summary>The base master transmit</summary>
         BaseMasterTransmit = 0x10,
+        /// <summary>The advanced shared channel</summary>
         AdvShared = 0x20,
+        /// <summary>The advanced Tx/Rx only or Rx always wild card</summary>
         AdvTxRxOnlyOrRxAlwaysWildCard = 0x40,
     };
 
+    /// <summary>The extended channel type enum.</summary>
     [Flags]
     public enum ChannelTypeExtended : byte
     {
+        /// <summary>The advanced always search</summary>
         AdvAlwaysSearch = 0x01,
+        /// <summary>The advanced frequency agility</summary>
         AdvFrequencyAgility = 0x04,
+        /// <summary>The advanced fast start</summary>
         AdvFastStart = 0x10,
+        /// <summary>The advanced asynchronous Tx</summary>
         AdvAsyncTx = 0x20,
     }
 
@@ -29,10 +38,15 @@ namespace AntRadioInterface
     /// </summary>
     public enum MessagingReturnCode : int
     {
+        /// <summary>Failed</summary>
         Fail = 0,
+        /// <summary>Passed</summary>
         Pass = 1,
+        /// <summary>Timeout</summary>
         Timeout = 2,
+        /// <summary>Cancelled</summary>
         Cancelled = 3,
+        /// <summary>Invalid parameters</summary>
         InvalidParams = 4,
     }
 
@@ -58,13 +72,17 @@ namespace AntRadioInterface
     }
 
     /// <summary>
-    /// Basic Channel status message codes, the bottom two bits of the received status message
+    /// Basic Channel status message codes, the bottom two bits of the received status message.
     /// </summary>
     public enum BasicChannelStatusCode : byte
     {
+        /// <summary>Unassigned</summary>
         Unassigned = 0x0,
+        /// <summary>Assigned</summary>
         Assigned = 0x1,
+        /// <summary>Searching</summary>
         Searching = 0x2,
+        /// <summary>Tracking</summary>
         Tracking = 0x3,
     }
 
@@ -100,6 +118,7 @@ namespace AntRadioInterface
         }
     }
 
+    /// <summary>The ANT channel interface.</summary>
     public interface IAntChannel
     {
         #region ChannelEventCallback Variables

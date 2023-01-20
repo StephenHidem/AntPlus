@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AntPlus.DeviceProfiles.BicyclePower
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// The standard crank torque sensor class.

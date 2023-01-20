@@ -1,9 +1,9 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles.UnknownDevice
+namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
 {
     /// <summary>
     /// This class supports unknown devices.

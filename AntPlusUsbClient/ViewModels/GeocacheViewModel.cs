@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles.Geocache;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
 using System.Windows.Input;
 
 namespace AntPlusUsbClient.ViewModels

@@ -1,8 +1,8 @@
 ﻿using ANT_Managed_Library;
-using AntRadioInterface;
+using SmallEarthTech.AntRadioInterface;
 using System;
 
-namespace AntUsbStick
+namespace SmallEarthTech.AntUsbStick
 {
     public class AntRadio : IAntRadio
     {
@@ -192,14 +192,16 @@ namespace AntUsbStick
             return (IDeviceCapabilities)antDevice.getDeviceCapabilities(responseWaitTime);
         }
 
-        public IDeviceInfo GetDeviceUSBInfo()
+        public DeviceInfo GetDeviceUSBInfo()
         {
-            return (IDeviceInfo)antDevice.getDeviceUSBInfo();
+            ANT_DeviceInfo di = antDevice.getDeviceUSBInfo();
+            return new DeviceInfo(di.productDescription, di.serialString);
         }
 
-        public IDeviceInfo GetDeviceUSBInfo(byte deviceNum)
+        public DeviceInfo GetDeviceUSBInfo(byte deviceNum)
         {
-            return (IDeviceInfo)antDevice.getDeviceUSBInfo(deviceNum);
+            ANT_DeviceInfo di = antDevice.getDeviceUSBInfo(deviceNum);
+            return new DeviceInfo(di.productDescription, di.serialString);
         }
 
         public void LoadCryptoKeyFromNVM(byte nonVolatileKeyIndex, byte volatileKeyIndex)

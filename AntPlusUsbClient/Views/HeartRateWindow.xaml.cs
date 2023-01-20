@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.HeartRate;
-using AntPlusUsbClient.ViewModels;
+﻿using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
 using System.Windows;
 
 namespace AntPlusUsbClient.Views

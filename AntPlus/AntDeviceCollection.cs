@@ -1,16 +1,16 @@
-﻿using AntPlus.DeviceProfiles.AssetTracker;
-using AntPlus.DeviceProfiles.BicyclePower;
-using AntPlus.DeviceProfiles.BikeSpeedAndCadence;
-using AntPlus.DeviceProfiles.FitnessEquipment;
-using AntPlus.DeviceProfiles.Geocache;
-using AntPlus.DeviceProfiles.HeartRate;
-using AntPlus.DeviceProfiles.MuscleOxygen;
-using AntPlus.DeviceProfiles.UnknownDevice;
-using AntRadioInterface;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
+using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
+using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
+using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
+using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace AntPlus
+namespace SmallEarthTech.AntPlus
 {
     /// <summary>
     /// This is a thread safe observable collection of ANT devices.

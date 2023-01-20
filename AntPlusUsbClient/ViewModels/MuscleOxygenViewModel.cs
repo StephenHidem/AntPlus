@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.MuscleOxygen;
-using AntPlusUsbClient.Views;
+﻿using AntPlusUsbClient.Views;
+using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
 using System;
 using System.Linq;
 using System.Windows.Input;

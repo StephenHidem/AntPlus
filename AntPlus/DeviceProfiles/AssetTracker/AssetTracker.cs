@@ -1,7 +1,7 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles.AssetTracker
+namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 {
     /// <summary>
     /// This class serves as an asset tracker.

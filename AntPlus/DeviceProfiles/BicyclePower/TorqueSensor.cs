@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AntPlus.DeviceProfiles.BicyclePower
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// This class supports messages common to crank/wheel torque sensors.

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Text;
 
-namespace AntPlus.DeviceProfiles.AssetTracker
+namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 {
     /// <summary>
     /// This class represents an asset.

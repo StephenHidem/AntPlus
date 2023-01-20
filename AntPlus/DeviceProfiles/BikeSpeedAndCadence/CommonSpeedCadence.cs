@@ -1,8 +1,8 @@
-﻿using AntRadioInterface;
+﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 
-namespace AntPlus.DeviceProfiles.BikeSpeedAndCadence
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
     /// <summary>
     /// This class is common to all speed and cadence sensors.

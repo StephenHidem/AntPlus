@@ -1,6 +1,6 @@
-﻿using AntPlus.DeviceProfiles.FitnessEquipment;
-using AntPlusUsbClient.Controls;
+﻿using AntPlusUsbClient.Controls;
 using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System.Windows;
 using System.Windows.Controls;
 

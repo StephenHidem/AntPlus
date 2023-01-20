@@ -1,5 +1,5 @@
-﻿using AntPlus.DeviceProfiles.Geocache;
-using AntPlusUsbClient.ViewModels;
+﻿using AntPlusUsbClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
 using System.Windows;
 
 namespace AntPlusUsbClient.Views

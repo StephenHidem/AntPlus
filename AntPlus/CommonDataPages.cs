@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace AntPlus
+namespace SmallEarthTech.AntPlus
 {
     /// <summary>Supported common data pages.</summary>
     public enum CommonDataPage

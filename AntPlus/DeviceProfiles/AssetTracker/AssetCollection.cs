@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace AntPlus.DeviceProfiles.AssetTracker
+namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 {
     /// <summary>A thread safe collection of assets.</summary>
     public class AssetCollection : ObservableCollection<Asset>

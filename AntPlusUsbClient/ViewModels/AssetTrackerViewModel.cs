@@ -1,4 +1,4 @@
-﻿using AntPlus.DeviceProfiles.AssetTracker;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 
 namespace AntPlusUsbClient.ViewModels
 {

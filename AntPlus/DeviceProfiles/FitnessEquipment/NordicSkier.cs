@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace AntPlus.DeviceProfiles.FitnessEquipment
+namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
     /// This class supports Nordic skiers fitness equipment type.

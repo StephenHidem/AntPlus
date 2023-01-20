@@ -59,18 +59,28 @@ namespace SmallEarthTech.AntRadioInterface
     /// </summary>
     public enum RequestMessageID : byte
     {
+        /// <summary>The version</summary>
         Version = 0x3E,
+        /// <summary>The channel identifier</summary>
         ChannelId = 0x51,
+        /// <summary>The channel status</summary>
         ChannelStatus = 0x52,
+        /// <summary>The capabilities</summary>
         Capabilities = 0x54,
+        /// <summary>The serial number</summary>
         SerialNumber = 0x61,
+        /// <summary>The user NVM</summary>
         UserNvm = 0x7C,
     };
 
+    /// <summary>Encryption information.</summary>
     public enum EncryptionInfo : byte
     {
+        /// <summary>The encryption identifier</summary>
         EncryptionId = 0x00,
+        /// <summary>The user information string</summary>
         UserInfoString = 0x01,
+        /// <summary>The random number seed</summary>
         RandomNumberSeed = 0x02,
     };
 
@@ -80,9 +90,13 @@ namespace SmallEarthTech.AntRadioInterface
     [Flags]
     public enum LibConfigFlags
     {
+        /// <summary>The radio configuration always</summary>
         RadioConfigAlways = 0x01,
+        /// <summary>The message out inc time stamp</summary>
         MesgOutIncTimeStamp = 0x20,
+        /// <summary>The message out inc rssi</summary>
         MesgOutIncRssi = 0x40,
+        /// <summary>The message out inc device identifier</summary>
         MesgOutIncDeviceId = 0x80,
     }
 
@@ -91,9 +105,13 @@ namespace SmallEarthTech.AntRadioInterface
     /// </summary>
     public enum TransmitPower : byte
     {
-        TxMinus20DB = 0x00,
-        TxMinus10DB = 0x01,
-        TxMinus5DB = 0x02,
+        /// <summary>The minus 20 dB</summary>
+        Minus20DB = 0x00,
+        /// <summary>The minus 10 dB</summary>
+        Minus10DB = 0x01,
+        /// <summary>The minus 5 dB</summary>
+        Minus5DB = 0x02,
+        /// <summary>0 dB</summary>
         Tx0DB = 0x03
     };
 

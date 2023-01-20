@@ -219,70 +219,37 @@ namespace SmallEarthTech.AntUsbStick
         public void SetCryptoID(byte[] encryptionID) => antDevice.setCryptoID(encryptionID);
 
         /// <inheritdoc/>
-        public bool SetCryptoID(byte[] encryptionID, uint responseWaitTime)
-        {
-            return antDevice.setCryptoID(encryptionID, responseWaitTime);
-        }
+        public bool SetCryptoID(byte[] encryptionID, uint responseWaitTime) => antDevice.setCryptoID(encryptionID, responseWaitTime);
 
         /// <inheritdoc/>
-        public void SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData)
-        {
-            antDevice.setCryptoInfo((ANT_ReferenceLibrary.EncryptionInfo)encryptionParameter, parameterData);
-        }
+        public void SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData) => antDevice.setCryptoInfo((ANT_ReferenceLibrary.EncryptionInfo)encryptionParameter, parameterData);
 
         /// <inheritdoc/>
-        public bool SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData, uint responseWaitTime)
-        {
-            return antDevice.setCryptoInfo((ANT_ReferenceLibrary.EncryptionInfo)encryptionParameter, parameterData, responseWaitTime);
-        }
+        public bool SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData, uint responseWaitTime) => antDevice.setCryptoInfo((ANT_ReferenceLibrary.EncryptionInfo)encryptionParameter, parameterData, responseWaitTime);
 
         /// <inheritdoc/>
-        public void SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey)
-        {
-            antDevice.setCryptoKey(volatileKeyIndex, encryptionKey);
-        }
+        public void SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey) => antDevice.setCryptoKey(volatileKeyIndex, encryptionKey);
 
         /// <inheritdoc/>
-        public bool SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey, uint responseWaitTime)
-        {
-            return antDevice.setCryptoKey(volatileKeyIndex, encryptionKey, responseWaitTime);
-        }
+        public bool SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey, uint responseWaitTime) => antDevice.setCryptoKey(volatileKeyIndex, encryptionKey, responseWaitTime);
 
         /// <inheritdoc/>
-        public void SetCryptoRNGSeed(byte[] cryptoRNGSeed)
-        {
-            antDevice.setCryptoRNGSeed(cryptoRNGSeed);
-        }
+        public void SetCryptoRNGSeed(byte[] cryptoRNGSeed) => antDevice.setCryptoRNGSeed(cryptoRNGSeed);
 
         /// <inheritdoc/>
-        public bool SetCryptoRNGSeed(byte[] cryptoRNGSeed, uint responseWaitTime)
-        {
-            return antDevice.setCryptoRNGSeed(cryptoRNGSeed, responseWaitTime);
-        }
+        public bool SetCryptoRNGSeed(byte[] cryptoRNGSeed, uint responseWaitTime) => antDevice.setCryptoRNGSeed(cryptoRNGSeed, responseWaitTime);
 
         /// <inheritdoc/>
-        public void SetCryptoUserInfo(byte[] userInfoString)
-        {
-            antDevice.setCryptoUserInfo(userInfoString);
-        }
+        public void SetCryptoUserInfo(byte[] userInfoString) => antDevice.setCryptoUserInfo(userInfoString);
 
         /// <inheritdoc/>
-        public bool SetCryptoUserInfo(byte[] userInfoString, uint responseWaitTime)
-        {
-            return antDevice.setCryptoUserInfo(userInfoString, responseWaitTime);
-        }
+        public bool SetCryptoUserInfo(byte[] userInfoString, uint responseWaitTime) => antDevice.setCryptoUserInfo(userInfoString, responseWaitTime);
 
         /// <inheritdoc/>
-        public void SetLibConfig(LibConfigFlags libConfigFlags)
-        {
-            antDevice.setLibConfig((ANT_ReferenceLibrary.LibConfigFlags)libConfigFlags);
-        }
+        public void SetLibConfig(LibConfigFlags libConfigFlags) => antDevice.setLibConfig((ANT_ReferenceLibrary.LibConfigFlags)libConfigFlags);
 
         /// <inheritdoc/>
-        public bool SetLibConfig(LibConfigFlags libConfigFlags, uint responseWaitTime)
-        {
-            return antDevice.setLibConfig((ANT_ReferenceLibrary.LibConfigFlags)libConfigFlags, responseWaitTime);
-        }
+        public bool SetLibConfig(LibConfigFlags libConfigFlags, uint responseWaitTime) => antDevice.setLibConfig((ANT_ReferenceLibrary.LibConfigFlags)libConfigFlags, responseWaitTime);
 
         /// <inheritdoc/>
         public void SetNetworkKey(byte netNumber, byte[] networkKey) => antDevice.setNetworkKey(netNumber, networkKey);

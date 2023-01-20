@@ -5,21 +5,31 @@ using System.Linq;
 
 namespace SmallEarthTech.AntUsbStick
 {
+    /// <summary>This class implement the IAntResponse interface.</summary>
     public class AntResponse : IAntResponse
     {
+        /// <inheritdoc/>
         public object Sender { get; }
 
+        /// <inheritdoc/>
         public byte AntChannel { get; }
 
+        /// <inheritdoc/>
         public DateTime TimeReceived { get; }
 
+        /// <inheritdoc/>
         public byte ResponseId { get; }
 
+        /// <inheritdoc/>
         public ChannelId ChannelId { get; }
 
+        /// <inheritdoc/>
         public byte[] Payload { get; } = null;
+        /// <inheritdoc/>
         public sbyte Rssi { get; }
+        /// <inheritdoc/>
         public sbyte ThresholdConfigurationValue { get; }
+        /// <inheritdoc/>
         public ushort Timestamp { get; }
 
         internal AntResponse(ANT_Response response)

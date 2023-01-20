@@ -424,11 +424,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// </returns>
         DeviceInfo GetDeviceUSBInfo(byte deviceNum);
         /// <summary>Gets the device USB PID.</summary>
-        /// <value>The device usbpid.</value>
         ushort DeviceUSBPID { get; }
 
         /// <summary>Gets the device USB VID.</summary>
-        /// <value>The device usbvid.</value>
         ushort DeviceUSBVID { get; }
 
         /// <summary>Gets the number channels.</summary>
@@ -442,15 +440,12 @@ namespace SmallEarthTech.AntRadioInterface
         PortType OpenedPortType { get; }
 
         /// <summary>Gets the opened USB baud rate.</summary>
-        /// <value>The opened usb baud rate.</value>
         uint OpenedUSBBaudRate { get; }
 
         /// <summary>Gets the opened USB device number.</summary>
-        /// <value>The opened usb device number.</value>
         int OpenedUSBDeviceNum { get; }
 
         /// <summary>Gets the serial number.</summary>
-        /// <value>The serial number.</value>
         uint SerialNumber { get; }
 
         /// <summary>Loads the crypto key from NVM.</summary>

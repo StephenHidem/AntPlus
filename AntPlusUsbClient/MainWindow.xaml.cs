@@ -22,7 +22,7 @@ namespace AntPlusUsbClient
         public MainWindow()
         {
             InitializeComponent();
-            BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.collectionLock);
+            BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.CollectionLock);
             DataContext = App.AntDevices;
             antDevices.MouseDoubleClick += AntDevices_MouseDoubleClick;
         }

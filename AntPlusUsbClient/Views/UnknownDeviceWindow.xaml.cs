@@ -12,7 +12,7 @@ namespace AntPlusUsbClient.Views
     {
         public UnknownDeviceWindow(UnknownDevice unknownDevice)
         {
-            BindingOperations.EnableCollectionSynchronization(unknownDevice.DataPages, unknownDevice.DataPages.collectionLock);
+            BindingOperations.EnableCollectionSynchronization(unknownDevice.DataPages, unknownDevice.DataPages.CollectionLock);
             InitializeComponent();
             DataContext = new UnknownDeviceViewModel(unknownDevice);
         }

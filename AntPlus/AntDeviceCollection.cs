@@ -23,10 +23,10 @@ namespace SmallEarthTech.AntPlus
         /// <remarks>
         /// An application should use the collection lock to ensure thread safe access to the
         /// collection. For example, the code behind for a WPF window should include -
-        /// <code>BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.collectionLock);</code>
+        /// <code>BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.CollectionLock);</code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object collectionLock = new object();
+        public object CollectionLock = new object();
         private readonly IAntRadio antRadio;
         private readonly IAntChannel channel;
 
@@ -42,7 +42,7 @@ namespace SmallEarthTech.AntPlus
         private void Channel_ChannelResponse(object sender, IAntResponse e)
         {
             AntDevice device;
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
                 if (device == null)
@@ -57,7 +57,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         protected override void ClearItems()
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.ClearItems();
             }
@@ -66,7 +66,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         protected override void InsertItem(int index, AntDevice item)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.InsertItem(index, item);
             }
@@ -75,7 +75,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.MoveItem(oldIndex, newIndex);
             }
@@ -84,7 +84,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.RemoveItem(index);
             }
@@ -93,7 +93,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         protected override void SetItem(int index, AntDevice item)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.SetItem(index, item);
             }

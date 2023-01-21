@@ -166,13 +166,6 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
-# Sandcastle Help File Builder is a documentation generator add-in
-Documentation/**/Help/
-Documentation/WebHelp/
-**/Doc/Help/
-**/Docs/Help/
-*.shfbproj_*
-
 # Click-Once directory
 publish/
 

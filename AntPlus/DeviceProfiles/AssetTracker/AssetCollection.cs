@@ -11,15 +11,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <remarks>
         /// An application should use the collection lock to ensure thread safe access to the
         /// collection. For example, the code behind for a WPF window should include -
-        /// <code>BindingOperations.EnableCollectionSynchronization(assetTrack.Assets, assetTracker.Assets.collectionLock);</code>
+        /// <code>BindingOperations.EnableCollectionSynchronization(assetTrack.Assets, assetTracker.Assets.CollectionLock);</code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object collectionLock = new object();
+        public object CollectionLock = new object();
 
         /// <inheritdoc/>
         protected override void ClearItems()
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.ClearItems();
             }
@@ -28,7 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <inheritdoc/>
         protected override void InsertItem(int index, Asset item)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.InsertItem(index, item);
             }
@@ -37,7 +37,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <inheritdoc/>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.MoveItem(oldIndex, newIndex);
             }
@@ -46,7 +46,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <inheritdoc/>
         protected override void RemoveItem(int index)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.RemoveItem(index);
             }
@@ -55,7 +55,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <inheritdoc/>
         protected override void SetItem(int index, Asset item)
         {
-            lock (collectionLock)
+            lock (CollectionLock)
             {
                 base.SetItem(index, item);
             }

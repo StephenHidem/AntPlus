@@ -15,7 +15,7 @@ namespace AntPlusUsbClient.Views
         {
             InitializeComponent();
             BicyclePowerViewModel bicyclePowerViewModel = new BicyclePowerViewModel(bicyclePower);
-            BindingOperations.EnableCollectionSynchronization(bicyclePowerViewModel.BicyclePower.Calibration.Measurements, bicyclePowerViewModel.BicyclePower.Calibration.Measurements.collectionLock);
+            BindingOperations.EnableCollectionSynchronization(bicyclePowerViewModel.BicyclePower.Calibration.Measurements, bicyclePowerViewModel.BicyclePower.Calibration.Measurements.CollectionLock);
 
             switch (bicyclePower.Sensor)
             {

@@ -17,4 +17,5 @@ Create a login and go to https://www.thisisant.com/my-ant/join-adopter.
 - Visual Studio 2022 Community Edition.
 - Download the zip file, unblock, and install https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/.
 - OPTIONAL: ANT USB stick hardware and device drivers. I use this for testing.
+
 ## Getting Started 

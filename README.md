@@ -7,7 +7,7 @@ The primary class is AntPlus and it  contains device
 profiles of ANT+ devices. AntRadioInterface permits different interfaces to the
 hardware being used and lends itself to dependency
 injection.
-## Prerequisites:
+## Prerequisites
 ##### Become an ANT+ Adopter! There is no membership fee. Start as an Adopter and receive free access to:
 ANT+ Device Profiles and reference code,
 ANT+ Device Profiles software simulators,

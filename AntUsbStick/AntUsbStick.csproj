@@ -17,4 +17,16 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ANT_WrappedLib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DSI_CP210xManufacturing_3_1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DSI_SiUSBXp_3_1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

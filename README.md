@@ -9,12 +9,13 @@ The class library is a .NET standard 2.0 compliant assembly in order to provide 
 from desktop applications to mobile platforms.
 ## Prerequisites
 Become an ANT+ Adopter! There is no membership fee. 
-Create a login and go to https://www.thisisant.com/my-ant/join-adopter. This provides you with access to
+Create a login and go to [Become an Adopter](https://www.thisisant.com/my-ant/join-adopter). This provides you with access to
 device profiles, SDK's, and useful software tools.
 - Visual Studio 2022 Community Edition.
 - OPTIONAL: ANT USB stick hardware and device drivers. I use two sticks for testing and some example projects require it.
 You can get them from DigiKey for around $45 for two.
-- OPTIONAL: Only needed if you intend to modify the libraries generated. Download the ANT PC SDK zip file https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/, unblock, and install.
+- OPTIONAL: Only needed if you intend to modify the libraries I've provided in the AntUsbStick project.
+Download the ANT PC SDK zip file https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/, unblock, and install.
 ## Documentation
 Project documentation is available at -
 * [ANT+ Class Library Help](http://stephenhidem.github.io/AntPlus)

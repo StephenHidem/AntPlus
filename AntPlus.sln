@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation", "Documentation\Documentation.shfbproj", "{50199F4B-CDEC-4C32-979F-2DFA639A34C3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DB48B2D7-3000-481A-8C7D-5265F1D91A89} = {DB48B2D7-3000-481A-8C7D-5265F1D91A89}
+		{EBA3A5BB-3E71-42F2-BBD6-FFF42105379E} = {EBA3A5BB-3E71-42F2-BBD6-FFF42105379E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

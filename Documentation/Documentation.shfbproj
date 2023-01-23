@@ -17,7 +17,7 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
     <OutputPath>..\docs\</OutputPath>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
@@ -32,6 +32,7 @@
     </TransformComponentArguments>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\AntPlus\AntPlus.csproj" />
+      <DocumentationSource sourceFile="..\AntRadioInterface\AntRadioInterface.csproj" />
     </DocumentationSources>
     <HelpFileFormat>Website</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
@@ -43,6 +44,32 @@
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
+    <HelpTitle>Small Earth Technology ANT+ Class Library</HelpTitle>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <NamingMethod>Guid</NamingMethod>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <NamespaceGrouping>True</NamespaceGrouping>
+    <MaximumGroupParts>2</MaximumGroupParts>
+    <Preliminary>False</Preliminary>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <CopyrightText>&amp;#169%3b 2022 Stephen Hidem.</CopyrightText>
+    <PlugInConfigurations>
+    </PlugInConfigurations>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus" isDocumented="True">This is the global namespace for ANT+ devices.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles (Group)" isGroup="True" isDocumented="True">This namespace contains supported ANT+ device profiles.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker" isDocumented="True">Contain the asset tracker classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower" isDocumented="True">Contains the bicycle power classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence" isDocumented="True">Contains the bicycle speed and cadence classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment" isDocumented="True">Contains the fitness equipment classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.Geocache" isDocumented="True">Contains the geocache classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.HeartRate" isDocumented="True">Contains the heart rate monitor classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen" isDocumented="True">Contains the muscle oxygen sensor classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice" isDocumented="True">Contains the unknown ANT+ device classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntRadioInterface" isDocumented="True">The ANT+ radio interface namespace.</NamespaceSummaryItem>
+    </NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->

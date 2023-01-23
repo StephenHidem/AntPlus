@@ -244,7 +244,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="optionalFields">The optional fields.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureAdvancedBursting(bool enable, byte maxPacketLength, AdvancedBurstConfigFlags requiredFields, AdvancedBurstConfigFlags optionalFields, uint responseWaitTime);
         /// <summary>Configures the extended advanced bursting.</summary>
@@ -264,13 +264,13 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="retryCount">The retry count.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureAdvancedBursting_ext(bool enable, byte maxPacketLength, AdvancedBurstConfigFlags requiredFields, AdvancedBurstConfigFlags optionalFields, ushort stallCount, byte retryCount, uint responseWaitTime);
         /// <summary>Configures the advanced burst splitting.</summary>
         /// <param name="splitBursts">if set to <c>true</c> [split bursts].</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureAdvancedBurstSplitting(bool splitBursts);
         /// <summary>Configures the event buffer.</summary>
@@ -284,7 +284,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="time">The time.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureEventBuffer(EventBufferConfig config, ushort size, ushort time, uint responseWaitTime);
         /// <summary>Configures the event filter.</summary>
@@ -294,7 +294,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="eventFilter">The event filter.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureEventFilter(ushort eventFilter, uint responseWaitTime);
         /// <summary>Configures the high duty search.</summary>
@@ -306,7 +306,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="suppressionCycles">The suppression cycles.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureHighDutySearch(bool enable, byte suppressionCycles, uint responseWaitTime);
         /// <summary>Configures the user NVM.</summary>
@@ -320,7 +320,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="size">The size.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ConfigureUserNvm(ushort address, byte[] data, byte size, uint responseWaitTime);
         /// <summary>Crypto key NVM operation.</summary>
@@ -334,7 +334,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="operationData">The operation data.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool CryptoKeyNVMOp(EncryptionNVMOp memoryOperation, byte nonVolatileKeyIndex, byte[] operationData, uint responseWaitTime);
         /// <summary>Crystal enable.</summary>
@@ -342,7 +342,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Crystal enable.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool CrystalEnable(uint responseWaitTime);
         /// <summary>Releases unmanaged and - optionally - managed resources.</summary>
@@ -354,7 +354,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="isEnabled">if set to <c>true</c> [is enabled].</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool EnableLED(bool isEnabled, uint responseWaitTime);
         /// <summary>Enables Rx extended messages.</summary>
@@ -364,7 +364,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="isEnabled">if set to <c>true</c> [is enabled].</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool EnableRxExtendedMessages(bool isEnabled, uint responseWaitTime);
         /// <summary>FIT adjust pairing settings.</summary>
@@ -378,7 +378,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="trackLv">The track lv.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool FitAdjustPairingSettings(byte searchLv, byte pairLv, byte trackLv, uint responseWaitTime);
         /// <summary>FIT set the state of the fitness equipment.</summary>
@@ -387,40 +387,43 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>FIT set the state of the fitness equipment.</summary>
         /// <param name="feState">State of the fe.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
+        /// <returns>
+        /// true if successful
+        /// </returns>
         bool FitSetFEState(byte feState, uint responseWaitTime);
         /// <summary>Gets the channel.</summary>
         /// <param name="num">The number.</param>
         /// <returns>
-        ///   <br />
+        /// ANT channel
         /// </returns>
         IAntChannel GetChannel(int num);
         /// <summary>Gets the device capabilities.</summary>
         /// <returns>
-        ///   <br />
+        /// Device capabilities
         /// </returns>
         IDeviceCapabilities GetDeviceCapabilities();
         /// <summary>Gets the device capabilities.</summary>
         /// <param name="forceNewCopy">if set to <c>true</c> [force new copy].</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// Device capabilities
         /// </returns>
         IDeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime);
         /// <summary>Gets the device capabilities.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// Device capabilities
         /// </returns>
         IDeviceCapabilities GetDeviceCapabilities(uint responseWaitTime);
         /// <summary>Gets the device USB information.</summary>
         /// <returns>
-        ///   <br />
+        /// Device information
         /// </returns>
         DeviceInfo GetDeviceUSBInfo();
         /// <summary>Gets the device USB information.</summary>
         /// <param name="deviceNum">The device number.</param>
         /// <returns>
-        ///   <br />
+        /// Device information
         /// </returns>
         DeviceInfo GetDeviceUSBInfo(byte deviceNum);
         /// <summary>Gets the device USB PID.</summary>
@@ -457,7 +460,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="volatileKeyIndex">Index of the volatile key.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool LoadCryptoKeyFromNVM(byte nonVolatileKeyIndex, byte volatileKeyIndex, uint responseWaitTime);
         /// <summary>Opens the Rx scan mode.</summary>
@@ -465,14 +468,14 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Opens the Rx scan mode.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool OpenRxScanMode(uint responseWaitTime);
         /// <summary>Reads the user NVM.</summary>
         /// <param name="address">The address.</param>
         /// <param name="size">The size.</param>
         /// <returns>
-        ///   <br />
+        ///  ANT response
         /// </returns>
         IAntResponse ReadUserNvm(ushort address, byte size);
         /// <summary>Reads the user NVM.</summary>
@@ -480,7 +483,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="size">The size.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// ANT response
         /// </returns>
         IAntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime);
         /// <summary>Requests the message.</summary>
@@ -495,14 +498,14 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="messageID">The message identifier.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// ANT response
         /// </returns>
         IAntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime);
         /// <summary>Requests the message and response.</summary>
         /// <param name="messageID">The message identifier.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// ANT response
         /// </returns>
         IAntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime);
         /// <summary>Resets the system.</summary>
@@ -510,7 +513,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Resets the system.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool ResetSystem(uint responseWaitTime);
         /// <summary>Resets the USB.</summary>
@@ -522,7 +525,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="encryptionID">The encryption identifier.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetCryptoID(byte[] encryptionID, uint responseWaitTime);
         /// <summary>Sets the crypto information.</summary>
@@ -534,7 +537,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="parameterData">The parameter data.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData, uint responseWaitTime);
         /// <summary>Sets the crypto key.</summary>
@@ -546,7 +549,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="encryptionKey">The encryption key.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey, uint responseWaitTime);
         /// <summary>Sets the crypto RNG seed.</summary>
@@ -556,7 +559,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="cryptoRNGSeed">The crypto RNG seed.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetCryptoRNGSeed(byte[] cryptoRNGSeed, uint responseWaitTime);
         /// <summary>Sets the crypto user information.</summary>
@@ -566,7 +569,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="userInfoString">The user information string.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetCryptoUserInfo(byte[] userInfoString, uint responseWaitTime);
         /// <summary>Sets the library configuration.</summary>
@@ -576,7 +579,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="libConfigFlags">The library configuration flags.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetLibConfig(LibConfigFlags libConfigFlags, uint responseWaitTime);
         /// <summary>Sets the network key.</summary>
@@ -588,7 +591,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="networkKey">The network key.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetNetworkKey(byte netNumber, byte[] networkKey, uint responseWaitTime);
         /// <summary>Sets the transmit power for all channels.</summary>
@@ -598,7 +601,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="transmitPower">The transmit power.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool SetTransmitPowerForAllChannels(TransmitPower transmitPower, uint responseWaitTime);
         /// <summary>Stores the crypto key to NVM.</summary>
@@ -610,7 +613,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="encryptionKey">The encryption key.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey, uint responseWaitTime);
         /// <summary>Converts to string.</summary>
@@ -620,7 +623,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="msgID">The MSG identifier.</param>
         /// <param name="msgData">The MSG data.</param>
         /// <returns>
-        ///   <br />
+        /// true if successful
         /// </returns>
         bool WriteRawMessageToDevice(byte msgID, byte[] msgData);
     }

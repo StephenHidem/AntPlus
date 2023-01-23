@@ -50,10 +50,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         {
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage"></param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             // check if asset list empty

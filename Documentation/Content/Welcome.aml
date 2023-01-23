@@ -2,16 +2,43 @@
 <topic id="5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
-			<para>This is a sample conceptual topic.  You can use this as a starting point for adding more conceptual
-content to your help project.</para>
+			<para>
+				Welcome to the Small Earth Technology ANT+ class library and examples. My goal is to provide a frictionless
+				as possible implementation to enable applications to interface and acquire data from a variety of ANT+
+				sensor sources. The primary class is AntPlus and it contains device profiles of ANT+ devices and common data pages.
+				The AntRadioInterface class permits different interfaces to the hardware being used and lends itself to
+				dependency injection.
+			</para>
 		</introduction>
 
 		<section>
 			<title>Getting Started</title>
 			<content>
-				<para>To get started, add a documentation source to the project (a Visual Studio solution, project, or
-assembly and XML comments file).  See the <legacyBold>Getting Started</legacyBold> topics in the Sandcastle Help
-File Builder's help file for more information.  The following default items are included in this project:</para>
+				<para>
+					Become an ANT+ Adopter! There is no membership fee.
+					Create a login and go to <a href="https://www.thisisant.com/my-ant/join-adopter">Become an Adopter</a>. This provides you with access to
+					device profiles, SDK's, and useful software tools.
+					<list class ="bullet">
+						Other prerequisites -
+						<listItem>
+							<para>
+								Visual Studio 2022 Community Edition must be installed.
+							</para>
+						</listItem>
+						<listItem>
+							<para>
+								OPTIONAL: ANT USB stick hardware and device drivers. I use two sticks for testing and some example projects require it.
+								You can get them from DigiKey for around $45 for two.
+							</para>
+						</listItem>
+						<listItem>
+							<para>
+								OPTIONAL: Only needed if you intend to modify the libraries I've provided in the AntUsbStick project.
+								Download the <a href="https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/">ANT PC SDK zip file</a>, unblock, and install.
+							</para>
+						</listItem>
+					</list>
+				</para>
 
 				<list class="bullet">
 					<listItem>

@@ -79,10 +79,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         {
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage"></param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             // don't parse if programming geocache

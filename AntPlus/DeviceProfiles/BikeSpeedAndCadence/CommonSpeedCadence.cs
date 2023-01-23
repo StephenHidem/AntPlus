@@ -111,10 +111,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         {
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage"></param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             // ignore duplicate/unchanged data pages

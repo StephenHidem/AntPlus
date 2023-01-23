@@ -86,10 +86,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             Calibration = new Calibration(this);
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage"></param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             switch ((DataPage)dataPage[0])

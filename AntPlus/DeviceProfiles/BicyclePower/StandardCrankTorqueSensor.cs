@@ -97,8 +97,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
         }
 
-        /// <summary>Parses the crank torque.</summary>
-        /// <param name="dataPage">The data page.</param>
+        /// <inheritdoc/>
         public override void ParseTorque(byte[] dataPage)
         {
             base.ParseTorque(dataPage);

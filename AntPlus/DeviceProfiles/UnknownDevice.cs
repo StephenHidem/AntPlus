@@ -28,10 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         {
         }
 
-        /// <summary>
-        /// Parses/updates the specified data page.
-        /// </summary>
-        /// <param name="dataPage"></param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             DataPage page = DataPages.FirstOrDefault(p => p.PageNumber == dataPage[0]);

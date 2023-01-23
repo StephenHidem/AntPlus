@@ -118,9 +118,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             /// <summary>Gets the virtual speed flag.</summary>
             public bool VirtualSpeedFlag { get; private set; }
 
-            /// <summary>
-            /// Parses the specified data page.
-            /// </summary>
+            /// <summary>Parses the specified data page.</summary>
             /// <param name="dataPage">The data page.</param>
             internal void Parse(byte[] dataPage)
             {
@@ -234,10 +232,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             GeneralMetabolic = new GeneralMetabolicPage();
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage"></param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             State = (FEState)((dataPage[7] & 0x70) >> 4);

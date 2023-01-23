@@ -29,8 +29,7 @@
         {
         }
 
-        /// <summary>Parses the torque message.</summary>
-        /// <param name="dataPage">The data page.</param>
+        /// <inheritdoc/>
         public override void ParseTorque(byte[] dataPage)
         {
             base.ParseTorque(dataPage);

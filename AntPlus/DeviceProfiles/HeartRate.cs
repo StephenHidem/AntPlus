@@ -273,10 +273,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
         {
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage">The data page.</param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             if (isFirstDataMessage)
@@ -375,7 +372,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
         /// Sets the sport mode.
         /// </summary>
         /// <param name="sportMode">The sport mode.</param>
-        /// <param name="subSportMode"></param>
+        /// <param name="subSportMode">Subsport mode.</param>
         public void SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
             SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));

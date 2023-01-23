@@ -107,9 +107,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>
         /// Creates and fills the ChannelStatus
         /// </summary>
-        /// <param name="BasicStatus"></param>
-        /// <param name="networkNumber"></param>
-        /// <param name="ChannelType"></param>
+        /// <param name="BasicStatus">Channel status code</param>
+        /// <param name="networkNumber">ANT network number</param>
+        /// <param name="ChannelType">Channel type</param>
         public ChannelStatus(BasicChannelStatusCode BasicStatus, byte networkNumber, ChannelType ChannelType)
         {
             this.BasicStatus = BasicStatus;
@@ -138,6 +138,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// Throws exception on timeout.
         /// </summary>
         /// <param name="responseWaitTime">Time to wait for device success response</param>
+        /// <returns>
+        /// Channel status
+        /// </returns>
         ChannelStatus RequestStatus(UInt32 responseWaitTime);
 
         /// <overloads>Assign channel</overloads>
@@ -173,7 +176,7 @@ namespace SmallEarthTech.AntRadioInterface
 
         /// <summary>Set the Channel ID of this channel.
         /// Throws exception if device type is &gt; 127.</summary>
-        /// <param name="channelId"></param>
+        /// <param name="channelId">Channel ID class</param>
         /// <param name="responseWaitTime">Time to wait for device success response</param>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
         bool SetChannelID(ChannelId channelId, uint responseWaitTime);
@@ -184,6 +187,8 @@ namespace SmallEarthTech.AntRadioInterface
         /// Not available on all ANT devices.
         /// Throws exception if device type is > 127.
         /// </summary>
+        /// <param name="channelId">Channel ID class</param>
+        /// <param name="waitResponseTime">Time to wait for device success response</param>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
         bool SetChannelID_UsingSerial(ChannelId channelId, UInt32 waitResponseTime);
 
@@ -248,6 +253,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// Throws exception if data > 8-bytes in length
         /// </summary>
         /// <param name="data">data to send (length 8 or less)</param>
+        /// <returns>
+        /// true if successful
+        /// </returns>
         bool SendBroadcastData(byte[] data);
 
         /// <overloads>Sends acknowledged message</overloads>
@@ -274,6 +282,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="channelId">The channel ID of the ANT device</param>
         /// <param name="data">data to send (length 8 or less)</param>
         /// <overloads>Sends extended broadcast message</overloads>
+        /// <returns>
+        /// true if successful
+        /// </returns>
         bool SendExtBroadcastData(ChannelId channelId, byte[] data);
 
         /// <summary>Sends the given data as an extended acknowledged transmission.

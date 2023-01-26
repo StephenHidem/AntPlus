@@ -47,6 +47,13 @@ namespace SmallEarthTech.AntPlus
         //public abstract void ChannelEventHandler(EventMsgId eventMsgId);
         //public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
 
+        /// <inheritdoc/>
+        /// <remarks>Overriden to provide the short class name versus the full namepace name.</remarks>
+        public override string ToString()
+        {
+            return base.GetType().Name;
+        }
+
         /// <summary>Requests the data page.</summary>
         /// <typeparam name="T">The data page enumeration of the derived ANT device class.</typeparam>
         /// <param name="page">The requested page.</param>

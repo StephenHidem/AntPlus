@@ -18,7 +18,7 @@
                         <GridView >
                             <GridViewColumn Header="Device Type" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceType}"/>
                             <GridViewColumn Header="Device Number" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceNumber}"/>
-                            <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Path=.}"/>
+                            <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding .}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

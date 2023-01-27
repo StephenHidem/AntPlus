@@ -1,6 +1,6 @@
 ﻿namespace SmallEarthTech.AntRadioInterface
 {
-    /// <summary>The channel ID is comprised of device number, device type, and transmission type.</summary>
+    /// <summary>The channel ID is a concrete class comprised of device number, device type, and transmission type.</summary>
     public class ChannelId
     {
         /// <summary>Gets the channel identifier.</summary>

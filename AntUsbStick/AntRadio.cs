@@ -160,17 +160,15 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public DeviceInfo GetDeviceUSBInfo()
+        public IDeviceInfo GetDeviceUSBInfo()
         {
-            ANT_DeviceInfo di = antDevice.getDeviceUSBInfo();
-            return new DeviceInfo(di.productDescription, di.serialString);
+            return new DeviceInfo(antDevice.getDeviceUSBInfo());
         }
 
         /// <inheritdoc/>
-        public DeviceInfo GetDeviceUSBInfo(byte deviceNum)
+        public IDeviceInfo GetDeviceUSBInfo(byte deviceNum)
         {
-            ANT_DeviceInfo di = antDevice.getDeviceUSBInfo(deviceNum);
-            return new DeviceInfo(di.productDescription, di.serialString);
+            return new DeviceInfo(antDevice.getDeviceUSBInfo(deviceNum));
         }
 
         /// <inheritdoc/>

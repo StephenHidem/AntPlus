@@ -419,13 +419,13 @@ namespace SmallEarthTech.AntRadioInterface
         /// <returns>
         /// Device information
         /// </returns>
-        DeviceInfo GetDeviceUSBInfo();
+        IDeviceInfo GetDeviceUSBInfo();
         /// <summary>Gets the device USB information.</summary>
         /// <param name="deviceNum">The device number.</param>
         /// <returns>
         /// Device information
         /// </returns>
-        DeviceInfo GetDeviceUSBInfo(byte deviceNum);
+        IDeviceInfo GetDeviceUSBInfo(byte deviceNum);
         /// <summary>Gets the device USB PID.</summary>
         ushort DeviceUSBPID { get; }
 

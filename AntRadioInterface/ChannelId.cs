@@ -3,7 +3,8 @@
     /// <summary>The channel ID is a concrete class comprised of device number, device type, and transmission type.</summary>
     /// <remarks>
     /// The channel identifier is received in all ANT packets as a 32 bit number, regardless of source.
-    /// Use the Id property for messages transmitted to an ANT device.
+    /// Use the Id property for messages transmitted to an ANT device. This is handled automatically in the
+    /// device profiles.
     /// </remarks>
     public class ChannelId
     {

@@ -68,9 +68,7 @@ namespace SmallEarthTech.AntUsbStick
 
         /// <summary>Requests the channel identifier.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
+        /// <returns>The <see cref="ChannelId"/>.</returns>
         public ChannelId RequestID(uint responseWaitTime)
         {
             var channelId = antChannel.requestID(responseWaitTime);

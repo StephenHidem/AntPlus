@@ -33,6 +33,7 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\AntPlus\AntPlus.csproj" />
       <DocumentationSource sourceFile="..\AntRadioInterface\AntRadioInterface.csproj" />
+      <DocumentationSource sourceFile="..\AntUsbStick\AntUsbStick.csproj" />
     </DocumentationSources>
     <HelpFileFormat>Website</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>

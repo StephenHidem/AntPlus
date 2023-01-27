@@ -142,18 +142,21 @@ namespace SmallEarthTech.AntUsbStick
         public IAntChannel GetChannel(int num) => new AntChannel(antDevice.getChannel(num));
 
         /// <inheritdoc/>
-        public IDeviceCapabilities GetDeviceCapabilities() => (IDeviceCapabilities)antDevice.getDeviceCapabilities();
+        public IDeviceCapabilities GetDeviceCapabilities()
+        {
+            return new DeviceCapabilities(antDevice.getDeviceCapabilities());
+        }
 
         /// <inheritdoc/>
         public IDeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
-            return (IDeviceCapabilities)antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime);
+            return new DeviceCapabilities(antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime));
         }
 
         /// <inheritdoc/>
         public IDeviceCapabilities GetDeviceCapabilities(uint responseWaitTime)
         {
-            return (IDeviceCapabilities)antDevice.getDeviceCapabilities(responseWaitTime);
+            return new DeviceCapabilities(antDevice.getDeviceCapabilities(responseWaitTime));
         }
 
         /// <inheritdoc/>

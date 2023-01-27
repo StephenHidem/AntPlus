@@ -48,7 +48,7 @@ namespace SmallEarthTech.AntPlus
         //public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
 
         /// <inheritdoc/>
-        /// <remarks>Overriden to provide the short class name versus the full namepace name.</remarks>
+        /// <remarks>Overridden to provide the short class name versus the full namepace name.</remarks>
         public override string ToString()
         {
             return base.GetType().Name;

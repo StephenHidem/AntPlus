@@ -146,7 +146,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Requests the channel identifier.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>The <see cref="ChannelId"/>.</returns>
-        ChannelId RequestID(uint responseWaitTime);
+        ChannelId RequestChannelID(uint responseWaitTime);
 
         /// <overloads>Assign channel</overloads>
         /// <summary>

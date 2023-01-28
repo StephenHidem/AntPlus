@@ -67,7 +67,7 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public ChannelId RequestID(uint responseWaitTime)
+        public ChannelId RequestChannelID(uint responseWaitTime)
         {
             var channelId = antChannel.requestID(responseWaitTime);
             byte[] bytes = { channelId.deviceTypeID, channelId.transmissionTypeID };

@@ -143,6 +143,11 @@ namespace SmallEarthTech.AntRadioInterface
         /// </returns>
         ChannelStatus RequestStatus(UInt32 responseWaitTime);
 
+        /// <summary>Requests the channel identifier.</summary>
+        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <returns>The <see cref="ChannelId"/>.</returns>
+        ChannelId RequestID(uint responseWaitTime);
+
         /// <overloads>Assign channel</overloads>
         /// <summary>
         /// Assign an ANT channel along with its main parameters.

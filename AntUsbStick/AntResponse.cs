@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SmallEarthTech.AntUsbStick
 {
-    /// <summary>This class implement the IAntResponse interface.</summary>
+    /// <summary>This class implements the IAntResponse interface.</summary>
     public class AntResponse : IAntResponse
     {
         /// <inheritdoc/>

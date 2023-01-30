@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using SmallEarthTech.AntPlus;
+using System.Windows.Controls;
 
 namespace AntPlusUsbClient.Controls
 {
@@ -12,7 +13,7 @@ namespace AntPlusUsbClient.Controls
             InitializeComponent();
         }
 
-        public CommonDataPagesControl(object ctx)
+        public CommonDataPagesControl(CommonDataPages ctx)
         {
             InitializeComponent();
             DataContext = ctx;

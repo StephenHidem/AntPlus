@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
-        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:GeocacheViewModel}"
+        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:GeocacheViewModel}"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="GeocacheWindow" Height="450" Width="379">
@@ -23,7 +24,7 @@
             <Button Content="Program Geocache" Command="{Binding ProgramGeocache}"/>
             <Button Content="Log Visit" Command="{Binding LogVisit}"/>
 
-            <uc:CommonDataPagesControl DataContext="{Binding Geocache}"/>
+            <uc:CommonDataPagesControl DataContext="{Binding Geocache.CommonDataPages}"/>
         </StackPanel>
     </Grid>
 </Window>

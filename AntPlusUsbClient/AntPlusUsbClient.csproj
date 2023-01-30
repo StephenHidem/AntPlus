@@ -116,6 +116,7 @@
     <Compile Include="ViewModels\GeocacheViewModel.cs" />
     <Compile Include="ViewModels\HeartRateViewModel.cs" />
     <Compile Include="ViewModels\MuscleOxygenViewModel.cs" />
+    <Compile Include="ViewModels\SDMViewModel.cs" />
     <Compile Include="ViewModels\UnknownDeviceViewModel.cs" />
     <Compile Include="Views\AssetTrackerWindow.xaml.cs">
       <DependentUpon>AssetTrackerWindow.xaml</DependentUpon>
@@ -143,6 +144,9 @@
     </Compile>
     <Compile Include="Views\MuscleOxygenWindow.xaml.cs">
       <DependentUpon>MuscleOxygenWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StrideBasedMonitorWindow.xaml.cs">
+      <DependentUpon>StrideBasedMonitorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UnknownDeviceWindow.xaml.cs">
       <DependentUpon>UnknownDeviceWindow.xaml</DependentUpon>
@@ -248,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MuscleOxygenWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StrideBasedMonitorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

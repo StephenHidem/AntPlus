@@ -19,6 +19,7 @@
     <None Remove="Images\Geocache.png" />
     <None Remove="Images\HeartRate.png" />
     <None Remove="Images\MuscleOygen.png" />
+    <None Remove="Images\SDM.PNG" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
 	<EmbeddedResource Include="Images\Geocache.png" />
     <EmbeddedResource Include="Images\HeartRate.png" />
     <EmbeddedResource Include="Images\MuscleOygen.png" />
+    <EmbeddedResource Include="Images\SDM.PNG" />
   </ItemGroup>
 
   <ItemGroup>

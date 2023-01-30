@@ -60,7 +60,7 @@
                     <TextBlock Text="{Binding GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET {0}'}"/>
                 </StackPanel>
             </Expander>
-            <uc:CommonDataPagesControl DataContext="{Binding FitnessEquipment}"/>
+            <uc:CommonDataPagesControl DataContext="{Binding FitnessEquipment.CommonDataPages}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -5,6 +5,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
 using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
 using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
+using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
 using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
 using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
@@ -121,6 +122,8 @@ namespace SmallEarthTech.AntPlus
                     return new Geocache(channelId, antRadio.GetChannel(1));
                 case AssetTracker.DeviceClass:
                     return new AssetTracker(channelId, antRadio.GetChannel(1));
+                case StrideBasedSpeedAndDistance.DeviceClass:
+                    return new StrideBasedSpeedAndDistance(channelId, antRadio.GetChannel(1));
                 default:
                     return new UnknownDevice(channelId, antRadio.GetChannel(1));
             }

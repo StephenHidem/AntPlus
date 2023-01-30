@@ -7,6 +7,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
 using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
 using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
+using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
 using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
 using System.Windows;
 using System.Windows.Controls;
@@ -67,6 +68,10 @@ namespace AntPlusUsbClient
                 case AssetTracker.DeviceClass:
                     AssetTrackerWindow tracker = new AssetTrackerWindow((AssetTracker)antDevice);
                     tracker.Show();
+                    break;
+                case StrideBasedSpeedAndDistance.DeviceClass:
+                    StrideBasedMonitorWindow sdmWindow = new StrideBasedMonitorWindow((StrideBasedSpeedAndDistance)antDevice);
+                    sdmWindow.Show();
                     break;
                 default:
                     // unknown device

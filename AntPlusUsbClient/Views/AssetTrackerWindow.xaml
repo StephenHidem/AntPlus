@@ -30,6 +30,6 @@
                 </ListView.View>
             </ListView>
         </Expander>
-        <uc:CommonDataPagesControl DataContext="{Binding AssetTracker}"/>
+        <uc:CommonDataPagesControl DataContext="{Binding AssetTracker.CommonDataPages}"/>
     </StackPanel>
 </Window>

@@ -32,7 +32,7 @@
             <Button Content="Start Session" Command="{Binding StartSession}"/>
             <Button Content="Stop Session" Command="{Binding StopSession}"/>
             <Button Content="Lap" Command="{Binding Lap}"/>
-            <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen}"/>
+            <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen.CommonDataPages}"/>
         </StackPanel>
     </Grid>
 </Window>

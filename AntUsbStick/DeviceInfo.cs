@@ -8,10 +8,10 @@ namespace SmallEarthTech.AntUsbStick
     {
         private readonly ANT_DeviceInfo deviceInfo;
 
-        /// <inheritdoe/>
+        /// <inheritdoc/>
         public string ProductDescription => deviceInfo.printProductDescription();
 
-        /// <inheritdoe/>
+        /// <inheritdoc/>
         public string SerialString => deviceInfo.printSerialString();
 
         /// <summary>Initializes a new instance of the <see cref="DeviceInfo" /> class.</summary>

@@ -12,7 +12,9 @@ namespace AntPlusUsbClient.Views
         public StrideBasedMonitorWindow(StrideBasedSpeedAndDistance sdm)
         {
             InitializeComponent();
-            DataContext = new SDMViewModel(sdm);
+            SDMViewModel viewModel = new SDMViewModel(sdm);
+            CommandBindings.AddRange(viewModel.CommandBindings);
+            DataContext = viewModel;
         }
     }
 }

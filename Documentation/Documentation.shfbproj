@@ -70,6 +70,8 @@
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen" isDocumented="True">Contains the muscle oxygen sensor classes and members.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice" isDocumented="True">Contains the unknown ANT+ device classes and members.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntRadioInterface" isDocumented="True">The ANT+ radio interface namespace.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance" isDocumented="True">Contains the stride based speed and sensor classes and members.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntUsbStick" isDocumented="True">This namespace supports the concrete implementation of the ant radio interface.</NamespaceSummaryItem>
     </NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
@@ -106,6 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\Help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="media\SmallEarthTech.png">
+      <ImageId>SmallEarthTech</ImageId>
+      <AlternateText>Small Earth Tech</AlternateText>
+    </Image>
   </ItemGroup>
   <!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="'$(MSBuildRestoreSessionId)' != ''" />

@@ -2,6 +2,9 @@
 <topic id="5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
+			<mediaLink>
+				<image xlink:href="SmallEarthTech" placement="center"/>
+			</mediaLink>
 			<para>
 				Welcome to the Small Earth Technology ANT+ class library and examples. My goal is to provide a frictionless
 				as possible implementation to enable applications to interface and acquire data from a variety of ANT+
@@ -11,6 +14,29 @@
 			</para>
 		</introduction>
 
+		<section>
+			<title>Overview</title>
+			<content>
+				<para>
+					The libraries are largely intended to support applications interfacing to ANT devices.
+					This could be a group app, mobile app, push data to the cloud, or some other purpose.
+				</para>
+				<para>
+					The primary projects are AntPlus and AntRadioInterface. AntPlus defines the device profiles
+					derived from the AntDevice class. The AntRadioInterface defines an interface to interact
+					with an ANT radio to send and receive from an ANT device.
+				</para>
+				<para>
+					The AntUsbStick project is derived from AntRadioInterface and implements a concrete
+					implementation that supports commercially available ANT USB sticks from Dynastream/Garmin.
+				</para>
+				<para>
+					The AntPlusUsbClient WPF application pulls these pieces together to demonstrate a simple
+					usage of the ANT class library.
+				</para>
+			</content>
+		</section>
+		
 		<section>
 			<title>Getting Started</title>
 			<content>
@@ -27,6 +53,11 @@
 						</listItem>
 						<listItem>
 							<para>
+								Clone or fork this repository.
+							</para>
+						</listItem>
+						<listItem>
+							<para>
 								OPTIONAL: ANT USB stick hardware and device drivers. I use two sticks for testing and some example projects require it.
 								You can get them from DigiKey for around $45 for two.
 							</para>
@@ -39,8 +70,20 @@
 						</listItem>
 					</list>
 				</para>
+			</content>
+		</section>
 
-
+		<section>
+			<title>Work in Progress</title>
+			<content>
+				<para>
+					ANT-FS is not currently supported. Some device profiles are not supported - please
+					create an issue if there is an ANT device profile you would like to see supported.
+				</para>
+				<para>
+					My next step is create a network AntRadioInterface implementation for use with Xamarin and MAUI
+					applications to extend the reach to mobile devices.
+				</para>
 			</content>
 		</section>
 

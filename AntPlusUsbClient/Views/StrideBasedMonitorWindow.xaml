@@ -19,6 +19,19 @@
             <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time {0}'}"/>
             <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency {0}'}"/>
 
+            <Label Content="Status" FontWeight="DemiBold"/>
+            <TextBlock Text="{Binding SDM.Status.Location, StringFormat='Location {0}'}"/>
+            <TextBlock Text="{Binding SDM.Status.Health, StringFormat='Health {0}'}"/>
+            <TextBlock Text="{Binding SDM.Status.Battery, StringFormat='Battery {0}'}"/>
+            <TextBlock Text="{Binding SDM.Status.State, StringFormat='State {0}'}"/>
+
+            <Button Content="Request Distance and Strides Summary" Command="{Binding RequestSummary}"/>
+            <TextBlock Text="{Binding SDM.StrideCountSummary, StringFormat='Stride Count {0}'}"/>
+            <TextBlock Text="{Binding SDM.DistanceSummary, StringFormat='Distance {0}'}"/>
+
+            <Button Content="Request Capabilities" Command="{Binding RequestCapabilities}"/>
+            <TextBlock Text="{Binding SDM.Capabilities}"/>
+            
             <uc:CommonDataPagesControl DataContext="{Binding SDM.CommonDataPages}"/>
         </StackPanel>
     </Grid>

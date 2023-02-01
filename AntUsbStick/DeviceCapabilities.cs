@@ -98,9 +98,7 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public byte MaxDataChannels => capabilities.maxDataChannels;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceCapabilities"/> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="DeviceCapabilities" /> class.</summary>
         /// <param name="capabilities">The capabilities.</param>
         public DeviceCapabilities(ANT_DeviceCapabilities capabilities)
         {

@@ -36,6 +36,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
             BasePage,
             /// <summary>Calories</summary>
             Calories,
+            /// <summary>The distance and strides summary</summary>
+            DistanceAndStridesSummary = 16,
             /// <summary>The capabilities page.
             /// Page 22 is used to indicate the specific broadcast data capabilities of a sensor.</summary>
             Capabilities = 22
@@ -93,8 +95,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
         [Flags]
         public enum CapabilitiesFlags
         {
-            /// <summary>All fields valid</summary>
-            AllValid = 0x3F,
+            /// <summary>Unknown</summary>
+            Unknown = 0x00,
             /// <summary>Calories valid</summary>
             CaloriesValid = 0x20,
             /// <summary>Cadence valid</summary>
@@ -160,7 +162,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
         public int AccumulatedCalories { get; private set; }
         /// <summary>Gets the sensor broadcast capabilities.</summary>
         /// <value>The capabilities.</value>
-        public CapabilitiesFlags Capabilities { get; private set; } = CapabilitiesFlags.AllValid;
+        public CapabilitiesFlags Capabilities { get; private set; } = CapabilitiesFlags.Unknown;
+        /// <summary>Gets the accumulated strides since battery change.</summary>
+        /// <value>The stride count summary.</value>
+        public uint StrideCountSummary { get; private set; }
+        /// <summary>Gets the accumulated distance since battery change.</summary>
+        /// <value>The distance summary in meters.</value>
+        public double DistanceSummary { get; private set; }
 
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
@@ -201,6 +209,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
                     RaisePropertyChange(nameof(InstantaneousSpeed));
                     RaisePropertyChange(nameof(UpdateLatency));
                     break;
+                case DataPage.BasePage:
+                    InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
+                    InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
+                    Status = new StatusFlags(dataPage[7]);
+                    RaisePropertyChange(nameof(InstantaneousCadence));
+                    RaisePropertyChange(nameof(InstantaneousSpeed));
+                    RaisePropertyChange(nameof(Status));
+                    break;
                 case DataPage.Calories:
                     if (isFirstCalPage)
                     {
@@ -219,6 +235,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
                     RaisePropertyChange(nameof(InstantaneousSpeed));
                     RaisePropertyChange(nameof(Status));
                     break;
+                case DataPage.DistanceAndStridesSummary:
+                    StrideCountSummary = BitConverter.ToUInt32(dataPage, 1) & 0x0FFFFF;
+                    DistanceSummary = BitConverter.ToUInt32(dataPage, 4) / 256.0;
+                    RaisePropertyChange(nameof(StrideCountSummary));
+                    RaisePropertyChange(nameof(DistanceSummary));
+                    break;
                 case DataPage.Capabilities:
                     Capabilities = (CapabilitiesFlags)dataPage[1];
                     RaisePropertyChange(nameof(Capabilities));
@@ -227,6 +249,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
                     CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Requests the total cumulative distance and stride count since the last battery change.
+        /// </summary>
+        public void RequestSummaryPage()
+        {
+            RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
         /// <summary>

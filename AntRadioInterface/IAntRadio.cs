@@ -227,7 +227,7 @@ namespace SmallEarthTech.AntRadioInterface
     public interface IAntRadio
     {
         /// <summary>Occurs when radio response has been received.</summary>
-        event EventHandler<IAntResponse> RadioResponse;
+        event EventHandler<AntResponse> RadioResponse;
         /// <summary>Cancels the transfers.</summary>
         /// <param name="cancelWaitTime">The cancel wait time.</param>
         void CancelTransfers(int cancelWaitTime);
@@ -477,7 +477,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <returns>
         ///  ANT response
         /// </returns>
-        IAntResponse ReadUserNvm(ushort address, byte size);
+        AntResponse ReadUserNvm(ushort address, byte size);
         /// <summary>Reads the user NVM.</summary>
         /// <param name="address">The address.</param>
         /// <param name="size">The size.</param>
@@ -485,7 +485,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <returns>
         /// ANT response
         /// </returns>
-        IAntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime);
+        AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime);
         /// <summary>Requests the message.</summary>
         /// <param name="channelNum">The channel number.</param>
         /// <param name="messageID">The message identifier.</param>
@@ -500,14 +500,14 @@ namespace SmallEarthTech.AntRadioInterface
         /// <returns>
         /// ANT response
         /// </returns>
-        IAntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime);
+        AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime);
         /// <summary>Requests the message and response.</summary>
         /// <param name="messageID">The message identifier.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
         /// ANT response
         /// </returns>
-        IAntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime);
+        AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime);
         /// <summary>Resets the system.</summary>
         void ResetSystem();
         /// <summary>Resets the system.</summary>

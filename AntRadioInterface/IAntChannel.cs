@@ -127,7 +127,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// The channel callback event. Triggered every time a message is received from the ANT device.
         /// Examples include transmit and receive messages.
         /// </summary>
-        event EventHandler<IAntResponse> ChannelResponse;
+        event EventHandler<AntResponse> ChannelResponse;
 
         #endregion
 

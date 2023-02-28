@@ -1,4 +1,6 @@
-﻿namespace SmallEarthTech.AntRadioInterface
+﻿using System.Runtime.Serialization;
+
+namespace SmallEarthTech.AntRadioInterface
 {
     /// <summary>The channel ID is a concrete class comprised of device number, device type, and transmission type.</summary>
     /// <remarks>
@@ -6,11 +8,13 @@
     /// Use the Id property for messages transmitted to an ANT device. This is handled automatically in the
     /// device profiles.
     /// </remarks>
+    [DataContract]
     public class ChannelId
     {
         /// <summary>Gets the channel identifier.</summary>
         /// <value>The channel identifier.</value>
-        public uint Id { get; }
+        [DataMember]
+        public uint Id { get; private set; }
         /// <summary>Gets the type of the device.</summary>
         /// <value>The type of the device.</value>
         public byte DeviceType => (byte)(Id >> 16 & 0x0000007F);

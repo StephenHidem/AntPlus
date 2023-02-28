@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ANT_NET.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ANT_WrappedLib.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

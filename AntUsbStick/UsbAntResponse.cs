@@ -2,40 +2,18 @@
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace SmallEarthTech.AntUsbStick
 {
-    /// <summary>This class implements the IAntResponse interface.</summary>
-    public class AntResponse : IAntResponse
+    /// <summary>This class implements the AntResponse interface.</summary>
+    [DataContract(Name = "AntResponse", Namespace = "http://www.smallearthtech.com")]
+    public class UsbAntResponse : AntResponse
     {
-        /// <inheritdoc/>
-        public object Sender { get; }
-
-        /// <inheritdoc/>
-        public byte AntChannel { get; }
-
-        /// <inheritdoc/>
-        public DateTime TimeReceived { get; }
-
-        /// <inheritdoc/>
-        public byte ResponseId { get; }
-
-        /// <inheritdoc/>
-        public ChannelId ChannelId { get; }
-
-        /// <inheritdoc/>
-        public byte[] Payload { get; } = null;
-        /// <inheritdoc/>
-        public sbyte Rssi { get; }
-        /// <inheritdoc/>
-        public sbyte ThresholdConfigurationValue { get; }
-        /// <inheritdoc/>
-        public ushort Timestamp { get; }
-
-        internal AntResponse(ANT_Response response)
+        internal UsbAntResponse(ANT_Response response)
         {
             Sender = response.sender;
-            AntChannel = response.antChannel;
+            ChannelNumber = response.antChannel;
             TimeReceived = response.timeReceived;
             ResponseId = response.responseID;
 

@@ -11,7 +11,7 @@ namespace SmallEarthTech.AntUsbStick
         private readonly ANT_Channel antChannel;
 
         /// <inheritdoc/>
-        public event EventHandler<IAntResponse> ChannelResponse;
+        public event EventHandler<AntResponse> ChannelResponse;
 
         internal AntChannel(ANT_Channel channel)
         {
@@ -21,7 +21,8 @@ namespace SmallEarthTech.AntUsbStick
 
         private void Channel_channelResponse(ANT_Response response)
         {
-            ChannelResponse?.Invoke(this, new AntResponse(response));
+            AntResponse antResponse = new UsbAntResponse(response);
+            ChannelResponse?.Invoke(this, antResponse);
         }
 
         /// <inheritdoc/>

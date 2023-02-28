@@ -10,7 +10,7 @@ namespace SmallEarthTech.AntUsbStick
         private readonly ANT_Device antDevice;
 
         /// <inheritdoc/>
-        public event EventHandler<IAntResponse> RadioResponse;
+        public event EventHandler<AntResponse> RadioResponse;
 
         /// <inheritdoc/>
         public ushort DeviceUSBPID => antDevice.getDeviceUSBPID();
@@ -48,7 +48,7 @@ namespace SmallEarthTech.AntUsbStick
 
         private void AntDevice_deviceResponse(ANT_Response response)
         {
-            RadioResponse?.Invoke(this, new AntResponse(response));
+            RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 
         /// <inheritdoc/>
@@ -184,10 +184,10 @@ namespace SmallEarthTech.AntUsbStick
         public bool OpenRxScanMode(uint responseWaitTime) => antDevice.openRxScanMode(responseWaitTime);
 
         /// <inheritdoc/>
-        public IAntResponse ReadUserNvm(ushort address, byte size) => new AntResponse(antDevice.readUserNvm(address, size));
+        public AntResponse ReadUserNvm(ushort address, byte size) => new UsbAntResponse(antDevice.readUserNvm(address, size));
 
         /// <inheritdoc/>
-        public IAntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime) => new AntResponse(antDevice.readUserNvm(address, size, responseWaitTime));
+        public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime) => new UsbAntResponse(antDevice.readUserNvm(address, size, responseWaitTime));
 
         /// <inheritdoc/>
         public void RequestMessage(byte channelNum, RequestMessageID messageID) => antDevice.requestMessage(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID);
@@ -196,15 +196,15 @@ namespace SmallEarthTech.AntUsbStick
         public void RequestMessage(RequestMessageID messageID) => antDevice.requestMessage((ANT_ReferenceLibrary.RequestMessageID)messageID);
 
         /// <inheritdoc/>
-        public IAntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime)
         {
-            return new AntResponse(antDevice.requestMessageAndResponse(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
+            return new UsbAntResponse(antDevice.requestMessageAndResponse(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
         }
 
         /// <inheritdoc/>
-        public IAntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime)
         {
-            return new AntResponse(antDevice.requestMessageAndResponse((ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
+            return new UsbAntResponse(antDevice.requestMessageAndResponse((ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
         }
 
         /// <inheritdoc/>

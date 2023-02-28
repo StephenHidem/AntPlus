@@ -6,4 +6,8 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="IAntResponse.cs" />
+  </ItemGroup>
+
 </Project>

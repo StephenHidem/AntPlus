@@ -28,19 +28,17 @@ namespace SmallEarthTech.AntPlus
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
         public object CollectionLock = new object();
-        private readonly IAntRadio antRadio;
         private readonly IAntChannel channel;
 
         /// <summary>Initializes a new instance of the <see cref="AntDeviceCollection" /> class.</summary>
         /// <param name="antRadio">The ANT radio interface.</param>
         public AntDeviceCollection(IAntRadio antRadio)
         {
-            this.antRadio = antRadio;
-            channel = antRadio.GetChannel(0);
-            channel.ChannelResponse += Channel_ChannelResponse;
+            antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;
+            channel = antRadio.GetChannel(1);
         }
 
-        private void Channel_ChannelResponse(object sender, IAntResponse e)
+        private void Channel_ChannelResponse(object sender, AntResponse e)
         {
             AntDevice device;
             lock (CollectionLock)
@@ -105,27 +103,27 @@ namespace SmallEarthTech.AntPlus
             switch (channelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
-                    return new HeartRate(channelId, antRadio.GetChannel(1));
+                    return new HeartRate(channelId, channel);
                 case BicyclePower.DeviceClass:
-                    return new BicyclePower(channelId, antRadio.GetChannel(1));
+                    return new BicyclePower(channelId, channel);
                 case BikeSpeedSensor.DeviceClass:
-                    return new BikeSpeedSensor(channelId, antRadio.GetChannel(1));
+                    return new BikeSpeedSensor(channelId, channel);
                 case BikeCadenceSensor.DeviceClass:
-                    return new BikeCadenceSensor(channelId, antRadio.GetChannel(1));
+                    return new BikeCadenceSensor(channelId, channel);
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
-                    return new CombinedSpeedAndCadenceSensor(channelId, antRadio.GetChannel(1));
+                    return new CombinedSpeedAndCadenceSensor(channelId, channel);
                 case FitnessEquipment.DeviceClass:
-                    return new FitnessEquipment(channelId, antRadio.GetChannel(1));
+                    return new FitnessEquipment(channelId, channel);
                 case MuscleOxygen.DeviceClass:
-                    return new MuscleOxygen(channelId, antRadio.GetChannel(1));
+                    return new MuscleOxygen(channelId, channel);
                 case Geocache.DeviceClass:
-                    return new Geocache(channelId, antRadio.GetChannel(1));
+                    return new Geocache(channelId, channel);
                 case AssetTracker.DeviceClass:
-                    return new AssetTracker(channelId, antRadio.GetChannel(1));
+                    return new AssetTracker(channelId, channel);
                 case StrideBasedSpeedAndDistance.DeviceClass:
-                    return new StrideBasedSpeedAndDistance(channelId, antRadio.GetChannel(1));
+                    return new StrideBasedSpeedAndDistance(channelId, channel);
                 default:
-                    return new UnknownDevice(channelId, antRadio.GetChannel(1));
+                    return new UnknownDevice(channelId, channel);
             }
         }
     }

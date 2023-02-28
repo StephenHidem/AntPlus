@@ -8,8 +8,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// </summary>
     public class AssetTracker : AntDevice
     {
-        private bool idRequested;
-
         /// <summary>
         /// The asset tracker device class ID.
         /// </summary>
@@ -53,35 +51,25 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            // check if asset list empty
-            if (Assets.Count == 0 && idRequested == false)
-            {
-                // request ID pages
-                RequestDataPage(DataPage.AssetId1, 255, 255, 4, CommandType.DataPageSet);
-                idRequested = true;
-            }
-
-            Asset asset = Assets.FirstOrDefault(a => a.Index == (dataPage[1] & 0x1F));
-
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.AssetLocation1:
-                    asset?.ParseLocation1(dataPage);
+                    GetAsset(dataPage).ParseLocation1(dataPage);
                     break;
                 case DataPage.AssetLocation2:
-                    asset?.ParseLocation2(dataPage);
+                    GetAsset(dataPage).ParseLocation2(dataPage);
                     break;
                 case DataPage.NoAssets:
-                    break;
-                case DataPage.AssetId1:
-                    if (asset == null)
+                    if (Assets.Count > 0)
                     {
-                        asset = new Asset(dataPage);
-                        Assets.Add(asset);
+                        Assets.Clear();
                     }
                     break;
+                case DataPage.AssetId1:
+                    GetAsset(dataPage).ParseIdPage1(dataPage);
+                    break;
                 case DataPage.AssetId2:
-                    asset?.ParseIdPage2(dataPage);
+                    GetAsset(dataPage).ParseIdPage2(dataPage);
                     break;
                 case DataPage.DisconnectCommand:
                     break;
@@ -89,6 +77,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                     CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
+        }
+
+        internal Asset GetAsset(byte[] data)
+        {
+            Asset asset = Assets.FirstOrDefault(a => a.Index == (data[1] & 0x1F));
+            if (asset == null)
+            {
+                asset = new Asset(data);
+                Assets.Add(asset);
+                RequestDataPage(DataPage.AssetId1, 255, 255, 4, CommandType.DataPageSet);
+            }
+            return asset;
         }
     }
 }

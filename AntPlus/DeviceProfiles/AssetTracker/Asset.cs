@@ -10,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class Asset : INotifyPropertyChanged
     {
-        private bool gotId;
+        private bool gotId1, gotId2;
         private bool gotLoc1 = false;
         private int lat;
 
@@ -130,8 +130,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         public Asset(byte[] data)
         {
             Index = data[1] & 0x1F;
+        }
+
+        /// <summary>
+        /// Parses the identifier page1. This provides the asset color and the first part of the name.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        internal void ParseIdPage1(byte[] data)
+        {
             Color = data[2];
-            Name = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
+            if (!gotId1)
+            {
+                Name = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
+                gotId1 = true;
+            }
         }
 
         /// <summary>
@@ -140,11 +153,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <param name="data">The data.</param>
         internal void ParseIdPage2(byte[] data)
         {
-            if (gotId == false)
+            Type = (AssetType)data[2];
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Type"));
+            if (!gotId2)
             {
-                Type = (AssetType)data[2];
                 Name += Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
-                gotId = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+                gotId2 = true;
             }
         }
 

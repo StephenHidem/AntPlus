@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
@@ -101,6 +102,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         public BatteryStatusPage BatteryStatus { get; private set; }
         /// <summary>Gets a value indicating whether this sensor has detected stopped condition.</summary>
         public bool Stopped { get; private set; }
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(CommonSpeedCadence).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.SpeedAndCadence.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSpeedCadence"/> class.

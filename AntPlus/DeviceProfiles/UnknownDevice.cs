@@ -1,6 +1,7 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
@@ -18,6 +19,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         /// The data pages.
         /// </value>
         public UnknownDataPages DataPages { get; private set; } = new UnknownDataPages();
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(UnknownDevice).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.Unknown.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownDevice"/> class.

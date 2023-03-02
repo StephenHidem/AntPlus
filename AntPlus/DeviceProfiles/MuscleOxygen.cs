@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
@@ -100,6 +101,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
         public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(MuscleOxygen).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.MuscleOxygen.png");
 
 
         /// <summary>Initializes a new instance of the <see cref="MuscleOxygen" /> class.</summary>

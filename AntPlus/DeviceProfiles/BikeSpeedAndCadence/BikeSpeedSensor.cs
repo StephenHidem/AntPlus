@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
@@ -25,6 +26,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         public double InstantaneousSpeed { get; private set; }
         /// <summary>Gets the accumulated distance in meters. This value is accumulated since distance was first reported.</summary>
         public double AccumulatedDistance { get; private set; }
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(BikeSpeedSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BikeSpeed.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BikeSpeedSensor"/> class.

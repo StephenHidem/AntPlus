@@ -1,4 +1,5 @@
 ﻿using SmallEarthTech.AntRadioInterface;
+using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
@@ -38,6 +39,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// Gets the common data pages.
         /// </summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(AssetTracker).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AssetTracker.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssetTracker"/> class.

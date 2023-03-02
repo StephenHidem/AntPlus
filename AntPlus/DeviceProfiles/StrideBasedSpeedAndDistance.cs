@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
 {
@@ -172,6 +173,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
 
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(StrideBasedSpeedAndDistance).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.SDM.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StrideBasedSpeedAndDistance"/> class.

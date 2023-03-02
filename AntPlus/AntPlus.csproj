@@ -12,7 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\AssetTracker.png" />
     <None Remove="Images\BicyclePower.png" />
+    <None Remove="Images\BikeCadence.png" />
+    <None Remove="Images\BikeSpeed.png" />
     <None Remove="Images\CrankTorqueFrequency.png" />
     <None Remove="Images\FE-C.png" />
     <None Remove="Images\FE.png" />
@@ -20,17 +23,24 @@
     <None Remove="Images\HeartRate.png" />
     <None Remove="Images\MuscleOygen.png" />
     <None Remove="Images\SDM.PNG" />
+    <None Remove="Images\SpeedAndCadence.png" />
+    <None Remove="Images\Unknown.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Images\AssetTracker.png" />
     <EmbeddedResource Include="Images\BicyclePower.png" />
+    <EmbeddedResource Include="Images\BikeCadence.png" />
+    <EmbeddedResource Include="Images\BikeSpeed.png" />
     <EmbeddedResource Include="Images\CrankTorqueFrequency.png" />
 	<EmbeddedResource Include="Images\FE-C.png" />
 	<EmbeddedResource Include="Images\FE.png" />
 	<EmbeddedResource Include="Images\Geocache.png" />
     <EmbeddedResource Include="Images\HeartRate.png" />
     <EmbeddedResource Include="Images\MuscleOygen.png" />
-    <EmbeddedResource Include="Images\SDM.PNG" />
+    <EmbeddedResource Include="Images\SDM.png" />
+    <EmbeddedResource Include="Images\SpeedAndCadence.png" />
+    <EmbeddedResource Include="Images\Unknown.png" />
   </ItemGroup>
 
   <ItemGroup>

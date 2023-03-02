@@ -1,6 +1,7 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -69,6 +70,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         public byte[] AuthenticationToken { get; private set; }
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(Geocache).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.GeoCache.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Geocache"/> class.

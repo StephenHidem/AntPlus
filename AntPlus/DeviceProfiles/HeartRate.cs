@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
@@ -265,6 +266,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
         public BatteryStatusPage BatteryStatus { get; private set; }
         /// <summary>Gets the manufacturer specific data.</summary>
         public ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(HeartRate).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.HeartRate.png");
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>

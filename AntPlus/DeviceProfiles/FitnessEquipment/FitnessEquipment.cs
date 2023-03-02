@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
@@ -219,6 +220,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public SupportedTrainingModes Capabilities { get; private set; }
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(FitnessEquipment).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.FE-C.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FitnessEquipment"/> class.

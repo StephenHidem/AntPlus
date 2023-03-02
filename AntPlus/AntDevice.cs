@@ -1,6 +1,7 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
+using System.IO;
 
 namespace SmallEarthTech.AntPlus
 {
@@ -40,6 +41,10 @@ namespace SmallEarthTech.AntPlus
             ChannelId = channelId;
             this.antChannel = antChannel;
         }
+
+        /// <summary>Gets or sets the device image stream.</summary>
+        /// <value>The device image stream.</value>
+        public abstract Stream DeviceImageStream { get; }
 
         /// <summary>Parses the specified data page.</summary>
         /// <param name="dataPage">The received data page.</param>

@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.IO;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
@@ -16,6 +17,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 
         /// <summary>Gets the instantaneous cadence in rotations per minute.</summary>
         public double InstantaneousCadence { get; private set; }
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(BikeCadenceSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BikeCadence.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BikeCadenceSensor"/> class.

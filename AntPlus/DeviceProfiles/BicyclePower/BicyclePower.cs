@@ -1,4 +1,5 @@
 ﻿using SmallEarthTech.AntRadioInterface;
+using System.IO;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -75,6 +76,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
         /// <summary>Gets the calibration class.</summary>
         public Calibration Calibration { get; private set; }
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(BicyclePower).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BicyclePower"/> class.

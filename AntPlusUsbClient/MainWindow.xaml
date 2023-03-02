@@ -16,9 +16,15 @@
                 <ListView x:Name="antDevices" ItemsSource="{Binding .}">
                     <ListView.View>
                         <GridView >
-                            <GridViewColumn Header="Device Type" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceType}"/>
-                            <GridViewColumn Header="Device Number" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceNumber}"/>
+                            <GridViewColumn Header="Image">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding DeviceImageStream}" Width="40" Height="40"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding .}"/>
+                            <GridViewColumn Header="Device Number" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceNumber}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

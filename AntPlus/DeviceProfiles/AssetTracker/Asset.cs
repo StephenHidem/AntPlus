@@ -140,7 +140,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         {
             Color = data[2];
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
-            if (!gotId1)
+            if (!gotId1 && !gotId2)
             {
                 Name = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
                 gotId1 = true;
@@ -155,7 +155,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         {
             Type = (AssetType)data[2];
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Type"));
-            if (!gotId2)
+            if (gotId1 && !gotId2)
             {
                 Name += Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));

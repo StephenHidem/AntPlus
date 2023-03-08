@@ -8,13 +8,13 @@ using System.Runtime.Serialization;
 using System.Text;
 
 // create UDP client
-UdpClient udpServer = new(2000, AddressFamily.InterNetworkV6);
+using UdpClient udpServer = new(2000, AddressFamily.InterNetworkV6);
 
 // create multicast endpoint to send ANT data to
 IPEndPoint endPoint = new(IPAddress.Parse("FF02::1"), 55436);
 
 // create and configure ANT radio
-AntRadio antRadio = new();
+using AntRadio antRadio = new();
 antRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
 antRadio.EnableRxExtendedMessages(true);
 antRadio.GetChannel(0).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
@@ -44,7 +44,6 @@ Console.ReadLine();
 
 // clean up
 channel.ChannelResponse -= Channel_ChannelResponse;
-antRadio.Dispose();
 
 void Channel_ChannelResponse(object? sender, AntResponse e)
 {

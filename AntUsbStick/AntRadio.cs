@@ -5,7 +5,7 @@ using System;
 namespace SmallEarthTech.AntUsbStick
 {
     /// <summary>This class implements the IAntRadio interface.</summary>
-    public class AntRadio : IAntRadio
+    public class AntRadio : IAntRadio, IDisposable
     {
         private readonly ANT_Device antDevice;
 
@@ -108,11 +108,8 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public bool CrystalEnable(uint responseWaitTime) => antDevice.crystalEnable(responseWaitTime);
 
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            antDevice.Dispose();
-        }
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        public void Dispose() => antDevice.Dispose();
 
         /// <inheritdoc/>
         public void EnableLED(bool isEnabled) => antDevice.EnableLED(isEnabled);

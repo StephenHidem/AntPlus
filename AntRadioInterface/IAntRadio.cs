@@ -345,8 +345,6 @@ namespace SmallEarthTech.AntRadioInterface
         /// true if successful
         /// </returns>
         bool CrystalEnable(uint responseWaitTime);
-        /// <summary>Releases unmanaged and - optionally - managed resources.</summary>
-        void Dispose();
         /// <summary>Enables the led.</summary>
         /// <param name="isEnabled">if set to <c>true</c> [is enabled].</param>
         void EnableLED(bool isEnabled);

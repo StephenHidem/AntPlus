@@ -10,7 +10,7 @@ namespace AntPlusUsbClient
     /// </summary>
     public partial class App : Application
     {
-        public static IAntRadio AntRadio { get; set; }
+        public static AntRadio AntRadio { get; set; }
         public static AntDeviceCollection AntDevices { get; set; }
 
         public App()

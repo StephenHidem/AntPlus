@@ -107,6 +107,7 @@
       <DependentUpon>TreadmillControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ByteArrayToString.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\AssetTrackerViewModel.cs" />
     <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
     <Compile Include="ViewModels\BikeCadenceViewModel.cs" />

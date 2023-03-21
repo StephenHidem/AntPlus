@@ -1,4 +1,5 @@
-﻿using AntPlusUsbClient.Views;
+﻿using AntPlusUsbClient.ViewModels;
+using AntPlusUsbClient.Views;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
@@ -20,11 +21,13 @@ namespace AntPlusUsbClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowViewModel viewModel;
         public MainWindow()
         {
             InitializeComponent();
-            BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.CollectionLock);
-            DataContext = App.AntDevices;
+            viewModel = new MainWindowViewModel();
+            BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);
+            DataContext = viewModel;
             antDevices.MouseDoubleClick += AntDevices_MouseDoubleClick;
         }
 

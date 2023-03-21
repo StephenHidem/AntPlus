@@ -3,17 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AntPlusUsbClient"
-        xmlns:AntUsbStick="clr-namespace:SmallEarthTech.AntUsbStick;assembly=AntUsbStick" x:Name="window" x:Class="AntPlusUsbClient.MainWindow"
+        xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        x:Name="window" x:Class="AntPlusUsbClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="375">
     <Grid>
         <StackPanel Orientation="Vertical">
             <Expander ExpandDirection="Down" IsExpanded="False" Height="206">
                 <Expander.Header>
-                    <TextBlock Text="{Binding Count, StringFormat='ANT Devices - {0}'}" d:Text="ANT Devices"/>
+                    <TextBlock Text="{Binding AntDevices.Count, StringFormat='ANT Devices - {0}'}" d:Text="ANT Devices"/>
                 </Expander.Header>
-                <ListView x:Name="antDevices" ItemsSource="{Binding .}">
+                <ListView x:Name="antDevices" ItemsSource="{Binding AntDevices}">
                     <ListView.View>
                         <GridView >
                             <GridViewColumn Header="Image">

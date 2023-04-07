@@ -49,8 +49,6 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Parses the specified data page.</summary>
         /// <param name="dataPage">The received data page.</param>
         public abstract void Parse(byte[] dataPage);
-        //public abstract void ChannelEventHandler(EventMsgId eventMsgId);
-        //public abstract void ChannelResponseHandler(byte messageId, ResponseMsgId responseMsgId);
 
         /// <inheritdoc/>
         /// <remarks>Overridden to provide the short class name versus the full namepace name.</remarks>

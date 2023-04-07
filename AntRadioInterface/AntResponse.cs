@@ -21,6 +21,8 @@ namespace SmallEarthTech.AntRadioInterface
     public enum MessageId
 
     {
+        /// <summary>The channel event or response</summary>
+        ChannelEventOrResponse = 0x40,
         /// <summary>The broadcast data</summary>
         BroadcastData = 0x4E,
         /// <summary>The acknowledged data</summary>

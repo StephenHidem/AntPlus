@@ -21,7 +21,7 @@
     <None Remove="Images\FE.png" />
     <None Remove="Images\Geocache.png" />
     <None Remove="Images\HeartRate.png" />
-    <None Remove="Images\MuscleOygen.png" />
+    <None Remove="Images\MuscleOxygen.png" />
     <None Remove="Images\SDM.PNG" />
     <None Remove="Images\SpeedAndCadence.png" />
     <None Remove="Images\Unknown.png" />
@@ -37,7 +37,7 @@
 	<EmbeddedResource Include="Images\FE.png" />
 	<EmbeddedResource Include="Images\Geocache.png" />
     <EmbeddedResource Include="Images\HeartRate.png" />
-    <EmbeddedResource Include="Images\MuscleOygen.png" />
+    <EmbeddedResource Include="Images\MuscleOxygen.png" />
     <EmbeddedResource Include="Images\SDM.png" />
     <EmbeddedResource Include="Images\SpeedAndCadence.png" />
     <EmbeddedResource Include="Images\Unknown.png" />

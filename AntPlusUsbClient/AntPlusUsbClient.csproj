@@ -107,6 +107,7 @@
       <DependentUpon>TreadmillControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ByteArrayToString.cs" />
+    <Compile Include="ViewModels\CapabilitiesViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\AssetTrackerViewModel.cs" />
     <Compile Include="ViewModels\BicyclePowerViewModel.cs" />
@@ -133,6 +134,9 @@
     </Compile>
     <Compile Include="Views\BikeSpeedWindow.xaml.cs">
       <DependentUpon>BikeSpeedWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CapabilitiesWindow.xaml.cs">
+      <DependentUpon>CapabilitiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FitnessEquipmentWindow.xaml.cs">
       <DependentUpon>FitnessEquipmentWindow.xaml</DependentUpon>
@@ -237,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BikeSpeedWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CapabilitiesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

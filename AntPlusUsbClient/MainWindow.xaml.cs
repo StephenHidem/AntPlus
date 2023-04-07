@@ -83,5 +83,11 @@ namespace AntPlusUsbClient
                     break;
             }
         }
+
+        private void Capabilities_Click(object sender, RoutedEventArgs e)
+        {
+            CapabilitiesWindow capabilitiesWindow = new CapabilitiesWindow(viewModel.AntRadio.GetDeviceCapabilities());
+            capabilitiesWindow.Show();
+        }
     }
 }

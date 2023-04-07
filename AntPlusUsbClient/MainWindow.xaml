@@ -8,8 +8,20 @@
         x:Name="window" x:Class="AntPlusUsbClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="375">
-    <Grid>
+    <Grid Margin="10,10,10,10">
         <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="{Binding DeviceInfo.ProductDescription}"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding DeviceInfo.SerialString}"/>
+                <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding HostVersion}"/>
+                <Button Grid.Column="3" HorizontalAlignment="Center" Content="Capabilities" Click="Capabilities_Click"/>
+            </Grid>
             <Expander ExpandDirection="Down" IsExpanded="False" Height="206">
                 <Expander.Header>
                     <TextBlock Text="{Binding AntDevices.Count, StringFormat='ANT Devices - {0}'}" d:Text="ANT Devices"/>

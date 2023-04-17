@@ -2,13 +2,12 @@
 using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
 namespace AntPlusUsbClient.ViewModels
 {
-    internal class HeartRateViewModel : INotifyPropertyChanged
+    internal class HeartRateViewModel
     {
         private readonly HeartRate heartRate;
 
@@ -34,13 +33,6 @@ namespace AntPlusUsbClient.ViewModels
             SetSportModeBinding = new CommandBinding(SetSportMode, SetSportModeExecuted, SetSportModeCanExecute);
             SetHRFeatureBinding = new CommandBinding(SetHRFeature, SetHRFeatureExecuted, SetHRFeatureCanExecute);
         }
-
-        private void RaisePropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void PageRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {

@@ -122,6 +122,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.MuscleOxygenData:
+                    // return if the event count has not changed
+                    if (EventCount == dataPage[1])
+                    {
+                        return;
+                    }
                     EventCount = dataPage[1];
                     UtcTimeRequired = (dataPage[2] & 0x01) == 0x01;
                     SupportsAntFs = (dataPage[3] & 0x01) == 0x01;
@@ -175,7 +180,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
                     }
                     CurrentSaturatedHemoglobin = shg;
 
-                    RaisePropertyChange(string.Empty);
+                    RaisePropertyChange(nameof(EventCount));
+                    RaisePropertyChange(nameof(UtcTimeRequired));
+                    RaisePropertyChange(nameof(SupportsAntFs));
+                    RaisePropertyChange(nameof(Interval));
+                    RaisePropertyChange(nameof(TotalHemoglobinConcentration));
+                    RaisePropertyChange(nameof(PreviousSaturatedHemoglobin));
+                    RaisePropertyChange(nameof(CurrentSaturatedHemoglobin));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

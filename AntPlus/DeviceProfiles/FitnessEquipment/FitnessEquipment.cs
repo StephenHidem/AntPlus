@@ -238,6 +238,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
+
             State = (FEState)((dataPage[7] & 0x70) >> 4);
             LapToggle = (dataPage[7] & 0x80) == 0x80;
 

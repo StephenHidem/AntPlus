@@ -92,6 +92,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.Unknown:

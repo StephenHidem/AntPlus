@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 
 namespace SmallEarthTech.AntPlus
 {
@@ -13,6 +14,8 @@ namespace SmallEarthTech.AntPlus
         /// <summary>The last data page received.</summary>
         protected byte[] lastDataPage = new byte[8];
         private readonly IAntChannel antChannel;
+        private Timer timeoutTimer;
+        private readonly int deviceTimeout;
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -28,27 +31,44 @@ namespace SmallEarthTech.AntPlus
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>Occurs when no messages have been received from the device within the timeout duration.</summary>
+        public event EventHandler DeviceWentOffline;
 
         /// <summary>Gets the channel identifier.</summary>
         /// <value>The channel identifier.</value>
         public ChannelId ChannelId { get; private set; }
 
-        /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
-        /// <param name="channelId">The channel identifier.</param>
-        /// <param name="antChannel">Channel to send messages to.</param>
-        protected AntDevice(ChannelId channelId, IAntChannel antChannel)
-        {
-            ChannelId = channelId;
-            this.antChannel = antChannel;
-        }
-
         /// <summary>Gets or sets the device image stream.</summary>
         /// <value>The device image stream.</value>
         public abstract Stream DeviceImageStream { get; }
 
+        /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="timeout">Time in milliseconds before firing <see cref="DeviceWentOffline"/>.
+        /// The default is 2000 milliseconds.</param>
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, int timeout = 2000)
+        {
+            ChannelId = channelId;
+            this.antChannel = antChannel;
+            deviceTimeout = timeout;
+            timeoutTimer = new Timer(TimeoutCallback);
+            timeoutTimer.Change(deviceTimeout, Timeout.Infinite);
+        }
+
+        private void TimeoutCallback(object state)
+        {
+            timeoutTimer?.Dispose();
+            timeoutTimer = null;
+            DeviceWentOffline?.Invoke(this, new EventArgs());
+        }
+
         /// <summary>Parses the specified data page.</summary>
         /// <param name="dataPage">The received data page.</param>
-        public abstract void Parse(byte[] dataPage);
+        public virtual void Parse(byte[] dataPage)
+        {
+            _ = timeoutTimer?.Change(deviceTimeout, Timeout.Infinite);
+        }
 
         /// <inheritdoc/>
         /// <remarks>Overridden to provide the short class name versus the full namepace name.</remarks>

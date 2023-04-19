@@ -48,9 +48,17 @@ namespace SmallEarthTech.AntPlus
                 {
                     device = CreateAntDevice(e.ChannelId);
                     Add(device);
+                    device.DeviceWentOffline += DeviceOffline;
                 }
             }
             device.Parse(e.Payload);
+        }
+
+        private void DeviceOffline(object sender, System.EventArgs e)
+        {
+            AntDevice device = (AntDevice)sender;
+            device.DeviceWentOffline -= DeviceOffline;
+            _ = Remove(device);
         }
 
         /// <inheritdoc/>

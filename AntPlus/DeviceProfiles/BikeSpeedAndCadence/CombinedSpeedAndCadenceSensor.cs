@@ -50,6 +50,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
             int deltaEventTime;
             int deltaRevCount;
 
+            base.Parse(dataPage);
+
             // ignore duplicate/unchanged data pages
             if (lastDataPage.SequenceEqual(dataPage))
             {

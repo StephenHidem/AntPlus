@@ -188,6 +188,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
+
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.Default:

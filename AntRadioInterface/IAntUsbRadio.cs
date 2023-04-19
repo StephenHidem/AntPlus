@@ -1,5 +1,6 @@
 ﻿namespace SmallEarthTech.AntRadioInterface
 {
+    /// <summary>This interface is used for ANT radios specifically connected to the host USB ports.</summary>
     public interface IAntUsbRadio
     {
         /// <summary>Gets the opened USB baud rate.</summary>

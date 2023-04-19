@@ -99,10 +99,6 @@ namespace SmallEarthTech.AntRadioInterface
         /// true if successful
         /// </returns>
         bool ConfigureEventBuffer(EventBufferConfig config, ushort size, ushort time, uint responseWaitTime);
-        /// <summary>FIT adjust pairing settings.</summary>
-        /// <param name="searchLv">The search lv.</param>
-        /// <param name="pairLv">The pair lv.</param>
-        /// <param name="trackLv">The track lv.</param>
         /// <summary>Configures the event filter.</summary>
         /// <param name="eventFilter">The event filter.</param>
         void ConfigureEventFilter(ushort eventFilter);

@@ -34,6 +34,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
+
             DataPage page = DataPages.FirstOrDefault(p => p.PageNumber == dataPage[0]);
             if (page == null)
             {

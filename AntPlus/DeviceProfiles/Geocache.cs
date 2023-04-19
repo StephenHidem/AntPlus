@@ -78,13 +78,20 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        public Geocache(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Device offline timeout. The default is 8000 milliseconds.</param>
+        /// <remarks>
+        /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
+        /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case./>
+        /// </remarks>
+        public Geocache(ChannelId channelId, IAntChannel antChannel, int timeout = 8000) : base(channelId, antChannel, timeout)
         {
         }
 
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
+
             // don't parse if programming geocache
             if (programmingGeocache)
             {

@@ -117,6 +117,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
+
             // ignore duplicate/unchanged data pages
             if (lastDataPage.SequenceEqual(dataPage))
             {

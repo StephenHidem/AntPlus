@@ -119,6 +119,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
             TotalHemoglobin thg = new TotalHemoglobin();
             SaturatedHemoglobin shg = new SaturatedHemoglobin();
 
+            base.Parse(dataPage);
+
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.MuscleOxygenData:

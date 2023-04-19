@@ -279,6 +279,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
             if (isFirstDataMessage)
             {
                 isFirstDataMessage = false;

@@ -54,10 +54,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.AssetLocation1:
-                    GetAsset(dataPage).ParseLocation1(dataPage);
+                    Asset asset = GetAsset(dataPage);
+                    asset.ParseLocation1(dataPage);
+                    if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset)) { Assets.Remove(asset); }
                     break;
                 case DataPage.AssetLocation2:
                     GetAsset(dataPage).ParseLocation2(dataPage);

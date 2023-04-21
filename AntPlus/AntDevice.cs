@@ -9,7 +9,7 @@ namespace SmallEarthTech.AntPlus
     /// <summary>
     /// Base class for all ANT devices.
     /// </summary>
-    public abstract class AntDevice : INotifyPropertyChanged
+    public abstract class AntDevice : INotifyPropertyChanged, IDisposable
     {
         /// <summary>The last data page received.</summary>
         protected byte[] lastDataPage = new byte[8];
@@ -100,11 +100,18 @@ namespace SmallEarthTech.AntPlus
             }
         }
 
-        /// <summary>Sends the acknowledged message.</summary>
+        /// <summary>Sends an acknowledged message to the ANT device.</summary>
         /// <param name="message">The message.</param>
         public void SendExtAcknowledgedMessage(byte[] message)
         {
             antChannel.SendExtAcknowledgedData(ChannelId, message, 500);
+        }
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            timeoutTimer?.Dispose();
+            timeoutTimer = null;
         }
     }
 }

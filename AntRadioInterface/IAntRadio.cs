@@ -182,7 +182,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="address">The address.</param>
         /// <param name="size">The size.</param>
         /// <returns>
-        ///  ANT response
+        /// <see cref="AntResponse"/>
         /// </returns>
         AntResponse ReadUserNvm(ushort address, byte size);
         /// <summary>Reads the user NVM.</summary>
@@ -190,9 +190,24 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="size">The size.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
-        /// ANT response
+        /// <see cref="AntResponse"/>
         /// </returns>
         AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime);
+        /// <summary>Requests a message and waits to return the response.</summary>
+        /// <param name="channelNum">The radio channel number to use.</param>
+        /// <param name="messageID">The message identifier.</param>
+        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <returns>
+        /// <see cref="AntResponse"/>
+        /// </returns>
+        AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime);
+        /// <summary>Requests a message and waits to return the response.</summary>
+        /// <param name="messageID">The message identifier.</param>
+        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <returns>
+        /// <see cref="AntResponse"/>
+        /// </returns>
+        AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime);
         /// <summary>Converts to string.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         string ToString();

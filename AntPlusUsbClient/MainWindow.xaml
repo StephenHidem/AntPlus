@@ -17,8 +17,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="{Binding DeviceInfo.ProductDescription}"/>
-                <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding DeviceInfo.SerialString}"/>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="{Binding ProductDescription}"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding SerialString}"/>
                 <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding HostVersion}"/>
                 <Button Grid.Column="3" HorizontalAlignment="Center" Content="Capabilities" Click="Capabilities_Click"/>
             </Grid>

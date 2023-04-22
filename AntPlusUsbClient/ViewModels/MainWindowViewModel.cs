@@ -8,14 +8,16 @@ namespace AntPlusUsbClient.ViewModels
     internal class MainWindowViewModel
     {
         public AntRadio AntRadio { get; }
-        public DeviceInfo DeviceInfo { get; private set; }
-        public string HostVersion { get; private set; }
+        public string ProductDescription { get; }
+        public string SerialString { get; }
+        public string HostVersion { get; }
         public AntDeviceCollection AntDevices { get; }
 
         public MainWindowViewModel()
         {
             AntRadio = new AntRadio();
-            DeviceInfo = (DeviceInfo)AntRadio.GetDeviceUSBInfo();
+            ProductDescription = AntRadio.GetProductDescription();
+            SerialString = AntRadio.GetSerialString();
             AntResponse rsp = AntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
             HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0');
 

@@ -11,16 +11,16 @@ namespace SmallEarthTech.AntUsbStick
         public int GetDeviceNum() => antDevice.getOpenedUSBDeviceNum();
 
         /// <inheritdoc/>
-        public IDeviceInfo GetDeviceUSBInfo() => new DeviceInfo(antDevice.getDeviceUSBInfo());
-
-        /// <inheritdoc/>
-        public IDeviceInfo GetDeviceUSBInfo(byte deviceNum) => new DeviceInfo(antDevice.getDeviceUSBInfo(deviceNum));
-
-        /// <inheritdoc/>
         public ushort GetPID() => antDevice.getDeviceUSBPID();
 
         /// <inheritdoc/>
         public ushort GetVID() => antDevice.getDeviceUSBVID();
+
+        /// <inheritdoc/>
+        public string GetProductDescription() => antDevice.getDeviceUSBInfo().printProductDescription();
+
+        /// <inheritdoc/>
+        public string GetSerialString() => antDevice.getDeviceUSBInfo().printSerialString();
 
         /// <inheritdoc/>
         public void ResetUSB() => antDevice.ResetUSB();

@@ -19,17 +19,14 @@
         /// <returns>The vendor ID of this device.</returns>
         ushort GetVID();
 
-        /// <summary>Gets the device USB information.</summary>
-        /// <returns>
-        /// Device information
-        /// </returns>
-        IDeviceInfo GetDeviceUSBInfo();
-        /// <summary>Gets the device USB information.</summary>
-        /// <param name="deviceNum">The device number.</param>
-        /// <returns>
-        /// Device information
-        /// </returns>
-        IDeviceInfo GetDeviceUSBInfo(byte deviceNum);
+        /// <summary>Gets the USB device droduct description.</summary>
+        /// <returns>The USB product string of this device.</returns>
+        string GetProductDescription();
+
+        /// <summary>Gets the USB device serial number string.</summary>
+        /// <returns>The USB serial number string of this device.</returns>
+        string GetSerialString();
+
         /// <summary>Resets the ANT radio USB interface.</summary>
         void ResetUSB();
     }

@@ -12,6 +12,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
     /// <seealso cref="AntPlus.AntDevice" />
     public class MuscleOxygen : AntDevice
     {
+        private byte eventCount;
+
         /// <summary>
         /// The muscle oxygen device class ID.
         /// </summary>
@@ -85,8 +87,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
             public double PercentSaturated { get; internal set; }
         }
 
-        /// <summary>Gets the event count.</summary>
-        public byte EventCount { get; private set; }
         /// <summary>Gets a value indicating whether UTC time required.</summary>
         public bool UtcTimeRequired { get; private set; }
         /// <summary>Gets a value indicating whether ANT-FS is supported.</summary>
@@ -125,11 +125,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
             {
                 case DataPage.MuscleOxygenData:
                     // return if the event count has not changed
-                    if (EventCount == dataPage[1])
+                    if (eventCount == dataPage[1])
                     {
                         return;
                     }
-                    EventCount = dataPage[1];
+                    eventCount = dataPage[1];
                     UtcTimeRequired = (dataPage[2] & 0x01) == 0x01;
                     SupportsAntFs = (dataPage[3] & 0x01) == 0x01;
                     Interval = (MeasurementInterval)((dataPage[3] >> 1) & 0x07);
@@ -182,7 +182,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
                     }
                     CurrentSaturatedHemoglobin = shg;
 
-                    RaisePropertyChange(nameof(EventCount));
                     RaisePropertyChange(nameof(UtcTimeRequired));
                     RaisePropertyChange(nameof(SupportsAntFs));
                     RaisePropertyChange(nameof(Interval));

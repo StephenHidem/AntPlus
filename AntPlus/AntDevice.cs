@@ -17,10 +17,7 @@ namespace SmallEarthTech.AntPlus
         private Timer timeoutTimer;
         private readonly int deviceTimeout;
 
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// Raises the property change event.

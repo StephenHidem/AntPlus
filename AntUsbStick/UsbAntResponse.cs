@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace SmallEarthTech.AntUsbStick
 {
-    /// <summary>This class implements the AntResponse interface.</summary>
+    /// <summary>This class provides the USB implemention of AntResponse.</summary>
     [DataContract(Name = "AntResponse", Namespace = "http://www.smallearthtech.com")]
     public class UsbAntResponse : AntResponse
     {

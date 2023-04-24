@@ -37,7 +37,9 @@ namespace SmallEarthTech.AntRadioInterface
         ExtBurstData = 0x5F
     }
 
-    /// <summary>Derive from AntResponse to support a concrete implementation.</summary>
+    /// <summary>
+    /// Derive from AntResponse to support a concrete implementation (i.e. USB ANT radio).
+    /// </summary>
     [DataContract(Name = "AntResponse", Namespace = "http://www.smallearthtech.com")]
     public class AntResponse
     {

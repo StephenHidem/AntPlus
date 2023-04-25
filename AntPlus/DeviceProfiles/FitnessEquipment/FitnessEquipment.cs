@@ -8,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This is the primary support class for fitness equipment sensors.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class FitnessEquipment : AntDevice
     {
         /// <summary>

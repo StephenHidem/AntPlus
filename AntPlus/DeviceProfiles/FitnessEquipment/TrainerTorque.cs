@@ -6,7 +6,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the trainer torque messages.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class TrainerTorque : INotifyPropertyChanged
     {
         /// <summary>Occurs when a property value changes.</summary>

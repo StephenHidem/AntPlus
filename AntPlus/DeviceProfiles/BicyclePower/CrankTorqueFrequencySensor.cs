@@ -7,7 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// The crank torque frequency sensor class.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class CrankTorqueFrequencySensor : INotifyPropertyChanged
     {
         private enum CTFDefinedId

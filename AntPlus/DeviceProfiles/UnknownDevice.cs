@@ -9,7 +9,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
     /// <summary>
     /// This class supports unknown devices.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class UnknownDevice : AntDevice
     {
         /// <summary>
@@ -48,7 +48,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
     /// <summary>
     /// This class encapsulates an unknown data page.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class DataPage : INotifyPropertyChanged
     {
         /// <summary>Occurs when a property value changes.</summary>

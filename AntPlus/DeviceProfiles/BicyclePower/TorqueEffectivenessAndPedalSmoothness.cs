@@ -5,7 +5,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// This class supports torque effectiveness and pedal smoothness messages.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class TorqueEffectivenessAndPedalSmoothness : INotifyPropertyChanged
     {
         /// <summary>Occurs when a property value changes.</summary>

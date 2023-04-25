@@ -6,7 +6,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the elliptical fitness equipment type.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class Elliptical : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

@@ -8,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <summary>
     /// This class supports combined speed and cadence sensors.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class CombinedSpeedAndCadenceSensor : AntDevice
     {
         /// <summary>
@@ -17,6 +17,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         public const byte DeviceClass = 121;
 
         private bool isFirstDataMessage = true;     // used for accumulated values
+        private byte[] lastDataPage = new byte[8];
         private ushort prevSpeedEventTime;
         private ushort prevSpeedRevCount;
         private ushort prevCadenceEventTime;

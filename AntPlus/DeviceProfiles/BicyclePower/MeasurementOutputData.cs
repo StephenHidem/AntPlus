@@ -6,7 +6,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// Measurement data reported during calibration.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class MeasurementOutputData : INotifyPropertyChanged
     {
         /// <summary>

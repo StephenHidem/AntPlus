@@ -11,8 +11,6 @@ namespace SmallEarthTech.AntPlus
     /// </summary>
     public abstract class AntDevice : INotifyPropertyChanged, IDisposable
     {
-        /// <summary>The last data page received.</summary>
-        protected byte[] lastDataPage = new byte[8];
         private readonly IAntChannel antChannel;
         private Timer timeoutTimer;
         private readonly int deviceTimeout;
@@ -35,7 +33,7 @@ namespace SmallEarthTech.AntPlus
         /// <value>The channel identifier.</value>
         public ChannelId ChannelId { get; private set; }
 
-        /// <summary>Gets or sets the device image stream.</summary>
+        /// <summary>Gets the device image stream from the embedded resource image associated with the derived device class.</summary>
         /// <value>The device image stream.</value>
         public abstract Stream DeviceImageStream { get; }
 

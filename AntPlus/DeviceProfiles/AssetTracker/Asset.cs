@@ -7,7 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// <summary>
     /// This class represents an asset.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class Asset : INotifyPropertyChanged
     {
         private bool gotId1, gotId2;

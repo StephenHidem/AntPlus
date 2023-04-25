@@ -22,9 +22,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
     /// Keep these caveats in mind when designing your application. Applications designed for group environments may choose to only attach
     /// to the manufacturer event and ignore other background pages.
     /// </remarks>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class HeartRate : AntDevice
     {
+        private byte[] lastDataPage = new byte[8];
+
         /// <summary>
         /// The heart rate device class ID.
         /// </summary>

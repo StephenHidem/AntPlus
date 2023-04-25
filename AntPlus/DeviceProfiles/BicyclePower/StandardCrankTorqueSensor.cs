@@ -5,7 +5,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// The standard crank torque sensor class.
     /// </summary>
-    /// <seealso cref="AntPlus.DeviceProfiles.BicyclePower.TorqueSensor" />
+    /// <seealso cref="TorqueSensor" />
     public class StandardCrankTorqueSensor : TorqueSensor
     {
         /// <summary>Force angle structure.</summary>

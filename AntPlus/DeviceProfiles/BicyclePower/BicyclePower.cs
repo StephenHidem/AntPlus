@@ -56,7 +56,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// The primary class managing bicycle power sensors.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class BicyclePower : AntDevice
     {
         /// <summary>

@@ -10,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
     /// <summary>
     /// This class supports geocaches. This is specified in ANT+ Managed Network Document – Geocache Device Profile.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class Geocache : AntDevice
     {
         /// <summary>

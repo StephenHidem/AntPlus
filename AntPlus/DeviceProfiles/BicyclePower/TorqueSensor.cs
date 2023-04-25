@@ -5,7 +5,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// This class supports messages common to crank/wheel torque sensors.
     /// </summary>
-    /// <seealso cref="AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor" />
+    /// <seealso cref="StandardPowerSensor" />
     public abstract class TorqueSensor : StandardPowerSensor
     {
         /// <summary>The is first data message

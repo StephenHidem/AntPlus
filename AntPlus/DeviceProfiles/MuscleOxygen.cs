@@ -9,7 +9,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
     /// This class supports muscle oxygen sensors. This profile is specified in
     /// ANT+ Managed Network Document – Muscle Oxygen Device Profile, Rev 1.1.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class MuscleOxygen : AntDevice
     {
         private byte eventCount;

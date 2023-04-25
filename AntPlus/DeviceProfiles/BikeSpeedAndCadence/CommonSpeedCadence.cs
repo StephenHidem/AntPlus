@@ -1,19 +1,19 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 {
     /// <summary>
-    /// This class is common to all speed and cadence sensors.
+    /// This class is common to speed and cadence sensors. Combined speed and cadence sensors do not use this class.
     /// </summary>
-    /// <seealso cref="AntPlus.AntDevice" />
-    public class CommonSpeedCadence : AntDevice
+    /// <seealso cref="AntDevice" />
+    public abstract class CommonSpeedCadence : AntDevice
     {
         /// <summary>The is first data message
         /// received.</summary>
         protected bool isFirstDataMessage = true;     // used for accumulated values
+        private byte[] lastDataPage = new byte[8];
         private bool pageToggle;
         private int observedToggle;
         /// <summary>The previous event time</summary>
@@ -102,8 +102,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         public BatteryStatusPage BatteryStatus { get; private set; }
         /// <summary>Gets a value indicating whether this sensor has detected stopped condition.</summary>
         public bool Stopped { get; private set; }
-        /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(CommonSpeedCadence).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.SpeedAndCadence.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSpeedCadence"/> class.

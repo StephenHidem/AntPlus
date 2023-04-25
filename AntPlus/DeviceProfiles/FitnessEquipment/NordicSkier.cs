@@ -6,7 +6,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports Nordic skiers fitness equipment type.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class NordicSkier : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

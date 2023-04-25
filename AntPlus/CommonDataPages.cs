@@ -104,7 +104,7 @@ namespace SmallEarthTech.AntPlus
     /// <summary>
     /// This class supports common data pages.  In particular, this class describes the common pages used by ANT+ devices.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class CommonDataPages : INotifyPropertyChanged
     {
         /// <summary>

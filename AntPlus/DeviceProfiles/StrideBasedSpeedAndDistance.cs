@@ -12,7 +12,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
     /// and distance while walking or running.Similarly, pedometers that may be worn on the waist or
     ///elsewhere are also considered SDMs.
     /// </summary>
-    /// <seealso cref="SmallEarthTech.AntPlus.AntDevice" />
+    /// <seealso cref="AntDevice" />
     public class StrideBasedSpeedAndDistance : AntDevice
     {
         /// <summary>

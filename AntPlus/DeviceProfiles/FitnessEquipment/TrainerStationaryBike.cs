@@ -6,7 +6,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the stationary bike fitness equipment type.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class TrainerStationaryBike : INotifyPropertyChanged
     {
         private bool isFirstDataMessage = true;

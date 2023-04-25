@@ -7,7 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// Bicycle power calibration class.
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="INotifyPropertyChanged" />
     public class Calibration : INotifyPropertyChanged
     {
         private readonly BicyclePower bp;

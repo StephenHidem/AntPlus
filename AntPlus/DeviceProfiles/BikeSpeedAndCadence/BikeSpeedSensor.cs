@@ -11,6 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// Set the wheel circumference if the default value is incorrect. The calculations rely
     /// on the wheel circumference.
     /// </remarks>
+    /// <seealso cref="CommonSpeedCadence" />
     public class BikeSpeedSensor : CommonSpeedCadence
     {
         /// <summary>

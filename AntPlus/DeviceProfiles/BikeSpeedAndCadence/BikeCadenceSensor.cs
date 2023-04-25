@@ -7,7 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <summary>
     /// This class supports bike cadence sensors.
     /// </summary>
-    /// <seealso cref="AntPlus.DeviceProfiles.BikeSpeedAndCadence.CommonSpeedCadence" />
+    /// <seealso cref="CommonSpeedCadence" />
     public class BikeCadenceSensor : CommonSpeedCadence
     {
         /// <summary>

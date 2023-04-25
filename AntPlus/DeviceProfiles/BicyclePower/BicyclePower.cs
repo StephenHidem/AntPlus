@@ -80,11 +80,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public override Stream DeviceImageStream => typeof(BicyclePower).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BicyclePower"/> class.
+        /// Initializes a new instance of the <see cref="BicyclePower"/> class. The default timeout is 2 seconds.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public BicyclePower(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
             Calibration = new Calibration(this);
         }

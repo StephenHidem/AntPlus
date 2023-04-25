@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -9,6 +10,16 @@ namespace SmallEarthTech.AntPlus
     /// <summary>
     /// Base class for all ANT devices.
     /// </summary>
+    /// <remarks>
+    /// An important consideration is an appropriate timeout to determine if a device has gone offline - battery 
+    /// has died, device has been turned off, device is out of range of receiver, ane/or the RF environment the
+    /// device and receiver are operating in. Most devices broadcast at 4Hz, with the notable exception of
+    /// <see cref="Geocache"/>.
+    /// 
+    /// A reasonable rule of thumb is to set the timeout at 8 messages times the channel period per second; typically
+    /// 2 seconds. Consult the device profile documentation at https://www.thisisant.com for a device and review the channel
+    /// period defined for master devices.
+    /// </remarks>
     public abstract class AntDevice : INotifyPropertyChanged, IDisposable
     {
         private readonly IAntChannel antChannel;
@@ -42,7 +53,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="DeviceWentOffline"/>.
         /// The default is 2000 milliseconds.</param>
-        protected AntDevice(ChannelId channelId, IAntChannel antChannel, int timeout = 2000)
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, int timeout)
         {
             ChannelId = channelId;
             this.antChannel = antChannel;

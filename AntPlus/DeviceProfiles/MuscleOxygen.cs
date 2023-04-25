@@ -108,7 +108,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
         /// <summary>Initializes a new instance of the <see cref="MuscleOxygen" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
         }
 

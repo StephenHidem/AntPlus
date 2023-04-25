@@ -43,11 +43,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         public override Stream DeviceImageStream => typeof(AssetTracker).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AssetTracker.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssetTracker"/> class.
+        /// Initializes a new instance of the <see cref="AssetTracker"/> class. The default timeout is 500ms.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        public AssetTracker(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public AssetTracker(ChannelId channelId, IAntChannel antChannel, int timeout = 500) : base(channelId, antChannel, timeout)
         {
         }
 

@@ -41,7 +41,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        public CombinedSpeedAndCadenceSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public CombinedSpeedAndCadenceSensor(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
         }
 

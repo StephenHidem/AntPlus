@@ -228,7 +228,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
             GeneralData = new GeneralDataPage();
             GeneralSettings = new GeneralSettingsPage();

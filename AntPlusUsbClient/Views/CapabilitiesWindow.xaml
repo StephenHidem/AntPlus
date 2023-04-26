@@ -8,15 +8,15 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         mc:Ignorable="d"
         Title="Capabilities" Height="259" Width="225">
-    <Grid Margin="10,0,10,10">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
-            <TextBlock Grid.Row="0" Text="{Binding MaxANTChannels, StringFormat='Max. ANT channel - {0}'}" />
-            <TextBlock Grid.Row="1" Text="{Binding MaxNetworks, StringFormat='Max. Networks - {0}'}"/>
-            <TextBlock Grid.Row="2" Text="{Binding MaxDataChannels, StringFormat='Max. Data Channels - {0}'}" />
+            <TextBlock Text="{Binding MaxANTChannels, StringFormat='Max. ANT channel - {0}'}" />
+            <TextBlock Text="{Binding MaxNetworks, StringFormat='Max. Networks - {0}'}"/>
+            <TextBlock Text="{Binding MaxDataChannels, StringFormat='Max. Data Channels - {0}'}" />
         </StackPanel>
         <ListBox Grid.Row="1" ItemsSource="{Binding Capabilities}" ItemStringFormat="- {0}"></ListBox>
     </Grid>

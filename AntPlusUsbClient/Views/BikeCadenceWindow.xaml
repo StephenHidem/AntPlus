@@ -6,21 +6,30 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeCadenceViewModel}"
         mc:Ignorable="d"
-        Title="BikeCadenceWindow" Height="289" Width="268">
-    <Grid>
+        Title="Bike Cadence" Height="289" Width="268" Icon="{Binding BikeCadenceSensor.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel DataContext="{Binding BikeCadenceSensor}">
-            <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-            <TextBlock Text="{Binding Stopped, StringFormat='Stopped {0}'}"/>
-            <Label Content="Manufacturer Info" FontWeight="ExtraBold"/>
-            <TextBlock Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id {0}'}"/>
-            <TextBlock Text="{Binding ManufacturerInfo.SerialNumber, StringFormat='Serial Number {0}'}"/>
-            <Label Content="Product Info" FontWeight="ExtraBold"/>
-            <TextBlock Text="{Binding ProductInfo.HardwareVersion, StringFormat='Hardware Version {0}'}"/>
-            <TextBlock Text="{Binding ProductInfo.ModelNumber, StringFormat='Model # {0}'}"/>
-            <TextBlock Text="{Binding ProductInfo.SoftwareVersion, StringFormat='Software Version {0}'}"/>
-            <Label Content="Battery Status" FontWeight="ExtraBold"/>
-            <TextBlock Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Status {0}'}"/>
-            <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage {0}'}"/>
+            <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+            <TextBlock Text="{Binding Stopped, StringFormat='Stopped: {0}'}"/>
+            <GroupBox Header="Manufacturer Info">
+                <StackPanel>
+                    <TextBlock FontWeight="Normal" Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
+                    <TextBlock FontWeight="Normal" Text="{Binding ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Product Info">
+                <StackPanel>
+                    <TextBlock FontWeight="Normal" Text="{Binding ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
+                    <TextBlock FontWeight="Normal" Text="{Binding ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
+                    <TextBlock FontWeight="Normal" Text="{Binding ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Battery Status">
+                <StackPanel>
+                    <TextBlock FontWeight="Normal" Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
+                    <TextBlock FontWeight="Normal" Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </Window>

@@ -8,11 +8,11 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:UnknownDeviceViewModel}"
         xmlns:converters="clr-namespace:AntPlusUsbClient.Converters"
         mc:Ignorable="d"
-        Title="UnknownDeviceWindow" Height="450" Width="322">
+        Title="Unknown Device" Height="450" Width="322" Icon="{Binding UnknownDevice.DeviceImageStream, Mode=OneWay}">
     <Window.Resources>
         <converters:ByteArrayToString x:Key="ByteToStr"/>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="10">
         <ListView ItemsSource="{Binding UnknownDevice.DataPages}">
             <ListView.View>
                 <GridView >

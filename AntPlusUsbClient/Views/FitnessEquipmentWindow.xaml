@@ -8,8 +8,8 @@
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:FitnessEquipmentViewModel}"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
-        Title="FitnessEquipmentWindow" Height="450" Width="367">
-    <Grid>
+        Title="Fitness Equipment" Height="450" Width="367" Icon="{Binding FitnessEquipment.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel x:Name="FESpecific">
             <TextBlock Text="{Binding FitnessEquipment.State, StringFormat='State {0}'}"/>
             <TextBlock Text="{Binding FitnessEquipment.LapToggle, StringFormat='Lap Toggle {0}'}"/>

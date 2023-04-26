@@ -8,8 +8,8 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:SDMViewModel}"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
-        Title="StrideBasedMonitorWindow" Height="450" Width="314">
-    <Grid>
+        Title="Stride Based Monitor" Height="450" Width="314" Icon="{Binding SDM.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence {0}'}"/>
             <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed {0}'}"/>
@@ -19,7 +19,7 @@
             <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time {0}'}"/>
             <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency {0}'}"/>
 
-            <Label Content="Status" FontWeight="DemiBold"/>
+            <Label Content="Status"/>
             <TextBlock Text="{Binding SDM.Status.Location, StringFormat='Location {0}'}"/>
             <TextBlock Text="{Binding SDM.Status.Health, StringFormat='Health {0}'}"/>
             <TextBlock Text="{Binding SDM.Status.Battery, StringFormat='Battery {0}'}"/>

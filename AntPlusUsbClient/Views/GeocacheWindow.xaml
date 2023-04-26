@@ -8,8 +8,8 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:GeocacheViewModel}"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
-        Title="GeocacheWindow" Height="450" Width="379">
-    <Grid>
+        Title="Geocache" Height="450" Width="379" Icon="{Binding Geocache.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID {0}'}"/>
             <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN {0}'}"/>

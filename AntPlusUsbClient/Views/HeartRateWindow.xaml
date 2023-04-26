@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:HeartRateViewModel}"
         mc:Ignorable="d"
-        Title="HeartRateWindow" Height="450" Width="287">
-    <Grid>
+        Title="Heart Rate" Height="450" Width="390" Icon="{Binding HeartRate.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding HeartRate.HeartRateData.ComputedHeartRate, StringFormat='Heart Rate {0}'}"/>
             <TextBlock Text="{Binding HeartRate.HeartRateData.RRInterval, StringFormat='RR Interval {0}'}"/>
@@ -80,19 +80,29 @@
                     <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Data, StringFormat='Manufacturer Specific Data {0}'}"/>
                 </StackPanel>
             </Expander>
-            <StackPanel Orientation="Horizontal">
-                <Button HorizontalAlignment="Stretch" Command="{Binding PageRequest}" CommandParameter="{Binding ElementName=DataPage, Path=SelectedItem}">Request Data Page</Button>
-                <ComboBox HorizontalAlignment="Stretch" Name="DataPage" ItemsSource="{Binding DataPageValues}" SelectedIndex="6"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding SetSportMode}" CommandParameter="{Binding ElementName=SetSportMode, Path=SelectedItem}">Set Sport Mode</Button>
-                <ComboBox Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedIndex="0"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding SetHRFeature}">Set HR Feature</Button>
-                <CheckBox IsChecked="{Binding ApplyFeature}" IsThreeState="False">Apply</CheckBox>
-                <CheckBox IsChecked="{Binding EnableGymMode}" IsThreeState="False">Enable Gym Mode</CheckBox>
-            </StackPanel>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Column="0" Command="{Binding PageRequest}" CommandParameter="{Binding ElementName=DataPage, Path=SelectedItem}" Margin="4">Request Data Page</Button>
+                <ComboBox Grid.Column="1" Name="DataPage" ItemsSource="{Binding DataPageValues}" SelectedIndex="6" Margin="4"/>
+
+                <Button Grid.Column="0" Grid.Row="1" Command="{Binding SetSportMode}" CommandParameter="{Binding ElementName=SetSportMode, Path=SelectedItem}" Margin="4">Set Sport Mode</Button>
+                <ComboBox Grid.Column="1" Grid.Row="1" Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedIndex="0" Margin="4"/>
+
+                <Button Grid.Column="0" Grid.Row="2" Command="{Binding SetHRFeature}" Margin="4">Set HR Feature</Button>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Margin="4">
+                    <CheckBox IsChecked="{Binding ApplyFeature}" IsThreeState="False" Margin="4">Apply</CheckBox>
+                    <CheckBox IsChecked="{Binding EnableGymMode}" IsThreeState="False" Margin="4">Enable Gym Mode</CheckBox>
+                </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>

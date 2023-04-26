@@ -7,30 +7,37 @@
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MuscleOxygenViewModel}"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
-        Title="MuscleOxygenWindow" Height="450" Width="388">
-    <Grid>
+        Title="Muscle Oxygen" Height="450" Width="388" Icon="{Binding MuscleOxygen.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
+            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
             <GroupBox Header="Local Time Offset">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Set Time" Command="{Binding SetTime}"/>
-                    <Label Content="Hours"/>
+                    <Button Margin="4" Content="Set Time" Command="{Binding SetTime}"/>
+                    <Label Content="Hours" FontWeight="Normal" VerticalAlignment="Center"/>
                     <ComboBox Name="HourOffset" ItemsSource="{Binding HoursOffset}" SelectedIndex="15" Width="48"/>
-                    <Label Content="Minutes"/>
+                    <Label Content="Minutes" FontWeight="Normal" VerticalAlignment="Center"/>
                     <ComboBox Name="MinuteOffset" ItemsSource="{Binding MinuteOffset}" SelectedIndex="0" Width="48"/>
                 </StackPanel>
             </GroupBox>
-            <Button Content="Start Session" Command="{Binding StartSession}"/>
-            <Button Content="Stop Session" Command="{Binding StopSession}"/>
-            <Button Content="Lap" Command="{Binding Lap}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Start Session" Command="{Binding StartSession}"/>
+                <Button Grid.Column="1" Content="Stop Session" Command="{Binding StopSession}"/>
+                <Button Grid.Column="2" Content="Lap" Command="{Binding Lap}"/>
+            </Grid>
             <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen.CommonDataPages}"/>
         </StackPanel>
     </Grid>

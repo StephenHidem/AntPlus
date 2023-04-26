@@ -1,6 +1,7 @@
 ﻿using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
+using System.IO;
 using System.Text;
 
 namespace AntPlusUsbClient.ViewModels
@@ -12,6 +13,7 @@ namespace AntPlusUsbClient.ViewModels
         public string SerialString { get; }
         public string HostVersion { get; }
         public AntDeviceCollection AntDevices { get; }
+        public Stream AntImage => AntDevice.AntImage;
 
         public MainWindowViewModel()
         {

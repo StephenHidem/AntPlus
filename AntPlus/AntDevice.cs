@@ -26,8 +26,13 @@ namespace SmallEarthTech.AntPlus
         private Timer timeoutTimer;
         private readonly int deviceTimeout;
 
+        /// <summary>This field supplies the generic ANT+ image
+        /// from the manifest resource stream.</summary>
+        public readonly static Stream AntImage = typeof(AntDevice).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AntPlus.png");
+
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Raises the property change event.
         /// </summary>

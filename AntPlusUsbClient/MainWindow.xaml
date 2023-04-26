@@ -7,8 +7,8 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         x:Name="window" x:Class="AntPlusUsbClient.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="375">
-    <Grid Margin="10,10,10,10">
+        Title="MainWindow" Height="450" Width="375" Icon="{Binding AntImage, Mode=OneWay}">
+    <Grid Margin="10">
         <StackPanel Orientation="Vertical">
             <Grid>
                 <Grid.ColumnDefinitions>

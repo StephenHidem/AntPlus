@@ -9,7 +9,7 @@
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="StrideBasedMonitorWindow" Height="450" Width="314">
-    <Grid>
+    <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence {0}'}"/>
             <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed {0}'}"/>

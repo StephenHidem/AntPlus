@@ -8,7 +8,7 @@
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="MuscleOxygenWindow" Height="450" Width="388">
-    <Grid>
+    <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required {0}'}"/>
             <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS {0}'}"/>

@@ -9,7 +9,7 @@
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
         Title="FitnessEquipmentWindow" Height="450" Width="367">
-    <Grid>
+    <Grid Margin="10">
         <StackPanel x:Name="FESpecific">
             <TextBlock Text="{Binding FitnessEquipment.State, StringFormat='State {0}'}"/>
             <TextBlock Text="{Binding FitnessEquipment.LapToggle, StringFormat='Lap Toggle {0}'}"/>

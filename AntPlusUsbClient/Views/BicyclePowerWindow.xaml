@@ -9,8 +9,8 @@
         xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
-        Title="Bicycle Power Window" Height="501" Width="301">
-    <Grid>
+        Title="Bicycle Power" Height="501" Width="301">
+    <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
             <StackPanel x:Name="BicyclePowerControl"/>

@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeSpeedViewModel}"
         mc:Ignorable="d"
-        Title="BikeSpeedWindow" Height="315" Width="311">
-    <Grid>
+        Title="Bike Speed" Height="315" Width="311">
+    <Grid Margin="10">
         <StackPanel DataContext="{Binding BikeSpeedSensor}">
             <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed {0}'}"/>
             <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>

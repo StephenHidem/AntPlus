@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         xmlns:viewmodels="clr-namespace:AntPlusUsbClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeCadenceViewModel}"
         mc:Ignorable="d"
-        Title="BikeCadenceWindow" Height="289" Width="268">
-    <Grid>
+        Title="Bike Cadence" Height="289" Width="268">
+    <Grid Margin="10">
         <StackPanel DataContext="{Binding BikeCadenceSensor}">
             <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
             <TextBlock Text="{Binding Stopped, StringFormat='Stopped {0}'}"/>

@@ -12,9 +12,9 @@
                 <TextBlock Text="Treadmill" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <TextBlock Text="{Binding Cadence, StringFormat='Cadence {0}'}"/>
-                <TextBlock Text="{Binding NegVerticalDistance, StringFormat='NegVerticalDistance {0}'}"/>
-                <TextBlock Text="{Binding PosVerticalDistance, StringFormat='PosVerticalDistance {0}'}"/>
+                <TextBlock Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding NegVerticalDistance, StringFormat='NegVerticalDistance: {0}'}"/>
+                <TextBlock Text="{Binding PosVerticalDistance, StringFormat='PosVerticalDistance: {0}'}"/>
             </StackPanel>
         </Expander>
     </Grid>

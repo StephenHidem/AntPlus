@@ -15,18 +15,18 @@
             </Expander.Header>
             <StackPanel>
                 <StackPanel DataContext="{Binding BicyclePower.Calibration}">
-                    <TextBlock Text="{Binding CalibrationStatus, StringFormat='Calibration Status {0}'}"/>
-                    <TextBlock Text="{Binding AutoZeroSupported, StringFormat='Auto Zero Supported {0}'}"/>
-                    <TextBlock Text="{Binding AutoZeroStatus, StringFormat='Auto Zero Status {0}'}"/>
-                    <TextBlock Text="{Binding CalibrationData, StringFormat='Calibration Data {0}'}"/>
-                    <TextBlock Text="{Binding CustomCalibrationParameters,StringFormat='Custom Cal Parameters {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationStatus, StringFormat='Calibration Status: {0}'}"/>
+                    <TextBlock Text="{Binding AutoZeroSupported, StringFormat='Auto Zero Supported: {0}'}"/>
+                    <TextBlock Text="{Binding AutoZeroStatus, StringFormat='Auto Zero Status: {0}'}"/>
+                    <TextBlock Text="{Binding CalibrationData, StringFormat='Calibration Data: {0}'}"/>
+                    <TextBlock Text="{Binding CustomCalibrationParameters,StringFormat='Custom Cal Parameters: {0}'}"/>
                     <Label Content="Measurement Output" FontWeight="DemiBold"/>
                     <ListView ItemsSource="{Binding Measurements}">
                         <ListView.View>
-                            <GridView >
-                                <GridViewColumn Header="Measurement Type" Width="100" DisplayMemberBinding="{Binding Path=MeasurementType}"/>
-                                <GridViewColumn Header="Timestamp" Width="100" DisplayMemberBinding="{Binding Path=Timestamp}"/>
-                                <GridViewColumn Header="Measurement" Width="200" DisplayMemberBinding="{Binding Path=Measurement}"/>
+                            <GridView>
+                                <GridViewColumn Header="Measurement Type" DisplayMemberBinding="{Binding Path=MeasurementType}"/>
+                                <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Path=Timestamp}"/>
+                                <GridViewColumn Header="Measurement" DisplayMemberBinding="{Binding Path=Measurement}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

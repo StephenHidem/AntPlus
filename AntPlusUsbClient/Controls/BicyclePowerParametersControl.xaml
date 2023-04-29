@@ -16,14 +16,14 @@
             </Expander.Header>
             <StackPanel>
                 <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor.Parameters}">
-                    <TextBlock Text="{Binding Crank.CrankLength, StringFormat='Crank Length {0}'}"/>
-                    <TextBlock Text="{Binding Crank.CrankStatus, StringFormat='Crank Status {0}'}"/>
-                    <TextBlock Text="{Binding Crank.MismatchStatus, StringFormat='Mismatch Status {0}'}"/>
-                    <TextBlock Text="{Binding Crank.AvailabilityStatus, StringFormat='Availability Status {0}'}"/>
-                    <TextBlock Text="{Binding Crank.CustomCalibration, StringFormat='Custom Calibration {0}'}"/>
-                    <TextBlock Text="{Binding Crank.AutoCrankLength, StringFormat='Auto Crank Length {0}'}"/>
-                    <TextBlock Text="{Binding PeakTorqueThreshold, StringFormat='Peak Torque Threshold {0}'}"/>
-                    <TextBlock Text="{Binding RiderPositionTimeOffset, StringFormat='Rider Position Time Offset {0}'}"/>
+                    <TextBlock Text="{Binding Crank.CrankLength, StringFormat='Crank Length: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.CrankStatus, StringFormat='Crank Status: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.MismatchStatus, StringFormat='Mismatch Status: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.AvailabilityStatus, StringFormat='Availability Status: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.CustomCalibration, StringFormat='Custom Calibration: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.AutoCrankLength, StringFormat='Auto Crank Length: {0}'}"/>
+                    <TextBlock Text="{Binding PeakTorqueThreshold, StringFormat='Peak Torque Threshold: {0}'}"/>
+                    <TextBlock Text="{Binding RiderPositionTimeOffset, StringFormat='Rider Position Time Offset: {0}'}"/>
                 </StackPanel>
                 <StackPanel>
                     <Button Content="Get Crank" Command="{Binding GetParameters}"

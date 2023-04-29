@@ -36,13 +36,14 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         
-        <Style TargetType="Label">
-            <Setter Property="FontWeight" Value="ExtraBold"/>
-        </Style>
-
         <Style TargetType="GroupBox">
-            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Style.Resources>
+                <DataTemplate x:Key="headerText">
+                    <TextBlock Text="{Binding}" FontWeight="DemiBold"/>
+                </DataTemplate>
+            </Style.Resources>
             <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="HeaderTemplate" Value="{StaticResource headerText}"/>
         </Style>
     </Application.Resources>
 </Application>

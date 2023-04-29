@@ -11,23 +11,26 @@
         Title="Stride Based Monitor" Height="450" Width="314" Icon="{Binding SDM.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence {0}'}"/>
-            <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedCalories, StringFormat='Accumulated Calories {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedStrideCount, StringFormat='Accumulated Stride Count {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time {0}'}"/>
-            <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency {0}'}"/>
+            <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
+            <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
+            <TextBlock Text="{Binding SDM.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
+            <TextBlock Text="{Binding SDM.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
+            <TextBlock Text="{Binding SDM.AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
+            <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time: {0}'}"/>
+            <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency: {0}'}"/>
 
-            <Label Content="Status"/>
-            <TextBlock Text="{Binding SDM.Status.Location, StringFormat='Location {0}'}"/>
-            <TextBlock Text="{Binding SDM.Status.Health, StringFormat='Health {0}'}"/>
-            <TextBlock Text="{Binding SDM.Status.Battery, StringFormat='Battery {0}'}"/>
-            <TextBlock Text="{Binding SDM.Status.State, StringFormat='State {0}'}"/>
+            <GroupBox Header="Status">
+                <StackPanel>
+                    <TextBlock Text="{Binding SDM.Status.Location, StringFormat='Location: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.Status.Health, StringFormat='Health: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.Status.Battery, StringFormat='Battery: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.Status.State, StringFormat='State: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
 
             <Button Content="Request Distance and Strides Summary" Command="{Binding RequestSummary}"/>
-            <TextBlock Text="{Binding SDM.StrideCountSummary, StringFormat='Stride Count {0}'}"/>
-            <TextBlock Text="{Binding SDM.DistanceSummary, StringFormat='Distance {0}'}"/>
+            <TextBlock Text="{Binding SDM.StrideCountSummary, StringFormat='Stride Count: {0}'}"/>
+            <TextBlock Text="{Binding SDM.DistanceSummary, StringFormat='Distance: {0}'}"/>
 
             <Button Content="Request Capabilities" Command="{Binding RequestCapabilities}"/>
             <TextBlock Text="{Binding SDM.Capabilities}"/>

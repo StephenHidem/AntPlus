@@ -15,12 +15,12 @@
             </Expander.Header>
             <StackPanel>
                 <StackPanel DataContext="{Binding BicyclePower.WheelTorqueSensor}">
-                    <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
-                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power {0}'}"/>
-                    <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque {0}'}"/>
-                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                    <TextBlock Text="{Binding AverageSpeed, StringFormat='Average Speed {0}'}"/>
-                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
+                    <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity: {0}'}"/>
+                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+                    <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque: {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                    <TextBlock Text="{Binding AverageSpeed, StringFormat='Average Speed: {0}'}"/>
+                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
                     <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
                     <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
                 </StackPanel>

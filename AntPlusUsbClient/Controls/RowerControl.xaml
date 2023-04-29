@@ -12,9 +12,9 @@
                 <TextBlock Text="Rower" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <TextBlock Text="{Binding StrokeCount, StringFormat='Stroke Count {0}'}"/>
-                <TextBlock Text="{Binding Cadence, StringFormat='Cadence {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
+                <TextBlock Text="{Binding StrokeCount, StringFormat='Stroke Count: {0}'}"/>
+                <TextBlock Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
             </StackPanel>
         </Expander>
     </Grid>

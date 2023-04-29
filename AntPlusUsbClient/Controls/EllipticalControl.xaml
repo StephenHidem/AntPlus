@@ -12,10 +12,10 @@
                 <TextBlock Text="Elliptical" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <TextBlock Text="{Binding StrideCount, StringFormat='Stride Count {0}'}"/>
-                <TextBlock Text="{Binding Cadence, StringFormat='Cadence {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
-                <TextBlock Text="{Binding PosVerticalDistance, StringFormat='PosVerticalDistance {0}'}"/>
+                <TextBlock Text="{Binding StrideCount, StringFormat='Stride Count: {0}'}"/>
+                <TextBlock Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding PosVerticalDistance, StringFormat='PosVerticalDistance: {0}'}"/>
             </StackPanel>
         </Expander>
     </Grid>

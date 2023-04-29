@@ -22,9 +22,9 @@
             <GroupBox Header="Local Time Offset">
                 <StackPanel Orientation="Horizontal">
                     <Button Margin="4" Content="Set Time" Command="{Binding SetTime}"/>
-                    <Label Content="Hours" FontWeight="Normal" VerticalAlignment="Center"/>
+                    <Label Content="Hours" VerticalAlignment="Center" FontWeight="DemiBold"/>
                     <ComboBox Name="HourOffset" ItemsSource="{Binding HoursOffset}" SelectedIndex="15" Width="48"/>
-                    <Label Content="Minutes" FontWeight="Normal" VerticalAlignment="Center"/>
+                    <Label Content="Minutes" VerticalAlignment="Center" FontWeight="DemiBold"/>
                     <ComboBox Name="MinuteOffset" ItemsSource="{Binding MinuteOffset}" SelectedIndex="0" Width="48"/>
                 </StackPanel>
             </GroupBox>

@@ -12,16 +12,16 @@
                 <TextBlock Text="Trainer/Stationary Bike" FontWeight="ExtraBold"/>
             </Expander.Header>
             <StackPanel>
-                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power {0}'}"/>
-                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power {0}'}"/>
-                <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status {0}'}"/>
-                <TextBlock Text="{Binding TargetPower, StringFormat='Target Power {0}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity {0}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque {0}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power {0}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed {0}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+                <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status: {0}'}"/>
+                <TextBlock Text="{Binding TargetPower, StringFormat='Target Power: {0}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity: {0}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque: {0}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power: {0}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed: {0}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
             </StackPanel>
         </Expander>
     </Grid>

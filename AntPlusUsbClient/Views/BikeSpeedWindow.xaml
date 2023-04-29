@@ -9,26 +9,26 @@
         Title="Bike Speed" Height="315" Width="311" Icon="{Binding BikeSpeedSensor.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel DataContext="{Binding BikeSpeedSensor}">
-            <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed {0}'}"/>
-            <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance {0}'}"/>
-            <TextBlock Text="{Binding Stopped, StringFormat='Stopped {0}'}"/>
+            <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed: {0}'}"/>
+            <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
+            <TextBlock Text="{Binding Stopped, StringFormat='Stopped: {0}'}"/>
             <GroupBox Header="Manufacturer Info">
                 <StackPanel>
-                    <TextBlock FontWeight="Normal" Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
-                    <TextBlock FontWeight="Normal" Text="{Binding ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
+                    <TextBlock Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
+                    <TextBlock Text="{Binding ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Product Info">
                 <StackPanel>
-                    <TextBlock FontWeight="Normal" Text="{Binding ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
-                    <TextBlock FontWeight="Normal" Text="{Binding ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
-                    <TextBlock FontWeight="Normal" Text="{Binding ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
+                    <TextBlock Text="{Binding ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
+                    <TextBlock Text="{Binding ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
+                    <TextBlock Text="{Binding ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Battery Status">
                 <StackPanel>
-                    <TextBlock FontWeight="Normal" Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
-                    <TextBlock FontWeight="Normal" Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
+                    <TextBlock Text="{Binding BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
+                    <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

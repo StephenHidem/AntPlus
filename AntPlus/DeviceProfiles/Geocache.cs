@@ -71,7 +71,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
         /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(Geocache).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.GeoCache.png");
+        public override Stream DeviceImageStream => typeof(Geocache).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.Geocache.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Geocache"/> class.

@@ -35,7 +35,7 @@
         <Style TargetType="CheckBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        
+
         <Style TargetType="GroupBox">
             <Style.Resources>
                 <DataTemplate x:Key="headerText">
@@ -43,6 +43,15 @@
                 </DataTemplate>
             </Style.Resources>
             <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="HeaderTemplate" Value="{StaticResource headerText}"/>
+        </Style>
+
+        <Style TargetType="Expander">
+            <Style.Resources>
+                <DataTemplate x:Key="headerText">
+                    <TextBlock Text="{Binding}" FontWeight="DemiBold"/>
+                </DataTemplate>
+            </Style.Resources>
             <Setter Property="HeaderTemplate" Value="{StaticResource headerText}"/>
         </Style>
     </Application.Resources>

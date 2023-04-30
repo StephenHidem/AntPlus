@@ -11,15 +11,19 @@
         Title="Geocache" Height="450" Width="379" Icon="{Binding Geocache.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.Hint, StringFormat='Hint: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits: {0}'}"/>
-            <TextBlock Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit: {0}'}"/>
-            <Button Content="Request PIN" Command="{Binding RequestPIN}"/>
+            <GroupBox Header="Data Pages">
+                <StackPanel>
+                    <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.Hint, StringFormat='Hint: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit: {0}'}"/>
+                    <Button Content="Request PIN" Command="{Binding RequestPIN}"/>
+                </StackPanel>
+            </GroupBox>
             <Button Content="Request Authentication" Command="{Binding RequestAuthentication}"/>
             <Button Content="Program Geocache" Command="{Binding ProgramGeocache}"/>
             <Button Content="Log Visit" Command="{Binding LogVisit}"/>

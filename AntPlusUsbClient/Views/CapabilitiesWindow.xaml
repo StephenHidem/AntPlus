@@ -7,7 +7,7 @@
         d:DataContext="{d:DesignInstance Type=vm:CapabilitiesViewModel}"
         xmlns:local="clr-namespace:AntPlusUsbClient.Views"
         mc:Ignorable="d"
-        Title="Capabilities" Height="259" Width="225">
+        Title="Capabilities" Height="259" Width="265">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -18,6 +18,8 @@
             <TextBlock Text="{Binding MaxNetworks, StringFormat='Max. Networks - {0}'}"/>
             <TextBlock Text="{Binding MaxDataChannels, StringFormat='Max. Data Channels - {0}'}" />
         </StackPanel>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Capabilities}" ItemStringFormat="- {0}"></ListBox>
+        <GroupBox Header="Flags" Grid.Row="1">
+            <ListBox ItemsSource="{Binding Capabilities}" ItemStringFormat="- {0}"/>
+        </GroupBox>
     </Grid>
 </Window>

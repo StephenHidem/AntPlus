@@ -10,15 +10,19 @@
         Title="Muscle Oxygen" Height="450" Width="388" Icon="{Binding MuscleOxygen.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
-            <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
+            <GroupBox Header="Main Data Page">
+                <StackPanel>
+                    <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
             <GroupBox Header="Local Time Offset">
                 <StackPanel Orientation="Horizontal">
                     <Button Margin="4" Content="Set Time" Command="{Binding SetTime}"/>

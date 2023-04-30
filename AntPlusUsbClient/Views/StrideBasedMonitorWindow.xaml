@@ -8,16 +8,20 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:SDMViewModel}"
         xmlns:uc="clr-namespace:AntPlusUsbClient.Controls"
         mc:Ignorable="d"
-        Title="Stride Based Monitor" Height="450" Width="314" Icon="{Binding SDM.DeviceImageStream, Mode=OneWay}">
+        Title="Stride Based Monitor" Height="496" Width="340" Icon="{Binding SDM.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
-            <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
-            <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time: {0}'}"/>
-            <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency: {0}'}"/>
+            <GroupBox Header="Main and Supplementary Data">
+                <StackPanel>
+                    <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time: {0}'}"/>
+                    <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
 
             <GroupBox Header="Status">
                 <StackPanel>
@@ -28,12 +32,33 @@
                 </StackPanel>
             </GroupBox>
 
-            <Button Content="Request Distance and Strides Summary" Command="{Binding RequestSummary}"/>
-            <TextBlock Text="{Binding SDM.StrideCountSummary, StringFormat='Stride Count: {0}'}"/>
-            <TextBlock Text="{Binding SDM.DistanceSummary, StringFormat='Distance: {0}'}"/>
+            <GroupBox Header="Distance and Strides Summary">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="0" Grid.RowSpan="2" Content="Request Summaries" Command="{Binding RequestSummary}">
+                    </Button>
+                    <TextBlock Grid.Column="1" Text="{Binding SDM.StrideCountSummary, StringFormat='Stride Count: {0}'}" VerticalAlignment="Bottom"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SDM.DistanceSummary, StringFormat='Distance: {0}'}" VerticalAlignment="Top"/>
+                </Grid>
+            </GroupBox>
 
-            <Button Content="Request Capabilities" Command="{Binding RequestCapabilities}"/>
-            <TextBlock Text="{Binding SDM.Capabilities}"/>
+            <GroupBox Header="Capabilities">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Request Capabilities" Command="{Binding RequestCapabilities}"/>
+                    <TextBlock Grid.Column="1" Text="{Binding SDM.Capabilities}" TextWrapping="Wrap"/>
+                </Grid>
+            </GroupBox>
             
             <uc:CommonDataPagesControl DataContext="{Binding SDM.CommonDataPages}"/>
         </StackPanel>

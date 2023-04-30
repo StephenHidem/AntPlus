@@ -7,10 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Expander>
-            <Expander.Header>
-                <TextBlock Text="Common Data Pages" FontWeight="ExtraBold"/>
-            </Expander.Header>
+        <Expander Header="Common Data Pages">
             <StackPanel>
                 <GroupBox Header="Manufacturer">
                     <StackPanel>

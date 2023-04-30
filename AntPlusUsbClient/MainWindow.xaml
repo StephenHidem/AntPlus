@@ -10,22 +10,24 @@
         Title="MainWindow" Height="450" Width="375" Icon="{Binding AntImage, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel Orientation="Vertical">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="{Binding ProductDescription}"/>
-                <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding SerialString}"/>
-                <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding HostVersion}"/>
-                <Button Grid.Column="3" HorizontalAlignment="Center" Content="Capabilities" Click="Capabilities_Click"/>
-            </Grid>
-            <Expander ExpandDirection="Down" IsExpanded="False" Height="206">
-                <Expander.Header>
-                    <TextBlock Text="{Binding AntDevices.Count, StringFormat='ANT Devices - {0}'}" d:Text="ANT Devices"/>
-                </Expander.Header>
+            <GroupBox Header="ANT Radio">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ProductDescription, StringFormat='Product: {0}'}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding SerialString, StringFormat='Serial #: {0}'}"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding HostVersion, StringFormat='Version: {0}'}"/>
+                    <Button Grid.Column="2" Grid.RowSpan="2" Content="Capabilities" Click="Capabilities_Click"/>
+                </Grid>
+            </GroupBox>
+            <Expander Header="ANT Devices">
                 <ListView x:Name="antDevices" ItemsSource="{Binding AntDevices}">
                     <ListView.View>
                         <GridView >
@@ -36,7 +38,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding .}"/>
+                            <GridViewColumn Header="Name" Width="160" DisplayMemberBinding="{Binding}"/>
                             <GridViewColumn Header="Device Number" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceNumber}"/>
                         </GridView>
                     </ListView.View>

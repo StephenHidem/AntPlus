@@ -87,6 +87,7 @@ namespace AntPlusUsbClient
         private void Capabilities_Click(object sender, RoutedEventArgs e)
         {
             CapabilitiesWindow capabilitiesWindow = new CapabilitiesWindow(viewModel.AntRadio.GetDeviceCapabilities());
+            capabilitiesWindow.Icon = Icon;
             capabilitiesWindow.Show();
         }
     }

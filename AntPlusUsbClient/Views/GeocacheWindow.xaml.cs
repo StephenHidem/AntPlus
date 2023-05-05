@@ -9,10 +9,12 @@ namespace AntPlusUsbClient.Views
     /// </summary>
     public partial class GeocacheWindow : Window
     {
+        GeocacheViewModel geo;
+
         public GeocacheWindow(Geocache geocache)
         {
             InitializeComponent();
-            GeocacheViewModel geo = new GeocacheViewModel(geocache);
+            geo = new GeocacheViewModel(geocache);
             CommandBindings.AddRange(geo.CommandBindings);
             DataContext = geo;
         }

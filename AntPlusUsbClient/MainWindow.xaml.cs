@@ -21,7 +21,8 @@ namespace AntPlusUsbClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainWindowViewModel viewModel;
+        private readonly MainWindowViewModel viewModel;
+
         public MainWindow()
         {
             InitializeComponent();

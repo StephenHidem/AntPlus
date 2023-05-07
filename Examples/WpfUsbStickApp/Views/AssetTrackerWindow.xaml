@@ -6,8 +6,12 @@
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
         xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AssetTrackerViewModel}"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
+        xmlns:conv="clr-namespace:WpfUsbStickApp.Converters"
         mc:Ignorable="d"
         Title="Asset Tracker" Height="450" Width="473" Icon="{Binding AssetTracker.DeviceImageStream, Mode=OneWay}">
+    <Window.Resources>
+        <conv:DegreesToSemicirclesConverter x:Key="DegSemi"/>
+    </Window.Resources>
     <Grid Margin="10">
         <StackPanel>
             <GroupBox Header="Assets">
@@ -22,13 +26,14 @@
                             <GridViewColumn Header="Bearing" DisplayMemberBinding="{Binding Path=Bearing}"/>
                             <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
                             <GridViewColumn Header="Situation" DisplayMemberBinding="{Binding Path=Situation}"/>
-                            <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude}"/>
-                            <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude}"/>
+                            <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude, Converter={StaticResource DegSemi}}"/>
+                            <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude, Converter={StaticResource DegSemi}}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </GroupBox>
             <uc:CommonDataPagesControl DataContext="{Binding AssetTracker.CommonDataPages}"/>
         </StackPanel>
+        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding AssetTracker.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

@@ -111,11 +111,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// </value>
         public AssetSituation Situation { get; private set; }
         /// <summary>Gets the latitude.</summary>
-        /// <value>The latitude of the asset in degrees.</value>
-        public double Latitude { get; private set; }
+        /// <value>The latitude of the asset in semicircles.</value>
+        public int Latitude { get; private set; }
         /// <summary>Gets the longitude.</summary>
-        /// <value>The longitude of the asset in degrees.</value>
-        public double Longitude { get; private set; }
+        /// <value>The longitude of the asset in semicircles.</value>
+        public int Longitude { get; private set; }
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -191,11 +191,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             if (gotLoc1)
             {
                 lat += BitConverter.ToUInt16(data, 2) << 16;
-                Latitude = 180.0 * lat / Math.Pow(2, 31);
+                Latitude = lat;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
                 gotLoc1 = false;
             }
-            Longitude = 180.0 * BitConverter.ToInt32(data, 4) / Math.Pow(2, 31);
+            Longitude = BitConverter.ToInt32(data, 4);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
         }
     }

@@ -8,15 +8,22 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal partial class MuscleOxygenViewModel : ObservableObject
     {
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(StartSessionCommand), nameof(StopSessionCommand), nameof(LogLapCommand))]
+        private bool started;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(StartSessionCommand), nameof(StopSessionCommand), nameof(LogLapCommand))]
+        private bool stopped = true;
+
         private readonly MuscleOxygen muscleOxygen;
         public MuscleOxygen MuscleOxygen => muscleOxygen;
-        public int[] Hours => Enumerable.Range(-15, 31).ToArray();
-        public int[] Minutes { get; } = { 0, 15, 30, 45 };
+        public int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
+        public int[] MinutesSource { get; } = { 0, 15, 30, 45 };
 
         [ObservableProperty]
-        private int hoursIndex = 15;
+        private int hours;
         [ObservableProperty]
-        private int minutesIndex = 0;
+        private int minutes;
 
         public MuscleOxygenViewModel(MuscleOxygen muscleOxygen)
         {
@@ -26,29 +33,48 @@ namespace WpfUsbStickApp.ViewModels
         [RelayCommand]
         private void SetTime()
         {
-            TimeSpan ts = new(Hours[HoursIndex], Minutes[MinutesIndex], 0);
+            TimeSpan ts = new(Hours, Minutes, 0);
             muscleOxygen.SendCommand(MuscleOxygen.CommandId.SetTime, ts, DateTime.UtcNow);
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanStartSession))]
         private void StartSession()
         {
-            TimeSpan ts = new(Hours[HoursIndex], Minutes[MinutesIndex], 0);
+            Started = true;
+            Stopped = false;
+            TimeSpan ts = new(Hours, Minutes, 0);
             muscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
         }
 
-        [RelayCommand]
+        private bool CanStartSession()
+        {
+            return !Started;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanStopSession))]
         private void StopSession()
         {
-            TimeSpan ts = new(Hours[HoursIndex], Minutes[MinutesIndex], 0);
+            Started = false;
+            Stopped = true;
+            TimeSpan ts = new(Hours, Minutes, 0);
             muscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
         }
 
-        [RelayCommand]
+        private bool CanStopSession()
+        {
+            return !Stopped;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanLogLap))]
         private void LogLap()
         {
-            TimeSpan ts = new(Hours[HoursIndex], Minutes[MinutesIndex], 0);
+            TimeSpan ts = new(Hours, Minutes, 0);
             muscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
+        }
+
+        private bool CanLogLap()
+        {
+            return Started;
         }
     }
 }

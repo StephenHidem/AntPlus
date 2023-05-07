@@ -1,0 +1,19 @@
+﻿<Window x:Class="WpfUsbStickApp.Views.BicyclePowerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfUsbStickApp.Views"
+        xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
+        xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
+        xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
+        mc:Ignorable="d"
+        Title="Bicycle Power" Height="501" Width="301" Icon="{Binding BicyclePower.DeviceImageStream, Mode=OneWay}">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
+            <StackPanel x:Name="BicyclePowerControl"/>
+        </StackPanel>
+    </Grid>
+</Window>

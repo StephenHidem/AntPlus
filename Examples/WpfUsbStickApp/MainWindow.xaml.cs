@@ -1,4 +1,8 @@
 ﻿using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
 using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
 using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
@@ -37,26 +41,26 @@ namespace WpfUsbStickApp
                     HeartRateWindow heartRateWindow = new((HeartRate)antDevice);
                     heartRateWindow.Show();
                     break;
-                //    case BicyclePower.DeviceClass:
-                //        BicyclePowerWindow bpWindow = new BicyclePowerWindow((BicyclePower)antDevice);
-                //        bpWindow.Show();
-                //        break;
-                //    case BikeSpeedSensor.DeviceClass:
-                //        BikeSpeedWindow bikeSpeedWindow = new BikeSpeedWindow((BikeSpeedSensor)antDevice);
-                //        bikeSpeedWindow.Show();
-                //        break;
-                //    case BikeCadenceSensor.DeviceClass:
-                //        BikeCadenceWindow bikeCadenceWindow = new BikeCadenceWindow((BikeCadenceSensor)antDevice);
-                //        bikeCadenceWindow.Show();
-                //        break;
-                //    case CombinedSpeedAndCadenceSensor.DeviceClass:
-                //        BikeSpeedAndCadenceWindow speedAndCadenceWindow = new BikeSpeedAndCadenceWindow((CombinedSpeedAndCadenceSensor)antDevice);
-                //        speedAndCadenceWindow.Show();
-                //        break;
-                //    case FitnessEquipment.DeviceClass:
-                //        FitnessEquipmentWindow fitnessEquipmentWindow = new FitnessEquipmentWindow((FitnessEquipment)antDevice);
-                //        fitnessEquipmentWindow.Show();
-                //        break;
+                case BicyclePower.DeviceClass:
+                    BicyclePowerWindow bpWindow = new BicyclePowerWindow((BicyclePower)antDevice);
+                    bpWindow.Show();
+                    break;
+                case BikeSpeedSensor.DeviceClass:
+                    BikeSpeedWindow bikeSpeedWindow = new BikeSpeedWindow((BikeSpeedSensor)antDevice);
+                    bikeSpeedWindow.Show();
+                    break;
+                case BikeCadenceSensor.DeviceClass:
+                    BikeCadenceWindow bikeCadenceWindow = new BikeCadenceWindow((BikeCadenceSensor)antDevice);
+                    bikeCadenceWindow.Show();
+                    break;
+                case CombinedSpeedAndCadenceSensor.DeviceClass:
+                    BikeSpeedAndCadenceWindow speedAndCadenceWindow = new BikeSpeedAndCadenceWindow((CombinedSpeedAndCadenceSensor)antDevice);
+                    speedAndCadenceWindow.Show();
+                    break;
+                case FitnessEquipment.DeviceClass:
+                    FitnessEquipmentWindow fitnessEquipmentWindow = new FitnessEquipmentWindow((FitnessEquipment)antDevice);
+                    fitnessEquipmentWindow.Show();
+                    break;
                 case MuscleOxygen.DeviceClass:
                     MuscleOxygenWindow muscleOxygenWindow = new((MuscleOxygen)antDevice);
                     muscleOxygenWindow.Show();
@@ -65,10 +69,10 @@ namespace WpfUsbStickApp
                     GeocacheWindow geocacheWindow = new((Geocache)antDevice);
                     geocacheWindow.Show();
                     break;
-                //    case AssetTracker.DeviceClass:
-                //        AssetTrackerWindow tracker = new AssetTrackerWindow((AssetTracker)antDevice);
-                //        tracker.Show();
-                //        break;
+                case AssetTracker.DeviceClass:
+                    AssetTrackerWindow tracker = new AssetTrackerWindow((AssetTracker)antDevice);
+                    tracker.Show();
+                    break;
                 case StrideBasedSpeedAndDistance.DeviceClass:
                     StrideBasedMonitorWindow sdmWindow = new((StrideBasedSpeedAndDistance)antDevice);
                     sdmWindow.Show();

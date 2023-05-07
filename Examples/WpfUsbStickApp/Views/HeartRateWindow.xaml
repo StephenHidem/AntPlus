@@ -77,10 +77,10 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button Grid.Column="0" Command="{Binding RequestPageCommand}" Margin="4">Request Data Page</Button>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding DataPageValues}" SelectedItem="{Binding PageRequested}" Margin="4"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding DataPageValues}" SelectedItem="{Binding PageRequested}" IsEditable="False" Margin="4"/>
 
                 <Button Grid.Column="0" Grid.Row="1" Command="{Binding SetSportModeCommand}" Margin="4">Set Sport Mode</Button>
-                <ComboBox Grid.Column="1" Grid.Row="1" Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedItem="{Binding ModeRequested}" Margin="4"/>
+                <ComboBox Grid.Column="1" Grid.Row="1" Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedItem="{Binding ModeRequested}" IsEditable="False" Margin="4"/>
 
                 <Button Grid.Column="0" Grid.Row="2" Command="{Binding SetHRFeatureCommand}" Margin="4">Set HR Feature</Button>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Margin="4">

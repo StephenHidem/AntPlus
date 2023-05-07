@@ -28,9 +28,9 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Margin="4" Content="Set Time" Command="{Binding SetTimeCommand}"/>
                     <Label Content="Hours"/>
-                    <ComboBox ItemsSource="{Binding Hours}" IsEditable="False" SelectedIndex="{Binding HoursIndex}" Width="48"/>
+                    <ComboBox ItemsSource="{Binding HoursSource}" IsEditable="False" SelectedItem="{Binding Hours}" Width="48"/>
                     <Label Content="Minutes"/>
-                    <ComboBox ItemsSource="{Binding Minutes}" IsEditable="False" SelectedIndex="{Binding MinutesIndex}" Width="48"/>
+                    <ComboBox ItemsSource="{Binding MinutesSource}" IsEditable="False" SelectedItem="{Binding Minutes}" Width="48"/>
                 </StackPanel>
             </GroupBox>
             <Grid>

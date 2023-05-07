@@ -1,0 +1,51 @@
+﻿<Window x:Class="WpfUsbStickApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+        xmlns:local="clr-namespace:WpfUsbStickApp"
+        mc:Ignorable="d"
+        Title="WPF USB Stick App" Height="450" Width="457" Icon="{Binding AntImage}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="ANT Radio">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ProductDescription, StringFormat='Product: {0}'}"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding SerialString, StringFormat='Serial #: {0}'}"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding HostVersion, StringFormat='Version: {0}'}"/>
+                <Button Grid.Column="2" Grid.RowSpan="2" Content="Capabilities" Click="Capabilities_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="ANT Devices" Grid.Row="1">
+            <ListView x:Name="antDevices" ItemsSource="{Binding AntDevices}">
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Header="Image">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding DeviceImageStream}" Width="40" Height="40"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Name" Width="160" DisplayMemberBinding="{Binding}"/>
+                        <GridViewColumn Header="Device Number" Width="100" DisplayMemberBinding="{Binding Path=ChannelId.DeviceNumber}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+    </Grid>
+</Window>

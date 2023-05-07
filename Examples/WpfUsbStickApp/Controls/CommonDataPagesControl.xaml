@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="WpfUsbStickApp.Controls.CommonDataPagesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Expander Header="Common Data Pages">
+            <StackPanel>
+                <GroupBox Header="Manufacturer">
+                    <StackPanel>
+                        <TextBlock Text="{Binding ManufacturerInfo.ManufacturerId, StringFormat='Manufacter ID: {0}'}"/>
+                        <TextBlock Text="{Binding ManufacturerInfo.ModelNumber, StringFormat='Model Number: {0}'}"/>
+                        <TextBlock Text="{Binding ManufacturerInfo.HardwareRevision, StringFormat='Hardware Revision: {0}'}"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Product">
+                    <StackPanel>
+                        <TextBlock Text="{Binding ProductInfo.SoftwareRevision, StringFormat='Software Revision: {0}'}"/>
+                        <TextBlock Text="{Binding ProductInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Battey Status">
+                    <StackPanel>
+                        <TextBlock Text="{Binding BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries: {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.Identifier, StringFormat='ID: {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.Status, StringFormat='Battery Status: {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
+                        <TextBlock Text="{Binding BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time: {0}'}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Expander>
+    </Grid>
+</UserControl>

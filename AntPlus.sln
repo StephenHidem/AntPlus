@@ -25,7 +25,11 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation", "Documentat
 		{EBA3A5BB-3E71-42F2-BBD6-FFF42105379E} = {EBA3A5BB-3E71-42F2-BBD6-FFF42105379E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntMulticastServer", "AntMulticastServer\AntMulticastServer.csproj", "{E700292C-C49D-4D9B-88A2-962DB59019A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntMulticastServer", "AntMulticastServer\AntMulticastServer.csproj", "{E700292C-C49D-4D9B-88A2-962DB59019A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{9B00ED0B-B099-4E6B-9228-27106DE36ABF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfUsbStickApp", "Examples\WpfUsbStickApp\WpfUsbStickApp.csproj", "{4613E881-4E42-4617-905A-4FC2204B76D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,9 +64,16 @@ Global
 		{E700292C-C49D-4D9B-88A2-962DB59019A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E700292C-C49D-4D9B-88A2-962DB59019A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E700292C-C49D-4D9B-88A2-962DB59019A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4613E881-4E42-4617-905A-4FC2204B76D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4613E881-4E42-4617-905A-4FC2204B76D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4613E881-4E42-4617-905A-4FC2204B76D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4613E881-4E42-4617-905A-4FC2204B76D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4613E881-4E42-4617-905A-4FC2204B76D4} = {9B00ED0B-B099-4E6B-9228-27106DE36ABF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B254219-260F-4D16-9D59-77A2386597E8}

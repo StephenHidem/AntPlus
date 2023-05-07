@@ -42,8 +42,18 @@ namespace SmallEarthTech.AntPlus
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        /// <summary>Occurs when no messages have been received from the device within the timeout duration.</summary>
+        /// <summary>Occurs when no messages have been received from the device within the specified timeout duration.</summary>
+        /// <remarks>
+        /// Consumers can also use the <see cref="Offline"/> property instead of this event for databinding
+        /// purposes.
+        /// </remarks>
         public event EventHandler DeviceWentOffline;
+
+        /// <summary>Gets a value indicating whether this <see cref="AntDevice" /> is offline.</summary>
+        /// <value>
+        ///   <c>true</c> if offline; otherwise, <c>false</c>.</value>
+        /// <remarks>The <see cref="DeviceWentOffline" /> event is also invoked when the device has not received a message within the timeout specified for this device.</remarks>
+        public bool Offline { get; private set; }
 
         /// <summary>Gets the channel identifier.</summary>
         /// <value>The channel identifier.</value>
@@ -71,6 +81,8 @@ namespace SmallEarthTech.AntPlus
         {
             timeoutTimer?.Dispose();
             timeoutTimer = null;
+            Offline = true;
+            RaisePropertyChange(nameof(Offline));
             DeviceWentOffline?.Invoke(this, new EventArgs());
         }
 

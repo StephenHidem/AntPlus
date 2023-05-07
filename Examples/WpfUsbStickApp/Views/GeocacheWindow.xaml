@@ -1,0 +1,71 @@
+﻿<Window x:Class="WpfUsbStickApp.Views.GeocacheWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:WpfUsbStickApp.Converters"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
+        xmlns:local="clr-namespace:WpfUsbStickApp.Views" d:DataContext="{d:DesignInstance Type=vm:GeocacheViewModel}"
+        mc:Ignorable="d"
+        Title="{Binding Geocache.ChannelId.DeviceNumber, StringFormat='Geocache - {0}'}" Height="617" Width="345" Icon="{Binding Geocache.DeviceImageStream}">
+    <Window.Resources>
+        <conv:ByteArrayToStringConverter x:Key="ByteToStr"/>
+        <conv:DegreesToSemicirclesConverter x:Key="DegSemi"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <StackPanel>
+            <GroupBox Header="Data Pages">
+                <StackPanel>
+                    <TextBlock Text="{Binding Geocache.MessageRate, StringFormat='Message Rate: {0:F2}Hz'}"/>
+                    <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude: {0}', Converter={StaticResource DegSemi}}"/>
+                    <TextBlock Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude: {0}', Converter={StaticResource DegSemi}}"/>
+                    <TextBlock Text="{Binding Geocache.Hint, StringFormat='Hint: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits: {0}'}"/>
+                    <TextBlock Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit: {0}'}"/>
+                    <Button Content="Request PIN" Command="{Binding RequestPINCommand}"/>
+                    <Button Content="Log Visit" Command="{Binding LogVisitCommand}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Authentication">
+                <StackPanel>
+                    <TextBlock Text="{Binding Geocache.AuthenticationToken, StringFormat='Authentication Token: {0}', Converter={StaticResource ByteToStr}}"/>
+                    <Button Content="Request Authentication" Command="{Binding RequestAuthenticationCommand}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Program">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="78"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="PIN:" Grid.Column="0"/>
+                    <TextBox Text="{Binding Pin}" MaxLength="10" Grid.Row="0" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBlock Text="Trackable ID:" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Text="{Binding TrackableId}" MaxLength="9" Grid.Column="1" Margin="0,17,0,18" Grid.RowSpan="3"/>
+                    <TextBlock Text="Latitude:" Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Text="{Binding Latitude, Converter={StaticResource DegSemi}}" Grid.Row="2" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBlock Text="Longitude:" Grid.Row="3" Grid.Column="0"/>
+                    <TextBox Text="{Binding Longitude, Converter={StaticResource DegSemi}}" Grid.Row="3" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBlock Text="Hint:" Grid.Row="4" Grid.Column="0"/>
+                    <TextBox Text="{Binding Hint}" TextWrapping="Wrap" MaxLength="168" Grid.Row="4" Grid.Column="1"/>
+                    <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Program Geocache" Command="{Binding ProgramGeocacheCommand}"/>
+                </Grid>
+            </GroupBox>
+
+            <uc:CommonDataPagesControl DataContext="{Binding Geocache.CommonDataPages}"/>
+        </StackPanel>
+        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding Geocache.Offline, Converter={StaticResource BoolToVisibility}}"/>
+    </Grid>
+</Window>

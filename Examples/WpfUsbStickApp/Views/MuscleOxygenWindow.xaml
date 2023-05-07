@@ -1,0 +1,50 @@
+﻿<Window x:Class="WpfUsbStickApp.Views.MuscleOxygenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfUsbStickApp.Views"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
+        d:DataContext="{d:DesignInstance Type=vm:MuscleOxygenViewModel}"
+        mc:Ignorable="d"
+        Title="MuscleOxygenWindow" Height="450" Width="331">
+    <Grid Margin="10">
+        <StackPanel>
+            <GroupBox Header="Main Data Page">
+                <StackPanel>
+                    <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
+                    <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Local Time Offset">
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="4" Content="Set Time" Command="{Binding SetTimeCommand}"/>
+                    <Label Content="Hours"/>
+                    <ComboBox ItemsSource="{Binding Hours}" IsEditable="False" SelectedIndex="{Binding HoursIndex}" Width="48"/>
+                    <Label Content="Minutes"/>
+                    <ComboBox ItemsSource="{Binding Minutes}" IsEditable="False" SelectedIndex="{Binding MinutesIndex}" Width="48"/>
+                </StackPanel>
+            </GroupBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Start Session" Command="{Binding StartSessionCommand}"/>
+                <Button Grid.Column="1" Content="Stop Session" Command="{Binding StopSessionCommand}"/>
+                <Button Grid.Column="2" Content="Lap" Command="{Binding LogLapCommand}"/>
+            </Grid>
+            <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen.CommonDataPages}"/>
+        </StackPanel>
+        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding MuscleOxygen.Offline, Converter={StaticResource BoolToVisibility}}"/>
+    </Grid>
+</Window>

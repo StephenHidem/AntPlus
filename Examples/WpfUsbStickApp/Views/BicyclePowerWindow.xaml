@@ -9,11 +9,13 @@
         xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         mc:Ignorable="d"
-        Title="Bicycle Power" Height="501" Width="301" Icon="{Binding BicyclePower.DeviceImageStream, Mode=OneWay}">
+        Title="{Binding SensorType, StringFormat='Bicycle Power - {0}'}"
+        SizeToContent="WidthAndHeight"
+        Icon="{Binding BicyclePower.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding SensorType, StringFormat='Sensor Type {0}'}"/>
             <StackPanel x:Name="BicyclePowerControl"/>
         </StackPanel>
+        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding BicyclePower.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

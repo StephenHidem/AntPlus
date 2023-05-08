@@ -1,36 +1,38 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.Input;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 
 namespace WpfUsbStickApp.ViewModels
 {
-    public class BicyclePowerViewModel
+    public partial class BicyclePowerViewModel
     {
         private readonly BicyclePower bicyclePower;
 
         public SensorType SensorType => BicyclePower.Sensor;
         public BicyclePower BicyclePower => bicyclePower;
-
-        public RoutedCommand ManualCalRequest { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetAutoZeroConfig { get; private set; } = new RoutedCommand();
-        public RoutedCommand GetCustomCalibrationParameters { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetCustomCalibrationParameters { get; private set; } = new RoutedCommand();
-        public RoutedCommand GetParameters { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetCrankLength { get; private set; } = new RoutedCommand();
-
-        public CommandBinding[] CommandBindings { get; private set; }
-
         public BicyclePowerViewModel(BicyclePower bicyclePower)
         {
             this.bicyclePower = bicyclePower;
-
-            CommandBindings = new CommandBinding[] {
-                new CommandBinding(ManualCalRequest, (s, e) => BicyclePower.Calibration.RequestManualCalibration()),
-                new CommandBinding(SetAutoZeroConfig, (s, e) => BicyclePower.Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On), (s, e) => e.CanExecute = BicyclePower.Sensor != SensorType.CrankTorqueFrequency),
-                new CommandBinding(GetCustomCalibrationParameters, (s, e) => BicyclePower.Calibration.RequestCustomParameters(), (s, e) => e.CanExecute = BicyclePower.Sensor != SensorType.CrankTorqueFrequency),
-                new CommandBinding(SetCustomCalibrationParameters, (s, e) => BicyclePower.Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 }), (s, e) => e.CanExecute = BicyclePower.Sensor != SensorType.CrankTorqueFrequency),
-                new CommandBinding(GetParameters, (s, e) => BicyclePower.PowerOnlySensor.Parameters.GetParameters((Subpage)e.Parameter)),
-                new CommandBinding(SetCrankLength, (s, e) => BicyclePower.PowerOnlySensor.Parameters.SetCrankLength(double.Parse(e.Parameter.ToString())))
-            };
         }
+
+        [RelayCommand]
+        private void ManualCalRequest() => BicyclePower.Calibration.RequestManualCalibration();
+
+        [RelayCommand(CanExecute = nameof(CanSetAutoZeroConfig))]
+        private void SetAutoZeroConfig() => BicyclePower.Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On);
+        private bool CanSetAutoZeroConfig() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+
+        [RelayCommand(CanExecute = nameof(CanGetCustomCalParameters))]
+        private void GetCustomCalParameters() => BicyclePower.Calibration.RequestCustomParameters();
+        private bool CanGetCustomCalParameters() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+
+        [RelayCommand(CanExecute = nameof(CanSetCustomCalParameters))]
+        private void SetCustomCalParameters() => BicyclePower.Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
+        private bool CanSetCustomCalParameters() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+
+        [RelayCommand]
+        private void GetParameters(Subpage subpage) => BicyclePower.PowerOnlySensor.Parameters.GetParameters(subpage);
+
+        [RelayCommand]
+        private void SetCrankLength(string length) => BicyclePower.PowerOnlySensor.Parameters.SetCrankLength(double.Parse(length));
     }
 }

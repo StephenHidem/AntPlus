@@ -6,7 +6,8 @@
         xmlns:conv="clr-namespace:WpfUsbStickApp.Converters"
         xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
-        xmlns:local="clr-namespace:WpfUsbStickApp.Views" d:DataContext="{d:DesignInstance Type=vm:GeocacheViewModel}"
+        xmlns:local="clr-namespace:WpfUsbStickApp.Views"
+        d:DataContext="{d:DesignInstance Type=vm:GeocacheViewModel}"
         mc:Ignorable="d"
         Title="{Binding Geocache.ChannelId.DeviceNumber, StringFormat='Geocache - {0}'}" Height="617" Width="345" Icon="{Binding Geocache.DeviceImageStream}">
     <Window.Resources>

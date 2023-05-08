@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using WpfUsbStickApp.ViewModels;
 
 namespace WpfUsbStickApp.Controls
 {
@@ -11,12 +10,6 @@ namespace WpfUsbStickApp.Controls
         public BicyclePowerCalibrationControl()
         {
             InitializeComponent();
-        }
-
-        public BicyclePowerCalibrationControl(BicyclePowerViewModel vm)
-        {
-            InitializeComponent();
-            DataContext = vm;
         }
     }
 }

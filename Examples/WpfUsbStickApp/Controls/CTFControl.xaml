@@ -7,22 +7,21 @@
              xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
-        <Expander>
-            <Expander.Header>
-                <TextBlock Text="Crank Torque Frequency Sensor" FontWeight="ExtraBold"/>
-            </Expander.Header>
-            <StackPanel>
-                <TextBlock Text="{Binding BicyclePower.CTFSensor.Offset, StringFormat='Offset: {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.CTFSensor.Slope, StringFormat='Slope: {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.CTFSensor.Cadence, StringFormat='Cadence: {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.CTFSensor.Torque, StringFormat='Torque: {0}'}"/>
-                <TextBlock Text="{Binding BicyclePower.CTFSensor.Power, StringFormat='Power: {0}'}"/>
-                <local:BicyclePowerCalibrationControl DataContext="{Binding .}"/>
-                <Button Content="Save Slope" Click="Click_SaveSlope"/>
-                <Button Content="Save Serial Number" Click="Click_SaveSerialNumber"/>
-            </StackPanel>
-        </Expander>
+        <StackPanel>
+            <GroupBox Header="Crank Torque Frequency">
+                <StackPanel>
+                    <TextBlock Text="{Binding BicyclePower.CTFSensor.Offset, StringFormat='Offset: {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.CTFSensor.Slope, StringFormat='Slope: {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.CTFSensor.Cadence, StringFormat='Cadence: {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.CTFSensor.Torque, StringFormat='Torque: {0}'}"/>
+                    <TextBlock Text="{Binding BicyclePower.CTFSensor.Power, StringFormat='Power: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <local:BicyclePowerCalibrationControl DataContext="{Binding .}"/>
+            <Button Content="Save Slope" Click="Click_SaveSlope"/>
+            <Button Content="Save Serial Number" Click="Click_SaveSerialNumber"/>
+        </StackPanel>
     </Grid>
 </UserControl>

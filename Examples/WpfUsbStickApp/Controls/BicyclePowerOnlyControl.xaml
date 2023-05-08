@@ -7,21 +7,31 @@
              xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
              d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1000" Background="White">
     <Grid>
-        <GroupBox Header="Power Only">
-            <StackPanel>
-                <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <GroupBox Header="Power" DataContext="{Binding BicyclePower.PowerOnlySensor}">
+                <StackPanel>
                     <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power: {0}'}"/>
                     <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
                     <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
                     <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
-                    <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
-                    <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
                 </StackPanel>
-                <local:BicyclePowerParametersControl DataContext="{Binding .}"/>
-                <local:BicyclePowerCalibrationControl DataContext="{Binding .}"/>
-            </StackPanel>
-        </GroupBox>
+            </GroupBox>
+            <local:TEPSControl DataContext="{Binding BicyclePower.PowerOnlySensor.TorqueEffectiveness}"/>
+            <local:CommonDataPagesControl DataContext="{Binding BicyclePower.PowerOnlySensor.CommonDataPages}"/>
+        </StackPanel>
+        <local:BicyclePowerCalibrationControl Grid.Column="1" DataContext="{Binding .}"/>
+        <local:BicyclePowerParametersControl Grid.Column="2" DataContext="{Binding .}"/>
     </Grid>
 </UserControl>

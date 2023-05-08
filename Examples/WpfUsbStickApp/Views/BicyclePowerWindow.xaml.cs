@@ -14,7 +14,7 @@ namespace WpfUsbStickApp.Views
         public BicyclePowerWindow(BicyclePower bicyclePower)
         {
             InitializeComponent();
-            BicyclePowerViewModel bicyclePowerViewModel = new BicyclePowerViewModel(bicyclePower);
+            BicyclePowerViewModel bicyclePowerViewModel = new(bicyclePower);
             BindingOperations.EnableCollectionSynchronization(bicyclePowerViewModel.BicyclePower.Calibration.Measurements, bicyclePowerViewModel.BicyclePower.Calibration.Measurements.CollectionLock);
 
             switch (bicyclePower.Sensor)
@@ -35,7 +35,6 @@ namespace WpfUsbStickApp.Views
                     break;
             }
 
-            CommandBindings.AddRange(bicyclePowerViewModel.CommandBindings);
             DataContext = bicyclePowerViewModel;
         }
     }

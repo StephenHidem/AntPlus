@@ -8,12 +8,9 @@
              d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
              xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:Background="White" Width="472">
     <Grid>
-        <Expander>
-            <Expander.Header>
-                <TextBlock Text="Get/Set Parameters" FontWeight="ExtraBold"/>
-            </Expander.Header>
+        <GroupBox Header="Parameters">
             <StackPanel>
                 <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor.Parameters}">
                     <TextBlock Text="{Binding Crank.CrankLength, StringFormat='Crank Length: {0}'}"/>
@@ -25,18 +22,27 @@
                     <TextBlock Text="{Binding PeakTorqueThreshold, StringFormat='Peak Torque Threshold: {0}'}"/>
                     <TextBlock Text="{Binding RiderPositionTimeOffset, StringFormat='Rider Position Time Offset: {0}'}"/>
                 </StackPanel>
-                <StackPanel>
-                    <Button Content="Get Crank" Command="{Binding GetParameters}"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Content="Get Crank Length" Command="{Binding GetParametersCommand}"
                                 CommandParameter="{x:Static dp:Subpage.CrankParameters}"/>
-                    <Button Content="Get Peak Torque Threshold" Command="{Binding GetParameters}"
+                    <Button Grid.Column="1" Content="Get Peak Torque Threshold" Command="{Binding GetParametersCommand}"
                                 CommandParameter="{x:Static dp:Subpage.PowerPhaseConfiguration}"/>
-                    <Button Content="Get Rider Position Time Offset" Command="{Binding GetParameters}"
+                    <Button Grid.Column="2" Content="Get Rider Position Time Offset" Command="{Binding GetParametersCommand}"
                                 CommandParameter="{x:Static dp:Subpage.RiderPositionConfiguration}"/>
-                    <Button Content="Set Crank Length" Command="{Binding SetCrankLength}" CommandParameter="{Binding ElementName=CrankLength, Path=Text}"/>
-                    <TextBox x:Name="CrankLength" Text="110" Width="50"/>
-                    <CheckBox Content="Auto Crank Length" IsChecked="False" IsThreeState="False"/>
-                </StackPanel>
+                    <Button Grid.Row="1" Content="Set Crank Length" Command="{Binding SetCrankLengthCommand}" CommandParameter="{Binding ElementName=CrankLength, Path=Text}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" x:Name="CrankLength" Text="110" Width="50"/>
+                    <CheckBox Grid.Row="1" Grid.Column="2" Content="Auto Crank Length" IsChecked="False" IsThreeState="False"/>
+                </Grid>
             </StackPanel>
-        </Expander>
+        </GroupBox>
     </Grid>
 </UserControl>

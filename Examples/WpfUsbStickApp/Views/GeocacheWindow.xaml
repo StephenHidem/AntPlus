@@ -9,7 +9,8 @@
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
         d:DataContext="{d:DesignInstance Type=vm:GeocacheViewModel}"
         mc:Ignorable="d"
-        Title="{Binding Geocache.ChannelId.DeviceNumber, StringFormat='Geocache - {0}'}" Height="617" Width="345" Icon="{Binding Geocache.DeviceImageStream}">
+        SizeToContent="WidthAndHeight"
+        Title="{Binding Geocache.ChannelId.DeviceNumber, StringFormat='Geocache - {0}'}" Icon="{Binding Geocache.DeviceImageStream}">
     <Window.Resources>
         <conv:ByteArrayToStringConverter x:Key="ByteToStr"/>
         <conv:DegreesToSemicirclesConverter x:Key="DegSemi"/>
@@ -67,6 +68,6 @@
 
             <uc:CommonDataPagesControl DataContext="{Binding Geocache.CommonDataPages}"/>
         </StackPanel>
-        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding Geocache.Offline, Converter={StaticResource BoolToVisibility}}"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Hidden"/>
     </Grid>
 </Window>

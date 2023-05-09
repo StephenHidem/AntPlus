@@ -11,7 +11,7 @@ namespace WpfUsbStickApp.Controls
         public RowerControl(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
-            DataContext = fitnessEquipment.Rower;
+            DataContext = fitnessEquipment;
         }
     }
 }

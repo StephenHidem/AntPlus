@@ -45,6 +45,6 @@
             </Grid>
             <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen.CommonDataPages}"/>
         </StackPanel>
-        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding MuscleOxygen.Offline, Converter={StaticResource BoolToVisibility}}"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Visible"/>
     </Grid>
 </Window>

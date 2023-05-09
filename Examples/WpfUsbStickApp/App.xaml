@@ -28,6 +28,15 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
+        <Style TargetType="TextBlock" x:Key="OfflineStyle">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Opacity" Value="0.5"/>
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="Text" Value="OFFLINE"/>
+        </Style>
+
         <Style TargetType="ComboBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>

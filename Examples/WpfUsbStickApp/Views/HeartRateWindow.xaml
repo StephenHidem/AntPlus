@@ -89,6 +89,6 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding HeartRate.Offline, Converter={StaticResource BoolToVisibility}}"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Visible"/>
     </Grid>
 </Window>

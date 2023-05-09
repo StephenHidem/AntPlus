@@ -14,6 +14,6 @@
             <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed: {0}'}"/>
             <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
         </StackPanel>
-        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding CombinedSpeedAndCadenceSensor.Offline, Converter={StaticResource BoolToVisibility}}"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Hidden"/>
     </Grid>
 </Window>

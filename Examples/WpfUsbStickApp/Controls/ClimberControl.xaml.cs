@@ -11,7 +11,7 @@ namespace WpfUsbStickApp.Controls
         public ClimberControl(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
-            DataContext = fitnessEquipment.Climber;
+            DataContext = fitnessEquipment;
         }
     }
 }

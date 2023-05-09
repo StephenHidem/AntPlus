@@ -11,7 +11,7 @@ namespace WpfUsbStickApp.Controls
         public EllipticalControl(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
-            DataContext = fitnessEquipment.Elliptical;
+            DataContext = fitnessEquipment;
         }
     }
 }

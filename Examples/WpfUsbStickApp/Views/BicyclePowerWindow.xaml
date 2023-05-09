@@ -16,6 +16,6 @@
         <StackPanel>
             <StackPanel x:Name="BicyclePowerControl"/>
         </StackPanel>
-        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding BicyclePower.Offline, Converter={StaticResource BoolToVisibility}}"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Hidden"/>
     </Grid>
 </Window>

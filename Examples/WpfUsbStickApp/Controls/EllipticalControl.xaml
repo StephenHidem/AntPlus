@@ -5,18 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
-        <Expander>
-            <Expander.Header>
-                <TextBlock Text="Elliptical" FontWeight="ExtraBold"/>
-            </Expander.Header>
+        <GroupBox Header="Elliptical">
             <StackPanel>
-                <TextBlock Text="{Binding StrideCount, StringFormat='Stride Count: {0}'}"/>
-                <TextBlock Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
-                <TextBlock Text="{Binding PosVerticalDistance, StringFormat='PosVerticalDistance: {0}'}"/>
+                <TextBlock Text="{Binding Elliptical.StrideCount, StringFormat='Stride Count: {0}'}"/>
+                <TextBlock Text="{Binding Elliptical.Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding Elliptical.InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding Elliptical.PosVerticalDistance, StringFormat='PosVerticalDistance: {0}'}"/>
+                <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
+                <TextBlock Text="{Binding LapToggle, StringFormat='Lap Toggle: {0}'}"/>
             </StackPanel>
-        </Expander>
+        </GroupBox>
     </Grid>
 </UserControl>

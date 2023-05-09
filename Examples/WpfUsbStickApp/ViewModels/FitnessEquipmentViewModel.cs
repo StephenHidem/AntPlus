@@ -1,19 +1,19 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using System.Windows.Controls;
 using System.Windows.Input;
+using WpfUsbStickApp.Controls;
 
 namespace WpfUsbStickApp.ViewModels
 {
-    internal class FitnessEquipmentViewModel
+    internal partial class FitnessEquipmentViewModel : ObservableObject
     {
         private readonly FitnessEquipment fitnessEquipment;
 
         public FitnessEquipment FitnessEquipment => fitnessEquipment;
-        public Treadmill Treadmill { get; private set; }
-        public Elliptical Elliptical { get; private set; }
-        public Rower Rower { get; private set; }
-        public Climber Climber { get; private set; }
-        public NordicSkier NordicSkier { get; private set; }
-        public TrainerStationaryBike TrainerStationaryBike { get; private set; }
+
+        [ObservableProperty]
+        private UserControl feControl;
 
         public RoutedCommand FECapabilitiesRequest { get; private set; } = new RoutedCommand();
         public RoutedCommand SetUserConfig { get; private set; } = new RoutedCommand();
@@ -34,6 +34,31 @@ namespace WpfUsbStickApp.ViewModels
                 new CommandBinding(SetWindResistance, (s, e) => FitnessEquipment.SetWindResistance(0.51, -30, 0.9)),
                 new CommandBinding(SetTrackResistance, (s, e) => FitnessEquipment.SetTrackResistance(-15)),
             };
+
+            switch (fitnessEquipment.GeneralData.EquipmentType)
+            {
+                case FitnessEquipment.FitnessEquipmentType.Treadmill:
+                    FeControl = new TreadmillControl(fitnessEquipment);
+                    break;
+                case FitnessEquipment.FitnessEquipmentType.Elliptical:
+                    FeControl = new EllipticalControl(fitnessEquipment);
+                    break;
+                case FitnessEquipment.FitnessEquipmentType.Rower:
+                    FeControl = new RowerControl(fitnessEquipment);
+                    break;
+                case FitnessEquipment.FitnessEquipmentType.Climber:
+                    FeControl = new ClimberControl(fitnessEquipment);
+                    break;
+                case FitnessEquipment.FitnessEquipmentType.NordicSkier:
+                    FeControl = new NordicSkierControl(fitnessEquipment);
+                    break;
+                case FitnessEquipment.FitnessEquipmentType.TrainerStationaryBike:
+                    FeControl = new TrainerStationaryBikeControl(fitnessEquipment);
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }

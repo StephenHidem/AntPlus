@@ -11,7 +11,7 @@ namespace WpfUsbStickApp.Controls
         public TrainerStationaryBikeControl(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
-            DataContext = fitnessEquipment.TrainerStationaryBike;
+            DataContext = fitnessEquipment;
         }
     }
 }

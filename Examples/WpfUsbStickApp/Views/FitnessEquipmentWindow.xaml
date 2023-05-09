@@ -5,59 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
         xmlns:pt="http://propertytools.org/wpf"
-        xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:FitnessEquipmentViewModel}"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:FitnessEquipmentViewModel}"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         mc:Ignorable="d"
-        Title="Fitness Equipment" Height="450" Width="367" Icon="{Binding FitnessEquipment.DeviceImageStream, Mode=OneWay}">
+        SizeToContent="WidthAndHeight"
+        Title="Fitness Equipment" Icon="{Binding FitnessEquipment.DeviceImageStream}">
     <Grid Margin="10">
-        <StackPanel x:Name="FESpecific">
-            <TextBlock Text="{Binding FitnessEquipment.State, StringFormat='State: {0}'}"/>
-            <TextBlock Text="{Binding FitnessEquipment.LapToggle, StringFormat='Lap Toggle: {0}'}"/>
-            <Button Content="Set User Configuration" Command="{Binding SetUserConfig}"/>
-            <Button Content="Set Basic Resistance" Command="{Binding SetBasicResistance}"/>
-            <Button Content="Set Target Power" Command="{Binding SetTargetPower}"/>
-            <Button Content="Set Wind Resistance" Command="{Binding SetWindResistance}"/>
-            <Button Content="Set Track Resistance" Command="{Binding SetTrackResistance}"/>
-            <GroupBox Header="Capabilities">
-                <StackPanel>
-                    <Button Content="Request FE Capabilities" Command="{Binding FECapabilitiesRequest}"/>
-                    <TextBlock Text="{Binding FitnessEquipment.Capabilities}"/>
-                    <TextBlock Text="{Binding FitnessEquipment.MaxTrainerResistance}"/>
-                </StackPanel>
-            </GroupBox>
-            <Expander>
-                <Expander.Header>
-                    <TextBlock Text="General Data" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel DataContext="{Binding FitnessEquipment}">
-                    <TextBlock Text="{Binding GeneralData.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralData.ElapsedTime, StringFormat='Elapsed Time: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralData.DistanceTraveled, StringFormat='Distance Traveled: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralData.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralData.InstantaneousHeartRate, StringFormat='Heart Rate: {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander>
-                <Expander.Header>
-                    <TextBlock Text="General Settings" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel DataContext="{Binding FitnessEquipment}">
-                    <TextBlock Text="{Binding GeneralSettings.CycleLength, StringFormat='Cycle Length: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralSettings.Incline, StringFormat='Incline: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralSettings.ResistanceLevel, StringFormat='Resistance Level: {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander>
-                <Expander.Header>
-                    <TextBlock Text="General Metabolic" FontWeight="ExtraBold"/>
-                </Expander.Header>
-                <StackPanel DataContext="{Binding FitnessEquipment}">
-                    <TextBlock Text="{Binding GeneralMetabolic.AccumulatedCalories, StringFormat='Cycle Length: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralMetabolic.CaloricBurnRate, StringFormat='Caloric Burn Rate: {0}'}"/>
-                    <TextBlock Text="{Binding GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET: {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <uc:CommonDataPagesControl DataContext="{Binding FitnessEquipment.CommonDataPages}"/>
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <UserControl Content="{Binding FeControl}"/>
+        <GroupBox Header="General Data" Grid.Row="1">
+            <StackPanel>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.ElapsedTime, StringFormat='Elapsed Time: {0:hh\\:mm\\:ss}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.DistanceTraveled, StringFormat='Distance Traveled: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.InstantaneousHeartRate, StringFormat='Heart Rate: {0}'}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="General Settings" Grid.Row="2">
+            <StackPanel>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralSettings.CycleLength, StringFormat='Cycle Length: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralSettings.Incline, StringFormat='Incline: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralSettings.ResistanceLevel, StringFormat='Resistance Level: {0}'}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="General Metabolic" Grid.Row="3">
+            <StackPanel>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.AccumulatedCalories, StringFormat='Cycle Length: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.CaloricBurnRate, StringFormat='Caloric Burn Rate: {0:F1}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET: {0:F2}'}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Capabilities" Grid.Row="4">
+            <StackPanel>
+                <TextBlock Text="{Binding FitnessEquipment.Capabilities}"/>
+                <TextBlock Text="{Binding FitnessEquipment.MaxTrainerResistance}"/>
+                <Button Content="Request FE Capabilities" Command="{Binding FECapabilitiesRequest}"/>
+            </StackPanel>
+        </GroupBox>
+        <uc:CommonDataPagesControl DataContext="{Binding FitnessEquipment.CommonDataPages}" Grid.Row="5"/>
+        <GroupBox Header="Equipment" Grid.Column="1">
+            <StackPanel>
+                <Button Content="Set User Configuration" Command="{Binding SetUserConfig}"/>
+                <Button Content="Set Basic Resistance" Command="{Binding SetBasicResistance}"/>
+                <Button Content="Set Target Power" Command="{Binding SetTargetPower}"/>
+                <Button Content="Set Wind Resistance" Command="{Binding SetWindResistance}"/>
+                <Button Content="Set Track Resistance" Command="{Binding SetTrackResistance}"/>
+            </StackPanel>
+        </GroupBox>
+        <TextBlock Style="{StaticResource OfflineStyle}" Grid.ColumnSpan="4" Grid.RowSpan="6" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Visible"/>
     </Grid>
 </Window>

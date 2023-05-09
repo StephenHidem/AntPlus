@@ -11,7 +11,7 @@ namespace WpfUsbStickApp.Controls
         public TreadmillControl(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
-            DataContext = fitnessEquipment.Treadmill;
+            DataContext = fitnessEquipment;
         }
     }
 }

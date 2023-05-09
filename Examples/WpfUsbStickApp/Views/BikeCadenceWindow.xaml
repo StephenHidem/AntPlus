@@ -4,13 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
-        xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeCadenceViewModel}"
+        xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:BikeCadenceViewModel}"
         mc:Ignorable="d"
-        Title="Bike Cadence" Height="289" Width="268" Icon="{Binding BikeCadenceSensor.DeviceImageStream, Mode=OneWay}">
+        SizeToContent="WidthAndHeight"
+        Title="Bike Cadence" Icon="{Binding BikeCadenceSensor.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel DataContext="{Binding BikeCadenceSensor}">
-            <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
-            <TextBlock Text="{Binding Stopped, StringFormat='Stopped: {0}'}"/>
+            <GroupBox Header="Cadence Sensor">
+                <StackPanel>
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                    <TextBlock Text="{Binding Stopped, StringFormat='Stopped: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
             <GroupBox Header="Manufacturer Info">
                 <StackPanel>
                     <TextBlock Text="{Binding ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
@@ -31,5 +37,6 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
+        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding BikeCadenceSensor.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

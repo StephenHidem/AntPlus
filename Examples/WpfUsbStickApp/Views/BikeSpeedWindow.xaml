@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
         xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeSpeedViewModel}"
         mc:Ignorable="d"
-        Title="Bike Speed" Height="315" Width="311" Icon="{Binding BikeSpeedSensor.DeviceImageStream, Mode=OneWay}">
+        SizeToContent="WidthAndHeight"
+        Title="Bike Speed" Icon="{Binding BikeSpeedSensor.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
         <StackPanel DataContext="{Binding BikeSpeedSensor}">
             <GroupBox Header="Speed and Distance">
@@ -36,5 +37,6 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
+        <TextBlock Text="OFFLINE" HorizontalAlignment="Center" FontSize="48" FontWeight="ExtraBold" Visibility="{Binding BikeSpeedSensor.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

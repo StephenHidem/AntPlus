@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="WpfUsbStickApp.Controls.BicyclePowerOnlyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
+             xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+             mc:Ignorable="d" Background="White" Height="148" Width="376">
+    <Grid>
+        <GroupBox Header="Power">
+            <StackPanel>
+                <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

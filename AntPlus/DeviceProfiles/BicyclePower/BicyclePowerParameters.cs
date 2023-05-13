@@ -273,7 +273,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="parameterSubpage">The parameter subpage.</param>
         public void GetParameters(Subpage parameterSubpage)
         {
-            bp.RequestDataPage(DataPage.GetSetParameters, (byte)parameterSubpage);
+            bp.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
         }
 
         /// <summary>

@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="WpfUsbStickApp.Controls.RowerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
+    <Grid>
+        <GroupBox Header="Rower">
+            <StackPanel>
+                <TextBlock Text="{Binding Rower.StrokeCount, StringFormat='Stroke Count: {0}'}"/>
+                <TextBlock Text="{Binding Rower.Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding Rower.InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
+                <TextBlock Text="{Binding LapToggle, StringFormat='Lap Toggle: {0}'}"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

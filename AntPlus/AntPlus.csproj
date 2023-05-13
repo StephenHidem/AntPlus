@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\AntPlus.png" />
     <None Remove="Images\AssetTracker.png" />
     <None Remove="Images\BicyclePower.png" />
     <None Remove="Images\BikeCadence.png" />
@@ -28,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Images\AntPlus.png" />
     <EmbeddedResource Include="Images\AssetTracker.png" />
     <EmbeddedResource Include="Images\BicyclePower.png" />
     <EmbeddedResource Include="Images\BikeCadence.png" />

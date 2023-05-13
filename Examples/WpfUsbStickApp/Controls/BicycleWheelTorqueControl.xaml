@@ -5,30 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
              xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
-             d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel DataContext="{Binding BicyclePower.WheelTorqueSensor}">
-            <GroupBox Header="Wheel Torque">
-                <StackPanel>
-                    <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F3}'}"/>
-                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0:F3}'}"/>
-                    <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque: {0:F3}'}"/>
-                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
-                    <TextBlock Text="{Binding AverageSpeed, StringFormat='Average Speed: {0:F3}'}"/>
-                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
-                </StackPanel>
-            </GroupBox>
-            <local:TEPSControl DataContext="{Binding TorqueEffectiveness}"/>
-            <local:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
-        </StackPanel>
-        <local:BicyclePowerParametersControl Grid.Column="2" DataContext="{Binding .}"/>
-        <local:BicyclePowerCalibrationControl Grid.Column="1" DataContext="{Binding .}"/>
+        <GroupBox Header="Wheel Torque" DataContext="{Binding BicyclePower.WheelTorqueSensor}">
+            <StackPanel>
+                <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F3}'}"/>
+                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0:F3}'}"/>
+                <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque: {0:F3}'}"/>
+                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                <TextBlock Text="{Binding AverageSpeed, StringFormat='Average Speed: {0:F3}'}"/>
+                <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </UserControl>

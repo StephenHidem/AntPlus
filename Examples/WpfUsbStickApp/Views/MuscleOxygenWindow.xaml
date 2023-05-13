@@ -8,43 +8,50 @@
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         d:DataContext="{d:DesignInstance Type=vm:MuscleOxygenViewModel}"
         mc:Ignorable="d"
-        Title="MuscleOxygenWindow" Height="450" Width="331">
+        SizeToContent="WidthAndHeight"
+        Title="Muscle Oxygen">
     <Grid Margin="10">
-        <StackPanel>
-            <GroupBox Header="Main Data Page">
-                <StackPanel>
-                    <TextBlock Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
-                    <TextBlock Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Local Time Offset">
-                <StackPanel Orientation="Horizontal">
-                    <Button Margin="4" Content="Set Time" Command="{Binding SetTimeCommand}"/>
-                    <Label Content="Hours"/>
-                    <ComboBox ItemsSource="{Binding HoursSource}" IsEditable="False" SelectedItem="{Binding Hours}" Width="48"/>
-                    <Label Content="Minutes"/>
-                    <ComboBox ItemsSource="{Binding MinutesSource}" IsEditable="False" SelectedItem="{Binding Minutes}" Width="48"/>
-                </StackPanel>
-            </GroupBox>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Start Session" Command="{Binding StartSessionCommand}"/>
-                <Button Grid.Column="1" Content="Stop Session" Command="{Binding StopSessionCommand}"/>
-                <Button Grid.Column="2" Content="Lap" Command="{Binding LogLapCommand}"/>
-            </Grid>
-            <uc:CommonDataPagesControl DataContext="{Binding MuscleOxygen.CommonDataPages}"/>
-        </StackPanel>
-        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Visible"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <GroupBox Header="Main Data Page">
+                    <StackPanel DataContext="{Binding MuscleOxygen}">
+                        <TextBlock Text="{Binding SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
+                        <TextBlock Text="{Binding UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
+                        <TextBlock Text="{Binding Interval, StringFormat='Measurement Interval: {0}'}"/>
+                        <TextBlock Text="{Binding TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
+                        <TextBlock Text="{Binding TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
+                        <TextBlock Text="{Binding PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
+                        <TextBlock Text="{Binding PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
+                        <TextBlock Text="{Binding CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
+                        <TextBlock Text="{Binding CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Local Time Offset">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="4" Content="Set Time" Command="{Binding SetTimeCommand}"/>
+                        <Label Content="Hours"/>
+                        <ComboBox ItemsSource="{Binding HoursSource}" IsEditable="False" SelectedItem="{Binding Hours}" Width="48"/>
+                        <Label Content="Minutes"/>
+                        <ComboBox ItemsSource="{Binding MinutesSource}" IsEditable="False" SelectedItem="{Binding Minutes}" Width="48"/>
+                    </StackPanel>
+                </GroupBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Start Session" Command="{Binding StartSessionCommand}"/>
+                    <Button Grid.Column="1" Content="Stop Session" Command="{Binding StopSessionCommand}"/>
+                    <Button Grid.Column="2" Content="Lap" Command="{Binding LogLapCommand}"/>
+                </Grid>
+            </StackPanel>
+            <uc:CommonDataPagesControl Grid.Column="1" DataContext="{Binding CommonDataPages}"/>
+        </Grid>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding MuscleOxygen.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

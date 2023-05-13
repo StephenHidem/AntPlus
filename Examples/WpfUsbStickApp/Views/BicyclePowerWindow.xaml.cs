@@ -1,7 +1,6 @@
 ﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using System.Windows;
 using System.Windows.Data;
-using WpfUsbStickApp.Controls;
 using WpfUsbStickApp.ViewModels;
 
 namespace WpfUsbStickApp.Views
@@ -14,28 +13,8 @@ namespace WpfUsbStickApp.Views
         public BicyclePowerWindow(BicyclePower bicyclePower)
         {
             InitializeComponent();
-            BicyclePowerViewModel bicyclePowerViewModel = new(bicyclePower);
-            BindingOperations.EnableCollectionSynchronization(bicyclePowerViewModel.BicyclePower.Calibration.Measurements, bicyclePowerViewModel.BicyclePower.Calibration.Measurements.CollectionLock);
-
-            switch (bicyclePower.Sensor)
-            {
-                case SensorType.PowerOnly:
-                    BicyclePowerControl.Children.Add(new BicyclePowerOnlyControl(bicyclePowerViewModel));
-                    break;
-                case SensorType.WheelTorque:
-                    BicyclePowerControl.Children.Add(new BicycleWheelTorqueControl(bicyclePowerViewModel));
-                    break;
-                case SensorType.CrankTorque:
-                    BicyclePowerControl.Children.Add(new BicycleCrankTorqueControl(bicyclePowerViewModel));
-                    break;
-                case SensorType.CrankTorqueFrequency:
-                    BicyclePowerControl.Children.Add(new CTFControl(bicyclePowerViewModel));
-                    break;
-                default:
-                    break;
-            }
-
-            DataContext = bicyclePowerViewModel;
+            BindingOperations.EnableCollectionSynchronization(bicyclePower.Calibration.Measurements, bicyclePower.Calibration.Measurements.CollectionLock);
+            DataContext = new BicyclePowerViewModel(bicyclePower);
         }
     }
 }

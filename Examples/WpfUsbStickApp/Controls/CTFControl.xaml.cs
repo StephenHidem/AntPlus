@@ -1,6 +1,5 @@
 ﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using System.Windows.Controls;
-using WpfUsbStickApp.ViewModels;
 
 namespace WpfUsbStickApp.Controls
 {
@@ -10,11 +9,11 @@ namespace WpfUsbStickApp.Controls
     public partial class CTFControl : UserControl
     {
         private readonly CrankTorqueFrequencySensor sensor;
-        public CTFControl(BicyclePowerViewModel vm)
+        public CTFControl(CrankTorqueFrequencySensor ctf)
         {
             InitializeComponent();
-            sensor = vm.BicyclePower.CTFSensor;
-            DataContext = vm;
+            sensor = ctf;
+            DataContext = ctf;
         }
 
         private void Click_SaveSlope(object sender, System.Windows.RoutedEventArgs e)

@@ -55,33 +55,25 @@ namespace WpfUsbStickApp.ViewModels
         [RelayCommand(CanExecute = nameof(CanRequestPage))]
         private void RequestPage()
         {
-            //if (page is int index)
-            {
-                _ = heartRate.RequestDataPage(PageRequested);
-            }
+            _ = heartRate.RequestDataPage(PageRequested);
         }
-
         private bool CanRequestPage()
         {
-            //if (PageRequestIndex)
+            switch (PageRequested)
             {
-                switch (PageRequested)
-                {
-                    case HeartRate.DataPage.Default:
-                    case HeartRate.DataPage.PreviousHeartBeat:
-                        return false;
-                    case HeartRate.DataPage.CumulativeOperatingTime:
-                    case HeartRate.DataPage.ManufacturerInfo:
-                    case HeartRate.DataPage.ProductInfo:
-                    case HeartRate.DataPage.SwimInterval:
-                    case HeartRate.DataPage.Capabilities:
-                    case HeartRate.DataPage.BatteryStatus:
-                        return true;
-                    default:
-                        return false;
-                }
+                case HeartRate.DataPage.Default:
+                case HeartRate.DataPage.PreviousHeartBeat:
+                    return false;
+                case HeartRate.DataPage.CumulativeOperatingTime:
+                case HeartRate.DataPage.ManufacturerInfo:
+                case HeartRate.DataPage.ProductInfo:
+                case HeartRate.DataPage.SwimInterval:
+                case HeartRate.DataPage.Capabilities:
+                case HeartRate.DataPage.BatteryStatus:
+                    return true;
+                default:
+                    return false;
             }
-            //return false;
         }
 
         [RelayCommand(CanExecute = nameof(CanSetSportMode))]
@@ -89,7 +81,6 @@ namespace WpfUsbStickApp.ViewModels
         {
             heartRate.SetSportMode(ModeRequested);
         }
-
         private bool CanSetSportMode()
         {
             switch (ModeRequested)

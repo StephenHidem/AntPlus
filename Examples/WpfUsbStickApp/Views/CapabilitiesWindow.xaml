@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:CapabilitiesViewModel}"
         mc:Ignorable="d"
         Title="Capabilities" Height="259" Width="265">
     <Grid Margin="10">

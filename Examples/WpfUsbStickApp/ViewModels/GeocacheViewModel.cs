@@ -35,15 +35,6 @@ namespace WpfUsbStickApp.ViewModels
         {
             this.geocache = geocache;
             geocache.PropertyChanged += Geocache_PropertyChanged;
-            geocache.DeviceWentOffline += Geocache_DeviceWentOffline;
-        }
-
-        private void Geocache_DeviceWentOffline(object? sender, EventArgs e)
-        {
-            geocache.PropertyChanged -= Geocache_PropertyChanged;
-            geocache.DeviceWentOffline -= Geocache_DeviceWentOffline;
-            //Offline = Visibility.Visible;
-            CheckCanExecutes();
         }
 
         private void Geocache_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -91,7 +82,6 @@ namespace WpfUsbStickApp.ViewModels
             RequestPINCommand.NotifyCanExecuteChanged();
             _ = await Task.Run(() => geocache.RequestPinPage());
         }
-
         private bool CanRequestPin()
         {
             return !geocache.Offline && !programming && !pinReq && geocache.MessageRate < 2;
@@ -104,7 +94,6 @@ namespace WpfUsbStickApp.ViewModels
             _ = geocache.UpdateLoggedVisits();
             ignoreVists = false;
         }
-
         private bool CanLogVisit()
         {
             return !geocache.Offline && !programming && !logVisit && !pinReq && geocache.MessageRate > 2 && geocache.NumberOfVisits != null;
@@ -117,7 +106,6 @@ namespace WpfUsbStickApp.ViewModels
             Random rnd = new();
             _ = await Task.Run(() => geocache.RequestAuthentication((uint)rnd.Next()));
         }
-
         private bool CanRequestAuthentication()
         {
             return !geocache.Offline && !programming && !authReq && geocache.MessageRate > 2;
@@ -142,7 +130,6 @@ namespace WpfUsbStickApp.ViewModels
                 _ = MessageBox.Show("Please enter a value for the ID and PIN.", "Program Geocache");
             }
         }
-
         private bool CanProgramGeocache()
         {
             return !geocache.Offline && !programming && geocache.MessageRate > 2 &&

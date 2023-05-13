@@ -1,5 +1,4 @@
-﻿using SmallEarthTech.AntPlus;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace WpfUsbStickApp.Controls
 {
@@ -11,12 +10,6 @@ namespace WpfUsbStickApp.Controls
         public CommonDataPagesControl()
         {
             InitializeComponent();
-        }
-
-        public CommonDataPagesControl(CommonDataPages ctx)
-        {
-            InitializeComponent();
-            DataContext = ctx;
         }
     }
 }

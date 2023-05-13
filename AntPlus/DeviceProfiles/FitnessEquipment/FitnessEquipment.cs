@@ -243,6 +243,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
             State = (FEState)((dataPage[7] & 0x70) >> 4);
             LapToggle = (dataPage[7] & 0x80) == 0x80;
+            RaisePropertyChange(nameof(State));
+            RaisePropertyChange(nameof(LapToggle));
 
             switch ((DataPage)dataPage[0])
             {

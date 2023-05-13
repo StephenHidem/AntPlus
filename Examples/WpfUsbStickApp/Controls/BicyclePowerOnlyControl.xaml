@@ -5,33 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
              xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
-             d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1000" Background="White">
+             mc:Ignorable="d" Background="White" Height="148" Width="376">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <StackPanel>
-            <GroupBox Header="Power" DataContext="{Binding BicyclePower.PowerOnlySensor}">
-                <StackPanel>
-                    <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power: {0}'}"/>
-                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
-                    <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
-                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
-                </StackPanel>
-            </GroupBox>
-            <local:TEPSControl DataContext="{Binding BicyclePower.PowerOnlySensor.TorqueEffectiveness}"/>
-            <local:CommonDataPagesControl DataContext="{Binding BicyclePower.PowerOnlySensor.CommonDataPages}"/>
-        </StackPanel>
-        <local:BicyclePowerCalibrationControl Grid.Column="1" DataContext="{Binding .}"/>
-        <local:BicyclePowerParametersControl Grid.Column="2" DataContext="{Binding .}"/>
+        <GroupBox Header="Power">
+            <StackPanel>
+                <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </UserControl>

@@ -241,6 +241,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
         public MessagingReturnCode RequestPinPage()
         {
+            firstHintPage = lastHintPage = 0;
+            Hint = string.Empty;
             return RequestDataPage(DataPage.PIN, 4000);
         }
 

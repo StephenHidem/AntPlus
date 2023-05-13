@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using WpfUsbStickApp.ViewModels;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using System.Windows.Controls;
 
 namespace WpfUsbStickApp.Controls
 {
@@ -8,10 +8,10 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class BicyclePowerOnlyControl : UserControl
     {
-        public BicyclePowerOnlyControl(BicyclePowerViewModel vm)
+        public BicyclePowerOnlyControl(StandardPowerSensor bicyclePower)
         {
             InitializeComponent();
-            DataContext = vm;
+            DataContext = bicyclePower;
         }
     }
 }

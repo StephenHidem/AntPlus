@@ -8,27 +8,28 @@
         d:DataContext="{d:DesignInstance Type=vm:SDMViewModel}"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         mc:Ignorable="d"
-        Title="{Binding SDM.ChannelId.DeviceNumber, StringFormat='Stride Based Monitor - {0}'}" Height="Auto" Width="274" Icon="{Binding SDM.DeviceImageStream}">
+        SizeToContent="WidthAndHeight"
+        Title="{Binding SDM.ChannelId.DeviceNumber, StringFormat='Stride Based Monitor - {0}'}" Icon="{Binding SDM.DeviceImageStream}">
     <Grid Margin="10">
         <StackPanel>
             <GroupBox Header="Main and Supplementary Data">
-                <StackPanel>
-                    <TextBlock Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time: {0:F2}'}"/>
-                    <TextBlock Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency: {0}'}"/>
+                <StackPanel DataContext="{Binding SDM}" >
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
+                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
+                    <TextBlock Text="{Binding AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
+                    <TextBlock Text="{Binding AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
+                    <TextBlock Text="{Binding AccumulatedTime, StringFormat='Accumulated Time: {0:F2}'}"/>
+                    <TextBlock Text="{Binding UpdateLatency, StringFormat='Update Latency: {0}'}"/>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox Header="Status">
-                <StackPanel>
-                    <TextBlock Text="{Binding SDM.Status.Location, StringFormat='Location: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.Status.Health, StringFormat='Health: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.Status.Battery, StringFormat='Battery: {0}'}"/>
-                    <TextBlock Text="{Binding SDM.Status.State, StringFormat='State: {0}'}"/>
+                <StackPanel DataContext="{Binding SDM}">
+                    <TextBlock Text="{Binding Status.Location, StringFormat='Location: {0}'}"/>
+                    <TextBlock Text="{Binding Status.Health, StringFormat='Health: {0}'}"/>
+                    <TextBlock Text="{Binding Status.Battery, StringFormat='Battery: {0}'}"/>
+                    <TextBlock Text="{Binding Status.State, StringFormat='State: {0}'}"/>
                 </StackPanel>
             </GroupBox>
 
@@ -43,12 +44,12 @@
             <GroupBox Header="Capabilities">
                 <StackPanel>
                     <TextBlock Text="{Binding SDM.Capabilities}" TextWrapping="Wrap"/>
-                    <Button Content="Request Capabilities" Command="{Binding RequestCapabilitiesCommand}"/>
+                    <Button Content="Request Capabilities" DataContext="{Binding .}" Command="{Binding RequestCapabilitiesCommand}"/>
                 </StackPanel>
             </GroupBox>
 
-            <uc:CommonDataPagesControl DataContext="{Binding SDM.CommonDataPages}"/>
+            <uc:CommonDataPagesControl DataContext="{Binding CommonDataPages}"/>
         </StackPanel>
-        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Visible"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding SDM.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

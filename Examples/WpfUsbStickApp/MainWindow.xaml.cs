@@ -42,23 +42,23 @@ namespace WpfUsbStickApp
                     heartRateWindow.Show();
                     break;
                 case BicyclePower.DeviceClass:
-                    BicyclePowerWindow bpWindow = new BicyclePowerWindow((BicyclePower)antDevice);
+                    BicyclePowerWindow bpWindow = new((BicyclePower)antDevice);
                     bpWindow.Show();
                     break;
                 case BikeSpeedSensor.DeviceClass:
-                    BikeSpeedWindow bikeSpeedWindow = new BikeSpeedWindow((BikeSpeedSensor)antDevice);
+                    BikeSpeedWindow bikeSpeedWindow = new((BikeSpeedSensor)antDevice);
                     bikeSpeedWindow.Show();
                     break;
                 case BikeCadenceSensor.DeviceClass:
-                    BikeCadenceWindow bikeCadenceWindow = new BikeCadenceWindow((BikeCadenceSensor)antDevice);
+                    BikeCadenceWindow bikeCadenceWindow = new((BikeCadenceSensor)antDevice);
                     bikeCadenceWindow.Show();
                     break;
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
-                    BikeSpeedAndCadenceWindow speedAndCadenceWindow = new BikeSpeedAndCadenceWindow((CombinedSpeedAndCadenceSensor)antDevice);
+                    BikeSpeedAndCadenceWindow speedAndCadenceWindow = new((CombinedSpeedAndCadenceSensor)antDevice);
                     speedAndCadenceWindow.Show();
                     break;
                 case FitnessEquipment.DeviceClass:
-                    FitnessEquipmentWindow fitnessEquipmentWindow = new FitnessEquipmentWindow((FitnessEquipment)antDevice);
+                    FitnessEquipmentWindow fitnessEquipmentWindow = new((FitnessEquipment)antDevice);
                     fitnessEquipmentWindow.Show();
                     break;
                 case MuscleOxygen.DeviceClass:
@@ -70,7 +70,7 @@ namespace WpfUsbStickApp
                     geocacheWindow.Show();
                     break;
                 case AssetTracker.DeviceClass:
-                    AssetTrackerWindow tracker = new AssetTrackerWindow((AssetTracker)antDevice);
+                    AssetTrackerWindow tracker = new((AssetTracker)antDevice);
                     tracker.Show();
                     break;
                 case StrideBasedSpeedAndDistance.DeviceClass:

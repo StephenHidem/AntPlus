@@ -1,39 +1,30 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System.Windows.Controls;
-using System.Windows.Input;
 using WpfUsbStickApp.Controls;
 
 namespace WpfUsbStickApp.ViewModels
 {
     internal partial class FitnessEquipmentViewModel : ObservableObject
     {
-        private readonly FitnessEquipment fitnessEquipment;
-
-        public FitnessEquipment FitnessEquipment => fitnessEquipment;
+        public FitnessEquipment FitnessEquipment { get; }
+        public UserControl? FeControl { get; }
 
         [ObservableProperty]
-        private UserControl feControl;
-
-        public RoutedCommand FECapabilitiesRequest { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetUserConfig { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetBasicResistance { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetTargetPower { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetWindResistance { get; private set; } = new RoutedCommand();
-        public RoutedCommand SetTrackResistance { get; private set; } = new RoutedCommand();
-        public CommandBinding[] CommandBindings { get; private set; }
+        private double userWeight;
+        [ObservableProperty]
+        private byte wheelDiameterOffset;
+        [ObservableProperty]
+        private double bikeWeight;
+        [ObservableProperty]
+        private double wheelDiameter;
+        [ObservableProperty]
+        private double gearRatio;
 
         public FitnessEquipmentViewModel(FitnessEquipment fitnessEquipment)
         {
-            this.fitnessEquipment = fitnessEquipment;
-            CommandBindings = new CommandBinding[] {
-                new CommandBinding(FECapabilitiesRequest, (s, e) => FitnessEquipment.RequestFECapabilities()),
-                new CommandBinding(SetUserConfig, (s, e) => FitnessEquipment.SetUserConfiguration(95, 10, 15, 2.2, 4)),
-                new CommandBinding(SetBasicResistance, (s, e) => FitnessEquipment.SetBasicResistance(50)),
-                new CommandBinding(SetTargetPower, (s, e) => FitnessEquipment.SetTargetPower(200)),
-                new CommandBinding(SetWindResistance, (s, e) => FitnessEquipment.SetWindResistance(0.51, -30, 0.9)),
-                new CommandBinding(SetTrackResistance, (s, e) => FitnessEquipment.SetTrackResistance(-15)),
-            };
+            FitnessEquipment = fitnessEquipment;
 
             switch (fitnessEquipment.GeneralData.EquipmentType)
             {
@@ -58,7 +49,19 @@ namespace WpfUsbStickApp.ViewModels
                 default:
                     break;
             }
-
         }
+
+        [RelayCommand]
+        private void FECapabilitiesRequest() => FitnessEquipment.RequestFECapabilities();
+        [RelayCommand]
+        private void SetUserConfig() => FitnessEquipment.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
+        [RelayCommand]
+        private void SetBasicResistance(string percent) => FitnessEquipment.SetBasicResistance(double.Parse(percent));
+        [RelayCommand]
+        private void SetTargetPower(string power) => FitnessEquipment.SetTargetPower(double.Parse(power));
+        [RelayCommand]
+        private void SetWindResistance() => FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
+        [RelayCommand]
+        private void SetTrackResistance() => FitnessEquipment.SetTrackResistance(-15);
     }
 }

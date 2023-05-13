@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
-        xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:BikeSpeedAndCadenceViewModel}"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:BikeSpeedAndCadenceViewModel}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="Bike Speed And Cadence" Icon="{Binding CombinedSpeedAndCadenceSensor.DeviceImageStream, Mode=OneWay}">
@@ -14,6 +15,6 @@
             <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed: {0}'}"/>
             <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
         </StackPanel>
-        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Hidden"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding CombinedSpeedAndCadenceSensor.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

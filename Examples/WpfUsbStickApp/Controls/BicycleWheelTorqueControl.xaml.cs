@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using WpfUsbStickApp.ViewModels;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using System.Windows.Controls;
 
 namespace WpfUsbStickApp.Controls
 {
@@ -8,10 +8,10 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class BicycleWheelTorqueControl : UserControl
     {
-        public BicycleWheelTorqueControl(BicyclePowerViewModel vm)
+        public BicycleWheelTorqueControl(StandardWheelTorqueSensor wts)
         {
             InitializeComponent();
-            DataContext = vm;
+            DataContext = wts;
         }
     }
 }

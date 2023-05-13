@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
-             xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels"
-             d:DataContext="{d:DesignInstance Type=viewmodels:BicyclePowerViewModel}"
+             xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
@@ -19,7 +19,6 @@
                     <TextBlock Text="{Binding BicyclePower.CTFSensor.Power, StringFormat='Power: {0}'}"/>
                 </StackPanel>
             </GroupBox>
-            <local:BicyclePowerCalibrationControl DataContext="{Binding .}"/>
             <Button Content="Save Slope" Click="Click_SaveSlope"/>
             <Button Content="Save Serial Number" Click="Click_SaveSerialNumber"/>
         </StackPanel>

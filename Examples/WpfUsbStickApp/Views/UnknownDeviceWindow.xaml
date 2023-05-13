@@ -20,5 +20,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding UnknownDevice.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

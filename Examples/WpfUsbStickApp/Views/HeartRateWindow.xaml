@@ -8,10 +8,16 @@
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         d:DataContext="{d:DesignInstance Type=vm:HeartRateViewModel}"
         mc:Ignorable="d"
-        Title="Heart Rate" Height="450" Width="411" Icon="{Binding HeartRate.DeviceImageStream, Mode=OneWay}">
+        SizeToContent="WidthAndHeight"
+        Title="Heart Rate" Height="450" Width="625" Icon="{Binding HeartRate.DeviceImageStream, Mode=OneWay}">
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <StackPanel>
-            <GroupBox Header="Main and Background Data Pages">
+            <GroupBox Header="Default Data">
                 <StackPanel>
                     <TextBlock Text="{Binding HeartRate.HeartRateData.ComputedHeartRate, StringFormat='Heart Rate: {0}'}"/>
                     <TextBlock Text="{Binding HeartRate.HeartRateData.RRInterval, StringFormat='RR Interval: {0}'}"/>
@@ -20,75 +26,77 @@
                     <TextBlock Text="{Binding HeartRate.EventType, StringFormat='Heartbeat Event Type: {0}'}"/>
                 </StackPanel>
             </GroupBox>
-            <Expander Header="RR Interval">
-                <StackPanel>
-                    <TextBlock Text="{Binding HeartRate.PreviousHeartBeat.RRInterval, StringFormat='RR Interval: {0}'}"/>
-                    <TextBlock Text="{Binding HeartRate.PreviousHeartBeat.ManufacturerSpecific, StringFormat='Previous Manufacturer Specific: {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander Header="Swim Interval">
-                <StackPanel>
-                    <TextBlock Text="{Binding HeartRate.SwimInterval.IntervalAverageHeartRate, StringFormat='IntervalAverageHeartRate: {0}'}"/>
-                    <TextBlock Text="{Binding HeartRate.SwimInterval.IntervalMaximumHeartRate, StringFormat='IntervalMaximumHeartRate: {0}'}"/>
-                    <TextBlock Text="{Binding HeartRate.SwimInterval.SessionAverageHeartRate, StringFormat='SessionAverageHeartRate: {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander Header="Capabilities">
-                <StackPanel>
-                    <TextBlock Text="{Binding HeartRate.Capabilities.Supported, StringFormat='Capabilities Supported: {0}'}"/>
-                    <TextBlock Text="{Binding HeartRate.Capabilities.Enabled, StringFormat='Capabilities Enabled: {0}'}"/>
-                </StackPanel>
-            </Expander>
-            <Expander Header="Manufacturer Info">
+            <GroupBox Header="Manufacturer Info">
                 <StackPanel>
                     <TextBlock Text="{Binding HeartRate.ManufacturerInfo.ManufacturingIdLsb, StringFormat='Man ID LSB: {0}'}"/>
                     <TextBlock Text="{Binding HeartRate.ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
                 </StackPanel>
-            </Expander>
-            <Expander Header="Product Info">
+            </GroupBox>
+            <GroupBox Header="Product Info">
                 <StackPanel>
                     <TextBlock Text="{Binding HeartRate.ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
                     <TextBlock Text="{Binding HeartRate.ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
                     <TextBlock Text="{Binding HeartRate.ProductInfo.ModelNumber, StringFormat='Model Number: {0}'}"/>
                 </StackPanel>
-            </Expander>
-            <Expander Header="Battery Status">
+            </GroupBox>
+            <GroupBox Header="Battery Status">
                 <StackPanel>
                     <TextBlock Text="{Binding HeartRate.BatteryStatus.BatteryLevel, StringFormat='Battery Level: {0}'}"/>
                     <TextBlock Text="{Binding HeartRate.BatteryStatus.BatteryStatus, StringFormat='Battery Status: {0}'}"/>
                     <TextBlock Text="{Binding HeartRate.BatteryStatus.BatteryVoltage, StringFormat='Battery Voltage: {0}'}"/>
                 </StackPanel>
-            </Expander>
-            <Expander Header="Manufacturer Specific Data Page">
-                <StackPanel>
-                    <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Page, StringFormat='Manufacturer Specific Page: {0}'}"/>
-                    <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Data, StringFormat='Manufacturer Specific Data: {0}'}"/>
-                </StackPanel>
-            </Expander>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Grid.Column="0" Command="{Binding RequestPageCommand}" Margin="4">Request Data Page</Button>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding DataPageValues}" SelectedItem="{Binding PageRequested}" IsEditable="False" Margin="4"/>
-
-                <Button Grid.Column="0" Grid.Row="1" Command="{Binding SetSportModeCommand}" Margin="4">Set Sport Mode</Button>
-                <ComboBox Grid.Column="1" Grid.Row="1" Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedItem="{Binding ModeRequested}" IsEditable="False" Margin="4"/>
-
-                <Button Grid.Column="0" Grid.Row="2" Command="{Binding SetHRFeatureCommand}" Margin="4">Set HR Feature</Button>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Margin="4">
-                    <CheckBox IsChecked="{Binding ApplyFeature}" IsThreeState="False" Margin="4">Apply</CheckBox>
-                    <CheckBox IsChecked="{Binding EnableGymMode}" IsThreeState="False" Margin="4">Enable Gym Mode</CheckBox>
-                </StackPanel>
-            </Grid>
+            </GroupBox>
         </StackPanel>
-        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Visible"/>
+        <StackPanel Grid.Column="1">
+            <GroupBox Header="Capabilities">
+                <StackPanel>
+                    <TextBlock Text="{Binding HeartRate.Capabilities.Supported, StringFormat='Capabilities Supported: {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.Capabilities.Enabled, StringFormat='Capabilities Enabled: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="RR Interval">
+                <StackPanel>
+                    <TextBlock Text="{Binding HeartRate.PreviousHeartBeat.RRInterval, StringFormat='RR Interval: {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.PreviousHeartBeat.ManufacturerSpecific, StringFormat='Previous Manufacturer Specific: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Swim Interval">
+                <StackPanel>
+                    <TextBlock Text="{Binding HeartRate.SwimInterval.IntervalAverageHeartRate, StringFormat='IntervalAverageHeartRate: {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.SwimInterval.IntervalMaximumHeartRate, StringFormat='IntervalMaximumHeartRate: {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.SwimInterval.SessionAverageHeartRate, StringFormat='SessionAverageHeartRate: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Manufacturer Specific">
+                <StackPanel>
+                    <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Page, StringFormat='Page: {0}'}"/>
+                    <TextBlock Text="{Binding HeartRate.ManufacturerSpecific.Data, StringFormat='Data: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Page Request" Grid.ColumnSpan="2">
+                <StackPanel>
+                    <ComboBox ItemsSource="{Binding DataPageValues}" SelectedItem="{Binding PageRequested}" IsEditable="False" Margin="4"/>
+                    <Button Command="{Binding RequestPageCommand}" Margin="4">Request Data Page</Button>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <GroupBox Header="Sport Mode">
+                <StackPanel>
+                    <ComboBox Name="SetSportMode" ItemsSource="{Binding SportModeValues}" SelectedItem="{Binding ModeRequested}" IsEditable="False" Margin="4"/>
+                    <Button Command="{Binding SetSportModeCommand}" Margin="4">Set Sport Mode</Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Heart Rate Features">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="4">
+                        <CheckBox IsChecked="{Binding ApplyFeature}" IsThreeState="False" Margin="0,0,12,0" >Apply</CheckBox>
+                        <CheckBox IsChecked="{Binding EnableGymMode}" IsThreeState="False">Enable Gym Mode</CheckBox>
+                    </StackPanel>
+                    <Button Command="{Binding SetHRFeatureCommand}" Margin="0, 4, 0, 0">Set HR Feature</Button>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding HeartRate.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

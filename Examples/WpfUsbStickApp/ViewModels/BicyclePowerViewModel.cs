@@ -1,17 +1,39 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using System.Windows.Controls;
+using WpfUsbStickApp.Controls;
 
 namespace WpfUsbStickApp.ViewModels
 {
-    public partial class BicyclePowerViewModel
+    public partial class BicyclePowerViewModel : ObservableObject
     {
-        private readonly BicyclePower bicyclePower;
-
+        public BicyclePower BicyclePower { get; }
         public SensorType SensorType => BicyclePower.Sensor;
-        public BicyclePower BicyclePower => bicyclePower;
+
+        public UserControl? BicyclePowerControl { get; }
+
         public BicyclePowerViewModel(BicyclePower bicyclePower)
         {
-            this.bicyclePower = bicyclePower;
+            BicyclePower = bicyclePower;
+
+            switch (bicyclePower.Sensor)
+            {
+                case SensorType.PowerOnly:
+                    BicyclePowerControl = new BicyclePowerOnlyControl(BicyclePower.PowerOnlySensor);
+                    break;
+                case SensorType.WheelTorque:
+                    BicyclePowerControl = new BicycleWheelTorqueControl(BicyclePower.WheelTorqueSensor);
+                    break;
+                case SensorType.CrankTorque:
+                    BicyclePowerControl = new BicycleCrankTorqueControl(BicyclePower.CrankTorqueSensor);
+                    break;
+                case SensorType.CrankTorqueFrequency:
+                    BicyclePowerControl = new CTFControl(BicyclePower.CTFSensor);
+                    break;
+                default:
+                    break;
+            }
         }
 
         [RelayCommand]

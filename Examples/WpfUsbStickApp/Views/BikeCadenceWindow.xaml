@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
-        xmlns:viewmodels="clr-namespace:WpfUsbStickApp.ViewModels"
-        d:DataContext="{d:DesignInstance Type=viewmodels:BikeCadenceViewModel}"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:BikeCadenceViewModel}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="Bike Cadence" Icon="{Binding BikeCadenceSensor.DeviceImageStream, Mode=OneWay}">
@@ -37,6 +37,6 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}" d:Visibility="Hidden"/>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding BikeCadenceSensor.Offline, Converter={StaticResource BoolToVisibility}}"/>
     </Grid>
 </Window>

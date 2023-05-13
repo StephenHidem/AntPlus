@@ -365,7 +365,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.HeartRate
                     break;
                 default:
                     // range check manufacturer specific pages
-                    if (dataPage[0] >= 112 && dataPage[0] < 128)
+                    if ((dataPage[0] & 0x7F) >= 112 && (dataPage[0] & 0x7F) < 128)
                     {
                         // let application parse
                         ManufacturerSpecific = new ManufacturerSpecificPage(dataPage);

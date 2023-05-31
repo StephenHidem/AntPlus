@@ -77,7 +77,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 double cadencePeriod = elapsedTime / Utils.CalculateDelta(updateEventCount, ref prevUpdateEventCount);
                 Cadence = 60.0 / cadencePeriod;
                 double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
-                Torque = torqueFreq / (Slope / 10.0);
+                Torque = torqueFreq / Slope;
                 Power = Torque * Cadence * Math.PI / 30.0;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cadence)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Torque)));

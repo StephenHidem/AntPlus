@@ -5,14 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
              xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
-             mc:Ignorable="d" Background="White" Height="148" Width="376">
+             xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
+             d:DataContext="{d:DesignInstance Type=dp:StandardPowerSensor}"
+             mc:Ignorable="d" Background="White">
     <Grid>
         <GroupBox Header="Power">
             <StackPanel>
-                <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power: {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
-                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+                <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power (Watts): {0}'}"/>
+                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

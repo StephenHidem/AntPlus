@@ -4,16 +4,23 @@ using SmallEarthTech.AntUsbStick;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+
+// opening credits
+Console.WriteLine(string.Format("ANT Multicast Server - Version {0}.", Assembly.GetExecutingAssembly().GetName().Version));
+Console.WriteLine("Small Earth Technology, Copyright Stephen Hidem 2023.");
 
 // create UDP client
 using UdpClient udpServer = new(2000, AddressFamily.InterNetworkV6);
 
 // create multicast endpoint to send ANT data to
+Console.WriteLine("Establishing IPv6 endpoint - FF02::1, port - 55436.");
 IPEndPoint endPoint = new(IPAddress.Parse("FF02::1"), 55436);
 
 // create and configure ANT radio
+Console.WriteLine("Configuring ANT radio (uses the first USB stick found).");
 using AntRadio antRadio = new();
 antRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
 antRadio.EnableRxExtendedMessages(true);
@@ -24,8 +31,8 @@ antRadio.OpenRxScanMode();
 IAntChannel channel = antRadio.GetChannel(0);
 channel.ChannelResponse += Channel_ChannelResponse;
 
-// create background task to receive UDP directed to this server
-Task.Run(async () =>
+// create background task to receive UDP directed to this server from any clients
+_ = Task.Run(async () =>
 {
     while (true)
     {
@@ -37,6 +44,8 @@ Task.Run(async () =>
         antRadio.GetChannel(1).SendExtAcknowledgedData(channelId, msg, ackWaitTime);
     }
 });
+
+Console.WriteLine("Up and running!");
 
 // loop until terminated
 Console.WriteLine("Press Enter to terminate.");

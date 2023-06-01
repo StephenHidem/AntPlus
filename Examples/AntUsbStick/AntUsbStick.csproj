@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AntRadioInterface\AntRadioInterface.csproj" />
+    <ProjectReference Include="..\..\AntRadioInterface\AntRadioInterface.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AntPlus\AntPlus.csproj" />
-    <ProjectReference Include="..\..\AntUsbStick\AntUsbStick.csproj" />
+    <ProjectReference Include="..\AntUsbStick\AntUsbStick.csproj" />
   </ItemGroup>
 
   <ItemGroup>

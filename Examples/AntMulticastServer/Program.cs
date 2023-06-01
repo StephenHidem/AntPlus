@@ -9,15 +9,15 @@ using System.Runtime.Serialization;
 using System.Text;
 
 // opening credits
-Console.WriteLine(string.Format("ANT Multicast Server - Version {0}.", Assembly.GetExecutingAssembly().GetName().Version));
-Console.WriteLine("Small Earth Technology, Copyright Stephen Hidem 2023.");
+Console.WriteLine(string.Format("ANT Multicast Server - Version {0}.", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)));
+Console.WriteLine("Copyright 2023 Stephen Hidem.");
 
 // create UDP client
 using UdpClient udpServer = new(2000, AddressFamily.InterNetworkV6);
 
 // create multicast endpoint to send ANT data to
-Console.WriteLine("Establishing IPv6 endpoint - FF02::1, port - 55436.");
 IPEndPoint endPoint = new(IPAddress.Parse("FF02::1"), 55436);
+Console.WriteLine(string.Format("Establishing IPv6 endpoint - {0}.", endPoint.ToString()));
 
 // create and configure ANT radio
 Console.WriteLine("Configuring ANT radio (uses the first USB stick found).");

@@ -33,7 +33,7 @@ namespace SmallEarthTech.AntPlus
 
         /// <summary>Initializes a new instance of the <see cref="AntDeviceCollection" /> class.</summary>
         /// <param name="antRadio">The ANT radio interface.</param>
-        /// <param name="antDeviceTimeout">ANT device timeout in milliseconds.</param>
+        /// <param name="antDeviceTimeout">ANT device timeout in milliseconds. The default is 2000 milliseconds.</param>
         /// <remarks>
         /// The timeout is set on each ANT device added to the collection. When the timeout
         /// expires, the <see cref="AntDevice.DeviceWentOffline"/> event is fired and the device is
@@ -41,7 +41,7 @@ namespace SmallEarthTech.AntPlus
         /// Geocaches are a special case; geocaches broadcast at a 0.5Hz rate
         /// until the PIN page is requested, whereupon they broadcast at 4Hz. The geocache timeout is multiplied by 4.
         /// </remarks>
-        public AntDeviceCollection(IAntRadio antRadio, ushort antDeviceTimeout)
+        public AntDeviceCollection(IAntRadio antRadio, ushort antDeviceTimeout = 2000)
         {
             timeout = antDeviceTimeout;
             antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;

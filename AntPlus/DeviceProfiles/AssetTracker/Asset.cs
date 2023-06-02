@@ -35,7 +35,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             /// <summary>Moving</summary>
             Moving,
             /// <summary>Pointing</summary>
-            Pointed,
+            Pointing,
             /// <summary>Treed</summary>
             Treed,
             /// <summary>Unknown</summary>

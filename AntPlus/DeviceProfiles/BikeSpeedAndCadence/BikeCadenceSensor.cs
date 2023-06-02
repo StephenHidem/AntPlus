@@ -25,7 +25,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">The ant channel.</param>
-        public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel) : base(channelId, antChannel)
+        /// <param name="timeout">Timeout in milliseconds.</param>
+        public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel, ushort timeout = 2000) : base(channelId, antChannel, timeout)
         {
         }
 

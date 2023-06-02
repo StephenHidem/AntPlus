@@ -33,7 +33,7 @@ namespace WpfUsbStickApp.ViewModels
             AntRadio.GetChannel(1).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
 
             // create the device collection
-            AntDevices = new AntDeviceCollection(AntRadio);
+            AntDevices = new AntDeviceCollection(AntRadio, 2000);
         }
     }
 }

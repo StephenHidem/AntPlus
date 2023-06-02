@@ -66,8 +66,7 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
-        /// <param name="timeout">Time in milliseconds before firing <see cref="DeviceWentOffline"/>.
-        /// The default is 2000 milliseconds.</param>
+        /// <param name="timeout">Time in milliseconds before firing <see cref="DeviceWentOffline"/>.</param>
         protected AntDevice(ChannelId channelId, IAntChannel antChannel, int timeout)
         {
             ChannelId = channelId;

@@ -29,11 +29,21 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public object CollectionLock = new object();
         private readonly IAntChannel channel;
+        private readonly ushort timeout;
 
         /// <summary>Initializes a new instance of the <see cref="AntDeviceCollection" /> class.</summary>
         /// <param name="antRadio">The ANT radio interface.</param>
-        public AntDeviceCollection(IAntRadio antRadio)
+        /// <param name="antDeviceTimeout">ANT device timeout in milliseconds.</param>
+        /// <remarks>
+        /// The timeout is set on each ANT device added to the collection. When the timeout
+        /// expires, the <see cref="AntDevice.DeviceWentOffline"/> event is fired and the device is
+        /// removed from the collection. Typically the timeout is set to 2000 milliseconds.
+        /// Geocaches are a special case; geocaches broadcast at a 0.5Hz rate
+        /// until the PIN page is requested, whereupon they broadcast at 4Hz. The geocache timeout is multiplied by 4.
+        /// </remarks>
+        public AntDeviceCollection(IAntRadio antRadio, ushort antDeviceTimeout)
         {
+            timeout = antDeviceTimeout;
             antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;
             channel = antRadio.GetChannel(1);
         }
@@ -111,27 +121,27 @@ namespace SmallEarthTech.AntPlus
             switch (channelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
-                    return new HeartRate(channelId, channel);
+                    return new HeartRate(channelId, channel, timeout);
                 case BicyclePower.DeviceClass:
-                    return new BicyclePower(channelId, channel);
+                    return new BicyclePower(channelId, channel, timeout);
                 case BikeSpeedSensor.DeviceClass:
-                    return new BikeSpeedSensor(channelId, channel);
+                    return new BikeSpeedSensor(channelId, channel, timeout);
                 case BikeCadenceSensor.DeviceClass:
-                    return new BikeCadenceSensor(channelId, channel);
+                    return new BikeCadenceSensor(channelId, channel, timeout);
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
-                    return new CombinedSpeedAndCadenceSensor(channelId, channel);
+                    return new CombinedSpeedAndCadenceSensor(channelId, channel, timeout);
                 case FitnessEquipment.DeviceClass:
-                    return new FitnessEquipment(channelId, channel);
+                    return new FitnessEquipment(channelId, channel, timeout);
                 case MuscleOxygen.DeviceClass:
-                    return new MuscleOxygen(channelId, channel);
+                    return new MuscleOxygen(channelId, channel, timeout);
                 case Geocache.DeviceClass:
-                    return new Geocache(channelId, channel);
+                    return new Geocache(channelId, channel, timeout * 4);
                 case AssetTracker.DeviceClass:
-                    return new AssetTracker(channelId, channel);
+                    return new AssetTracker(channelId, channel, timeout);
                 case StrideBasedSpeedAndDistance.DeviceClass:
-                    return new StrideBasedSpeedAndDistance(channelId, channel);
+                    return new StrideBasedSpeedAndDistance(channelId, channel, timeout);
                 default:
-                    return new UnknownDevice(channelId, channel);
+                    return new UnknownDevice(channelId, channel, timeout);
             }
         }
     }

@@ -10,11 +10,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="INotifyPropertyChanged" />
     public class CrankTorqueFrequencySensor : INotifyPropertyChanged
     {
-        private enum CTFDefinedId
+        /// <summary>Crank torque frequency defined IDs. These are used by methods that save the slope or serial number to the sensor flash or when the zero offset is reported by the sensor.</summary>
+        public enum CTFDefinedId
         {
+            /// <summary>The zero offset reported by sensor.</summary>
             ZeroOffset = 1,
+            /// <summary>The slope ID.</summary>
             Slope = 2,
+            /// <summary>The serial number ID.</summary>
             SerialNumber = 3,
+            /// <summary>The acknowledgement message ID.</summary>
             Ack = 0xAC
         }
 
@@ -28,9 +33,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>Occurs when slope or serial number save acknowledged.</summary>
+        public event EventHandler<CTFDefinedId> SaveAcknowledged;
+
         /// <summary>Gets the zero offset in Hz.</summary>
+        /// <remarks>Offset is only received from the sensor when a calibration is requested or bike has been coasting.</remarks>
         public ushort Offset { get; private set; } = 0;
-        /// <summary>Gets the slope. Slope ranges in value from 10.0Nm/Hz to 50.0Nm/Hz.</summary>
+        /// <summary>Gets the slope. Slope ranges in value from 10.0Nm/Hz to 50.0Nm/Hz. Resolution is 0.1 Nm/Hz.</summary>
         public double Slope { get; private set; }
         /// <summary>Gets the cadence in revolutions per minute.</summary>
         public double Cadence { get; private set; }
@@ -40,10 +49,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public double Power { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
-        /// <param name="bp">The bp.</param>
-        public CrankTorqueFrequencySensor(BicyclePower bp)
+        /// <param name="bicyclePower">The <see cref="BicyclePower"/> instance.</param>
+        public CrankTorqueFrequencySensor(BicyclePower bicyclePower)
         {
-            this.bp = bp;
+            bp = bicyclePower;
         }
 
         /// <summary>
@@ -97,6 +106,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     break;
                 case CTFDefinedId.Ack:
                     // TODO: NEED TO REPORT STATUS OF CTF SAVE FUNCS
+                    SaveAcknowledged?.Invoke(this, (CTFDefinedId)message[3]);
                     switch ((CTFDefinedId)message[3])
                     {
                         case CTFDefinedId.Slope:
@@ -112,19 +122,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        /// <summary>Requests manual calibration.</summary>
-        public void RequestCalibration()
-        {
-            // TODO: FIX REQUEST
-            //bp.Calibration.RequestManualCalibration();
-        }
-
         /// <summary>Saves the slope to flash.</summary>
-        /// <param name="slope">The slope.</param>
-        public void SaveSlopeToFlash(ushort slope)
+        /// <param name="slope">The slope. Valid range is 10.0 to 50.0 Nm/Hz. Resolution is 0.1 Nm/Hz.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Invalid slope value.</exception>
+        public void SaveSlopeToFlash(double slope)
         {
+            // check range
+            if (slope < 10.0 || slope > 50.0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(slope));
+            }
+
+            ushort slp = Convert.ToUInt16(slope * 10.0);    // scale by resolution
+
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.Slope, 0xFF, 0xFF, 0xFF };
-            msg = msg.Concat(BitConverter.GetBytes(slope).Reverse()).ToArray();
+            msg = msg.Concat(BitConverter.GetBytes(slp).Reverse()).ToArray();
             bp.SendExtAcknowledgedMessage(msg);
         }
 

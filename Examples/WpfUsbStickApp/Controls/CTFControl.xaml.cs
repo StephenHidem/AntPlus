@@ -18,7 +18,7 @@ namespace WpfUsbStickApp.Controls
 
         private void Click_SaveSlope(object sender, System.Windows.RoutedEventArgs e)
         {
-            sensor.SaveSlopeToFlash(300);
+            sensor.SaveSlopeToFlash(30.0);
         }
 
         private void Click_SaveSerialNumber(object sender, System.Windows.RoutedEventArgs e)

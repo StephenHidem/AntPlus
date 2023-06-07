@@ -25,9 +25,9 @@ namespace WpfUsbStickApp.ViewModels
         [ObservableProperty]
         private string? trackableId;
         [ObservableProperty]
-        private int? latitude;
+        private double latitude;
         [ObservableProperty]
-        private int? longitude;
+        private double longitude;
         [ObservableProperty]
         private string? hint;
 

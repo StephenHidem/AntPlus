@@ -111,11 +111,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// </value>
         public AssetSituation Situation { get; private set; }
         /// <summary>Gets the latitude.</summary>
-        /// <value>The latitude of the asset in semicircles.</value>
-        public int Latitude { get; private set; }
+        /// <value>The latitude of the asset in decimal degrees.</value>
+        public double Latitude { get; private set; }
         /// <summary>Gets the longitude.</summary>
-        /// <value>The longitude of the asset in semicircles.</value>
-        public int Longitude { get; private set; }
+        /// <value>The longitude of the asset in decimal degrees.</value>
+        public double Longitude { get; private set; }
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -164,7 +164,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         }
 
         /// <summary>
-        /// Parses the location1 page. This provides the distance, bearing, situation, status, and
+        /// Parses location page 1. This provides the distance, bearing, situation, status, and
         /// part of the latitude of the asset sensor being tracked.
         /// </summary>
         /// <param name="data">The data.</param>
@@ -183,7 +183,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         }
 
         /// <summary>
-        /// Parses the location2 page. This provides the latitude and longitude of the asset sensor being tracked.
+        /// Parses location page 2. This provides the latitude and longitude of the asset sensor being tracked.
         /// </summary>
         /// <param name="data">The data.</param>
         internal void ParseLocation2(byte[] data)
@@ -191,11 +191,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             if (gotLoc1)
             {
                 lat += BitConverter.ToUInt16(data, 2) << 16;
-                Latitude = lat;
+                Latitude = Utils.SemicirclesToDegrees(lat);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
                 gotLoc1 = false;
             }
-            Longitude = BitConverter.ToInt32(data, 4);
+            Longitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(data, 4));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
         }
     }

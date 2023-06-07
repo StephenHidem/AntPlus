@@ -59,10 +59,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         public uint? ProgrammingPIN { get; private set; }
         /// <summary>Gets the total pages programmed.</summary>
         public byte? TotalPagesProgrammed { get; private set; }
-        /// <summary>Gets the next stage latitude in semicircles(180/2^31). North is positive, south is negative.</summary>
-        public int? NextStageLatitude { get; private set; }
-        /// <summary>Gets the next stage longitude in semicircles(180/2^31). East is positive, west is negative.</summary>
-        public int? NextStageLongitude { get; private set; }
+        /// <summary>Gets the next stage latitude in decimal degrees. North is positive, south is negative.</summary>
+        public double NextStageLatitude { get; private set; }
+        /// <summary>Gets the next stage longitude in decimal degrees. East is positive, west is negative.</summary>
+        public double NextStageLongitude { get; private set; }
         /// <summary>Gets a message from the geocache device, or a next stage hint.</summary>
         public string Hint { get; private set; } = string.Empty;
         /// <summary>Gets the number of visits logged.</summary>
@@ -145,11 +145,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
                         switch ((DataId)dataPage[1])
                         {
                             case DataId.Latitude:
-                                NextStageLatitude = BitConverter.ToInt32(dataPage, 2);
+                                NextStageLatitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
                                 RaisePropertyChange(nameof(NextStageLatitude));
                                 break;
                             case DataId.Longitude:
-                                NextStageLongitude = BitConverter.ToInt32(dataPage, 2);
+                                NextStageLongitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
                                 RaisePropertyChange(nameof(NextStageLongitude));
                                 break;
                             case DataId.Hint:
@@ -280,12 +280,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// <summary>Programs the geocache.</summary>
         /// <param name="id">The trackable ID. Must be less than or equal to 9 characters.</param>
         /// <param name="pin">The programming PIN.</param>
-        /// <param name="latitude">The latitude in semicircles.</param>
-        /// <param name="longitude">The longitude in semicircles.</param>
+        /// <param name="latitude">The latitude in decimal degrees.</param>
+        /// <param name="longitude">The longitude in decimal degrees.</param>
         /// <param name="hint">The next stage hint or message.</param>
         /// <exception cref="ArgumentException">id is greater than 9 characters.</exception>
-        /// <remarks>Latitude and longitude are expressed as semicircles.</remarks>
-        public void ProgramGeocache(string id, uint pin, int? latitude, int? longitude, string hint)
+        public void ProgramGeocache(string id, uint pin, double latitude, double longitude, string hint)
         {
             programmingGeocache = true;
             byte page = 3;  // initial page number for optional pages
@@ -305,20 +304,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
             SendExtAcknowledgedMessage(new byte[] { 0x02, (byte)DataId.LoggedVisits, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00 });
 
             // program latitude
-            if (latitude is int lat)
-            {
-                msg = new byte[] { page++, (byte)DataId.Latitude }.
-                        Concat(BitConverter.GetBytes(lat)).Concat(new byte[] { 0xFF, 0xFF }).ToArray();
-                SendExtAcknowledgedMessage(msg);
-            }
+            msg = new byte[] { page++, (byte)DataId.Latitude }.
+                Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles(latitude))).
+                Concat(new byte[] { 0xFF, 0xFF }).ToArray();
+            SendExtAcknowledgedMessage(msg);
 
             // program longitude
-            if (longitude is int lng)
-            {
-                msg = new byte[] { page++, (byte)DataId.Longitude }.
-                        Concat(BitConverter.GetBytes(lng)).Concat(new byte[] { 0xFF, 0xFF }).ToArray();
-                SendExtAcknowledgedMessage(msg);
-            }
+            msg = new byte[] { page++, (byte)DataId.Longitude }.
+                Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles(longitude))).
+                Concat(new byte[] { 0xFF, 0xFF }).ToArray();
+            SendExtAcknowledgedMessage(msg);
 
             // program hint pages - get hint and pad with null terminator
             Hint = string.Empty;

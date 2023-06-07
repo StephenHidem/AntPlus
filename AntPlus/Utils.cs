@@ -101,5 +101,27 @@ namespace SmallEarthTech.AntPlus
         {
             return (ushort)((value >> rotate) | (value << (16 - rotate)));
         }
+
+        /// <summary>Convert semicircles to decimal degrees.</summary>
+        /// <param name="semicircles">The semicircles.</param>
+        /// <returns>Decimal degrees.</returns>
+        /// <remarks>
+        /// The conversion formula is decimal degrees = 180 * semicircles / 2^31.
+        /// </remarks>
+        public static double SemicirclesToDegrees(int semicircles)
+        {
+            return 180.0 * semicircles / 0x80000000;
+        }
+
+        /// <summary>Convert decimal degrees to semicircles.</summary>
+        /// <param name="degrees">Decimal degrees.</param>
+        /// <returns>Semicircles.</returns>
+        /// <remarks>
+        /// The conversion formula is semicircles = decimal degrees * 2^31 / 180.
+        /// </remarks>
+        public static int DegreesToSemicircles(double degrees)
+        {
+            return (int)(degrees * 0x80000000 / 180.0);
+        }
     }
 }

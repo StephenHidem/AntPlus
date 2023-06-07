@@ -13,7 +13,6 @@
         Title="{Binding Geocache.ChannelId.DeviceNumber, StringFormat='Geocache - {0}'}" Icon="{Binding Geocache.DeviceImageStream}">
     <Window.Resources>
         <conv:ByteArrayToStringConverter x:Key="ByteToStr"/>
-        <conv:DegreesToSemicirclesConverter x:Key="DegSemi"/>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -27,8 +26,8 @@
                     <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
                     <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN: {0}'}"/>
                     <TextBlock Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed: {0}'}"/>
-                    <TextBlock Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude: {0:F3}', Converter={StaticResource DegSemi}}"/>
-                    <TextBlock Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude: {0:F3}', Converter={StaticResource DegSemi}}"/>
+                    <TextBlock Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude: {0:F6}'}"/>
+                    <TextBlock Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude: {0:F6}'}"/>
                     <TextBlock Text="{Binding Geocache.Hint, StringFormat='Hint: {0}'}"/>
                     <TextBlock Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits: {0}'}"/>
                     <TextBlock Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit: {0}'}"/>
@@ -61,9 +60,9 @@
                     <TextBlock Text="Trackable ID:" Grid.Row="1" Grid.Column="0"/>
                     <TextBox Text="{Binding TrackableId}" MaxLength="9" Grid.Column="1" Margin="0,17,0,18" Grid.RowSpan="3"/>
                     <TextBlock Text="Latitude:" Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding Latitude, Converter={StaticResource DegSemi}, StringFormat='\{0:F3}'}" Grid.Row="2" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBox Text="{Binding Latitude}" Grid.Row="2" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
                     <TextBlock Text="Longitude:" Grid.Row="3" Grid.Column="0"/>
-                    <TextBox Text="{Binding Longitude, Converter={StaticResource DegSemi}, StringFormat='\{0:F3}'}" Grid.Row="3" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBox Text="{Binding Longitude}" Grid.Row="3" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
                     <TextBlock Text="Hint:" Grid.Row="4" Grid.Column="0"/>
                     <TextBox Text="{Binding Hint}" TextWrapping="Wrap" MaxLength="168" Grid.Row="4" Grid.Column="1"/>
                     <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Program Geocache" Command="{Binding ProgramGeocacheCommand}"/>

@@ -7,13 +7,9 @@
         xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
         d:DataContext="{d:DesignInstance Type=vm:AssetTrackerViewModel}"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
-        xmlns:conv="clr-namespace:WpfUsbStickApp.Converters"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="Asset Tracker" Height="450" Width="473" Icon="{Binding AssetTracker.DeviceImageStream, Mode=OneWay}">
-    <Window.Resources>
-        <conv:DegreesToSemicirclesConverter x:Key="DegSemi"/>
-    </Window.Resources>
     <Grid Margin="10">
         <StackPanel>
             <GroupBox Header="Assets">
@@ -28,8 +24,8 @@
                             <GridViewColumn Header="Bearing" DisplayMemberBinding="{Binding Path=Bearing}"/>
                             <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
                             <GridViewColumn Header="Situation" DisplayMemberBinding="{Binding Path=Situation}"/>
-                            <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude, Converter={StaticResource DegSemi}}"/>
-                            <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude, Converter={StaticResource DegSemi}}"/>
+                            <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude}"/>
+                            <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

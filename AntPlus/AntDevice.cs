@@ -2,6 +2,7 @@
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
@@ -130,7 +131,14 @@ namespace SmallEarthTech.AntPlus
         /// <returns>Returns the <see cref="MessagingReturnCode"/>.</returns>
         public MessagingReturnCode SendExtAcknowledgedMessage(byte[] message, uint ackWaitTime = 500)
         {
-            return antChannel.SendExtAcknowledgedData(ChannelId, message, ackWaitTime);
+            int retries = 3;
+            MessagingReturnCode ret;
+            do
+            {
+                ret = antChannel.SendExtAcknowledgedData(ChannelId, message, ackWaitTime);
+                Debug.WriteLineIf(ret != MessagingReturnCode.Pass, string.Format("SendExtAcknowledgedMessage error: Page = {0}, Code = {1}, Retries = {2}", message[0], ret, retries));
+            } while (ret != MessagingReturnCode.Pass && --retries > 0);
+            return ret;
         }
 
         /// <inheritdoc/>

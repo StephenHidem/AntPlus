@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -46,8 +47,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
             LoggedVisits = 4
         }
 
-        private byte firstHintPage;
-        private byte lastHintPage;
         private bool authRequested;
         private bool programmingGeocache;
         private byte loggedVisitsPage;
@@ -60,11 +59,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// <summary>Gets the total pages programmed.</summary>
         public byte? TotalPagesProgrammed { get; private set; }
         /// <summary>Gets the next stage latitude in decimal degrees. North is positive, south is negative.</summary>
-        public double NextStageLatitude { get; private set; }
+        public double? NextStageLatitude { get; private set; }
         /// <summary>Gets the next stage longitude in decimal degrees. East is positive, west is negative.</summary>
-        public double NextStageLongitude { get; private set; }
+        public double? NextStageLongitude { get; private set; }
         /// <summary>Gets a message from the geocache device, or a next stage hint.</summary>
-        public string Hint { get; private set; } = string.Empty;
+        public string Hint => string.Concat(hintPages.Values);
         /// <summary>Gets the number of visits logged.</summary>
         public ushort? NumberOfVisits { get; private set; }
         /// <summary>Gets the last visit timestamp.</summary>
@@ -88,7 +87,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// <param name="timeout">Device offline timeout. The default is 8000 milliseconds.</param>
         /// <remarks>
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
-        /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case./>
+        /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
         public Geocache(ChannelId channelId, IAntChannel antChannel, int timeout = 8000) : base(channelId, antChannel, timeout)
         {
@@ -179,25 +178,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
             }
         }
 
+        private readonly SortedList<byte, string> hintPages = new SortedList<byte, string>();
         private void ParseHint(byte[] dataPage)
         {
-            if (firstHintPage == 0)
+            if (!hintPages.ContainsKey(dataPage[0]))
             {
-                // initial hint received, could be any datapage
-                firstHintPage = lastHintPage = dataPage[0];
-                Hint = Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0);
-            }
-            else if (dataPage[0] < firstHintPage)
-            {
-                // start over if we received later hint pages first
-                firstHintPage = lastHintPage = dataPage[0];
-                Hint = Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0);
-            }
-            else if (dataPage[0] > lastHintPage)
-            {
-                // append subsequent hint pages
-                lastHintPage = dataPage[0];
-                Hint += Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0);
+                hintPages.Add(dataPage[0], Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0));
             }
         }
 
@@ -220,10 +206,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         private byte[] FormatId(string id)
         {
             // pad ID with spaces if less than 9 characters
-            if (id.Length < 9)
-            {
-                id = id.PadRight(9, ' ');
-            }
+            id = id.PadRight(9, ' ');
+
             id = id.ToUpper();
             int ch1 = (id[0] - 0x20) << 18;
             ch1 |= ((id[1] - 0x20)) << 12;
@@ -239,11 +223,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
 
         /// <summary> Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
-        public MessagingReturnCode RequestPinPage()
+        public MessagingReturnCode RequestPinPage(uint timeout = 16000)
         {
-            firstHintPage = lastHintPage = 0;
-            Hint = string.Empty;
-            return RequestDataPage(DataPage.PIN, 4000);
+            // clear any previous state
+            TrackableId = string.Empty;
+            ProgrammingPIN = default;
+            TotalPagesProgrammed = default;
+            NextStageLatitude = NextStageLongitude = default;
+            hintPages.Clear();
+            NumberOfVisits = default;
+            LastVisitTimestamp = default;
+            RaisePropertyChange(string.Empty);
+
+            return RequestDataPage(DataPage.PIN, timeout);
         }
 
         /// <summary>Requests the authentication.</summary>
@@ -257,12 +249,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
             random.NextBytes(nonce);
             byte[] msg = { (byte)DataPage.AuthenticationPage, 0xFF };
             msg = msg.Concat(nonce).Concat(BitConverter.GetBytes(gpsSerialNumber)).ToArray();
-            return SendExtAcknowledgedMessage(msg);
+            return SendExtAcknowledgedMessage(msg, 16000);
         }
 
         /// <summary>Updates the logged visits count and last visit timestamp.</summary>
         /// <exception cref="InvalidOperationException">The geocache has not been programmed.</exception>
-        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
         public MessagingReturnCode UpdateLoggedVisits()
         {
             // check that a logged visits page has been programmed
@@ -270,11 +262,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
             {
                 throw new InvalidOperationException("The geocache has not been programmed with a logged visits pages. Program the geocache; this will set a logged visits page.");
             }
-            ushort addVisit = (ushort)(NumberOfVisits + 1);
+            NumberOfVisits++;
+            LastVisitTimestamp = DateTime.UtcNow;
             uint timestamp = (uint)(DateTime.UtcNow - new DateTime(1989, 12, 31)).TotalSeconds;
             return SendExtAcknowledgedMessage(new byte[] { loggedVisitsPage, (byte)DataId.LoggedVisits }.
                 Concat(BitConverter.GetBytes(timestamp)).
-                Concat(BitConverter.GetBytes(addVisit)).ToArray());
+                Concat(BitConverter.GetBytes((short)NumberOfVisits)).ToArray(), 16000);
         }
 
         /// <summary>Programs the geocache.</summary>
@@ -283,67 +276,97 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
         /// <param name="latitude">The latitude in decimal degrees.</param>
         /// <param name="longitude">The longitude in decimal degrees.</param>
         /// <param name="hint">The next stage hint or message.</param>
-        /// <exception cref="ArgumentException">id is greater than 9 characters.</exception>
-        public void ProgramGeocache(string id, uint pin, double latitude, double longitude, string hint)
+        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
+        public MessagingReturnCode ProgramGeocache(string id, uint? pin, double? latitude, double? longitude, string hint)
         {
             programmingGeocache = true;
-            byte page = 3;  // initial page number for optional pages
-            byte[] msg;
+            byte page = 1;  // initial page number for optional pages
 
-            // validate ID length
-            if (id.Length > 9)
+            // clear any previous state
+            TrackableId = string.Empty;
+            ProgrammingPIN = default;
+            TotalPagesProgrammed = default;
+            NextStageLatitude = NextStageLongitude = default;
+            hintPages.Clear();
+            NumberOfVisits = default;
+            LastVisitTimestamp = default;
+            RaisePropertyChange(string.Empty);
+
+            // set ID to empty string if null
+            if (id is null)
             {
-                throw new ArgumentException("The ID is longer than 9 characters.");
+                id = string.Empty;
             }
 
-            // program ID page
-            msg = new byte[] { (byte)DataPage.TrackableId }.Concat(FormatId(id)).ToArray();
-            SendExtAcknowledgedMessage(msg);
-
-            // program logged visits - clear number of visits logged
-            SendExtAcknowledgedMessage(new byte[] { 0x02, (byte)DataId.LoggedVisits, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00 });
-
-            // program latitude
-            msg = new byte[] { page++, (byte)DataId.Latitude }.
-                Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles(latitude))).
-                Concat(new byte[] { 0xFF, 0xFF }).ToArray();
-            SendExtAcknowledgedMessage(msg);
-
-            // program longitude
-            msg = new byte[] { page++, (byte)DataId.Longitude }.
-                Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles(longitude))).
-                Concat(new byte[] { 0xFF, 0xFF }).ToArray();
-            SendExtAcknowledgedMessage(msg);
-
-            // program hint pages - get hint and pad with null terminator
-            Hint = string.Empty;
-            firstHintPage = 0;
-            if (hint?.Length > 0)
+            // assemble list of messages to send; simplifies error handling
+            List<byte[]> messages = new List<byte[]>
             {
-                byte[] hnt = Encoding.UTF8.GetBytes(hint.PadRight(hint.Length + 6 - (hint.Length % 6), '\0'));
-                while (hnt.Length > 0 && page < 32)
+                // ID page
+                new byte[] { (byte)DataPage.TrackableId }.Concat(FormatId(id)).ToArray(),
+            };
+
+            // program optional pages and PIN if PIN is not null
+            if (pin != null)
+            {
+                page = 2;   // optional pages begin at page 2
+
+                // initialize logged visits page to 0 visits and no timestamp
+                messages.Add(new byte[] { page++, (byte)DataId.LoggedVisits, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00 });
+
+                // optional latitude page
+                if (latitude != null)
                 {
-                    msg = new byte[] { page++, (byte)DataId.Hint }.Concat(hnt.Take(6)).ToArray();
-                    hnt = hnt.Skip(6).ToArray();
-                    SendExtAcknowledgedMessage(msg);
+                    messages.Add(new byte[] { page++, (byte)DataId.Latitude }.
+                                Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles((double)latitude))).
+                                Concat(new byte[] { 0xFF, 0xFF }).ToArray());
+                }
+
+                // optional longitude page
+                if (longitude != null)
+                {
+                    messages.Add(new byte[] { page++, (byte)DataId.Longitude }.
+                            Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles((double)longitude))).
+                            Concat(new byte[] { 0xFF, 0xFF }).ToArray());
+                }
+
+                // optional hint pages - get hint and pad with null terminator
+                if (hint?.Length > 0)
+                {
+                    byte[] hnt = Encoding.UTF8.GetBytes(hint.PadRight(hint.Length + 6 - (hint.Length % 6), '\0'));
+                    while (hnt.Length > 0 && page < 32)
+                    {
+                        messages.Add(new byte[] { page++, (byte)DataId.Hint }.Concat(hnt.Take(6)).ToArray());
+                        hnt = hnt.Skip(6).ToArray();
+                    }
+                }
+
+                // finally, program PIN page and total pages programmed
+                messages.Add(new byte[] { (byte)DataPage.PIN, 0xFF }.
+                        Concat(BitConverter.GetBytes((uint)pin)).
+                        Concat(new byte[] { page }).
+                        Concat(new byte[] { 0xFF }).
+                        ToArray());
+            }
+
+            // clear remaining unused programmable pages
+            while (page < 32)
+            {
+                messages.Add(new byte[] { page++, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            }
+
+            // send pages to geocache
+            MessagingReturnCode returnCode = MessagingReturnCode.Pass;
+            foreach (byte[] msg in messages)
+            {
+                returnCode = SendExtAcknowledgedMessage(msg, 16000);
+                if (returnCode != MessagingReturnCode.Pass)
+                {
+                    break;
                 }
             }
 
-            // program PIN page and total pages programmed
-            msg = new byte[] { (byte)DataPage.PIN, 0xFF }.
-                    Concat(BitConverter.GetBytes(pin)).
-                    Concat(new byte[] { page }).ToArray();
-            SendExtAcknowledgedMessage(msg);
-
-            // clear remaining unused programmable pages
-            msg = new byte[] { page, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            while (msg[0] < 32)
-            {
-                SendExtAcknowledgedMessage(msg);
-                msg[0]++;
-            }
-
             programmingGeocache = false;
+            return returnCode;
         }
     }
 }

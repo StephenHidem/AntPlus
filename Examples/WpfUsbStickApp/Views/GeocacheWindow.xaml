@@ -10,7 +10,7 @@
         d:DataContext="{d:DesignInstance Type=vm:GeocacheViewModel}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
-        Title="{Binding Geocache.ChannelId.DeviceNumber, StringFormat='Geocache - {0}'}" Icon="{Binding Geocache.DeviceImageStream}">
+        Title="Geocache" Icon="{Binding Geocache.DeviceImageStream}">
     <Window.Resources>
         <conv:ByteArrayToStringConverter x:Key="ByteToStr"/>
     </Window.Resources>
@@ -55,16 +55,16 @@
                         <ColumnDefinition Width="Auto" MinWidth="78"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="PIN:" Grid.Column="0"/>
-                    <TextBox Text="{Binding Pin}" MaxLength="10" Grid.Row="0" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
-                    <TextBlock Text="Trackable ID:" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding TrackableId}" MaxLength="9" Grid.Column="1" Margin="0,17,0,18" Grid.RowSpan="3"/>
+                    <TextBlock Text="Trackable ID:" Grid.Row="0" Grid.Column="0"/>
+                    <TextBox Text="{Binding TrackableId, TargetNullValue=''}" MaxLength="9" Grid.Row="0" Grid.Column="1"/>
+                    <TextBlock Text="PIN:" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Text="{Binding Pin, TargetNullValue=''}" MaxLength="10" Grid.Row="1" Grid.Column="1"/>
                     <TextBlock Text="Latitude:" Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding Latitude}" Grid.Row="2" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBox Text="{Binding Latitude, TargetNullValue=''}" Grid.Row="2" Grid.Column="1"/>
                     <TextBlock Text="Longitude:" Grid.Row="3" Grid.Column="0"/>
-                    <TextBox Text="{Binding Longitude}" Grid.Row="3" Grid.Column="1" Margin="0,0,0,18" Grid.RowSpan="2"/>
+                    <TextBox Text="{Binding Longitude, TargetNullValue=''}" Grid.Row="3" Grid.Column="1"/>
                     <TextBlock Text="Hint:" Grid.Row="4" Grid.Column="0"/>
-                    <TextBox Text="{Binding Hint}" TextWrapping="Wrap" MaxLength="168" Grid.Row="4" Grid.Column="1"/>
+                    <TextBox Text="{Binding Hint, TargetNullValue=''}" TextWrapping="Wrap" MaxLength="168" Grid.Row="4" Grid.Column="1"/>
                     <Button Grid.Row="5" Grid.ColumnSpan="2" Content="Program Geocache" Command="{Binding ProgramGeocacheCommand}"/>
                 </Grid>
             </GroupBox>

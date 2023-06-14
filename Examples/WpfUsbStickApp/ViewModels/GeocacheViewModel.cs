@@ -10,24 +10,20 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal partial class GeocacheViewModel : ObservableObject
     {
-        private bool pinReq;
-        private bool authReq, programming;
-        private bool logVisit;
-        private bool ignoreVists;
-        private double lastMessageRate;
+        private bool pinReq, authReq, programming, logVisit;
 
         private readonly Geocache geocache;
         public Geocache Geocache => geocache;
 
         [ObservableProperty]
+        private string? trackableId;
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
         private uint? pin;
         [ObservableProperty]
-        private string? trackableId;
+        private double? latitude;
         [ObservableProperty]
-        private double latitude;
-        [ObservableProperty]
-        private double longitude;
+        private double? longitude;
         [ObservableProperty]
         private string? hint;
 
@@ -48,20 +44,12 @@ namespace WpfUsbStickApp.ViewModels
                         CheckCanExecutes();
                     }
                     break;
-                case nameof(Geocache.MessageRate):
-                    double deltaRate = Math.Abs(geocache.MessageRate - lastMessageRate);
-                    if (deltaRate > 2)
-                    {
-                        lastMessageRate = geocache.MessageRate;
-                        CheckCanExecutes();
-                    }
-                    break;
                 case nameof(Geocache.NumberOfVisits):
-                    if (logVisit && !ignoreVists)
+                    if (logVisit)
                     {
                         logVisit = false;
-                        CheckCanExecutes();
                     }
+                    CheckCanExecutes();
                     break;
                 case nameof(Geocache.AuthenticationToken):
                     if (authReq)
@@ -79,61 +67,54 @@ namespace WpfUsbStickApp.ViewModels
         private async void RequestPIN()
         {
             pinReq = true;
-            RequestPINCommand.NotifyCanExecuteChanged();
+            CheckCanExecutes();
             _ = await Task.Run(() => geocache.RequestPinPage());
         }
         private bool CanRequestPin()
         {
-            return !geocache.Offline && !programming && !pinReq && geocache.MessageRate < 2;
+            return !geocache.Offline && !programming && !pinReq & !logVisit && !authReq;
         }
 
         [RelayCommand(CanExecute = nameof(CanLogVisit))]
         private void LogVisit()
         {
-            logVisit = ignoreVists = true;
+            logVisit = true;
+            CheckCanExecutes();
             _ = geocache.UpdateLoggedVisits();
-            ignoreVists = false;
         }
         private bool CanLogVisit()
         {
-            return !geocache.Offline && !programming && !logVisit && !pinReq && geocache.MessageRate > 2 && geocache.NumberOfVisits != null;
+            return !geocache.Offline && !programming && !pinReq && !logVisit && !authReq && geocache.NumberOfVisits != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanRequestAuthentication))]
         private async void RequestAuthentication()
         {
             authReq = true;
+            CheckCanExecutes();
             Random rnd = new();
             _ = await Task.Run(() => geocache.RequestAuthentication((uint)rnd.Next()));
         }
         private bool CanRequestAuthentication()
         {
-            return !geocache.Offline && !programming && !authReq && geocache.MessageRate > 2;
+            return !geocache.Offline && !programming && !pinReq && !logVisit && !authReq;
         }
 
         [RelayCommand(CanExecute = nameof(CanProgramGeocache))]
         private async void ProgramGeocache()
         {
-            if (TrackableId != null && Pin != null)
+            programming = true;
+            CheckCanExecutes();
+            await Task.Run(() =>
             {
-                // we want to capture the updated logged visits
-                programming = logVisit = true;
+                geocache.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
+                programming = false;
                 CheckCanExecutes();
-                await Task.Run(() =>
-                {
-                    geocache.ProgramGeocache(TrackableId, (uint)Pin, Latitude, Longitude, Hint);
-                    programming = false;
-                });
-            }
-            else
-            {
-                _ = MessageBox.Show("Please enter a value for the ID and PIN.", "Program Geocache");
-            }
+            });
         }
         private bool CanProgramGeocache()
         {
-            return !geocache.Offline && !programming && geocache.MessageRate > 2 &&
-                (geocache.ProgrammingPIN == null || geocache.ProgrammingPIN == Pin);
+            return !geocache.Offline && !programming && !pinReq && !logVisit && !authReq;
         }
 
         private void CheckCanExecutes()

@@ -89,7 +89,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
             /// <summary>Inactive</summary>
             Inactive,
             /// <summary>Active</summary>
-            Active
+            Active,
+            /// <summary>Reserved</summary>
+            Reserved
         }
 
         /// <summary>Sensor broadcast capabilities.</summary>
@@ -126,9 +128,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
             /// <summary>Gets the SDM health status.</summary>
             /// <value>The health status.</value>
             public HealthStatus Health => (HealthStatus)((status & 0x0C) >> 2);
-            /// <summary>Gets the state of the SDM sensor.</summary>
-            /// <value>The state. Either active or inactive.</value>
-            public UseState State => (UseState)(status & 0x03);
+            /// <summary>Gets the use state of the SDM sensor.</summary>
+            /// <value>The use state. Either active or inactive.</value>
+            public UseState State => (status & 0x03) > 1 ? UseState.Reserved : (UseState)(status & 0x03);
 
             internal StatusFlags(byte status)
             {
@@ -242,7 +244,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
                     RaisePropertyChange(nameof(Status));
                     break;
                 case DataPage.DistanceAndStridesSummary:
-                    StrideCountSummary = BitConverter.ToUInt32(dataPage, 1) & 0x0FFFFF;
+                    StrideCountSummary = BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF;
                     DistanceSummary = BitConverter.ToUInt32(dataPage, 4) / 256.0;
                     RaisePropertyChange(nameof(StrideCountSummary));
                     RaisePropertyChange(nameof(DistanceSummary));

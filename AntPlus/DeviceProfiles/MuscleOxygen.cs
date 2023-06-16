@@ -210,7 +210,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
         public MessagingReturnCode SendCommand(CommandId command, TimeSpan localTimeOffest, DateTime currentTimeStamp)
         {
             sbyte offset = (sbyte)(localTimeOffest.TotalMinutes / 15);
-            int current = (int)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds;
+            uint current = (uint)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds;
             byte[] msg = { (byte)DataPage.Commands, (byte)command, 0xFF, (byte)offset };
             msg = msg.Concat(BitConverter.GetBytes(current)).ToArray();
             return SendExtAcknowledgedMessage(msg);

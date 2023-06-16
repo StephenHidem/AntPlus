@@ -107,7 +107,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         [DataRow(CommandId.StartSession)]
         [DataRow(CommandId.StopSession)]
         [DataRow(CommandId.Lap)]
-        public void SendCommand_StateUnderTest_ExpectedBehavior(CommandId command)
+        public void SendCommand_PageSent_PageMatches(CommandId command)
         {
             // Arrange
             TimeSpan localTimeOffest = new(6, 0, 0);
@@ -116,7 +116,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             antChannel.Setup(s => s.SendExtAcknowledgedData(
                 cid, It.Is<byte[]>(cmd => (CommandId)cmd[1] == command &&
                 cmd[3] == localTimeOffest.TotalMinutes / 15 &&
-                BitConverter.ToInt32(cmd, 4) == (int)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds),
+                BitConverter.ToUInt32(cmd, 4) == (uint)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds),
                 It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
             var muscleOxygen = new MuscleOxygen(cid, antChannel.Object);

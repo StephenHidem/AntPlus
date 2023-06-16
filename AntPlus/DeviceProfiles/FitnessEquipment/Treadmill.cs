@@ -28,7 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Gets the cadence in strides per minute.</summary>
         public byte Cadence { get; private set; }
-        /// <summary>Gets the accumulated negative vertical distance traveled in meters.</summary>
+        /// <summary>Gets the accumulated negative vertical distance traveled in meters. Note this is a negative value.</summary>
         public double NegVerticalDistance { get; private set; }
         /// <summary>Gets the accumulated positive vertical distance traveled in meters.</summary>
         public double PosVerticalDistance { get; private set; }
@@ -52,8 +52,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                NegVerticalDistance += Utils.CalculateDelta(dataPage[5], ref prevNeg);
-                PosVerticalDistance += Utils.CalculateDelta(dataPage[6], ref prevPos);
+                NegVerticalDistance += Utils.CalculateDelta(dataPage[5], ref prevNeg) / -10.0;
+                PosVerticalDistance += Utils.CalculateDelta(dataPage[6], ref prevPos) / 10.0;
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }

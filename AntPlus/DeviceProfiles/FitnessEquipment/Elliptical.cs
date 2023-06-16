@@ -52,7 +52,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                PosVerticalDistance += Utils.CalculateDelta(dataPage[2], ref prevPos);
+                PosVerticalDistance += Utils.CalculateDelta(dataPage[2], ref prevPos) / 10.0;
                 StrideCount += Utils.CalculateDelta(dataPage[3], ref prevStride);
             }
             Cadence = dataPage[4];

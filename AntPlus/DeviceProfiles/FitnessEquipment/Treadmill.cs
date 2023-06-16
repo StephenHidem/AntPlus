@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
@@ -12,6 +13,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevPos;
         private byte prevNeg;
 
+        /// <summary>Treadmill specific capabilities.</summary>
+        [Flags]
+        public enum CapabilityFlags
+        {
+            /// <summary>Transmits positive vertical distance.</summary>
+            TxPosVertDistance = 0x01,
+            /// <summary>Transmits negative vertical distance.</summary>
+            TxNegVertDistance = 0x02
+        }
+
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,6 +32,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public double NegVerticalDistance { get; private set; }
         /// <summary>Gets the accumulated positive vertical distance traveled in meters.</summary>
         public double PosVerticalDistance { get; private set; }
+        /// <summary>Gets the treadmill specific capabilities.</summary>
+        /// <value>The capabilities.</value>
+        public CapabilityFlags Capabilities { get; private set; }
 
         /// <summary>
         /// Parses the specified data page.
@@ -29,6 +43,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public void Parse(byte[] dataPage)
         {
             Cadence = dataPage[4];
+            Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
             if (isFirstDataMessage)
             {
                 prevNeg = dataPage[5];

@@ -13,6 +13,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevPos;
         private byte prevStride;
 
+        /// <summary>Elliptical specific capabilities.</summary>
+        [Flags]
+        public enum CapabilityFlags
+        {
+            /// <summary>Transmits stride count.</summary>
+            TxStrideCount = 0x01,
+            /// <summary>Transmits positive vertical distance.</summary>
+            TxPosVertDistance = 0x02
+        }
+
         /// <summary>Gets the stride count. This is an accumulated value.</summary>
         public int StrideCount { get; private set; }
         /// <summary>Gets the cadence in strides per minute.</summary>
@@ -21,6 +31,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public double PosVerticalDistance { get; private set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
         public int InstantaneousPower { get; private set; }
+        /// <summary>Gets the elliptical specific capabilities.</summary>
+        /// <value>The capabilities.</value>
+        public CapabilityFlags Capabilities { get; private set; }
 
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -44,6 +57,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             Cadence = dataPage[4];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
+            Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }

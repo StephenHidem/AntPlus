@@ -12,12 +12,23 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private bool isFirstDataMessage = true;
         private byte prevStride;
 
+        /// <summary>Nordic skier specific capabilities.</summary>
+        [Flags]
+        public enum CapabilityFlags
+        {
+            /// <summary>Transmits accumulated stride count.</summary>
+            TxStrideCount = 0x01,
+        }
+
         /// <summary>Gets the stride count.</summary>
         public int StrideCount { get; private set; }
         /// <summary>Gets the cadence in strides per minute.</summary>
         public byte Cadence { get; private set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
         public int InstantaneousPower { get; private set; }
+        /// <summary>Gets the Nordic skier specific capabilities.</summary>
+        /// <value>The capabilities.</value>
+        public CapabilityFlags Capabilities { get; private set; }
 
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -39,6 +50,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             Cadence = dataPage[4];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
+            Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }

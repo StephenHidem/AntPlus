@@ -140,9 +140,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
                     {
                         case 0xFFE:
                             thg.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            thg.Concentration = double.NaN;
                             break;
                         case 0xFFF:
                             thg.Status = MeasuremantStatus.Invalid;
+                            thg.Concentration = double.NaN;
                             break;
                         default:
                             thg.Status = MeasuremantStatus.Valid;
@@ -156,9 +158,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
                     {
                         case 0x3FE:
                             shg.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            shg.PercentSaturated = double.NaN;
                             break;
                         case 0x3FF:
                             shg.Status = MeasuremantStatus.Invalid;
+                            shg.PercentSaturated = double.NaN;
                             break;
                         default:
                             shg.Status = MeasuremantStatus.Valid;
@@ -172,9 +176,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
                     {
                         case 0x3FE:
                             shg.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            shg.PercentSaturated = double.NaN;
                             break;
                         case 0x3FF:
                             shg.Status = MeasuremantStatus.Invalid;
+                            shg.PercentSaturated = double.NaN;
                             break;
                         default:
                             shg.Status = MeasuremantStatus.Valid;
@@ -196,17 +202,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
             }
         }
 
-        /// <summary>Sends the command to the muscle oxygen sensor.</summary>
+        /// <summary>Sends a command to the muscle oxygen sensor.</summary>
         /// <param name="command">The command.</param>
         /// <param name="localTimeOffest">The local time offest.</param>
         /// <param name="currentTimeStamp">The current time stamp.</param>
-        public void SendCommand(CommandId command, TimeSpan localTimeOffest, DateTime currentTimeStamp)
+        /// <returns>The MessagingReturnCode.</returns>
+        public MessagingReturnCode SendCommand(CommandId command, TimeSpan localTimeOffest, DateTime currentTimeStamp)
         {
             sbyte offset = (sbyte)(localTimeOffest.TotalMinutes / 15);
             int current = (int)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds;
             byte[] msg = { (byte)DataPage.Commands, (byte)command, 0xFF, (byte)offset };
             msg = msg.Concat(BitConverter.GetBytes(current)).ToArray();
-            SendExtAcknowledgedMessage(msg);
+            return SendExtAcknowledgedMessage(msg);
         }
     }
 }

@@ -19,6 +19,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         [Flags]
         public enum TrainerStatusField
         {
+            /// <summary>Complete or not required.</summary>
+            None = 0x00,
             /// <summary>Bike power calibration required.</summary>
             BikePowerCalRequired = 0x10,
             /// <summary>Resistance calibration required.</summary>

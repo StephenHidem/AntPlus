@@ -13,9 +13,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStroke;
 
         /// <summary>Rower specific capabilities.</summary>
-        [Flags]
         public enum CapabilityFlags
         {
+            /// <summary>No supported capabilities.</summary>
+            None,
             /// <summary>Transmits accumulated stroke count.</summary>
             TxStrokeCount = 0x01,
         }

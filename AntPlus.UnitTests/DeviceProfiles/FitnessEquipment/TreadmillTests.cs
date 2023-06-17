@@ -1,5 +1,4 @@
-﻿using Moq;
-using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Treadmill;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
@@ -7,24 +6,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class TreadmillTests
     {
-        private MockRepository mockRepository;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-        }
-
-        private Treadmill CreateTreadmill()
-        {
-            return new Treadmill();
-        }
-
         [TestMethod]
         public void Parse_InstantaneousCadence_Matches()
         {
             // Arrange
-            var treadmill = CreateTreadmill();
+            var treadmill = new Treadmill();
             byte[] dataPage = new byte[] { 19, 0, 0, 0, 128, 0, 0, 0 };
 
             // Act
@@ -32,14 +18,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.IsTrue(treadmill.Cadence == 128);
-            mockRepository.VerifyAll();
         }
 
         [TestMethod]
         public void Parse_PositiveVerticalDistance_Updated()
         {
             // Arrange
-            var treadmill = CreateTreadmill();
+            var treadmill = new Treadmill();
             byte[] dataPage = new byte[] { 19, 0, 0, 0, 0, 0, 255, 0 };
             treadmill.Parse(dataPage);
             dataPage[6] = 19;
@@ -49,14 +34,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.IsTrue(treadmill.PosVerticalDistance == 2.0);
-            mockRepository.VerifyAll();
         }
 
         [TestMethod]
         public void Parse_NegativeVerticalDistance_Updated()
         {
             // Arrange
-            var treadmill = CreateTreadmill();
+            var treadmill = new Treadmill();
             byte[] dataPage = new byte[] { 19, 0, 0, 0, 0, 255, 0, 0 };
             treadmill.Parse(dataPage);
             dataPage[5] = 19;
@@ -66,7 +50,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.IsTrue(treadmill.NegVerticalDistance == -2.0);
-            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -75,7 +58,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_Capabilities_Matches(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
-            var treadmill = CreateTreadmill();
+            var treadmill = new Treadmill();
 
             // Act
             treadmill.Parse(
@@ -83,7 +66,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.AreEqual(capabilities, treadmill.Capabilities);
-            mockRepository.VerifyAll();
         }
     }
 }

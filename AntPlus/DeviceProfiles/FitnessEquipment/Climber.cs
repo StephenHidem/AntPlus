@@ -13,9 +13,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStride;
 
         /// <summary>Climber specific capabilities.</summary>
-        [Flags]
         public enum CapabilityFlags
         {
+            /// <summary>Accumulated strides are not transmitted.</summary>
+            None = 0x00,
             /// <summary>Transmits accumulated strides.</summary>
             TxStrides = 0x01,
         }

@@ -17,6 +17,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         [Flags]
         public enum CapabilityFlags
         {
+            /// <summary>No supported capabilities.</summary>
+            None = 0x00,
             /// <summary>Transmits stride count.</summary>
             TxStrideCount = 0x01,
             /// <summary>Transmits positive vertical distance.</summary>

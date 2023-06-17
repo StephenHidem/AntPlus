@@ -13,9 +13,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStride;
 
         /// <summary>Nordic skier specific capabilities.</summary>
-        [Flags]
         public enum CapabilityFlags
         {
+            /// <summary>No supported capabilities.</summary>
+            None,
             /// <summary>Transmits accumulated stride count.</summary>
             TxStrideCount = 0x01,
         }

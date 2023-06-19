@@ -29,16 +29,37 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         }
 
         [TestMethod]
-        [DataRow(new byte[8] { 16, 19, 0, 0, 0, 0, 0, 0 }, FitnessEquipmentType.Treadmill)]
-        [DataRow(new byte[8] { 16, 20, 0, 0, 0, 0, 0, 0 }, FitnessEquipmentType.Elliptical)]
-        [DataRow(new byte[8] { 16, 22, 0, 0, 0, 0, 0, 0 }, FitnessEquipmentType.Rower)]
-        [DataRow(new byte[8] { 16, 23, 0, 0, 0, 0, 0, 0 }, FitnessEquipmentType.Climber)]
-        [DataRow(new byte[8] { 16, 24, 0, 0, 0, 0, 0, 0 }, FitnessEquipmentType.NordicSkier)]
-        [DataRow(new byte[8] { 16, 25, 0, 0, 0, 0, 0, 0 }, FitnessEquipmentType.TrainerStationaryBike)]
-        public void Parse_GeneralDataPage_ExpectedEquipmentCreated(byte[] dataPage, FitnessEquipmentType equipmentType)
+        [DataRow(0x00, FEState.Unknown)]
+        [DataRow(0x10, FEState.AsleepOrOff)]
+        [DataRow(0x20, FEState.Ready)]
+        [DataRow(0x30, FEState.InUse)]
+        [DataRow(0x40, FEState.FinishedOrPaused)]
+        public void Parse_FEState_ExpectedFEState(int state, FEState expState)
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
+            byte[] dataPage = { 16, 0, 0, 0, 0, 0, 0, (byte)state };
+
+            // Act
+            fitnessEquipment.Parse(
+                dataPage);
+
+            // Assert
+            Assert.AreEqual(expState, fitnessEquipment.State);
+        }
+
+        [TestMethod]
+        [DataRow(19, FitnessEquipmentType.Treadmill)]
+        [DataRow(20, FitnessEquipmentType.Elliptical)]
+        [DataRow(22, FitnessEquipmentType.Rower)]
+        [DataRow(23, FitnessEquipmentType.Climber)]
+        [DataRow(24, FitnessEquipmentType.NordicSkier)]
+        [DataRow(25, FitnessEquipmentType.TrainerStationaryBike)]
+        public void Parse_GeneralDataPage_ExpectedEquipmentCreated(int equip, FitnessEquipmentType equipmentType)
+        {
+            // Arrange
+            var fitnessEquipment = CreateFitnessEquipment();
+            byte[] dataPage = { 16, (byte)equip, 0, 0, 0, 0, 0, 0 };
 
             // Act
             fitnessEquipment.Parse(
@@ -70,6 +91,48 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                     Assert.Fail();
                     break;
             }
+        }
+
+        [TestMethod]
+        public void Parse_GeneralDataPage_DataValid()
+        {
+            // Arrange
+            var fitnessEquipment = CreateFitnessEquipment();
+            fitnessEquipment.Parse(new byte[] { 16, 0, 0, 0, 0, 0, 0, 0 });
+            byte[] dataPage = { 16, 0, 128, 64, 0x00, 0x80, 70, 0 };
+
+            // Act
+            fitnessEquipment.Parse(
+                dataPage);
+
+            // Assert
+            Assert.IsTrue(fitnessEquipment.GeneralData.DistanceTraveled == 64);
+            Assert.IsTrue(fitnessEquipment.GeneralData.ElapsedTime == TimeSpan.FromSeconds(128 / 4));
+            Assert.IsTrue(fitnessEquipment.GeneralData.InstantaneousSpeed == 32.768);
+            Assert.IsTrue(fitnessEquipment.GeneralData.InstantaneousHeartRate == 70);
+        }
+
+        [TestMethod]
+        [DataRow(0x00, HRDataSource.Invalid, false, false)]
+        [DataRow(0x01, HRDataSource.HeartRateMonitor, false, false)]
+        [DataRow(0x02, HRDataSource.EMHeartRateMonitor, false, false)]
+        [DataRow(0x03, HRDataSource.HandContactSensors, false, false)]
+        [DataRow(0x04, HRDataSource.Invalid, true, false)]
+        [DataRow(0x08, HRDataSource.Invalid, false, true)]
+        public void Parse_GeneralDataPage_ExpectedCapabilities(int caps, HRDataSource hrSrc, bool expDistTravelEn, bool expVirtSpeedFlag)
+        {
+            // Arrange
+            var fitnessEquipment = CreateFitnessEquipment();
+            byte[] dataPage = { 16, 0, 0, 0, 0, 0, 0, (byte)caps };
+
+            // Act
+            fitnessEquipment.Parse(
+                dataPage);
+
+            // Assert
+            Assert.AreEqual(hrSrc, fitnessEquipment.GeneralData.HeartRateSource);
+            Assert.AreEqual(expDistTravelEn, fitnessEquipment.GeneralData.DistanceTraveledEnabled);
+            Assert.AreEqual(expVirtSpeedFlag, fitnessEquipment.GeneralData.VirtualSpeedFlag);
         }
 
         [TestMethod]

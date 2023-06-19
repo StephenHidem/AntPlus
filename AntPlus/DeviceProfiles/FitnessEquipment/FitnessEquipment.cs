@@ -74,6 +74,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>Equipment state</summary>
         public enum FEState
         {
+            /// <summary>Unknown</summary>
+            Unknown = 0,
             /// <summary>Asleep or off</summary>
             AsleepOrOff = 1,
             /// <summary>Ready</summary>
@@ -118,28 +120,29 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             public HRDataSource HeartRateSource { get; private set; }
             /// <summary>Gets the virtual speed flag.</summary>
             public bool VirtualSpeedFlag { get; private set; }
+            /// <summary>Gets the distance traveled enabled flag.</summary>
+            public bool DistanceTraveledEnabled { get; private set; }
 
             /// <summary>Parses the specified data page.</summary>
             /// <param name="dataPage">The data page.</param>
             internal void Parse(byte[] dataPage)
             {
                 EquipmentType = (FitnessEquipmentType)dataPage[1];
-                ElapsedTime += TimeSpan.FromSeconds(Utils.CalculateDelta(dataPage[2], ref prevElapsedTime) * 0.25);
-                if ((dataPage[7] & 0x04) != 0)
+                if (!isFirstDataMessage)
                 {
-                    if (!isFirstDataMessage)
-                    {
-                        DistanceTraveled += Utils.CalculateDelta(dataPage[3], ref prevDistance);
-                    }
-                    else
-                    {
-                        prevDistance = dataPage[3];
-                        isFirstDataMessage = false;
-                    }
+                    ElapsedTime += TimeSpan.FromSeconds(Utils.CalculateDelta(dataPage[2], ref prevElapsedTime) * 0.25);
+                    DistanceTraveled += Utils.CalculateDelta(dataPage[3], ref prevDistance);
                 }
-                InstantaneousSpeed = BitConverter.ToInt16(dataPage, 4) * 0.001;
+                else
+                {
+                    prevElapsedTime = dataPage[2];
+                    prevDistance = dataPage[3];
+                    isFirstDataMessage = false;
+                }
+                InstantaneousSpeed = BitConverter.ToUInt16(dataPage, 4) * 0.001;
                 InstantaneousHeartRate = dataPage[6];
                 HeartRateSource = (HRDataSource)(dataPage[7] & 0x03);
+                DistanceTraveledEnabled = (dataPage[7] & 0x04) != 0;
                 VirtualSpeedFlag = (dataPage[7] & 0x08) != 0;
             }
         }
@@ -241,15 +244,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         {
             base.Parse(dataPage);
 
-            State = (FEState)((dataPage[7] & 0x70) >> 4);
-            LapToggle = (dataPage[7] & 0x80) == 0x80;
-            RaisePropertyChange(nameof(State));
-            RaisePropertyChange(nameof(LapToggle));
-
             switch ((DataPage)dataPage[0])
             {
                 // handle general pages
                 case DataPage.GeneralFEData:
+                    HandleFEState(dataPage[7]);
                     GeneralData.Parse(dataPage);
                     if (!IsKnownEquipmentType(GeneralData.EquipmentType))
                     {
@@ -258,33 +257,42 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     RaisePropertyChange(nameof(GeneralData));
                     break;
                 case DataPage.GeneralSettings:
+                    HandleFEState(dataPage[7]);
                     GeneralSettings.Parse(dataPage);
                     RaisePropertyChange(nameof(GeneralSettings));
                     break;
                 case DataPage.GeneralMetabolicData:
+                    HandleFEState(dataPage[7]);
                     GeneralMetabolic.Parse(dataPage);
                     RaisePropertyChange(nameof(GeneralMetabolic));
                     break;
                 // handle specific FE pages
                 case DataPage.TreadmillData:
+                    HandleFEState(dataPage[7]);
                     Treadmill?.Parse(dataPage);
                     break;
                 case DataPage.EllipticalData:
+                    HandleFEState(dataPage[7]);
                     Elliptical?.Parse(dataPage);
                     break;
                 case DataPage.RowerData:
+                    HandleFEState(dataPage[7]);
                     Rower?.Parse(dataPage);
                     break;
                 case DataPage.ClimberData:
+                    HandleFEState(dataPage[7]);
                     Climber?.Parse(dataPage);
                     break;
                 case DataPage.NordicSkierData:
+                    HandleFEState(dataPage[7]);
                     NordicSkier?.Parse(dataPage);
                     break;
                 case DataPage.TrainerStationaryBikeData:
+                    HandleFEState(dataPage[7]);
                     TrainerStationaryBike?.Parse(dataPage);
                     break;
                 case DataPage.TrainerTorqueData:
+                    HandleFEState(dataPage[7]);
                     TrainerStationaryBike?.TrainerTorque.Parse(dataPage);
                     break;
                 case DataPage.FECapabilities:
@@ -297,6 +305,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
+        }
+
+        private void HandleFEState(byte state)
+        {
+            State = (FEState)((state & 0x70) >> 4);
+            LapToggle = (state & 0x80) == 0x80;
+            RaisePropertyChange(nameof(State));
+            RaisePropertyChange(nameof(LapToggle));
         }
 
         /// <summary>Sets the percentage of maximum resistance resistance.</summary>

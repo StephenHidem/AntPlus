@@ -72,7 +72,7 @@ namespace SmallEarthTech.AntPlus
         /// <returns>The average speed in kilometers per hour.</returns>
         public static double ComputeAvgSpeed(double wheelCircumference, int deltaEventCount, int deltaPeriod)
         {
-            return (3600.0 / 1000.0) * wheelCircumference * deltaEventCount / (deltaPeriod / 2048.0);
+            return (3600.0 / 1000.0) * (wheelCircumference * deltaEventCount) / (deltaPeriod / 2048.0);
         }
 
         /// <summary>Computes the change in distance.</summary>

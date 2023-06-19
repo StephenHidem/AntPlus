@@ -11,9 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     {
         private bool isFirstDataMessage = true;
         private byte lastEventCount;
-        private int deltaEventCount;
         private ushort lastPower;
-        private int deltaPower;
 
         /// <summary>The trainer status bit field is used to indicate whether the trainer requires calibration and/or configuration data to be sent.</summary>
         [Flags]
@@ -84,8 +82,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             if (dataPage[1] != lastEventCount)
             {
                 // handle new events
-                deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
-                deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPower);
+                int deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
+                int deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPower);
                 AveragePower = deltaPower / deltaEventCount;
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));

@@ -14,13 +14,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
-        private int deltaTicks;
         private byte lastEventCount;
-        private int deltaEventCount;
         private ushort lastPeriod;
-        private int deltaPeriod;
         private ushort lastTorque;
-        private int deltaTorque;
 
         /// <summary>
         /// Wheel circumference in meters. The default is 2.2 meters.
@@ -61,10 +57,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             if (dataPage[1] != lastEventCount)
             {
                 // handle new events
-                deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
-                deltaTicks = Utils.CalculateDelta(dataPage[2], ref lastTicks);
-                deltaPeriod = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPeriod);
-                deltaTorque = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 5), ref lastTorque);
+                int deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
+                int deltaTicks = Utils.CalculateDelta(dataPage[2], ref lastTicks);
+                int deltaPeriod = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPeriod);
+                int deltaTorque = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 5), ref lastTorque);
 
                 AverageAngularVelocity = Utils.ComputeAvgAngularVelocity(deltaEventCount, deltaPeriod);
                 AverageTorque = Utils.ComputeAvgTorque(deltaTorque, deltaEventCount);

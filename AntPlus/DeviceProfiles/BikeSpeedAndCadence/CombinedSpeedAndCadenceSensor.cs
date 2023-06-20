@@ -54,13 +54,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
 
             base.Parse(dataPage);
 
-            // ignore duplicate/unchanged data pages
-            if (lastDataPage.SequenceEqual(dataPage))
-            {
-                return;
-            }
-            lastDataPage = dataPage;
-
             if (isFirstDataMessage)
             {
                 isFirstDataMessage = false;
@@ -69,6 +62,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 prevSpeedRevCount = BitConverter.ToUInt16(dataPage, 6);
                 prevCadenceRevCount = BitConverter.ToUInt16(dataPage, 2);
                 lastDataPage = dataPage;
+                return;
+            }
+
+            // ignore duplicate/unchanged data pages
+            if (lastDataPage.SequenceEqual(dataPage))
+            {
                 return;
             }
 

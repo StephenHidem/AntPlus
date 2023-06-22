@@ -63,13 +63,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             {
                 case DataPage.AssetLocation1:
                     Asset asset = GetAsset(dataPage);
+                    asset.ParseLocation1(dataPage);
                     if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset))
                     {
                         Assets.Remove(asset);
-                    }
-                    else
-                    {
-                        asset.ParseLocation1(dataPage);
                     }
                     break;
                 case DataPage.AssetLocation2:

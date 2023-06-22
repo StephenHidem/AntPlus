@@ -33,20 +33,6 @@ namespace AntPlus.UnitTests.DeviceProfiles
         private readonly ushort numVisits = 1;
         private readonly DateTime lastVisit = new(2023, 6, 8, 23, 52, 19);
 
-        // modern implementation of the Fisher-Yates Shuffle algorithm
-        public static List<byte[]> ShuffleDataPages(List<byte[]> listToShuffle)
-        {
-            Random rand = new Random();
-            for (int i = listToShuffle.Count - 1; i > 0; i--)
-            {
-                var k = rand.Next(i + 1);
-                var value = listToShuffle[k];
-                listToShuffle[k] = listToShuffle[i];
-                listToShuffle[i] = value;
-            }
-            return listToShuffle;
-        }
-
         [TestMethod]
         public void Parse_OutOfOrderDataPages_AllPropertiesCorrect()
         {
@@ -59,7 +45,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             for (int i = 0; i < 32; i++)
             {
                 // randomize list of datapages
-                dataPages = ShuffleDataPages(dataPages);
+                dataPages = Utils.ShuffleDataPages(dataPages);
                 foreach (byte[] page in dataPages)
                 {
                     geocache.Parse(page);

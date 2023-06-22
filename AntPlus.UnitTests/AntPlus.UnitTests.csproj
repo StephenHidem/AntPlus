@@ -26,4 +26,8 @@
     <ProjectReference Include="..\AntPlus\AntPlus.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DeviceProfiles\AssetTracker\" />
+  </ItemGroup>
+
 </Project>

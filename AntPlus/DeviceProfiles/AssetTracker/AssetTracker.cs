@@ -35,6 +35,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 
         /// <summary>Gets the collection of assets being tracked.</summary>
         public AssetCollection Assets { get; } = new AssetCollection();
+        /// <summary>Gets a value indicating whether this <see cref="AssetTracker" /> is disconnected.</summary>
+        /// <value><c>true</c> if disconnected; otherwise, <c>false</c>.</value>
+        public bool Disconnected { get; private set; }
         /// <summary>
         /// Gets the common data pages.
         /// </summary>
@@ -60,8 +63,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             {
                 case DataPage.AssetLocation1:
                     Asset asset = GetAsset(dataPage);
-                    asset.ParseLocation1(dataPage);
-                    if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset)) { Assets.Remove(asset); }
+                    if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset))
+                    {
+                        Assets.Remove(asset);
+                    }
+                    else
+                    {
+                        asset.ParseLocation1(dataPage);
+                    }
                     break;
                 case DataPage.AssetLocation2:
                     GetAsset(dataPage).ParseLocation2(dataPage);
@@ -79,6 +88,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                     GetAsset(dataPage).ParseIdPage2(dataPage);
                     break;
                 case DataPage.DisconnectCommand:
+                    Disconnected = true;
+                    RaisePropertyChange(nameof(Disconnected));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

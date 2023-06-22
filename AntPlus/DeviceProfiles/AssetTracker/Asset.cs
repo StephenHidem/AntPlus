@@ -10,9 +10,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// <seealso cref="INotifyPropertyChanged" />
     public class Asset : INotifyPropertyChanged
     {
-        private bool gotId1, gotId2;
-        private bool gotLoc1 = false;
-        private int lat;
+        private bool gotIdPage1, gotIdPage2;
+        private string upperName, lowerName;
+        private bool gotLocationPage1, gotLocationPage2;
+        private ushort lowerLatitude, upperLatitude;
 
         /// <summary>
         /// The asset being tracked.
@@ -41,7 +42,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             /// <summary>Unknown</summary>
             Unknown,
             /// <summary>Undefined</summary>
-            Undefined = 0xFF
+            Undefined = 7
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             LowBattery = 0x08,
             /// <summary>GPS lost track</summary>
             GPSLost = 0x10,
-            /// <summary>Lost communication with GPS</summary>
+            /// <summary>Lost communication with the transmitter node</summary>
             CommunicationLost = 0x20,
             /// <summary>Remove asset</summary>
             RemoveAsset = 0x40,
@@ -75,7 +76,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <value>
         /// The name.
         /// </value>
-        public string Name { get; private set; }
+        public string Name => upperName + lowerName;
         /// <summary>
         /// Gets the type of the asset.
         /// </summary>
@@ -87,7 +88,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// Gets the color of the asset. This is an 8 bit RGB value.
         /// </summary>
         /// <value>
-        /// The color.
+        /// The color. Uses the 3-3-2 bit RGB colour palette.
         /// </value>
         public byte Color { get; private set; }
         /// <summary>Gets the distance.</summary>
@@ -112,7 +113,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         public AssetSituation Situation { get; private set; }
         /// <summary>Gets the latitude.</summary>
         /// <value>The latitude of the asset in decimal degrees.</value>
-        public double Latitude { get; private set; }
+        public double Latitude => Utils.SemicirclesToDegrees((upperLatitude << 16) | lowerLatitude);
         /// <summary>Gets the longitude.</summary>
         /// <value>The longitude of the asset in decimal degrees.</value>
         public double Longitude { get; private set; }
@@ -140,10 +141,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         {
             Color = data[2];
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
-            if (!gotId1 && !gotId2)
+            if (!gotIdPage1)
             {
-                Name = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
-                gotId1 = true;
+                upperName = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
+                gotIdPage1 = true;
+            }
+            if (gotIdPage1 && gotIdPage2)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
             }
         }
 
@@ -155,11 +160,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         {
             Type = (AssetType)data[2];
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Type"));
-            if (gotId1 && !gotId2)
+            if (!gotIdPage2)
             {
-                Name += Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
+                lowerName += Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
+                gotIdPage2 = true;
+            }
+            if (gotIdPage1 && gotIdPage2)
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
-                gotId2 = true;
             }
         }
 
@@ -174,12 +182,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             Bearing = 360.0 * data[4] / 256.0;
             Situation = (AssetSituation)(data[5] & 0x07);
             Status = (AssetStatus)(data[5] & 0x78);
-            lat = BitConverter.ToUInt16(data, 6);
+            if (!gotLocationPage1)
+            {
+                lowerLatitude = BitConverter.ToUInt16(data, 6);
+                gotLocationPage1 = true;
+            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Distance"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bearing"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Situation"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
-            gotLoc1 = true;
+            if (gotLocationPage1 && gotLocationPage2)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+            }
         }
 
         /// <summary>
@@ -188,15 +203,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <param name="data">The data.</param>
         internal void ParseLocation2(byte[] data)
         {
-            if (gotLoc1)
+            if (!gotLocationPage2)
             {
-                lat += BitConverter.ToUInt16(data, 2) << 16;
-                Latitude = Utils.SemicirclesToDegrees(lat);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
-                gotLoc1 = false;
+                upperLatitude = BitConverter.ToUInt16(data, 2);
+                gotLocationPage2 = true;
             }
             Longitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(data, 4));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
+            if (gotLocationPage1 && gotLocationPage2)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+            }
         }
     }
 }

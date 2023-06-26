@@ -30,13 +30,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public void Parse(byte[] dataPage)
         {
             if (dataPage[2] != 0xFF) { LeftTorqueEffectiveness = dataPage[2] * 0.5; }
-            else { LeftTorqueEffectiveness = 0; }
+            else { LeftTorqueEffectiveness = double.NaN; }
 
             if (dataPage[3] != 0xFF) { RightTorqueEffectiveness = dataPage[3] * 0.5; }
-            else { RightTorqueEffectiveness = 0; }
+            else { RightTorqueEffectiveness = double.NaN; }
 
             if (dataPage[4] != 0xFF) { LeftPedalSmoothness = dataPage[4] * 0.5; }
-            else { LeftPedalSmoothness = 0; }
+            else { LeftPedalSmoothness = double.NaN; }
 
             if (dataPage[5] != 0xFF)
             {
@@ -54,7 +54,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             else
             {
                 CombinedPedalSmoothness = false;
-                RightPedalSmoothness = 0;
+                RightPedalSmoothness = double.NaN;
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }

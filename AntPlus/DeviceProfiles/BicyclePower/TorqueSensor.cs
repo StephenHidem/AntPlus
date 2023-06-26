@@ -24,8 +24,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>The delta torque</summary>
         protected int deltaTorque;
 
-        /// <summary>Gets the instantaneous pedaling cadence in revolutions per minute.</summary>
-        public new byte InstantaneousCadence { get; private set; }
         /// <summary>Gets the average angular velocity in radians per second.</summary>
         public double AverageAngularVelocity { get; private set; }
         /// <summary>Gets the average torque in Nm.</summary>

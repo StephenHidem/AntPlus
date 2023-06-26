@@ -88,7 +88,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 /// <summary>Not required</summary>
                 NotRequired = 0x40,
                 /// <summary>Required</summary>
-                Required = 0x80
+                Required = 0x80,
+                /// <summary>Reserved</summary>
+                Reserved = 0xC0
             }
 
             /// <summary>The crank length in millimeters.</summary>
@@ -106,7 +108,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
             internal CrankParameters(byte[] dataPage)
             {
-                CrankLength = dataPage[4] * 0.5 + 110.0;
+                CrankLength = (dataPage[4] < 0xFE) ? dataPage[4] * 0.5 + 110.0 : double.NaN;
                 CrankStatus = (CrankLengthStatus)(dataPage[5] & 0x03);
                 MismatchStatus = (SensorMisMatchStatus)(dataPage[5] & 0x0C);
                 AvailabilityStatus = (SensorAvailabilityStatus)(dataPage[5] & 0x30);
@@ -125,6 +127,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             [Flags]
             public enum InteropProp
             {
+                /// <summary>None</summary>
+                None = 0,
                 /// <summary>Default crank length</summary>
                 DefaultCrankLength = 1,
                 /// <summary>Requires crank length</summary>
@@ -135,7 +139,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             /// Interop capabilities.
             /// </summary>
             [Flags]
-            public enum InteroperableCapabilies
+            public enum InteroperableCapabilities
             {
                 /// <summary>None</summary>
                 None = 0,
@@ -156,11 +160,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             /// <summary>Gets the custom properties.</summary>
             public byte CustomProperties { get; }
             /// <summary>Gets the interoperable capabilities mask.</summary>
-            public InteroperableCapabilies Mask { get; }
+            public InteroperableCapabilities Mask { get; }
             /// <summary>Gets the custom capabilities mask.</summary>
             public byte CustomCapabilitiesMask { get; }
             /// <summary>Gets the interoperable capabilities value.</summary>
-            public InteroperableCapabilies Value { get; }
+            public InteroperableCapabilities Value { get; }
             /// <summary>Gets the custom capabilities value.</summary>
             public byte CustomCapabilitiesValue { get; }
 
@@ -168,9 +172,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             {
                 InteroperableProperties = (InteropProp)(dataPage[2] & 0x03);
                 CustomProperties = dataPage[3];
-                Mask = (InteroperableCapabilies)dataPage[4];
+                Mask = (InteroperableCapabilities)(dataPage[4] & 0x73);
                 CustomCapabilitiesMask = dataPage[5];
-                Value = (InteroperableCapabilies)dataPage[6];
+                Value = (InteroperableCapabilities)(dataPage[6] & 0x73);
                 CustomCapabilitiesValue = dataPage[7];
             }
         }
@@ -179,24 +183,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </summary>
         public readonly struct AdvCapabilities2
         {
-            /// <summary>Gets the interoperable capabilities.</summary>
+            /// <summary>Interoperable capabilities.</summary>
             [Flags]
             public enum InteroperableCapabilies
             {
                 /// <summary>None</summary>
                 None = 0,
                 /// <summary>Four Hz</summary>
-                FourHz = 1,
+                FourHz = 0x01,
                 /// <summary>Eight Hz</summary>
-                EightHz = 2,
+                EightHz = 0x02,
                 /// <summary>Power phase, eight Hz</summary>
-                PowerPhase8Hz = 8,
+                PowerPhase8Hz = 0x08,
                 /// <summary>PCO, eight Hz</summary>
-                PCO8Hz = 16,
+                PCO8Hz = 0x10,
                 /// <summary>Rider position, eight Hz</summary>
-                RiderPosition8Hz = 32,
+                RiderPosition8Hz = 0x20,
                 /// <summary>Troque barycenter, eight Hz</summary>
-                TorqueBarycenter8Hz = 64,
+                TorqueBarycenter8Hz = 0x40,
             }
 
             /// <summary>Gets the interoperable capabilities mask.</summary>
@@ -206,8 +210,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
             internal AdvCapabilities2(byte[] dataPage)
             {
-                Mask = (InteroperableCapabilies)dataPage[4];
-                Value = (InteroperableCapabilies)dataPage[6];
+                Mask = (InteroperableCapabilies)(dataPage[4] & 0x7B);
+                Value = (InteroperableCapabilies)(dataPage[6] & 0x7B);
             }
         }
 
@@ -247,7 +251,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Crank)));
                     break;
                 case Subpage.PowerPhaseConfiguration:
-                    PeakTorqueThreshold = dataPage[2] * 0.5;
+                    PeakTorqueThreshold = dataPage[2] <= 200 ? dataPage[2] * 0.5 : double.NaN;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PeakTorqueThreshold)));
                     break;
                 case Subpage.RiderPositionConfiguration:
@@ -330,7 +334,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             {
                 throw new ArgumentOutOfRangeException("Parameter threshold range is 0 to 100 percent.");
             }
-            byte peak = (byte)((threshold / 0.5));
+            byte peak = (byte)(threshold / 0.5);
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
             bp.SendExtAcknowledgedMessage(msg);
         }

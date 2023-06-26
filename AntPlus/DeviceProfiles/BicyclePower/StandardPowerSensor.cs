@@ -31,7 +31,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <value>The pedal power.</value>
         public byte PedalPower { get; private set; }
         /// <summary>Gets the instantaneous pedaling cadence.</summary>
-        public byte InstantaneousCadence { get; private set; }
+        public byte InstantaneousCadence { get; protected set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
         public ushort InstantaneousPower { get; private set; }
         /// <summary>Gets the parameters.</summary>

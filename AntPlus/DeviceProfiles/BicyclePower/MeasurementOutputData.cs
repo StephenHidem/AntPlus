@@ -12,7 +12,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Data type of the measurement reported.
         /// </summary>
-        public enum DataType
+        public enum DataType : byte
         {
             /// <summary>The progress countdown</summary>
             ProgressCountdown = 0,
@@ -57,7 +57,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             /// <summary>The left pedal angle</summary>
             LeftPedalAngle = 40,
             /// <summary>The right pedal angle</summary>
-            RightPedalAngle = 41
+            RightPedalAngle = 41,
+            /// <summary>Reserved. Any value not a member of this enum will return reserved.</summary>
+            Reserved = 255
         }
 
         /// <summary>Occurs when a property value changes.</summary>
@@ -67,7 +69,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public int NumberOfMeasurementTypes { get; }
         /// <summary>Gets the type of this measurement.</summary>
         public DataType MeasurementType { get; }
-        /// <summary>Gets the timestamp of the measurement.</summary>
+        /// <summary>Gets the timestamp of the measurement in seconds.</summary>
+        /// <remarks>Range is 0 to less than 32 seconds. Rollover is not handled.</remarks>
         public double Timestamp { get; private set; }
         /// <summary>Gets the measurement value. The scaling factor is applied.</summary>
         public double Measurement { get; private set; }
@@ -78,8 +81,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         internal MeasurementOutputData(byte[] dataPage)
         {
-            NumberOfMeasurementTypes = dataPage[1];
-            MeasurementType = (DataType)dataPage[2];
+            NumberOfMeasurementTypes = dataPage[1] & 0x0F;
+            if (Enum.IsDefined(typeof(DataType), dataPage[2]))
+            {
+                MeasurementType = (DataType)dataPage[2];
+            }
+            else
+            {
+                MeasurementType = DataType.Reserved;
+                // TODO: LOG UNEXPECTED VALUE
+            }
         }
 
         /// <summary>

@@ -10,8 +10,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     {
         /// <summary>Unknown</summary>
         Unknown,
-        /// <summary>Power only</summary>
-        PowerOnly,
+        /// <summary>Power</summary>
+        Power,
         /// <summary>Wheel torque</summary>
         WheelTorque,
         /// <summary>Crank torque</summary>
@@ -66,8 +66,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Gets the sensor type.</summary>
         public SensorType Sensor { get; private set; } = SensorType.Unknown;
-        /// <summary>Gets the power only sensor.</summary>
-        public StandardPowerSensor PowerOnlySensor { get; private set; }
+        /// <summary>Gets the power sensor.</summary>
+        public StandardPowerSensor PowerSensor { get; private set; }
         /// <summary>Gets the crank torque sensor.</summary>
         public StandardCrankTorqueSensor CrankTorqueSensor { get; private set; }
         /// <summary>Gets the wheel torque sensor.</summary>
@@ -102,7 +102,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     Calibration.Parse(dataPage);
                     break;
                 case DataPage.GetSetParameters:
-                    PowerOnlySensor?.Parameters.Parse(dataPage);
+                    PowerSensor?.Parameters.Parse(dataPage);
                     break;
                 case DataPage.MeasurementOutput:
                     Calibration.ParseMeasurementOutputData(dataPage);
@@ -110,29 +110,29 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 case DataPage.PowerOnly:
                     if (Sensor == SensorType.Unknown)
                     {
-                        Sensor = SensorType.PowerOnly;
-                        PowerOnlySensor = new StandardPowerSensor(this);
+                        Sensor = SensorType.Power;
+                        PowerSensor = new StandardPowerSensor(this);
                     }
-                    PowerOnlySensor.Parse(dataPage);
+                    PowerSensor.Parse(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    if (Sensor == SensorType.Unknown || Sensor == SensorType.PowerOnly)
+                    if (Sensor == SensorType.Unknown || Sensor == SensorType.Power)
                     {
                         Sensor = SensorType.WheelTorque;
-                        PowerOnlySensor = WheelTorqueSensor = new StandardWheelTorqueSensor(this);
+                        PowerSensor = WheelTorqueSensor = new StandardWheelTorqueSensor(this);
                     }
                     WheelTorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    if (Sensor == SensorType.Unknown || Sensor == SensorType.PowerOnly)
+                    if (Sensor == SensorType.Unknown || Sensor == SensorType.Power)
                     {
                         Sensor = SensorType.CrankTorque;
-                        PowerOnlySensor = CrankTorqueSensor = new StandardCrankTorqueSensor(this);
+                        PowerSensor = CrankTorqueSensor = new StandardCrankTorqueSensor(this);
                     }
                     CrankTorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    PowerOnlySensor?.TorqueEffectiveness.Parse(dataPage);
+                    PowerSensor?.TorqueEffectiveness.Parse(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
                     Sensor = SensorType.CrankTorqueFrequency;
@@ -149,7 +149,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     CrankTorqueSensor.ParseCyclingDynamics(dataPage);
                     break;
                 default:
-                    PowerOnlySensor?.CommonDataPages.ParseCommonDataPage(dataPage);
+                    PowerSensor?.CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
         }

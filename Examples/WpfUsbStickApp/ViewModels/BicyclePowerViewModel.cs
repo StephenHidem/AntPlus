@@ -19,8 +19,8 @@ namespace WpfUsbStickApp.ViewModels
 
             switch (bicyclePower.Sensor)
             {
-                case SensorType.PowerOnly:
-                    BicyclePowerControl = new BicyclePowerOnlyControl(BicyclePower.PowerOnlySensor);
+                case SensorType.Power:
+                    BicyclePowerControl = new BicyclePowerOnlyControl(BicyclePower.PowerSensor);
                     break;
                 case SensorType.WheelTorque:
                     BicyclePowerControl = new BicycleWheelTorqueControl(BicyclePower.WheelTorqueSensor);
@@ -52,9 +52,9 @@ namespace WpfUsbStickApp.ViewModels
         private bool CanSetCustomCalParameters() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
 
         [RelayCommand]
-        private void GetParameters(Subpage subpage) => BicyclePower.PowerOnlySensor.Parameters.GetParameters(subpage);
+        private void GetParameters(Subpage subpage) => BicyclePower.PowerSensor.Parameters.GetParameters(subpage);
 
         [RelayCommand]
-        private void SetCrankLength(string length) => BicyclePower.PowerOnlySensor.Parameters.SetCrankLength(double.Parse(length));
+        private void SetCrankLength(string length) => BicyclePower.PowerSensor.Parameters.SetCrankLength(double.Parse(length));
     }
 }

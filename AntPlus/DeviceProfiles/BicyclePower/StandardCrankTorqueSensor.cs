@@ -14,17 +14,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             /// <summary>Gets the event count.</summary>
             public byte EventCount { get; }
             /// <summary>Gets the start angle.</summary>
-            /// <value>The start angle in brads (binary radians).</value>
-            public byte StartAngle { get; }
+            /// <value>The start angle in decimal degrees. NaN if invalid.</value>
+            public double StartAngle { get; }
             /// <summary>Gets the end angle.</summary>
-            /// <value>The end angle in brads (binary radians).</value>
-            public byte EndAngle { get; }
+            /// <value>The end angle in decimal degrees. NaN if invalid.</value>
+            public double EndAngle { get; }
             /// <summary>Gets the start peak angle.</summary>
-            /// <value>The start peak angle in brads (binary radians).</value>
-            public byte StartPeakAngle { get; }
+            /// <value>The start peak angle in decimal degrees. NaN if invalid.</value>
+            public double StartPeakAngle { get; }
             /// <summary>Gets the end peak angle.</summary>
-            /// <value>The end peak angle in brads (binary radians).</value>
-            public byte EndPeakAngle { get; }
+            /// <value>The end peak angle in decimal degrees. NaN if invalid.</value>
+            public double EndPeakAngle { get; }
             /// <summary>Gets the average torque.</summary>
             /// <value>The average torque in Nm.</value>
             public double AvgTorque { get; }
@@ -32,10 +32,26 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             internal ForceAngle(byte[] dataPage)
             {
                 EventCount = dataPage[1];
-                StartAngle = dataPage[2];
-                EndAngle = dataPage[3];
-                StartPeakAngle = dataPage[4];
-                EndPeakAngle = dataPage[5];
+                if (dataPage[2] == 0xC0 && dataPage[3] == 0xC0)
+                {
+                    StartAngle = EndAngle = double.NaN;
+                }
+                else
+                {
+                    StartAngle = 360.0 * dataPage[2] / 256.0;
+                    EndAngle = 360.0 * dataPage[3] / 256.0;
+                }
+
+                if (dataPage[4] == 0xC0 && dataPage[5] == 0xC0)
+                {
+                    StartPeakAngle = EndPeakAngle = double.NaN;
+                }
+                else
+                {
+                    StartPeakAngle = 360.0 * dataPage[4] / 256.0;
+                    EndPeakAngle = 360.0 * dataPage[5] / 256.0;
+                }
+
                 AvgTorque = BitConverter.ToUInt16(dataPage, 6) / 32.0;
             }
         }
@@ -115,7 +131,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.TorqueBarycenter:
-                    TorqueBarycenterAngle = dataPage[2] * 0.5 + 30.0;
+                    TorqueBarycenterAngle = dataPage[1] * 0.5 + 30.0;
                     RaisePropertyChange(nameof(TorqueBarycenterAngle));
                     break;
                 case DataPage.RightForceAngle:

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="47871b73-83b7-4cf4-8842-44d7520804aa" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>Version 2.0.0.0 was released on June 27, 2023.</para>
+    </introduction>
+
+	  <section>
+		  <title>Changes in This Release</title>
+		  <content>
+			  <list class="bullet">
+				  <listItem>
+					  <para>BREAKING: Renamed BicyclePower PowerOnlySensor to PowerSensor.</para>
+				  </listItem>
+				  <listItem>
+					  <para>BREAKING: AssetTracker Asset latitude and longitude are now reported in decimal degrees.</para>
+				  </listItem>
+				  <listItem>
+					  <para>The unit tests led to a number of bug fixes.</para>
+				  </listItem>
+			  </list>
+		  </content>
+	  </section>
+
+	  <relatedTopics>
+		  <link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+	  </relatedTopics>
+  </developerConceptualDocument>
+</topic>

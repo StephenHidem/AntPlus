@@ -221,8 +221,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
             return BitConverter.GetBytes(ch1).Take(3).Reverse().Concat(BitConverter.GetBytes(ch2).Reverse()).ToArray();
         }
 
-        /// <summary> Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
-        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
+        /// <summary>Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
+        /// <param name="timeout">Request timeout in milliseconds. The default is 16000 milliseconds.</param>
+        /// <returns>Status of the request. See <see cref="MessagingReturnCode" />.</returns>
         public MessagingReturnCode RequestPinPage(uint timeout = 16000)
         {
             // clear any previous state

@@ -21,7 +21,7 @@
         <StackPanel>
             <UserControl Content="{Binding BicyclePowerControl}"/>
             <GroupBox Header="Torque Effectiveness and Pedal Smoothness">
-                <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor.TorqueEffectiveness}">
+                <StackPanel DataContext="{Binding BicyclePower.PowerSensor.TorqueEffectiveness}">
                     <TextBlock Text="{Binding CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness: {0}'}"/>
                     <TextBlock Text="{Binding LeftPedalSmoothness, StringFormat='Left Pedal Smoothness: {0}'}"/>
                     <TextBlock Text="{Binding LeftTorqueEffectiveness, StringFormat='Left Torque Effectiveness: {0}'}"/>
@@ -29,7 +29,7 @@
                     <TextBlock Text="{Binding RightTorqueEffectiveness, StringFormat='Right Torque Effectiveness: {0}'}"/>
                 </StackPanel>
             </GroupBox>
-            <uc:CommonDataPagesControl DataContext="{Binding BicyclePower.PowerOnlySensor.CommonDataPages}"/>
+            <uc:CommonDataPagesControl DataContext="{Binding BicyclePower.PowerSensor.CommonDataPages}"/>
         </StackPanel>
         <GroupBox Header="Calibration" Grid.Column="1">
             <StackPanel>
@@ -59,7 +59,7 @@
         </GroupBox>
         <GroupBox Header="Parameters" Grid.Column="2">
             <StackPanel>
-                <StackPanel DataContext="{Binding BicyclePower.PowerOnlySensor.Parameters}">
+                <StackPanel DataContext="{Binding BicyclePower.PowerSensor.Parameters}">
                     <TextBlock Text="{Binding Crank.CrankLength, StringFormat='Crank Length: {0}'}"/>
                     <TextBlock Text="{Binding Crank.CrankStatus, StringFormat='Crank Status: {0}'}"/>
                     <TextBlock Text="{Binding Crank.MismatchStatus, StringFormat='Mismatch Status: {0}'}"/>

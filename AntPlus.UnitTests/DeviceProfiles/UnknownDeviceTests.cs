@@ -23,7 +23,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.IsTrue(unknownDevice.DataPages.Count == 1);
-            Assert.IsTrue(unknownDevice.DataPages[0].Page.SequenceEqual(dataPage));
+            Assert.IsTrue(unknownDevice.DataPages[0].SequenceEqual(dataPage));
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.IsTrue(unknownDevice.DataPages.Count == 1);
-            Assert.IsTrue(unknownDevice.DataPages[0].Page.SequenceEqual(updatePage));
+            Assert.IsTrue(unknownDevice.DataPages[0].SequenceEqual(updatePage));
         }
     }
 }

@@ -16,7 +16,7 @@
         <ListView ItemsSource="{Binding UnknownDevice.DataPages}">
             <ListView.View>
                 <GridView >
-                    <GridViewColumn Header="Data Page" Width="300" DisplayMemberBinding="{Binding Page, Converter={StaticResource ByteToStr}}"/>
+                    <GridViewColumn Header="Data Page" Width="300" DisplayMemberBinding="{Binding ., Converter={StaticResource ByteToStr}}"/>
                 </GridView>
             </ListView.View>
         </ListView>

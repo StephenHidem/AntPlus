@@ -1,6 +1,5 @@
 ﻿using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
@@ -37,54 +36,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         {
             base.Parse(dataPage);
 
-            DataPage page = DataPages.FirstOrDefault(p => p.PageNumber == dataPage[0]);
+            byte[] page = DataPages.FirstOrDefault(p => p[0] == dataPage[0]);
             if (page == null)
             {
-                DataPages.Add(new DataPage(dataPage));
+                DataPages.Add(dataPage);
             }
-            else { page.Update(dataPage); }
-        }
-    }
-
-    /// <summary>
-    /// This class encapsulates an unknown data page.
-    /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class DataPage : INotifyPropertyChanged
-    {
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Gets the data page received from the unknown sensor.
-        /// </summary>
-        /// <value>
-        /// 8 byte array of the page received from the unknown sensor.
-        /// </value>
-        public byte[] Page { get; private set; }
-        /// <summary>Gets the data page number.</summary>
-        public byte PageNumber => Page[0];
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataPage"/> class.
-        /// </summary>
-        /// <param name="dataPage">The data page.</param>
-        public DataPage(byte[] dataPage)
-        {
-            Page = dataPage;
-        }
-
-        /// <summary>
-        /// Updates the specified data page. The property changed notification is
-        /// raised if the data page has changed.
-        /// </summary>
-        /// <param name="dataPage">The data page.</param>
-        public void Update(byte[] dataPage)
-        {
-            if (!Page.SequenceEqual(dataPage))
+            else
             {
-                Page = dataPage;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Page)));
+                if (!page.SequenceEqual(dataPage))
+                {
+                    DataPages[DataPages.IndexOf(page)] = dataPage;
+                }
             }
         }
     }
@@ -92,7 +54,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
     /// <summary>
     /// A thread safe collection of unknown data pages.
     /// </summary>
-    public class UnknownDataPages : ObservableCollection<DataPage>
+    public class UnknownDataPages : ObservableCollection<byte[]>
     {
         /// <summary>
         /// The collection lock.
@@ -106,7 +68,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         public object CollectionLock = new object();
 
         /// <inheritdoc/>
-        protected override void InsertItem(int index, DataPage item)
+        protected override void InsertItem(int index, byte[] item)
         {
             lock (CollectionLock)
             {
@@ -142,7 +104,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         }
 
         /// <inheritdoc/>
-        protected override void SetItem(int index, DataPage item)
+        protected override void SetItem(int index, byte[] item)
         {
             lock (CollectionLock)
             {

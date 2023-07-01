@@ -65,8 +65,8 @@ namespace WpfUsbStickApp
                     GeocacheWindow geocacheWindow = new((Geocache)antDevice);
                     geocacheWindow.Show();
                     break;
-                case AssetTracker.DeviceClass:
-                    AssetTrackerWindow tracker = new((AssetTracker)antDevice);
+                case Tracker.DeviceClass:
+                    AssetTrackerWindow tracker = new((Tracker)antDevice);
                     tracker.Show();
                     break;
                 case StrideBasedSpeedAndDistance.DeviceClass:

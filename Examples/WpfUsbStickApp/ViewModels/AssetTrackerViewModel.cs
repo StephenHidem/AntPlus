@@ -4,11 +4,11 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal class AssetTrackerViewModel
     {
-        private readonly AssetTracker tracker;
+        private readonly Tracker tracker;
 
-        public AssetTracker AssetTracker => tracker;
+        public Tracker AssetTracker => tracker;
 
-        public AssetTrackerViewModel(AssetTracker tracker)
+        public AssetTrackerViewModel(Tracker tracker)
         {
             this.tracker = tracker;
         }

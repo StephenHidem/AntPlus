@@ -22,9 +22,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             mockAntChannel = mockRepository.Create<IAntChannel>();
         }
 
-        private SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.AssetTracker CreateAssetTracker()
+        private SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker CreateAssetTracker()
         {
-            return new SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.AssetTracker(
+            return new SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker(
                 mockChannelId,
                 mockAntChannel.Object);
         }

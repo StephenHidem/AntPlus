@@ -136,8 +136,8 @@ namespace SmallEarthTech.AntPlus
                     return new MuscleOxygen(channelId, channel, timeout);
                 case Geocache.DeviceClass:
                     return new Geocache(channelId, channel, timeout * 4);
-                case AssetTracker.DeviceClass:
-                    return new AssetTracker(channelId, channel, timeout);
+                case Tracker.DeviceClass:
+                    return new Tracker(channelId, channel, timeout);
                 case StrideBasedSpeedAndDistance.DeviceClass:
                     return new StrideBasedSpeedAndDistance(channelId, channel, timeout);
                 default:

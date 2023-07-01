@@ -7,7 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// <summary>
     /// This class serves as an asset tracker.
     /// </summary>
-    public class AssetTracker : AntDevice
+    public class Tracker : AntDevice
     {
         /// <summary>
         /// The asset tracker device class ID.
@@ -35,7 +35,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 
         /// <summary>Gets the collection of assets being tracked.</summary>
         public AssetCollection Assets { get; } = new AssetCollection();
-        /// <summary>Gets a value indicating whether this <see cref="AssetTracker" /> is disconnected.</summary>
+        /// <summary>Gets a value indicating whether this <see cref="Tracker" /> is disconnected.</summary>
         /// <value><c>true</c> if disconnected; otherwise, <c>false</c>.</value>
         public bool Disconnected { get; private set; }
         /// <summary>
@@ -43,15 +43,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// </summary>
         public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
         /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(AssetTracker).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AssetTracker.png");
+        public override Stream DeviceImageStream => typeof(Tracker).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AssetTracker.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssetTracker"/> class. The default timeout is 500ms.
+        /// Initializes a new instance of the <see cref="Tracker"/> class. The default timeout is 500ms.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public AssetTracker(ChannelId channelId, IAntChannel antChannel, int timeout = 500) : base(channelId, antChannel, timeout)
+        public Tracker(ChannelId channelId, IAntChannel antChannel, int timeout = 500) : base(channelId, antChannel, timeout)
         {
         }
 

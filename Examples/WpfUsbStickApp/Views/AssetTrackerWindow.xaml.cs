@@ -10,7 +10,7 @@ namespace WpfUsbStickApp.Views
     /// </summary>
     public partial class AssetTrackerWindow : Window
     {
-        public AssetTrackerWindow(AssetTracker assetTracker)
+        public AssetTrackerWindow(Tracker assetTracker)
         {
             InitializeComponent();
             BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.Assets.CollectionLock);

@@ -1,4 +1,6 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntRadioInterface;
 
 namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
@@ -6,12 +8,20 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
     [TestClass]
     public class CombinedSpeedAndCadenceSensorTests
     {
+        private MockRepository mockRepository;
+
         private CombinedSpeedAndCadenceSensor _sensor;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<CombinedSpeedAndCadenceSensor>> mockLogger;
 
         [TestInitialize]
         public void Initialize()
         {
-            _sensor = new CombinedSpeedAndCadenceSensor(new ChannelId(0), null);
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<CombinedSpeedAndCadenceSensor>>();
+            _sensor = new CombinedSpeedAndCadenceSensor(new ChannelId(0), mockAntChannel.Object, mockLogger.Object);
             byte[] dataPage = new byte[8];
             _sensor.Parse(dataPage);
         }

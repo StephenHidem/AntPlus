@@ -10,14 +10,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
     [TestClass]
     public class UnknownDeviceTests
     {
-        ChannelId cid = new(0);
-        Mock<ILogger<UnknownDevice>> logger = new();
+        readonly ChannelId cid = new(0);
+        readonly Mock<ILogger<UnknownDevice>> mockLogger = new();
 
         [TestMethod]
         public void Parse_EmptyPageCollection_PageAdded()
         {
             // Arrange
-            UnknownDevice unknownDevice = new(cid, null, logger.Object);
+            UnknownDevice unknownDevice = new(cid, null, mockLogger.Object);
             byte[] dataPage = { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
 
             // Act
@@ -33,7 +33,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_Update_PageUpdated()
         {
             // Arrange
-            UnknownDevice unknownDevice = new(cid, null, logger.Object);
+            UnknownDevice unknownDevice = new(cid, null, mockLogger.Object);
             byte[] dataPage = { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
             byte[] updatePage = { 0x11, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x88 };
 

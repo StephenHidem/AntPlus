@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using static SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
@@ -10,8 +11,9 @@ namespace AntPlus.UnitTests.DeviceProfiles
     {
         private MockRepository mockRepository;
 
-        ChannelId cid = new(0);
+        readonly ChannelId cid = new(0);
         private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<StrideBasedSpeedAndDistance>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -19,13 +21,15 @@ namespace AntPlus.UnitTests.DeviceProfiles
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<StrideBasedSpeedAndDistance>>();
         }
 
         private StrideBasedSpeedAndDistance CreateStrideBasedSpeedAndDistance()
         {
             return new StrideBasedSpeedAndDistance(
                 cid,
-                mockAntChannel.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         [TestMethod]

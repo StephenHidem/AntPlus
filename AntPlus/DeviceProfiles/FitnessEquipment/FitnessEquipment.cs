@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
 using System.Linq;
@@ -199,6 +200,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public FEState State { get; private set; }
         /// <summary>Gets a value indicating whether [lap toggle].</summary>
         public bool LapToggle { get; private set; }
+
+        private readonly ILogger<FitnessEquipment> _logger;
+
         /// <summary>Gets the general data.</summary>
         public GeneralDataPage GeneralData { get; private set; }
         /// <summary>Gets the general settings.</summary>
@@ -231,9 +235,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
+            _logger = logger;
             GeneralData = new GeneralDataPage();
             GeneralSettings = new GeneralSettingsPage();
             GeneralMetabolic = new GeneralMetabolicPage();

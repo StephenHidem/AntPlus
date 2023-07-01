@@ -121,25 +121,25 @@ namespace SmallEarthTech.AntPlus
             switch (channelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
-                    return new HeartRate(channelId, channel, timeout);
+                    return new HeartRate(channelId, channel, _loggerFactory.CreateLogger<HeartRate>(), timeout);
                 case BicyclePower.DeviceClass:
-                    return new BicyclePower(channelId, channel, timeout);
+                    return new BicyclePower(channelId, channel, _loggerFactory.CreateLogger<BicyclePower>(), timeout);
                 case BikeSpeedSensor.DeviceClass:
-                    return new BikeSpeedSensor(channelId, channel, timeout);
+                    return new BikeSpeedSensor(channelId, channel, _loggerFactory.CreateLogger<BikeSpeedSensor>(), timeout);
                 case BikeCadenceSensor.DeviceClass:
-                    return new BikeCadenceSensor(channelId, channel, timeout);
+                    return new BikeCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<BikeCadenceSensor>(), timeout);
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
-                    return new CombinedSpeedAndCadenceSensor(channelId, channel, timeout);
+                    return new CombinedSpeedAndCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), timeout);
                 case FitnessEquipment.DeviceClass:
-                    return new FitnessEquipment(channelId, channel, timeout);
+                    return new FitnessEquipment(channelId, channel, _loggerFactory.CreateLogger<FitnessEquipment>(), timeout);
                 case MuscleOxygen.DeviceClass:
-                    return new MuscleOxygen(channelId, channel, timeout);
+                    return new MuscleOxygen(channelId, channel, _loggerFactory.CreateLogger<MuscleOxygen>(), timeout);
                 case Geocache.DeviceClass:
-                    return new Geocache(channelId, channel, timeout * 4);
+                    return new Geocache(channelId, channel, _loggerFactory.CreateLogger<Geocache>(), timeout * 4);
                 case Tracker.DeviceClass:
-                    return new Tracker(channelId, channel, timeout);
+                    return new Tracker(channelId, channel, _loggerFactory.CreateLogger<Tracker>(), timeout);
                 case StrideBasedSpeedAndDistance.DeviceClass:
-                    return new StrideBasedSpeedAndDistance(channelId, channel, timeout);
+                    return new StrideBasedSpeedAndDistance(channelId, channel, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), timeout);
                 default:
                     return new UnknownDevice(channelId, channel, _loggerFactory.CreateLogger<UnknownDevice>(), timeout);
             }

@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,6 +51,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private bool authRequested;
         private bool programmingGeocache;
         private byte loggedVisitsPage;
+        private readonly ILogger<Geocache> _logger;
         private DateTime lastMessageTime;
 
         /// <summary>Gets the trackable identifier.</summary>
@@ -84,13 +86,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Device offline timeout. The default is 8000 milliseconds.</param>
         /// <remarks>
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
         /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
-        public Geocache(ChannelId channelId, IAntChannel antChannel, int timeout = 8000) : base(channelId, antChannel, timeout)
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int timeout = 8000) : base(channelId, antChannel, timeout)
         {
+            _logger = logger;
             lastMessageTime = DateTime.Now;
         }
 

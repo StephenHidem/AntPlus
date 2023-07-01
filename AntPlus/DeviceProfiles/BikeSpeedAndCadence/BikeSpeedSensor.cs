@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
 
@@ -18,6 +19,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// The BikeSpeedSensor device class ID.
         /// </summary>
         public const byte DeviceClass = 123;
+        private readonly ILogger<BikeSpeedSensor> _logger;
 
         /// <summary>
         /// The wheel circumference in meters. The default is 2.2 meters.
@@ -35,9 +37,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">The ant channel.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Timeout in milliseconds.</param>
-        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ushort timeout = 2000) : base(channelId, antChannel, timeout)
+        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeSpeedSensor> logger, ushort timeout = 2000) : base(channelId, antChannel, timeout)
         {
+            _logger = logger;
         }
 
         /// <inheritdoc/>

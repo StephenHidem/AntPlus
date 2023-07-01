@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -11,8 +12,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
     {
         private MockRepository mockRepository;
 
-        private ChannelId mockChannelId = new(0);
+        private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Tracker>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -20,13 +22,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<Tracker>>();
         }
 
         private SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker CreateAssetTracker()
         {
             return new SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker(
                 mockChannelId,
-                mockAntChannel.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         [TestMethod]

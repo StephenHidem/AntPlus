@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System.IO;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -74,6 +75,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public StandardWheelTorqueSensor WheelTorqueSensor { get; private set; }
         /// <summary>Gets the crank torque frequency (CTF) sensor.</summary>
         public CrankTorqueFrequencySensor CTFSensor { get; private set; }
+
+        private readonly ILogger<BicyclePower> _logger;
+
         /// <summary>Gets the calibration class.</summary>
         public Calibration Calibration { get; private set; }
         /// <inheritdoc/>
@@ -84,9 +88,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
+            _logger = logger;
             Calibration = new Calibration(this);
         }
 

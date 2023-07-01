@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -9,7 +10,19 @@ namespace AntPlus.UnitTests.DeviceProfiles
     [TestClass]
     public class MuscleOxygenTests
     {
-        ChannelId cid = new(0);
+        readonly ChannelId cid = new(0);
+        private MockRepository mockRepository;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<MuscleOxygen>> mockLogger;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<MuscleOxygen>>();
+        }
 
         [TestMethod]
         [DataRow(new byte[] { 1, 1, 0, 0, 0, 0, 0, 0 }, false)]
@@ -17,7 +30,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_Notifications_Match(byte[] dataPage, bool expected)
         {
             // Arrange
-            var muscleOxygen = new MuscleOxygen(cid, null);
+            var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object);
 
             // Act
             muscleOxygen.Parse(
@@ -37,7 +50,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_Capabilities_Match(byte[] dataPage, bool antFs, MeasurementInterval interval)
         {
             // Arrange
-            var muscleOxygen = new MuscleOxygen(cid, null);
+            var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object);
 
             // Act
             muscleOxygen.Parse(
@@ -55,7 +68,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_TotalHemoglobinConcentration_Match(byte[] dataPage, double concentration, MeasuremantStatus status)
         {
             // Arrange
-            var muscleOxygen = new MuscleOxygen(cid, null);
+            var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object);
 
             // Act
             muscleOxygen.Parse(
@@ -73,7 +86,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_PreviousSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasuremantStatus status)
         {
             // Arrange
-            var muscleOxygen = new MuscleOxygen(cid, null);
+            var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object);
 
             // Act
             muscleOxygen.Parse(
@@ -91,7 +104,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_CurrentSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasuremantStatus status)
         {
             // Arrange
-            var muscleOxygen = new MuscleOxygen(cid, null);
+            var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object);
 
             // Act
             muscleOxygen.Parse(
@@ -112,14 +125,13 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Arrange
             TimeSpan localTimeOffest = new(6, 0, 0);
             DateTime currentTimeStamp = DateTime.UtcNow;
-            Mock<IAntChannel> antChannel = new();
-            antChannel.Setup(s => s.SendExtAcknowledgedData(
+            mockAntChannel.Setup(s => s.SendExtAcknowledgedData(
                 cid, It.Is<byte[]>(cmd => (CommandId)cmd[1] == command &&
                 cmd[3] == localTimeOffest.TotalMinutes / 15 &&
                 BitConverter.ToUInt32(cmd, 4) == (uint)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds),
                 It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
-            var muscleOxygen = new MuscleOxygen(cid, antChannel.Object);
+            var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object);
 
             // Act
             var result = muscleOxygen.SendCommand(

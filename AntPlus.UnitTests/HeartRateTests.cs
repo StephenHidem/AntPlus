@@ -1,4 +1,6 @@
-﻿using SmallEarthTech.AntPlus;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -10,6 +12,18 @@ namespace DeviceProfile.UnitTests
     public class HeartRateTests
     {
         private readonly ChannelId hrmCid = new(0x01782211);
+        private MockRepository mockRepository;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<HeartRate>> mockLogger;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<HeartRate>>();
+        }
 
         [TestMethod]
         [DataRow(new byte[] { (byte)HeartRate.DataPage.Default, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 }, 0, 0, 0)]
@@ -19,7 +33,7 @@ namespace DeviceProfile.UnitTests
             // Arrange
             int et = 0, rr = 0;
             byte chr = 0;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 et = heartRate.HeartRateData.AccumulatedHeartBeatEventTime;
@@ -42,7 +56,7 @@ namespace DeviceProfile.UnitTests
             // Arrange
             int et = 0, rr = 0;
             byte chr = 0;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 et = heartRate.HeartRateData.AccumulatedHeartBeatEventTime;
@@ -67,7 +81,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             TimeSpan cot = TimeSpan.FromSeconds(0);
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 cot = heartRate.CumulativeOperatingTime;
@@ -87,7 +101,7 @@ namespace DeviceProfile.UnitTests
         public void Parse_ManufacturerInformation_ExpectedBehavior(byte[] dataPage, byte manId, uint sn)
         {
             // Arrange
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             byte mid = 0;
             uint serNum = 0;
             heartRate.PropertyChanged += (sender, e) =>
@@ -111,7 +125,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             byte hv = 0, sv = 0, mn = 0;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 hv = heartRate.ProductInfo.HardwareVersion;
@@ -136,7 +150,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             int rr = 0;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 rr = heartRate.PreviousHeartBeat.RRInterval;
@@ -156,7 +170,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             byte iahr = 0, imhr = 0, sahr = 0;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 iahr = heartRate.SwimInterval.IntervalAverageHeartRate;
@@ -182,7 +196,7 @@ namespace DeviceProfile.UnitTests
         {
             // Arrange
             HeartRate.Features enabled = HeartRate.Features.Generic, supported = HeartRate.Features.Generic;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 enabled = heartRate.Capabilities.Enabled;
@@ -207,7 +221,7 @@ namespace DeviceProfile.UnitTests
             byte bl = 0;
             double bv = 0;
             BatteryStatus bs = BatteryStatus.Unknown;
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 bl = heartRate.BatteryStatus.BatteryLevel;
@@ -231,7 +245,7 @@ namespace DeviceProfile.UnitTests
             // Arrange
             byte page = 0;
             byte[] data = { 0, 0, 0 };
-            var heartRate = new HeartRate(hrmCid, null);
+            var heartRate = new HeartRate(hrmCid, mockAntChannel.Object, mockLogger.Object);
             heartRate.PropertyChanged += (sender, e) =>
             {
                 page = heartRate.ManufacturerSpecific.Page;

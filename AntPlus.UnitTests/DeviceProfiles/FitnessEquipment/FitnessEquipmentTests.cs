@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment;
@@ -8,10 +9,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class FitnessEquipmentTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
+        private readonly ChannelId mockChannelId = new(0);
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -19,13 +21,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>>();
         }
 
         private SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment CreateFitnessEquipment()
         {
             return new SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment(
                 mockChannelId,
-                mockAntChannel?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         [TestMethod]

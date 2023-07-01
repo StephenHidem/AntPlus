@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System.IO;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// The asset tracker device class ID.
         /// </summary>
         public const byte DeviceClass = 41;
+        private readonly ILogger<Tracker> _logger;
 
         /// <summary>
         /// Main data pages.
@@ -50,9 +52,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public Tracker(ChannelId channelId, IAntChannel antChannel, int timeout = 500) : base(channelId, antChannel, timeout)
+        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger<Tracker> logger, int timeout = 500) : base(channelId, antChannel, timeout)
         {
+            _logger = logger;
         }
 
         /// <inheritdoc/>

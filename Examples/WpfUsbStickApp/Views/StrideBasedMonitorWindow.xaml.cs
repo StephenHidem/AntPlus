@@ -1,4 +1,4 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles;
 using System.Windows;
 using WpfUsbStickApp.ViewModels;
 

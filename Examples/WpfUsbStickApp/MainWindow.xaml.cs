@@ -1,13 +1,9 @@
 ﻿using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
-using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
-using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
-using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
-using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
-using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus;
-using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;

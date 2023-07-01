@@ -1,9 +1,11 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
-namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
+namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
     /// <summary>
     /// This class supports unknown devices.
@@ -11,6 +13,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
     /// <seealso cref="AntDevice" />
     public class UnknownDevice : AntDevice
     {
+        private readonly ILogger<UnknownDevice> _logger;
+
         /// <summary>
         /// Gets the collection of data pages received from the unknown device.
         /// </summary>
@@ -26,15 +30,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public UnknownDevice(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public UnknownDevice(ChannelId channelId, IAntChannel antChannel, ILogger<UnknownDevice> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
         {
+            _logger = logger;
         }
 
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
+            _logger.LogInformation("Data page = {0}", BitConverter.ToString(dataPage));
 
             byte[] page = DataPages.FirstOrDefault(p => p[0] == dataPage[0]);
             if (page == null)

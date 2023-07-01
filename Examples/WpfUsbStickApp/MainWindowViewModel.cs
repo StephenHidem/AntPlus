@@ -1,4 +1,7 @@
-﻿using SmallEarthTech.AntPlus;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
 using System.IO;
@@ -12,6 +15,9 @@ namespace WpfUsbStickApp.ViewModels
         public string ProductDescription { get; }
         public string SerialString { get; }
         public string HostVersion { get; }
+
+        private readonly IHost _host;
+
         public AntDeviceCollection AntDevices { get; }
         public static Stream AntImage => AntDevice.AntImage;
 
@@ -32,8 +38,11 @@ namespace WpfUsbStickApp.ViewModels
 
             AntRadio.GetChannel(1).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
 
+            // dependency services
+            _host = Host.CreateDefaultBuilder().Build();
+
             // create the device collection
-            AntDevices = new AntDeviceCollection(AntRadio, 2000);
+            AntDevices = new AntDeviceCollection(AntRadio, _host.Services.GetService<ILoggerFactory>(), 2000);
         }
     }
 }

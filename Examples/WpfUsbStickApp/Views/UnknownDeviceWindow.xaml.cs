@@ -1,4 +1,4 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles;
 using System.Windows;
 using System.Windows.Data;
 using WpfUsbStickApp.ViewModels;

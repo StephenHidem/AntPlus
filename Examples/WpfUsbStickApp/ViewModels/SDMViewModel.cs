@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus;
-using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 
 namespace WpfUsbStickApp.ViewModels
 {

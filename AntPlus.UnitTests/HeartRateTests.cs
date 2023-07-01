@@ -1,5 +1,5 @@
 ﻿using SmallEarthTech.AntPlus;
-using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;

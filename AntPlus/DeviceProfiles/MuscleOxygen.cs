@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen
+namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
     /// <summary>
     /// This class supports muscle oxygen sensors. This profile is specified in

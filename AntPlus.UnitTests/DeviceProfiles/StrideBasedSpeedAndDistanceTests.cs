@@ -1,7 +1,7 @@
 ﻿using Moq;
-using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
-using static SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance.StrideBasedSpeedAndDistance;
+using static SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
 
 namespace AntPlus.UnitTests.DeviceProfiles
 {

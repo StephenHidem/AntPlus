@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SmallEarthTech.AntPlus.DeviceProfiles.Geocache
+namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
     /// <summary>
     /// This class supports geocaches. This is specified in ANT+ Managed Network Document – Geocache Device Profile.

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;

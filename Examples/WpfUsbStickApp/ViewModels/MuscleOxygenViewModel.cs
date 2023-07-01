@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus;
-using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using System;
 using System.Linq;
 

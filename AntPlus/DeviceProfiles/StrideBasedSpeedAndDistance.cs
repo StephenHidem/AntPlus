@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance
+namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
     /// <summary>
     /// The stride based speed and distance monitor (SDM) class. The SDM is a personal body-worn device that allows the

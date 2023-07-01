@@ -1,4 +1,4 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles;
 using System.Windows;
 using WpfUsbStickApp.ViewModels;
 

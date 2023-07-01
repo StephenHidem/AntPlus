@@ -1,8 +1,8 @@
 ﻿using Moq;
-using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using static SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen.MuscleOxygen;
+using static SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
 
 namespace AntPlus.UnitTests.DeviceProfiles
 {

@@ -1,12 +1,9 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
-using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
-using SmallEarthTech.AntPlus.DeviceProfiles.HeartRate;
-using SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
-using SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
-using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
 using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -29,10 +26,12 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public object CollectionLock = new object();
         private readonly IAntChannel channel;
+        private readonly ILoggerFactory _loggerFactory;
         private readonly ushort timeout;
 
         /// <summary>Initializes a new instance of the <see cref="AntDeviceCollection" /> class.</summary>
         /// <param name="antRadio">The ANT radio interface.</param>
+        /// <param name="loggerFactory">Logger factory to generate type specific ILogger from.</param>
         /// <param name="antDeviceTimeout">ANT device timeout in milliseconds. The default is 2000 milliseconds.</param>
         /// <remarks>
         /// The timeout is set on each ANT device added to the collection. When the timeout
@@ -41,8 +40,9 @@ namespace SmallEarthTech.AntPlus
         /// Geocaches are a special case; geocaches broadcast at a 0.5Hz rate
         /// until the PIN page is requested, whereupon they broadcast at 4Hz. The geocache timeout is multiplied by 4.
         /// </remarks>
-        public AntDeviceCollection(IAntRadio antRadio, ushort antDeviceTimeout = 2000)
+        public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, ushort antDeviceTimeout = 2000)
         {
+            _loggerFactory = loggerFactory;
             timeout = antDeviceTimeout;
             antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;
             channel = antRadio.GetChannel(1);
@@ -141,7 +141,7 @@ namespace SmallEarthTech.AntPlus
                 case StrideBasedSpeedAndDistance.DeviceClass:
                     return new StrideBasedSpeedAndDistance(channelId, channel, timeout);
                 default:
-                    return new UnknownDevice(channelId, channel, timeout);
+                    return new UnknownDevice(channelId, channel, _loggerFactory.CreateLogger<UnknownDevice>(), timeout);
             }
         }
     }

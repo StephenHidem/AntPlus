@@ -1,4 +1,4 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles;
 
 namespace WpfUsbStickApp.ViewModels
 {

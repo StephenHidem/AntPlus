@@ -1,5 +1,5 @@
 ﻿using Moq;
-using SmallEarthTech.AntPlus.DeviceProfiles.Geocache;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;

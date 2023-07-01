@@ -1,5 +1,6 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice;
+﻿using Moq;
 using SmallEarthTech.AntRadioInterface;
+using System.Threading;
 
 namespace SmallEarthTech.AntPlus.UnitTests
 {
@@ -9,57 +10,61 @@ namespace SmallEarthTech.AntPlus.UnitTests
         [TestMethod]
         [DataRow((uint)0x0FFF0001, (uint)0x00000001)]
         [DataRow((uint)0xFFFF0001, (uint)0x000F0001)]
-        public void TestDeviceNumber(uint channelId, uint expectedDeviceNumber)
+        public void Ctor_ChannelID_VerifyDeviceNumber(uint channelId, uint expectedDeviceNumber)
         {
             // Arrange
-            var antDevice = new UnknownDevice(new ChannelId(channelId), null);
+            ChannelId cid = new((uint)channelId);
 
             // Act
+            Mock<AntDevice> antDevice = new(cid, null, 500);
 
             // Assert
-            Assert.AreEqual(expectedDeviceNumber, antDevice.ChannelId.DeviceNumber);
+            Assert.AreEqual((uint)expectedDeviceNumber, antDevice.Object.ChannelId.DeviceNumber);
         }
 
         [TestMethod]
         [DataRow((uint)0xFF81FFFF, (byte)0x01)]
         [DataRow((uint)0xFFFFFFFF, (byte)0x7F)]
-        public void TestDeviceType(uint channelId, byte expectedDeviceType)
+        public void Ctor_ChannelID_VerifyDeviceType(uint channelId, byte expectedDeviceType)
         {
             // Arrange
-            var antDevice = new UnknownDevice(new ChannelId(channelId), null);
+            ChannelId cid = new((uint)channelId);
 
             // Act
+            Mock<AntDevice> antDevice = new(cid, null, 500);
 
             // Assert
-            Assert.AreEqual(expectedDeviceType, antDevice.ChannelId.DeviceType);
+            Assert.AreEqual(expectedDeviceType, antDevice.Object.ChannelId.DeviceType);
         }
 
         [TestMethod]
         [DataRow((uint)0x00800000, true)]
         [DataRow((uint)0xFF7FFFFF, false)]
-        public void TestPairingBit(uint channelId, bool expectedResult)
+        public void Ctor_ChannelID_VerifyPairingBit(uint channelId, bool expectedResult)
         {
             // Arrange
-            var antDevice = new UnknownDevice(new ChannelId(channelId), null);
+            ChannelId cid = new((uint)channelId);
 
             // Act
+            Mock<AntDevice> antDevice = new(cid, null, 500);
 
             // Assert
-            Assert.AreEqual(expectedResult, antDevice.ChannelId.IsPairingBitSet);
+            Assert.AreEqual(expectedResult, antDevice.Object.ChannelId.IsPairingBitSet);
         }
 
         [TestMethod]
         [DataRow((uint)0x04000000, true)]
         [DataRow((uint)0xFBFFFFFF, false)]
-        public void TestAreGlobalPageUsed(uint channelId, bool expectedResult)
+        public void Ctor_ChannelID_VerifyAreGlobalPageUsed(uint channelId, bool expectedResult)
         {
             // Arrange
-            var antDevice = new UnknownDevice(new ChannelId(channelId), null);
+            ChannelId cid = new((uint)channelId);
 
             // Act
+            Mock<AntDevice> antDevice = new(cid, null, 500);
 
             // Assert
-            Assert.AreEqual(expectedResult, antDevice.ChannelId.AreGlobalDataPagesUsed);
+            Assert.AreEqual(expectedResult, antDevice.Object.ChannelId.AreGlobalDataPagesUsed);
         }
 
         [TestMethod]
@@ -71,15 +76,33 @@ namespace SmallEarthTech.AntPlus.UnitTests
         [DataRow((uint)0xFEFFFFFF, ChannelSharing.SharedChannelOneByteAddress)]
         [DataRow((uint)0xF3FFFFFF, ChannelSharing.SharedChannelTwoByteAddress)]
         [DataRow((uint)0xFFFFFFFF, ChannelSharing.SharedChannelTwoByteAddress)]
-        public void TestTransmissionType(uint channelId, ChannelSharing expectedTranmissonType)
+        public void Ctor_ChannelID_VerifyTransmissionType(uint channelId, ChannelSharing expectedTranmissonType)
         {
             // Arrange
-            var antDevice = new UnknownDevice(new ChannelId(channelId), null);
+            ChannelId cid = new((uint)channelId);
 
             // Act
+            Mock<AntDevice> antDevice = new(cid, null, 500);
 
             // Assert
-            Assert.AreEqual(expectedTranmissonType, antDevice.ChannelId.TransmissionType);
+            Assert.AreEqual(expectedTranmissonType, antDevice.Object.ChannelId.TransmissionType);
+        }
+
+        [TestMethod]
+        public void Timeout_Offline_ExpectedEventAndStatus()
+        {
+            // Arrange
+            bool offline = false;
+            ChannelId cid = new(0);
+            Mock<AntDevice> antDevice = new(cid, null, 50);
+            antDevice.Object.DeviceWentOffline += (sender, e) => { offline = antDevice.Object.Offline; };
+
+            // Act
+            Thread.Sleep(100);
+
+            // Assert
+            Assert.IsTrue(offline == true);
+            Assert.IsTrue(antDevice.Object.Offline == true);
         }
     }
 }

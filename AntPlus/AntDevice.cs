@@ -97,7 +97,7 @@ namespace SmallEarthTech.AntPlus
         /// <remarks>Overridden to provide the short class name versus the full namepace name.</remarks>
         public override string ToString()
         {
-            return base.GetType().Name;
+            return GetType().Name;
         }
 
         /// <summary>Requests the data page.</summary>

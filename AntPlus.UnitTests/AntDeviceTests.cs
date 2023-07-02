@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntRadioInterface;
 using System.Threading;
 
@@ -7,6 +9,20 @@ namespace SmallEarthTech.AntPlus.UnitTests
     [TestClass]
     public class AntDeviceTests
     {
+        private MockRepository mockRepository;
+
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Tracker>> mockLogger;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<Tracker>>(MockBehavior.Loose);
+        }
+
         [TestMethod]
         [DataRow((uint)0x0FFF0001, (uint)0x00000001)]
         [DataRow((uint)0xFFFF0001, (uint)0x000F0001)]
@@ -16,7 +32,7 @@ namespace SmallEarthTech.AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, null, 500);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, 500);
 
             // Assert
             Assert.AreEqual((uint)expectedDeviceNumber, antDevice.Object.ChannelId.DeviceNumber);
@@ -31,7 +47,7 @@ namespace SmallEarthTech.AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, null, 500);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, 500);
 
             // Assert
             Assert.AreEqual(expectedDeviceType, antDevice.Object.ChannelId.DeviceType);
@@ -46,7 +62,7 @@ namespace SmallEarthTech.AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, null, 500);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, 500);
 
             // Assert
             Assert.AreEqual(expectedResult, antDevice.Object.ChannelId.IsPairingBitSet);
@@ -61,7 +77,7 @@ namespace SmallEarthTech.AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, null, 500);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, 500);
 
             // Assert
             Assert.AreEqual(expectedResult, antDevice.Object.ChannelId.AreGlobalDataPagesUsed);
@@ -82,7 +98,7 @@ namespace SmallEarthTech.AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, null, 500);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, 500);
 
             // Assert
             Assert.AreEqual(expectedTranmissonType, antDevice.Object.ChannelId.TransmissionType);
@@ -94,7 +110,7 @@ namespace SmallEarthTech.AntPlus.UnitTests
             // Arrange
             bool offline = false;
             ChannelId cid = new(0);
-            Mock<AntDevice> antDevice = new(cid, null, 50);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, 50);
             antDevice.Object.DeviceWentOffline += (sender, e) => { offline = antDevice.Object.Offline; };
 
             // Act

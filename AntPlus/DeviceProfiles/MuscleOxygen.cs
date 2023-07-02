@@ -14,7 +14,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     public class MuscleOxygen : AntDevice
     {
         private byte eventCount;
-        private readonly ILogger<MuscleOxygen> _logger;
 
         /// <summary>
         /// The muscle oxygen device class ID.
@@ -102,7 +101,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>Gets the current saturated hemoglobin.</summary>
         public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
         /// <summary>Gets the common data pages.</summary>
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(MuscleOxygen).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.MuscleOxygen.png");
 
@@ -112,9 +111,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger<MuscleOxygen> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger<MuscleOxygen> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
+            CommonDataPages = new CommonDataPages(logger);
         }
 
         /// <inheritdoc/>

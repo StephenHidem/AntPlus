@@ -11,7 +11,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
     public class UnknownDeviceTests
     {
         readonly ChannelId cid = new(0);
-        readonly Mock<ILogger<UnknownDevice>> mockLogger = new();
+        readonly Mock<ILogger<UnknownDevice>> mockLogger = new(MockBehavior.Loose);
 
         [TestMethod]
         public void Parse_EmptyPageCollection_PageAdded()

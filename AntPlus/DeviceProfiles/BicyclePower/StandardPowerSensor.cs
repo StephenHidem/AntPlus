@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -34,19 +35,22 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public byte InstantaneousCadence { get; protected set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
         public ushort InstantaneousPower { get; private set; }
+
         /// <summary>Gets the parameters.</summary>
         public Parameters Parameters { get; private set; }
         /// <summary>Gets the torque effectiveness and pedal smoothness.</summary>
         public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; } = new TorqueEffectivenessAndPedalSmoothness();
         /// <summary>Gets the common data pages.</summary>
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public CommonDataPages CommonDataPages { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
         /// </summary>
         /// <param name="bp">The bp.</param>
-        public StandardPowerSensor(BicyclePower bp)
+        /// <param name="logger">Logger to use.</param>
+        public StandardPowerSensor(BicyclePower bp, ILogger logger)
         {
+            CommonDataPages = new CommonDataPages(logger);
             Parameters = new Parameters(bp);
         }
 

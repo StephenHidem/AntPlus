@@ -15,7 +15,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// The BikeCadenceSensor device class ID.
         /// </summary>
         public const byte DeviceClass = 122;
-        private readonly ILogger<BikeCadenceSensor> _logger;
 
         /// <summary>Gets the instantaneous cadence in rotations per minute.</summary>
         public double InstantaneousCadence { get; private set; }
@@ -29,9 +28,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <param name="antChannel">The ant channel.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Timeout in milliseconds.</param>
-        public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeCadenceSensor> logger, ushort timeout = 2000) : base(channelId, antChannel, timeout)
+        public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeCadenceSensor> logger, ushort timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
         }
 
         /// <inheritdoc/>

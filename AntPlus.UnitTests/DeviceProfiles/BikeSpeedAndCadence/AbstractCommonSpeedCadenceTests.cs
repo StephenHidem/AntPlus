@@ -1,4 +1,6 @@
-﻿using SmallEarthTech.AntPlus;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -8,7 +10,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 {
     internal class AbstractCommonSpeedCadence : CommonSpeedCadence
     {
-        public AbstractCommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public AbstractCommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
         }
 
@@ -24,11 +26,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
     public class AbstractCommonSpeedCadenceTests
     {
         private AbstractCommonSpeedCadence _sensor;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger> mockLogger;
 
         [TestInitialize]
         public void Initialize()
         {
-            _sensor = new(new ChannelId(1), null);
+            mockAntChannel = new Mock<IAntChannel>();
+            mockLogger = new Mock<ILogger>();
+            _sensor = new(new ChannelId(1), mockAntChannel.Object, mockLogger.Object);
             byte[] dataPage = new byte[8];
             dataPage[0] = 0x80;         // initial page change toggle
             _sensor.Parse(dataPage);

@@ -23,7 +23,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         private ushort prevSpeedRevCount;
         private ushort prevCadenceEventTime;
         private ushort prevCadenceRevCount;
-        private readonly ILogger<CombinedSpeedAndCadenceSensor> _logger;
 
         /// <summary>Gets the instantaneous cadence in revolutions per minute.</summary>
         public double InstantaneousCadence { get; private set; }
@@ -45,9 +44,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public CombinedSpeedAndCadenceSensor(ChannelId channelId, IAntChannel antChannel, ILogger<CombinedSpeedAndCadenceSensor> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public CombinedSpeedAndCadenceSensor(ChannelId channelId, IAntChannel antChannel, ILogger<CombinedSpeedAndCadenceSensor> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
         }
 
         /// <inheritdoc/>

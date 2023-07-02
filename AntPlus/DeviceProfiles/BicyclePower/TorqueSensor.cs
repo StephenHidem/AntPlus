@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -33,7 +34,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Initializes a new instance of the <see cref="TorqueSensor" /> class.</summary>
         /// <param name="bp">The bp.</param>
-        protected TorqueSensor(BicyclePower bp) : base(bp)
+        /// <param name="logger">Logger to use.</param>
+        protected TorqueSensor(BicyclePower bp, ILogger logger) : base(bp, logger)
         {
         }
 

@@ -22,7 +22,7 @@ namespace DeviceProfile.UnitTests
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<HeartRate>>();
+            mockLogger = mockRepository.Create<ILogger<HeartRate>>(MockBehavior.Loose);
         }
 
         [TestMethod]

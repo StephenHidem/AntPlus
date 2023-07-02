@@ -1,4 +1,5 @@
-﻿using SmallEarthTech.AntRadioInterface;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 
@@ -108,8 +109,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
         }
 
@@ -165,6 +167,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     RaisePropertyChange(nameof(Stopped));
                     break;
                 default:
+                    logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(Parse), BitConverter.ToString(dataPage));
                     break;
             }
         }

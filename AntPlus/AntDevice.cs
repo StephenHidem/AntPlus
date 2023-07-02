@@ -1,8 +1,8 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
@@ -26,6 +26,9 @@ namespace SmallEarthTech.AntPlus
         private readonly IAntChannel antChannel;
         private Timer timeoutTimer;
         private readonly int deviceTimeout;
+
+        /// <summary>The logger for derived classes to use.</summary>
+        protected readonly ILogger logger;
 
         /// <summary>This field supplies the generic ANT+ image
         /// from the manifest resource stream.</summary>
@@ -67,11 +70,14 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="DeviceWentOffline"/>.</param>
-        protected AntDevice(ChannelId channelId, IAntChannel antChannel, int timeout)
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
         {
+            logger.LogInformation("Created {AntDevice}", ToString());
             ChannelId = channelId;
             this.antChannel = antChannel;
+            this.logger = logger;
             deviceTimeout = timeout;
             timeoutTimer = new Timer(TimeoutCallback);
             timeoutTimer.Change(deviceTimeout, Timeout.Infinite);
@@ -79,8 +85,7 @@ namespace SmallEarthTech.AntPlus
 
         private void TimeoutCallback(object state)
         {
-            timeoutTimer?.Dispose();
-            timeoutTimer = null;
+            Dispose();
             Offline = true;
             RaisePropertyChange(nameof(Offline));
             DeviceWentOffline?.Invoke(this, new EventArgs());
@@ -121,7 +126,9 @@ namespace SmallEarthTech.AntPlus
             }
             else
             {
-                throw new ArgumentException("Invalid data page requested.");
+                ArgumentException ex = new ArgumentException("Invalid data page requested.", nameof(page));
+                logger.LogError(ex, "AntDevice {AntDevice}", ToString());
+                throw ex;
             }
         }
 
@@ -136,14 +143,15 @@ namespace SmallEarthTech.AntPlus
             do
             {
                 ret = antChannel.SendExtAcknowledgedData(ChannelId, message, ackWaitTime);
-                Debug.WriteLineIf(ret != MessagingReturnCode.Pass, string.Format("SendExtAcknowledgedMessage error: Page = {0}, Code = {1}, Retries = {2}", message[0], ret, retries));
             } while (ret != MessagingReturnCode.Pass && --retries > 0);
+            logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), nameof(SendExtAcknowledgedMessage), ret);
             return ret;
         }
 
         /// <inheritdoc/>
         public void Dispose()
         {
+            logger.LogInformation("Disposed {AntDevice}", ToString());
             timeoutTimer?.Dispose();
             timeoutTimer = null;
         }

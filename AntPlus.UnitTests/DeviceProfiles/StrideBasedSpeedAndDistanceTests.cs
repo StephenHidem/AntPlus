@@ -21,7 +21,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<StrideBasedSpeedAndDistance>>();
+            mockLogger = mockRepository.Create<ILogger<StrideBasedSpeedAndDistance>>(MockBehavior.Loose);
         }
 
         private StrideBasedSpeedAndDistance CreateStrideBasedSpeedAndDistance()

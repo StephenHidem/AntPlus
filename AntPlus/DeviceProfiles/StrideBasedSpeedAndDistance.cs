@@ -26,7 +26,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private byte prevTime;
         private byte prevDistance;
         private byte prevStrideCount;
-        private readonly ILogger<StrideBasedSpeedAndDistance> _logger;
 
         /// <summary>
         /// SDM device data pages.
@@ -176,7 +175,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public double DistanceSummary { get; private set; }
 
         /// <summary>Gets the common data pages.</summary>
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(StrideBasedSpeedAndDistance).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.SDM.png");
 
@@ -187,9 +186,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
+            CommonDataPages = new CommonDataPages(logger);
         }
 
         /// <inheritdoc/>
@@ -268,6 +267,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </summary>
         public void RequestSummaryPage()
         {
+            logger.LogInformation(nameof(RequestSummaryPage));
             RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
@@ -284,6 +284,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         public void RequestBroadcastCapabilities()
         {
+            logger?.LogInformation(nameof(RequestBroadcastCapabilities));
             RequestDataPage(DataPage.Capabilities);
         }
     }

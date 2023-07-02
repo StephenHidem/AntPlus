@@ -43,7 +43,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<Geocache>>();
+            mockLogger = mockRepository.Create<ILogger<Geocache>>(MockBehavior.Loose);
         }
 
         [TestMethod]

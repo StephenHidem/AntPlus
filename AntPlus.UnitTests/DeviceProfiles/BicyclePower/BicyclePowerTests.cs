@@ -25,7 +25,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
             mockChannelId = new ChannelId(0);
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower>>();
+            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower>>(MockBehavior.Loose);
         }
 
         private SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower CreateBicyclePower()

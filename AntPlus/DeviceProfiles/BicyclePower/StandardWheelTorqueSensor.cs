@@ -1,4 +1,6 @@
-﻿namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
+﻿using Microsoft.Extensions.Logging;
+
+namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// The standard wheel torque sensor.
@@ -25,7 +27,8 @@
 
         /// <summary>Initializes a new instance of the <see cref="StandardWheelTorqueSensor" /> class.</summary>
         /// <param name="bp">The bp.</param>
-        public StandardWheelTorqueSensor(BicyclePower bp) : base(bp)
+        /// <param name="logger">Logger to use.</param>
+        public StandardWheelTorqueSensor(BicyclePower bp, ILogger logger) : base(bp, logger)
         {
         }
 

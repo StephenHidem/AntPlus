@@ -22,7 +22,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<Tracker>>();
+            mockLogger = mockRepository.Create<ILogger<Tracker>>(MockBehavior.Loose);
         }
 
         private SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker CreateAssetTracker()

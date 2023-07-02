@@ -14,7 +14,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// The asset tracker device class ID.
         /// </summary>
         public const byte DeviceClass = 41;
-        private readonly ILogger<Tracker> _logger;
 
         /// <summary>
         /// Main data pages.
@@ -43,7 +42,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <summary>
         /// Gets the common data pages.
         /// </summary>
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(Tracker).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AssetTracker.png");
 
@@ -54,9 +53,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger<Tracker> logger, int timeout = 500) : base(channelId, antChannel, timeout)
+        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger<Tracker> logger, int timeout = 500) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
+            CommonDataPages = new CommonDataPages(logger);
         }
 
         /// <inheritdoc/>

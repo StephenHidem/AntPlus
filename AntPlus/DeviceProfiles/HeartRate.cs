@@ -100,7 +100,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private bool pageToggle = false;
         private int observedToggle;
         private int rrInterval;
-        private readonly ILogger<HeartRate> _logger;
 
         /// <summary>
         /// Heart rate data common to all data pages.
@@ -278,9 +277,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="antChannel"></param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
         }
 
         /// <inheritdoc/>

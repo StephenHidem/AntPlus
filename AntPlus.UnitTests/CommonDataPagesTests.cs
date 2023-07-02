@@ -12,7 +12,7 @@ namespace AntPlus.UnitTests
         public void ParseCommonDataPage_SupportedPages_PropertiesCorrect()
         {
             // Arrange
-            CommonDataPages commonDataPage = new();
+            CommonDataPages commonDataPage = new(null);
             List<byte[]> commonDataPages = new()
             {
                 new byte[8] { 0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44 },   // command status

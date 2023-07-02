@@ -201,8 +201,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>Gets a value indicating whether [lap toggle].</summary>
         public bool LapToggle { get; private set; }
 
-        private readonly ILogger<FitnessEquipment> _logger;
-
         /// <summary>Gets the general data.</summary>
         public GeneralDataPage GeneralData { get; private set; }
         /// <summary>Gets the general settings.</summary>
@@ -226,7 +224,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>Gets the supported capabilities.</summary>
         public SupportedTrainingModes Capabilities { get; private set; }
         /// <summary>Gets the common data pages.</summary>
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(FitnessEquipment).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.FE-C.png");
 
@@ -237,9 +235,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, timeout)
+        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
+            CommonDataPages = new CommonDataPages(logger);
             GeneralData = new GeneralDataPage();
             GeneralSettings = new GeneralSettingsPage();
             GeneralMetabolic = new GeneralMetabolicPage();

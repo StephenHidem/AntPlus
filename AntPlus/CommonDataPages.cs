@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel;
 using System.Linq;
 
@@ -107,6 +108,8 @@ namespace SmallEarthTech.AntPlus
     /// <seealso cref="INotifyPropertyChanged" />
     public class CommonDataPages : INotifyPropertyChanged
     {
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
@@ -384,6 +387,13 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Gets the error description.</summary>
         public ErrorDescriptionPage ErrorDescription { get; private set; }
 
+        /// <summary>Initializes a new instance of the <see cref="CommonDataPages" /> class.</summary>
+        /// <param name="logger">The logger.</param>
+        public CommonDataPages(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>Parses the common data page.</summary>
         /// <param name="dataPage">The data page.</param>
         public void ParseCommonDataPage(byte[] dataPage)
@@ -429,6 +439,7 @@ namespace SmallEarthTech.AntPlus
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ErrorDescription"));
                     break;
                 default:
+                    _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
                     break;
             }
         }

@@ -83,19 +83,14 @@ namespace WpfUsbStickApp.ViewModels
         }
         private bool CanSetSportMode()
         {
-            switch (ModeRequested)
+            return ModeRequested switch
             {
-                case SportMode.Generic:
-                    return !HeartRate.Capabilities.Enabled.Equals(HeartRate.Features.Generic);
-                case SportMode.Running:
-                    return HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Running);
-                case SportMode.Cycling:
-                    return HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Cycling);
-                case SportMode.Swimming:
-                    return HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Swimming);
-                default:
-                    return false;
-            }
+                SportMode.Generic => !HeartRate.Capabilities.Enabled.Equals(HeartRate.Features.Generic),
+                SportMode.Running => HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Running),
+                SportMode.Cycling => HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Cycling),
+                SportMode.Swimming => HeartRate.Capabilities.Supported.HasFlag(HeartRate.Features.Swimming),
+                _ => false,
+            };
         }
 
         [RelayCommand]

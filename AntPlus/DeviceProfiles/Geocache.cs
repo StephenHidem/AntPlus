@@ -51,7 +51,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private bool authRequested;
         private bool programmingGeocache;
         private byte loggedVisitsPage;
-        private readonly ILogger<Geocache> _logger;
         private DateTime lastMessageTime;
 
         /// <summary>Gets the trackable identifier.</summary>
@@ -77,7 +76,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <value>The message rate in Hz.</value>
         public double MessageRate { get; private set; }
         /// <summary>Gets the common data pages.</summary>
-        public CommonDataPages CommonDataPages { get; private set; } = new CommonDataPages();
+        public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(Geocache).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.Geocache.png");
 
@@ -92,9 +91,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
         /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
-        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int timeout = 8000) : base(channelId, antChannel, timeout)
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int timeout = 8000) : base(channelId, antChannel, logger, timeout)
         {
-            _logger = logger;
+            CommonDataPages = new CommonDataPages(logger);
             lastMessageTime = DateTime.Now;
         }
 

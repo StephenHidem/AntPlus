@@ -25,9 +25,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             mockLogger = mockRepository.Create<ILogger<Tracker>>(MockBehavior.Loose);
         }
 
-        private SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker CreateAssetTracker()
+        private Tracker CreateAssetTracker()
         {
-            return new SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker.Tracker(
+            return new Tracker(
                 mockChannelId,
                 mockAntChannel.Object,
                 mockLogger.Object);

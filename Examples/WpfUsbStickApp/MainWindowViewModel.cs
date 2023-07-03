@@ -5,6 +5,8 @@ using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace WpfUsbStickApp.ViewModels
@@ -40,6 +42,15 @@ namespace WpfUsbStickApp.ViewModels
 
             // dependency services
             _host = Host.CreateDefaultBuilder().Build();
+
+            // log app info
+            var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name.StartsWith("Ant"));
+            var logger = _host.Services.GetRequiredService<ILogger<App>>();
+            logger.LogInformation("{App}", Assembly.GetExecutingAssembly().GetName().FullName);
+            foreach (var asm in antAssemblies)
+            {
+                logger?.LogInformation("{AntAssembly}", asm.FullName);
+            }
 
             // create the device collection
             AntDevices = new AntDeviceCollection(AntRadio, _host.Services.GetService<ILoggerFactory>(), 2000);

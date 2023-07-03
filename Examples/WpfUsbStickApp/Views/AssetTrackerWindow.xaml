@@ -24,8 +24,8 @@
                             <GridViewColumn Header="Bearing" DisplayMemberBinding="{Binding Path=Bearing}"/>
                             <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
                             <GridViewColumn Header="Situation" DisplayMemberBinding="{Binding Path=Situation}"/>
-                            <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude}"/>
-                            <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude}"/>
+                            <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Latitude, StringFormat='\{0:F6}'}"/>
+                            <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Longitude, StringFormat='\{0:F6}'}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

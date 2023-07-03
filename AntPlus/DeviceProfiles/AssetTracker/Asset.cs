@@ -194,6 +194,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             if (gotLocationPage1 && gotLocationPage2)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                gotLocationPage1 = gotLocationPage2 = false;
             }
         }
 
@@ -213,6 +214,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             if (gotLocationPage1 && gotLocationPage2)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                gotLocationPage1 = gotLocationPage2 = false;
             }
         }
     }

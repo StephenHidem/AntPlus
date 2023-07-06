@@ -7,11 +7,75 @@ using System.Linq;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
+    /// Fitness equipment type.
+    /// </summary>
+    public enum FitnessEquipmentType
+    {
+        /// <summary>Treadmill</summary>
+        Treadmill = 0x13,
+        /// <summary>Elliptical</summary>
+        Elliptical = 0x14,
+        /// <summary>Rower</summary>
+        Rower = 0x16,
+        /// <summary>Climber</summary>
+        Climber = 0x17,
+        /// <summary>Nordic skier</summary>
+        NordicSkier = 0x18,
+        /// <summary>Trainer stationary bike</summary>
+        TrainerStationaryBike = 0x19
+    }
+
+    /// <summary>Heart rate data source</summary>
+    public enum HRDataSource
+    {
+        /// <summary>Invalid</summary>
+        Invalid,
+        /// <summary>Heart rate monitor</summary>
+        HeartRateMonitor,
+        /// <summary>EM heart rate monitor</summary>
+        EMHeartRateMonitor,
+        /// <summary>Hand contact sensors</summary>
+        HandContactSensors
+    }
+
+    /// <summary>Equipment state</summary>
+    public enum FEState
+    {
+        /// <summary>Unknown</summary>
+        Unknown = 0,
+        /// <summary>Asleep or off</summary>
+        AsleepOrOff = 1,
+        /// <summary>Ready</summary>
+        Ready,
+        /// <summary>In use</summary>
+        InUse,
+        /// <summary>Finished or paused</summary>
+        FinishedOrPaused
+    }
+
+    /// <summary>Supported training modes</summary>
+    [Flags]
+    public enum SupportedTrainingModes
+    {
+        /// <summary>Basic resistance</summary>
+        BasicResistance = 0x01,
+        /// <summary>Target power</summary>
+        TargetPower = 0x02,
+        /// <summary>Simulation</summary>
+        Simulation = 0x04
+    }
+
+    /// <summary>
     /// This is the primary support class for fitness equipment sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
     public class Equipment : AntDevice
     {
+        private bool isFirstDataMessage = true;
+        private byte prevElapsedTime;
+        private byte prevDistance;
+        private bool prevLapToggle;
+
         /// <summary>
         /// The fitness equipment device class ID.
         /// </summary>
@@ -38,114 +102,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             TrackResistance = 0x33,
             FECapabilities = 0x36,
             UserConfiguration = 0x37
-        }
-
-        /// <summary>
-        /// Fitness equipment type.
-        /// </summary>
-        public enum FitnessEquipmentType
-        {
-            /// <summary>Treadmill</summary>
-            Treadmill = 0x13,
-            /// <summary>Elliptical</summary>
-            Elliptical = 0x14,
-            /// <summary>Rower</summary>
-            Rower = 0x16,
-            /// <summary>Climber</summary>
-            Climber = 0x17,
-            /// <summary>Nordic skier</summary>
-            NordicSkier = 0x18,
-            /// <summary>Trainer stationary bike</summary>
-            TrainerStationaryBike = 0x19
-        }
-
-        /// <summary>Heart rate data source</summary>
-        public enum HRDataSource
-        {
-            /// <summary>Invalid</summary>
-            Invalid,
-            /// <summary>Heart rate monitor</summary>
-            HeartRateMonitor,
-            /// <summary>EM heart rate monitor</summary>
-            EMHeartRateMonitor,
-            /// <summary>Hand contact sensors</summary>
-            HandContactSensors
-        }
-
-        /// <summary>Equipment state</summary>
-        public enum FEState
-        {
-            /// <summary>Unknown</summary>
-            Unknown = 0,
-            /// <summary>Asleep or off</summary>
-            AsleepOrOff = 1,
-            /// <summary>Ready</summary>
-            Ready,
-            /// <summary>In use</summary>
-            InUse,
-            /// <summary>Finished or paused</summary>
-            FinishedOrPaused
-        }
-
-        /// <summary>Supported training modes</summary>
-        [Flags]
-        public enum SupportedTrainingModes
-        {
-            /// <summary>Basic resistance</summary>
-            BasicResistance = 0x01,
-            /// <summary>Target power</summary>
-            TargetPower = 0x02,
-            /// <summary>Simulation</summary>
-            Simulation = 0x04
-        }
-
-        /// <summary>This class supports fitness equipment general data pages.</summary>
-        public class GeneralDataPage
-        {
-            private bool isFirstDataMessage = true;
-            private byte prevElapsedTime;
-            private byte prevDistance;
-
-            /// <summary>Gets the type of the equipment.</summary>
-            public FitnessEquipmentType EquipmentType { get; private set; }
-            /// <summary>Gets the elapsed time.</summary>
-            public TimeSpan ElapsedTime { get; private set; }
-            /// <summary>Gets the distance traveled in meters.</summary>
-            public int DistanceTraveled { get; private set; }
-            /// <summary>Gets the instantaneous speed.</summary>
-            /// <value>The instantaneous speed in meters per second.</value>
-            public double InstantaneousSpeed { get; private set; }
-            /// <summary>Gets the instantaneous heart rate.</summary>
-            public byte InstantaneousHeartRate { get; private set; }
-            /// <summary>Gets the heart rate source.</summary>
-            public HRDataSource HeartRateSource { get; private set; }
-            /// <summary>Gets the virtual speed flag.</summary>
-            public bool VirtualSpeedFlag { get; private set; }
-            /// <summary>Gets the distance traveled enabled flag.</summary>
-            public bool DistanceTraveledEnabled { get; private set; }
-
-            /// <summary>Parses the specified data page.</summary>
-            /// <param name="dataPage">The data page.</param>
-            internal void Parse(byte[] dataPage)
-            {
-                EquipmentType = (FitnessEquipmentType)dataPage[1];
-                if (!isFirstDataMessage)
-                {
-                    ElapsedTime += TimeSpan.FromSeconds(Utils.CalculateDelta(dataPage[2], ref prevElapsedTime) * 0.25);
-                    DistanceTraveled += Utils.CalculateDelta(dataPage[3], ref prevDistance);
-                }
-                else
-                {
-                    prevElapsedTime = dataPage[2];
-                    prevDistance = dataPage[3];
-                    isFirstDataMessage = false;
-                }
-                InstantaneousSpeed = BitConverter.ToUInt16(dataPage, 4) * 0.001;
-                InstantaneousHeartRate = dataPage[6];
-                HeartRateSource = (HRDataSource)(dataPage[7] & 0x03);
-                DistanceTraveledEnabled = (dataPage[7] & 0x04) != 0;
-                VirtualSpeedFlag = (dataPage[7] & 0x08) != 0;
-            }
         }
 
         /// <summary>This class supports fitness equipment general settings pages.</summary>
@@ -196,13 +152,28 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
 
+        /// <summary>Gets the type of the equipment.</summary>
+        public FitnessEquipmentType EquipmentType { get; private set; }
         /// <summary>Gets the equipment state.</summary>
         public FEState State { get; private set; }
-        /// <summary>Gets a value indicating whether [lap toggle].</summary>
-        public bool LapToggle { get; private set; }
+        /// <summary>Gets the elapsed time.</summary>
+        public TimeSpan ElapsedTime { get; private set; }
+        /// <summary>Gets the distance traveled in meters.</summary>
+        public int DistanceTraveled { get; private set; }
+        /// <summary>Gets the lap time.</summary>
+        public TimeSpan LapTime { get; private set; }
+        /// <summary>Gets the instantaneous speed.</summary>
+        /// <value>The instantaneous speed in meters per second.</value>
+        public double InstantaneousSpeed { get; private set; }
+        /// <summary>Gets the instantaneous heart rate.</summary>
+        public byte InstantaneousHeartRate { get; private set; }
+        /// <summary>Gets the heart rate source.</summary>
+        public HRDataSource HeartRateSource { get; private set; }
+        /// <summary>Gets the virtual speed flag.</summary>
+        public bool VirtualSpeedFlag { get; private set; }
+        /// <summary>Gets the distance traveled enabled flag.</summary>
+        public bool DistanceTraveledEnabled { get; private set; }
 
-        /// <summary>Gets the general data.</summary>
-        public GeneralDataPage GeneralData { get; private set; }
         /// <summary>Gets the general settings.</summary>
         public GeneralSettingsPage GeneralSettings { get; private set; }
         /// <summary>Gets the general metabolic reports.</summary>
@@ -238,7 +209,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public Equipment(ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
-            GeneralData = new GeneralDataPage();
             GeneralSettings = new GeneralSettingsPage();
             GeneralMetabolic = new GeneralMetabolicPage();
         }
@@ -250,15 +220,55 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
             switch ((DataPage)dataPage[0])
             {
-                // handle general pages
                 case DataPage.GeneralFEData:
                     HandleFEState(dataPage[7]);
-                    GeneralData.Parse(dataPage);
-                    if (!IsKnownEquipmentType(GeneralData.EquipmentType))
+                    EquipmentType = (FitnessEquipmentType)dataPage[1];
+                    RaisePropertyChange(nameof(EquipmentType));
+                    InstantaneousSpeed = BitConverter.ToUInt16(dataPage, 4) * 0.001;
+                    RaisePropertyChange(nameof(InstantaneousSpeed));
+                    InstantaneousHeartRate = dataPage[6];
+                    RaisePropertyChange(nameof(InstantaneousHeartRate));
+                    HeartRateSource = (HRDataSource)(dataPage[7] & 0x03);
+                    RaisePropertyChange(nameof(HeartRateSource));
+                    DistanceTraveledEnabled = (dataPage[7] & 0x04) != 0;
+                    RaisePropertyChange(nameof(DistanceTraveledEnabled));
+                    VirtualSpeedFlag = (dataPage[7] & 0x08) != 0;
+                    RaisePropertyChange(nameof(VirtualSpeedFlag));
+
+                    if (!IsKnownEquipmentType(EquipmentType))
                     {
-                        CreateSpecificEquipment(GeneralData.EquipmentType);
+                        CreateSpecificEquipment(EquipmentType);
                     }
-                    RaisePropertyChange(nameof(GeneralData));
+
+                    // update elapsed time, distance traveled, lap toggle if in use
+                    if (State == FEState.InUse)
+                    {
+                        if (!isFirstDataMessage)
+                        {
+                            TimeSpan deltaTimeSpan = TimeSpan.FromSeconds(Utils.CalculateDelta(dataPage[2], ref prevElapsedTime) * 0.25);
+                            ElapsedTime += deltaTimeSpan;
+                            LapTime += deltaTimeSpan;
+                            DistanceTraveled += Utils.CalculateDelta(dataPage[3], ref prevDistance);
+                        }
+                        else
+                        {
+                            prevElapsedTime = dataPage[2];
+                            prevDistance = dataPage[3];
+                            LapTime = default;
+                            prevLapToggle = (dataPage[7] & 0x80) == 0x80;
+                            isFirstDataMessage = false;
+                        }
+                        RaisePropertyChange(nameof(ElapsedTime));
+                        RaisePropertyChange(nameof(DistanceTraveled));
+
+                        // check for lap toggle
+                        if (prevLapToggle != ((dataPage[7] & 0x80) == 0x80))
+                        {
+                            RaisePropertyChange(nameof(LapTime));
+                            prevLapToggle = (dataPage[7] & 0x80) == 0x80;
+                            LapTime = default;  // reset lap interval time
+                        }
+                    }
                     break;
                 case DataPage.GeneralSettings:
                     HandleFEState(dataPage[7]);
@@ -319,10 +329,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         private void HandleFEState(byte state)
         {
-            State = (FEState)((state & 0x70) >> 4);
-            LapToggle = (state & 0x80) == 0x80;
-            RaisePropertyChange(nameof(State));
-            RaisePropertyChange(nameof(LapToggle));
+            var st = (state & 0x70) >> 4;
+            // check for valid state
+            if (Enum.IsDefined(typeof(FEState), st))
+            {
+                // state changed?
+                if (State != (FEState)st)
+                {
+                    State = (FEState)st;
+                    RaisePropertyChange(nameof(State));
+                }
+            }
+            else
+            {
+                logger.LogWarning("Invalid state. Received {State}", st);
+            }
         }
 
         /// <summary>Sets the percentage of maximum resistance resistance.</summary>

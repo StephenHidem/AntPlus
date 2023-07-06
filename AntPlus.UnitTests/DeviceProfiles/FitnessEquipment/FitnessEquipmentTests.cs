@@ -71,7 +71,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(equipmentType, fitnessEquipment.GeneralData.EquipmentType);
+            Assert.AreEqual(equipmentType, fitnessEquipment.EquipmentType);
             switch (equipmentType)
             {
                 case FitnessEquipmentType.Treadmill:
@@ -103,18 +103,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
-            fitnessEquipment.Parse(new byte[] { 16, 0, 0, 0, 0, 0, 0, 0 });
-            byte[] dataPage = { 16, 0, 128, 64, 0x00, 0x80, 70, 0 };
+            fitnessEquipment.Parse(new byte[] { 16, 0, 0, 0, 0, 0, 0, 0x30 });
+            byte[] dataPage = { 16, 0, 128, 64, 0x00, 0x80, 70, 0x30 };
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(fitnessEquipment.GeneralData.DistanceTraveled == 64);
-            Assert.IsTrue(fitnessEquipment.GeneralData.ElapsedTime == TimeSpan.FromSeconds(128 / 4));
-            Assert.IsTrue(fitnessEquipment.GeneralData.InstantaneousSpeed == 32.768);
-            Assert.IsTrue(fitnessEquipment.GeneralData.InstantaneousHeartRate == 70);
+            Assert.IsTrue(fitnessEquipment.DistanceTraveled == 64);
+            Assert.IsTrue(fitnessEquipment.ElapsedTime == TimeSpan.FromSeconds(128 / 4));
+            Assert.IsTrue(fitnessEquipment.InstantaneousSpeed == 32.768);
+            Assert.IsTrue(fitnessEquipment.InstantaneousHeartRate == 70);
         }
 
         [TestMethod]
@@ -135,9 +135,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(hrSrc, fitnessEquipment.GeneralData.HeartRateSource);
-            Assert.AreEqual(expDistTravelEn, fitnessEquipment.GeneralData.DistanceTraveledEnabled);
-            Assert.AreEqual(expVirtSpeedFlag, fitnessEquipment.GeneralData.VirtualSpeedFlag);
+            Assert.AreEqual(hrSrc, fitnessEquipment.HeartRateSource);
+            Assert.AreEqual(expDistTravelEn, fitnessEquipment.DistanceTraveledEnabled);
+            Assert.AreEqual(expVirtSpeedFlag, fitnessEquipment.VirtualSpeedFlag);
         }
 
         [TestMethod]

@@ -95,6 +95,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">The received data page.</param>
         public virtual void Parse(byte[] dataPage)
         {
+            logger.LogTrace("Page = {Page}", BitConverter.ToString(dataPage));
             _ = timeoutTimer?.Change(deviceTimeout, Timeout.Infinite);
         }
 
@@ -151,7 +152,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         public void Dispose()
         {
-            logger.LogInformation("Disposed {AntDevice}", ToString());
+            logger.LogDebug("Disposed {AntDevice}", ToString());
             timeoutTimer?.Dispose();
             timeoutTimer = null;
         }

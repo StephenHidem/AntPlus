@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WpfUsbStickApp": {
+      "commandName": "Project"
+    },
+    "LogLevel Trace": {
+      "commandName": "Project",
+      "commandLineArgs": "--Logging:LogLevel:Default=Trace"
+    }
+  }
+}

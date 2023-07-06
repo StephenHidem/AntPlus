@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -41,7 +42,7 @@ namespace WpfUsbStickApp.ViewModels
             AntRadio.GetChannel(1).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
 
             // dependency services
-            _host = Host.CreateDefaultBuilder().Build();
+            _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).Build();
 
             // log app info
             var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name.StartsWith("Ant"));

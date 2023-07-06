@@ -8,7 +8,7 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class EllipticalControl : UserControl
     {
-        public EllipticalControl(FitnessEquipment fitnessEquipment)
+        public EllipticalControl(Equipment fitnessEquipment)
         {
             InitializeComponent();
             DataContext = fitnessEquipment;

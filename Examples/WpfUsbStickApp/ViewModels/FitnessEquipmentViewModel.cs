@@ -8,7 +8,7 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal partial class FitnessEquipmentViewModel : ObservableObject
     {
-        public FitnessEquipment FitnessEquipment { get; }
+        public Equipment FitnessEquipment { get; }
         public UserControl? FeControl { get; }
 
         [ObservableProperty]
@@ -22,28 +22,28 @@ namespace WpfUsbStickApp.ViewModels
         [ObservableProperty]
         private double gearRatio;
 
-        public FitnessEquipmentViewModel(FitnessEquipment fitnessEquipment)
+        public FitnessEquipmentViewModel(Equipment fitnessEquipment)
         {
             FitnessEquipment = fitnessEquipment;
 
             switch (fitnessEquipment.GeneralData.EquipmentType)
             {
-                case FitnessEquipment.FitnessEquipmentType.Treadmill:
+                case Equipment.FitnessEquipmentType.Treadmill:
                     FeControl = new TreadmillControl(fitnessEquipment);
                     break;
-                case FitnessEquipment.FitnessEquipmentType.Elliptical:
+                case Equipment.FitnessEquipmentType.Elliptical:
                     FeControl = new EllipticalControl(fitnessEquipment);
                     break;
-                case FitnessEquipment.FitnessEquipmentType.Rower:
+                case Equipment.FitnessEquipmentType.Rower:
                     FeControl = new RowerControl(fitnessEquipment);
                     break;
-                case FitnessEquipment.FitnessEquipmentType.Climber:
+                case Equipment.FitnessEquipmentType.Climber:
                     FeControl = new ClimberControl(fitnessEquipment);
                     break;
-                case FitnessEquipment.FitnessEquipmentType.NordicSkier:
+                case Equipment.FitnessEquipmentType.NordicSkier:
                     FeControl = new NordicSkierControl(fitnessEquipment);
                     break;
-                case FitnessEquipment.FitnessEquipmentType.TrainerStationaryBike:
+                case Equipment.FitnessEquipmentType.TrainerStationaryBike:
                     FeControl = new TrainerStationaryBikeControl(fitnessEquipment);
                     break;
                 default:

@@ -53,8 +53,8 @@ namespace WpfUsbStickApp
                     BikeSpeedAndCadenceWindow speedAndCadenceWindow = new((CombinedSpeedAndCadenceSensor)antDevice);
                     speedAndCadenceWindow.Show();
                     break;
-                case FitnessEquipment.DeviceClass:
-                    FitnessEquipmentWindow fitnessEquipmentWindow = new((FitnessEquipment)antDevice);
+                case Equipment.DeviceClass:
+                    FitnessEquipmentWindow fitnessEquipmentWindow = new((Equipment)antDevice);
                     fitnessEquipmentWindow.Show();
                     break;
                 case MuscleOxygen.DeviceClass:

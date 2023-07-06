@@ -10,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// This is the primary support class for fitness equipment sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public class FitnessEquipment : AntDevice
+    public class Equipment : AntDevice
     {
         /// <summary>
         /// The fitness equipment device class ID.
@@ -226,16 +226,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(FitnessEquipment).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.FE-C.png");
+        public override Stream DeviceImageStream => typeof(Equipment).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.FE-C.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FitnessEquipment"/> class.
+        /// Initializes a new instance of the <see cref="Equipment"/> class.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public Equipment(ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
             GeneralData = new GeneralDataPage();
@@ -309,6 +309,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return "Fitness Equipment";
         }
 
         private void HandleFEState(byte state)

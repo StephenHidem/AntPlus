@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment;
+using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Equipment;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
@@ -13,7 +14,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>> mockLogger;
+        private Mock<ILogger<Equipment>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -21,12 +22,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<Equipment>>(MockBehavior.Loose);
         }
 
-        private SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment CreateFitnessEquipment()
+        private Equipment CreateFitnessEquipment()
         {
-            return new SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment(
+            return new Equipment(
                 mockChannelId,
                 mockAntChannel.Object,
                 mockLogger.Object);

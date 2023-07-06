@@ -156,5 +156,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     break;
             }
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return "Bicycle Power";
+        }
     }
 }

@@ -49,7 +49,7 @@ namespace SmallEarthTech.AntPlus
         public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, ushort antDeviceTimeout = 2000)
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            logger = loggerFactory.CreateLogger<AntDeviceCollection>();
+            logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             logger.LogInformation("Created AntDeviceCollection");
             timeout = antDeviceTimeout;
             antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;

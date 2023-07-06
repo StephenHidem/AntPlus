@@ -8,12 +8,12 @@ namespace WpfUsbStickApp.ViewModels
 {
     public partial class BicyclePowerViewModel : ObservableObject
     {
-        public BicyclePower BicyclePower { get; }
+        public Bicycle BicyclePower { get; }
         public SensorType SensorType => BicyclePower.Sensor;
 
         public UserControl? BicyclePowerControl { get; }
 
-        public BicyclePowerViewModel(BicyclePower bicyclePower)
+        public BicyclePowerViewModel(Bicycle bicyclePower)
         {
             BicyclePower = bicyclePower;
 

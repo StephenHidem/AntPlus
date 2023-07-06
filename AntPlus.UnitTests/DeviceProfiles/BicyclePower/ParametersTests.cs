@@ -14,7 +14,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
         private ChannelId mockChannelId;
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower>> mockLogger;
+        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -23,13 +23,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
             mockChannelId = new ChannelId(0);
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Bicycle>>(MockBehavior.Loose);
         }
 
         private Parameters CreateParameters()
         {
             return new Parameters(
-                new SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower(mockChannelId, mockAntChannel.Object, mockLogger.Object));
+                new SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Bicycle(mockChannelId, mockAntChannel.Object, mockLogger.Object));
         }
 
         [TestMethod]

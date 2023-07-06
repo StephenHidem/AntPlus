@@ -28,7 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Initializes a new instance of the <see cref="StandardWheelTorqueSensor" /> class.</summary>
         /// <param name="bp">The bp.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardWheelTorqueSensor(BicyclePower bp, ILogger logger) : base(bp, logger)
+        public StandardWheelTorqueSensor(Bicycle bp, ILogger logger) : base(bp, logger)
         {
         }
 

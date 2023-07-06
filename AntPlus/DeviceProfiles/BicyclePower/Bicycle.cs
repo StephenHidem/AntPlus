@@ -58,7 +58,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// The primary class managing bicycle power sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public class BicyclePower : AntDevice
+    public class Bicycle : AntDevice
     {
         /// <summary>
         /// The device class ID.
@@ -79,16 +79,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Gets the calibration class.</summary>
         public Calibration Calibration { get; private set; }
         /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(BicyclePower).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
+        public override Stream DeviceImageStream => typeof(Bicycle).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BicyclePower"/> class. The default timeout is 2 seconds.
+        /// Initializes a new instance of the <see cref="Bicycle"/> class. The default timeout is 2 seconds.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public Bicycle(ChannelId channelId, IAntChannel antChannel, ILogger<Bicycle> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
             Calibration = new Calibration(this);
         }

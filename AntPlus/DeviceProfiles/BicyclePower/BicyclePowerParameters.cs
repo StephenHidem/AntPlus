@@ -26,7 +26,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="INotifyPropertyChanged" />
     public class Parameters : INotifyPropertyChanged
     {
-        private readonly BicyclePower bp;
+        private readonly Bicycle bp;
 
         /// <summary>
         /// Various crank parameters.
@@ -233,7 +233,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// Initializes a new instance of the <see cref="Parameters"/> class.
         /// </summary>
         /// <param name="bp">The bp.</param>
-        public Parameters(BicyclePower bp)
+        public Parameters(Bicycle bp)
         {
             this.bp = bp;
         }

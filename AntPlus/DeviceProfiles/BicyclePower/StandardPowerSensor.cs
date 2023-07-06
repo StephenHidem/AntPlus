@@ -48,7 +48,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </summary>
         /// <param name="bp">The bp.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardPowerSensor(BicyclePower bp, ILogger logger)
+        public StandardPowerSensor(Bicycle bp, ILogger logger)
         {
             CommonDataPages = new CommonDataPages(logger);
             Parameters = new Parameters(bp);

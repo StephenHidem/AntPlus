@@ -10,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="INotifyPropertyChanged" />
     public class Calibration : INotifyPropertyChanged
     {
-        private readonly BicyclePower bp;
+        private readonly Bicycle bp;
 
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -74,7 +74,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// Initializes a new instance of the <see cref="Calibration"/> class.
         /// </summary>
         /// <param name="bp">The bp.</param>
-        public Calibration(BicyclePower bp)
+        public Calibration(Bicycle bp)
         {
             this.bp = bp;
         }

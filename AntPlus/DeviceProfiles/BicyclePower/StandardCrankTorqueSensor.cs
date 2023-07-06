@@ -111,7 +111,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </summary>
         /// <param name="bp">The bp.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardCrankTorqueSensor(BicyclePower bp, ILogger logger) : base(bp, logger)
+        public StandardCrankTorqueSensor(Bicycle bp, ILogger logger) : base(bp, logger)
         {
         }
 

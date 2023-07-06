@@ -23,7 +23,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             Ack = 0xAC
         }
 
-        private readonly BicyclePower bp;
+        private readonly Bicycle bp;
 
         private bool isFirstPage = true;
         private byte prevUpdateEventCount;
@@ -49,8 +49,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public double Power { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
-        /// <param name="bicyclePower">The <see cref="BicyclePower"/> instance.</param>
-        public CrankTorqueFrequencySensor(BicyclePower bicyclePower)
+        /// <param name="bicyclePower">The <see cref="Bicycle"/> instance.</param>
+        public CrankTorqueFrequencySensor(Bicycle bicyclePower)
         {
             bp = bicyclePower;
         }

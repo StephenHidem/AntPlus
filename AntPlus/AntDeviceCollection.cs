@@ -132,8 +132,8 @@ namespace SmallEarthTech.AntPlus
             {
                 case HeartRate.DeviceClass:
                     return new HeartRate(channelId, channel, _loggerFactory.CreateLogger<HeartRate>(), timeout);
-                case BicyclePower.DeviceClass:
-                    return new BicyclePower(channelId, channel, _loggerFactory.CreateLogger<BicyclePower>(), timeout);
+                case Bicycle.DeviceClass:
+                    return new Bicycle(channelId, channel, _loggerFactory.CreateLogger<Bicycle>(), timeout);
                 case BikeSpeedSensor.DeviceClass:
                     return new BikeSpeedSensor(channelId, channel, _loggerFactory.CreateLogger<BikeSpeedSensor>(), timeout);
                 case BikeCadenceSensor.DeviceClass:

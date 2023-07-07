@@ -129,22 +129,41 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             internal void Parse(byte[] dataPage)
             {
                 EquipmentType = (FitnessEquipmentType)dataPage[1];
-                if (!isFirstDataMessage)
-                {
-                    ElapsedTime += TimeSpan.FromSeconds(Utils.CalculateDelta(dataPage[2], ref prevElapsedTime) * 0.25);
-                    DistanceTraveled += Utils.CalculateDelta(dataPage[3], ref prevDistance);
-                }
-                else
-                {
-                    prevElapsedTime = dataPage[2];
-                    prevDistance = dataPage[3];
-                    isFirstDataMessage = false;
-                }
                 InstantaneousSpeed = BitConverter.ToUInt16(dataPage, 4) * 0.001;
                 InstantaneousHeartRate = dataPage[6];
                 HeartRateSource = (HRDataSource)(dataPage[7] & 0x03);
                 DistanceTraveledEnabled = (dataPage[7] & 0x04) != 0;
                 VirtualSpeedFlag = (dataPage[7] & 0x08) != 0;
+
+                // update ElapseTime and DistanceTraveled
+                if ((FEState)((dataPage[7] & 0x70) >> 4) == FEState.InUse)
+                {
+                    // in use, accumulate
+                    if (!isFirstDataMessage)
+                    {
+                        ElapsedTime += TimeSpan.FromSeconds(Utils.CalculateDelta(dataPage[2], ref prevElapsedTime) * 0.25);
+                        if (DistanceTraveledEnabled)
+                        {
+                            // distance enabled, accumulate
+                            DistanceTraveled += Utils.CalculateDelta(dataPage[3], ref prevDistance);
+                        }
+                    }
+                    else
+                    {
+                        // initialize state
+                        prevElapsedTime = dataPage[2];
+                        if (DistanceTraveledEnabled)
+                        {
+                            prevDistance = dataPage[3];
+                        }
+                        isFirstDataMessage = false;
+                    }
+                }
+                else
+                {
+                    // not in use, stop accumulating
+                    isFirstDataMessage = true;
+                }
             }
         }
 

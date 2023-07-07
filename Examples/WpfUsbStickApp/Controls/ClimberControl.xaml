@@ -12,6 +12,8 @@
                 <TextBlock Text="{Binding Climber.StrideCycles, StringFormat='Stride Cycles: {0}'}"/>
                 <TextBlock Text="{Binding Climber.Cadence, StringFormat='Cadence: {0}'}"/>
                 <TextBlock Text="{Binding Climber.InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
+                <TextBlock Text="{Binding LapToggle, StringFormat='Lap Toggle: {0}'}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

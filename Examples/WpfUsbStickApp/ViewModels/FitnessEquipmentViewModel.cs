@@ -26,24 +26,24 @@ namespace WpfUsbStickApp.ViewModels
         {
             FitnessEquipment = fitnessEquipment;
 
-            switch (fitnessEquipment.EquipmentType)
+            switch (fitnessEquipment.GeneralData.EquipmentType)
             {
-                case FitnessEquipmentType.Treadmill:
+                case Equipment.FitnessEquipmentType.Treadmill:
                     FeControl = new TreadmillControl(fitnessEquipment);
                     break;
-                case FitnessEquipmentType.Elliptical:
+                case Equipment.FitnessEquipmentType.Elliptical:
                     FeControl = new EllipticalControl(fitnessEquipment);
                     break;
-                case FitnessEquipmentType.Rower:
+                case Equipment.FitnessEquipmentType.Rower:
                     FeControl = new RowerControl(fitnessEquipment);
                     break;
-                case FitnessEquipmentType.Climber:
+                case Equipment.FitnessEquipmentType.Climber:
                     FeControl = new ClimberControl(fitnessEquipment);
                     break;
-                case FitnessEquipmentType.NordicSkier:
+                case Equipment.FitnessEquipmentType.NordicSkier:
                     FeControl = new NordicSkierControl(fitnessEquipment);
                     break;
-                case FitnessEquipmentType.TrainerStationaryBike:
+                case Equipment.FitnessEquipmentType.TrainerStationaryBike:
                     FeControl = new TrainerStationaryBikeControl(fitnessEquipment);
                     break;
                 default:

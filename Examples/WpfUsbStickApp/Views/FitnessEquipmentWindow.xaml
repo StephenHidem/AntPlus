@@ -26,13 +26,11 @@
         <UserControl Content="{Binding FeControl}"/>
         <GroupBox Header="General Data" Grid.Column="1" Grid.Row="0">
             <StackPanel>
-                <TextBlock Text="{Binding FitnessEquipment.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.State, StringFormat='State: {0}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.ElapsedTime, StringFormat='Elapsed Time: {0:hh\\:mm\\:ss\\.ff}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.DistanceTraveled, StringFormat='Distance Traveled: {0}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.InstantaneousHeartRate, StringFormat='Heart Rate: {0}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.LapTime, StringFormat='Lap Time: {0:hh\\:mm\\:ss\\.ff}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.ElapsedTime, StringFormat='Elapsed Time: {0:hh\\:mm\\:ss}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.DistanceTraveled, StringFormat='Distance Traveled: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.InstantaneousHeartRate, StringFormat='Heart Rate: {0}'}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="General Settings" Grid.Column="1" Grid.Row="1">

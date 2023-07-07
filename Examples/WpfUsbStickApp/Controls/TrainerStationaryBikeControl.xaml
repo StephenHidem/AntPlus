@@ -11,17 +11,21 @@
              d:DataContext="{d:DesignInstance Type=ant:Equipment}">
     <Grid>
         <GroupBox Header="Trainer/Stationary Bike">
-            <StackPanel DataContext="{Binding TrainerStationaryBike}">
-                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
-                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
-                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
-                <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status: {0}'}"/>
-                <TextBlock Text="{Binding TargetPower, StringFormat='Target Power: {0}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F2}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque: {0:F4}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power: {0:F2}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed: {0:F2}'}"/>
-                <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F2}'}"/>
+            <StackPanel>
+                <StackPanel DataContext="{Binding TrainerStationaryBike}">
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+                    <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status: {0}'}"/>
+                    <TextBlock Text="{Binding TargetPower, StringFormat='Target Power: {0}'}"/>
+                    <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F2}'}"/>
+                    <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque: {0:F4}'}"/>
+                    <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power: {0:F2}'}"/>
+                    <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed: {0:F2}'}"/>
+                    <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F2}'}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
+                <TextBlock Text="{Binding LapToggle, StringFormat='Lap Toggle: {0}'}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

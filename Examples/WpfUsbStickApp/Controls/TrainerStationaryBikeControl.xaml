@@ -25,7 +25,6 @@
                     <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F2}'}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
-                <TextBlock Text="{Binding LapToggle, StringFormat='Lap Toggle: {0}'}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

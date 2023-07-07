@@ -103,8 +103,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
-            fitnessEquipment.Parse(new byte[] { 16, 0, 0, 0, 0, 0, 0, 0 });
-            byte[] dataPage = { 16, 0, 128, 64, 0x00, 0x80, 70, 0 };
+            fitnessEquipment.Parse(new byte[] { 16, 0, 0, 0, 0, 0, 0, 0x34 });
+            byte[] dataPage = { 16, 0, 128, 64, 0x00, 0x80, 70, 0x34 };
 
             // Act
             fitnessEquipment.Parse(

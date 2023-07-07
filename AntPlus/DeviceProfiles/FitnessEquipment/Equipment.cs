@@ -110,7 +110,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             public FitnessEquipmentType EquipmentType { get; private set; }
             /// <summary>Gets the elapsed time.</summary>
             public TimeSpan ElapsedTime { get; private set; }
-            /// <summary>Gets the distance traveled in meters.</summary>
+            /// <summary>Gets the distance traveled in meters. This property is only valid when
+            /// <see cref="DistanceTraveledEnabled"/> is enabled.</summary>
             public int DistanceTraveled { get; private set; }
             /// <summary>Gets the instantaneous speed.</summary>
             /// <value>The instantaneous speed in meters per second.</value>
@@ -214,12 +215,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
         }
 
+        private bool lapToggleState;
+        /// <summary>Occurs when a lap toggle is signaled by the device.</summary>
+        /// <remarks>
+        /// The event itself does not convey any information. It is the responsibilty of the application/view model to
+        /// capture any relevant state from the equipment and/or specific equipment for user consumption. For
+        /// example, it may be useful to capture elapsed time and accumulated distance from the class.
+        /// </remarks>
+        public event EventHandler LapToggled;
 
         /// <summary>Gets the equipment state.</summary>
         public FEState State { get; private set; }
-        /// <summary>Gets a value indicating whether [lap toggle].</summary>
-        public bool LapToggle { get; private set; }
-
         /// <summary>Gets the general data.</summary>
         public GeneralDataPage GeneralData { get; private set; }
         /// <summary>Gets the general settings.</summary>
@@ -278,6 +284,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                         CreateSpecificEquipment(GeneralData.EquipmentType);
                     }
                     RaisePropertyChange(nameof(GeneralData));
+
+                    // check for lap toggle
+                    if (lapToggleState != ((dataPage[7] & 0x80) == 0x80))
+                    {
+                        lapToggleState = (dataPage[7] & 0x80) == 0x80;
+                        LapToggled?.Invoke(this, EventArgs.Empty);
+                    }
                     break;
                 case DataPage.GeneralSettings:
                     HandleFEState(dataPage[7]);
@@ -353,8 +366,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             {
                 logger.LogWarning("Invalid state. Received {State}", st);
             }
-            LapToggle = (state & 0x80) == 0x80;
-            RaisePropertyChange(nameof(LapToggle));
         }
 
         /// <summary>Sets the percentage of maximum resistance resistance.</summary>

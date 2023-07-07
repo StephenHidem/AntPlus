@@ -13,7 +13,6 @@
                 <TextBlock Text="{Binding Treadmill.NegVerticalDistance, StringFormat='NegVerticalDistance: {0}'}"/>
                 <TextBlock Text="{Binding Treadmill.PosVerticalDistance, StringFormat='PosVerticalDistance: {0}'}"/>
                 <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
-                <TextBlock Text="{Binding LapToggle, StringFormat='Lap Toggle: {0}'}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

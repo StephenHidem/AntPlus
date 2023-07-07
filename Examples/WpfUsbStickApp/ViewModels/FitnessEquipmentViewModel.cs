@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using System;
 using System.Windows.Controls;
 using WpfUsbStickApp.Controls;
 
@@ -21,11 +22,13 @@ namespace WpfUsbStickApp.ViewModels
         private double wheelDiameter;
         [ObservableProperty]
         private double gearRatio;
+        [ObservableProperty]
+        private TimeSpan lapSplitTime;
 
         public FitnessEquipmentViewModel(Equipment fitnessEquipment)
         {
             FitnessEquipment = fitnessEquipment;
-
+            FitnessEquipment.LapToggled += FitnessEquipment_LapToggled;
             switch (fitnessEquipment.GeneralData.EquipmentType)
             {
                 case Equipment.FitnessEquipmentType.Treadmill:
@@ -49,6 +52,11 @@ namespace WpfUsbStickApp.ViewModels
                 default:
                     break;
             }
+        }
+
+        private void FitnessEquipment_LapToggled(object sender, System.EventArgs e)
+        {
+            LapSplitTime = ((Equipment)sender).GeneralData.ElapsedTime;
         }
 
         [RelayCommand]

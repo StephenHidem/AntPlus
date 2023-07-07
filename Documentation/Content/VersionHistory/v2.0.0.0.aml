@@ -5,21 +5,37 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-      <para>Version 2.0.0.0 was released on June 27, 2023.</para>
+      <para>Version 2.0.0.0 was released on July 7, 2023.</para>
     </introduction>
 
 	  <section>
-		  <title>Changes in This Release</title>
+		  <title>Breaking Changes in This Release</title>
 		  <content>
 			  <list class="bullet">
 				  <listItem>
-					  <para>BREAKING: Renamed BicyclePower PowerOnlySensor to PowerSensor.</para>
+					  <para>Renamed BicyclePower PowerOnlySensor to PowerSensor.</para>
 				  </listItem>
 				  <listItem>
-					  <para>BREAKING: AssetTracker Asset latitude and longitude are now reported in decimal degrees.</para>
+				  	<para>AssetTracker class renamed to Tracker.</para>
 				  </listItem>
 				  <listItem>
-					  <para>The unit tests led to a number of bug fixes.</para>
+				  	<para>AssetTracker Asset latitude and longitude are now reported in decimal degrees.</para>
+				  </listItem>
+				  <listItem>
+				  	<para>FitnessEquipment class renamed to Equipment.</para>
+				  </listItem>
+				  <listItem>
+					<para>
+					Namespaces modified - the following classes are rooted in DeviceProfiles:
+						Geocache
+						HeartRate
+						MuscleOxygen
+						StrideBasedSpeedAndDistance
+						UnknownDevice
+					</para>
+				  </listItem>
+				  <listItem>
+				  	<para>All device profiles require an Ilogger in their ctor. The AntDeviceCollection requires an ILoggerFactory which used to generate ILogger's for the device profiles.</para>
 				  </listItem>
 			  </list>
 		  </content>

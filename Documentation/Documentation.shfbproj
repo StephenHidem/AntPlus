@@ -59,20 +59,21 @@
     </PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus" isDocumented="True">This is the global namespace for ANT+ devices.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles (Group)" isGroup="True" isDocumented="True">This namespace contains supported ANT+ device profiles.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker" isDocumented="True">Contains the asset tracker classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower" isDocumented="True">Contains the bicycle power classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence" isDocumented="True">Contains the bicycle speed and cadence classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment" isDocumented="True">Contains the fitness equipment classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.Geocache" isDocumented="True">Contains the geocache classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.HeartRate" isDocumented="True">Contains the heart rate monitor classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen" isDocumented="True">Contains the muscle oxygen sensor classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice" isDocumented="True">Contains the unknown ANT+ device classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntRadioInterface" isDocumented="True">The ANT+ radio interface namespace.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance" isDocumented="True">Contains the stride based speed and sensor classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntUsbStick" isDocumented="True">This namespace supports the concrete implementation of the ant radio interface.</NamespaceSummaryItem>
-    </NamespaceSummaries>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus" isDocumented="True">This is the global namespace for ANT+ devices.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles (Group)" isGroup="True" isDocumented="True">This namespace contains supported ANT+ device profiles.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker" isDocumented="True">Contains the asset tracker classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower" isDocumented="True">Contains the bicycle power classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence" isDocumented="True">Contains the bicycle speed and cadence classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment" isDocumented="True">Contains the fitness equipment classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.Geocache" isDocumented="True">Contains the geocache classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.HeartRate" isDocumented="True">Contains the heart rate monitor classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen" isDocumented="True">Contains the muscle oxygen sensor classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice" isDocumented="True">Contains the unknown ANT+ device classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntRadioInterface" isDocumented="True">The ANT+ radio interface namespace.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance" isDocumented="True">Contains the stride based speed and sensor classes and members.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntUsbStick" isDocumented="True">This namespace supports the concrete implementation of the ant radio interface.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus (Group)" isGroup="True" isDocumented="True">This is the global namespace for ANT+ devices.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles" isDocumented="True">This namespace contains supported ANT+ device profiles.</NamespaceSummaryItem></NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->

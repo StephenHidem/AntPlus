@@ -28,7 +28,7 @@
             <StackPanel>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralData.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralData.ElapsedTime, StringFormat='Elapsed Time: {0:hh\\:mm\\:ss}'}"/>
-                <TextBlock Text="{Binding FitnessEquipment.GeneralData.DistanceTraveled, StringFormat='Distance Traveled: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralData.DistanceTraveled, StringFormat='Distance Traveled: {0}'}" Visibility="{Binding FitnessEquipment.GeneralData.DistanceTraveledEnabled, Converter={StaticResource BoolToVisibility}}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralData.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralData.InstantaneousHeartRate, StringFormat='Heart Rate: {0}'}"/>
             </StackPanel>

@@ -58,19 +58,23 @@ namespace SmallEarthTech.AntPlus
 
         private void Channel_ChannelResponse(object sender, AntResponse e)
         {
-            AntDevice device;
-            lock (CollectionLock)
+            if (e.ChannelId != null)
             {
-                device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
-                if (device == null)
+                AntDevice device;
+                lock (CollectionLock)
                 {
-                    device = CreateAntDevice(e.ChannelId);
-                    Add(device);
-                    device.DeviceWentOffline += DeviceOffline;
-                    logger.LogDebug("{Device} added.", device);
+                    device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+                    if (device == null)
+                    {
+                        device = CreateAntDevice(e.ChannelId);
+                        Add(device);
+                        device.DeviceWentOffline += DeviceOffline;
+                        logger.LogDebug("{Device} added.", device);
+                    }
                 }
+                device.Parse(e.Payload);
             }
-            device.Parse(e.Payload);
+            logger.LogCritical("The AntRadio channel closed unexpectedly. Response ID = {Response}.", e.ResponseId);
         }
 
         private void DeviceOffline(object sender, System.EventArgs e)

@@ -319,9 +319,22 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         private void HandleFEState(byte state)
         {
-            State = (FEState)((state & 0x70) >> 4);
+            var st = (state & 0x70) >> 4;
+            // check for valid state
+            if (Enum.IsDefined(typeof(FEState), st))
+            {
+                // state changed?
+                if (State != (FEState)st)
+                {
+                    State = (FEState)st;
+                    RaisePropertyChange(nameof(State));
+                }
+            }
+            else
+            {
+                logger.LogWarning("Invalid state. Received {State}", st);
+            }
             LapToggle = (state & 0x80) == 0x80;
-            RaisePropertyChange(nameof(State));
             RaisePropertyChange(nameof(LapToggle));
         }
 

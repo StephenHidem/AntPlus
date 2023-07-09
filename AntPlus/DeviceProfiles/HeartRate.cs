@@ -400,7 +400,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="gymMode">if set to <c>true</c> gym mode is enabled.</param>
         public void SetHRFeature(bool applyGymMode, bool gymMode)
         {
-            byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(applyGymMode ? 0xFF : 0x7F), (byte)(gymMode ? 0xFF : 0x7F) };
+            byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(applyGymMode ? 0xFF : 0x7F), (byte)(gymMode ? 0x80 : 0x00) };
             SendExtAcknowledgedMessage(msg);
         }
 

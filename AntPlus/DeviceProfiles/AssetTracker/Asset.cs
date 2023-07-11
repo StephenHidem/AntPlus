@@ -149,6 +149,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             if (gotIdPage1 && gotIdPage2)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+                gotIdPage1 = gotIdPage2 = false;
             }
         }
 
@@ -162,12 +163,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Type"));
             if (!gotIdPage2)
             {
-                lowerName += Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
+                lowerName = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
                 gotIdPage2 = true;
             }
             if (gotIdPage1 && gotIdPage2)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+                gotIdPage1 = gotIdPage2 = false;
             }
         }
 

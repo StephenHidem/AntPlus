@@ -29,8 +29,8 @@ namespace AntPlus.UnitTests.DeviceProfiles
         private readonly string trackableId = "HOMEALONE";
         private readonly uint pin = 1234;
         private readonly string nextStageHint = "This is a very long hint.";
-        private readonly int nextStageLat = 45;
-        private readonly int nextStageLong = -93;
+        private readonly double nextStageLat = 45.0;
+        private readonly double nextStageLong = -93.0;
         private readonly ushort numVisits = 1;
         private readonly DateTime lastVisit = new(2023, 6, 8, 23, 52, 19);
         private MockRepository mockRepository;
@@ -57,7 +57,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Act
             for (int i = 0; i < 32; i++)
             {
-                // randomize list of datapages
+                // randomize list of data pages
                 dataPages = Utils.ShuffleDataPages(dataPages);
                 foreach (byte[] page in dataPages)
                 {
@@ -65,13 +65,13 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 }
 
                 // Assert
-                Assert.IsTrue(geocache.TrackableId == trackableId);
-                Assert.IsTrue(geocache.ProgrammingPIN == pin);
-                Assert.IsTrue(geocache.Hint == nextStageHint);
-                Assert.IsTrue(Convert.ToInt32(geocache.NextStageLatitude) == nextStageLat);
-                Assert.IsTrue(Convert.ToInt32(geocache.NextStageLongitude) == nextStageLong);
-                Assert.IsTrue(geocache.NumberOfVisits == numVisits);
-                Assert.IsTrue(geocache.LastVisitTimestamp == lastVisit);
+                Assert.AreEqual(trackableId, geocache.TrackableId);
+                Assert.AreEqual(pin, geocache.ProgrammingPIN);
+                Assert.AreEqual(nextStageHint, geocache.Hint);
+                Assert.AreEqual(nextStageLat, geocache.NextStageLatitude, 0.000001);
+                Assert.AreEqual(nextStageLong, geocache.NextStageLongitude, 0.000001);
+                Assert.AreEqual(numVisits, geocache.NumberOfVisits);
+                Assert.AreEqual(lastVisit, geocache.LastVisitTimestamp);
             }
         }
 
@@ -88,14 +88,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
             _ = geocache.RequestPinPage();
 
             // Assert
-            Assert.IsTrue(geocache.TrackableId == string.Empty);
-            Assert.IsTrue(geocache.ProgrammingPIN == default);
-            Assert.IsTrue(geocache.TotalPagesProgrammed == default);
-            Assert.IsTrue(geocache.NextStageLatitude == default);
-            Assert.IsTrue(geocache.NextStageLongitude == default);
-            Assert.IsTrue(geocache.Hint == string.Empty);
-            Assert.IsTrue(geocache.NumberOfVisits == default);
-            Assert.IsTrue(geocache.LastVisitTimestamp == default);
+            Assert.AreEqual(string.Empty, geocache.TrackableId);
+            Assert.AreEqual(default, geocache.ProgrammingPIN);
+            Assert.AreEqual(default, geocache.TotalPagesProgrammed);
+            Assert.AreEqual(default, geocache.NextStageLatitude);
+            Assert.AreEqual(default, geocache.NextStageLongitude);
+            Assert.AreEqual(string.Empty, geocache.Hint);
+            Assert.AreEqual(default, geocache.NumberOfVisits);
+            Assert.AreEqual(default, geocache.LastVisitTimestamp);
         }
 
         //[TestMethod]
@@ -136,8 +136,8 @@ namespace AntPlus.UnitTests.DeviceProfiles
             var result = geocache.UpdateLoggedVisits();
 
             // Assert
-            Assert.IsTrue(geocache.NumberOfVisits == 2);
-            Assert.IsTrue((dateTime - geocache.LastVisitTimestamp).Value.Minutes == 0);
+            Assert.AreEqual((ushort?)2, geocache.NumberOfVisits);
+            Assert.AreEqual(0, (dateTime - geocache.LastVisitTimestamp).Value.Minutes);
         }
 
         [TestMethod]
@@ -158,14 +158,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 nextStageHint);
 
             // Assert
-            Assert.IsTrue(geocache.TrackableId == string.Empty);
-            Assert.IsTrue(geocache.ProgrammingPIN == default);
-            Assert.IsTrue(geocache.TotalPagesProgrammed == default);
-            Assert.IsTrue(geocache.NextStageLatitude == default);
-            Assert.IsTrue(geocache.NextStageLongitude == default);
-            Assert.IsTrue(geocache.Hint == string.Empty);
-            Assert.IsTrue(geocache.NumberOfVisits == default);
-            Assert.IsTrue(geocache.LastVisitTimestamp == default);
+            Assert.AreEqual(string.Empty, geocache.TrackableId);
+            Assert.AreEqual(default, geocache.ProgrammingPIN);
+            Assert.AreEqual(default, geocache.TotalPagesProgrammed);
+            Assert.AreEqual(default, geocache.NextStageLatitude);
+            Assert.AreEqual(default, geocache.NextStageLongitude);
+            Assert.AreEqual(string.Empty, geocache.Hint);
+            Assert.AreEqual(default, geocache.NumberOfVisits);
+            Assert.AreEqual(default, geocache.LastVisitTimestamp);
         }
     }
 }

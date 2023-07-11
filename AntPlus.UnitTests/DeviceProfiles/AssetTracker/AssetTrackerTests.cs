@@ -2,7 +2,6 @@
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntRadioInterface;
-using System;
 using System.Collections.Generic;
 
 namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
@@ -52,7 +51,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             {
                 var tracker = CreateAssetTracker();
 
-                // randomize list of datapages
+                // randomize list of data pages
                 dataPages = Utils.ShuffleDataPages(dataPages);
                 foreach (byte[] dataPage in dataPages)
                 {
@@ -61,15 +60,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
                 }
 
                 // Assert
-                Assert.IsTrue(tracker.Assets.Count == 1);
-                Assert.IsTrue(tracker.Assets[0].Index == 1);
-                Assert.IsTrue(tracker.Assets[0].Distance == 20);
-                Assert.IsTrue(tracker.Assets[0].Bearing == 180.0);
-                Assert.IsTrue(Convert.ToInt32(tracker.Assets[0].Latitude) == 45);
-                Assert.IsTrue(Convert.ToInt32(tracker.Assets[0].Longitude) == -93);
-                Assert.IsTrue(tracker.Assets[0].Color == 128);
-                Assert.IsTrue(tracker.Assets[0].Name == "Carlos Cat");
-                Assert.IsTrue(tracker.Assets[0].Type == Asset.AssetType.AssetTracker);
+                Assert.AreEqual(1, tracker.Assets.Count);
+                Assert.AreEqual(1, tracker.Assets[0].Index);
+                Assert.AreEqual(20, tracker.Assets[0].Distance);
+                Assert.AreEqual(180.0, tracker.Assets[0].Bearing, 1.41);
+                Assert.AreEqual(45, tracker.Assets[0].Latitude, 0.000001);
+                Assert.AreEqual(-93, tracker.Assets[0].Longitude, 0.000001);
+                Assert.AreEqual(128, tracker.Assets[0].Color);
+                Assert.AreEqual("Carlos Cat", tracker.Assets[0].Name);
+                Assert.AreEqual(Asset.AssetType.AssetTracker, tracker.Assets[0].Type);
                 mockRepository.VerifyAll();
             }
         }
@@ -122,7 +121,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             // Assert
             if (expStatus == Asset.AssetStatus.RemoveAsset)
             {
-                Assert.IsTrue(tracker.Assets.Count == 0);
+                Assert.AreEqual(0, tracker.Assets.Count);
             }
             else
             {
@@ -147,7 +146,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             tracker.Parse(dataPage);
 
             // Assert
-            Assert.IsTrue(tracker.Assets.Count == 0);
+            Assert.AreEqual(0, tracker.Assets.Count);
         }
 
         [TestMethod]

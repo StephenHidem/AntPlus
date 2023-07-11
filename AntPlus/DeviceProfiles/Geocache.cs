@@ -60,9 +60,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>Gets the total pages programmed.</summary>
         public byte? TotalPagesProgrammed { get; private set; }
         /// <summary>Gets the next stage latitude in decimal degrees. North is positive, south is negative.</summary>
-        public double? NextStageLatitude { get; private set; }
+        public double NextStageLatitude { get; private set; }
         /// <summary>Gets the next stage longitude in decimal degrees. East is positive, west is negative.</summary>
-        public double? NextStageLongitude { get; private set; }
+        public double NextStageLongitude { get; private set; }
         /// <summary>Gets a message from the geocache device, or a next stage hint.</summary>
         public string Hint => string.Concat(hintPages.Values);
         /// <summary>Gets the number of visits logged.</summary>

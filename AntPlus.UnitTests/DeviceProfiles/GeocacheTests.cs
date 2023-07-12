@@ -4,6 +4,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AntPlus.UnitTests.DeviceProfiles
 {
@@ -76,6 +77,24 @@ namespace AntPlus.UnitTests.DeviceProfiles
         }
 
         [TestMethod]
+        public void Parse_AuthenticationPage_ExpectedToken()
+        {
+            // Arrange
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(cid, It.IsAny<byte[]>(), It.IsAny<uint>())).Returns(MessagingReturnCode.Pass);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object);
+            byte[] token = { 1, 2, 3, 4, 5, 6, 7 };
+            byte[] page = new byte[] { 32 }.Concat(token).ToArray();
+            geocache.RequestAuthentication(0);
+
+            // Act
+            geocache.Parse(page);
+
+            // Assert
+            Assert.IsTrue(token.SequenceEqual(geocache.AuthenticationToken),
+                string.Format("Expected {0}, Actual {1}", BitConverter.ToString(token), BitConverter.ToString(geocache.AuthenticationToken)));
+        }
+
+        [TestMethod]
         public void RequestPinPage_StateInitialize_StateCleared()
         {
             // Arrange
@@ -97,21 +116,6 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.AreEqual(default, geocache.NumberOfVisits);
             Assert.AreEqual(default, geocache.LastVisitTimestamp);
         }
-
-        //[TestMethod]
-        //public void RequestAuthentication_StateUnderTest_ExpectedBehavior()
-        //{
-        //    // Arrange
-        //    Geocache geocache = new(cid, null);
-        //    uint gpsSerialNumber = 0;
-
-        //    // Act
-        //    var result = geocache.RequestAuthentication(
-        //        gpsSerialNumber);
-
-        //    // Assert
-        //    Assert.Fail();
-        //}
 
         [TestMethod]
         public void UpdateLoggedVisits_LoggedVisitPageUnprogrammed_ThrowsException()

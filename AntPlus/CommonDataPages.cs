@@ -282,11 +282,11 @@ namespace SmallEarthTech.AntPlus
 
             /// <summary>Subpage data field.</summary>
             public SubPage Subpage1 { get; }
-            /// <summary>Gets the computed data field 1.</summary>
+            /// <summary>Gets the computed data field 1. Returns NaN if this is not a valid subpage.</summary>
             public double ComputedDataField1 { get; }
             /// <summary>Subpage data field.</summary>
             public SubPage Subpage2 { get; }
-            /// <summary>Gets the computed data field 2.</summary>
+            /// <summary>Gets the computed data field 2. Returns NaN if this is not a valid subpage.</summary>
             public double ComputedDataField2 { get; }
 
             internal SubfieldDataPage(byte[] dataPage)
@@ -299,7 +299,7 @@ namespace SmallEarthTech.AntPlus
 
             private static double ParseSubfieldData(SubPage page, short value)
             {
-                double retVal = 0;
+                double retVal = double.NaN;
                 switch (page)
                 {
                     case SubPage.Temperature:

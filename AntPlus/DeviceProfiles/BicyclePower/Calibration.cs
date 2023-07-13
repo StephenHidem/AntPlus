@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     public class Calibration : INotifyPropertyChanged
     {
         private readonly Bicycle bp;
+        private readonly ILogger logger;
 
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -73,10 +75,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="Calibration"/> class.
         /// </summary>
-        /// <param name="bp">The bp.</param>
-        public Calibration(Bicycle bp)
+        /// <param name="bp">The <see cref="Bicycle"/>.</param>
+        /// <param name="logger">Logger to use.</param>
+        public Calibration(Bicycle bp, ILogger logger)
         {
             this.bp = bp;
+            this.logger = logger;
         }
 
         /// <summary>Parses the specified data page.</summary>
@@ -123,6 +127,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 default:
+                    logger.LogWarning("Unknown CalibrationResponseId = {CalibrationResponseId}.", dataPage[1]);
                     break;
             }
         }

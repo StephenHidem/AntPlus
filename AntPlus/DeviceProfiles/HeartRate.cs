@@ -373,6 +373,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                         ManufacturerSpecific = new ManufacturerSpecificPage(dataPage);
                         RaisePropertyChange(nameof(ManufacturerSpecific));
                     }
+                    else
+                    {
+                        logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
+                    }
                     break;
             }
         }

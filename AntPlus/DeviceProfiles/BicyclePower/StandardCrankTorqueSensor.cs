@@ -149,6 +149,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     RaisePropertyChange(nameof(PedalPosition));
                     break;
                 default:
+                    logger.LogWarning("ParseCyclingDynamics: Unknown data page = {Page}", dataPage[0]);
                     break;
             }
         }

@@ -170,6 +170,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                                 RaisePropertyChange(nameof(LastVisitTimestamp));
                                 break;
                             default:
+                                logger.LogWarning("Unknown DataId = {DataId}", dataPage[1]);
                                 break;
                         }
                     }

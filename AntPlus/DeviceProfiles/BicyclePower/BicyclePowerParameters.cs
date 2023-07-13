@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -27,6 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     public class Parameters : INotifyPropertyChanged
     {
         private readonly Bicycle bp;
+        private readonly ILogger logger;
 
         /// <summary>
         /// Various crank parameters.
@@ -232,10 +234,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="Parameters"/> class.
         /// </summary>
-        /// <param name="bp">The bp.</param>
-        public Parameters(Bicycle bp)
+        /// <param name="bp">The <see cref="Bicycle"/>.</param>
+        /// <param name="logger">Logger to use.</param>
+        public Parameters(Bicycle bp, Microsoft.Extensions.Logging.ILogger logger)
         {
             this.bp = bp;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -267,6 +271,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities2)));
                     break;
                 default:
+                    logger.LogWarning("Unknown Subpage - {Subpage}.", dataPage[1]);
                     break;
             }
         }

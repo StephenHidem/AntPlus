@@ -6,6 +6,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -74,7 +75,13 @@ namespace SmallEarthTech.AntPlus
                 }
                 device.Parse(e.Payload);
             }
-            logger.LogCritical("The AntRadio channel closed unexpectedly. Response ID = {Response}.", e.ResponseId);
+            else
+            {
+                logger.LogError("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
+                    e.ChannelNumber,
+                    e.ResponseId,
+                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+            }
         }
 
         private void DeviceOffline(object sender, System.EventArgs e)

@@ -46,12 +46,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
         /// </summary>
-        /// <param name="bp">The <see cref="Bicycle"/>.</param>
+        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardPowerSensor(Bicycle bp, ILogger logger)
+        public StandardPowerSensor(Bicycle bicycle, ILogger logger)
         {
             CommonDataPages = new CommonDataPages(logger);
-            Parameters = new Parameters(bp, logger);
+            Parameters = new Parameters(bicycle, logger);
         }
 
         /// <summary>

@@ -24,7 +24,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             Ack = 0xAC
         }
 
-        private readonly Bicycle bp;
+        private readonly Bicycle _bicycle;
         private readonly ILogger _logger;
         private bool isFirstPage = true;
         private byte prevUpdateEventCount;
@@ -50,11 +50,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public double Power { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
-        /// <param name="bicyclePower">The <see cref="Bicycle"/> instance.</param>
+        /// <param name="bicycle">The <see cref="Bicycle"/> instance.</param>
         /// <param name="logger">The logger to use.</param>
-        public CrankTorqueFrequencySensor(Bicycle bicyclePower, ILogger logger)
+        public CrankTorqueFrequencySensor(Bicycle bicycle, ILogger logger)
         {
-            bp = bicyclePower;
+            _bicycle = bicycle;
             _logger = logger;
         }
 
@@ -142,7 +142,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.Slope, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(slp).Reverse()).ToArray();
-            bp.SendExtAcknowledgedMessage(msg);
+            _bicycle.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Saves the serial number to flash.</summary>
@@ -151,7 +151,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.SerialNumber, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(serialNumber).Reverse()).ToArray();
-            bp.SendExtAcknowledgedMessage(msg);
+            _bicycle.SendExtAcknowledgedMessage(msg);
         }
     }
 }

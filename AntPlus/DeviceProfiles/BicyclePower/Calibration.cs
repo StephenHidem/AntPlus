@@ -11,7 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="INotifyPropertyChanged" />
     public class Calibration : INotifyPropertyChanged
     {
-        private readonly Bicycle bp;
+        private readonly Bicycle _bicycle;
         private readonly ILogger _logger;
 
         /// <summary>Occurs when a property value changes.</summary>
@@ -75,11 +75,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="Calibration"/> class.
         /// </summary>
-        /// <param name="bp">The <see cref="Bicycle"/>.</param>
+        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
         /// <param name="logger">Logger to use.</param>
-        public Calibration(Bicycle bp, ILogger logger)
+        public Calibration(Bicycle bicycle, ILogger logger)
         {
-            this.bp = bp;
+            _bicycle = bicycle;
             _logger = logger;
         }
 
@@ -90,7 +90,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             switch ((CalibrationResponseId)dataPage[1])
             {
                 case CalibrationResponseId.CTFDefinedMsg:
-                    bp.CTFSensor.ParseCalibrationMessage(dataPage);
+                    _bicycle.CTFSensor.ParseCalibrationMessage(dataPage);
                     break;
                 case CalibrationResponseId.AutoZeroSupport:
                     AutoZeroSupported = (dataPage[2] & 0x01) == 0x01;
@@ -142,7 +142,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             CalibrationStatus = CalibrationResponse.InProgress;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Sets the sensor automatic zero configuration.</summary>
@@ -151,7 +151,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             CalibrationStatus = CalibrationResponse.Unknown;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Requests the manufacturer specific custom calibration parameters.</summary>
@@ -159,7 +159,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             CalibrationStatus = CalibrationResponse.InProgress;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            bp.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
@@ -176,7 +176,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };
             msg = msg.Concat(customParameters).ToArray();
-            bp.SendExtAcknowledgedMessage(msg);
+            _bicycle.SendExtAcknowledgedMessage(msg);
         }
     }
 }

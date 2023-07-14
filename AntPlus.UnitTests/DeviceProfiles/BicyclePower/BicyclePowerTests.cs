@@ -427,22 +427,22 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities2.InteroperableCapabilies.None)]
-        [DataRow(0x01, AdvCapabilities2.InteroperableCapabilies.FourHz)]
-        [DataRow(0x02, AdvCapabilities2.InteroperableCapabilies.EightHz)]
-        [DataRow(0x08, AdvCapabilities2.InteroperableCapabilies.PowerPhase8Hz)]
-        [DataRow(0x10, AdvCapabilities2.InteroperableCapabilies.PCO8Hz)]
-        [DataRow(0x20, AdvCapabilities2.InteroperableCapabilies.RiderPosition8Hz)]
-        [DataRow(0x40, AdvCapabilities2.InteroperableCapabilies.TorqueBarycenter8Hz)]
+        [DataRow(0, AdvCapabilities2.InteroperableCapabilities.None)]
+        [DataRow(0x01, AdvCapabilities2.InteroperableCapabilities.FourHz)]
+        [DataRow(0x02, AdvCapabilities2.InteroperableCapabilities.EightHz)]
+        [DataRow(0x08, AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz)]
+        [DataRow(0x10, AdvCapabilities2.InteroperableCapabilities.PCO8Hz)]
+        [DataRow(0x20, AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz)]
+        [DataRow(0x40, AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz)]
         [DataRow(0xFF,
-            AdvCapabilities2.InteroperableCapabilies.FourHz |
-            AdvCapabilities2.InteroperableCapabilies.EightHz |
-            AdvCapabilities2.InteroperableCapabilies.PowerPhase8Hz |
-            AdvCapabilities2.InteroperableCapabilies.PCO8Hz |
-            AdvCapabilities2.InteroperableCapabilies.RiderPosition8Hz |
-            AdvCapabilities2.InteroperableCapabilies.TorqueBarycenter8Hz
+            AdvCapabilities2.InteroperableCapabilities.FourHz |
+            AdvCapabilities2.InteroperableCapabilities.EightHz |
+            AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz |
+            AdvCapabilities2.InteroperableCapabilities.PCO8Hz |
+            AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz |
+            AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz
             )]
-        public void Parse_GetSetParametersAdvCap2_ExpectedMask(int mask, AdvCapabilities2.InteroperableCapabilies expMask)
+        public void Parse_GetSetParametersAdvCap2_ExpectedMask(int mask, AdvCapabilities2.InteroperableCapabilities expMask)
         {
             // Arrange
             var bicyclePower = CreateBicyclePower();
@@ -460,22 +460,22 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities2.InteroperableCapabilies.None)]
-        [DataRow(0x01, AdvCapabilities2.InteroperableCapabilies.FourHz)]
-        [DataRow(0x02, AdvCapabilities2.InteroperableCapabilies.EightHz)]
-        [DataRow(0x08, AdvCapabilities2.InteroperableCapabilies.PowerPhase8Hz)]
-        [DataRow(0x10, AdvCapabilities2.InteroperableCapabilies.PCO8Hz)]
-        [DataRow(0x20, AdvCapabilities2.InteroperableCapabilies.RiderPosition8Hz)]
-        [DataRow(0x40, AdvCapabilities2.InteroperableCapabilies.TorqueBarycenter8Hz)]
+        [DataRow(0, AdvCapabilities2.InteroperableCapabilities.None)]
+        [DataRow(0x01, AdvCapabilities2.InteroperableCapabilities.FourHz)]
+        [DataRow(0x02, AdvCapabilities2.InteroperableCapabilities.EightHz)]
+        [DataRow(0x08, AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz)]
+        [DataRow(0x10, AdvCapabilities2.InteroperableCapabilities.PCO8Hz)]
+        [DataRow(0x20, AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz)]
+        [DataRow(0x40, AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz)]
         [DataRow(0xFF,
-            AdvCapabilities2.InteroperableCapabilies.FourHz |
-            AdvCapabilities2.InteroperableCapabilies.EightHz |
-            AdvCapabilities2.InteroperableCapabilies.PowerPhase8Hz |
-            AdvCapabilities2.InteroperableCapabilies.PCO8Hz |
-            AdvCapabilities2.InteroperableCapabilies.RiderPosition8Hz |
-            AdvCapabilities2.InteroperableCapabilies.TorqueBarycenter8Hz
+            AdvCapabilities2.InteroperableCapabilities.FourHz |
+            AdvCapabilities2.InteroperableCapabilities.EightHz |
+            AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz |
+            AdvCapabilities2.InteroperableCapabilities.PCO8Hz |
+            AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz |
+            AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz
             )]
-        public void Parse_GetSetParametersAdvCap2_ExpectedValue(int value, AdvCapabilities2.InteroperableCapabilies expValue)
+        public void Parse_GetSetParametersAdvCap2_ExpectedValue(int value, AdvCapabilities2.InteroperableCapabilities expValue)
         {
             // Arrange
             var bicyclePower = CreateBicyclePower();

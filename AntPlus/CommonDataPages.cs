@@ -18,7 +18,7 @@ namespace SmallEarthTech.AntPlus
         OpenChannelCommand = 0x4A,
         /// <summary>Mode settings data page</summary>
         ModeSettingsPage = 0x4C,
-        /// <summary>Multiple componet manufacturer info data page</summary>
+        /// <summary>Multiple component manufacturer info data page</summary>
         MultiComponentManufacturerInfo = 0x4E,
         /// <summary>Multiple component product info data page</summary>
         MultiComponentProductInfo = 0x4F,
@@ -26,7 +26,7 @@ namespace SmallEarthTech.AntPlus
         ManufacturerInfo = 0x50,
         /// <summary>Product info data page</summary>
         ProductInfo = 0x51,
-        /// <summary>Battrey status data page</summary>
+        /// <summary>Battery status data page</summary>
         BatteryStatus = 0x52,
         /// <summary>Time and date data page</summary>
         TimeAndDate = 0x53,
@@ -47,7 +47,7 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Data page command</summary>
         DataPage,
         /// <summary>ANT-FS command</summary>
-        AntFSSesion,
+        AntFSSession,
         /// <summary>Data page from slave command</summary>
         DataPageFromSlave,
         /// <summary>Data page set command</summary>
@@ -87,7 +87,7 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Swimming</summary>
         Swimming = 5,
     }
-    /// <summary>Currently the subsport mode is only used by heart rate monitors.</summary>
+    /// <summary>Currently the sub sport mode is only used by heart rate monitors.</summary>
     public enum SubSportMode
     {
         /// <summary>Generic. Use default.</summary>
@@ -260,7 +260,7 @@ namespace SmallEarthTech.AntPlus
             /// <summary>The subfield data page type.</summary>
             public enum SubPage
             {
-                /// <summary>The temperature in degrees celsius.</summary>
+                /// <summary>The temperature in degrees Celsius.</summary>
                 Temperature = 1,
                 /// <summary>The barometric pressure in kPa.</summary>
                 BarometricPressure,
@@ -272,9 +272,9 @@ namespace SmallEarthTech.AntPlus
                 WindDirection,
                 /// <summary>The number of charging cycles.</summary>
                 ChargingCycles,
-                /// <summary>The minimum operating temperature in degrees celsius.</summary>
+                /// <summary>The minimum operating temperature in degrees Celsius.</summary>
                 MinimumOperatingTemperature,
-                /// <summary>The maximum operating temperature in degrees celsius.</summary>
+                /// <summary>The maximum operating temperature in degrees Celsius.</summary>
                 MaximumOperatingTemperature,
                 /// <summary>Invalid.</summary>
                 Invalid = 0xFF

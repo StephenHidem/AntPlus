@@ -25,7 +25,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         }
 
         private readonly Bicycle bp;
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
         private bool isFirstPage = true;
         private byte prevUpdateEventCount;
         private ushort prevTimeStamp;
@@ -55,7 +55,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public CrankTorqueFrequencySensor(Bicycle bicyclePower, ILogger logger)
         {
             bp = bicyclePower;
-            this.logger = logger;
+            _logger = logger;
         }
 
         /// <summary>
@@ -117,12 +117,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                         case CTFDefinedId.SerialNumber:
                             break;
                         default:
-                            logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", message[3]);
+                            _logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", message[3]);
                             break;
                     }
                     break;
                 default:
-                    logger.LogWarning("Unexpected CTF message ID = {ID}", message[2]);
+                    _logger.LogWarning("Unexpected CTF message ID = {ID}", message[2]);
                     break;
             }
         }

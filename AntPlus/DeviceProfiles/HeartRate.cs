@@ -375,7 +375,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     }
                     else
                     {
-                        logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
+                        _logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
                     }
                     break;
             }

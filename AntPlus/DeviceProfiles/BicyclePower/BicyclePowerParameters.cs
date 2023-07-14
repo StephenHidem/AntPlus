@@ -28,7 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     public class Parameters : INotifyPropertyChanged
     {
         private readonly Bicycle bp;
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Various crank parameters.
@@ -187,7 +187,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             /// <summary>Interoperable capabilities.</summary>
             [Flags]
-            public enum InteroperableCapabilies
+            public enum InteroperableCapabilities
             {
                 /// <summary>None</summary>
                 None = 0,
@@ -201,19 +201,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 PCO8Hz = 0x10,
                 /// <summary>Rider position, eight Hz</summary>
                 RiderPosition8Hz = 0x20,
-                /// <summary>Troque barycenter, eight Hz</summary>
+                /// <summary>Torque barycenter, eight Hz</summary>
                 TorqueBarycenter8Hz = 0x40,
             }
 
             /// <summary>Gets the interoperable capabilities mask.</summary>
-            public InteroperableCapabilies Mask { get; }
+            public InteroperableCapabilities Mask { get; }
             /// <summary>Gets the interoperable capabilities value.</summary>
-            public InteroperableCapabilies Value { get; }
+            public InteroperableCapabilities Value { get; }
 
             internal AdvCapabilities2(byte[] dataPage)
             {
-                Mask = (InteroperableCapabilies)(dataPage[4] & 0x7B);
-                Value = (InteroperableCapabilies)(dataPage[6] & 0x7B);
+                Mask = (InteroperableCapabilities)(dataPage[4] & 0x7B);
+                Value = (InteroperableCapabilities)(dataPage[6] & 0x7B);
             }
         }
 
@@ -236,10 +236,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </summary>
         /// <param name="bp">The <see cref="Bicycle"/>.</param>
         /// <param name="logger">Logger to use.</param>
-        public Parameters(Bicycle bp, Microsoft.Extensions.Logging.ILogger logger)
+        public Parameters(Bicycle bp, ILogger logger)
         {
             this.bp = bp;
-            this.logger = logger;
+            _logger = logger;
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities2)));
                     break;
                 default:
-                    logger.LogWarning("Unknown Subpage - {Subpage}.", dataPage[1]);
+                    _logger.LogWarning("Unknown Subpage - {Subpage}.", dataPage[1]);
                     break;
             }
         }

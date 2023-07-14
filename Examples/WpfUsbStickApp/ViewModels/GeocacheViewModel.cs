@@ -64,7 +64,7 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanRequestPin))]
-        private async void RequestPIN()
+        private async Task RequestPIN()
         {
             pinReq = true;
             CheckCanExecutes();
@@ -88,7 +88,7 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanRequestAuthentication))]
-        private async void RequestAuthentication()
+        private async Task RequestAuthentication()
         {
             authReq = true;
             CheckCanExecutes();
@@ -101,7 +101,7 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanProgramGeocache))]
-        private async void ProgramGeocache()
+        private async Task ProgramGeocache()
         {
             programming = true;
             CheckCanExecutes();

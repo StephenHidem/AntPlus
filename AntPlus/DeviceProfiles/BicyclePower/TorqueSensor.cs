@@ -25,7 +25,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>The delta torque</summary>
         protected int deltaTorque;
         /// <summary>The logger to use.</summary>
-        protected ILogger logger;
+        protected ILogger _logger;
 
         /// <summary>Gets the average angular velocity in radians per second.</summary>
         public double AverageAngularVelocity { get; private set; }
@@ -39,7 +39,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="logger">Logger to use.</param>
         protected TorqueSensor(Bicycle bp, ILogger logger) : base(bp, logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
         /// <summary>Parses the torque message.</summary>

@@ -267,7 +267,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </summary>
         public void RequestSummaryPage()
         {
-            logger.LogInformation(nameof(RequestSummaryPage));
+            _logger.LogInformation(nameof(RequestSummaryPage));
             RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
@@ -284,7 +284,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         public void RequestBroadcastCapabilities()
         {
-            logger?.LogInformation(nameof(RequestBroadcastCapabilities));
+            _logger?.LogInformation(nameof(RequestBroadcastCapabilities));
             RequestDataPage(DataPage.Capabilities);
         }
     }

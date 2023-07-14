@@ -41,7 +41,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
         }
 
         [TestMethod]
-        public void Parse_CumulativeOperartingTime_Expected()
+        public void Parse_CumulativeOperatingTime_Expected()
         {
             // Arrange
             TimeSpan cot = TimeSpan.FromSeconds(10000);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -26,7 +27,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <seealso cref="INotifyPropertyChanged" />
     public class Parameters : INotifyPropertyChanged
     {
-        private readonly Bicycle bp;
+        private readonly Bicycle _bicycle;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Various crank parameters.
@@ -185,7 +187,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             /// <summary>Interoperable capabilities.</summary>
             [Flags]
-            public enum InteroperableCapabilies
+            public enum InteroperableCapabilities
             {
                 /// <summary>None</summary>
                 None = 0,
@@ -199,19 +201,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 PCO8Hz = 0x10,
                 /// <summary>Rider position, eight Hz</summary>
                 RiderPosition8Hz = 0x20,
-                /// <summary>Troque barycenter, eight Hz</summary>
+                /// <summary>Torque barycenter, eight Hz</summary>
                 TorqueBarycenter8Hz = 0x40,
             }
 
             /// <summary>Gets the interoperable capabilities mask.</summary>
-            public InteroperableCapabilies Mask { get; }
+            public InteroperableCapabilities Mask { get; }
             /// <summary>Gets the interoperable capabilities value.</summary>
-            public InteroperableCapabilies Value { get; }
+            public InteroperableCapabilities Value { get; }
 
             internal AdvCapabilities2(byte[] dataPage)
             {
-                Mask = (InteroperableCapabilies)(dataPage[4] & 0x7B);
-                Value = (InteroperableCapabilies)(dataPage[6] & 0x7B);
+                Mask = (InteroperableCapabilities)(dataPage[4] & 0x7B);
+                Value = (InteroperableCapabilities)(dataPage[6] & 0x7B);
             }
         }
 
@@ -232,10 +234,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="Parameters"/> class.
         /// </summary>
-        /// <param name="bp">The bp.</param>
-        public Parameters(Bicycle bp)
+        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
+        /// <param name="logger">Logger to use.</param>
+        public Parameters(Bicycle bicycle, ILogger logger)
         {
-            this.bp = bp;
+            _bicycle = bicycle;
+            _logger = logger;
         }
 
         /// <summary>
@@ -267,6 +271,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities2)));
                     break;
                 default:
+                    _logger.LogWarning("Unknown Subpage - {Subpage}.", dataPage[1]);
                     break;
             }
         }
@@ -277,7 +282,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="parameterSubpage">The parameter subpage.</param>
         public void GetParameters(Subpage parameterSubpage)
         {
-            bp.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
+            _bicycle.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
         }
 
         /// <summary>
@@ -298,7 +303,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 byte cl = (byte)((length - 110) / 0.5);
                 msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
             }
-            bp.SendExtAcknowledgedMessage(msg);
+            _bicycle.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -314,7 +319,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public void SetTransitionTimeOffset(byte offset)
         {
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            bp.SendExtAcknowledgedMessage(msg);
+            _bicycle.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -336,7 +341,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
             byte peak = (byte)(threshold / 0.5);
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            bp.SendExtAcknowledgedMessage(msg);
+            _bicycle.SendExtAcknowledgedMessage(msg);
         }
     }
 }

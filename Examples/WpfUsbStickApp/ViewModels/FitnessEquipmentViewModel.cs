@@ -54,7 +54,7 @@ namespace WpfUsbStickApp.ViewModels
             }
         }
 
-        private void FitnessEquipment_LapToggled(object sender, System.EventArgs e)
+        private void FitnessEquipment_LapToggled(object sender, EventArgs e)
         {
             LapSplitTime = ((Equipment)sender).GeneralData.ElapsedTime;
         }

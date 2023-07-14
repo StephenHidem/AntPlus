@@ -90,7 +90,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
         public Bicycle(ChannelId channelId, IAntChannel antChannel, ILogger<Bicycle> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
-            Calibration = new Calibration(this);
+            Calibration = new Calibration(this, logger);
         }
 
         /// <inheritdoc/>
@@ -114,7 +114,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     if (Sensor == SensorType.Unknown)
                     {
                         Sensor = SensorType.Power;
-                        PowerSensor = new StandardPowerSensor(this, logger);
+                        PowerSensor = new StandardPowerSensor(this, _logger);
                     }
                     PowerSensor.Parse(dataPage);
                     break;
@@ -122,7 +122,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     if (Sensor == SensorType.Unknown || Sensor == SensorType.Power)
                     {
                         Sensor = SensorType.WheelTorque;
-                        PowerSensor = WheelTorqueSensor = new StandardWheelTorqueSensor(this, logger);
+                        PowerSensor = WheelTorqueSensor = new StandardWheelTorqueSensor(this, _logger);
                     }
                     WheelTorqueSensor.ParseTorque(dataPage);
                     break;
@@ -130,7 +130,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     if (Sensor == SensorType.Unknown || Sensor == SensorType.Power)
                     {
                         Sensor = SensorType.CrankTorque;
-                        PowerSensor = CrankTorqueSensor = new StandardCrankTorqueSensor(this, logger);
+                        PowerSensor = CrankTorqueSensor = new StandardCrankTorqueSensor(this, _logger);
                     }
                     CrankTorqueSensor.ParseTorque(dataPage);
                     break;
@@ -141,7 +141,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     Sensor = SensorType.CrankTorqueFrequency;
                     if (CTFSensor == null)
                     {
-                        CTFSensor = new CrankTorqueFrequencySensor(this);
+                        CTFSensor = new CrankTorqueFrequencySensor(this, _logger);
                     }
                     CTFSensor.Parse(dataPage);
                     break;

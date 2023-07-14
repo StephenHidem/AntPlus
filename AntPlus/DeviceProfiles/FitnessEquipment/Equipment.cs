@@ -364,7 +364,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                logger.LogWarning("Invalid state. Received {State}", st);
+                _logger.LogWarning("Invalid state. Received {State}", st);
             }
         }
 
@@ -487,6 +487,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     TrainerStationaryBike = new TrainerStationaryBike();
                     break;
                 default:
+                    _logger.LogError("Unknown equipment type = {EquipmentType}", equipmentType);
                     break;
             }
         }

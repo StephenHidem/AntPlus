@@ -167,7 +167,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     RaisePropertyChange(nameof(Stopped));
                     break;
                 default:
-                    logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(Parse), BitConverter.ToString(dataPage));
+                    _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(Parse), BitConverter.ToString(dataPage));
                     break;
             }
         }

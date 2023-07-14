@@ -9,11 +9,11 @@ namespace AntPlus.UnitTests.DeviceProfiles
     [TestClass]
     public class StrideBasedSpeedAndDistanceTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
         readonly ChannelId cid = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<StrideBasedSpeedAndDistance>> mockLogger;
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<StrideBasedSpeedAndDistance>>? mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -28,8 +28,8 @@ namespace AntPlus.UnitTests.DeviceProfiles
         {
             return new StrideBasedSpeedAndDistance(
                 cid,
-                mockAntChannel.Object,
-                mockLogger.Object);
+                mockAntChannel?.Object,
+                mockLogger?.Object);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.IsTrue(strideBasedSpeedAndDistance.InstantaneousSpeed == 1.5);
             Assert.IsTrue(strideBasedSpeedAndDistance.AccumulatedStrideCount == 0);
             Assert.IsTrue(strideBasedSpeedAndDistance.UpdateLatency == 1.5);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.IsTrue(strideBasedSpeedAndDistance.InstantaneousSpeed == 1.5);
             Assert.IsTrue(strideBasedSpeedAndDistance.AccumulatedStrideCount == 6);
             Assert.IsTrue(strideBasedSpeedAndDistance.UpdateLatency == 1.5);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.IsTrue(strideBasedSpeedAndDistance.InstantaneousSpeed == 1.5);
             Assert.IsTrue(strideBasedSpeedAndDistance.InstantaneousCadence == 60.5);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.IsTrue(strideBasedSpeedAndDistance.AccumulatedCalories == 20);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(capabilities, strideBasedSpeedAndDistance.Capabilities);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -142,7 +142,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.IsTrue(strideBasedSpeedAndDistance.DistanceSummary == 7824981.265625);
             Assert.IsTrue(strideBasedSpeedAndDistance.StrideCountSummary == 3351057);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(location, strideBasedSpeedAndDistance.Status.Location);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -180,7 +180,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(batteryStatus, strideBasedSpeedAndDistance.Status.Battery);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -199,7 +199,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(healthStatus, strideBasedSpeedAndDistance.Status.Health);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -218,7 +218,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(useState, strideBasedSpeedAndDistance.Status.State);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         //[TestMethod]

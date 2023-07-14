@@ -9,11 +9,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
     [TestClass]
     public class AssetTrackerTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Tracker>> mockLogger;
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<Tracker>>? mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -28,18 +28,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             return new Tracker(
                 mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+                mockAntChannel?.Object,
+                mockLogger?.Object);
         }
 
         [TestMethod]
         public void Parse_OutOfOrderDataPages_ExpectedAssetProperties()
         {
             // Arrange
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
-            List<byte[]> dataPages = new() {
+            List<byte[]>? dataPages = new() {
                 new byte[] { 1, 0xE1, 20, 0, 128, 0, 0x00, 0x00 },
                 new byte[] { 2, 0xE1, 0x00, 0x20, 0xDE, 0xDD, 0xDD, 0xBD },
                 new byte[] { 16, 0xE1, 128, (byte)'C', (byte)'a', (byte)'r', (byte)'l', (byte)'o' },
@@ -47,7 +47,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             };
 
             // Act
-            for (int i = 0; i < 32; i++)
+            for (int? i = 0; i < 32; i++)
             {
                 var tracker = CreateAssetTracker();
 
@@ -69,7 +69,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
                 Assert.AreEqual(128, tracker.Assets[0].Color);
                 Assert.AreEqual("Carlos Cat", tracker.Assets[0].Name);
                 Assert.AreEqual(Asset.AssetType.AssetTracker, tracker.Assets[0].Type);
-                mockRepository.VerifyAll();
+                mockRepository?.VerifyAll();
             }
         }
 
@@ -83,10 +83,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         public void Parse_AssetSituation_ExpectedSituation(int situation, Asset.AssetSituation expSituation)
         {
             // Arrange
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
-            byte[] dataPage = new byte[8];
+            byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
             dataPage[5] = (byte)situation;
             var tracker = CreateAssetTracker();
@@ -107,10 +107,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         public void Parse_AssetStatus_ExpectedStatus(int status, Asset.AssetStatus expStatus)
         {
             // Arrange
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
-            byte[] dataPage = new byte[8];
+            byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
             dataPage[5] = (byte)status;
             var tracker = CreateAssetTracker();
@@ -133,10 +133,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         public void Parse_NoAssets_ExpectedAssetCountIsZero()
         {
             // Arrange
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
-            byte[] dataPage = new byte[8];
+            byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
             var tracker = CreateAssetTracker();
             tracker.Parse(dataPage);
@@ -153,10 +153,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         public void Parse_Disconnected_IsDisconnected()
         {
             // Arrange
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
-            byte[] dataPage = new byte[8];
+            byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
             var tracker = CreateAssetTracker();
             tracker.Parse(dataPage);

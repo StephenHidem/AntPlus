@@ -8,11 +8,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
     [TestClass]
     public class CombinedSpeedAndCadenceSensorTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
-        private CombinedSpeedAndCadenceSensor _sensor;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<CombinedSpeedAndCadenceSensor>> mockLogger;
+        private CombinedSpeedAndCadenceSensor? _sensor;
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<CombinedSpeedAndCadenceSensor>>? mockLogger;
 
         [TestInitialize]
         public void Initialize()
@@ -33,13 +33,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 0x00, 0x04, 0x02, 0x00, 0x00, 0x04, 0x05, 0x00 };
 
             // Act
-            _sensor.Parse(
+            _sensor?.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(_sensor.InstantaneousCadence == 120);
-            Assert.IsTrue(_sensor.InstantaneousSpeed == 11);
-            Assert.IsTrue(_sensor.AccumulatedDistance == 11);
+            Assert.IsTrue(_sensor?.InstantaneousCadence == 120);
+            Assert.IsTrue(_sensor?.InstantaneousSpeed == 11);
+            Assert.IsTrue(_sensor?.AccumulatedDistance == 11);
         }
     }
 }

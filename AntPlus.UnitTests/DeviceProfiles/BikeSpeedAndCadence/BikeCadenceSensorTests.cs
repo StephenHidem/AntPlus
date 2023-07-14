@@ -8,11 +8,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
     [TestClass]
     public class BikeCadenceSensorTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
-        private BikeCadenceSensor _sensor;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<BikeCadenceSensor>> mockLogger;
+        private BikeCadenceSensor? _sensor;
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<BikeCadenceSensor>>? mockLogger;
 
         [TestInitialize]
         public void Initialize()
@@ -33,11 +33,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 0, 1, 2, 3, 0x00, 0x04, 0x02, 0x00 };
 
             // Act
-            _sensor.Parse(
+            _sensor?.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(_sensor.InstantaneousCadence == 120);
+            Assert.IsTrue(_sensor?.InstantaneousCadence == 120);
         }
     }
 }

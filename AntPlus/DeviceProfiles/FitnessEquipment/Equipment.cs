@@ -218,7 +218,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private bool lapToggleState;
         /// <summary>Occurs when a lap toggle is signaled by the device.</summary>
         /// <remarks>
-        /// The event itself does not convey any information. It is the responsibilty of the application/view model to
+        /// The event itself does not convey any information. It is the responsibility of the application/view model to
         /// capture any relevant state from the equipment and/or specific equipment for user consumption. For
         /// example, it may be useful to capture elapsed time and accumulated distance from the class.
         /// </remarks>

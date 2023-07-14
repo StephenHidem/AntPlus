@@ -12,18 +12,17 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class BicyclePowerTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
-        private ChannelId mockChannelId;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private readonly ChannelId mockChannelId = new(0);
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<Bicycle>>? mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
-            mockChannelId = new ChannelId(0);
             mockAntChannel = mockRepository.Create<IAntChannel>();
             mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
         }
@@ -32,8 +31,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+                mockAntChannel?.Object,
+                mockLogger?.Object);
         }
 
         [TestMethod]
@@ -243,7 +242,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         [DataRow(0x10, SensorAvailabilityStatus.LeftPresent)]
         [DataRow(0x20, SensorAvailabilityStatus.RightPresent)]
         [DataRow(0x30, SensorAvailabilityStatus.BothPresent)]
-        public void Parse_GetSetParameters_ExpectedSensorAvailabilityStatus(int val, SensorAvailabilityStatus expSensorAvailibility)
+        public void Parse_GetSetParameters_ExpectedSensorAvailabilityStatus(int val, SensorAvailabilityStatus expSensorAvailability)
         {
             // Arrange
             var bicyclePower = CreateBicyclePower();
@@ -257,7 +256,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expSensorAvailibility, bicyclePower.PowerSensor.Parameters.Crank.AvailabilityStatus);
+            Assert.AreEqual(expSensorAvailability, bicyclePower.PowerSensor.Parameters.Crank.AvailabilityStatus);
         }
 
         [TestMethod]

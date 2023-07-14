@@ -11,18 +11,17 @@ namespace AntPlus.UnitTests.DeviceProfiles
     [TestClass]
     public class HeartRateTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
-        private ChannelId mockChannelId;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<HeartRate>> mockLogger;
+        private readonly ChannelId mockChannelId = new(0);
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<HeartRate>>? mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
-            mockChannelId = new ChannelId(0);
             mockAntChannel = mockRepository.Create<IAntChannel>();
             mockLogger = mockRepository.Create<ILogger<HeartRate>>(MockBehavior.Loose);
         }
@@ -31,8 +30,8 @@ namespace AntPlus.UnitTests.DeviceProfiles
         {
             return new HeartRate(
                 mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+                mockAntChannel?.Object,
+                mockLogger?.Object);
         }
 
         [TestMethod]
@@ -51,7 +50,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.AreEqual(hr, heartRate.HeartRateData.ComputedHeartRate);
             Assert.AreEqual(0, heartRate.HeartRateData.RRInterval);
             Assert.AreEqual(0, heartRate.HeartRateData.AccumulatedHeartBeatEventTime);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -69,7 +68,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.AreEqual(1000, heartRate.HeartRateData.RRInterval);
             Assert.AreEqual(1000, heartRate.HeartRateData.AccumulatedHeartBeatEventTime);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -87,7 +86,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(expTime, heartRate.CumulativeOperatingTime);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -107,7 +106,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.AreEqual(manId, heartRate.ManufacturerInfo.ManufacturingIdLsb);
             Assert.AreEqual(serialNum, heartRate.ManufacturerInfo.SerialNumber);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -129,11 +128,11 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.AreEqual(hwVer, heartRate.ProductInfo.HardwareVersion);
             Assert.AreEqual(swVer, heartRate.ProductInfo.SoftwareVersion);
             Assert.AreEqual(model, heartRate.ProductInfo.ModelNumber);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
-        public void Parse_PreviousHeartBeat_ExpectedRRInverval()
+        public void Parse_PreviousHeartBeat_ExpectedRRInterval()
         {
             // Arrange
             var heartRate = CreateHeartRate();
@@ -149,7 +148,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.AreEqual(manSpecific, heartRate.PreviousHeartBeat.ManufacturerSpecific);
             Assert.AreEqual(rrInterval, heartRate.PreviousHeartBeat.RRInterval);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -171,7 +170,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.AreEqual(intAvgHr, heartRate.SwimInterval.IntervalAverageHeartRate);
             Assert.AreEqual(intMaxHr, heartRate.SwimInterval.IntervalMaximumHeartRate);
             Assert.AreEqual(sessAvgHr, heartRate.SwimInterval.SessionAverageHeartRate);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -196,7 +195,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.AreEqual(expFeature, heartRate.Capabilities.Supported);
             Assert.AreEqual(expFeature, heartRate.Capabilities.Enabled);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -216,7 +215,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.AreEqual(expPct, heartRate.BatteryStatus.BatteryLevel);
             Assert.AreEqual(expVoltage, heartRate.BatteryStatus.BatteryVoltage, 1 / 256.0);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -241,7 +240,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(expStatus, heartRate.BatteryStatus.BatteryStatus);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -260,7 +259,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(expEventType, heartRate.EventType);
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -271,7 +270,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             SportMode sportMode = default;
             SubSportMode subSportMode = default;
             byte[] msg = new byte[] { (byte)CommonDataPage.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode };
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
             ac.SendExtAcknowledgedData(mockChannelId, msg, It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
 
@@ -281,7 +280,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 subSportMode);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -292,7 +291,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             bool applyGymMode = false;
             bool gymMode = false;
             byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0x00 };
-            mockAntChannel.Setup(ac =>
+            mockAntChannel?.Setup(ac =>
             ac.SendExtAcknowledgedData(mockChannelId, msg, It.IsAny<uint>())).
                 Returns(MessagingReturnCode.Pass);
 
@@ -302,7 +301,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 gymMode);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
     }
 }

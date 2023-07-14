@@ -10,11 +10,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class FitnessEquipmentTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Equipment>> mockLogger;
+        private Mock<IAntChannel>? mockAntChannel;
+        private Mock<ILogger<Equipment>>? mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,8 +29,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         {
             return new Equipment(
                 mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+                mockAntChannel?.Object,
+                mockLogger?.Object);
         }
 
         [TestMethod]
@@ -210,7 +210,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
             double resistance = 50;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 48, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(resistance / 0.5) },
                 500)).Returns(MessagingReturnCode.Pass);
@@ -220,7 +220,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 resistance);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -230,7 +230,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             var fitnessEquipment = CreateFitnessEquipment();
             double power = 4000;
             byte[] expPow = BitConverter.GetBytes((ushort)(power / 0.25));
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 49, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, expPow[0], expPow[1] },
                 500)).Returns(MessagingReturnCode.Pass);
@@ -240,7 +240,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 power);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -251,7 +251,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             double windResistanceCoefficient = 1.86;
             sbyte windSpeed = 0;
             double draftingFactor = 0.5;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 50, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(windResistanceCoefficient / 0.01), (byte)(windSpeed + 127), (byte)(draftingFactor / 0.01) },
                 500)).Returns(MessagingReturnCode.Pass);
@@ -263,7 +263,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 draftingFactor);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -274,7 +274,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             double grade = 0;
             double rollingResistanceCoefficient = 0.004;
             byte[] expGrade = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 51, 0xFF, 0xFF, 0xFF, 0xFF, expGrade[0], expGrade[1], (byte)(rollingResistanceCoefficient / 0.00005) },
                 500)).Returns(MessagingReturnCode.Pass);
@@ -285,7 +285,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 rollingResistanceCoefficient);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
 
         [TestMethod]
@@ -301,7 +301,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             byte[] expWeight = BitConverter.GetBytes((ushort)(userWeight / 0.01));
             byte[] expBikeWeight = BitConverter.GetBytes((ushort)(bikeWeight / 0.05) << 4);
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 55, expWeight[0], expWeight[1], 0xFF, (byte)((wheelDiameterOffset & 0x0F) | (expBikeWeight[0] & 0xF0)), expBikeWeight[1], (byte)(wheelDiameter / 0.01), (byte)(gearRatio / 0.03) },
                 500)).Returns(MessagingReturnCode.Pass);
@@ -315,7 +315,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 gearRatio);
 
             // Assert
-            mockRepository.VerifyAll();
+            mockRepository?.VerifyAll();
         }
     }
 }

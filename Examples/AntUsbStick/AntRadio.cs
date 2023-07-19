@@ -32,13 +32,14 @@ namespace SmallEarthTech.AntUsbStick
         public void CancelTransfers(int cancelWaitTime) => antDevice.cancelTransfers(cancelWaitTime);
 
         /// <summary>Initializes a new instance of the <see cref="AntRadio" /> class.</summary>
+        /// <param name="loggerFactory">The factory is used to create <see cref="ILogger"/>s for AntChannels.</param>
         public AntRadio(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<AntRadio>();
             antDevice = new ANT_Device();
             antDevice.deviceResponse += AntDevice_deviceResponse;
-            _logger.LogInformation("Created AntRadio");
+            _logger.LogDebug("Created AntRadio");
         }
 
         private void AntDevice_deviceResponse(ANT_Response response)
@@ -50,7 +51,7 @@ namespace SmallEarthTech.AntUsbStick
         public void Dispose()
         {
             antDevice.Dispose();
-            _logger.LogInformation("Disposed");
+            _logger.LogDebug("Disposed");
         }
 
         /// <inheritdoc/>

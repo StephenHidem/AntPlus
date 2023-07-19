@@ -6,6 +6,10 @@
     "LogLevel Trace": {
       "commandName": "Project",
       "commandLineArgs": "--Logging:LogLevel:Default=Trace"
+    },
+    "LogLevel Debug": {
+      "commandName": "Project",
+      "commandLineArgs": "--Logging:LogLevel:Default=Debug"
     }
   }
 }

@@ -86,7 +86,7 @@ namespace WpfUsbStickApp
 
         private void Capabilities_Click(object sender, RoutedEventArgs e)
         {
-            CapabilitiesWindow capabilitiesWindow = new(viewModel.AntRadio.GetDeviceCapabilities())
+            CapabilitiesWindow capabilitiesWindow = new(viewModel.UsbAntRadio.GetDeviceCapabilities())
             {
                 Icon = Icon
             };

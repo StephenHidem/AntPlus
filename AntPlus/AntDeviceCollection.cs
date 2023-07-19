@@ -55,6 +55,7 @@ namespace SmallEarthTech.AntPlus
             timeout = antDeviceTimeout;
             antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;
             channel = antRadio.GetChannel(1);
+            _ = channel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
         }
 
         private void Channel_ChannelResponse(object sender, AntResponse e)
@@ -77,7 +78,7 @@ namespace SmallEarthTech.AntPlus
             }
             else
             {
-                logger.LogError("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
+                logger.LogCritical("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
                     e.ChannelNumber,
                     e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");

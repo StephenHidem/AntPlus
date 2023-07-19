@@ -1,7 +1,6 @@
 ﻿using ANT_Managed_Library;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -21,7 +20,7 @@ namespace SmallEarthTech.AntUsbStick
             switch ((MessageId)ResponseId)
             {
                 case MessageId.ChannelEventOrResponse:
-                    Debug.WriteLine(string.Format("ChannelEventOrResponse: {0}", BitConverter.ToString(response.messageContents)));
+                    Payload = response.messageContents;
                     break;
                 case MessageId.BroadcastData:
                 case MessageId.AcknowledgedData:

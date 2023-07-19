@@ -119,7 +119,7 @@ namespace SmallEarthTech.AntRadioInterface
     }
 
     /// <summary>The ANT channel interface.</summary>
-    public interface IAntChannel
+    public interface IAntChannel : IDisposable
     {
         /// <summary>
         /// The channel response event. Triggered every time a message is received from the ANT device.

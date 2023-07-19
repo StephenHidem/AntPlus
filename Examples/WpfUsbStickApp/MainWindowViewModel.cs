@@ -14,7 +14,7 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal class MainWindowViewModel
     {
-        public AntRadio AntRadio { get; }
+        public AntRadio UsbAntRadio { get; }
         public string ProductDescription { get; }
         public string SerialString { get; }
         public string HostVersion { get; }
@@ -26,23 +26,30 @@ namespace WpfUsbStickApp.ViewModels
 
         public MainWindowViewModel()
         {
-            AntRadio = new AntRadio();
-            ProductDescription = AntRadio.GetProductDescription();
-            SerialString = AntRadio.GetSerialString();
-            AntResponse rsp = AntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
+            // dependency services
+            _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
+                ConfigureServices(s =>
+                {
+                    s.AddSingleton<IAntRadio, AntRadio>();
+                    s.AddSingleton<AntDeviceCollection>();
+                }).
+                Build();
+
+            UsbAntRadio = (AntRadio)_host.Services.GetRequiredService<IAntRadio>();
+            ProductDescription = UsbAntRadio.GetProductDescription();
+            SerialString = UsbAntRadio.GetSerialString();
+            AntResponse rsp = UsbAntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
             HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0');
 
-            AntRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
-            AntRadio.EnableRxExtendedMessages(true);
-            AntRadio.GetChannel(0).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-            AntRadio.GetChannel(0).SetChannelID(new ChannelId(0), 500);
-            AntRadio.GetChannel(0).SetChannelFreq(57, 500);
-            AntRadio.OpenRxScanMode();
+            UsbAntRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
+            UsbAntRadio.EnableRxExtendedMessages(true);
+            IAntChannel antChannel = UsbAntRadio.GetChannel(0);
+            antChannel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+            antChannel.SetChannelID(new ChannelId(0), 500);
+            antChannel.SetChannelFreq(57, 500);
+            UsbAntRadio.OpenRxScanMode();
 
-            AntRadio.GetChannel(1).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-
-            // dependency services
-            _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).Build();
+            //UsbAntRadio.GetChannel(1).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
 
             // log app info
             var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name.StartsWith("Ant"));
@@ -54,7 +61,7 @@ namespace WpfUsbStickApp.ViewModels
             }
 
             // create the device collection
-            AntDevices = new AntDeviceCollection(AntRadio, _host.Services.GetService<ILoggerFactory>(), 2000);
+            AntDevices = _host.Services.GetRequiredService<AntDeviceCollection>();
         }
     }
 }

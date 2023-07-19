@@ -1,4 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
 using System.Diagnostics;
@@ -12,6 +14,14 @@ using System.Text;
 Console.WriteLine(string.Format("ANT Multicast Server - Version {0}.", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)));
 Console.WriteLine("Copyright 2023 Stephen Hidem.");
 
+// dependency services
+IHost host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
+    ConfigureServices(s =>
+    {
+        s.AddSingleton<IAntRadio, AntRadio>();
+    }).
+    Build();
+
 // create UDP client
 using UdpClient udpServer = new(2000, AddressFamily.InterNetworkV6);
 
@@ -21,27 +31,28 @@ Console.WriteLine(string.Format("Establishing IPv6 endpoint - {0}.", endPoint.To
 
 // create and configure ANT radio
 Console.WriteLine("Configuring ANT radio (uses the first USB stick found).");
-using AntRadio antRadio = new();
+AntRadio antRadio = (AntRadio)host.Services.GetRequiredService<IAntRadio>();
+IAntChannel channel = antRadio.GetChannel(0);
 antRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
 antRadio.EnableRxExtendedMessages(true);
-antRadio.GetChannel(0).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-antRadio.GetChannel(0).SetChannelID(new ChannelId(0), 500);
-antRadio.GetChannel(0).SetChannelFreq(57, 500);
+channel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+channel.SetChannelID(new ChannelId(0), 500);
+channel.SetChannelFreq(57, 500);
 antRadio.OpenRxScanMode();
-IAntChannel channel = antRadio.GetChannel(0);
 channel.ChannelResponse += Channel_ChannelResponse;
 
 // create background task to receive UDP directed to this server from any clients
 _ = Task.Run(async () =>
 {
+    using IAntChannel txChannel = antRadio.GetChannel(1);
     while (true)
     {
         UdpReceiveResult result = await udpServer.ReceiveAsync();
-        Debug.WriteLine(result.Buffer.ToString());
+        Debug.WriteLine(BitConverter.ToString(result.Buffer));
         ChannelId channelId = new(BitConverter.ToUInt32(result.Buffer, 0));
         byte[] msg = result.Buffer.Skip(4).Take(8).ToArray();
         uint ackWaitTime = BitConverter.ToUInt32(result.Buffer, 12);
-        antRadio.GetChannel(1).SendExtAcknowledgedData(channelId, msg, ackWaitTime);
+        txChannel.SendExtAcknowledgedData(channelId, msg, ackWaitTime);
     }
 });
 

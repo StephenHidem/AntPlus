@@ -1,4 +1,5 @@
 ﻿using ANT_Managed_Library;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
@@ -8,20 +9,24 @@ namespace SmallEarthTech.AntUsbStick
     /// <summary>This class contains the implementation of IAntChannel.</summary>
     public class AntChannel : IAntChannel
     {
+        private readonly ILogger<AntChannel> _logger;
         private readonly ANT_Channel antChannel;
 
         /// <inheritdoc/>
         public event EventHandler<AntResponse> ChannelResponse;
 
-        internal AntChannel(ANT_Channel channel)
+        internal AntChannel(ANT_Channel channel, ILogger<AntChannel> logger)
         {
+            _logger = logger;
             antChannel = channel;
             channel.channelResponse += Channel_channelResponse;
+            _logger.LogInformation("Created AntChannel {Channel}", channel.getChannelNum());
         }
 
         private void Channel_channelResponse(ANT_Response response)
         {
             AntResponse antResponse = new UsbAntResponse(response);
+            _logger.LogTrace("Channel response. Channel # = {ChannelNumber}, Response ID = {ResponseID}, Payload = {Payload}", antChannel.getChannelNum(), (MessageId)antResponse.ResponseId, BitConverter.ToString(antResponse.Payload ?? new byte[] { 0 }));
             ChannelResponse?.Invoke(this, antResponse);
         }
 
@@ -104,7 +109,9 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            return (MessagingReturnCode)antChannel.sendExtAcknowledgedData((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
+            var rc = (MessagingReturnCode)antChannel.sendExtAcknowledgedData((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
+            _logger.LogDebug("SendExtAcknowledgedData: Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", channelId.Id, rc, BitConverter.ToString(data));
+            return rc;
         }
 
         /// <inheritdoc/>
@@ -177,6 +184,13 @@ namespace SmallEarthTech.AntUsbStick
         public bool UnassignChannel(uint responseWaitTime)
         {
             return antChannel.unassignChannel(responseWaitTime);
+        }
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            antChannel?.Dispose();
+            _logger.LogInformation("Disposed");
         }
     }
 }

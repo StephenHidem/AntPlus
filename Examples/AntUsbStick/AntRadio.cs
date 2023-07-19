@@ -1,4 +1,6 @@
 ﻿using ANT_Managed_Library;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System;
 
@@ -7,6 +9,8 @@ namespace SmallEarthTech.AntUsbStick
     /// <summary>This class implements the IAntRadio interface.</summary>
     public partial class AntRadio : IAntRadio, IDisposable
     {
+        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<IAntRadio> _logger;
         private readonly ANT_Device antDevice;
 
         /// <inheritdoc/>
@@ -28,10 +32,13 @@ namespace SmallEarthTech.AntUsbStick
         public void CancelTransfers(int cancelWaitTime) => antDevice.cancelTransfers(cancelWaitTime);
 
         /// <summary>Initializes a new instance of the <see cref="AntRadio" /> class.</summary>
-        public AntRadio()
+        public AntRadio(ILoggerFactory loggerFactory)
         {
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            _logger = _loggerFactory.CreateLogger<AntRadio>();
             antDevice = new ANT_Device();
             antDevice.deviceResponse += AntDevice_deviceResponse;
+            _logger.LogInformation("Created AntRadio");
         }
 
         private void AntDevice_deviceResponse(ANT_Response response)
@@ -39,11 +46,15 @@ namespace SmallEarthTech.AntUsbStick
             RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 
-        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
-        public void Dispose() => antDevice.Dispose();
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            antDevice.Dispose();
+            _logger.LogInformation("Disposed");
+        }
 
         /// <inheritdoc/>
-        public IAntChannel GetChannel(int num) => new AntChannel(antDevice.getChannel(num));
+        public IAntChannel GetChannel(int num) => new AntChannel(antDevice.getChannel(num), _loggerFactory.CreateLogger<AntChannel>());
 
         /// <inheritdoc/>
         public DeviceCapabilities GetDeviceCapabilities()

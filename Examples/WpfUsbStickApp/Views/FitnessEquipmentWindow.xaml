@@ -43,7 +43,7 @@
         </GroupBox>
         <GroupBox Header="General Metabolic" Grid.Column="1" Grid.Row="2">
             <StackPanel>
-                <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.AccumulatedCalories, StringFormat='Cycle Length: {0}'}"/>
+                <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.CaloricBurnRate, StringFormat='Caloric Burn Rate: {0:F1}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET: {0:F2}'}"/>
             </StackPanel>

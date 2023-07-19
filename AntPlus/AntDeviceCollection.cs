@@ -87,10 +87,13 @@ namespace SmallEarthTech.AntPlus
 
         private void DeviceOffline(object sender, System.EventArgs e)
         {
-            AntDevice device = (AntDevice)sender;
-            device.DeviceWentOffline -= DeviceOffline;
-            _ = Remove(device);
-            logger.LogDebug("{Device} removed.", device);
+            lock (CollectionLock)
+            {
+                AntDevice device = (AntDevice)sender;
+                device.DeviceWentOffline -= DeviceOffline;
+                _ = Remove(device);
+                logger.LogDebug("{Device} removed.", device);
+            }
         }
 
         /// <inheritdoc/>

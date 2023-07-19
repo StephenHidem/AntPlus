@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "AntMulticastServer": {
+      "commandName": "Project"
+    },
+    "LogLevel Debug": {
+      "commandName": "Project",
+      "commandLineArgs": "--Logging:LogLevel:Default=Debug"
+    }
+  }
+}

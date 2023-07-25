@@ -62,10 +62,10 @@ namespace AntPlus.UnitTests.DeviceProfiles
         }
 
         [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0xFF, 0x0F, 0, 0 }, double.NaN, MeasuremantStatus.Invalid)]
-        [DataRow(new byte[] { 1, 2, 0, 0, 0xFE, 0x0F, 0, 0 }, double.NaN, MeasuremantStatus.AmbientLightTooHigh)]
-        [DataRow(new byte[] { 1, 3, 0, 0, 0xD0, 0x07, 0, 0 }, 20.0, MeasuremantStatus.Valid)]
-        public void Parse_TotalHemoglobinConcentration_Match(byte[] dataPage, double concentration, MeasuremantStatus status)
+        [DataRow(new byte[] { 1, 1, 0, 0, 0xFF, 0x0F, 0, 0 }, double.NaN, MeasurementStatus.Invalid)]
+        [DataRow(new byte[] { 1, 2, 0, 0, 0xFE, 0x0F, 0, 0 }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
+        [DataRow(new byte[] { 1, 3, 0, 0, 0xD0, 0x07, 0, 0 }, 20.0, MeasurementStatus.Valid)]
+        public void Parse_TotalHemoglobinConcentration_Match(byte[] dataPage, double concentration, MeasurementStatus status)
         {
             // Arrange
             var muscleOxygen = new MuscleOxygen(cid, mockAntChannel?.Object, mockLogger?.Object);
@@ -80,10 +80,10 @@ namespace AntPlus.UnitTests.DeviceProfiles
         }
 
         [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0xF0, 0x3F, 0 }, double.NaN, MeasuremantStatus.Invalid)]
-        [DataRow(new byte[] { 1, 2, 0, 0, 0, 0xE0, 0x3F, 0 }, double.NaN, MeasuremantStatus.AmbientLightTooHigh)]
-        [DataRow(new byte[] { 1, 3, 0, 0, 0, 0x80, 0x0C, 0 }, 20.0, MeasuremantStatus.Valid)]
-        public void Parse_PreviousSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasuremantStatus status)
+        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0xF0, 0x3F, 0 }, double.NaN, MeasurementStatus.Invalid)]
+        [DataRow(new byte[] { 1, 2, 0, 0, 0, 0xE0, 0x3F, 0 }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
+        [DataRow(new byte[] { 1, 3, 0, 0, 0, 0x80, 0x0C, 0 }, 20.0, MeasurementStatus.Valid)]
+        public void Parse_PreviousSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasurementStatus status)
         {
             // Arrange
             var muscleOxygen = new MuscleOxygen(cid, mockAntChannel?.Object, mockLogger?.Object);
@@ -98,10 +98,10 @@ namespace AntPlus.UnitTests.DeviceProfiles
         }
 
         [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0, 0xC0, 0xFF }, double.NaN, MeasuremantStatus.Invalid)]
-        [DataRow(new byte[] { 1, 2, 0, 0, 0, 0, 0x80, 0xFF }, double.NaN, MeasuremantStatus.AmbientLightTooHigh)]
-        [DataRow(new byte[] { 1, 3, 0, 0, 0, 0, 0x00, 0x32 }, 20.0, MeasuremantStatus.Valid)]
-        public void Parse_CurrentSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasuremantStatus status)
+        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0, 0xC0, 0xFF }, double.NaN, MeasurementStatus.Invalid)]
+        [DataRow(new byte[] { 1, 2, 0, 0, 0, 0, 0x80, 0xFF }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
+        [DataRow(new byte[] { 1, 3, 0, 0, 0, 0, 0x00, 0x32 }, 20.0, MeasurementStatus.Valid)]
+        public void Parse_CurrentSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasurementStatus status)
         {
             // Arrange
             var muscleOxygen = new MuscleOxygen(cid, mockAntChannel?.Object, mockLogger?.Object);
@@ -123,21 +123,21 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void SendCommand_PageSent_PageMatches(CommandId command)
         {
             // Arrange
-            TimeSpan localTimeOffest = new(6, 0, 0);
+            TimeSpan localTimeOffset = new(6, 0, 0);
             DateTime currentTimeStamp = DateTime.UtcNow;
             mockAntChannel?.Setup(s => s.SendExtAcknowledgedData(
                 cid, It.Is<byte[]>(cmd => (CommandId)cmd[1] == command &&
-                cmd[3] == localTimeOffest.TotalMinutes / 15 &&
+                cmd[3] == localTimeOffset.TotalMinutes / 15 &&
                 BitConverter.ToUInt32(cmd, 4) == (uint)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds),
-                It.IsAny<uint>())).
+                It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
             var muscleOxygen = new MuscleOxygen(cid, mockAntChannel?.Object, mockLogger?.Object);
 
             // Act
             var result = muscleOxygen.SendCommand(
                 command,
-                localTimeOffest,
-                currentTimeStamp);
+                localTimeOffset,
+                currentTimeStamp).Result;
 
             // Assert
             Assert.IsTrue(result == MessagingReturnCode.Pass);

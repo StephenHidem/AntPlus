@@ -3,6 +3,7 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
@@ -370,29 +371,29 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Sets the percentage of maximum resistance resistance.</summary>
         /// <param name="resistance">The resistance.</param>
-        public void SetBasicResistance(double resistance)
+        public async Task<MessagingReturnCode> SetBasicResistance(double resistance)
         {
             byte[] res = new byte[] { (byte)(resistance / 0.5) };
             byte[] msg = (new byte[] { (byte)DataPage.BasicResistance, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }).
                 Concat(res).ToArray();
-            SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Sets the target power in wats.</summary>
         /// <param name="power">The power in watts. Resolution is 0.25 watt.</param>
-        public void SetTargetPower(double power)
+        public async Task<MessagingReturnCode> SetTargetPower(double power)
         {
             byte[] pow = BitConverter.GetBytes((ushort)(power / 0.25));
             byte[] msg = (new byte[] { (byte)DataPage.TargetPower, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }).
                 Concat(pow).ToArray();
-            SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Sets the wind resistance.</summary>
         /// <param name="windResistanceCoefficient">The wind resistance coefficient. Resolution is 0.01 kg/m.</param>
         /// <param name="windSpeed">The wind speed in km/h.</param>
         /// <param name="draftingFactor">The drafting scale factor. Range is 0 to 1.00.</param>
-        public void SetWindResistance(double windResistanceCoefficient, sbyte windSpeed, double draftingFactor)
+        public async Task<MessagingReturnCode> SetWindResistance(double windResistanceCoefficient, sbyte windSpeed, double draftingFactor)
         {
             byte[] wrc = new byte[] { (byte)(windResistanceCoefficient / 0.01) };
             byte[] df = new byte[] { (byte)(draftingFactor / 0.01) };
@@ -400,20 +401,20 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 Concat(wrc).
                 Concat(new byte[] { (byte)(windSpeed + 127) }).
                 Concat(df).ToArray();
-            SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Sets the track resistance.</summary>
         /// <param name="grade">The grade. Set as a percentage of vertical displacement to horizontal displacement.</param>
         /// <param name="rollingResistanceCoefficient">The rolling resistance coefficient.</param>
-        public void SetTrackResistance(double grade, double rollingResistanceCoefficient = 0.004)
+        public async Task<MessagingReturnCode> SetTrackResistance(double grade, double rollingResistanceCoefficient = 0.004)
         {
             byte[] grd = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
             byte[] rrc = new byte[] { (byte)(rollingResistanceCoefficient / 0.00005) };
             byte[] msg = (new byte[] { (byte)DataPage.TrackResistance, 0xFF, 0xFF, 0xFF, 0xFF }).
                 Concat(grd).
                 Concat(rrc).ToArray();
-            SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Sets the user configuration.</summary>
@@ -422,7 +423,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="bikeWeight">The bike weight in kg.</param>
         /// <param name="wheelDiameter">The wheel diameter in meters.</param>
         /// <param name="gearRatio">The gear ratio.</param>
-        public void SetUserConfiguration(double userWeight, byte wheelDiameterOffset, double bikeWeight, double wheelDiameter, double gearRatio)
+        public async Task<MessagingReturnCode> SetUserConfiguration(double userWeight, byte wheelDiameterOffset, double bikeWeight, double wheelDiameter, double gearRatio)
         {
             byte[] uw = BitConverter.GetBytes((ushort)(userWeight / 0.01));
             byte[] wdo_bw = BitConverter.GetBytes((ushort)((ushort)(bikeWeight / 0.05) << 4 | (wheelDiameterOffset & 0x0F)));
@@ -434,13 +435,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 Concat(wdo_bw).
                 Concat(wd).
                 Concat(gr).ToArray();
-            SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Requests the fitness equipment capabilities.</summary>
-        public void RequestFECapabilities()
+        public async Task<MessagingReturnCode> RequestFECapabilities()
         {
-            RequestDataPage(DataPage.FECapabilities);
+            return await RequestDataPage(DataPage.FECapabilities);
         }
 
         private bool IsKnownEquipmentType(FitnessEquipmentType equipmentType)

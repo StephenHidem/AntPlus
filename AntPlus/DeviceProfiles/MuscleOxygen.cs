@@ -3,6 +3,7 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
@@ -60,7 +61,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         }
 
         /// <summary>Measurement status.</summary>
-        public enum MeasuremantStatus
+        public enum MeasurementStatus
         {
             /// <summary>Valid</summary>
             Valid,
@@ -74,7 +75,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public struct TotalHemoglobin
         {
             /// <summary>Gets or sets the measurement status.</summary>
-            public MeasuremantStatus Status { get; internal set; }
+            public MeasurementStatus Status { get; internal set; }
             /// <summary>Gets or sets the concentration.</summary>
             public double Concentration { get; internal set; }
         }
@@ -83,7 +84,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public struct SaturatedHemoglobin
         {
             /// <summary>Gets or sets the measurement status.</summary>
-            public MeasuremantStatus Status { get; internal set; }
+            public MeasurementStatus Status { get; internal set; }
             /// <summary>Gets or sets the percent saturated.</summary>
             public double PercentSaturated { get; internal set; }
         }
@@ -142,15 +143,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     switch (val)
                     {
                         case 0xFFE:
-                            thg.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            thg.Status = MeasurementStatus.AmbientLightTooHigh;
                             thg.Concentration = double.NaN;
                             break;
                         case 0xFFF:
-                            thg.Status = MeasuremantStatus.Invalid;
+                            thg.Status = MeasurementStatus.Invalid;
                             thg.Concentration = double.NaN;
                             break;
                         default:
-                            thg.Status = MeasuremantStatus.Valid;
+                            thg.Status = MeasurementStatus.Valid;
                             thg.Concentration = val * 0.01;
                             break;
                     }
@@ -160,15 +161,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     switch (val)
                     {
                         case 0x3FE:
-                            shg.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            shg.Status = MeasurementStatus.AmbientLightTooHigh;
                             shg.PercentSaturated = double.NaN;
                             break;
                         case 0x3FF:
-                            shg.Status = MeasuremantStatus.Invalid;
+                            shg.Status = MeasurementStatus.Invalid;
                             shg.PercentSaturated = double.NaN;
                             break;
                         default:
-                            shg.Status = MeasuremantStatus.Valid;
+                            shg.Status = MeasurementStatus.Valid;
                             shg.PercentSaturated = val * 0.1;
                             break;
                     }
@@ -178,15 +179,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     switch (val)
                     {
                         case 0x3FE:
-                            shg.Status = MeasuremantStatus.AmbientLightTooHigh;
+                            shg.Status = MeasurementStatus.AmbientLightTooHigh;
                             shg.PercentSaturated = double.NaN;
                             break;
                         case 0x3FF:
-                            shg.Status = MeasuremantStatus.Invalid;
+                            shg.Status = MeasurementStatus.Invalid;
                             shg.PercentSaturated = double.NaN;
                             break;
                         default:
-                            shg.Status = MeasuremantStatus.Valid;
+                            shg.Status = MeasurementStatus.Valid;
                             shg.PercentSaturated = val * 0.1;
                             break;
                     }
@@ -207,16 +208,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Sends a command to the muscle oxygen sensor.</summary>
         /// <param name="command">The command.</param>
-        /// <param name="localTimeOffest">The local time offest.</param>
+        /// <param name="localTimeOffset">The local time offset.</param>
         /// <param name="currentTimeStamp">The current time stamp.</param>
         /// <returns>The MessagingReturnCode.</returns>
-        public MessagingReturnCode SendCommand(CommandId command, TimeSpan localTimeOffest, DateTime currentTimeStamp)
+        public async Task<MessagingReturnCode> SendCommand(CommandId command, TimeSpan localTimeOffset, DateTime currentTimeStamp)
         {
-            sbyte offset = (sbyte)(localTimeOffest.TotalMinutes / 15);
+            sbyte offset = (sbyte)(localTimeOffset.TotalMinutes / 15);
             uint current = (uint)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds;
             byte[] msg = { (byte)DataPage.Commands, (byte)command, 0xFF, (byte)offset };
             msg = msg.Concat(BitConverter.GetBytes(current)).ToArray();
-            return SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
     }
 }

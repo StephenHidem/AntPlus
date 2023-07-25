@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -138,35 +140,35 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         }
 
         /// <summary>Requests manual calibration.</summary>
-        public void RequestManualCalibration()
+        public async Task<MessagingReturnCode> RequestManualCalibration()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            return await _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Sets the sensor automatic zero configuration.</summary>
         /// <param name="autoZero">The automatic zero.</param>
-        public void SetAutoZeroConfiguration(AutoZero autoZero)
+        public async Task<MessagingReturnCode> SetAutoZeroConfiguration(AutoZero autoZero)
         {
             CalibrationStatus = CalibrationResponse.Unknown;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            return await _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Requests the manufacturer specific custom calibration parameters.</summary>
-        public void RequestCustomParameters()
+        public async Task<MessagingReturnCode> RequestCustomParameters()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            return await _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
         /// maximum of 6 bytes.</summary>
         /// <param name="customParameters">The custom parameters. Defined by the manufacturer.</param>
         /// <exception cref="System.ArgumentException">Custom parameters must be 6 bytes in length.</exception>
-        public void SetCustomParameters(byte[] customParameters)
+        public async Task<MessagingReturnCode> SetCustomParameters(byte[] customParameters)
         {
             if (customParameters.Length != 6)
             {
@@ -176,7 +178,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };
             msg = msg.Concat(customParameters).ToArray();
-            _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _bicycle.SendExtAcknowledgedMessage(msg);
         }
     }
 }

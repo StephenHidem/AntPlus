@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
 {
@@ -107,9 +108,13 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        public async Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            var rc = (MessagingReturnCode)antChannel.sendExtAcknowledgedData((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
+            MessagingReturnCode rc = await Task.Run(() =>
+                (MessagingReturnCode)antChannel.sendExtAcknowledgedData(
+                    (ushort)channelId.DeviceNumber,
+                    channelId.DeviceType,
+                    BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime));
             _logger.LogDebug("SendExtAcknowledgedData: Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", channelId.Id, rc, BitConverter.ToString(data));
             return rc;
         }

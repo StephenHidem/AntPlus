@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
@@ -228,7 +229,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
         /// <param name="timeout">Request timeout in milliseconds. The default is 16000 milliseconds.</param>
         /// <returns>Status of the request. See <see cref="MessagingReturnCode" />.</returns>
-        public MessagingReturnCode RequestPinPage(uint timeout = 16000)
+        public async Task<MessagingReturnCode> RequestPinPage(uint timeout = 16000)
         {
             // clear any previous state
             TrackableId = string.Empty;
@@ -240,13 +241,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             LastVisitTimestamp = default;
             RaisePropertyChange(string.Empty);
 
-            return RequestDataPage(DataPage.PIN, timeout);
+            return await RequestDataPage(DataPage.PIN, timeout);
         }
 
-        /// <summary>Requests the authentication.</summary>
+        /// <summary>Requests the authentication token from the geocache.</summary>
         /// <param name="gpsSerialNumber">The GPS serial number.</param>
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
-        public MessagingReturnCode RequestAuthentication(uint gpsSerialNumber)
+        public async Task<MessagingReturnCode> RequestAuthentication(uint gpsSerialNumber)
         {
             authRequested = true;
             Random random = new Random();
@@ -254,13 +255,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             random.NextBytes(nonce);
             byte[] msg = { (byte)DataPage.AuthenticationPage, 0xFF };
             msg = msg.Concat(nonce).Concat(BitConverter.GetBytes(gpsSerialNumber)).ToArray();
-            return SendExtAcknowledgedMessage(msg, 16000);
+            return await SendExtAcknowledgedMessage(msg, 16000);
         }
 
         /// <summary>Updates the logged visits count and last visit timestamp.</summary>
         /// <exception cref="InvalidOperationException">The geocache has not been programmed.</exception>
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
-        public MessagingReturnCode UpdateLoggedVisits()
+        public async Task<MessagingReturnCode> UpdateLoggedVisits()
         {
             // check that a logged visits page has been programmed
             if (loggedVisitsPage == 0)
@@ -270,7 +271,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             NumberOfVisits++;
             LastVisitTimestamp = DateTime.UtcNow;
             uint timestamp = (uint)(DateTime.UtcNow - new DateTime(1989, 12, 31)).TotalSeconds;
-            return SendExtAcknowledgedMessage(new byte[] { loggedVisitsPage, (byte)DataId.LoggedVisits }.
+            return await SendExtAcknowledgedMessage(new byte[] { loggedVisitsPage, (byte)DataId.LoggedVisits }.
                 Concat(BitConverter.GetBytes(timestamp)).
                 Concat(BitConverter.GetBytes((short)NumberOfVisits)).ToArray(), 16000);
         }
@@ -363,7 +364,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             MessagingReturnCode returnCode = MessagingReturnCode.Pass;
             foreach (byte[] msg in messages)
             {
-                returnCode = SendExtAcknowledgedMessage(msg, 16000);
+                returnCode = SendExtAcknowledgedMessage(msg, 16000).Result;
                 if (returnCode != MessagingReturnCode.Pass)
                 {
                     break;

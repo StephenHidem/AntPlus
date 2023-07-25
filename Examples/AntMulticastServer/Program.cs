@@ -52,7 +52,7 @@ _ = Task.Run(async () =>
         ChannelId channelId = new(BitConverter.ToUInt32(result.Buffer, 0));
         byte[] msg = result.Buffer.Skip(4).Take(8).ToArray();
         uint ackWaitTime = BitConverter.ToUInt32(result.Buffer, 12);
-        txChannel.SendExtAcknowledgedData(channelId, msg, ackWaitTime);
+        _ = await txChannel.SendExtAcknowledgedData(channelId, msg, ackWaitTime);
     }
 });
 

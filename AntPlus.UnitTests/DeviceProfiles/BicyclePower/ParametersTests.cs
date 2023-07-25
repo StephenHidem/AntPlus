@@ -52,7 +52,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 (byte)SmallEarthTech.AntPlus.CommandType.DataPage
             };
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
             // Act
@@ -82,7 +82,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 0xFF
             };
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
             // Act
@@ -110,7 +110,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 0xFF
             };
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
             // Act
@@ -138,7 +138,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 0xFF
             };
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
             // Act

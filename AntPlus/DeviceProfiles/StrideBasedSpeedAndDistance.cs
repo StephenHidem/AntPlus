@@ -2,6 +2,7 @@
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
@@ -265,15 +266,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>
         /// Requests the total cumulative distance and stride count since the last battery change.
         /// </summary>
-        public void RequestSummaryPage()
+        /// <returns><see cref="MessagingReturnCode"/></returns>
+        public async Task<MessagingReturnCode> RequestSummaryPage()
         {
             _logger.LogInformation(nameof(RequestSummaryPage));
-            RequestDataPage(DataPage.DistanceAndStridesSummary);
+            return await RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
         /// <summary>
         /// Requests the SDM broadcast capabilities page.
         /// </summary>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         /// <remarks>Page 22 is used to indicate the specific broadcast data capabilities of a sensor.
         /// The SDM shall be able to transmit the capabilities page upon request.
         /// Note that legacy SDMs were only required to support Page 22 if any
@@ -282,10 +285,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// capabilities page is not received, the display should assume that all the prior mentioned capabilities
         /// are supported and nothing else.
         /// </remarks>
-        public void RequestBroadcastCapabilities()
+        public async Task<MessagingReturnCode> RequestBroadcastCapabilities()
         {
             _logger?.LogInformation(nameof(RequestBroadcastCapabilities));
-            RequestDataPage(DataPage.Capabilities);
+            return await RequestDataPage(DataPage.Capabilities);
         }
     }
 }

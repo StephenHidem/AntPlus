@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -130,7 +132,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Saves the slope to flash.</summary>
         /// <param name="slope">The slope. Valid range is 10.0 to 50.0 Nm/Hz. Resolution is 0.1 Nm/Hz.</param>
         /// <exception cref="ArgumentOutOfRangeException">Invalid slope value.</exception>
-        public void SaveSlopeToFlash(double slope)
+        public async Task<MessagingReturnCode> SaveSlopeToFlash(double slope)
         {
             // check range
             if (slope < 10.0 || slope > 50.0)
@@ -142,16 +144,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.Slope, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(slp).Reverse()).ToArray();
-            _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _bicycle.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Saves the serial number to flash.</summary>
         /// <param name="serialNumber">The serial number.</param>
-        public void SaveSerialNumberToFlash(ushort serialNumber)
+        public async Task<MessagingReturnCode> SaveSerialNumberToFlash(ushort serialNumber)
         {
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.SerialNumber, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(serialNumber).Reverse()).ToArray();
-            _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _bicycle.SendExtAcknowledgedMessage(msg);
         }
     }
 }

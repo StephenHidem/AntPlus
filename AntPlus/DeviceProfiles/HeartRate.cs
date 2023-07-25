@@ -3,6 +3,7 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
@@ -113,11 +114,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             /// <summary>RR interval in milliseconds.</summary>
             public int RRInterval { get; }
 
-            internal CommonHeartRateData(int accumEventTime, byte heartRate, int rrInverval)
+            internal CommonHeartRateData(int accumEventTime, byte heartRate, int rrInterval)
             {
                 AccumulatedHeartBeatEventTime = accumEventTime * 1000 / 1024;
                 ComputedHeartRate = heartRate;
-                RRInterval = rrInverval;
+                RRInterval = rrInterval;
             }
         }
 
@@ -171,7 +172,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             internal PreviousHeartBeatPage(byte[] dataPage)
             {
                 ManufacturerSpecific = dataPage[1];
-                RRInterval = CalculateRRInverval(BitConverter.ToUInt16(dataPage, 2), BitConverter.ToUInt16(dataPage, 4));
+                RRInterval = CalculateRRInterval(BitConverter.ToUInt16(dataPage, 2), BitConverter.ToUInt16(dataPage, 4));
             }
         }
 
@@ -312,7 +313,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                 // calculate RR interval if delta beat count is 1
                 if (deltaHeartBeatCount == 1)
                 {
-                    rrInterval = CalculateRRInverval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
+                    rrInterval = CalculateRRInterval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
                 }
 
                 accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
@@ -386,9 +387,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </summary>
         /// <param name="sportMode">The sport mode.</param>
         /// <param name="subSportMode">Subsport mode.</param>
-        public void SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
+        public async Task<MessagingReturnCode> SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
-            SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));
+            return await SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));
         }
 
         /// <summary>
@@ -402,19 +403,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         /// <param name="applyGymMode">if set to <c>true</c> apply gym mode. Displays cannot rely on this field as older sensors do not decode it. The Gym Mode bit shall be set to the last received value from the capabilities page if Apply Gym Mode is set to false.</param>
         /// <param name="gymMode">if set to <c>true</c> gym mode is enabled.</param>
-        public void SetHRFeature(bool applyGymMode, bool gymMode)
+        public async Task<MessagingReturnCode> SetHRFeature(bool applyGymMode, bool gymMode)
         {
             byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(applyGymMode ? 0xFF : 0x7F), (byte)(gymMode ? 0x80 : 0x00) };
-            SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
-        /// Calculates the RR inverval.
+        /// Calculates the RR interval.
         /// </summary>
         /// <param name="previousHeartBeatEventTime">The previous heart beat event time.</param>
         /// <param name="heartBeatEventTime">The heart beat event time.</param>
         /// <returns>RR interval in milliseconds.</returns>
-        private static int CalculateRRInverval(ushort previousHeartBeatEventTime, ushort heartBeatEventTime)
+        private static int CalculateRRInterval(ushort previousHeartBeatEventTime, ushort heartBeatEventTime)
         {
             // calculate delta event time
             var deltaEventTime = heartBeatEventTime - previousHeartBeatEventTime;

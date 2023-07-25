@@ -37,7 +37,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             // Arrange
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
             List<byte[]>? dataPages = new() {
                 new byte[] { 1, 0xE1, 20, 0, 128, 0, 0x00, 0x00 },
@@ -84,7 +84,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             // Arrange
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
             byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
@@ -108,7 +108,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             // Arrange
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
             byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
@@ -134,7 +134,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             // Arrange
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
             byte[]? dataPage = new byte[8];
             dataPage[0] = 1;
@@ -154,7 +154,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             // Arrange
             mockAntChannel?.Setup(ac =>
-                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>())).
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
             byte[]? dataPage = new byte[8];
             dataPage[0] = 1;

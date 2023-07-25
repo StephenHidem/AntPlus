@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntRadioInterface
 {
@@ -160,7 +161,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// Throws exception if the network number is invalid.
         /// </summary>
         /// <param name="channelTypeByte">Channel Type byte</param>
-        /// <param name="networkNumber">Network to assign to channel, must be less than device's max netwoks - 1</param>
+        /// <param name="networkNumber">Network to assign to channel, must be less than device's max networks - 1</param>
         /// <param name="extAssignByte">Extended assignment byte</param>
         /// <param name="responseWaitTime">Time to wait for device success response</param>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
@@ -293,7 +294,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="data">Data to send (length 8 or less)</param>
         /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
-        MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime);
+        Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime);
 
         /// <summary>Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled</summary>
         /// <param name="channelId">Channel ID assigned to a device</param>

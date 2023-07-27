@@ -76,11 +76,11 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanLogVisit))]
-        private void LogVisit()
+        private async Task LogVisit()
         {
             logVisit = true;
             CheckCanExecutes();
-            _ = geocache.UpdateLoggedVisits();
+            _ = await geocache.UpdateLoggedVisits();
         }
         private bool CanLogVisit()
         {

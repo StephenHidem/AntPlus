@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using WpfUsbStickApp.Controls;
 
@@ -54,22 +55,25 @@ namespace WpfUsbStickApp.ViewModels
             }
         }
 
-        private void FitnessEquipment_LapToggled(object sender, EventArgs e)
+        private void FitnessEquipment_LapToggled(object? sender, EventArgs e)
         {
-            LapSplitTime = ((Equipment)sender).GeneralData.ElapsedTime;
+            if (sender != null)
+            {
+                LapSplitTime = ((Equipment)sender).GeneralData.ElapsedTime;
+            }
         }
 
         [RelayCommand]
-        private void FECapabilitiesRequest() => FitnessEquipment.RequestFECapabilities();
+        private async Task FECapabilitiesRequest() => await FitnessEquipment.RequestFECapabilities();
         [RelayCommand]
-        private void SetUserConfig() => FitnessEquipment.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
+        private async Task SetUserConfig() => await FitnessEquipment.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
         [RelayCommand]
-        private void SetBasicResistance(string percent) => FitnessEquipment.SetBasicResistance(double.Parse(percent));
+        private async Task SetBasicResistance(string percent) => await FitnessEquipment.SetBasicResistance(double.Parse(percent));
         [RelayCommand]
-        private void SetTargetPower(string power) => FitnessEquipment.SetTargetPower(double.Parse(power));
+        private async Task SetTargetPower(string power) => await FitnessEquipment.SetTargetPower(double.Parse(power));
         [RelayCommand]
-        private void SetWindResistance() => FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
+        private async Task SetWindResistance() => await FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
         [RelayCommand]
-        private void SetTrackResistance() => FitnessEquipment.SetTrackResistance(-15);
+        private async Task SetTrackResistance() => await FitnessEquipment.SetTrackResistance(-15);
     }
 }

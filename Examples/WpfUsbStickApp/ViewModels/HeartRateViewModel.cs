@@ -5,6 +5,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace WpfUsbStickApp.ViewModels
@@ -53,9 +54,9 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanRequestPage))]
-        private void RequestPage()
+        private async Task RequestPage()
         {
-            _ = heartRate.RequestDataPage(PageRequested);
+            _ = await heartRate.RequestDataPage(PageRequested);
         }
         private bool CanRequestPage()
         {
@@ -77,9 +78,9 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanSetSportMode))]
-        private void SetSportMode()
+        private async Task SetSportMode()
         {
-            heartRate.SetSportMode(ModeRequested);
+            _ = await heartRate.SetSportMode(ModeRequested);
         }
         private bool CanSetSportMode()
         {
@@ -94,9 +95,9 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand]
-        private void SetHRFeature()
+        private async Task SetHRFeature()
         {
-            heartRate.SetHRFeature(ApplyFeature, EnableGymMode);
+            _ = await heartRate.SetHRFeature(ApplyFeature, EnableGymMode);
         }
     }
 }

@@ -4,6 +4,7 @@ using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WpfUsbStickApp.ViewModels
 {
@@ -34,19 +35,19 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand]
-        private void SetTime()
+        private async Task SetTime()
         {
             TimeSpan ts = new(Hours, Minutes, 0);
-            MuscleOxygen.SendCommand(MuscleOxygen.CommandId.SetTime, ts, DateTime.UtcNow);
+            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.SetTime, ts, DateTime.UtcNow);
         }
 
         [RelayCommand(CanExecute = nameof(CanStartSession))]
-        private void StartSession()
+        private async Task StartSession()
         {
             Started = true;
             Stopped = false;
             TimeSpan ts = new(Hours, Minutes, 0);
-            MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
+            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
         }
 
         private bool CanStartSession()
@@ -55,12 +56,12 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanStopSession))]
-        private void StopSession()
+        private async Task StopSession()
         {
             Started = false;
             Stopped = true;
             TimeSpan ts = new(Hours, Minutes, 0);
-            MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
+            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
         }
 
         private bool CanStopSession()
@@ -69,10 +70,10 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanLogLap))]
-        private void LogLap()
+        private async Task LogLap()
         {
             TimeSpan ts = new(Hours, Minutes, 0);
-            MuscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
+            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
         }
 
         private bool CanLogLap()

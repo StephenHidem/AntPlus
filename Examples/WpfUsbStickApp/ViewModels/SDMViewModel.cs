@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using System.Threading.Tasks;
 
 namespace WpfUsbStickApp.ViewModels
 {
@@ -16,9 +17,9 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand]
-        void RequestSummary() => SDM.RequestSummaryPage();
+        private async Task RequestSummary() => await SDM.RequestSummaryPage();
 
         [RelayCommand]
-        void RequestCapabilities() => SDM.RequestBroadcastCapabilities();
+        private async Task RequestCapabilities() => await SDM.RequestBroadcastCapabilities();
     }
 }

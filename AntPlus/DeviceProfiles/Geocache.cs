@@ -52,7 +52,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private bool authRequested;
         private bool programmingGeocache;
         private byte loggedVisitsPage;
-        private DateTime lastMessageTime;
 
         /// <summary>Gets the trackable identifier.</summary>
         public string TrackableId { get; private set; }
@@ -72,10 +71,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public DateTime? LastVisitTimestamp { get; private set; }
         /// <summary>Gets the authentication token.</summary>
         public byte[] AuthenticationToken { get; private set; } = new byte[0];
-        /// <summary>Gets the message rate in Hz.
-        /// This may be used to determine if the geocache is in low power mode and broadcasting at 0.5Hz or in active mode and broadcasting at 4Hz.</summary>
-        /// <value>The message rate in Hz.</value>
-        public double MessageRate { get; private set; }
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
@@ -95,19 +90,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int timeout = 8000) : base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
-            lastMessageTime = DateTime.Now;
         }
 
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
-
-            // determine message rate
-            DateTime now = DateTime.Now;
-            MessageRate = 1.0 / now.Subtract(lastMessageTime).TotalSeconds;
-            lastMessageTime = now;
-            RaisePropertyChange(nameof(MessageRate));
 
             // don't parse if programming geocache
             if (programmingGeocache)

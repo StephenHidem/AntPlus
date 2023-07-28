@@ -150,9 +150,9 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public bool SetChannelPeriod(ushort messagePeriod_32768unitspersecond, uint responseWaitTime)
+        public bool SetChannelPeriod(ushort messagePeriod, uint responseWaitTime)
         {
-            return antChannel.setChannelPeriod(messagePeriod_32768unitspersecond, responseWaitTime);
+            return antChannel.setChannelPeriod(messagePeriod, responseWaitTime);
         }
 
         /// <inheritdoc/>

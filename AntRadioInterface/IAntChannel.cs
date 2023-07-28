@@ -197,10 +197,10 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>
         /// Set this channel's messaging period
         /// </summary>
-        /// <param name="messagePeriod_32768unitspersecond">Desired period in seconds * 32768</param>
+        /// <param name="messagePeriod">Desired period in seconds * 32768</param>
         /// <param name="responseWaitTime">Time to wait for device success response</param>
         /// <returns>True on success. Note: Always returns true with a response time of 0</returns>
-        bool SetChannelPeriod(UInt16 messagePeriod_32768unitspersecond, UInt32 responseWaitTime);
+        bool SetChannelPeriod(UInt16 messagePeriod, UInt32 responseWaitTime);
 
         /// <overloads>Sets the RSSI threshold (ARCT)</overloads>
         /// <summary>

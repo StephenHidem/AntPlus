@@ -131,6 +131,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Saves the slope to flash.</summary>
         /// <param name="slope">The slope. Valid range is 10.0 to 50.0 Nm/Hz. Resolution is 0.1 Nm/Hz.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         /// <exception cref="ArgumentOutOfRangeException">Invalid slope value.</exception>
         public async Task<MessagingReturnCode> SaveSlopeToFlash(double slope)
         {
@@ -149,6 +150,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Saves the serial number to flash.</summary>
         /// <param name="serialNumber">The serial number.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SaveSerialNumberToFlash(ushort serialNumber)
         {
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.SerialNumber, 0xFF, 0xFF, 0xFF };

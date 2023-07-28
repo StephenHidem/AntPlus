@@ -97,7 +97,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte prevBeatCount;
         private ushort prevBeatEventTime;
-        private int accumHeartBeatEventTime;
+        private int accumulatedHeartBeatEventTime;
         private bool pageToggle = false;
         private int observedToggle;
         private int rrInterval;
@@ -114,9 +114,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             /// <summary>RR interval in milliseconds.</summary>
             public int RRInterval { get; }
 
-            internal CommonHeartRateData(int accumEventTime, byte heartRate, int rrInterval)
+            internal CommonHeartRateData(int accumulatedEventTime, byte heartRate, int rrInterval)
             {
-                AccumulatedHeartBeatEventTime = accumEventTime * 1000 / 1024;
+                AccumulatedHeartBeatEventTime = accumulatedEventTime * 1000 / 1024;
                 ComputedHeartRate = heartRate;
                 RRInterval = rrInterval;
             }
@@ -293,7 +293,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                 prevBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
                 prevBeatCount = dataPage[6];
                 lastDataPage = dataPage;
-                HeartRateData = new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval);
+                HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
                 RaisePropertyChange(nameof(HeartRateData));
                 return;
             }
@@ -316,8 +316,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     rrInterval = CalculateRRInterval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
                 }
 
-                accumHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
-                HeartRateData = new CommonHeartRateData(accumHeartBeatEventTime, dataPage[7], rrInterval);
+                accumulatedHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
+                HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
                 RaisePropertyChange(nameof(HeartRateData));
             }
 
@@ -386,7 +386,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// Sets the sport mode.
         /// </summary>
         /// <param name="sportMode">The sport mode.</param>
-        /// <param name="subSportMode">Subsport mode.</param>
+        /// <param name="subSportMode">The sub sport mode.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
             return await SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));
@@ -403,6 +404,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         /// <param name="applyGymMode">if set to <c>true</c> apply gym mode. Displays cannot rely on this field as older sensors do not decode it. The Gym Mode bit shall be set to the last received value from the capabilities page if Apply Gym Mode is set to false.</param>
         /// <param name="gymMode">if set to <c>true</c> gym mode is enabled.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetHRFeature(bool applyGymMode, bool gymMode)
         {
             byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(applyGymMode ? 0xFF : 0x7F), (byte)(gymMode ? 0x80 : 0x00) };

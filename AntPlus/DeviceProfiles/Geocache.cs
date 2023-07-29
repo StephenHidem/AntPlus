@@ -271,7 +271,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="longitude">The longitude in decimal degrees.</param>
         /// <param name="hint">The next stage hint or message.</param>
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
-        public MessagingReturnCode ProgramGeocache(string id, uint? pin, double? latitude, double? longitude, string hint)
+        public async Task<MessagingReturnCode> ProgramGeocache(string id, uint? pin, double? latitude, double? longitude, string hint)
         {
             programmingGeocache = true;
             byte page = 1;  // initial page number for optional pages
@@ -352,7 +352,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             MessagingReturnCode returnCode = MessagingReturnCode.Pass;
             foreach (byte[] msg in messages)
             {
-                returnCode = SendExtAcknowledgedMessage(msg, 16000).Result;
+                returnCode = await SendExtAcknowledgedMessage(msg, 16000);
                 if (returnCode != MessagingReturnCode.Pass)
                 {
                     break;

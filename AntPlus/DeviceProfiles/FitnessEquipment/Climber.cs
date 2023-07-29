@@ -23,7 +23,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Gets the stride cycles. Accumulated value of the complete number of stride cycles (i.e. number of steps climbed/2)</summary>
         public int StrideCycles { get; private set; }
-        /// <summary>Gets the cadence in stride cycles per minuter.</summary>
+        /// <summary>Gets the cadence in stride cycles per minute.</summary>
         public byte Cadence { get; private set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
         public int InstantaneousPower { get; private set; }

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="07393f6f-e5a8-47d3-bbcc-6c6dd391afb9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Version 2.1.0.0 was released on July 29, 2023.</para>
+    </introduction>
+    <section>
+      <title>Breaking Changes in This Release</title>
+      <content>
+      	<list class="bullet">
+      		<listItem>
+		        <para>Refactored class library and examples to use async/await.</para>
+      		</listItem>
+      		<listItem>
+      			<para>Removed MessageRate property from geocache.</para>
+      		</listItem>
+      		<listItem>
+      			<para>Changed AntUsbStick target platform to x86.</para>
+      		</listItem>
+      		<listItem>
+      			<para>Code clean up, tweaks, and logging updates.</para>
+      		</listItem>
+      	</list>
+      </content>
+    </section>
+    <relatedTopics>
+		<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

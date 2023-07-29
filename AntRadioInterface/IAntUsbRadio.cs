@@ -19,7 +19,7 @@
         /// <returns>The vendor ID of this device.</returns>
         ushort GetVID();
 
-        /// <summary>Gets the USB device droduct description.</summary>
+        /// <summary>Gets the USB device product description.</summary>
         /// <returns>The USB product string of this device.</returns>
         string GetProductDescription();
 

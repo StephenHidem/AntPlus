@@ -93,7 +93,7 @@ namespace WpfUsbStickApp.ViewModels
             authReq = true;
             CheckCanExecutes();
             Random rnd = new();
-            _ = await Task.Run(() => geocache.RequestAuthentication((uint)rnd.Next()));
+            _ = await geocache.RequestAuthentication((uint)rnd.Next());
         }
         private bool CanRequestAuthentication()
         {
@@ -105,12 +105,9 @@ namespace WpfUsbStickApp.ViewModels
         {
             programming = true;
             CheckCanExecutes();
-            await Task.Run(() =>
-            {
-                geocache.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
-                programming = false;
-                CheckCanExecutes();
-            });
+            _ = await geocache.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
+            programming = false;
+            CheckCanExecutes();
         }
         private bool CanProgramGeocache()
         {

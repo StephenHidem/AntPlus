@@ -14,10 +14,11 @@
         <HelpKeyword index="K" term="version, 1.0.0.0" />
       </HelpKeywords>
     </Topic>
-    <Topic id="47871b73-83b7-4cf4-8842-44d7520804aa" visible="True" isSelected="true" title="Version 2.0.0.0">
+    <Topic id="47871b73-83b7-4cf4-8842-44d7520804aa" visible="True" title="Version 2.0.0.0">
       <HelpKeywords>
         <HelpKeyword index="K" term="version, 2.0.0.0" />
       </HelpKeywords>
     </Topic>
+    <Topic id="07393f6f-e5a8-47d3-bbcc-6c6dd391afb9" visible="True" isSelected="true" title="Version 2.1.0.0" />
   </Topic>
 </Topics>

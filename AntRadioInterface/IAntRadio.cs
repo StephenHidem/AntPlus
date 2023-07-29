@@ -119,8 +119,8 @@ namespace SmallEarthTech.AntRadioInterface
         InvalidScanTxChannels = 0x31,
         /// <summary>The invalid parameter</summary>
         InvalidParameter = 0x33,
-        /// <summary>The encrypt negotiation succes</summary>
-        EncryptNegotiationSucces = 0x38,
+        /// <summary>The encrypt negotiation success</summary>
+        EncryptNegotiationSuccess = 0x38,
         /// <summary>The encrypt negotiation failed</summary>
         EncryptNegotiationFail = 0x39,
         /// <summary>The NVM full error</summary>

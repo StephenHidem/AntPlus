@@ -24,7 +24,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>
         /// Parses the torque effectiveness and pedal smoothness data page.
-        /// Note that if the right and left pedal smootness is combined, the right and left values will be the same.
+        /// Note that if the right and left pedal smoothness is combined, the right and left values will be the same.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)

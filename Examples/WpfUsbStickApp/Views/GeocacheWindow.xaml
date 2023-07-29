@@ -22,7 +22,6 @@
         <StackPanel>
             <GroupBox Header="Data Pages">
                 <StackPanel>
-                    <TextBlock Text="{Binding Geocache.MessageRate, StringFormat='Message Rate: {0:F2}Hz'}"/>
                     <TextBlock Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
                     <TextBlock Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN: {0}'}"/>
                     <TextBlock Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed: {0}'}"/>

@@ -4,7 +4,7 @@ using System.Linq;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
-    /// A thread safe collection of measurments reported during calibration.
+    /// A thread safe collection of measurements reported during calibration.
     /// </summary>
     public class MeasurementCollection : ObservableCollection<MeasurementOutputData>
     {

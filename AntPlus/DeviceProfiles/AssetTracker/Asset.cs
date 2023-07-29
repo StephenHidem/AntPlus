@@ -88,7 +88,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// Gets the color of the asset. This is an 8 bit RGB value.
         /// </summary>
         /// <value>
-        /// The color. Uses the 3-3-2 bit RGB colour palette.
+        /// The color. Uses the 3-3-2 bit RGB color palette.
         /// </value>
         public byte Color { get; private set; }
         /// <summary>Gets the distance.</summary>

@@ -12,6 +12,7 @@ namespace SmallEarthTech.AntUsbStick
     {
         private readonly ILogger<AntChannel> _logger;
         private readonly ANT_Channel antChannel;
+        private readonly object channelLock = new object();
 
         /// <inheritdoc/>
         public event EventHandler<AntResponse> ChannelResponse;
@@ -111,10 +112,15 @@ namespace SmallEarthTech.AntUsbStick
         public async Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
             MessagingReturnCode rc = await Task.Run(() =>
-                (MessagingReturnCode)antChannel.sendExtAcknowledgedData(
+            {
+                lock (channelLock)
+                {
+                    return (MessagingReturnCode)antChannel.sendExtAcknowledgedData(
                     (ushort)channelId.DeviceNumber,
                     channelId.DeviceType,
-                    BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime));
+                    BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
+                }
+            });
             _logger.LogDebug("SendExtAcknowledgedData: Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", channelId.Id, rc, BitConverter.ToString(data));
             return rc;
         }

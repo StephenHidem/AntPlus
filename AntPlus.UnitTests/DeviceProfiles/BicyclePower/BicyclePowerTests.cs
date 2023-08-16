@@ -3,6 +3,7 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Linq;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Parameters;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Parameters.CrankParameters;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.PedalPositionPage;
@@ -23,7 +24,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
-            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
             mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
         }
 
@@ -86,6 +87,26 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         }
 
         [TestMethod]
+        [DataRow(0x00, false, Calibration.AutoZero.Off)]
+        [DataRow(0x01, true, Calibration.AutoZero.Off)]
+        [DataRow(0x02, false, Calibration.AutoZero.On)]
+        [DataRow(0x03, true, Calibration.AutoZero.On)]
+        public void Parse_AutoZeroSupport_ExpectedAutoZeroSupport(int config, bool supported, Calibration.AutoZero status)
+        {
+            // Arrange
+            var bicyclePower = CreateBicyclePower();
+            byte[] dataPage = new byte[8] { 0x01, 0x12, (byte)config, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
+            // Act
+            bicyclePower.Parse(
+                dataPage);
+
+            // Assert
+            Assert.AreEqual(supported, bicyclePower.Calibration.AutoZeroSupported);
+            Assert.AreEqual(status, bicyclePower.Calibration.AutoZeroStatus);
+        }
+
+        [TestMethod]
         [DataRow(new byte[] { 1, 0xAC, 0x00, 0xFF, 0xFF, 0xFF, 0x22, 0x11 }, Calibration.CalibrationResponse.Succeeded, Calibration.AutoZero.Off)]
         [DataRow(new byte[] { 1, 0xAC, 0x01, 0xFF, 0xFF, 0xFF, 0x22, 0x11 }, Calibration.CalibrationResponse.Succeeded, Calibration.AutoZero.On)]
         [DataRow(new byte[] { 1, 0xAC, 0xFF, 0xFF, 0xFF, 0xFF, 0x22, 0x11 }, Calibration.CalibrationResponse.Succeeded, Calibration.AutoZero.NotSupported)]
@@ -105,6 +126,23 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             Assert.AreEqual(response, bicyclePower.Calibration.CalibrationStatus);
             Assert.AreEqual(autoZero, bicyclePower.Calibration.AutoZeroStatus);
             Assert.IsTrue(bicyclePower.Calibration.CalibrationData == 0x1122);
+        }
+
+        [TestMethod]
+        [DataRow(0xBB)]
+        [DataRow(0xBD)]
+        public void Parse_CustomCalibration_ExpectedCustomParameters(int calID)
+        {
+            // Arrange
+            var bicyclePower = CreateBicyclePower();
+            byte[] dataPage = new byte[8] { 1, (byte)calID, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
+
+            // Act
+            bicyclePower.Parse(
+                dataPage);
+
+            // Assert
+            Assert.IsTrue(bicyclePower.Calibration.CustomCalibrationParameters.SequenceEqual(dataPage.Skip(2).ToArray()));
         }
 
         [TestMethod]

@@ -19,51 +19,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </remarks>
         public object CollectionLock = new object();
 
-        /// <inheritdoc/>
-        protected override void InsertItem(int index, MeasurementOutputData item)
-        {
-            lock (CollectionLock)
-            {
-                base.InsertItem(index, item);
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void RemoveItem(int index)
-        {
-            lock (CollectionLock)
-            {
-                base.RemoveItem(index);
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void ClearItems()
-        {
-            lock (CollectionLock)
-            {
-                base.ClearItems();
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void MoveItem(int oldIndex, int newIndex)
-        {
-            lock (CollectionLock)
-            {
-                base.MoveItem(oldIndex, newIndex);
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void SetItem(int index, MeasurementOutputData item)
-        {
-            lock (CollectionLock)
-            {
-                base.SetItem(index, item);
-            }
-        }
-
         /// <summary>
         /// Parses the specified data page.
         /// </summary>
@@ -74,7 +29,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             if (measurement == null)
             {
                 measurement = new MeasurementOutputData(dataPage);
-                Add(measurement);
+                lock (CollectionLock)
+                {
+                    Add(measurement);
+                }
             }
             measurement.Parse(dataPage);
         }

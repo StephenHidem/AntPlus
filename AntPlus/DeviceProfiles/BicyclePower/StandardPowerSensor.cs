@@ -17,6 +17,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private ushort lastPower;
         private int deltaPower;
 
+        /// <summary>Pedal power differentiation.</summary>
+        public enum PedalDifferentiation
+        {
+            /// <summary>Right pedal power contribution.</summary>
+            RightPedal,
+            /// <summary>Unknown pedal power contribution.</summary>
+            Unknown,
+            /// <summary>Pedal power not used.</summary>
+            Unused
+        }
+
         /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>Raises the property change.</summary>
@@ -28,9 +39,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Gets the average power in watts.</summary>
         public double AveragePower { get; private set; }
-        /// <summary>Gets the pedal power in watts.</summary>
+        /// <summary>The pedal power data field provides the user’s power contribution (as a percentage) between the left and right pedals, as
+        /// measured by a pedal power sensor. </summary>
         /// <value>The pedal power.</value>
         public byte PedalPower { get; private set; }
+        /// <summary>Gets the pedal power contribution.</summary>
+        /// <value>The pedal differentiation.</value>
+        public PedalDifferentiation PedalContribution { get; private set; }
         /// <summary>Gets the instantaneous pedaling cadence.</summary>
         public byte InstantaneousCadence { get; protected set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
@@ -60,10 +75,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
-            PedalPower = dataPage[2];
+            PedalPower = (byte)(dataPage[2] & 0x7F);
+            PedalContribution = dataPage[2] == 0xFF
+                ? PedalDifferentiation.Unused
+                : (dataPage[2] & 0x80) != 0 ? PedalDifferentiation.RightPedal : PedalDifferentiation.Unknown;
             InstantaneousCadence = dataPage[3];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 6);
             RaisePropertyChange(nameof(PedalPower));
+            RaisePropertyChange(nameof(PedalContribution));
             RaisePropertyChange(nameof(InstantaneousCadence));
             RaisePropertyChange(nameof(InstantaneousPower));
 

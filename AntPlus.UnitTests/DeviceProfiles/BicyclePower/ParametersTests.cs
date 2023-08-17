@@ -288,6 +288,25 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         }
 
         [TestMethod]
+        [DataRow(0, AdvCapabilities1.InteropProp.None)]
+        [DataRow(0x01, AdvCapabilities1.InteropProp.DefaultCrankLength)]
+        [DataRow(0x02, AdvCapabilities1.InteropProp.RequiresCrankLength)]
+        [DataRow(0x03, AdvCapabilities1.InteropProp.DefaultCrankLength | AdvCapabilities1.InteropProp.RequiresCrankLength)]
+        public void Parse_AdvCap1Parameters_ExpectedProperties(int value, AdvCapabilities1.InteropProp expProp)
+        {
+            // Arrange
+            var parameters = CreateParameters();
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
+            // Act
+            mockBicycle?.Parse(
+                dataPage);
+
+            // Assert
+            Assert.AreEqual(expProp, parameters.AdvancedCapabilities1.InteroperableProperties);
+        }
+
+        [TestMethod]
         [DataRow(Subpage.CrankParameters)]
         [DataRow(Subpage.AdvancedCapabilities1)]
         [DataRow(Subpage.AdvancedCapabilities2)]

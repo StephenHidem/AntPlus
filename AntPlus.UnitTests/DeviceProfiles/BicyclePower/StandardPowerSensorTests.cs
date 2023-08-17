@@ -9,7 +9,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class StandardPowerSensorTests
     {
-        private MockRepository mockRepository;
+        private MockRepository? mockRepository;
 
         private Bicycle? mockBicycle;
         private readonly ChannelId mockChannelId = new(0);

@@ -12,6 +12,7 @@
         <GroupBox Header="Power">
             <StackPanel>
                 <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
+                <TextBlock Text="{Binding PedalContribution, StringFormat='Pedal Contribution: {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power (Watts): {0}'}"/>
                 <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>

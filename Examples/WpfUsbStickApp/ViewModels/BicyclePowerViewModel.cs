@@ -21,13 +21,13 @@ namespace WpfUsbStickApp.ViewModels
             switch (bicyclePower.Sensor)
             {
                 case SensorType.Power:
-                    BicyclePowerControl = new BicyclePowerOnlyControl(BicyclePower.PowerSensor);
+                    BicyclePowerControl = new BicyclePowerOnlyControl(bicyclePower);
                     break;
                 case SensorType.WheelTorque:
-                    BicyclePowerControl = new BicycleWheelTorqueControl(BicyclePower.WheelTorqueSensor);
+                    BicyclePowerControl = new BicycleWheelTorqueControl(bicyclePower);
                     break;
                 case SensorType.CrankTorque:
-                    BicyclePowerControl = new BicycleCrankTorqueControl(BicyclePower.CrankTorqueSensor);
+                    BicyclePowerControl = new BicycleCrankTorqueControl(bicyclePower);
                     break;
                 case SensorType.CrankTorqueFrequency:
                     BicyclePowerControl = new CTFControl(BicyclePower.CTFSensor);

@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
              xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
              xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
-             d:DataContext="{d:DesignInstance Type=dp:StandardPowerSensor}"
+             d:DataContext="{d:DesignInstance Type=dp:Bicycle}"
              mc:Ignorable="d" Background="White">
     <Grid>
         <GroupBox Header="Power">
-            <StackPanel>
+            <StackPanel DataContext="{Binding PowerSensor}">
                 <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
                 <TextBlock Text="{Binding PedalContribution, StringFormat='Pedal Contribution: {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>

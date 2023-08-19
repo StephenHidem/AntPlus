@@ -3,19 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
              xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
-             d:DataContext="{d:DesignInstance Type=dp:StandardCrankTorqueSensor}"
+             d:DataContext="{d:DesignInstance Type=dp:Bicycle}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
-        <GroupBox Header="Crank Torque">
-            <StackPanel>
-                <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
-                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
-                <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
-                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
-                <TextBlock Text="{Binding AverageCadence, StringFormat='AverageCadence (RPM): {0}'}"/>
-            </StackPanel>
-        </GroupBox>
+        <StackPanel>
+            <GroupBox Header="Crank Torque">
+                <StackPanel DataContext="{Binding CrankTorqueSensor}">
+                    <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
+                    <TextBlock Text="{Binding AverageCadence, StringFormat='AverageCadence (RPM): {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <uc:BicyclePowerOnlyControl DataContext="{Binding .}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

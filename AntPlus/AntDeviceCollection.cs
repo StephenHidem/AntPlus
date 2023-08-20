@@ -27,7 +27,9 @@ namespace SmallEarthTech.AntPlus
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
         public object CollectionLock = new object();
-        private readonly IAntChannel channel;
+
+        private readonly IAntRadio antRadio;
+        private int channelNum = 0;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AntDeviceCollection> logger;
         private readonly ushort timeout;
@@ -49,13 +51,18 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, ushort antDeviceTimeout = 2000)
         {
+            this.antRadio = antRadio;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             logger.LogInformation("Created AntDeviceCollection");
             timeout = antDeviceTimeout;
             antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;
-            channel = antRadio.GetChannel(1);
-            _ = channel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+
+            // assign channels for devices to use for sending messages
+            for (int i = 1; i < antRadio.NumChannels; i++)
+            {
+                _ = antRadio.GetChannel(i).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+            }
         }
 
         private void Channel_ChannelResponse(object sender, AntResponse e)
@@ -143,6 +150,9 @@ namespace SmallEarthTech.AntPlus
 
         private AntDevice CreateAntDevice(ChannelId channelId)
         {
+            if (++channelNum == 8) channelNum = 1;
+            IAntChannel channel = antRadio.GetChannel(channelNum);
+
             switch (channelId.DeviceType)
             {
                 case HeartRate.DeviceClass:

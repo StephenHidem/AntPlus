@@ -121,7 +121,7 @@ namespace SmallEarthTech.AntUsbStick
                     BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
                 }
             });
-            _logger.LogDebug("SendExtAcknowledgedData: Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", channelId.Id, rc, BitConverter.ToString(data));
+            _logger.LogDebug("SendExtAcknowledgedData: Channel # = {ChannelNumber}, Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", antChannel.getChannelNum(), channelId.Id, rc, BitConverter.ToString(data));
             return rc;
         }
 

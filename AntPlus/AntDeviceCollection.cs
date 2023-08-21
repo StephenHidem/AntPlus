@@ -150,7 +150,7 @@ namespace SmallEarthTech.AntPlus
 
         private AntDevice CreateAntDevice(ChannelId channelId)
         {
-            if (++channelNum == 8) channelNum = 1;
+            if (++channelNum == antRadio.NumChannels) channelNum = 1;
             IAntChannel channel = antRadio.GetChannel(channelNum);
 
             switch (channelId.DeviceType)

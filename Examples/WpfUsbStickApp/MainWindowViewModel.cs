@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
@@ -26,8 +27,16 @@ namespace WpfUsbStickApp.ViewModels
 
         public MainWindowViewModel()
         {
+            // Initialize early, without access to configuration or services
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Debug(outputTemplate:
+                    "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}") // + file or centralized logging
+                .MinimumLevel.Debug()
+                .CreateLogger();
+
             // dependency services
             _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
+                UseSerilog().
                 ConfigureServices(s =>
                 {
                     s.AddSingleton<IAntRadio, AntRadio>();
@@ -48,8 +57,6 @@ namespace WpfUsbStickApp.ViewModels
             antChannel.SetChannelID(new ChannelId(0), 500);
             antChannel.SetChannelFreq(57, 500);
             UsbAntRadio.OpenRxScanMode();
-
-            //UsbAntRadio.GetChannel(1).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
 
             // log app info
             var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name.StartsWith("Ant"));

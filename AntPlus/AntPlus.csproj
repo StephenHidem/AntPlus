@@ -5,6 +5,17 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
+    <Version>$(AssemblyVersion)</Version>
+    <Title>ANT+ Class Library</Title>
+    <PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
+    <Authors>Stephen Hidem</Authors>
+    <Copyright>© $(Authors). All rights reserved.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>ant; ant+; ant plus; smallearthtech</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +55,13 @@
     <EmbeddedResource Include="Images\SDM.png" />
     <EmbeddedResource Include="Images\SpeedAndCadence.png" />
     <EmbeddedResource Include="Images\Unknown.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -4,10 +4,25 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
+    <Authors>Stephen Hidem</Authors>
+    <Title>ANT+ Radio Interface Class Library</Title>
+    <Version>$(AssemblyVersion)</Version>
+    <Copyright>© $(Authors). All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>ant; ant+; ant plus; smallearthtech</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="IAntResponse.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

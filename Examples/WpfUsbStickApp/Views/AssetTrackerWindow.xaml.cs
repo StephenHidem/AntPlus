@@ -13,7 +13,7 @@ namespace WpfUsbStickApp.Views
         public AssetTrackerWindow(Tracker assetTracker)
         {
             InitializeComponent();
-            BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.Assets.CollectionLock);
+            BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.CollectionLock);
             DataContext = new AssetTrackerViewModel(assetTracker);
         }
     }

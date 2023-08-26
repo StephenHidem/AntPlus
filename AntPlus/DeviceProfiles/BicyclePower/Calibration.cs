@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,6 +62,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             NotSupported = 0xFF
         }
 
+        /// <summary>
+        /// The collection lock.
+        /// </summary>
+        /// <remarks>
+        /// An application should use the collection lock to ensure thread safe access to the
+        /// collection. For example, the code behind for a WPF window should include -
+        /// <code>BindingOperations.EnableCollectionSynchronization(bicyclePower.Calibration.Measurements, bicyclePower.Calibration.CollectionLock);</code>
+        /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
+        /// </remarks>
+        public object CollectionLock = new object();
+
         /// <summary>Gets the calibration status.</summary>
         public CalibrationResponse CalibrationStatus { get; private set; }
         /// <summary>Gets the automatic zero status.</summary>
@@ -72,7 +84,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Gets the custom calibration parameters.</summary>
         public byte[] CustomCalibrationParameters { get; private set; }
         /// <summary>Gets the reported measurements collection. There may be one or more measurement data types reported.</summary>
-        public MeasurementCollection Measurements { get; private set; } = new MeasurementCollection();
+        public ObservableCollection<MeasurementOutputData> Measurements { get; private set; } = new ObservableCollection<MeasurementOutputData>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Calibration"/> class.
@@ -136,7 +148,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         internal void ParseMeasurementOutputData(byte[] dataPage)
         {
-            Measurements.Parse(dataPage);
+            MeasurementOutputData measurement = Measurements.FirstOrDefault(m => m.MeasurementType == (MeasurementOutputData.DataType)dataPage[2]);
+            if (measurement == null)
+            {
+                measurement = new MeasurementOutputData(dataPage);
+                lock (CollectionLock)
+                {
+                    Measurements.Add(measurement);
+                }
+            }
+            measurement.Parse(dataPage);
         }
 
         /// <summary>Requests manual calibration.</summary>

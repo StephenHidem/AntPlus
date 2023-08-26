@@ -13,7 +13,7 @@ namespace WpfUsbStickApp.Views
         public BicyclePowerWindow(Bicycle bicyclePower)
         {
             InitializeComponent();
-            BindingOperations.EnableCollectionSynchronization(bicyclePower.Calibration.Measurements, bicyclePower.Calibration.Measurements.CollectionLock);
+            BindingOperations.EnableCollectionSynchronization(bicyclePower.Calibration.Measurements, bicyclePower.Calibration.CollectionLock);
             DataContext = new BicyclePowerViewModel(bicyclePower);
         }
     }

@@ -70,16 +70,13 @@ namespace SmallEarthTech.AntPlus
             if (e.ChannelId != null)
             {
                 AntDevice device;
-                lock (CollectionLock)
+                device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+                if (device == null)
                 {
-                    device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
-                    if (device == null)
-                    {
-                        device = CreateAntDevice(e.ChannelId);
-                        Add(device);
-                        device.DeviceWentOffline += DeviceOffline;
-                        logger.LogDebug("{Device} added.", device);
-                    }
+                    device = CreateAntDevice(e.ChannelId);
+                    Add(device);
+                    device.DeviceWentOffline += DeviceOffline;
+                    logger.LogDebug("{Device} added.", device);
                 }
                 device.Parse(e.Payload);
             }
@@ -92,60 +89,27 @@ namespace SmallEarthTech.AntPlus
             }
         }
 
-        private void DeviceOffline(object sender, System.EventArgs e)
+        private void DeviceOffline(object sender, EventArgs e)
         {
-            lock (CollectionLock)
-            {
-                AntDevice device = (AntDevice)sender;
-                device.DeviceWentOffline -= DeviceOffline;
-                _ = Remove(device);
-                logger.LogDebug("{Device} removed.", device);
-            }
+            AntDevice device = (AntDevice)sender;
+            device.DeviceWentOffline -= DeviceOffline;
+            _ = Remove(device);
+            logger.LogDebug("{Device} removed.", device);
         }
 
-        /// <inheritdoc/>
-        protected override void ClearItems()
+        /// <summary>Adds the specified item to the end of the collection.</summary>
+        /// <param name="item">The item.</param>
+        public new void Add(AntDevice item)
         {
-            lock (CollectionLock)
-            {
-                base.ClearItems();
-            }
+            lock (CollectionLock) { base.Add(item); }
         }
 
-        /// <inheritdoc/>
-        protected override void InsertItem(int index, AntDevice item)
+        /// <summary>Removes the specified item from the collection.</summary>
+        /// <param name="item">The item.</param>
+        /// <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the original collection.</returns>
+        public new bool Remove(AntDevice item)
         {
-            lock (CollectionLock)
-            {
-                base.InsertItem(index, item);
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void MoveItem(int oldIndex, int newIndex)
-        {
-            lock (CollectionLock)
-            {
-                base.MoveItem(oldIndex, newIndex);
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void RemoveItem(int index)
-        {
-            lock (CollectionLock)
-            {
-                base.RemoveItem(index);
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void SetItem(int index, AntDevice item)
-        {
-            lock (CollectionLock)
-            {
-                base.SetItem(index, item);
-            }
+            lock (CollectionLock) { return base.Remove(item); }
         }
 
         private AntDevice CreateAntDevice(ChannelId channelId)

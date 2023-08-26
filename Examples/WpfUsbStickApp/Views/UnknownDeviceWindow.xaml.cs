@@ -12,7 +12,7 @@ namespace WpfUsbStickApp.Views
     {
         public UnknownDeviceWindow(UnknownDevice unknownDevice)
         {
-            BindingOperations.EnableCollectionSynchronization(unknownDevice.DataPages, unknownDevice.DataPages.CollectionLock);
+            BindingOperations.EnableCollectionSynchronization(unknownDevice.DataPages, unknownDevice.CollectionLock);
             InitializeComponent();
             DataContext = new UnknownDeviceViewModel(unknownDevice);
         }

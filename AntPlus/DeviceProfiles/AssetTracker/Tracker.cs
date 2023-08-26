@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -34,8 +35,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             DisconnectCommand = 0x20,
         }
 
+        /// <summary>
+        /// The collection lock.
+        /// </summary>
+        /// <remarks>
+        /// An application should use the collection lock to ensure thread safe access to the
+        /// collection. For example, the code behind for a WPF window should include -
+        /// <code>BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.CollectionLock);</code>
+        /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
+        /// </remarks>
+        public object CollectionLock = new object();
+
         /// <summary>Gets the collection of assets being tracked.</summary>
-        public AssetCollection Assets { get; } = new AssetCollection();
+        public ObservableCollection<Asset> Assets { get; } = new ObservableCollection<Asset>();
         /// <summary>Gets a value indicating whether this <see cref="Tracker" /> is disconnected.</summary>
         /// <value><c>true</c> if disconnected; otherwise, <c>false</c>.</value>
         public bool Disconnected { get; private set; }
@@ -65,15 +77,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.AssetLocation1:
-                    Asset asset = GetAsset(dataPage);
-                    asset.ParseLocation1(dataPage);
-                    if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset))
-                    {
-                        lock (Assets.CollectionLock)
-                        {
-                            Assets.Remove(asset);
-                        }
-                    }
+                    GetAsset(dataPage).ParseLocation1(dataPage);
                     break;
                 case DataPage.AssetLocation2:
                     GetAsset(dataPage).ParseLocation2(dataPage);
@@ -81,7 +85,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                 case DataPage.NoAssets:
                     if (Assets.Count > 0)
                     {
-                        Assets.Clear();
+                        lock (CollectionLock)
+                        {
+                            Assets.Clear();
+                        }
                     }
                     break;
                 case DataPage.AssetId1:
@@ -106,7 +113,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             if (asset == null)
             {
                 asset = new Asset(data);
-                Assets.Add(asset);
+                lock (CollectionLock)
+                {
+                    Assets.Add(asset);
+                }
                 _ = RequestDataPage(DataPage.AssetId1, 500, 255, 255, 4, CommandType.DataPageSet);
             }
             return asset;

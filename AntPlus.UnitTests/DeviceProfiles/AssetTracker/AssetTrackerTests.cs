@@ -119,14 +119,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
             tracker.Parse(dataPage);
 
             // Assert
-            if (expStatus == Asset.AssetStatus.RemoveAsset)
-            {
-                Assert.AreEqual(0, tracker.Assets.Count);
-            }
-            else
-            {
-                Assert.AreEqual(expStatus, tracker.Assets[0].Status);
-            }
+            Assert.AreEqual(expStatus, tracker.Assets[0].Status);
         }
 
         [TestMethod]

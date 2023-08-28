@@ -35,7 +35,7 @@ namespace AntPlus.UnitTests
             return new AntDeviceCollection(
                 mockAntRadio.Object,
                 null,
-                2000);
+                3000);
         }
 
         [TestMethod]

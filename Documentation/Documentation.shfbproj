@@ -101,6 +101,7 @@
     <Folder Include="media" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\VersionHistory\v2.2.0.0.aml" />
     <None Include="Content\VersionHistory\v2.1.0.0.aml" />
     <None Include="Content\VersionHistory\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\v2.0.0.0.aml" />

@@ -187,7 +187,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         [DataRow(SupportedTrainingModes.Simulation)]
         [DataRow(SupportedTrainingModes.BasicResistance)]
         [DataRow(SupportedTrainingModes.TargetPower)]
-        public void Parse_FECapabilites_Expected(SupportedTrainingModes trainingModes)
+        public void Parse_FECapabilities_Expected(SupportedTrainingModes trainingModes)
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();

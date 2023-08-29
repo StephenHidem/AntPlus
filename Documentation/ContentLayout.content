@@ -19,6 +19,15 @@
         <HelpKeyword index="K" term="version, 2.0.0.0" />
       </HelpKeywords>
     </Topic>
-    <Topic id="07393f6f-e5a8-47d3-bbcc-6c6dd391afb9" visible="True" isSelected="true" title="Version 2.1.0.0" />
+    <Topic id="07393f6f-e5a8-47d3-bbcc-6c6dd391afb9" visible="True" title="Version 2.1.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 2.1.0.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="3c9ce4f9-cb16-44d2-84c4-3981f14f2161" visible="True" isSelected="true" title="Version 2.2.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 2.2.0.0" />
+      </HelpKeywords>
+    </Topic>
   </Topic>
 </Topics>

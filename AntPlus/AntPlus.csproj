@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
     <Version>$(AssemblyVersion)</Version>
     <Title>ANT+ Class Library</Title>
@@ -16,6 +15,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>ant; ant+; ant plus; smallearthtech</PackageTags>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

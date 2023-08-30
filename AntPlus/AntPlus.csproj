@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<AssemblyVersion>2.2.0.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -15,9 +16,17 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>ant; ant+; ant plus; smallearthtech</PackageTags>
-    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <Description>Enables applications to interface and acquire data from a variety of ANT+ sensor sources. The primary class is AntPlus and it contains device profiles of ANT+ devices and common data pages.</Description>
+    <RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
+    <RepositoryType></RepositoryType>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
-
+	
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+	  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+	
   <ItemGroup>
     <Compile Remove="AntFS.cs" />
     <Compile Remove="AntRadio.cs" />
@@ -72,4 +81,10 @@
     <ProjectReference Include="..\AntRadioInterface\AntRadioInterface.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+	<PrivateAssets>all</PrivateAssets>
+	<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>
 </Project>

@@ -20,6 +20,8 @@
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

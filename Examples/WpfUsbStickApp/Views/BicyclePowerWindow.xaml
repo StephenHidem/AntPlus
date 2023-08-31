@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUsbStickApp.Views"
         xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
-        xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
+        xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
         mc:Ignorable="d"

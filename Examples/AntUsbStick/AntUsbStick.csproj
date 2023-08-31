@@ -10,10 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\AntRadioInterface\AntRadioInterface.csproj" />
+    <PackageReference Include="SmallEarthTech.AntRadioInterface" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

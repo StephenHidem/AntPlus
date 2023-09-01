@@ -9,12 +9,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class StandardWheelTorqueSensorTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private Bicycle? mockBicycle;
+        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Bicycle>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,8 +29,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         private StandardWheelTorqueSensor CreateStandardWheelTorqueSensor()
@@ -50,15 +50,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             double expAvgPower = 178;
             double expAvgAngVel = 2 * Math.PI / (0x439 / 2048.0);
             double expAvgTorq = 14.9375;
-            double expDist = 2.2;
+            double expDistance = 2.2;
             byte[] dataPage = new byte[8] { (byte)DataPage.WheelTorque, 1, 1, 60, 0x39, 0x04, 0xDE, 0x01 };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expDist, standardWheelTorqueSensor.AccumulatedDistance);
+            Assert.AreEqual(expDistance, standardWheelTorqueSensor.AccumulatedDistance);
             Assert.AreEqual(expAvgSpeed, standardWheelTorqueSensor.AverageSpeed, 0.01);
             Assert.AreEqual(expInstCad, standardWheelTorqueSensor.InstantaneousCadence);
             Assert.AreEqual(expAvgAngVel, standardWheelTorqueSensor.AverageAngularVelocity);

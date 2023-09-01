@@ -12,12 +12,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class ParametersTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private Bicycle? mockBicycle;
+        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Bicycle>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -32,8 +32,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         private Parameters CreateParameters()
@@ -55,7 +55,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, (byte)val, 0, 0, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -74,7 +74,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -93,7 +93,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -112,7 +112,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -131,7 +131,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -149,7 +149,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -164,7 +164,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, 128, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -192,7 +192,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -220,7 +220,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -250,7 +250,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities2, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -280,7 +280,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities2, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -299,7 +299,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -326,7 +326,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 (byte)DataPage.GetSetParameters,
                 (byte)SmallEarthTech.AntPlus.CommandType.DataPage
             };
-            mockAntChannel?.Setup(ac =>
+            mockAntChannel.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
@@ -335,7 +335,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 page);
 
             // Assert
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -356,7 +356,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 0x00,
                 0xFF
             };
-            mockAntChannel?.Setup(ac =>
+            mockAntChannel.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
@@ -365,7 +365,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 length);
 
             // Assert
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -384,7 +384,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 0xFF,
                 0xFF
             };
-            mockAntChannel?.Setup(ac =>
+            mockAntChannel.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
@@ -393,7 +393,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 offset);
 
             // Assert
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -412,7 +412,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 0xFF,
                 0xFF
             };
-            mockAntChannel?.Setup(ac =>
+            mockAntChannel.Setup(ac =>
                 ac.SendExtAcknowledgedData(mockChannelId, dataPage, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
@@ -421,7 +421,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 threshold);
 
             // Assert
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
     }
 }

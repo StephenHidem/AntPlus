@@ -9,12 +9,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class StandardPowerSensorTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private Bicycle? mockBicycle;
+        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Bicycle>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,8 +29,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         private StandardPowerSensor CreateStandardPowerSensor()

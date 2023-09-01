@@ -10,12 +10,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class CrankTorqueFrequencySensorTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private Bicycle? mockBicycle;
+        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Bicycle>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,8 +30,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         private CrankTorqueFrequencySensor CreateCrankTorqueFrequencySensor()
@@ -49,7 +49,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 0x01, 0x10, 0x01, 0xFF, 0xFF, 0xFF, 0x11, 0x22 };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -93,7 +93,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             double slope = 34.5;
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0x10, 0x02, 0xFF, 0xFF, 0xFF, 0x01, 0x59 },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0x10, 0x02, 0xFF, 0xFF, 0xFF, 0x01, 0x59 },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -103,7 +103,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             ushort serialNumber = 12345;
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0x10, 0x03, 0xFF, 0xFF, 0xFF, 0x30, 0x39 },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0x10, 0x03, 0xFF, 0xFF, 0xFF, 0x30, 0x39 },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -134,7 +134,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
     }
 }

@@ -10,12 +10,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class StandardCrankTorqueSensorTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private Bicycle? mockBicycle;
+        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Bicycle>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,8 +30,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         private StandardCrankTorqueSensor CreateStandardCrankTorqueSensor()
@@ -51,10 +51,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.RightForceAngle, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
             dataPage[0] = (byte)DataPage.LeftForceAngle;
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -74,10 +74,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.RightForceAngle, 0xFF, 0xFF, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
             dataPage[0] = (byte)DataPage.LeftForceAngle;
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -99,7 +99,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.PedalPosition, 0xFF, (byte)pos, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -114,7 +114,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.PedalPosition, 0xFF, 0xFF, 128, 64, 0xE0, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -134,7 +134,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.TorqueBarycenter, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -155,7 +155,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.CrankTorque, 1, 1, 60, 0x00, 0x08, 0x9C, 0x05 };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert

@@ -6,7 +6,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class TrainerStationaryBikeTests
     {
-        TrainerStationaryBike? trainer;
+        TrainerStationaryBike trainer;
 
         [TestInitialize]
         public void Initialize()
@@ -22,12 +22,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             byte[] dataPage = new byte[] { 25, 1, 128, 0, 0, 0x55, 0x0A, 0 };
 
             // Act
-            trainer?.Parse(
+            trainer.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(trainer?.InstantaneousCadence == 128);
-            Assert.IsTrue(trainer?.InstantaneousPower == 2645);
+            Assert.IsTrue(trainer.InstantaneousCadence == 128);
+            Assert.IsTrue(trainer.InstantaneousPower == 2645);
         }
 
         [TestMethod]
@@ -35,16 +35,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         {
             // Arrange
             byte[] dataPage = new byte[] { 25, 1, 0, 0xFF, 0xFF, 0, 0, 0 };
-            trainer?.Parse(
+            trainer.Parse(
                 dataPage);
             dataPage[1] = 2; dataPage[3] = 19; dataPage[4] = 0;
 
             // Act
-            trainer?.Parse(
+            trainer.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(trainer?.AveragePower == 20.0);
+            Assert.IsTrue(trainer.AveragePower == 20.0);
         }
 
         [TestMethod]
@@ -57,11 +57,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             // Arrange
 
             // Act
-            trainer?.Parse(
+            trainer.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(trainerStatus, trainer?.TrainerStatus);
+            Assert.AreEqual(trainerStatus, trainer.TrainerStatus);
         }
 
         [TestMethod]
@@ -74,11 +74,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             // Arrange
 
             // Act
-            trainer?.Parse(
+            trainer.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(targetPowerLimit, trainer?.TargetPower);
+            Assert.AreEqual(targetPowerLimit, trainer.TargetPower);
         }
     }
 }

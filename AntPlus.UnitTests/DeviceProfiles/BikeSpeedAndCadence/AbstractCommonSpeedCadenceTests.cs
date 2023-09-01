@@ -25,9 +25,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
     [TestClass]
     public class AbstractCommonSpeedCadenceTests
     {
-        private AbstractCommonSpeedCadence? _sensor;
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger>? mockLogger;
+        private AbstractCommonSpeedCadence _sensor;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger> mockLogger;
 
         [TestInitialize]
         public void Initialize()
@@ -48,11 +48,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 1, 0x88, 0x13, 0x00, 4, 5, 6, 7 };
 
             // Act
-            _sensor?.Parse(
+            _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(cot, _sensor?.CumulativeOperatingTime);
+            Assert.AreEqual(cot, _sensor.CumulativeOperatingTime);
         }
 
         [TestMethod]
@@ -64,12 +64,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 2, manId, 0x00, 0x80, 4, 5, 6, 7 };
 
             // Act
-            _sensor?.Parse(
+            _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(manId, _sensor?.ManufacturerInfo.ManufacturingId);
-            Assert.AreEqual(sn, _sensor?.ManufacturerInfo.SerialNumber);
+            Assert.AreEqual(manId, _sensor.ManufacturerInfo.ManufacturingId);
+            Assert.AreEqual(sn, _sensor.ManufacturerInfo.SerialNumber);
         }
 
         [TestMethod]
@@ -80,13 +80,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 3, hw, sw, model, 4, 5, 6, 7 };
 
             // Act
-            _sensor?.Parse(
+            _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(hw, _sensor?.ProductInfo.HardwareVersion);
-            Assert.AreEqual(sw, _sensor?.ProductInfo.SoftwareVersion);
-            Assert.AreEqual(model, _sensor?.ProductInfo.ModelNumber);
+            Assert.AreEqual(hw, _sensor.ProductInfo.HardwareVersion);
+            Assert.AreEqual(sw, _sensor.ProductInfo.SoftwareVersion);
+            Assert.AreEqual(model, _sensor.ProductInfo.ModelNumber);
         }
 
         [TestMethod]
@@ -98,12 +98,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 4, 0xFF, 128, 0x33, 4, 5, 6, 7 };
 
             // Act
-            _sensor?.Parse(
+            _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(battVolt, _sensor?.BatteryStatus.BatteryVoltage);
-            Assert.AreEqual(battStat, _sensor?.BatteryStatus.BatteryStatus);
+            Assert.AreEqual(battVolt, _sensor.BatteryStatus.BatteryVoltage);
+            Assert.AreEqual(battStat, _sensor.BatteryStatus.BatteryStatus);
         }
 
         [TestMethod]
@@ -115,11 +115,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = new byte[8] { 5, (byte)flag, 0xFF, 0xFF, 4, 5, 6, 7 };
 
             // Act
-            _sensor?.Parse(
+            _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expState, _sensor?.Stopped);
+            Assert.AreEqual(expState, _sensor.Stopped);
         }
     }
 }

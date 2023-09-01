@@ -3,6 +3,7 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Threading.Tasks;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Equipment;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
@@ -10,11 +11,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class FitnessEquipmentTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Equipment>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Equipment>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,8 +30,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         {
             return new Equipment(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         [TestMethod]
@@ -124,7 +125,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         [DataRow(0x03, HRDataSource.HandContactSensors, false, false)]
         [DataRow(0x04, HRDataSource.Invalid, true, false)]
         [DataRow(0x08, HRDataSource.Invalid, false, true)]
-        public void Parse_GeneralDataPage_ExpectedCapabilities(int caps, HRDataSource hrSrc, bool expDistTravelEn, bool expVirtSpeedFlag)
+        public void Parse_GeneralDataPage_ExpectedCapabilities(int caps, HRDataSource hrSrc, bool expDistanceTravelEn, bool expVirtualSpeedFlag)
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
@@ -136,8 +137,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.AreEqual(hrSrc, fitnessEquipment.GeneralData.HeartRateSource);
-            Assert.AreEqual(expDistTravelEn, fitnessEquipment.GeneralData.DistanceTraveledEnabled);
-            Assert.AreEqual(expVirtSpeedFlag, fitnessEquipment.GeneralData.VirtualSpeedFlag);
+            Assert.AreEqual(expDistanceTravelEn, fitnessEquipment.GeneralData.DistanceTraveledEnabled);
+            Assert.AreEqual(expVirtualSpeedFlag, fitnessEquipment.GeneralData.VirtualSpeedFlag);
         }
 
         [TestMethod]
@@ -166,19 +167,19 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
-            double mets = 50.01;
+            double metabolicEquivalents = 50.01;
             double calBurnRate = 3000.0;
-            byte cals = 128;
-            byte[] metsVal = BitConverter.GetBytes((ushort)(mets / 0.01));
+            byte calories = 128;
+            byte[] metabolic = BitConverter.GetBytes((ushort)(metabolicEquivalents / 0.01));
             byte[] cbrVal = BitConverter.GetBytes((ushort)(calBurnRate / 0.1));
-            byte[] dataPage = new byte[8] { 18, 0xFF, metsVal[0], metsVal[1], cbrVal[0], cbrVal[1], cals, 0 };
+            byte[] dataPage = new byte[8] { 18, 0xFF, metabolic[0], metabolic[1], cbrVal[0], cbrVal[1], calories, 0 };
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(fitnessEquipment.GeneralMetabolic.InstantaneousMET == mets);
+            Assert.IsTrue(fitnessEquipment.GeneralMetabolic.InstantaneousMET == metabolicEquivalents);
             Assert.IsTrue(fitnessEquipment.GeneralMetabolic.CaloricBurnRate == calBurnRate);
             Assert.IsTrue(fitnessEquipment.GeneralMetabolic.AccumulatedCalories == 0);
         }
@@ -205,91 +206,95 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         }
 
         [TestMethod]
-        public void SetBasicResistance_Message_Matches()
+        public async Task SetBasicResistance_Message_Matches()
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
             double resistance = 50;
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 48, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(resistance / 0.5) },
                 500).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
-            fitnessEquipment.SetBasicResistance(
+            var result = await fitnessEquipment.SetBasicResistance(
                 resistance);
 
             // Assert
-            mockRepository?.VerifyAll();
+            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
-        public void SetTargetPower_Message_Matches()
+        public async Task SetTargetPower_Message_Matches()
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
             double power = 4000;
             byte[] expPow = BitConverter.GetBytes((ushort)(power / 0.25));
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 49, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, expPow[0], expPow[1] },
                 500).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
-            fitnessEquipment.SetTargetPower(
+            var result = await fitnessEquipment.SetTargetPower(
                 power);
 
             // Assert
-            mockRepository?.VerifyAll();
+            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
-        public void SetWindResistance_Message_Matches()
+        public async Task SetWindResistance_Message_Matches()
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
             double windResistanceCoefficient = 1.86;
             sbyte windSpeed = 0;
             double draftingFactor = 0.5;
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 50, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(windResistanceCoefficient / 0.01), (byte)(windSpeed + 127), (byte)(draftingFactor / 0.01) },
                 500).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
-            fitnessEquipment.SetWindResistance(
+            var result = await fitnessEquipment.SetWindResistance(
                 windResistanceCoefficient,
                 windSpeed,
                 draftingFactor);
 
             // Assert
-            mockRepository?.VerifyAll();
+            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
-        public void SetTrackResistance_Message_Matches()
+        public async Task SetTrackResistance_Message_Matches()
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
             double grade = 0;
             double rollingResistanceCoefficient = 0.004;
             byte[] expGrade = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 51, 0xFF, 0xFF, 0xFF, 0xFF, expGrade[0], expGrade[1], (byte)(rollingResistanceCoefficient / 0.00005) },
                 500).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
-            fitnessEquipment.SetTrackResistance(
+            var result = await fitnessEquipment.SetTrackResistance(
                 grade,
                 rollingResistanceCoefficient);
 
             // Assert
-            mockRepository?.VerifyAll();
+            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
-        public void SetUserConfiguration_Message_Matches()
+        public async Task SetUserConfiguration_Message_Matches()
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
@@ -301,13 +306,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             byte[] expWeight = BitConverter.GetBytes((ushort)(userWeight / 0.01));
             byte[] expBikeWeight = BitConverter.GetBytes((ushort)(bikeWeight / 0.05) << 4);
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
                 mockChannelId,
                 new byte[8] { 55, expWeight[0], expWeight[1], 0xFF, (byte)((wheelDiameterOffset & 0x0F) | (expBikeWeight[0] & 0xF0)), expBikeWeight[1], (byte)(wheelDiameter / 0.01), (byte)(gearRatio / 0.03) },
                 500).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
-            fitnessEquipment.SetUserConfiguration(
+            var result = await fitnessEquipment.SetUserConfiguration(
                 userWeight,
                 wheelDiameterOffset,
                 bikeWeight,
@@ -315,7 +320,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 gearRatio);
 
             // Assert
-            mockRepository?.VerifyAll();
+            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            mockRepository.VerifyAll();
         }
     }
 }

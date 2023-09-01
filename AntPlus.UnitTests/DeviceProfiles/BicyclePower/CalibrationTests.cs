@@ -12,12 +12,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
     [TestClass]
     public class CalibrationTests
     {
-        private MockRepository? mockRepository;
+        private MockRepository mockRepository;
 
-        private Bicycle? mockBicycle;
+        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel>? mockAntChannel;
-        private Mock<ILogger<Bicycle>>? mockLogger;
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Bicycle>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -32,8 +32,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             return new Bicycle(
                 mockChannelId,
-                mockAntChannel?.Object,
-                mockLogger?.Object);
+                mockAntChannel.Object,
+                mockLogger.Object);
         }
 
         private Calibration CreateCalibration()
@@ -54,7 +54,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 0x01, 0x12, (byte)config, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -75,7 +75,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             var calibration = CreateCalibration();
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -94,7 +94,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 1, (byte)calID, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -114,7 +114,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 3, 0x00, (byte)val, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -126,21 +126,21 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         [DataRow(sbyte.MaxValue, short.MaxValue)]
         [DataRow(sbyte.MinValue, short.MinValue)]
         [DataRow(sbyte.MaxValue, short.MinValue)]
-        public void Parse_MeasurementOutputData_ExpectedScaledMeasurement(int scale, int meas)
+        public void Parse_MeasurementOutputData_ExpectedScaledMeasurement(int scale, int measurement)
         {
             // Arrange
             var calibration = CreateCalibration();
             byte[] dataPage = new byte[8] { 3, 0x00, 0x00, (byte)scale, 0x00, 0x00, 0x00, 0x00 };
-            dataPage[6] = BitConverter.GetBytes((short)meas)[0];
-            dataPage[7] = BitConverter.GetBytes((short)meas)[1];
-            double expMeas = meas * Math.Pow(2, scale);
+            dataPage[6] = BitConverter.GetBytes((short)measurement)[0];
+            dataPage[7] = BitConverter.GetBytes((short)measurement)[1];
+            double expMeasurement = measurement * Math.Pow(2, scale);
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expMeas, calibration.Measurements[0].Measurement);
+            Assert.AreEqual(expMeasurement, calibration.Measurements[0].Measurement);
         }
 
         [TestMethod]
@@ -156,7 +156,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             dataPage[5] = BitConverter.GetBytes((ushort)timeStamp)[1];
 
             // Act
-            mockBicycle?.Parse(
+            mockBicycle.Parse(
                 dataPage);
 
             // Assert
@@ -168,7 +168,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             // Arrange
             var calibration = CreateCalibration();
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -178,7 +178,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
             Assert.AreEqual(CalibrationResponse.InProgress, calibration.CalibrationStatus);
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -189,7 +189,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             // Arrange
             var calibration = CreateCalibration();
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAB, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAB, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -200,7 +200,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
             Assert.AreEqual(CalibrationResponse.Unknown, calibration.CalibrationStatus);
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -208,7 +208,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         {
             // Arrange
             var calibration = CreateCalibration();
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xBA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xBA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -218,7 +218,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
             Assert.AreEqual(CalibrationResponse.InProgress, calibration.CalibrationStatus);
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [TestMethod]
@@ -227,7 +227,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Arrange
             var calibration = CreateCalibration();
             byte[] customParameters = new byte[] { 0x01, 0xBC, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
-            mockAntChannel?.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, customParameters,
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, customParameters,
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -238,7 +238,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
             Assert.AreEqual(CalibrationResponse.InProgress, calibration.CalibrationStatus);
-            mockRepository?.VerifyAll();
+            mockRepository.VerifyAll();
         }
     }
 }

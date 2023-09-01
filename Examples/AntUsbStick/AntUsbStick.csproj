@@ -6,10 +6,40 @@
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<AssemblyVersion>1.1.0.0</AssemblyVersion>
+	<AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
+	<Version>$(AssemblyVersion)</Version>
+	<Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Authors>Stephen Hidem</Authors>
+	<Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
+	<Copyright>© $(Authors). All rights reserved.</Copyright>
+	<PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
+	<PackageReadmeFile></PackageReadmeFile>
+	<PackageTags>ant; ant+; antplus; smallearthtech</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <IncludeContentFilesProjectOutputGroup>true</IncludeContentFilesProjectOutputGroup>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Prefer32Bit>False</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Prefer32Bit>False</Prefer32Bit>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="SmallEarthTech.AntRadioInterface" Version="1.0.1" />
   </ItemGroup>
 
@@ -19,19 +49,19 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="ANT_NET.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ANT_WrappedLib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="DSI_CP210xManufacturing_3_1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="DSI_SiUSBXp_3_1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="ANT_NET.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="ANT_WrappedLib.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="DSI_CP210xManufacturing_3_1.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="DSI_SiUSBXp_3_1.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

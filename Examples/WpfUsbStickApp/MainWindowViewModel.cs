@@ -59,7 +59,7 @@ namespace WpfUsbStickApp.ViewModels
             UsbAntRadio.OpenRxScanMode();
 
             // log app info
-            var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name.StartsWith("Ant"));
+            var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name!.StartsWith("Ant"));
             var logger = _host.Services.GetRequiredService<ILogger<App>>();
             logger.LogInformation("{App}", Assembly.GetExecutingAssembly().GetName().FullName);
             foreach (var asm in antAssemblies)

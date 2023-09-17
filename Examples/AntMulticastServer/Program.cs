@@ -32,13 +32,7 @@ Console.WriteLine(string.Format("Establishing IPv6 endpoint - {0}.", endPoint.To
 // create and configure ANT radio
 Console.WriteLine("Configuring ANT radio (uses the first USB stick found).");
 AntRadio antRadio = (AntRadio)host.Services.GetRequiredService<IAntRadio>();
-IAntChannel channel = antRadio.GetChannel(0);
-antRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
-antRadio.EnableRxExtendedMessages(true);
-channel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-channel.SetChannelID(new ChannelId(0), 500);
-channel.SetChannelFreq(57, 500);
-antRadio.OpenRxScanMode();
+IAntChannel channel = antRadio.InitializeContinuousScanMode();
 channel.ChannelResponse += Channel_ChannelResponse;
 
 // create background task to receive UDP directed to this server from any clients

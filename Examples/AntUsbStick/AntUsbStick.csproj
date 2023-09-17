@@ -37,13 +37,13 @@
 
   <ItemGroup>
     <Reference Include="ANT_NET">
-      <HintPath>..\..\ANT-SDK_PC.3.5\ANT-SDK_PC.3.5\Release\ANT_NET.dll</HintPath>
+      <HintPath>ANT_NET.dll</HintPath>
     </Reference>
   </ItemGroup>
 
 	<ItemGroup>
 		<None Update="ANT_NET.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 		<None Update="ANT_WrappedLib.dll">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

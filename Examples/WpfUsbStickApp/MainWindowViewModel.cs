@@ -50,13 +50,8 @@ namespace WpfUsbStickApp.ViewModels
             AntResponse rsp = UsbAntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
             HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0');
 
-            UsbAntRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
-            UsbAntRadio.EnableRxExtendedMessages(true);
-            IAntChannel antChannel = UsbAntRadio.GetChannel(0);
-            antChannel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-            antChannel.SetChannelID(new ChannelId(0), 500);
-            antChannel.SetChannelFreq(57, 500);
-            UsbAntRadio.OpenRxScanMode();
+            // initialize continuous scan mode
+            _ = UsbAntRadio.InitializeContinuousScanMode();
 
             // log app info
             var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name!.StartsWith("Ant"));

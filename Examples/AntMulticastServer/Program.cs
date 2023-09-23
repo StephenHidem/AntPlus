@@ -1,9 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -14,8 +14,16 @@ using System.Text;
 Console.WriteLine(string.Format("ANT Multicast Server - Version {0}.", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)));
 Console.WriteLine("Copyright 2023 Stephen Hidem.");
 
+// Initialize early, without access to configuration or services
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Debug(outputTemplate:
+        "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}") // + file or centralized logging
+    .MinimumLevel.Debug()
+    .CreateLogger();
+
 // dependency services
 IHost host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
+    UseSerilog().
     ConfigureServices(s =>
     {
         s.AddSingleton<IAntRadio, AntRadio>();
@@ -32,14 +40,8 @@ Console.WriteLine(string.Format("Establishing IPv6 endpoint - {0}.", endPoint.To
 // create and configure ANT radio
 Console.WriteLine("Configuring ANT radio (uses the first USB stick found).");
 AntRadio antRadio = (AntRadio)host.Services.GetRequiredService<IAntRadio>();
-IAntChannel channel = antRadio.GetChannel(0);
-antRadio.SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
-antRadio.EnableRxExtendedMessages(true);
-channel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-channel.SetChannelID(new ChannelId(0), 500);
-channel.SetChannelFreq(57, 500);
-antRadio.OpenRxScanMode();
-channel.ChannelResponse += Channel_ChannelResponse;
+IAntChannel[] channel = antRadio.InitializeContinuousScanMode();
+channel[0].ChannelResponse += Channel_ChannelResponse;
 
 // create background task to receive UDP directed to this server from any clients
 _ = Task.Run(async () =>
@@ -48,7 +50,7 @@ _ = Task.Run(async () =>
     while (true)
     {
         UdpReceiveResult result = await udpServer.ReceiveAsync();
-        Debug.WriteLine(BitConverter.ToString(result.Buffer));
+        Log.Debug(BitConverter.ToString(result.Buffer));
         ChannelId channelId = new(BitConverter.ToUInt32(result.Buffer, 0));
         byte[] msg = result.Buffer.Skip(4).Take(8).ToArray();
         uint ackWaitTime = BitConverter.ToUInt32(result.Buffer, 12);
@@ -63,7 +65,7 @@ Console.WriteLine("Press Enter to terminate.");
 Console.ReadLine();
 
 // clean up
-channel.ChannelResponse -= Channel_ChannelResponse;
+channel[0].ChannelResponse -= Channel_ChannelResponse;
 
 void Channel_ChannelResponse(object? sender, AntResponse e)
 {

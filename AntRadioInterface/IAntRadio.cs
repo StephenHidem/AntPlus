@@ -138,6 +138,40 @@ namespace SmallEarthTech.AntRadioInterface
     {
         /// <summary>Occurs when radio response has been received.</summary>
         event EventHandler<AntResponse> RadioResponse;
+
+        /// <summary>Initializes the ANT radio for continuous scan mode.</summary>
+        /// <returns>
+        /// Returns an array of ANT channels. The first element of the array (ANT channel 0) is used for continuous
+        /// scan mode to receive broadcast messages from ANT master devices. The remaining channels
+        /// should be configured so messages may be sent to ANT master devices.
+        /// </returns>
+        /// <remarks>
+        /// Implementors typically would perform the following setup -
+        /// <code>
+        /// public IAntChannel[] InitializeContinuousScanMode()
+        /// {
+        ///     IAntChannel[] channels = new IAntChannel[NumChannels];
+        ///     
+        ///     // configure channel 0 for continuous scan mode
+        ///     SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
+        ///     EnableRxExtendedMessages(true);
+        ///     channels[0] = GetChannel(0);
+        ///     channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+        ///     channels[0].SetChannelID(new ChannelId(0), 500);
+        ///     channels[0].SetChannelFreq(57, 500);
+        ///     OpenRxScanMode();
+        ///     
+        ///     // assign channels for devices to use for sending messages
+        ///     for (int i = 1; i &lt; NumChannels; i++)
+        ///     {
+        ///         channels[i] = GetChannel(i);
+        ///         _ = channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+        ///     }
+        ///     return channels;
+        /// }
+        /// </code>
+        /// </remarks>
+        IAntChannel[] InitializeContinuousScanMode();
         /// <summary>Cancels the transfers.</summary>
         /// <param name="cancelWaitTime">The cancel wait time.</param>
         void CancelTransfers(int cancelWaitTime);

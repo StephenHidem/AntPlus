@@ -22,13 +22,13 @@ namespace SmallEarthTech.AntUsbStick
             _logger = logger;
             antChannel = channel;
             channel.channelResponse += Channel_channelResponse;
-            _logger.LogDebug("Created AntChannel {Channel}", channel.getChannelNum());
+            _logger.LogDebug("Created AntChannel {Channel}", ChannelNumber);
         }
 
         private void Channel_channelResponse(ANT_Response response)
         {
             AntResponse antResponse = new UsbAntResponse(response);
-            _logger.LogTrace("Channel response. Channel # = {ChannelNumber}, Response ID = {ResponseID}, Payload = {Payload}", antChannel.getChannelNum(), (MessageId)antResponse.ResponseId, BitConverter.ToString(antResponse.Payload ?? new byte[] { 0 }));
+            _logger.LogTrace("Channel response. Channel # = {ChannelNumber}, Response ID = {ResponseID}, Payload = {Payload}", ChannelNumber, (MessageId)antResponse.ResponseId, BitConverter.ToString(antResponse.Payload ?? new byte[] { 0 }));
             ChannelResponse?.Invoke(this, antResponse);
         }
 
@@ -55,6 +55,9 @@ namespace SmallEarthTech.AntUsbStick
         {
             return antChannel.configFrequencyAgility(freq1, freq2, freq3, responseWaitTime);
         }
+
+        /// <inheritdoc/>
+        public byte ChannelNumber => antChannel.getChannelNum();
 
         /// <inheritdoc/>
         public bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, uint responseWaitTime)
@@ -121,7 +124,7 @@ namespace SmallEarthTech.AntUsbStick
                     BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
                 }
             });
-            _logger.LogDebug("SendExtAcknowledgedData: Channel # = {ChannelNumber}, Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", antChannel.getChannelNum(), channelId.Id, rc, BitConverter.ToString(data));
+            _logger.LogDebug("SendExtAcknowledgedData: Channel # = {ChannelNumber}, Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", ChannelNumber, channelId.Id, rc, BitConverter.ToString(data));
             return rc;
         }
 

@@ -9,10 +9,9 @@
     <Authors>Stephen Hidem</Authors>
     <Title>ANT+ Radio Interface Class Library</Title>
     <Version>$(AssemblyVersion)</Version>
-    <Copyright>© $(Authors). All rights reserved.</Copyright>
-    <PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>ant; ant+; ant plus; smallearthtech</PackageTags>
+    <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
+    <PackageProjectUrl>http://stephenhidem.github.io/AntPlus</PackageProjectUrl>
+    <PackageTags>ant; ant+; ant plus; dynastream; smallearthtech</PackageTags>
     <RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
     <Description>The AntRadioInterface defines an interface to interact with an ANT radio to send and receive from an ANT device. Use this package to create a concrete implementation of an ANT radio.</Description>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -22,21 +21,20 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageIcon>PackageLogo.png</PackageIcon>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 	  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="IAntResponse.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
 
   <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <Compile Remove="IAntResponse.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +42,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PackageLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

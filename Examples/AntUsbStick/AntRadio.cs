@@ -48,6 +48,30 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
+        public IAntChannel[] InitializeContinuousScanMode()
+        {
+            IAntChannel[] channels = new IAntChannel[NumChannels];
+
+            // configure channel 0 for continuous scan mode
+            SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
+            EnableRxExtendedMessages(true);
+            channels[0] = GetChannel(0);
+            channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+            channels[0].SetChannelID(new ChannelId(0), 500);
+            channels[0].SetChannelFreq(57, 500);
+            OpenRxScanMode();
+
+            // assign channels for devices to use for sending messages
+            for (int i = 1; i < NumChannels; i++)
+            {
+                channels[i] = GetChannel(i);
+                _ = channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+            }
+
+            return channels;
+        }
+
+        /// <inheritdoc/>
         public void Dispose()
         {
             antDevice.Dispose();

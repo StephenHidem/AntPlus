@@ -50,9 +50,6 @@ namespace WpfUsbStickApp.ViewModels
             AntResponse rsp = UsbAntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
             HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0');
 
-            // initialize continuous scan mode
-            _ = UsbAntRadio.InitializeContinuousScanMode();
-
             // log app info
             var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name!.StartsWith("Ant"));
             var logger = _host.Services.GetRequiredService<ILogger<App>>();

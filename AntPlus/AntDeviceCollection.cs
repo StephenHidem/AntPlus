@@ -28,13 +28,16 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public object CollectionLock = new object();
 
-        private readonly IAntRadio antRadio;
-        private int channelNum = 0;
+        private int channelNum = 1;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AntDeviceCollection> logger;
         private readonly ushort timeout;
+        private readonly IAntChannel[] channels;
 
-        /// <summary>Initializes a new instance of the <see cref="AntDeviceCollection" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AntDeviceCollection" /> class. The ANT radio is configured
+        /// for continuous scan mode.
+        /// </summary>
         /// <param name="antRadio">The ANT radio interface.</param>
         /// <param name="loggerFactory">Logger factory to generate type specific ILogger from. Can be null.</param>
         /// <param name="antDeviceTimeout">ANT device timeout in milliseconds. The default is 2000 milliseconds.</param>
@@ -51,18 +54,12 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, ushort antDeviceTimeout = 2000)
         {
-            this.antRadio = antRadio;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             logger.LogInformation("Created AntDeviceCollection");
             timeout = antDeviceTimeout;
-            antRadio.GetChannel(0).ChannelResponse += Channel_ChannelResponse;
-
-            // assign channels for devices to use for sending messages
-            for (int i = 1; i < antRadio.NumChannels; i++)
-            {
-                _ = antRadio.GetChannel(i).AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-            }
+            channels = antRadio.InitializeContinuousScanMode();
+            channels[0].ChannelResponse += Channel_ChannelResponse;
         }
 
         private void Channel_ChannelResponse(object sender, AntResponse e)
@@ -114,8 +111,8 @@ namespace SmallEarthTech.AntPlus
 
         private AntDevice CreateAntDevice(ChannelId channelId)
         {
-            if (++channelNum == antRadio.NumChannels) channelNum = 1;
-            IAntChannel channel = antRadio.GetChannel(channelNum);
+            IAntChannel channel = channels[channelNum++];
+            if (channelNum == channels.Length) { channelNum = 1; }
 
             switch (channelId.DeviceType)
             {

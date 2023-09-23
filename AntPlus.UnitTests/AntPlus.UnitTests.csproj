@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AntPlus\AntPlus.csproj" />
+    <Folder Include="DeviceProfiles\AssetTracker\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DeviceProfiles\AssetTracker\" />
+    <ProjectReference Include="..\AntPlus\AntPlus.csproj" />
   </ItemGroup>
 
 </Project>

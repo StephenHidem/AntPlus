@@ -47,18 +47,28 @@ namespace SmallEarthTech.AntUsbStick
             RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 
-        /// <summary>Initializes the ANT radio for continuous scan mode.</summary>
-        /// <returns>Returns the ANT channel used for continuous scan mode. Typically used to receive broadcast messages from ANT master devices.</returns>
-        public IAntChannel InitializeContinuousScanMode()
+        /// <inheritdoc/>
+        public IAntChannel[] InitializeContinuousScanMode()
         {
+            IAntChannel[] channels = new IAntChannel[NumChannels];
+
+            // configure channel 0 for continuous scan mode
             SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
             EnableRxExtendedMessages(true);
-            IAntChannel antChannel = GetChannel(0);
-            antChannel.AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-            antChannel.SetChannelID(new ChannelId(0), 500);
-            antChannel.SetChannelFreq(57, 500);
+            channels[0] = GetChannel(0);
+            channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+            channels[0].SetChannelID(new ChannelId(0), 500);
+            channels[0].SetChannelFreq(57, 500);
             OpenRxScanMode();
-            return antChannel;
+
+            // assign channels for devices to use for sending messages
+            for (int i = 1; i < NumChannels; i++)
+            {
+                channels[i] = GetChannel(i);
+                _ = channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+            }
+
+            return channels;
         }
 
         /// <inheritdoc/>

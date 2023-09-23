@@ -32,6 +32,9 @@ namespace AntPlus.UnitTests
 
         private AntDeviceCollection CreateAntDeviceCollection()
         {
+            IAntChannel[] mockChannels = new IAntChannel[8];
+            Array.Fill(mockChannels, mockAntChannel.Object);
+            mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).Returns(mockChannels);
             return new AntDeviceCollection(
                 mockAntRadio.Object,
                 null,
@@ -42,7 +45,6 @@ namespace AntPlus.UnitTests
         public void MultithreadedAdd_Collection_ExpectedCount()
         {
             // Arrange
-            mockAntRadio.Setup(r => r.GetChannel(It.IsAny<int>())).Returns(mockAntChannel.Object);
             Mock<ILogger<UnknownDevice>> mockLogger = new();
             var antDeviceCollection = CreateAntDeviceCollection();
             int numberOfDevices = 16;
@@ -73,7 +75,6 @@ namespace AntPlus.UnitTests
         public void MultithreadedRemove_Collection_ExpectedCount()
         {
             // Arrange
-            mockAntRadio.Setup(r => r.GetChannel(It.IsAny<int>())).Returns(mockAntChannel.Object);
             Mock<ILogger<UnknownDevice>> mockLogger = new();
             var antDeviceCollection = CreateAntDeviceCollection();
             int numberOfDevices = 16;
@@ -117,7 +118,6 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] id = new byte[4] { 1, 0, deviceClass, 0 };
             ChannelId cid = new(BitConverter.ToUInt32(id));
-            mockAntRadio.Setup(r => r.GetChannel(It.IsAny<int>())).Returns(mockAntChannel.Object);
             mockAntChannel.SetupAdd(m => m.ChannelResponse += It.IsAny<EventHandler<AntResponse>>());
             mockAntChannel.SetupRemove(m => m.ChannelResponse -= It.IsAny<EventHandler<AntResponse>>());
             var mockResponse = new MockResponse(cid, new byte[8]);

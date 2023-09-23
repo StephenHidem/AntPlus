@@ -129,6 +129,10 @@ namespace SmallEarthTech.AntRadioInterface
 
         #region ANT Channel Functions
 
+        /// <summary>Gets the channel number.</summary>
+        /// <returns>ANT channel number.</returns>
+        byte ChannelNumber { get; }
+
         /// <summary>
         /// Returns current channel status.
         /// Throws exception on timeout.

@@ -39,7 +39,7 @@ namespace SmallEarthTech.AntUsbStick
             _logger = _loggerFactory.CreateLogger<AntRadio>();
             antDevice = new ANT_Device();
             antDevice.deviceResponse += AntDevice_deviceResponse;
-            _logger.LogDebug("Created AntRadio");
+            _logger.LogDebug("Created AntRadio #{DeviceNum}", antDevice.getOpenedUSBDeviceNum());
         }
 
         private void AntDevice_deviceResponse(ANT_Response response)
@@ -74,8 +74,8 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public void Dispose()
         {
+            _logger.LogDebug("Disposed AntRadio #{DeviceNum}", antDevice.getOpenedUSBDeviceNum());
             antDevice.Dispose();
-            _logger.LogDebug("Disposed");
         }
 
         /// <inheritdoc/>

@@ -22,7 +22,7 @@ namespace SmallEarthTech.AntUsbStick
             _logger = logger;
             antChannel = channel;
             channel.channelResponse += Channel_channelResponse;
-            _logger.LogDebug("Created AntChannel {Channel}", ChannelNumber);
+            _logger.LogDebug("Created AntChannel #{Channel}", ChannelNumber);
         }
 
         private void Channel_channelResponse(ANT_Response response)
@@ -203,8 +203,8 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public void Dispose()
         {
+            _logger.LogDebug("Disposed AntChannel #{Channel}", ChannelNumber);
             antChannel?.Dispose();
-            _logger.LogDebug("Disposed");
         }
     }
 }

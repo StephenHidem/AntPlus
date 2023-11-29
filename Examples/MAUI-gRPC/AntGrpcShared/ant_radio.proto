@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "AntRadioGrpcService";
+
+package AntRadioPackage;
+
+// The ANT radio service
+service AntRadio {
+	//rpc GetProperties (PropertiesRequest) returns (PropertiesReply);
+	rpc InitializeContinuousScanMode (InitScanModeRequest) returns (InitScanModeReply);
+}
+
+message PropertiesRequest {}
+message PropertiesReply {
+
+}
+
+message InitScanModeRequest {}
+message InitScanModeReply {
+	int32 NumChannels = 1;
+}

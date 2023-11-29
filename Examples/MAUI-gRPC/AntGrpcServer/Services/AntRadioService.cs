@@ -1,6 +1,7 @@
 ﻿using AntRadioGrpcService;
 using Grpc.Core;
 using SmallEarthTech.AntRadioInterface;
+using System.Text;
 
 namespace AntGrpcServer.Services
 {
@@ -18,6 +19,19 @@ namespace AntGrpcServer.Services
             return Task.FromResult(new InitScanModeReply
             {
                 NumChannels = AntChannels.Length
+            });
+        }
+
+        public override Task<PropertiesReply> GetProperties(PropertiesRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation($"{nameof(GetProperties)}");
+            SmallEarthTech.AntUsbStick.AntRadio usbAntRadio = (SmallEarthTech.AntUsbStick.AntRadio)_antRadio;
+            AntResponse rsp = usbAntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
+            return Task.FromResult(new PropertiesReply
+            {
+                SerialString = usbAntRadio.GetSerialString(),
+                HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0'),
+                ProductDescription = usbAntRadio.GetProductDescription()
             });
         }
     }

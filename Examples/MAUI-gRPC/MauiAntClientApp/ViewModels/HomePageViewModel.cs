@@ -27,7 +27,10 @@ namespace MauiAntClientApp.ViewModels
             IsBusy = true;
             await _antRadioService.FindAntRadioServerAsync();
             IsBusy = false;
-            ServerIPAddress = _antRadioService?.ServerIPAddress;
+            ServerIPAddress = _antRadioService.ServerIPAddress;
+            ProductDescription = _antRadioService.ProductDescription;
+            SerialString = _antRadioService.SerialString;
+            HostVersion = _antRadioService.HostVersion;
         }
     }
 }

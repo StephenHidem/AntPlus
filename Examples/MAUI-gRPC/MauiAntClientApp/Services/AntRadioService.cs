@@ -75,6 +75,10 @@ namespace MauiAntClientApp.Services
                 })
             });
             client = new AntRadio.AntRadioClient(channel);
+            PropertiesReply reply = await client.GetPropertiesAsync(new PropertiesRequest());
+            ProductDescription = reply.ProductDescription;
+            SerialString = reply.SerialString;
+            HostVersion = reply.HostVersion;
         }
 
         public IAntChannel[] InitializeContinuousScanMode()

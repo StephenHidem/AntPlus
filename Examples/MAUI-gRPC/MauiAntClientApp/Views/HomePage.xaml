@@ -11,7 +11,9 @@
                 <StackLayout>
                     <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}"/>
                     <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill"/>
-                    <Label Text="Radio details"/>
+                    <Label Text="{Binding ProductDescription}"/>
+                    <Label Text="{Binding SerialString, StringFormat='Serial Number - {0}'}"/>
+                    <Label Text="{Binding HostVersion, StringFormat='Host Version - {0}'}"/>
                 </StackLayout>
             </Frame>
             <Label 

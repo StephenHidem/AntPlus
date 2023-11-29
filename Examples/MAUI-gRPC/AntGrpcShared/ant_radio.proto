@@ -6,13 +6,15 @@ package AntRadioPackage;
 
 // The ANT radio service
 service AntRadio {
-	//rpc GetProperties (PropertiesRequest) returns (PropertiesReply);
+	rpc GetProperties (PropertiesRequest) returns (PropertiesReply);
 	rpc InitializeContinuousScanMode (InitScanModeRequest) returns (InitScanModeReply);
 }
 
 message PropertiesRequest {}
 message PropertiesReply {
-
+	string ProductDescription = 1;
+	string SerialString = 2;
+	string HostVersion = 3;
 }
 
 message InitScanModeRequest {}

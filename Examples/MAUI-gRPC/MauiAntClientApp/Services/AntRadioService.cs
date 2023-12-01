@@ -19,7 +19,7 @@ namespace MauiAntClientApp.Services
         private AntRadio.AntRadioClient? client;
         private readonly ILogger<AntRadioService> _logger = logger;
 
-        private IAntChannel[] radioChannels;
+        private IAntChannel[]? radioChannels;
         [ObservableProperty]
         private IPAddress? serverIPAddress;
         [ObservableProperty]

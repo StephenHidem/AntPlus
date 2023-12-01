@@ -31,6 +31,7 @@ namespace MauiAntClientApp.ViewModels
             ProductDescription = _antRadioService.ProductDescription;
             SerialString = _antRadioService.SerialString;
             HostVersion = _antRadioService.HostVersion;
+            _ = _antRadioService.InitializeContinuousScanMode();
         }
     }
 }

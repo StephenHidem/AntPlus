@@ -27,8 +27,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         public enum DataPage
         {
+            /// <summary>Default or unknown page</summary>
+            Default,
             /// <summary>Cumulative operating time</summary>
-            CumulativeOperatingTime = 1,
+            CumulativeOperatingTime,
             /// <summary>Manufacturer information</summary>
             ManufacturerInfo,
             /// <summary>Product information</summary>
@@ -144,8 +146,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 if (!pageToggle) return;
             }
 
-            switch ((DataPage)dataPage[0])
+            switch ((DataPage)(dataPage[0] & 0x7F))
             {
+                case DataPage.Default:
+                    // the default page is handled by the derived classes
+                    break;
                 case DataPage.CumulativeOperatingTime:
                     CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
                     RaisePropertyChange(nameof(CumulativeOperatingTime));

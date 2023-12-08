@@ -2,6 +2,8 @@
 using MauiAntClientApp.ViewModels;
 using MauiAntClientApp.Views;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntRadioInterface;
 
 namespace MauiAntClientApp
 {
@@ -31,7 +33,8 @@ namespace MauiAntClientApp
 
         private static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
         {
-            mauiAppBuilder.Services.AddSingleton<AntRadioService>();
+            mauiAppBuilder.Services.AddSingleton<IAntRadio, AntRadioService>();
+            mauiAppBuilder.Services.AddSingleton<AntDeviceCollection>();
             return mauiAppBuilder;
         }
 

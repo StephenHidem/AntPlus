@@ -4,8 +4,8 @@ option csharp_namespace = "AntRadioGrpcService";
 
 package AntRadioPackage;
 
-// The ANT radio service
-service AntRadio {
+// The ANT radio gRPC service.
+service gRPCAntRadio {
 	rpc GetProperties (PropertiesRequest) returns (PropertiesReply);
 	rpc Subscribe (SubscribeRequest) returns (stream RadioResponse);
 	rpc InitializeContinuousScanMode (InitScanModeRequest) returns (InitScanModeReply);
@@ -28,9 +28,10 @@ message InitScanModeReply {
 	int32 num_channels = 1;
 }
 
-message GetChannelRequest {}
-message GetChannelReply {
+message GetChannelRequest {
 	int32 channel_number = 1;
+}
+message GetChannelReply {
 }
 
 message GetDeviceCapabilitiesRequest {

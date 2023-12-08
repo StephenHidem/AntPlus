@@ -1,17 +1,16 @@
 ﻿using AntRadioGrpcService;
 using Grpc.Core;
 using SmallEarthTech.AntRadioInterface;
-using SmallEarthTech.AntUsbStick;
 using System.Text;
 
 namespace AntGrpcServer.Services
 {
-    public class AntRadioService(ILogger<AntRadioService> logger, IAntRadio antRadio) : AntRadioGrpcService.AntRadio.AntRadioBase
+    public class AntRadioService(ILogger<AntRadioService> logger, IAntRadio antRadio) : gRPCAntRadio.gRPCAntRadioBase
     {
         private readonly ILogger<AntRadioService> _logger = logger;
         private readonly IAntRadio _antRadio = antRadio;
 
-        public AntChannel[] AntChannels { get; private set; }
+        public static IAntChannel[] AntChannels { get; private set; } = [];
 
         public override Task<PropertiesReply> GetProperties(PropertiesRequest request, ServerCallContext context)
         {
@@ -29,11 +28,20 @@ namespace AntGrpcServer.Services
         public override Task<InitScanModeReply> InitializeContinuousScanMode(InitScanModeRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(InitializeContinuousScanMode)}");
-            AntChannels = (AntChannel[])_antRadio.InitializeContinuousScanMode();
+            AntChannels = _antRadio.InitializeContinuousScanMode();
+
             return Task.FromResult(new InitScanModeReply
             {
                 NumChannels = AntChannels.Length
             });
+        }
+
+        public override Task<GetChannelReply> GetChannel(GetChannelRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation($"{nameof(GetChannel)}");
+            _ = _antRadio.GetChannel(request.ChannelNumber);
+
+            return Task.FromResult(new GetChannelReply());
         }
 
         public override Task<GetDeviceCapabilitiesReply> GetDeviceCapabilities(GetDeviceCapabilitiesRequest request, ServerCallContext context)

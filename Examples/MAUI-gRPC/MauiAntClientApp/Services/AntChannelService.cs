@@ -1,20 +1,68 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AntChannelGrpcService;
+using Google.Protobuf;
+using Grpc.Core;
+using Grpc.Net.Client;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
+using MessagingReturnCode = SmallEarthTech.AntRadioInterface.MessagingReturnCode;
 
 namespace MauiAntClientApp.Services
 {
     internal class AntChannelService : IAntChannel
     {
         private readonly ILogger<AntChannelService> _logger;
+        private readonly gRPCAntChannel.gRPCAntChannelClient _client;
 
-        public AntChannelService(ILogger<AntChannelService> logger)
+        public AntChannelService(ILogger<AntChannelService> logger, byte antChannel, GrpcChannel grpcChannel)
         {
             _logger = logger;
+            ChannelNumber = antChannel;
+            _client = new gRPCAntChannel.gRPCAntChannelClient(grpcChannel);
+            _logger.LogInformation("Created AntChannelService, ANT channel {AntChannel}.", antChannel);
         }
 
-        public byte ChannelNumber => throw new NotImplementedException();
+        private async void HandleChannelResponseEvents()
+        {
+            _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
+            await foreach (var update in _response.ResponseStream.ReadAllAsync())
+            {
+                _logger.LogInformation($"Update {update}");
+                _responseReceived?.Invoke(this, new GrpcAntResponse(update));
+            }
+        }
 
-        public event EventHandler<AntResponse>? ChannelResponse;
+        public byte ChannelNumber { get; }
+
+        private readonly object _lock = new();
+        private event EventHandler<AntResponse> _responseReceived;
+        private AsyncServerStreamingCall<ChannelResponse> _response;
+        public event EventHandler<AntResponse> ChannelResponse
+        {
+            add
+            {
+                lock (_lock)
+                {
+                    if (_responseReceived == null)
+                    {
+                        _logger.LogInformation("Invoke HandleChannelResponseEvents");
+                        HandleChannelResponseEvents();
+                    }
+                    _responseReceived += value;
+                }
+            }
+            remove
+            {
+                lock (_lock)
+                {
+                    _responseReceived -= value;
+                    if (_responseReceived == null)
+                    {
+                        _logger.LogInformation("Disposing _response");
+                        _response.Dispose();
+                    }
+                }
+            }
+        }
 
         public bool AssignChannel(ChannelType channelTypeByte, byte networkNumber, uint responseWaitTime)
         {
@@ -81,9 +129,16 @@ namespace MauiAntClientApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        public async Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            throw new NotImplementedException();
+            MessagingCodeReply reply = await _client.SendExtAcknowledgedDataAsync(new ExtDataRequest
+            {
+                ChannelNumber = ChannelNumber,
+                ChannelId = channelId.Id,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = ackWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         public bool SendExtBroadcastData(ChannelId channelId, byte[] data)

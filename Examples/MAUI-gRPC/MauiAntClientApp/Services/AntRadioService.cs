@@ -10,16 +10,17 @@ using System.Text;
 
 namespace MauiAntClientApp.Services
 {
-    public partial class AntRadioService(ILogger<AntRadioService> logger) : ObservableObject, IAntRadio
+    public partial class AntRadioService(ILogger<AntRadioService> logger, ILoggerFactory loggerFactory) : ObservableObject, IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 7072;              // gRPC port
 
-        private AntRadio.AntRadioClient? client;
+        private gRPCAntRadio.gRPCAntRadioClient? _client;
+        private readonly ILoggerFactory _loggerFactory = loggerFactory;
         private readonly ILogger<AntRadioService> _logger = logger;
+        private GrpcChannel? _channel;
 
-        private IAntChannel[]? radioChannels;
         [ObservableProperty]
         private IPAddress? serverIPAddress;
         [ObservableProperty]
@@ -67,15 +68,15 @@ namespace MauiAntClientApp.Services
             }
 
             UriBuilder uriBuilder = new("https", ServerIPAddress.ToString(), gRPCPort);
-            GrpcChannel channel = GrpcChannel.ForAddress(uriBuilder.Uri, new GrpcChannelOptions
+            _channel = GrpcChannel.ForAddress(uriBuilder.Uri, new GrpcChannelOptions
             {
                 HttpHandler = new GrpcWebHandler(new HttpClientHandler
                 {
                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 })
             });
-            client = new AntRadio.AntRadioClient(channel);
-            PropertiesReply reply = await client.GetPropertiesAsync(new PropertiesRequest());
+            _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
+            PropertiesReply reply = await _client.GetPropertiesAsync(new PropertiesRequest());
             ProductDescription = reply.ProductDescription;
             SerialString = reply.SerialString;
             HostVersion = reply.HostVersion;
@@ -83,12 +84,14 @@ namespace MauiAntClientApp.Services
 
         public IAntChannel[] InitializeContinuousScanMode()
         {
-            InitScanModeReply reply = client!.InitializeContinuousScanMode(new InitScanModeRequest());
-            for (int i = 0; i < reply.NumChannels; i++)
+            InitScanModeReply reply = _client!.InitializeContinuousScanMode(new InitScanModeRequest());
+            AntChannelService[] channels = new AntChannelService[reply.NumChannels];
+            ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();
+            for (byte i = 0; i < reply.NumChannels; i++)
             {
-
+                channels[i] = new AntChannelService(logger, i, _channel);
             }
-            return radioChannels;
+            return channels;
         }
 
         public void CancelTransfers(int cancelWaitTime)

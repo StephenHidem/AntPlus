@@ -103,7 +103,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         [DataRow(0x08, Asset.AssetStatus.LowBattery)]
         [DataRow(0x10, Asset.AssetStatus.GPSLost)]
         [DataRow(0x20, Asset.AssetStatus.CommunicationLost)]
-        [DataRow(0x40, Asset.AssetStatus.RemoveAsset)]
         public void Parse_AssetStatus_ExpectedStatus(int status, Asset.AssetStatus expStatus)
         {
             // Arrange

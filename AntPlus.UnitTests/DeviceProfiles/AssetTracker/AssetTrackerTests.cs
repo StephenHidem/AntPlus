@@ -122,6 +122,27 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         }
 
         [TestMethod]
+        public void Parse_AssetStatusRemoveAsset_ExpectedAssetCountIsZero()
+        {
+            // Arrange
+            mockAntChannel.Setup(ac =>
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
+                Returns(MessagingReturnCode.Pass);
+            byte[] dataPage = new byte[8];
+            dataPage[0] = 1;
+            var tracker = CreateAssetTracker();
+            tracker.Parse(dataPage);
+            dataPage[0] = 1;
+            dataPage[5] = (byte)Asset.AssetStatus.RemoveAsset;
+
+            // Act
+            tracker.Parse(dataPage);
+
+            // Assert
+            Assert.AreEqual(0, tracker.Assets.Count);
+        }
+
+        [TestMethod]
         public void Parse_NoAssets_ExpectedAssetCountIsZero()
         {
             // Arrange

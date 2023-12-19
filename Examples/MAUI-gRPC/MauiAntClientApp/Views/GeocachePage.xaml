@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MauiAntClientApp.Controls"
+             xmlns:converters="clr-namespace:MauiAntClientApp.Converters"
+             xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
+             x:DataType="viewmodels:GeocacheViewModel"
+             x:Class="MauiAntClientApp.Views.GeocachePage"
+             Title="GeocachePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToStringConverter x:Key="ByteArrayToString"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid Margin="10" RowDefinitions="Auto, *">
+        <HorizontalStackLayout Spacing="24">
+            <RadioButton x:Name="geo" Content="Geocache" ControlTemplate="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+            <RadioButton x:Name="prg" Content="Programming" ControlTemplate="{StaticResource TabbedRadioButton}"/>
+            <RadioButton x:Name="cdp" Content="Common Data Pages"  ControlTemplate="{StaticResource TabbedRadioButton}" />
+        </HorizontalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout>
+                <VerticalStackLayout IsVisible="{Binding Source={x:Reference geo}, Path=IsChecked}">
+                    <Frame>
+                        <StackLayout>
+                            <Label Text="Data Pages" FontAttributes="Bold" TextDecorations="Underline"/>
+                            <Label Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
+                            <Label Text="{Binding Geocache.ProgrammingPIN, StringFormat='Programming PIN: {0}'}"/>
+                            <Label Text="{Binding Geocache.TotalPagesProgrammed, StringFormat='Total Pages Programmed: {0}'}"/>
+                            <Label Text="{Binding Geocache.NextStageLatitude, StringFormat='Next Stage Latitude: {0:F6}'}"/>
+                            <Label Text="{Binding Geocache.NextStageLongitude, StringFormat='Next Stage Longitude: {0:F6}'}"/>
+                            <Label Text="{Binding Geocache.Hint, StringFormat='Hint: {0}'}"/>
+                            <Label Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits: {0}'}"/>
+                            <Label Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit: {0}'}"/>
+                            <Button Text="Request PIN" Command="{Binding RequestPINCommand}"/>
+                            <Button Text="Log Visit" Command="{Binding LogVisitCommand}"/>
+                        </StackLayout>
+                    </Frame>
+                    <Frame>
+                        <StackLayout>
+                            <Label Text="Authentication" FontAttributes="Bold" TextDecorations="Underline"/>
+                            <Label Text="{Binding Geocache.AuthenticationToken, StringFormat='Authentication Token: {0}', Converter={StaticResource ByteArrayToString}}"/>
+                            <Button Text="Request Authentication" Command="{Binding RequestAuthenticationCommand}"/>
+                        </StackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <controls:ProgramGeocacheView GeocacheViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
+                <controls:CommonDataPagesView CommonDataPages="{Binding CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding Geocache.Offline}" Grid.RowSpan="2"/>
+    </Grid>
+</ContentPage>

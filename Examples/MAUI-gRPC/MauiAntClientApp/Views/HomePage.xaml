@@ -12,12 +12,8 @@
             <converters:StreamToImageSourceConverter x:Key="StreamToImage"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid Margin="16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Frame BorderColor="Black">
+    <Grid Margin="16" RowDefinitions="Auto, *">
+        <Frame>
             <StackLayout>
                 <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}"/>
                 <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill"/>
@@ -26,25 +22,18 @@
                 <Label Text="{Binding HostVersion, StringFormat='Host Version - {0}'}"/>
             </StackLayout>
         </Frame>
-        <Frame BorderColor="Black" Margin="0,10,0,0" Grid.Row="1">
+        <Frame Grid.Row="1">
             <StackLayout>
                 <Label Text="ANT Devices"/>
                 <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill" Margin="0,0,0,4"/>
-                <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" BackgroundColor="Beige" VerticalOptions="CenterAndExpand">
+                <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" SelectionMode="Single" VerticalOptions="StartAndExpand">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="ant:AntDevice">
-                            <Grid Padding="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+                            <Grid Padding="10" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *, Auto">
                                 <Image Margin="0,0,10,0" Grid.RowSpan="2" Source="{Binding ., Converter={StaticResource StreamToImage}}" Aspect="AspectFill" HeightRequest="40" WidthRequest="40"/>
                                 <Label Grid.Column="1" Text="{Binding}"/>
                                 <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=ChannelId.DeviceNumber, StringFormat='Device Number - {0}'}"/>
+                                <Button Text="Details" Grid.RowSpan="2" Grid.Column="2" Clicked="Details_Clicked"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

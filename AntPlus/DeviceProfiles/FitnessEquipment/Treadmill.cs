@@ -17,6 +17,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         [Flags]
         public enum CapabilityFlags
         {
+            /// <summary>Positive and negative vertical distance is not transmitted.</summary>
+            None = 0x00,
             /// <summary>Transmits positive vertical distance.</summary>
             TxPosVertDistance = 0x01,
             /// <summary>Transmits negative vertical distance.</summary>

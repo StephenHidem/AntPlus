@@ -9,6 +9,39 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Label" x:Key="OfflineStyle">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="Opacity" Value="0.4"/>
+                <Setter Property="FontSize" Value="48"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Text" Value="OFFLINE"/>
+            </Style>
+
+            <Style TargetType="Frame">
+                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                <Setter Property="Margin" Value="8"/>
+            </Style>
+
+            <ControlTemplate x:Key="TabbedRadioButton">
+                <Grid RowDefinitions="Auto,4">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CheckedStates">
+                                <VisualState x:Name="Checked"/>
+                                <VisualState x:Name="Unchecked">
+                                    <VisualState.Setters>
+                                        <Setter TargetName="Indicator" Property="BoxView.Color" Value="Transparent"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                    <Label x:Name="TextLabel" Text="{TemplateBinding Content}"/>
+                    <BoxView x:Name="Indicator" Grid.Row="1"/>
+                </Grid>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

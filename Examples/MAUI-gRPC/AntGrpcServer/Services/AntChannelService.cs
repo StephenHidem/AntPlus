@@ -14,22 +14,32 @@ namespace AntGrpcServer.Services
         public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<ChannelResponse> responseStream, ServerCallContext context)
         {
             _logger.LogInformation("Subscribe called. {ChannelNumber}", request.ChannelNumber);
-            _antRadio.GetChannel((int)request.ChannelNumber).ChannelResponse += AntChannelService_ChannelResponse;
+            IAntChannel antChannel = _antRadio.GetChannel((int)request.ChannelNumber);
+            antChannel.ChannelResponse += AntChannelService_ChannelResponse;
             while (!context.CancellationToken.IsCancellationRequested)
             {
                 _response = new TaskCompletionSource<AntResponse>();
                 AntResponse channelResponse = await _response.Task;
-                await responseStream.WriteAsync(new ChannelResponse
+                try
                 {
-                    ChannelId = channelResponse.ChannelId.Id,       // TODO: NULL COALESCE CHANNELID
-                    ChannelNumber = channelResponse.ChannelNumber,
-                    ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
-                    Payload = ByteString.CopyFrom(channelResponse.Payload),
-                    ResponseId = channelResponse.ResponseId,
-                    Rssi = channelResponse.Rssi,
-                    Timestamp = channelResponse.Timestamp
-                });
+                    await responseStream.WriteAsync(new ChannelResponse
+                    {
+                        ChannelId = channelResponse.ChannelId.Id,       // TODO: NULL COALESCE CHANNELID
+                        ChannelNumber = channelResponse.ChannelNumber,
+                        ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
+                        Payload = ByteString.CopyFrom(channelResponse.Payload),
+                        ResponseId = channelResponse.ResponseId,
+                        Rssi = channelResponse.Rssi,
+                        Timestamp = channelResponse.Timestamp
+                    });
+                }
+                catch (InvalidOperationException e)
+                {
+                    _logger.LogInformation($"Subscription closed. {e.Message}");
+                    break;
+                }
             }
+            antChannel.ChannelResponse -= AntChannelService_ChannelResponse;
             _logger.LogInformation("Subscribe exited. {ChannelNumber}", request.ChannelNumber);
         }
 
@@ -44,7 +54,7 @@ namespace AntGrpcServer.Services
         public override async Task<MessagingCodeReply> SendExtAcknowledgedData(ExtDataRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(SendExtAcknowledgedData)}");
-            SmallEarthTech.AntRadioInterface.MessagingReturnCode reply = await AntRadioService.AntChannels[request.ChannelNumber].SendExtAcknowledgedData(new ChannelId(request.ChannelId), request.Data.ToArray(), request.WaitTime);
+            SmallEarthTech.AntRadioInterface.MessagingReturnCode reply = await AntRadioService.AntChannels[request.ChannelNumber].SendExtAcknowledgedData(new ChannelId(request.ChannelId), [.. request.Data], request.WaitTime);
             return new MessagingCodeReply { ReturnCode = (AntChannelGrpcService.MessagingReturnCode)reply };
         }
     }

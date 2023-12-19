@@ -26,7 +26,6 @@ namespace MauiAntClientApp.Services
             _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
             await foreach (var update in _response.ResponseStream.ReadAllAsync())
             {
-                _logger.LogInformation($"Update {update}");
                 _responseReceived?.Invoke(this, new GrpcAntResponse(update));
             }
         }
@@ -58,7 +57,7 @@ namespace MauiAntClientApp.Services
                     if (_responseReceived == null)
                     {
                         _logger.LogInformation("Disposing _response");
-                        _response.Dispose();
+                        _response?.Dispose();
                     }
                 }
             }
@@ -86,7 +85,8 @@ namespace MauiAntClientApp.Services
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Disposing _response");
+            _response?.Dispose();
         }
 
         public bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, uint responseWaitTime)

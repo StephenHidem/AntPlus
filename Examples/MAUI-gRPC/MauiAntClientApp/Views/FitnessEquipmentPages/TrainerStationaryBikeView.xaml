@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;assembly=SmallEarthTech.AntPlus"
              x:DataType="ant:TrainerStationaryBike"
-             x:Class="MauiAntClientApp.Views.FitnessEquipment.TrainerStationaryBikeView">
+             x:Class="MauiAntClientApp.Views.FitnessEquipmentPages.TrainerStationaryBikeView">
     <VerticalStackLayout>
         <Label Text="Trainer Stationary Bike" FontAttributes="Bold" TextDecorations="Underline"/>
         <Label Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>

@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MauiAntClientApp.Controls"
              xmlns:converters="clr-namespace:MauiAntClientApp.Converters"
+             xmlns:views="clr-namespace:MauiAntClientApp.Views.GeocachePages"
              xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
              x:DataType="viewmodels:GeocacheViewModel"
-             x:Class="MauiAntClientApp.Views.GeocachePage"
+             x:Class="MauiAntClientApp.Views.GeocachePages.GeocachePage"
              Title="GeocachePage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -46,8 +47,8 @@
                         </StackLayout>
                     </Frame>
                 </VerticalStackLayout>
-
-                <controls:ProgramGeocacheView GeocacheViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
+                
+                <views:ProgramGeocacheView GeocacheViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
                 <controls:CommonDataPagesView CommonDataPages="{Binding CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>

@@ -1,6 +1,6 @@
 using MauiAntClientApp.ViewModels;
 
-namespace MauiAntClientApp.Controls;
+namespace MauiAntClientApp.Views.HeartRatePages;
 
 public partial class HeartRateCapabilitiesView : ContentView
 {

@@ -20,13 +20,13 @@ namespace MauiAntClientApp.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
-        private uint pin;
+        private uint? pin;
         [ObservableProperty]
         private string trackableId = string.Empty;
         [ObservableProperty]
-        private double latitude;
+        private double? latitude;
         [ObservableProperty]
-        private double longitude;
+        private double? longitude;
         [ObservableProperty]
         private string hint = string.Empty;
 

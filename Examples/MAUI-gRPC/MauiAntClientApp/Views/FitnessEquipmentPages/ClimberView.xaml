@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;assembly=SmallEarthTech.AntPlus"
              x:DataType="ant:Climber"
-             x:Class="MauiAntClientApp.Views.FitnessEquipment.ClimberView">
+             x:Class="MauiAntClientApp.Views.FitnessEquipmentPages.ClimberView">
     <VerticalStackLayout>
         <Label Text="Climber" FontAttributes="Bold" TextDecorations="Underline"/>
         <Label Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>

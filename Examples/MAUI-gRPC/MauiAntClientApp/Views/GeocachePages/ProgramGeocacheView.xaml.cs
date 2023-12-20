@@ -1,11 +1,11 @@
 using MauiAntClientApp.ViewModels;
 
-namespace MauiAntClientApp.Controls;
+namespace MauiAntClientApp.Views.GeocachePages;
 
 public partial class ProgramGeocacheView : ContentView
 {
     public static readonly BindableProperty GeocacheViewModelProperty =
-    BindableProperty.Create(nameof(GeocacheViewModel), typeof(GeocacheViewModel), typeof(ProgramGeocacheView));
+   BindableProperty.Create(nameof(GeocacheViewModel), typeof(GeocacheViewModel), typeof(ProgramGeocacheView));
     public GeocacheViewModel GeocacheViewModel
     {
         get => (GeocacheViewModel)GetValue(GeocacheViewModelProperty);

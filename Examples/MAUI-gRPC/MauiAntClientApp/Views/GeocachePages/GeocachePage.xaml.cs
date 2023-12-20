@@ -1,6 +1,6 @@
 using MauiAntClientApp.ViewModels;
 
-namespace MauiAntClientApp.Views;
+namespace MauiAntClientApp.Views.GeocachePages;
 
 public partial class GeocachePage : ContentPage
 {

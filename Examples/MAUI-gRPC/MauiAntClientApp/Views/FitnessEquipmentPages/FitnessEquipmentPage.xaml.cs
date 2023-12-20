@@ -1,6 +1,6 @@
 using MauiAntClientApp.ViewModels;
 
-namespace MauiAntClientApp.Views.FitnessEquipment;
+namespace MauiAntClientApp.Views.FitnessEquipmentPages;
 
 public partial class FitnessEquipmentPage : ContentPage
 {

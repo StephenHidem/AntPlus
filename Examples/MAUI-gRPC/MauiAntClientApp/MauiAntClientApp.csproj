@@ -78,7 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Controls\HeartRateCapabilitiesView.xaml.cs">
+	  <Compile Update="Views\HeartRatePages\HeartRateCapabilitiesView.xaml.cs">
 	    <DependentUpon>HeartRateCapabilitiesView.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\MuscleOxygenPage.xaml.cs">
@@ -87,34 +87,34 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\FitnessEquipment\ClimberView.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\ClimberView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Controls\CommonDataPagesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FitnessEquipment\EllipticalView.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\EllipticalView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\HeartRateCapabilitiesView.xaml">
+	  <MauiXaml Update="Views\HeartRatePages\HeartRateCapabilitiesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FitnessEquipment\FitnessEquipmentPage.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\FitnessEquipmentPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FitnessEquipment\NordicSkierView.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\NordicSkierView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Controls\ProgramGeocacheView.xaml">
+	  <MauiXaml Update="Views\GeocachePages\ProgramGeocacheView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FitnessEquipment\RowerView.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\RowerView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FitnessEquipment\TrainerStationaryBikeView.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\TrainerStationaryBikeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FitnessEquipment\TreadmillView.xaml">
+	  <MauiXaml Update="Views\FitnessEquipmentPages\TreadmillView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AssetTrackerPage.xaml">
@@ -126,10 +126,10 @@
 	  <MauiXaml Update="Views\BikeSpeedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\GeocachePage.xaml">
+	  <MauiXaml Update="Views\GeocachePages\GeocachePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\HeartRatePage.xaml">
+	  <MauiXaml Update="Views\HeartRatePages\HeartRatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">

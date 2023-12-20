@@ -2,7 +2,9 @@
 using MauiAntClientApp.Services;
 using MauiAntClientApp.ViewModels;
 using MauiAntClientApp.Views;
-using MauiAntClientApp.Views.FitnessEquipment;
+using MauiAntClientApp.Views.FitnessEquipmentPages;
+using MauiAntClientApp.Views.GeocachePages;
+using MauiAntClientApp.Views.HeartRatePages;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;

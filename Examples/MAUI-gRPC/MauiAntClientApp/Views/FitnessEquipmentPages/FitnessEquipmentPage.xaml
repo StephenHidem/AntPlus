@@ -4,7 +4,7 @@
              xmlns:views="clr-namespace:MauiAntClientApp.Views.FitnessEquipment"
              xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
              x:DataType="viewmodels:FitnessEquipmentViewModel"
-             x:Class="MauiAntClientApp.Views.FitnessEquipment.FitnessEquipmentPage"
+             x:Class="MauiAntClientApp.Views.FitnessEquipmentPages.FitnessEquipmentPage"
              Title="FitnessEquipmentPage">
     <Grid Margin="10" RowDefinitions="Auto, *">
         <HorizontalStackLayout Spacing="24">

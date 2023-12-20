@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ant="clr-namespace:SmallEarthTech.AntPlus;assembly=SmallEarthTech.AntPlus"
              x:Name="this"
-             x:Class="MauiAntClientApp.Controls.HeartRateCapabilitiesView">
+             x:Class="MauiAntClientApp.Views.HeartRatePages.HeartRateCapabilitiesView">
 
     <VerticalStackLayout BindingContext="{x:Reference this}">
         <Frame>

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MauiAntClientApp.Views.FitnessEquipment;
+using MauiAntClientApp.Views.FitnessEquipmentPages;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;

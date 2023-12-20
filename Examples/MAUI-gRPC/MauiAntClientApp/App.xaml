@@ -32,6 +32,7 @@
                                 <VisualState x:Name="Checked"/>
                                 <VisualState x:Name="Unchecked">
                                     <VisualState.Setters>
+                                        <Setter TargetName="Indicator" Property="BoxView.BackgroundColor" Value="Transparent"/>
                                         <Setter TargetName="Indicator" Property="BoxView.Color" Value="Transparent"/>
                                     </VisualState.Setters>
                                 </VisualState>

@@ -114,6 +114,9 @@
 	  <MauiXaml Update="Views\BicyclePowerPages\TEPSView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\BikeSpeedAndCadencePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\FitnessEquipmentPages\CapsAndSettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

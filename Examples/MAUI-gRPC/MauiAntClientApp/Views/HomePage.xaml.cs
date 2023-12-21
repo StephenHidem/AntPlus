@@ -36,6 +36,11 @@ public partial class HomePage : ContentPage
                     { "Sensor", (BikeSpeedSensor)antDevices.SelectedItem }
                 });
                 break;
+            case CombinedSpeedAndCadenceSensor:
+                await Shell.Current.GoToAsync("SpeedAndCadence", new Dictionary<string, object> {
+                    { "Sensor", (CombinedSpeedAndCadenceSensor)antDevices.SelectedItem }
+                });
+                break;
             case BikeCadenceSensor:
                 await Shell.Current.GoToAsync("BikeCadence", new Dictionary<string, object> {
                     { "Sensor", (BikeCadenceSensor)antDevices.SelectedItem }

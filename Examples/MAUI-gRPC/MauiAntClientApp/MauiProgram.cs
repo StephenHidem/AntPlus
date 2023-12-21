@@ -67,6 +67,7 @@ namespace MauiAntClientApp
             mauiAppBuilder.Services.AddTransient<AssetTrackerPage>();
             mauiAppBuilder.Services.AddTransient<BicyclePowerPage>();
             mauiAppBuilder.Services.AddTransient<BikeCadencePage>();
+            mauiAppBuilder.Services.AddTransient<BikeSpeedAndCadencePage>();
             mauiAppBuilder.Services.AddTransient<BikeSpeedPage>();
             mauiAppBuilder.Services.AddTransient<FitnessEquipmentPage>();
             mauiAppBuilder.Services.AddTransient<GeocachePage>();

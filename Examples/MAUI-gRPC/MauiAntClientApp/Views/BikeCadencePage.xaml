@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;assembly=SmallEarthTech.AntPlus"
              xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
              x:DataType="viewmodels:BikeCadenceViewModel"
              x:Class="MauiAntClientApp.Views.BikeCadencePage"
@@ -10,21 +9,21 @@
         <StackLayout>
             <Frame>
                 <StackLayout>
-                    <Label Text="Cadence Sensor" FontAttributes="Bold"/>
+                    <Label Text="Cadence Sensor" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding BikeCadenceSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence: {0:F3}'}"/>
                     <Label Text="{Binding BikeCadenceSensor.Stopped, StringFormat='Stopped: {0}'}"/>
                 </StackLayout>
             </Frame>
             <Frame>
                 <StackLayout>
-                    <Label Text="Manufacturer Info" FontAttributes="Bold"/>
+                    <Label Text="Manufacturer Info" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding BikeCadenceSensor.ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
                     <Label Text="{Binding BikeCadenceSensor.ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
                 </StackLayout>
             </Frame>
             <Frame>
                 <StackLayout>
-                    <Label Text="Product Info" FontAttributes="Bold"/>
+                    <Label Text="Product Info" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding BikeCadenceSensor.ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
                     <Label Text="{Binding BikeCadenceSensor.ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
                     <Label Text="{Binding BikeCadenceSensor.ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
@@ -32,7 +31,7 @@
             </Frame>
             <Frame>
                 <StackLayout>
-                    <Label Text="Battery Status" FontAttributes="Bold"/>
+                    <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding BikeCadenceSensor.BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
                     <Label Text="{Binding BikeCadenceSensor.BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
                 </StackLayout>

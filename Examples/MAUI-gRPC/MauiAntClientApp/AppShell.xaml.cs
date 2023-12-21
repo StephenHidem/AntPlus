@@ -1,4 +1,5 @@
 ﻿using MauiAntClientApp.Views;
+using MauiAntClientApp.Views.BicyclePowerPages;
 using MauiAntClientApp.Views.FitnessEquipmentPages;
 using MauiAntClientApp.Views.GeocachePages;
 using MauiAntClientApp.Views.HeartRatePages;
@@ -13,6 +14,7 @@ namespace MauiAntClientApp
 
             // initialize routing
             Routing.RegisterRoute("AssetTracker", typeof(AssetTrackerPage));
+            Routing.RegisterRoute("BicyclePower", typeof(BicyclePowerPage));
             Routing.RegisterRoute("BikeCadence", typeof(BikeCadencePage));
             Routing.RegisterRoute("BikeSpeed", typeof(BikeSpeedPage));
             Routing.RegisterRoute("FitnessEquipment", typeof(FitnessEquipmentPage));

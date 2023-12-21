@@ -24,25 +24,29 @@
                 <Setter Property="Margin" Value="8"/>
             </Style>
 
-            <ControlTemplate x:Key="TabbedRadioButton">
-                <Grid RowDefinitions="Auto,4">
-                    <VisualStateManager.VisualStateGroups>
-                        <VisualStateGroupList>
-                            <VisualStateGroup x:Name="CheckedStates">
-                                <VisualState x:Name="Checked"/>
-                                <VisualState x:Name="Unchecked">
-                                    <VisualState.Setters>
-                                        <Setter TargetName="Indicator" Property="BoxView.BackgroundColor" Value="Transparent"/>
-                                        <Setter TargetName="Indicator" Property="BoxView.Color" Value="Transparent"/>
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateGroupList>
-                    </VisualStateManager.VisualStateGroups>
-                    <Label x:Name="TextLabel" Text="{TemplateBinding Content}"/>
-                    <BoxView x:Name="Indicator" Grid.Row="1"/>
-                </Grid>
-            </ControlTemplate>
+            <Style TargetType="RadioButton" x:Key="TabbedRadioButton">
+                <Setter Property="ControlTemplate">
+                    <ControlTemplate>
+                        <Grid RowDefinitions="Auto,4">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup x:Name="CheckedStates">
+                                        <VisualState x:Name="Checked"/>
+                                        <VisualState x:Name="Unchecked">
+                                            <VisualState.Setters>
+                                                <Setter TargetName="Indicator" Property="BoxView.BackgroundColor" Value="Transparent"/>
+                                                <Setter TargetName="Indicator" Property="BoxView.Color" Value="Transparent"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                            <Label x:Name="TextLabel" Text="{TemplateBinding Content}"/>
+                            <BoxView x:Name="Indicator" Grid.Row="1"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

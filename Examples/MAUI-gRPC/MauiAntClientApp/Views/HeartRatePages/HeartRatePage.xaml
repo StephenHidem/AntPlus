@@ -8,8 +8,8 @@
              Title="HeartRatePage">
     <Grid Margin="10" RowDefinitions="Auto, *">
         <HorizontalStackLayout Spacing="24">
-            <RadioButton x:Name="hr" Content="Heart Rate" ControlTemplate="{StaticResource TabbedRadioButton}" IsChecked="True"/>
-            <RadioButton x:Name="cap" Content="Capabilities"  ControlTemplate="{StaticResource TabbedRadioButton}" />
+            <RadioButton x:Name="hr" Content="Heart Rate" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+            <RadioButton x:Name="cap" Content="Capabilities"  Style="{StaticResource TabbedRadioButton}" />
         </HorizontalStackLayout>
 
         <ScrollView Grid.Row="1">

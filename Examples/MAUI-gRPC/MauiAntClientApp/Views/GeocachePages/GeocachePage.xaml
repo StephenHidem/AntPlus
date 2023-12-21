@@ -16,9 +16,9 @@
 
     <Grid Margin="10" RowDefinitions="Auto, *">
         <HorizontalStackLayout Spacing="24">
-            <RadioButton x:Name="geo" Content="Geocache" ControlTemplate="{StaticResource TabbedRadioButton}" IsChecked="True"/>
-            <RadioButton x:Name="prg" Content="Programming" ControlTemplate="{StaticResource TabbedRadioButton}"/>
-            <RadioButton x:Name="cdp" Content="Common Data Pages"  ControlTemplate="{StaticResource TabbedRadioButton}" />
+            <RadioButton x:Name="geo" Content="Geocache" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+            <RadioButton x:Name="prg" Content="Programming" Style="{StaticResource TabbedRadioButton}"/>
+            <RadioButton x:Name="cdp" Content="Common Data Pages"  Style="{StaticResource TabbedRadioButton}" />
         </HorizontalStackLayout>
 
         <ScrollView Grid.Row="1">

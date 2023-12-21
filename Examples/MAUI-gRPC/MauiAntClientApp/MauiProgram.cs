@@ -2,6 +2,7 @@
 using MauiAntClientApp.Services;
 using MauiAntClientApp.ViewModels;
 using MauiAntClientApp.Views;
+using MauiAntClientApp.Views.BicyclePowerPages;
 using MauiAntClientApp.Views.FitnessEquipmentPages;
 using MauiAntClientApp.Views.GeocachePages;
 using MauiAntClientApp.Views.HeartRatePages;
@@ -64,6 +65,7 @@ namespace MauiAntClientApp
         {
             mauiAppBuilder.Services.AddTransient<HomePage>();
             mauiAppBuilder.Services.AddTransient<AssetTrackerPage>();
+            mauiAppBuilder.Services.AddTransient<BicyclePowerPage>();
             mauiAppBuilder.Services.AddTransient<BikeCadencePage>();
             mauiAppBuilder.Services.AddTransient<BikeSpeedPage>();
             mauiAppBuilder.Services.AddTransient<FitnessEquipmentPage>();

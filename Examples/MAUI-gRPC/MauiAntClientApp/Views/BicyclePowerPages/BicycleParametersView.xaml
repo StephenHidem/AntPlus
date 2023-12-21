@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:bp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
+             x:Name="this"
+             x:Class="MauiAntClientApp.Views.BicyclePowerPages.BicycleParametersView">
+    <VerticalStackLayout BindingContext="{x:Reference this}">
+        <Frame BindingContext="{Binding ViewModel.BicyclePower.PowerSensor.Parameters}">
+            <StackLayout>
+                <Label Text="Status" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Label Text="{Binding Crank.CrankLength, StringFormat='Crank Length: {0}'}"/>
+                <Label Text="{Binding Crank.CrankStatus, StringFormat='Crank Status: {0}'}"/>
+                <Label Text="{Binding Crank.MismatchStatus, StringFormat='Mismatch Status: {0}'}"/>
+                <Label Text="{Binding Crank.AvailabilityStatus, StringFormat='Availability Status: {0}'}"/>
+                <Label Text="{Binding Crank.CustomCalibration, StringFormat='Custom Calibration: {0}'}"/>
+                <Label Text="{Binding Crank.AutoCrankLength, StringFormat='Auto Crank Length: {0}'}"/>
+                <Label Text="{Binding PeakTorqueThreshold, StringFormat='Peak Torque Threshold: {0}'}"/>
+                <Label Text="{Binding RiderPositionTimeOffset, StringFormat='Rider Position Time Offset: {0}'}"/>
+            </StackLayout>
+        </Frame>
+        <Button Text="Get Crank Length" Command="{Binding ViewModel.GetParametersCommand}"
+                                CommandParameter="{x:Static bp:Subpage.CrankParameters}"/>
+        <Button Text="Get Peak Torque Threshold" Command="{Binding ViewModel.GetParametersCommand}"
+                                CommandParameter="{x:Static bp:Subpage.PowerPhaseConfiguration}"/>
+        <Button Text="Get Rider Position Time Offset" Command="{Binding ViewModel.GetParametersCommand}"
+                                CommandParameter="{x:Static bp:Subpage.RiderPositionConfiguration}"/>
+    </VerticalStackLayout>
+</ContentView>

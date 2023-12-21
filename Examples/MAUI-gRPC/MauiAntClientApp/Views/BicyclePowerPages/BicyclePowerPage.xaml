@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MauiAntClientApp.Controls"
+             xmlns:views="clr-namespace:MauiAntClientApp.Views.BicyclePowerPages"
+             xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
+             x:DataType="viewmodels:BicyclePowerViewModel"
+             x:Class="MauiAntClientApp.Views.BicyclePowerPages.BicyclePowerPage"
+             Title="BicyclePowerPage">
+    <Grid Margin="10" RowDefinitions="Auto, *">
+        <HorizontalStackLayout Spacing="24" IsVisible="{Binding Options}">
+            <RadioButton x:Name="bike" Content="Bicycle" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+            <RadioButton x:Name="cal" Content="Calibration" Style="{StaticResource TabbedRadioButton}"/>
+            <RadioButton x:Name="parm" Content="Parameters" Style="{StaticResource TabbedRadioButton}"/>
+            <RadioButton x:Name="cdp" Content="Common Data Pages"  Style="{StaticResource TabbedRadioButton}" />
+        </HorizontalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout>
+                <VerticalStackLayout IsVisible="{Binding Source={x:Reference bike}, Path=IsChecked}">
+                    <ContentView Content="{Binding SpecificBicycleView}"/>
+                </VerticalStackLayout>
+
+                <views:BicycleCalibrationView ViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference cal}, Path=IsChecked}"/>
+                <views:BicycleParametersView ViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference parm}, Path=IsChecked}"/>
+                <controls:CommonDataPagesView CommonDataPages="{Binding BicyclePower.PowerSensor.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+        
+        <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding BicyclePower.Offline}" Grid.RowSpan="2"/>
+    </Grid>
+</ContentPage>

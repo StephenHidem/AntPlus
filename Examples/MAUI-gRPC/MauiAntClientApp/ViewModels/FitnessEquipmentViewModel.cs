@@ -81,6 +81,6 @@ namespace MauiAntClientApp.ViewModels
         [RelayCommand]
         private async Task<MessagingReturnCode> SetWindResistance() => await FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
         [RelayCommand]
-        private async Task<MessagingReturnCode> SetTrackResistance() => await FitnessEquipment.SetTrackResistance(-15);
+        private async Task<MessagingReturnCode> SetTrackResistance(string grade) => await FitnessEquipment.SetTrackResistance(double.Parse(grade));
     }
 }

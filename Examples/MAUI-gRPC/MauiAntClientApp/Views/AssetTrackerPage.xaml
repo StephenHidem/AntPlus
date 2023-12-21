@@ -35,7 +35,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <controls:CommonDataPagesView CommonDataPages="{Binding CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <controls:CommonDataPagesView CommonDataPages="{Binding Tracker.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>
 

@@ -49,7 +49,7 @@
                 </VerticalStackLayout>
                 
                 <views:ProgramGeocacheView GeocacheViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
-                <controls:CommonDataPagesView CommonDataPages="{Binding CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <controls:CommonDataPagesView CommonDataPages="{Binding Geocache.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>
 

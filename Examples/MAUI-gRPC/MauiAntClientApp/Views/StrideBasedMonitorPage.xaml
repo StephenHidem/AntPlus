@@ -53,7 +53,7 @@
             </StackLayout>
         </ScrollView>
 
-        <controls:CommonDataPagesView CommonDataPages="{Binding CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+        <controls:CommonDataPagesView CommonDataPages="{Binding SDM.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
 
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding SDM.Offline}" Grid.RowSpan="2"/>
     </Grid>

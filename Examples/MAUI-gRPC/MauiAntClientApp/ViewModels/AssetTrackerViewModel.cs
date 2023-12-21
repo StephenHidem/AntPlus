@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
-using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 
 namespace MauiAntClientApp.ViewModels
@@ -11,8 +10,7 @@ namespace MauiAntClientApp.ViewModels
 
         [ObservableProperty]
         private Tracker tracker = null!;
-        [ObservableProperty]
-        private CommonDataPages commonDataPages = null!;
+
 
         public AssetTrackerViewModel(ILogger<AssetTrackerViewModel> logger)
         {
@@ -24,7 +22,6 @@ namespace MauiAntClientApp.ViewModels
         {
             _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             Tracker = (Tracker)query["Sensor"];
-            CommonDataPages = Tracker.CommonDataPages;
         }
     }
 }

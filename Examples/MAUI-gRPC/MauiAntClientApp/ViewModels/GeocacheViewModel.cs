@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System.ComponentModel;
@@ -15,8 +14,6 @@ namespace MauiAntClientApp.ViewModels
 
         [ObservableProperty]
         private Geocache geocache = null!;
-        [ObservableProperty]
-        private CommonDataPages commonDataPages = null!;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
@@ -40,7 +37,6 @@ namespace MauiAntClientApp.ViewModels
         {
             _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             Geocache = (Geocache)query["Sensor"];
-            CommonDataPages = Geocache.CommonDataPages;
             Geocache.PropertyChanged += Geocache_PropertyChanged;
         }
 

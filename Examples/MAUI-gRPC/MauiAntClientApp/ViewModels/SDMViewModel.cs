@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 
@@ -12,8 +11,6 @@ namespace MauiAntClientApp.ViewModels
         private readonly ILogger<SDMViewModel> _logger;
         [ObservableProperty]
         private StrideBasedSpeedAndDistance sDM = null!;
-        [ObservableProperty]
-        private CommonDataPages commonDataPages = null!;
 
         public SDMViewModel(ILogger<SDMViewModel> logger)
         {
@@ -31,7 +28,6 @@ namespace MauiAntClientApp.ViewModels
         {
             _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             SDM = (StrideBasedSpeedAndDistance)query["Sensor"];
-            CommonDataPages = SDM.CommonDataPages;
         }
     }
 }

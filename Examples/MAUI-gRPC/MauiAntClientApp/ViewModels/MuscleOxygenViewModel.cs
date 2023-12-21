@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 
@@ -14,8 +13,6 @@ namespace MauiAntClientApp.ViewModels
 
         [ObservableProperty]
         private MuscleOxygen muscleOxygen = null!;
-        [ObservableProperty]
-        private CommonDataPages commonDataPages = null!;
         [ObservableProperty]
         private int hours;
         [ObservableProperty]
@@ -34,7 +31,6 @@ namespace MauiAntClientApp.ViewModels
         {
             _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             MuscleOxygen = (MuscleOxygen)query["Sensor"];
-            CommonDataPages = MuscleOxygen.CommonDataPages;
         }
 
         [RelayCommand]

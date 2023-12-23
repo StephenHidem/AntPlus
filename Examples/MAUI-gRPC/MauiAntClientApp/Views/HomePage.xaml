@@ -31,9 +31,9 @@
                         <DataTemplate x:DataType="ant:AntDevice">
                             <Grid Padding="10" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *, Auto">
                                 <Image Margin="0,0,10,0" Grid.RowSpan="2" Source="{Binding ., Converter={StaticResource StreamToImage}}" Aspect="AspectFill" HeightRequest="40" WidthRequest="40"/>
-                                <Label Grid.Column="1" Text="{Binding}"/>
+                                <Label Grid.Column="1" Text="{Binding .}"/>
                                 <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=ChannelId.DeviceNumber, StringFormat='Device Number - {0}'}"/>
-                                <Button Text="Details" Grid.RowSpan="2" Grid.Column="2" Clicked="Details_Clicked"/>
+                                <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="2" Grid.RowSpan="2" HeightRequest="40" WidthRequest="40" Command="{Binding Path=ShowDetailsCommand, Source={x:RelativeSource AncestorType={x:Type viewmodels:HomePageViewModel}}}" CommandParameter="{Binding}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

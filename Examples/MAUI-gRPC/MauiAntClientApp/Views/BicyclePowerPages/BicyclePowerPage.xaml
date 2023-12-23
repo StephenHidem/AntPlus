@@ -8,12 +8,14 @@
              x:Class="MauiAntClientApp.Views.BicyclePowerPages.BicyclePowerPage"
              Title="BicyclePowerPage">
     <Grid Margin="10" RowDefinitions="Auto, *">
-        <HorizontalStackLayout Spacing="24" IsVisible="{Binding Options}">
-            <RadioButton x:Name="bike" Content="Bicycle" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
-            <RadioButton x:Name="cal" Content="Calibration" Style="{StaticResource TabbedRadioButton}"/>
-            <RadioButton x:Name="parm" Content="Parameters" Style="{StaticResource TabbedRadioButton}"/>
-            <RadioButton x:Name="cdp" Content="Common Data Pages"  Style="{StaticResource TabbedRadioButton}" />
-        </HorizontalStackLayout>
+        <ScrollView Orientation="Horizontal">
+            <HorizontalStackLayout Spacing="24" IsVisible="{Binding Options}">
+                <RadioButton x:Name="bike" Content="Bicycle" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+                <RadioButton x:Name="cal" Content="Calibration" Style="{StaticResource TabbedRadioButton}"/>
+                <RadioButton x:Name="parm" Content="Parameters" Style="{StaticResource TabbedRadioButton}"/>
+                <RadioButton x:Name="cdp" Content="Common Data Pages"  Style="{StaticResource TabbedRadioButton}" />
+            </HorizontalStackLayout>
+        </ScrollView>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>

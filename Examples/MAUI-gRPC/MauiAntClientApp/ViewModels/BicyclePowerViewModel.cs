@@ -4,6 +4,7 @@ using MauiAntClientApp.Views.BicyclePowerPages;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
+using System.ComponentModel;
 
 namespace MauiAntClientApp.ViewModels
 {
@@ -30,6 +31,7 @@ namespace MauiAntClientApp.ViewModels
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             BicyclePower = (Bicycle)query["Sensor"];
+            BicyclePower.Calibration.PropertyChanged += OnPropertyChanged;
             switch (BicyclePower.Sensor)
             {
                 case SensorType.Power:
@@ -51,6 +53,19 @@ namespace MauiAntClientApp.ViewModels
             Options = BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
         }
 
+        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            _logger.LogInformation("Sender: {Sender}, Property: {PropName}", sender, e.PropertyName);
+            if (e.PropertyName == "AutoZeroSupported")
+            {
+                SetAutoZeroConfigCommand.NotifyCanExecuteChanged();
+            }
+            if (e.PropertyName == "CalibrationStatus")
+            {
+                _logger.LogInformation("{Status}", ((Calibration)sender).CalibrationStatus);
+            }
+        }
+
         private void CTFSensor_SaveAcknowledged(object? sender, CrankTorqueFrequencySensor.CTFDefinedId e)
         {
             switch (e)
@@ -70,10 +85,10 @@ namespace MauiAntClientApp.ViewModels
         private async Task<MessagingReturnCode> ManualCalRequest() => await BicyclePower.Calibration.RequestManualCalibration();
 
         [RelayCommand(CanExecute = nameof(CanSetAutoZeroConfig))]
-        private async Task<MessagingReturnCode> SetAutoZeroConfig() => await BicyclePower.Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On);
+        private async Task<MessagingReturnCode> SetAutoZeroConfig() => await BicyclePower.Calibration.SetAutoZeroConfiguration(BicyclePower.Calibration.AutoZeroStatus == Calibration.AutoZero.Off ? Calibration.AutoZero.On : Calibration.AutoZero.Off);
         private bool CanSetAutoZeroConfig()
         {
-            return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+            return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency && BicyclePower.Calibration.AutoZeroSupported;
         }
 
         [RelayCommand(CanExecute = nameof(CanGetCustomCalParameters))]
@@ -84,7 +99,7 @@ namespace MauiAntClientApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanSetCustomCalParameters))]
-        private async Task<MessagingReturnCode> SetCustomCalParameters() => await BicyclePower.Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
+        private async Task<MessagingReturnCode> SetCustomCalParameters(string parms) => await BicyclePower.Calibration.SetCustomParameters(Convert.FromHexString(parms));
         private bool CanSetCustomCalParameters()
         {
             return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency;

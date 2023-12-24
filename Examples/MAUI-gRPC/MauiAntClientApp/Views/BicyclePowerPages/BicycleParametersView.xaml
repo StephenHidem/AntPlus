@@ -19,12 +19,12 @@
         <Frame>
             <StackLayout>
                 <Label Text="Crank Control" FontAttributes="Bold" TextDecorations="Underline"/>
-                <Grid ColumnDefinitions="Auto, Auto, Auto" ColumnSpacing="16" Margin="8">
+                <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="*, *" ColumnSpacing="16" RowSpacing="8" Margin="8">
                     <Button Text="Get Crank Settings" Command="{Binding ViewModel.GetParametersCommand}"
                             CommandParameter="{x:Static bp:Subpage.CrankParameters}"/>
-                    <Button Text="Set Crank Length" Grid.Column="1" Command="{Binding ViewModel.SetCrankLengthCommand}"
+                    <Button Text="Set Crank Length" Grid.Row="1" Command="{Binding ViewModel.SetCrankLengthCommand}"
                             CommandParameter="{Binding Source={x:Reference CrankLength}, Path=Text}"/>
-                    <Entry x:Name="CrankLength" Placeholder="Crank length from 110mm to 236.6mm" Grid.Column="2"/>
+                    <Entry x:Name="CrankLength" Placeholder="Crank length from 110mm to 236.6mm" Grid.Row="1" Grid.Column="1"/>
                 </Grid>
             </StackLayout>
         </Frame>

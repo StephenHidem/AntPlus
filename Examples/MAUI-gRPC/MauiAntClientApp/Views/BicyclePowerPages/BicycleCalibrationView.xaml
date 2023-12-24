@@ -36,10 +36,10 @@
             <StackLayout>
                 <Label Text="Custom Calibration Parameters" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="16" RowSpacing="8">
-                    <Button Text="Get Custom Calibration Parameters" Command="{Binding ViewModel.GetCustomCalParametersCommand}"/>
+                    <Button Text="Get Parameters" Command="{Binding ViewModel.GetCustomCalParametersCommand}"/>
                     <Label Text="{Binding ViewModel.BicyclePower.Calibration.CustomCalibrationParameters, StringFormat='Parameters: {0}'}" Grid.Column="1" VerticalOptions="Center"/>
-                    <Button Text="Set Custom Calibration Parameters" Command="{Binding ViewModel.SetCustomCalParametersCommand}" CommandParameter="{Binding Source={x:Reference CustomCalParms}, Path=Text}" Grid.Row="1"/>
-                    <Entry Placeholder="Enter 6 hae bytes seperated by spaces or dashes" x:Name="CustomCalParms" Grid.Column="1" Grid.Row="1"/>
+                    <Button Text="Set Parameters" Command="{Binding ViewModel.SetCustomCalParametersCommand}" CommandParameter="{Binding Source={x:Reference CustomCalParms}, Path=Text}" Grid.Row="1"/>
+                    <Entry Placeholder="Enter 6 hae bytes" x:Name="CustomCalParms" Grid.Column="1" Grid.Row="1"/>
                 </Grid>
             </StackLayout>
         </Frame>

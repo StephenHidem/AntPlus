@@ -84,6 +84,11 @@ namespace MauiAntClientApp.Services
 
         public IAntChannel[] InitializeContinuousScanMode()
         {
+            if (_channel == null)
+            {
+                _logger.LogError("_channel is null!");
+                return [];
+            }
             InitScanModeReply reply = _client!.InitializeContinuousScanMode(new InitScanModeRequest());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();

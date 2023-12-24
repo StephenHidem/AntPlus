@@ -12,29 +12,9 @@ namespace MauiAntClientApp.Services
     {
         private readonly ILogger<AntChannelService> _logger;
         private readonly gRPCAntChannel.gRPCAntChannelClient _client;
-
-        public AntChannelService(ILogger<AntChannelService> logger, byte antChannel, GrpcChannel grpcChannel)
-        {
-            _logger = logger;
-            ChannelNumber = antChannel;
-            _client = new gRPCAntChannel.gRPCAntChannelClient(grpcChannel);
-            _logger.LogInformation("Created AntChannelService, ANT channel {AntChannel}.", antChannel);
-        }
-
-        private async void HandleChannelResponseEvents()
-        {
-            _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
-            await foreach (var update in _response.ResponseStream.ReadAllAsync())
-            {
-                _responseReceived?.Invoke(this, new GrpcAntResponse(update));
-            }
-        }
-
-        public byte ChannelNumber { get; }
-
         private readonly object _lock = new();
-        private event EventHandler<AntResponse> _responseReceived;
-        private AsyncServerStreamingCall<ChannelResponse> _response;
+        private event EventHandler<AntResponse>? _responseReceived;
+        private AsyncServerStreamingCall<ChannelResponse>? _response;
         public event EventHandler<AntResponse> ChannelResponse
         {
             add
@@ -60,6 +40,26 @@ namespace MauiAntClientApp.Services
                         _response?.Dispose();
                     }
                 }
+            }
+        }
+
+
+        public byte ChannelNumber { get; }
+
+        public AntChannelService(ILogger<AntChannelService> logger, byte antChannel, GrpcChannel grpcChannel)
+        {
+            _logger = logger;
+            ChannelNumber = antChannel;
+            _client = new gRPCAntChannel.gRPCAntChannelClient(grpcChannel);
+            _logger.LogInformation("Created AntChannelService, ANT channel {AntChannel}.", antChannel);
+        }
+
+        private async void HandleChannelResponseEvents()
+        {
+            _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
+            await foreach (var update in _response.ResponseStream.ReadAllAsync())
+            {
+                _responseReceived?.Invoke(this, new GrpcAntResponse(update));
             }
         }
 

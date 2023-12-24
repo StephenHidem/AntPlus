@@ -8,9 +8,9 @@ using System.ComponentModel;
 
 namespace MauiAntClientApp.ViewModels
 {
-    public partial class BicyclePowerViewModel : ObservableObject, IQueryAttributable
+    public partial class BicyclePowerViewModel(ILogger<BicyclePowerViewModel> logger) : ObservableObject, IQueryAttributable
     {
-        private readonly ILogger<BicyclePowerViewModel> _logger;
+        private readonly ILogger<BicyclePowerViewModel> _logger = logger;
         public SensorType SensorType => BicyclePower.Sensor;
 
         [ObservableProperty]
@@ -22,11 +22,6 @@ namespace MauiAntClientApp.ViewModels
 
         [ObservableProperty]
         private string ctfAckMessage = null!;
-
-        public BicyclePowerViewModel(ILogger<BicyclePowerViewModel> logger)
-        {
-            _logger = logger;
-        }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
@@ -60,7 +55,7 @@ namespace MauiAntClientApp.ViewModels
             {
                 SetAutoZeroConfigCommand.NotifyCanExecuteChanged();
             }
-            if (e.PropertyName == "CalibrationStatus")
+            if (sender != null && e.PropertyName == "CalibrationStatus")
             {
                 _logger.LogInformation("{Status}", ((Calibration)sender).CalibrationStatus);
             }
@@ -99,7 +94,7 @@ namespace MauiAntClientApp.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanSetCustomCalParameters))]
-        private async Task<MessagingReturnCode> SetCustomCalParameters(string parms) => await BicyclePower.Calibration.SetCustomParameters(Convert.FromHexString(parms));
+        private async Task<MessagingReturnCode> SetCustomCalParameters(string parameters) => await BicyclePower.Calibration.SetCustomParameters(Convert.FromHexString(parameters));
         private bool CanSetCustomCalParameters()
         {
             return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency;

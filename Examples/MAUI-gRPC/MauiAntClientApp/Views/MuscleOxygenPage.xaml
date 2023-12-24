@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
+             x:DataType="viewmodels:MuscleOxygenViewModel"
+             xmlns:controls="clr-namespace:MauiAntClientApp.Controls"
+             x:Class="MauiAntClientApp.Views.MuscleOxygenPage"
+             Title="MuscleOxygenPage">
+    <Grid Margin="10" RowDefinitions="Auto, *">
+        <HorizontalStackLayout Spacing="24">
+            <RadioButton x:Name="mox" Content="Muscle Oxygen" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+            <RadioButton x:Name="cdp" Content="Common Data Pages" Style="{StaticResource TabbedRadioButton}"/>
+        </HorizontalStackLayout>
+
+        <ScrollView Grid.Row="1" IsVisible="{Binding Source={x:Reference mox}, Path=IsChecked}">
+            <StackLayout>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Main Data Page" FontAttributes="Bold" TextDecorations="Underline"/>
+                        <Label Text="{Binding MuscleOxygen.SupportsAntFs, StringFormat='Supports ANT-FS: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.UtcTimeRequired, StringFormat='UTC time required: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.Interval, StringFormat='Measurement Interval: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Concentration, StringFormat='Total Hq concentration: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.TotalHemoglobinConcentration.Status, StringFormat='Total Hq status: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated, StringFormat='Previous saturated Hg: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.PreviousSaturatedHemoglobin.Status, StringFormat='Previous saturated Hq status: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated, StringFormat='Current saturated Hg: {0}'}"/>
+                        <Label Text="{Binding MuscleOxygen.CurrentSaturatedHemoglobin.Status, StringFormat='Current saturated Hq status: {0}'}"/>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <Grid ColumnSpacing="16" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto, Auto">
+                        <Label Text="Local Time Offset" FontAttributes="Bold" TextDecorations="Underline" Grid.ColumnSpan="3"/>
+                        <HorizontalStackLayout Grid.Row="1">
+                            <Label Text="Hours:" VerticalOptions="Center"/>
+                            <Picker ItemsSource="{Binding HoursSource}" SelectedItem="{Binding Hours}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="Minutes:" VerticalOptions="Center"/>
+                            <Picker ItemsSource="{Binding MinutesSource}" SelectedItem="{Binding Minutes}"/>
+                        </HorizontalStackLayout>
+                        <Button Margin="4" Text="Set Time" Command="{Binding SetTimeCommand}" Grid.Row="1" Grid.Column="2"/>
+                    </Grid>
+                </Frame>
+                <Frame>
+                    <Grid ColumnSpacing="16" RowSpacing="8" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto, Auto">
+                        <Label Text="Session Control" FontAttributes="Bold" TextDecorations="Underline" Grid.ColumnSpan="3"/>
+                        <Button Grid.Column="0" Grid.Row="1" Text="Start" Command="{Binding StartSessionCommand}"/>
+                        <Button Grid.Column="1" Grid.Row="1" Text="Stop" Command="{Binding StopSessionCommand}"/>
+                        <Button Grid.Column="2" Grid.Row="1" Text="Lap" Command="{Binding LogLapCommand}"/>
+                    </Grid>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+
+        <controls:CommonDataPagesView CommonDataPages="{Binding MuscleOxygen.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+
+        <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding MuscleOxygen.Offline}" Grid.RowSpan="2"/>
+    </Grid>
+</ContentPage>

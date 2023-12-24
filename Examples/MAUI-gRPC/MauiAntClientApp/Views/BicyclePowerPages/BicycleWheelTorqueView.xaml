@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:MauiAntClientApp.Views.BicyclePowerPages"
+             xmlns:viewmodels="clr-namespace:MauiAntClientApp.ViewModels"
+             x:DataType="viewmodels:BicyclePowerViewModel"
+             x:Class="MauiAntClientApp.Views.BicyclePowerPages.BicycleWheelTorqueView">
+    <VerticalStackLayout>
+        <Frame>
+            <StackLayout>
+                <Label Text="Wheel Torque" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Label Text="{Binding BicyclePower.WheelTorqueSensor.AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
+                <Label Text="{Binding BicyclePower.WheelTorqueSensor.AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
+                <Label Text="{Binding BicyclePower.WheelTorqueSensor.AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
+                <Label Text="{Binding BicyclePower.WheelTorqueSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
+                <Label Text="{Binding BicyclePower.WheelTorqueSensor.AverageSpeed, StringFormat='Average Speed (km/h): {0:F3}'}"/>
+                <Label Text="{Binding BicyclePower.WheelTorqueSensor.AccumulatedDistance, StringFormat='Accumulated Distance (m): {0:F3}'}"/>
+            </StackLayout>
+        </Frame>
+        <views:PowerView Power="{Binding BicyclePower.PowerSensor}"/>
+        <views:TEPSView TEPS="{Binding BicyclePower.PowerSensor.TorqueEffectiveness}"/>
+    </VerticalStackLayout>
+</ContentView>

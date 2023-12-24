@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -280,9 +282,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// Gets the requested parameters subpage.
         /// </summary>
         /// <param name="parameterSubpage">The parameter subpage.</param>
-        public void GetParameters(Subpage parameterSubpage)
+        public async Task<MessagingReturnCode> GetParameters(Subpage parameterSubpage)
         {
-            _ = _bicycle.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
+            return await _bicycle.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
         }
 
         /// <summary>
@@ -290,7 +292,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// 236.5 mm, auto crank length is enabled. Typically you would omit the length parameter to enable auto crank length.
         /// </summary>
         /// <param name="length">The length in millimeters. Omit to enable auto crank length.</param>
-        public void SetCrankLength(double length = 237)
+        public async Task<MessagingReturnCode> SetCrankLength(double length = 237)
         {
             byte[] msg;
             if (length > 236.5)
@@ -303,7 +305,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 byte cl = (byte)((length - 110) / 0.5);
                 msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
             }
-            _ = _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _bicycle.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -316,10 +318,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// whether the transition was successful or not.
         /// </remarks>
         /// <param name="offset">The offset in seconds.</param>
-        public void SetTransitionTimeOffset(byte offset)
+        public async Task<MessagingReturnCode> SetTransitionTimeOffset(byte offset)
         {
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            _ = _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _bicycle.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -332,7 +334,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </remarks>
         /// <param name="threshold">The threshold percentage.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Parameter threshold range is 0 to 100 percent.</exception>
-        public void SetPeakTorqueThreshold(double threshold)
+        public async Task<MessagingReturnCode> SetPeakTorqueThreshold(double threshold)
         {
             // valid range is 0 to 100 percent
             if (threshold < 0 || threshold > 100)
@@ -341,7 +343,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
             byte peak = (byte)(threshold / 0.5);
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            _ = _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _bicycle.SendExtAcknowledgedMessage(msg);
         }
     }
 }

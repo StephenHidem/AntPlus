@@ -103,6 +103,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="message">The message.</param>
         internal void ParseCalibrationMessage(byte[] message)
         {
+            _logger.LogDebug("ParseCalibrationMessage: {Msg}", (CTFDefinedId)message[2]);
             switch ((CTFDefinedId)message[2])
             {
                 case CTFDefinedId.ZeroOffset:

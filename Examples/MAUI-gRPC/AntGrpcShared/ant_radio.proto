@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option csharp_namespace = "AntRadioGrpcService";
+
+package AntRadioPackage;
+
+// The ANT radio gRPC service.
+service gRPCAntRadio {
+	rpc GetProperties (PropertiesRequest) returns (PropertiesReply);
+	rpc Subscribe (SubscribeRequest) returns (stream RadioResponse);
+	rpc InitializeContinuousScanMode (InitScanModeRequest) returns (InitScanModeReply);
+	rpc GetChannel (GetChannelRequest) returns (GetChannelReply);
+	rpc GetDeviceCapabilities (GetDeviceCapabilitiesRequest) returns (GetDeviceCapabilitiesReply);
+}
+
+message PropertiesRequest {}
+message PropertiesReply {
+	string product_description = 1;
+	string serial_string = 2;
+	string host_version = 3;
+}
+
+message SubscribeRequest {}
+message RadioResponse {}
+
+message InitScanModeRequest {}
+message InitScanModeReply {
+	int32 num_channels = 1;
+}
+
+message GetChannelRequest {
+	int32 channel_number = 1;
+}
+message GetChannelReply {
+}
+
+message GetDeviceCapabilitiesRequest {
+	optional bool force_copy = 1;
+	optional uint32 wait_response_time = 2;
+}
+message GetDeviceCapabilitiesReply {
+	uint32 max_ant_channels = 1;
+	uint32 max_networks = 2;
+	bool no_receive_channels = 3;
+	bool no_transmit_channels = 4;
+	bool no_receive_messages = 5;
+	bool no_transmit_messages = 6;
+	bool no_ack_messages = 7;
+	bool no_burst_messages = 8;
+	bool private_networks = 9;
+	bool serial_number = 10;
+	bool per_channel_transmit_power = 11;
+	bool low_priority_search = 12;
+	bool script_support = 13;
+	bool search_list = 14;
+	bool onboard_led = 15;
+	bool extended_messaging = 16;
+	bool scan_mode_support = 17;
+	bool extended_channel_assignment = 18;
+	bool proximity_search = 19;
+	bool antfs_support = 20;
+	bool fit_support = 21;
+	bool advanced_burst = 22;
+	bool event_buffering = 23;
+	bool event_filtering = 24;
+	bool high_duty_search = 25;
+	bool search_sharing = 26;
+	bool selective_data_update = 27;
+	bool single_channel_encryption = 28;
+	uint32 max_data_channels = 29;
+}

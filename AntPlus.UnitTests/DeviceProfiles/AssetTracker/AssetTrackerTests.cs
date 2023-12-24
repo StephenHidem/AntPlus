@@ -103,7 +103,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         [DataRow(0x08, Asset.AssetStatus.LowBattery)]
         [DataRow(0x10, Asset.AssetStatus.GPSLost)]
         [DataRow(0x20, Asset.AssetStatus.CommunicationLost)]
-        [DataRow(0x40, Asset.AssetStatus.RemoveAsset)]
         public void Parse_AssetStatus_ExpectedStatus(int status, Asset.AssetStatus expStatus)
         {
             // Arrange
@@ -120,6 +119,27 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
 
             // Assert
             Assert.AreEqual(expStatus, tracker.Assets[0].Status);
+        }
+
+        [TestMethod]
+        public void Parse_AssetStatusRemoveAsset_ExpectedAssetCountIsZero()
+        {
+            // Arrange
+            mockAntChannel.Setup(ac =>
+                ac.SendExtAcknowledgedData(mockChannelId, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).
+                Returns(MessagingReturnCode.Pass);
+            byte[] dataPage = new byte[8];
+            dataPage[0] = 1;
+            var tracker = CreateAssetTracker();
+            tracker.Parse(dataPage);
+            dataPage[0] = 1;
+            dataPage[5] = (byte)Asset.AssetStatus.RemoveAsset;
+
+            // Act
+            tracker.Parse(dataPage);
+
+            // Assert
+            Assert.AreEqual(0, tracker.Assets.Count);
         }
 
         [TestMethod]

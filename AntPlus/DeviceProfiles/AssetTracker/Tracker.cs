@@ -71,13 +71,22 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         }
 
         /// <inheritdoc/>
+        /// <remarks>The asset is removed from the <see cref="Assets"/> collection if the <see cref="Asset.AssetStatus.RemoveAsset"/> flag is set.</remarks>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.AssetLocation1:
-                    GetAsset(dataPage).ParseLocation1(dataPage);
+                    Asset asset = GetAsset(dataPage);
+                    asset.ParseLocation1(dataPage);
+                    if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset))
+                    {
+                        lock (CollectionLock)
+                        {
+                            Assets.Remove(asset);
+                        }
+                    }
                     break;
                 case DataPage.AssetLocation2:
                     GetAsset(dataPage).ParseLocation2(dataPage);

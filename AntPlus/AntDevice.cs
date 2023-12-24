@@ -146,7 +146,11 @@ namespace SmallEarthTech.AntPlus
             {
                 ret = await antChannel.SendExtAcknowledgedData(ChannelId, message, ackWaitTime);
             } while (ret != MessagingReturnCode.Pass && --retries > 0);
-            _logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), nameof(SendExtAcknowledgedMessage), ret);
+
+            if (ret != MessagingReturnCode.Pass)
+            {
+                _logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), nameof(SendExtAcknowledgedMessage), ret);
+            }
             return ret;
         }
 

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Stephen Hidem</Authors>
+	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ant_channel.proto" />
+    <None Remove="ant_radio.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.60.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="ant_channel.proto" GrpcServices="Both" />
+    <Protobuf Include="ant_radio.proto" />
+  </ItemGroup>
+
+</Project>

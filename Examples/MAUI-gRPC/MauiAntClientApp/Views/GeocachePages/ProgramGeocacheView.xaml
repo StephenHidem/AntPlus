@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="this"
+             x:Class="MauiAntClientApp.Views.GeocachePages.ProgramGeocacheView">
+    <Frame>
+        <VerticalStackLayout BindingContext="{x:Reference this}">
+            <Grid RowDefinitions="*, *, *, *" ColumnDefinitions="Auto, *">
+                <Label Text="Trackable ID:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry Text="{Binding GeocacheViewModel.TrackableId}" MaxLength="9" Grid.Row="0" Grid.Column="1"/>
+                <Label Text="PIN:" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry Text="{Binding GeocacheViewModel.Pin}" MaxLength="10" Grid.Row="1" Grid.Column="1"/>
+                <Label Text="Latitude:" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry Text="{Binding GeocacheViewModel.Latitude}" Grid.Row="2" Grid.Column="1"/>
+                <Label Text="Longitude:" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry Text="{Binding GeocacheViewModel.Longitude}" Grid.Row="3" Grid.Column="1"/>
+            </Grid>
+            <Label Text="Hint:"/>
+            <Editor Text="{Binding GeocacheViewModel.Hint}" MaxLength="168" AutoSize="TextChanges"/>
+            <Button Text="Program Geocache" Command="{Binding GeocacheViewModel.ProgramGeocacheCommand}"/>
+        </VerticalStackLayout>
+    </Frame>
+</ContentView>

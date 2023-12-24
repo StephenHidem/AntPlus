@@ -101,6 +101,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public void Parse(byte[] dataPage)
         {
+            _logger.LogDebug("CalibrationResponseId: {Id}", (CalibrationResponseId)dataPage[1]);
             switch ((CalibrationResponseId)dataPage[1])
             {
                 case CalibrationResponseId.CTFDefinedMsg:

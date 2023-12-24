@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option csharp_namespace = "AntChannelGrpcService";
+
+package AntRadioPackage;
+
+// The AntChannel gRPC service.
+service gRPCAntChannel {
+    // Subscribe to channel response event.
+    rpc Subscribe (SubscribeRequest) returns (stream ChannelResponse);
+    // Sends an extended acknowledged data message.
+    rpc SendExtAcknowledgedData (ExtDataRequest) returns (MessagingCodeReply);
+}
+
+message SubscribeRequest {
+    uint32 channel_number = 1;
+}
+message ChannelResponse {
+    uint32 channel_number = 1;
+    uint32 response_id = 2;
+    uint32 channel_id = 3;
+    bytes payload = 4;
+    int32 rssi = 5;
+    int32 threshold_configuration_value = 6;
+    uint32 timestamp = 7;
+}
+
+// The int status codes returned by the acknowledged and broadcast messaging functions.
+enum MessagingReturnCode {
+    MESSAGING_RETURN_CODE_FAIL = 0;
+    MESSAGING_RETURN_CODE_PASS = 1;
+    MESSAGING_RETURN_CODE_TIMEOUT = 2;
+    MESSAGING_RETURN_CODE_CANCELLED = 3;
+    MESSAGING_RETURN_CODE_INVALID_PARAMS = 4;
+}
+
+message ExtDataRequest {
+    uint32 channel_number = 1;
+    uint32 channel_id = 2;
+    bytes data = 3;
+    optional uint32 wait_time = 4;
+}
+
+message MessagingCodeReply {
+    MessagingReturnCode return_code = 1;
+}

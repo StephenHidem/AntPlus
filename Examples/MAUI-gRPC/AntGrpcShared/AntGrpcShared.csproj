@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Authors>Stephen Hidem</Authors>
+	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

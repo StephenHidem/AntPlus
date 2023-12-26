@@ -4,6 +4,7 @@ using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System.Data;
+using System.Threading.Tasks;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Parameters;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Parameters.CrankParameters;
 
@@ -312,7 +313,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         [DataRow(Subpage.AdvancedCapabilities2)]
         [DataRow(Subpage.RiderPositionConfiguration)]
         [DataRow(Subpage.PowerPhaseConfiguration)]
-        public void GetParameters_RequestedSubpage_ExpectedDataPage(Subpage page)
+        public async Task GetParameters_RequestedSubpage_ExpectedDataPage(Subpage page)
         {
             // Arrange
             var parameters = CreateParameters();
@@ -331,7 +332,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            parameters.GetParameters(
+            await parameters.GetParameters(
                 page);
 
             // Assert
@@ -341,7 +342,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         [TestMethod]
         [DataRow(172.5)]
         [DataRow(237)]
-        public void SetCrankLength_Message_ExpectedDataPage(double length)
+        public async Task SetCrankLength_Message_ExpectedDataPage(double length)
         {
             // Arrange
             var parameters = CreateParameters();
@@ -361,7 +362,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            parameters.SetCrankLength(
+            await parameters.SetCrankLength(
                 length);
 
             // Assert
@@ -369,7 +370,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         }
 
         [TestMethod]
-        public void SetTransitionTimeOffset_Message_ExpectedDataPage()
+        public async Task SetTransitionTimeOffset_Message_ExpectedDataPage()
         {
             // Arrange
             var parameters = CreateParameters();
@@ -389,7 +390,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            parameters.SetTransitionTimeOffset(
+            await parameters.SetTransitionTimeOffset(
                 offset);
 
             // Assert
@@ -397,7 +398,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         }
 
         [TestMethod]
-        public void SetPeakTorqueThreshold_Message_ExpectedDataPage()
+        public async Task SetPeakTorqueThreshold_Message_ExpectedDataPage()
         {
             // Arrange
             var parameters = CreateParameters();
@@ -417,7 +418,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            parameters.SetPeakTorqueThreshold(
+            await parameters.SetPeakTorqueThreshold(
                 threshold);
 
             // Assert

@@ -53,9 +53,9 @@ namespace WpfUsbStickApp.ViewModels
         private bool CanSetCustomCalParameters() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
 
         [RelayCommand]
-        private void GetParameters(Subpage subpage) => BicyclePower.PowerSensor.Parameters.GetParameters(subpage);
+        private async Task GetParameters(Subpage subpage) => await BicyclePower.PowerSensor.Parameters.GetParameters(subpage);
 
         [RelayCommand]
-        private void SetCrankLength(string length) => BicyclePower.PowerSensor.Parameters.SetCrankLength(double.Parse(length));
+        private async Task SetCrankLength(string length) => await BicyclePower.PowerSensor.Parameters.SetCrankLength(double.Parse(length));
     }
 }

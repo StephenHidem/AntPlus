@@ -129,16 +129,16 @@ namespace MauiAntClientApp.Services
             throw new NotImplementedException();
         }
 
-        public async Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        public Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            MessagingCodeReply reply = await _client.SendExtAcknowledgedDataAsync(new ExtDataRequest
+            var reply = _client.SendExtAcknowledgedData(new ExtDataRequest
             {
                 ChannelNumber = ChannelNumber,
                 ChannelId = channelId.Id,
                 Data = ByteString.CopyFrom(data),
                 WaitTime = ackWaitTime
             });
-            return (MessagingReturnCode)reply.ReturnCode;
+            return Task.FromResult((MessagingReturnCode)reply.ReturnCode);
         }
 
         public bool SendExtBroadcastData(ChannelId channelId, byte[] data)

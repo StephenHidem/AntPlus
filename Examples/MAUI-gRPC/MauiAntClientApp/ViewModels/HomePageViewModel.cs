@@ -31,6 +31,8 @@ namespace MauiAntClientApp.ViewModels
         private string? hostVersion;
         [ObservableProperty]
         public AntDeviceCollection? antDevices;
+        [ObservableProperty]
+        public DeviceCapabilities? deviceCapabilities;
 
         public async Task SearchAsync()
         {
@@ -46,9 +48,15 @@ namespace MauiAntClientApp.ViewModels
         }
 
         [RelayCommand]
+        private void GetRadioCapabilities()
+        {
+            DeviceCapabilities = _antRadioService.GetDeviceCapabilities();
+        }
+
+        [RelayCommand]
         private async Task ShowDetails(AntDevice antDevice)
         {
-            _logger.LogInformation($"ShowDetails {antDevice}");
+            _logger.LogInformation("ShowDetails {Ant}", antDevice);
             switch (antDevice)
             {
                 case Tracker:

@@ -40,11 +40,11 @@
                 </CollectionView>
             </StackLayout>
         </Frame>
-        <Border BackgroundColor="AliceBlue" VerticalOptions="Center" HorizontalOptions="Center" Padding="8" IsVisible="{Binding IsBusy}" Grid.RowSpan="2">
+        <Frame BackgroundColor="AliceBlue" VerticalOptions="Center" HorizontalOptions="Center" Padding="8" IsVisible="{Binding IsBusy}" Grid.RowSpan="2">
             <VerticalStackLayout Spacing="10">
                 <Label Text="Searching for ANT radio server"/>
                 <ActivityIndicator IsRunning="{Binding IsBusy}"/>
             </VerticalStackLayout>
-        </Border>
+        </Frame>
     </Grid>
 </ContentPage>

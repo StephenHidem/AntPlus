@@ -63,7 +63,7 @@ namespace MauiAntClientApp.Services
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("SearchAsync: OperationCanceledException. Retry.");
+                    _logger.LogInformation("FindAntRadioServerAsync: OperationCanceledException. Retry.");
                 }
             }
 
@@ -111,17 +111,20 @@ namespace MauiAntClientApp.Services
 
         public DeviceCapabilities GetDeviceCapabilities()
         {
-            throw new NotImplementedException();
+            GetDeviceCapabilitiesReply caps = _client!.GetDeviceCapabilities(new GetDeviceCapabilitiesRequest());
+            return new GrpcDeviceCapabilities(caps);
         }
 
         public DeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            GetDeviceCapabilitiesReply caps = _client!.GetDeviceCapabilities(new GetDeviceCapabilitiesRequest { ForceCopy = forceNewCopy, WaitResponseTime = responseWaitTime });
+            return new GrpcDeviceCapabilities(caps);
         }
 
         public DeviceCapabilities GetDeviceCapabilities(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            GetDeviceCapabilitiesReply caps = _client!.GetDeviceCapabilities(new GetDeviceCapabilitiesRequest { WaitResponseTime = responseWaitTime });
+            return new GrpcDeviceCapabilities(caps);
         }
 
         public AntResponse ReadUserNvm(ushort address, byte size)

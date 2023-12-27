@@ -25,15 +25,15 @@ namespace AntGrpcServer.Services
             });
         }
 
-        public override Task<InitScanModeReply> InitializeContinuousScanMode(InitScanModeRequest request, ServerCallContext context)
+        public override async Task<InitScanModeReply> InitializeContinuousScanMode(InitScanModeRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(InitializeContinuousScanMode)}");
-            AntChannels = _antRadio.InitializeContinuousScanMode();
+            AntChannels = await _antRadio.InitializeContinuousScanMode();
 
-            return Task.FromResult(new InitScanModeReply
+            return new InitScanModeReply
             {
                 NumChannels = AntChannels.Length
-            });
+            };
         }
 
         public override Task<GetChannelReply> GetChannel(GetChannelRequest request, ServerCallContext context)

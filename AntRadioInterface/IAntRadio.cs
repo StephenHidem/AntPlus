@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntRadioInterface
 {
@@ -171,7 +172,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// }
         /// </code>
         /// </remarks>
-        IAntChannel[] InitializeContinuousScanMode();
+        Task<IAntChannel[]> InitializeContinuousScanMode();
         /// <summary>Cancels the transfers.</summary>
         /// <param name="cancelWaitTime">The cancel wait time.</param>
         void CancelTransfers(int cancelWaitTime);

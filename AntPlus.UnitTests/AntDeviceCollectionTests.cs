@@ -34,7 +34,7 @@ namespace AntPlus.UnitTests
         {
             IAntChannel[] mockChannels = new IAntChannel[8];
             Array.Fill(mockChannels, mockAntChannel.Object);
-            mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).Returns(mockChannels);
+            mockAntRadio.Setup(r => r.InitializeContinuousScanMode().Result).Returns(mockChannels);
             return new AntDeviceCollection(
                 mockAntRadio.Object,
                 null,

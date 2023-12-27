@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
 {
@@ -48,7 +49,7 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public IAntChannel[] InitializeContinuousScanMode()
+        public Task<IAntChannel[]> InitializeContinuousScanMode()
         {
             IAntChannel[] channels = new IAntChannel[NumChannels];
 
@@ -68,7 +69,7 @@ namespace SmallEarthTech.AntUsbStick
                 _ = channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
             }
 
-            return channels;
+            return Task.FromResult(channels);
         }
 
         /// <inheritdoc/>

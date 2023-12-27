@@ -30,7 +30,7 @@ namespace AntMulticastServer
         {
             // configure ANT radio
             Console.WriteLine("Configuring ANT radio (uses the first USB stick found).");
-            IAntChannel[] channel = _antRadio.InitializeContinuousScanMode();
+            IAntChannel[] channel = await _antRadio.InitializeContinuousScanMode();
             channel[0].ChannelResponse += Channel_ChannelResponse;
             Console.WriteLine("Up and running!");
 
@@ -38,7 +38,7 @@ namespace AntMulticastServer
             while (!stoppingToken.IsCancellationRequested)
             {
                 UdpReceiveResult result = await _udpClient.ReceiveAsync(stoppingToken);
-                _logger.LogDebug(BitConverter.ToString(result.Buffer));
+                _logger.LogDebug("Multicast reply: {Reply}", BitConverter.ToString(result.Buffer));
                 ChannelId channelId = new(BitConverter.ToUInt32(result.Buffer, 0));
                 byte[] msg = result.Buffer.Skip(4).Take(8).ToArray();
                 uint ackWaitTime = BitConverter.ToUInt32(result.Buffer, 12);

@@ -14,16 +14,18 @@
     </ContentPage.Resources>
     <Grid Margin="16" RowDefinitions="Auto, *">
         <Frame>
-            <Grid ColumnDefinitions="*, Auto">
-                <StackLayout>
-                    <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}"/>
-                    <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill"/>
-                    <Label Text="{Binding ProductDescription, StringFormat='Description - {0}'}"/>
-                    <Label Text="{Binding SerialString, StringFormat='Serial Number - {0}'}"/>
-                    <Label Text="{Binding HostVersion, StringFormat='Host Version - {0}'}"/>
-                </StackLayout>
-                <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="2" HeightRequest="40" WidthRequest="40" Command="{Binding ShowRadioCapabilitiesCommand}"/>
-            </Grid>
+            <StackLayout>
+                <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}"/>
+                <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill" Margin="0,0,0,4"/>
+                <Grid Padding="8" ColumnDefinitions="*, Auto">
+                    <StackLayout>
+                        <Label Text="{Binding ProductDescription, StringFormat='Description - {0}'}"/>
+                        <Label Text="{Binding SerialString, StringFormat='Serial Number - {0}'}"/>
+                        <Label Text="{Binding HostVersion, StringFormat='Host Version - {0}'}"/>
+                    </StackLayout>
+                    <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="1" HeightRequest="32" WidthRequest="32" Command="{Binding ShowRadioCapabilitiesCommand}"/>
+                </Grid>
+            </StackLayout>
         </Frame>
         <Frame Grid.Row="1">
             <StackLayout>
@@ -32,11 +34,11 @@
                 <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" SelectionMode="Single" VerticalOptions="StartAndExpand">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="ant:AntDevice">
-                            <Grid Padding="10" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *, Auto">
+                            <Grid Padding="8" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *, Auto">
                                 <Image Margin="0,0,10,0" Grid.RowSpan="2" Source="{Binding ., Converter={StaticResource StreamToImage}}" Aspect="AspectFill" HeightRequest="40" WidthRequest="40"/>
                                 <Label Grid.Column="1" Text="{Binding .}"/>
                                 <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=ChannelId.DeviceNumber, StringFormat='Device Number - {0}'}"/>
-                                <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="2" Grid.RowSpan="2" HeightRequest="40" WidthRequest="40" Command="{Binding Path=ShowDetailsCommand, Source={x:RelativeSource AncestorType={x:Type viewmodels:HomePageViewModel}}}" CommandParameter="{Binding}"/>
+                                <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="2" Grid.RowSpan="2" HeightRequest="32" WidthRequest="32" Command="{Binding Path=ShowDetailsCommand, Source={x:RelativeSource AncestorType={x:Type viewmodels:HomePageViewModel}}}" CommandParameter="{Binding}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

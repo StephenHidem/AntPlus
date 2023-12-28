@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:MauiAntClientApp"
     xmlns:views="clr-namespace:MauiAntClientApp.Views"
     Shell.FlyoutBehavior="Disabled"
+    Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}"
     Title="MauiAntClientApp">
 
     <ShellContent

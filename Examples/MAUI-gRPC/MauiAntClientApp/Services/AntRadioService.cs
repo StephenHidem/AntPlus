@@ -109,21 +109,21 @@ namespace MauiAntClientApp.Services
             throw new NotImplementedException();
         }
 
-        public DeviceCapabilities GetDeviceCapabilities()
+        public async Task<DeviceCapabilities> GetDeviceCapabilities()
         {
-            GetDeviceCapabilitiesReply caps = _client!.GetDeviceCapabilities(new GetDeviceCapabilitiesRequest());
+            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest());
             return new GrpcDeviceCapabilities(caps);
         }
 
-        public DeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
+        public async Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
-            GetDeviceCapabilitiesReply caps = _client!.GetDeviceCapabilities(new GetDeviceCapabilitiesRequest { ForceCopy = forceNewCopy, WaitResponseTime = responseWaitTime });
+            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { ForceCopy = forceNewCopy, WaitResponseTime = responseWaitTime });
             return new GrpcDeviceCapabilities(caps);
         }
 
-        public DeviceCapabilities GetDeviceCapabilities(uint responseWaitTime)
+        public async Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime)
         {
-            GetDeviceCapabilitiesReply caps = _client!.GetDeviceCapabilities(new GetDeviceCapabilitiesRequest { WaitResponseTime = responseWaitTime });
+            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { WaitResponseTime = responseWaitTime });
             return new GrpcDeviceCapabilities(caps);
         }
 

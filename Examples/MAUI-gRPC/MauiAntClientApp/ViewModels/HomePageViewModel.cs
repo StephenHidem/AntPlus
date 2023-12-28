@@ -20,6 +20,7 @@ namespace MauiAntClientApp.ViewModels
         private readonly IServiceProvider _services = services;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ShowRadioCapabilitiesCommand))]
         private bool isBusy;
         [ObservableProperty]
         private IPAddress? serverIPAddress;
@@ -31,8 +32,6 @@ namespace MauiAntClientApp.ViewModels
         private string? hostVersion;
         [ObservableProperty]
         public AntDeviceCollection? antDevices;
-        [ObservableProperty]
-        public DeviceCapabilities? deviceCapabilities;
 
         public async Task SearchAsync()
         {
@@ -47,10 +46,15 @@ namespace MauiAntClientApp.ViewModels
             AntDevices = _services.GetRequiredService<AntDeviceCollection>();
         }
 
-        [RelayCommand]
-        private void GetRadioCapabilities()
+        [RelayCommand(CanExecute = nameof(CanShowRadioCapabilities))]
+        private static async Task ShowRadioCapabilities()
         {
-            DeviceCapabilities = _antRadioService.GetDeviceCapabilities();
+            await Shell.Current.GoToAsync("RadioCapabilities");
+        }
+
+        private bool CanShowRadioCapabilities()
+        {
+            return !IsBusy;
         }
 
         [RelayCommand]

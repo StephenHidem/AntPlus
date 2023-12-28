@@ -13,6 +13,7 @@ namespace MauiAntClientApp
             InitializeComponent();
 
             // initialize routing
+            Routing.RegisterRoute("RadioCapabilities", typeof(RadioCapabilitiesPage));
             Routing.RegisterRoute("AssetTracker", typeof(AssetTrackerPage));
             Routing.RegisterRoute("BicyclePower", typeof(BicyclePowerPage));
             Routing.RegisterRoute("BikeCadence", typeof(BikeCadencePage));

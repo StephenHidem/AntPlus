@@ -186,20 +186,20 @@ namespace SmallEarthTech.AntRadioInterface
         /// <returns>
         /// Device capabilities
         /// </returns>
-        DeviceCapabilities GetDeviceCapabilities();
+        Task<DeviceCapabilities> GetDeviceCapabilities();
         /// <summary>Gets the device capabilities.</summary>
         /// <param name="forceNewCopy">if set to <c>true</c> [force new copy].</param>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
         /// Device capabilities
         /// </returns>
-        DeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime);
+        Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime);
         /// <summary>Gets the device capabilities.</summary>
         /// <param name="responseWaitTime">The response wait time.</param>
         /// <returns>
         /// Device capabilities
         /// </returns>
-        DeviceCapabilities GetDeviceCapabilities(uint responseWaitTime);
+        Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime);
         /// <summary>Gets the number channels.</summary>
         /// <value>The number channels.</value>
         int NumChannels { get; }

@@ -83,21 +83,21 @@ namespace SmallEarthTech.AntUsbStick
         public IAntChannel GetChannel(int num) => new AntChannel(antDevice.getChannel(num), _loggerFactory.CreateLogger<AntChannel>());
 
         /// <inheritdoc/>
-        public DeviceCapabilities GetDeviceCapabilities()
+        public Task<DeviceCapabilities> GetDeviceCapabilities()
         {
-            return new UsbDeviceCapabilities(antDevice.getDeviceCapabilities());
+            return Task.FromResult(new UsbDeviceCapabilities(antDevice.getDeviceCapabilities()) as DeviceCapabilities);
         }
 
         /// <inheritdoc/>
-        public DeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
+        public Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
-            return new UsbDeviceCapabilities(antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime));
+            return Task.FromResult(new UsbDeviceCapabilities(antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime)) as DeviceCapabilities);
         }
 
         /// <inheritdoc/>
-        public DeviceCapabilities GetDeviceCapabilities(uint responseWaitTime)
+        public Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime)
         {
-            return new UsbDeviceCapabilities(antDevice.getDeviceCapabilities(responseWaitTime));
+            return Task.FromResult(new UsbDeviceCapabilities(antDevice.getDeviceCapabilities(responseWaitTime)) as DeviceCapabilities);
         }
 
         /// <inheritdoc/>

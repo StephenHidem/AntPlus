@@ -9,6 +9,7 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus
 {
@@ -32,7 +33,7 @@ namespace SmallEarthTech.AntPlus
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AntDeviceCollection> logger;
         private readonly ushort timeout;
-        private readonly IAntChannel[] channels;
+        private IAntChannel[] channels;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AntDeviceCollection" /> class. The ANT radio is configured
@@ -58,8 +59,11 @@ namespace SmallEarthTech.AntPlus
             logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             logger.LogInformation("Created AntDeviceCollection");
             timeout = antDeviceTimeout;
-            channels = antRadio.InitializeContinuousScanMode();
-            channels[0].ChannelResponse += Channel_ChannelResponse;
+            Task.Run(async () =>
+            {
+                channels = await antRadio.InitializeContinuousScanMode();
+                channels[0].ChannelResponse += Channel_ChannelResponse;
+            });
         }
 
         private void Channel_ChannelResponse(object sender, AntResponse e)

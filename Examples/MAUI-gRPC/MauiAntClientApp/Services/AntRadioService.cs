@@ -63,7 +63,7 @@ namespace MauiAntClientApp.Services
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("SearchAsync: OperationCanceledException. Retry.");
+                    _logger.LogInformation("FindAntRadioServerAsync: OperationCanceledException. Retry.");
                 }
             }
 
@@ -82,14 +82,14 @@ namespace MauiAntClientApp.Services
             HostVersion = reply.HostVersion;
         }
 
-        public IAntChannel[] InitializeContinuousScanMode()
+        public async Task<IAntChannel[]> InitializeContinuousScanMode()
         {
             if (_channel == null)
             {
                 _logger.LogError("_channel is null!");
                 return [];
             }
-            InitScanModeReply reply = _client!.InitializeContinuousScanMode(new InitScanModeRequest());
+            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new InitScanModeRequest());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();
             for (byte i = 0; i < reply.NumChannels; i++)
@@ -109,19 +109,22 @@ namespace MauiAntClientApp.Services
             throw new NotImplementedException();
         }
 
-        public DeviceCapabilities GetDeviceCapabilities()
+        public async Task<DeviceCapabilities> GetDeviceCapabilities()
         {
-            throw new NotImplementedException();
+            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest());
+            return new GrpcDeviceCapabilities(caps);
         }
 
-        public DeviceCapabilities GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
+        public async Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { ForceCopy = forceNewCopy, WaitResponseTime = responseWaitTime });
+            return new GrpcDeviceCapabilities(caps);
         }
 
-        public DeviceCapabilities GetDeviceCapabilities(uint responseWaitTime)
+        public async Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { WaitResponseTime = responseWaitTime });
+            return new GrpcDeviceCapabilities(caps);
         }
 
         public AntResponse ReadUserNvm(ushort address, byte size)

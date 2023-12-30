@@ -5,6 +5,7 @@
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
   </Topic>
+  <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" isSelected="true" title="MAUI-gRPC Example Overview" />
   <Topic id="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" visible="True" isExpanded="true" title="Version History">
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />
@@ -24,9 +25,14 @@
         <HelpKeyword index="K" term="version, 2.1.0.0" />
       </HelpKeywords>
     </Topic>
-    <Topic id="3c9ce4f9-cb16-44d2-84c4-3981f14f2161" visible="True" isSelected="true" title="Version 2.2.0.0">
+    <Topic id="3c9ce4f9-cb16-44d2-84c4-3981f14f2161" visible="True" title="Version 2.2.0.0">
       <HelpKeywords>
         <HelpKeyword index="K" term="version, 2.2.0.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="4da48a04-bc9c-42f8-b053-c84fe501c284" visible="True" title="Version 3.0.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 3.0.0.0" />
       </HelpKeywords>
     </Topic>
   </Topic>

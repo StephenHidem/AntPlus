@@ -25,15 +25,15 @@ namespace AntGrpcServer.Services
             });
         }
 
-        public override Task<InitScanModeReply> InitializeContinuousScanMode(InitScanModeRequest request, ServerCallContext context)
+        public override async Task<InitScanModeReply> InitializeContinuousScanMode(InitScanModeRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(InitializeContinuousScanMode)}");
-            AntChannels = _antRadio.InitializeContinuousScanMode();
+            AntChannels = await _antRadio.InitializeContinuousScanMode();
 
-            return Task.FromResult(new InitScanModeReply
+            return new InitScanModeReply
             {
                 NumChannels = AntChannels.Length
-            });
+            };
         }
 
         public override Task<GetChannelReply> GetChannel(GetChannelRequest request, ServerCallContext context)
@@ -44,23 +44,23 @@ namespace AntGrpcServer.Services
             return Task.FromResult(new GetChannelReply());
         }
 
-        public override Task<GetDeviceCapabilitiesReply> GetDeviceCapabilities(GetDeviceCapabilitiesRequest request, ServerCallContext context)
+        public override async Task<GetDeviceCapabilitiesReply> GetDeviceCapabilities(GetDeviceCapabilitiesRequest request, ServerCallContext context)
         {
             DeviceCapabilities capabilities;
             if (request.HasForceCopy && request.HasWaitResponseTime)
             {
-                capabilities = _antRadio.GetDeviceCapabilities(request.ForceCopy, request.WaitResponseTime);
+                capabilities = await _antRadio.GetDeviceCapabilities(request.ForceCopy, request.WaitResponseTime);
             }
             else if (request.HasWaitResponseTime)
             {
-                capabilities = _antRadio.GetDeviceCapabilities(request.WaitResponseTime);
+                capabilities = await _antRadio.GetDeviceCapabilities(request.WaitResponseTime);
             }
             else
             {
-                capabilities = _antRadio.GetDeviceCapabilities();
+                capabilities = await _antRadio.GetDeviceCapabilities();
             }
 
-            return Task.FromResult(new GetDeviceCapabilitiesReply
+            return new GetDeviceCapabilitiesReply
             {
                 MaxAntChannels = capabilities.MaxANTChannels,
                 MaxNetworks = capabilities.MaxNetworks,
@@ -91,7 +91,7 @@ namespace AntGrpcServer.Services
                 SelectiveDataUpdate = capabilities.SelectiveDataUpdate,
                 SingleChannelEncryption = capabilities.SingleChannelEncryption,
                 MaxDataChannels = capabilities.MaxDataChannels
-            });
+            };
         }
     }
 }

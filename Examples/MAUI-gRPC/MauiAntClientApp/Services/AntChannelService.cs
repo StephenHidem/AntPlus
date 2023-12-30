@@ -131,7 +131,7 @@ namespace MauiAntClientApp.Services
 
         public async Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
-            MessagingCodeReply reply = await _client.SendExtAcknowledgedDataAsync(new ExtDataRequest
+            var reply = await _client.SendExtAcknowledgedDataAsync(new ExtDataRequest
             {
                 ChannelNumber = ChannelNumber,
                 ChannelId = channelId.Id,

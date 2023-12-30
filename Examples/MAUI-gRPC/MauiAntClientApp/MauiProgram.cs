@@ -47,6 +47,7 @@ namespace MauiAntClientApp
         private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
         {
             mauiAppBuilder.Services.AddSingleton<HomePageViewModel>();
+            mauiAppBuilder.Services.AddTransient<RadioCapabilitiesViewModel>();
             mauiAppBuilder.Services.AddTransient<AssetTrackerViewModel>();
             mauiAppBuilder.Services.AddTransient<BicyclePowerViewModel>();
             mauiAppBuilder.Services.AddTransient<BikeCadenceViewModel>();
@@ -64,6 +65,7 @@ namespace MauiAntClientApp
         private static MauiAppBuilder RegisterViews(this MauiAppBuilder mauiAppBuilder)
         {
             mauiAppBuilder.Services.AddTransient<HomePage>();
+            mauiAppBuilder.Services.AddTransient<RadioCapabilitiesPage>();
             mauiAppBuilder.Services.AddTransient<AssetTrackerPage>();
             mauiAppBuilder.Services.AddTransient<BicyclePowerPage>();
             mauiAppBuilder.Services.AddTransient<BikeCadencePage>();

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>2.2.0.0</AssemblyVersion>
+	<AssemblyVersion>3.0.0.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -24,6 +24,12 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
+	<PackageReleaseNotes>1. CommonSpeedCadence - bug fix handling default data page 0.
+2. Treadmill - added None to CapabilityFlags enum.
+3. AntDevice - fixed log warning bug in SendExtAcknowledgedMessage method.
+4. AntDeviceCollection - ctor has been modified.
+5. BicyclePower/Parameters - all methods are now async calls.
+6. Tracker - the asset is removed from the Assets collection if the Asset.AssetStatus.RemoveAsset flag is set.</PackageReleaseNotes>
   </PropertyGroup>
 	
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

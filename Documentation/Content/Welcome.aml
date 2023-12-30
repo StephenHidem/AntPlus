@@ -34,8 +34,12 @@
 			<content>
 				<para>
 					Become an ANT+ Adopter! There is no membership fee.
-					Create a login and go to <a href="https://www.thisisant.com/my-ant/join-adopter">Become an Adopter</a>. This provides you with access to
-					device profiles, SDK's, and useful software tools.
+					Create a login and go to
+					<externalLink>
+						<linkText>Become an Adopter</linkText>
+						<linkUri>https://www.thisisant.com/my-ant/join-adopter</linkUri>
+					</externalLink>
+					This provides you with access to device profiles, SDK's, and useful software tools.
 					<list class ="bullet">
 						Prerequisites -
 						<listItem>
@@ -57,7 +61,11 @@
 						<listItem>
 							<para>
 								OPTIONAL: Only needed if you intend to modify the libraries I've provided in the AntUsbStick project.
-								Download the <a href="https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/">ANT PC SDK zip file</a>, unblock, and install.
+								Download the
+								<externalLink>
+									<linkText>ANT PC SDK zip file</linkText>
+									<linkUri>https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/</linkUri>
+								</externalLink>, unblock, and install.
 							</para>
 						</listItem>
 					</list>
@@ -84,7 +92,19 @@
 						<para>
 							The AntMulticastServer console application uses the AntUsbStick class library to send/receive ANT messages over the UDP network protocol.
 							A seperate Xamarin Forms solution with an Android app uses this UDP socket. The Xamarin solution is
-							located at <a href="https://github.com/StephenHidem/XamAntClientApp/">XamAntClientApp</a>.
+							located at
+							<externalLink>
+								<linkText>XamAntClientApp.</linkText>
+								<linkUri>https://github.com/StephenHidem/XamAntClientApp/</linkUri>
+							</externalLink>
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							<legacyBold>NEW!</legacyBold> This is a new example using .NET MAUI and gRPC. You can find it in the Examples folder 
+							under MAUI-gRPC. It consists of three projects - a shared gRPC library, the gRPC server, and the client application.
+							The client application runs under Windows and Android mobile devices. I have not tested it on any of the other platforms
+							MAUI apps can run on. <link xlink:href="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca">Details are located here.</link>
 						</para>
 					</listItem>
 				</list>
@@ -95,8 +115,11 @@
 			<title>Work in Progress</title>
 			<content>
 				<para>
-					ANT-FS is not currently supported. Some device profiles are not supported - please
-					create an issue if there is an ANT device profile you would like to see supported.
+					ANT-FS is not currently supported. Some device profiles are not supported - please create an issue if there is an ANT
+					device profile you would like to see supported.
+				</para>
+				<para>
+					A NuGet package will be created for AntUsbStick in the near future.
 				</para>
 			</content>
 		</section>

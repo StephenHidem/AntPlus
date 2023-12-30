@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>x86</PlatformTarget>
-    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<Authors>Stephen Hidem</Authors>
 	<Copyright>© $(Authors). All rights reserved.</Copyright>

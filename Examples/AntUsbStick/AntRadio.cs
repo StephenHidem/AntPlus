@@ -12,25 +12,27 @@ namespace SmallEarthTech.AntUsbStick
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<IAntRadio> _logger;
-        private readonly ANT_Device antDevice;
+        private readonly ANT_Device _antDevice;
+        private IAntChannel[] _channels = new IAntChannel[0];
+        private readonly object _lock = new object();
 
         /// <inheritdoc/>
         public event EventHandler<AntResponse> RadioResponse;
 
         /// <inheritdoc/>
-        public int NumChannels => antDevice.getNumChannels();
+        public int NumChannels => _antDevice.getNumChannels();
 
         /// <inheritdoc/>
-        public FramerType OpenedFrameType => (FramerType)antDevice.getOpenedFrameType();
+        public FramerType OpenedFrameType => (FramerType)_antDevice.getOpenedFrameType();
 
         /// <inheritdoc/>
-        public PortType OpenedPortType => (PortType)antDevice.getOpenedPortType();
+        public PortType OpenedPortType => (PortType)_antDevice.getOpenedPortType();
 
         /// <inheritdoc/>
-        public uint SerialNumber => antDevice.getSerialNumber();
+        public uint SerialNumber => _antDevice.getSerialNumber();
 
         /// <inheritdoc/>
-        public void CancelTransfers(int cancelWaitTime) => antDevice.cancelTransfers(cancelWaitTime);
+        public void CancelTransfers(int cancelWaitTime) => _antDevice.cancelTransfers(cancelWaitTime);
 
         /// <summary>Initializes a new instance of the <see cref="AntRadio" /> class.</summary>
         /// <param name="loggerFactory">The factory is used to create <see cref="ILogger"/>s for AntChannels.</param>
@@ -38,9 +40,9 @@ namespace SmallEarthTech.AntUsbStick
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<AntRadio>();
-            antDevice = new ANT_Device();
-            antDevice.deviceResponse += AntDevice_deviceResponse;
-            _logger.LogDebug("Created AntRadio #{DeviceNum}", antDevice.getOpenedUSBDeviceNum());
+            _antDevice = new ANT_Device();
+            _antDevice.deviceResponse += AntDevice_deviceResponse;
+            _logger.LogDebug("Created AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
         }
 
         private void AntDevice_deviceResponse(ANT_Response response)
@@ -51,74 +53,84 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public Task<IAntChannel[]> InitializeContinuousScanMode()
         {
-            IAntChannel[] channels = new IAntChannel[NumChannels];
-
-            // configure channel 0 for continuous scan mode
-            SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
-            EnableRxExtendedMessages(true);
-            channels[0] = GetChannel(0);
-            channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-            channels[0].SetChannelID(new ChannelId(0), 500);
-            channels[0].SetChannelFreq(57, 500);
-            OpenRxScanMode();
-
-            // assign channels for devices to use for sending messages
-            for (int i = 1; i < NumChannels; i++)
+            // multiple clients may attempt to initialize
+            lock (_lock)
             {
-                channels[i] = GetChannel(i);
-                _ = channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+                // test if channels have not been allocated (first time initialization)
+                if (_channels.Length == 0)
+                {
+                    // allocate channels for this radio
+                    _logger.LogInformation("Allocating channels for continuous scan mode.");
+                    _channels = new IAntChannel[NumChannels];
+
+                    // configure channel 0 for continuous scan mode
+                    SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
+                    EnableRxExtendedMessages(true);
+                    _channels[0] = GetChannel(0);
+                    _channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+                    _channels[0].SetChannelID(new ChannelId(0), 500);
+                    _channels[0].SetChannelFreq(57, 500);
+                    OpenRxScanMode();
+
+                    // assign channels for devices to use for sending messages
+                    for (int i = 1; i < NumChannels; i++)
+                    {
+                        _channels[i] = GetChannel(i);
+                        _ = _channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+                    }
+                }
             }
 
-            return Task.FromResult(channels);
+            return Task.FromResult(_channels);
         }
 
         /// <inheritdoc/>
         public void Dispose()
         {
-            _logger.LogDebug("Disposed AntRadio #{DeviceNum}", antDevice.getOpenedUSBDeviceNum());
-            antDevice.Dispose();
+            _logger.LogDebug("Disposed AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+            _antDevice.Dispose();
         }
 
         /// <inheritdoc/>
-        public IAntChannel GetChannel(int num) => new AntChannel(antDevice.getChannel(num), _loggerFactory.CreateLogger<AntChannel>());
+        public IAntChannel GetChannel(int num) => new AntChannel(_antDevice.getChannel(num), _loggerFactory.CreateLogger<AntChannel>());
 
         /// <inheritdoc/>
         public Task<DeviceCapabilities> GetDeviceCapabilities()
         {
-            return Task.FromResult(new UsbDeviceCapabilities(antDevice.getDeviceCapabilities()) as DeviceCapabilities);
+            return Task.FromResult(new UsbDeviceCapabilities(_antDevice.getDeviceCapabilities()) as DeviceCapabilities);
         }
 
         /// <inheritdoc/>
         public Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
-            return Task.FromResult(new UsbDeviceCapabilities(antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime)) as DeviceCapabilities);
+            return Task.FromResult(new UsbDeviceCapabilities(_antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime)) as DeviceCapabilities);
         }
 
         /// <inheritdoc/>
         public Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime)
         {
-            return Task.FromResult(new UsbDeviceCapabilities(antDevice.getDeviceCapabilities(responseWaitTime)) as DeviceCapabilities);
+            return Task.FromResult(new UsbDeviceCapabilities(_antDevice.getDeviceCapabilities(responseWaitTime)) as DeviceCapabilities);
         }
 
         /// <inheritdoc/>
-        public AntResponse ReadUserNvm(ushort address, byte size) => new UsbAntResponse(antDevice.readUserNvm(address, size));
+        public AntResponse ReadUserNvm(ushort address, byte size) => new UsbAntResponse(_antDevice.readUserNvm(address, size));
 
         /// <inheritdoc/>
-        public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime) => new UsbAntResponse(antDevice.readUserNvm(address, size, responseWaitTime));
+        public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime) => new UsbAntResponse(_antDevice.readUserNvm(address, size, responseWaitTime));
 
         /// <inheritdoc/>
         public AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime)
         {
-            return new UsbAntResponse(antDevice.requestMessageAndResponse(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
+            return new UsbAntResponse(_antDevice.requestMessageAndResponse(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
         }
 
         /// <inheritdoc/>
         public AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime)
         {
-            return new UsbAntResponse(antDevice.requestMessageAndResponse((ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
+            return new UsbAntResponse(_antDevice.requestMessageAndResponse((ANT_ReferenceLibrary.RequestMessageID)messageID, responseWaitTime));
         }
 
         /// <inheritdoc/>
-        public bool WriteRawMessageToDevice(byte msgID, byte[] msgData) => antDevice.writeRawMessageToDevice(msgID, msgData);
+        public bool WriteRawMessageToDevice(byte msgID, byte[] msgData) => _antDevice.writeRawMessageToDevice(msgID, msgData);
     }
 }

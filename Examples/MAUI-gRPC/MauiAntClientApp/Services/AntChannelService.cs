@@ -15,6 +15,7 @@ namespace MauiAntClientApp.Services
         private readonly object _lock = new();
         private event EventHandler<AntResponse>? _responseReceived;
         private AsyncServerStreamingCall<ChannelResponse>? _response;
+
         public event EventHandler<AntResponse> ChannelResponse
         {
             add

@@ -6,22 +6,22 @@ namespace SmallEarthTech.AntUsbStick
     public partial class AntRadio : IAntControl
     {
         /// <inheritdoc/>
-        public void OpenRxScanMode() => antDevice.openRxScanMode();
+        public void OpenRxScanMode() => _antDevice.openRxScanMode();
 
         /// <inheritdoc/>
-        public bool OpenRxScanMode(uint responseWaitTime) => antDevice.openRxScanMode(responseWaitTime);
+        public bool OpenRxScanMode(uint responseWaitTime) => _antDevice.openRxScanMode(responseWaitTime);
 
         /// <inheritdoc/>
-        public void RequestMessage(byte channelNum, RequestMessageID messageID) => antDevice.requestMessage(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID);
+        public void RequestMessage(byte channelNum, RequestMessageID messageID) => _antDevice.requestMessage(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID);
 
         /// <inheritdoc/>
-        public void RequestMessage(RequestMessageID messageID) => antDevice.requestMessage((ANT_ReferenceLibrary.RequestMessageID)messageID);
+        public void RequestMessage(RequestMessageID messageID) => _antDevice.requestMessage((ANT_ReferenceLibrary.RequestMessageID)messageID);
 
         /// <inheritdoc/>
-        public void ResetSystem() => antDevice.ResetSystem();
+        public void ResetSystem() => _antDevice.ResetSystem();
 
         /// <inheritdoc/>
-        public bool ResetSystem(uint responseWaitTime) => antDevice.ResetSystem(responseWaitTime);
+        public bool ResetSystem(uint responseWaitTime) => _antDevice.ResetSystem(responseWaitTime);
 
     }
 }

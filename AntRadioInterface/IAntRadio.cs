@@ -146,32 +146,40 @@ namespace SmallEarthTech.AntRadioInterface
         /// scan mode to receive broadcast messages from ANT master devices. The remaining channels
         /// should be configured so messages may be sent to ANT master devices.
         /// </returns>
-        /// <remarks>
+        /// <example>
         /// Implementors typically would perform the following setup -
-        /// <code>
-        /// public IAntChannel[] InitializeContinuousScanMode()
+        /// <code>public Task&lt;IAntChannel[]&gt; InitializeContinuousScanMode()
         /// {
-        ///     IAntChannel[] channels = new IAntChannel[NumChannels];
-        ///     
-        ///     // configure channel 0 for continuous scan mode
-        ///     SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
-        ///     EnableRxExtendedMessages(true);
-        ///     channels[0] = GetChannel(0);
-        ///     channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
-        ///     channels[0].SetChannelID(new ChannelId(0), 500);
-        ///     channels[0].SetChannelFreq(57, 500);
-        ///     OpenRxScanMode();
-        ///     
-        ///     // assign channels for devices to use for sending messages
-        ///     for (int i = 1; i &lt; NumChannels; i++)
+        ///     // multiple clients may attempt to initialize
+        ///     lock (_lock)
         ///     {
-        ///         channels[i] = GetChannel(i);
-        ///         _ = channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+        ///         // test if channels have not been allocated (first time initialization)
+        ///         if (_channels.Length == 0)
+        ///         {
+        ///             // allocate channels for this radio
+        ///             _logger.LogInformation("Allocating channels for continuous scan mode.");
+        ///             _channels = new IAntChannel[NumChannels];
+        ///
+        ///             // configure channel 0 for continuous scan mode
+        ///             SetNetworkKey(0, new byte[] { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 });
+        ///             EnableRxExtendedMessages(true);
+        ///             _channels[0] = GetChannel(0);
+        ///             _channels[0].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+        ///             _channels[0].SetChannelID(new ChannelId(0), 500);
+        ///             _channels[0].SetChannelFreq(57, 500);
+        ///             OpenRxScanMode();
+        ///
+        ///             // assign channels for devices to use for sending messages
+        ///             for (int i = 1; i &lt; NumChannels; i++)
+        ///             {
+        ///                 _channels[i] = GetChannel(i);
+        ///                 _ = _channels[i].AssignChannel(ChannelType.BaseSlaveReceive, 0, 500);
+        ///             }
+        ///         }
         ///     }
-        ///     return channels;
-        /// }
-        /// </code>
-        /// </remarks>
+        ///
+        ///     return Task.FromResult(_channels);
+        /// }</code></example>
         Task<IAntChannel[]> InitializeContinuousScanMode();
         /// <summary>Cancels the transfers.</summary>
         /// <param name="cancelWaitTime">The cancel wait time.</param>

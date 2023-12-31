@@ -35,7 +35,7 @@ namespace AntGrpcServer.Services
                 }
                 catch (InvalidOperationException e)
                 {
-                    _logger.LogInformation($"Subscription closed. {e.Message}");
+                    _logger.LogInformation("Subscription closed. {Msg}", e.Message);
                     break;
                 }
             }

@@ -9,7 +9,7 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<Authors>Stephen Hidem</Authors>
-	<Copyright>© $(Authors). All rights reserved.</Copyright>
+	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

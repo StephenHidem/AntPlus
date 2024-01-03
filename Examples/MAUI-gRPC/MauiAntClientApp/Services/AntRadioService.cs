@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System.Net;
 using System.Net.Sockets;
@@ -17,8 +18,8 @@ namespace MauiAntClientApp.Services
         private const int gRPCPort = 7072;              // gRPC port
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
-        private readonly ILoggerFactory _loggerFactory = loggerFactory;
-        private readonly ILogger<AntRadioService> _logger = logger;
+        private readonly ILoggerFactory _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+        private readonly ILogger<AntRadioService> _logger = logger ?? NullLogger<AntRadioService>.Instance;
         private GrpcChannel? _channel;
 
         [ObservableProperty]

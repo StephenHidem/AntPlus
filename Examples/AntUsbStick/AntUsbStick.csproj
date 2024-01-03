@@ -15,12 +15,14 @@
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
 	<PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
-	<PackageReadmeFile></PackageReadmeFile>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageTags>ant; ant+; antplus; antusbstick; smallearthtech</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PackageId>$(AssemblyName)</PackageId>
+	<PackageIcon>PackageLogo.png</PackageIcon>
+	<PackageReleaseNotes>Initial release.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -57,6 +59,14 @@
 		</None>
 		<None Update="DSI_SiUSBXp_3_1.dll" Pack="true" PackagePath="build\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PackageLogo.png">
+		  <PackagePath>\</PackagePath>
+		  <Pack>True</Pack>
+		</None>
+		<None Update="readme.md">
+		  <PackagePath>\</PackagePath>
+		  <Pack>True</Pack>
 		</None>
 		<None Include="$(PackageId).targets" Pack="true" PackagePath="build\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

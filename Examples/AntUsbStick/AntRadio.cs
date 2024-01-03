@@ -50,7 +50,14 @@ namespace SmallEarthTech.AntUsbStick
             RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 
-        /// <inheritdoc/>
+        /// <summary>Initializes the ANT radio for continuous scan mode.</summary>
+        /// <returns>
+        /// Returns an array of ANT channels.
+        /// </returns>
+        /// <remarks>
+        /// The first element of the array (ANT channel 0) is used for continuous scan mode to receive broadcast messages from ANT master devices.
+        /// The remaining channels are configured so messages may be sent to ANT master devices.
+        /// </remarks>
         public Task<IAntChannel[]> InitializeContinuousScanMode()
         {
             // multiple clients may attempt to initialize

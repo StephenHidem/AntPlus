@@ -6,38 +6,40 @@
              x:Class="MauiAntClientApp.Views.BikeSpeedPage"
              Title="BikeSpeedPage">
     <Grid Margin="10">
-        <StackLayout>
-            <Frame>
-                <StackLayout>
-                    <Label Text="Speed and Distance" FontAttributes="Bold" TextDecorations="Underline"/>
-                    <Label Text="{Binding BikeSpeedSensor.InstantaneousSpeed, StringFormat='Instantaneous Speed: {0:F3}'}"/>
-                    <Label Text="{Binding BikeSpeedSensor.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
-                    <Label Text="{Binding BikeSpeedSensor.Stopped, StringFormat='Stopped: {0}'}"/>
-                </StackLayout>
-            </Frame>
-            <Frame>
-                <StackLayout>
-                    <Label Text="Manufacturer Info" FontAttributes="Bold" TextDecorations="Underline"/>
-                    <Label Text="{Binding BikeSpeedSensor.ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
-                    <Label Text="{Binding BikeSpeedSensor.ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
-                </StackLayout>
-            </Frame>
-            <Frame>
-                <StackLayout>
-                    <Label Text="Product Info" FontAttributes="Bold" TextDecorations="Underline"/>
-                    <Label Text="{Binding BikeSpeedSensor.ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
-                    <Label Text="{Binding BikeSpeedSensor.ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
-                    <Label Text="{Binding BikeSpeedSensor.ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
-                </StackLayout>
-            </Frame>
-            <Frame>
-                <StackLayout>
-                    <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
-                    <Label Text="{Binding BikeSpeedSensor.BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
-                    <Label Text="{Binding BikeSpeedSensor.BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
-                </StackLayout>
-            </Frame>
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Speed and Distance" FontAttributes="Bold" TextDecorations="Underline"/>
+                        <Label Text="{Binding BikeSpeedSensor.InstantaneousSpeed, StringFormat='Instantaneous Speed: {0:F3}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.Stopped, StringFormat='Stopped: {0}'}"/>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Manufacturer Info" FontAttributes="Bold" TextDecorations="Underline"/>
+                        <Label Text="{Binding BikeSpeedSensor.ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Product Info" FontAttributes="Bold" TextDecorations="Underline"/>
+                        <Label Text="{Binding BikeSpeedSensor.ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
+                        <Label Text="{Binding BikeSpeedSensor.BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding BikeSpeedSensor.Offline}"/>
     </Grid>
 </ContentPage>

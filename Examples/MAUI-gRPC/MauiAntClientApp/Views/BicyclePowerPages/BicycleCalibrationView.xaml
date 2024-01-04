@@ -12,8 +12,8 @@
                 <Label Text="{Binding ViewModel.BicyclePower.Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported: {0}'}"/>
                 <Label Text="{Binding ViewModel.BicyclePower.Calibration.AutoZeroStatus, StringFormat='Auto Zero Status: {0}'}"/>
                 <Label Text="{Binding ViewModel.BicyclePower.Calibration.CalibrationData, StringFormat='Calibration Data: {0}'}"/>
-                <Button Text="Manual Calibration Request" HorizontalOptions="Start" Command="{Binding ViewModel.ManualCalRequestCommand}" Margin="8"/>
-                <Button Text="Toggle Auto Zero Configuration" HorizontalOptions="Start" Command="{Binding ViewModel.SetAutoZeroConfigCommand}" Margin="8"/>
+                <Button Text="Manual Calibration Request" HorizontalOptions="Start" Command="{Binding ViewModel.ManualCalRequestCommand}" Margin="0, 8, 0, 8"/>
+                <Button Text="Toggle Auto Zero Configuration" HorizontalOptions="Start" Command="{Binding ViewModel.SetAutoZeroConfigCommand}" />
             </StackLayout>
         </Frame>
         <Frame>

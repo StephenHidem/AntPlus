@@ -35,7 +35,7 @@
                             <Label Text="{Binding Geocache.Hint, StringFormat='Hint: {0}'}"/>
                             <Label Text="{Binding Geocache.NumberOfVisits, StringFormat='Number of visits: {0}'}"/>
                             <Label Text="{Binding Geocache.LastVisitTimestamp, StringFormat='Last visit: {0}'}"/>
-                            <Button Text="Request PIN" Command="{Binding RequestPINCommand}"/>
+                            <Button Text="Request PIN" Command="{Binding RequestPINCommand}" Margin="0, 8, 0, 8"/>
                             <Button Text="Log Visit" Command="{Binding LogVisitCommand}"/>
                         </StackLayout>
                     </Frame>

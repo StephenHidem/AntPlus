@@ -21,4 +21,6 @@ This snippet makes use of the Small Earth Technology ANT+ Class Library AntDevic
 will provide logging services and the IAntRadio implementation provided by the ANT+ USB Stick Class Library to the AntDeviceCollection.
 ##### Addtional Links
 * [Documentation](https://stephenhidem.github.io/AntPlus/html/bf8a5d40-6d1a-6d79-a57f-fd17688d7682.htm)
+* [Examples](https://github.com/StephenHidem/AntPlus/tree/master/Examples) - Includes AntUsbStick source code
 * [Issues](https://github.com/StephenHidem/AntPlus/issues) - Mention AntUsbStick in the issue title.
+* [Discussions](https://github.com/StephenHidem/AntPlus/discussions) - Post questions and join discussions.

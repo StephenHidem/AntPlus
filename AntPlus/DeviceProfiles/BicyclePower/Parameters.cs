@@ -278,10 +278,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        /// <summary>
-        /// Gets the requested parameters subpage.
-        /// </summary>
+        /// <summary>Gets the requested parameters subpage.</summary>
         /// <param name="parameterSubpage">The parameter subpage.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> GetParameters(Subpage parameterSubpage)
         {
             return await _bicycle.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
@@ -292,6 +291,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// 236.5 mm, auto crank length is enabled. Typically you would omit the length parameter to enable auto crank length.
         /// </summary>
         /// <param name="length">The length in millimeters. Omit to enable auto crank length.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetCrankLength(double length = 237)
         {
             byte[] msg;
@@ -318,6 +318,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// whether the transition was successful or not.
         /// </remarks>
         /// <param name="offset">The offset in seconds.</param>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetTransitionTimeOffset(byte offset)
         {
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
@@ -334,6 +335,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </remarks>
         /// <param name="threshold">The threshold percentage.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Parameter threshold range is 0 to 100 percent.</exception>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetPeakTorqueThreshold(double threshold)
         {
             // valid range is 0 to 100 percent

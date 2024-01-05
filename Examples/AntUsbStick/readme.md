@@ -2,7 +2,7 @@
 This package implements the Small Earth Technology ANT radio interface. It supports Garmin/Dynastream ANT USB sticks and some development
 boards with USB interfaces.
 ##### Getting Started
-> <b>Important:</b> Projects that consume this package must set the platform target to x86. This is due to the native DLLs that are a part of the package.
+> **Important:** Projects that consume this package must set the platform target to x86. This is due to the native DLLs that are a part of the package.
 
 The easiest way to make use of the package is to add it to your DI container.
 ```csharp

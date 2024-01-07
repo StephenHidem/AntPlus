@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <Authors>Stephen Hidem</Authors>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

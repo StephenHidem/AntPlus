@@ -1,4 +1,6 @@
 ﻿using AntRadioGrpcService;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using SmallEarthTech.AntRadioInterface;
 using System.Text;
@@ -9,14 +11,15 @@ namespace AntGrpcServer.Services
     {
         private readonly ILogger<AntRadioService> _logger = logger;
         private readonly IAntRadio _antRadio = antRadio;
+        private TaskCompletionSource<AntResponse>? _response;
 
         public static IAntChannel[] AntChannels { get; private set; } = [];
 
-        public override Task<PropertiesReply> GetProperties(PropertiesRequest request, ServerCallContext context)
+        public override Task<PropertiesReply> GetProperties(Empty request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(GetProperties)}");
             SmallEarthTech.AntUsbStick.AntRadio usbAntRadio = (SmallEarthTech.AntUsbStick.AntRadio)_antRadio;
-            AntResponse rsp = usbAntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
+            AntResponse rsp = usbAntRadio.RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID.Version, 500);
             return Task.FromResult(new PropertiesReply
             {
                 SerialString = usbAntRadio.GetSerialString(),
@@ -25,7 +28,7 @@ namespace AntGrpcServer.Services
             });
         }
 
-        public override async Task<InitScanModeReply> InitializeContinuousScanMode(InitScanModeRequest request, ServerCallContext context)
+        public override async Task<InitScanModeReply> InitializeContinuousScanMode(Empty request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(InitializeContinuousScanMode)}");
             AntChannels = await _antRadio.InitializeContinuousScanMode();
@@ -34,6 +37,12 @@ namespace AntGrpcServer.Services
             {
                 NumChannels = AntChannels.Length
             };
+        }
+
+        public override Task<Empty> CancelTransfers(CancelTransfersRequest request, ServerCallContext context)
+        {
+            _antRadio.CancelTransfers(request.WaitTime);
+            return Task.FromResult(new Empty());
         }
 
         public override Task<GetChannelReply> GetChannel(GetChannelRequest request, ServerCallContext context)
@@ -91,6 +100,76 @@ namespace AntGrpcServer.Services
                 SelectiveDataUpdate = capabilities.SelectiveDataUpdate,
                 SingleChannelEncryption = capabilities.SingleChannelEncryption,
                 MaxDataChannels = capabilities.MaxDataChannels
+            };
+        }
+
+        public override Task<AntResponseReply> ReadUserNvm(ReadUserNvmRequest request, ServerCallContext context)
+        {
+            AntResponse result = _antRadio.ReadUserNvm((ushort)request.Address, (byte)request.Size);
+            return Task.FromResult(FromAntResponse(result));
+        }
+
+        public override Task<AntResponseReply> RequestMessageAndResponse(RequestMessageAndResponseRequest request, ServerCallContext context)
+        {
+            AntResponse result;
+            if (request.HasChannelNumber)
+            {
+                result = _antRadio.RequestMessageAndResponse((byte)request.ChannelNumber, (SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime);
+            }
+            else
+            {
+                result = _antRadio.RequestMessageAndResponse((SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime);
+            }
+            return Task.FromResult(FromAntResponse(result));
+        }
+
+        public override Task<BoolValue> WriteRawMessageToDevice(WriteRawMessageToDeviceRequest request, ServerCallContext context)
+        {
+            bool result = _antRadio.WriteRawMessageToDevice((byte)request.MsgId, [.. request.MsgData]);
+            return Task.FromResult(new BoolValue { Value = result });
+        }
+
+        public override async Task Subscribe(Empty request, IServerStreamWriter<AntResponseReply> responseStream, ServerCallContext context)
+        {
+            _logger.LogInformation("Subscribe called.");
+            _antRadio.RadioResponse += AntRadio_RadioResponse;
+            while (!context.CancellationToken.IsCancellationRequested)
+            {
+                _response = new TaskCompletionSource<AntResponse>();
+                AntResponse radioResponse = await _response.Task;
+                try
+                {
+                    await responseStream.WriteAsync(FromAntResponse(radioResponse));
+                }
+                catch (InvalidOperationException e)
+                {
+                    _logger.LogInformation("Subscription closed. {Msg}", e.Message);
+                    break;
+                }
+            }
+            _antRadio.RadioResponse -= AntRadio_RadioResponse;
+            _logger.LogInformation("Subscribe exited.");
+        }
+
+        private void AntRadio_RadioResponse(object? sender, AntResponse e)
+        {
+            if (sender != null && _response != null && !_response.TrySetResult(e))
+            {
+                ((IAntRadio)sender).RadioResponse -= AntRadio_RadioResponse;
+            }
+        }
+
+        private static AntResponseReply FromAntResponse(AntResponse antResponse)
+        {
+            return new AntResponseReply
+            {
+                ChannelNumber = antResponse.ChannelNumber,
+                ResponseId = antResponse.ResponseId,
+                ChannelId = antResponse.ChannelId.Id,
+                Payload = ByteString.CopyFrom(antResponse.Payload),
+                Rssi = antResponse.Rssi,
+                ThresholdConfigurationValue = antResponse.ThresholdConfigurationValue,
+                Timestamp = antResponse.Timestamp
             };
         }
     }

@@ -9,10 +9,12 @@ import "google/protobuf/empty.proto";
 
 // The ANT radio gRPC service.
 service gRPCAntRadio {
+	// Cancels any pending transfers.
+	rpc CancelTransfers (CancelTransfersRequest) returns (google.protobuf.Empty);
 	// Retrieves the ANT radio general characteristics.
 	rpc GetProperties (google.protobuf.Empty) returns (PropertiesReply);
 	// Subcribes to the stream of ANT device broadcast messages. The ANT radio should be configure for continuous scan mode.
-	rpc Subscribe (google.protobuf.Empty) returns (stream RadioResponse);
+	rpc Subscribe (google.protobuf.Empty) returns (stream AntResponseReply);
 	// Initializes the ANT radio for continuous scan mode. Channel 0 is used to receive broadcasts and the remaining channels are used to send messages to ANT devices.
 	rpc InitializeContinuousScanMode (google.protobuf.Empty) returns (InitScanModeReply);
 	// Gets the requested ANT channel.
@@ -27,7 +29,12 @@ service gRPCAntRadio {
 	rpc WriteRawMessageToDevice (WriteRawMessageToDeviceRequest) returns (google.protobuf.BoolValue);
 }
 
-// The common properties of the ANT radio.
+message CancelTransfersRequest {
+	// Time to wait for cancellation in milliseconds
+	int32 wait_time = 1;
+}
+
+// Common properties of the ANT radio.
 message PropertiesReply {
 	// ANT radio product description.
 	string product_description = 1;
@@ -36,9 +43,6 @@ message PropertiesReply {
 	// ANT radio version number.
 	string host_version = 3;
 }
-
-// This message may change in the future.
-message RadioResponse {}
 
 // The number of configured channels.
 message InitScanModeReply {

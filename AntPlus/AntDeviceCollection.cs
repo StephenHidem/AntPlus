@@ -29,6 +29,7 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public object CollectionLock = new object();
 
+        private readonly IAntRadio _antRadio;
         private int channelNum = 1;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AntDeviceCollection> logger;
@@ -55,6 +56,7 @@ namespace SmallEarthTech.AntPlus
         /// </remarks>
         public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, ushort antDeviceTimeout = 2000)
         {
+            _antRadio = antRadio;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             logger.LogInformation("Created AntDeviceCollection");
@@ -66,7 +68,7 @@ namespace SmallEarthTech.AntPlus
             });
         }
 
-        private void Channel_ChannelResponse(object sender, AntResponse e)
+        private async void Channel_ChannelResponse(object sender, AntResponse e)
         {
             if (e.ChannelId != null)
             {
@@ -85,8 +87,11 @@ namespace SmallEarthTech.AntPlus
             {
                 logger.LogCritical("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
                     e.ChannelNumber,
-                    e.ResponseId,
+                    (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+
+                // attempt to reopen channel 0 for Rx continuous scan mode
+                _ = await _antRadio.InitializeContinuousScanMode();
             }
         }
 

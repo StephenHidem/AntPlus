@@ -1,5 +1,6 @@
 ﻿using AntRadioGrpcService;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using Microsoft.Extensions.Logging;
@@ -32,12 +33,13 @@ namespace MauiAntClientApp.Services
         private string? hostVersion;
 
         public int NumChannels => throw new NotImplementedException();
+        public uint SerialNumber => throw new NotImplementedException();
 
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         public FramerType OpenedFrameType => throw new NotImplementedException();
 
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         public PortType OpenedPortType => throw new NotImplementedException();
-
-        public uint SerialNumber => throw new NotImplementedException();
 
         public event EventHandler<AntResponse>? RadioResponse;
 
@@ -77,7 +79,7 @@ namespace MauiAntClientApp.Services
                 })
             });
             _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
-            PropertiesReply reply = await _client.GetPropertiesAsync(new PropertiesRequest());
+            PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
             ProductDescription = reply.ProductDescription;
             SerialString = reply.SerialString;
             HostVersion = reply.HostVersion;
@@ -90,7 +92,7 @@ namespace MauiAntClientApp.Services
                 _logger.LogError("_channel is null!");
                 return [];
             }
-            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new InitScanModeRequest());
+            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();
             for (byte i = 0; i < reply.NumChannels; i++)
@@ -138,12 +140,12 @@ namespace MauiAntClientApp.Services
             throw new NotImplementedException();
         }
 
-        public AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(byte channelNum, SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime)
         {
             throw new NotImplementedException();
         }
 
-        public AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime)
         {
             throw new NotImplementedException();
         }

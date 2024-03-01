@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
@@ -16,7 +15,7 @@ namespace MauiAntClientApp.Services
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
-        private const int gRPCPort = 7072;              // gRPC port
+        private const int gRPCPort = 5073;              // gRPC port
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
         private readonly ILoggerFactory _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
@@ -70,14 +69,16 @@ namespace MauiAntClientApp.Services
                 }
             }
 
-            UriBuilder uriBuilder = new("https", ServerIPAddress.ToString(), gRPCPort);
-            _channel = GrpcChannel.ForAddress(uriBuilder.Uri, new GrpcChannelOptions
-            {
-                HttpHandler = new GrpcWebHandler(new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                })
-            });
+            UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
+            //_channel = GrpcChannel.ForAddress(uriBuilder.Uri, new GrpcChannelOptions
+            //{
+            //    HttpHandler = new GrpcWebHandler(new HttpClientHandler
+            //    {
+            //        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
+            //    }),
+            //    Credentials = Grpc.Core.ChannelCredentials.Insecure
+            //});
+            _channel = GrpcChannel.ForAddress(uriBuilder.Uri);
             _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
             PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
             ProductDescription = reply.ProductDescription;

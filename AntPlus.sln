@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntGrpcShared", "Examples\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiAntClientApp", "Examples\MAUI-gRPC\MauiAntClientApp\MauiAntClientApp.csproj", "{484F3AAF-9A5A-4B8B-946F-D1BD502A4759}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntGrpcService", "Examples\MAUI-gRPC\AntGrpcService\AntGrpcService.csproj", "{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{484F3AAF-9A5A-4B8B-946F-D1BD502A4759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484F3AAF-9A5A-4B8B-946F-D1BD502A4759}.Release|Any CPU.Build.0 = Release|Any CPU
 		{484F3AAF-9A5A-4B8B-946F-D1BD502A4759}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{86A76078-EB59-4CDD-B6F0-68B88552FF6D} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
 		{760EBC5D-542A-4AB4-BEEA-E16E62ACB30E} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
 		{484F3AAF-9A5A-4B8B-946F-D1BD502A4759} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
+		{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B254219-260F-4D16-9D59-77A2386597E8}

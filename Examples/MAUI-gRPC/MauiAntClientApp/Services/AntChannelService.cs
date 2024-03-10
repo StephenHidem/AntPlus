@@ -13,7 +13,7 @@ namespace MauiAntClientApp.Services
         private readonly ILogger<AntChannelService> _logger;
         private readonly gRPCAntChannel.gRPCAntChannelClient _client;
         private readonly object _lock = new();
-        private event EventHandler<AntResponse>? _responseReceived;
+        private event EventHandler<AntResponse>? ResponseReceived;
         private AsyncServerStreamingCall<ChannelResponse>? _response;
 
         public event EventHandler<AntResponse> ChannelResponse
@@ -22,20 +22,20 @@ namespace MauiAntClientApp.Services
             {
                 lock (_lock)
                 {
-                    if (_responseReceived == null)
+                    if (ResponseReceived == null)
                     {
                         _logger.LogInformation("Invoke HandleChannelResponseEvents");
                         HandleChannelResponseEvents();
                     }
-                    _responseReceived += value;
+                    ResponseReceived += value;
                 }
             }
             remove
             {
                 lock (_lock)
                 {
-                    _responseReceived -= value;
-                    if (_responseReceived == null)
+                    ResponseReceived -= value;
+                    if (ResponseReceived == null)
                     {
                         _logger.LogInformation("Disposing _response");
                         _response?.Dispose();
@@ -60,7 +60,7 @@ namespace MauiAntClientApp.Services
             _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
             await foreach (var update in _response.ResponseStream.ReadAllAsync())
             {
-                _responseReceived?.Invoke(this, new GrpcAntResponse(update));
+                ResponseReceived?.Invoke(this, new GrpcAntResponse(update));
             }
         }
 

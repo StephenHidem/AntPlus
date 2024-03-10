@@ -21,8 +21,8 @@ namespace WpfUsbStickApp.ViewModels
         [NotifyCanExecuteChangedFor(nameof(StartSessionCommand), nameof(StopSessionCommand), nameof(LogLapCommand))]
         private bool stopped = true;
 
-        public int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
-        public int[] MinutesSource { get; } = { 0, 15, 30, 45 };
+        public static int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
+        public static int[] MinutesSource { get; } = { 0, 15, 30, 45 };
 
         [ObservableProperty]
         private int hours;

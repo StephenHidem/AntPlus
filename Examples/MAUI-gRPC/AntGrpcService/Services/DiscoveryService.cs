@@ -43,8 +43,6 @@ namespace AntGrpcService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{Message}", ex.Message);
-
                 // Terminates this process and returns an exit code to the operating system.
                 // This is required to avoid the 'BackgroundServiceExceptionBehavior', which
                 // performs one of two scenarios:
@@ -53,6 +51,7 @@ namespace AntGrpcService.Services
                 //
                 // In order for the Windows Service Management system to leverage configured
                 // recovery options, we need to terminate the process with a non-zero exit code.
+                _logger.LogError(ex, "{Message}", ex.Message);
                 Environment.Exit(1);
             }
             finally

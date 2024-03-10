@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<UI>
+			<Dialog Id="NetworkDlg" Width="370" Height="270" Title="[ProductName] Setup">
+				<Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.LicenseAgreementDlgBannerBitmap)" />
+				<Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+				<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+				<Control Id="Description" Type="Text" X="25" Y="20" Width="300" Height="30" Transparent="yes" NoPrefix="yes" Text="Select the network scope and enter the port number to use. Clients will need to use the specified port number to connect." />
+				<Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}Network Settings" />
+
+				<Control Id="Scopes" Type="RadioButtonGroup" X="20" Y="60" Width="330" Height="140" Text="Network Scope and Port" HasBorder="true" Property="NETWORKSCOPE">
+					<RadioButtonGroup Property="NETWORKSCOPE">
+						<RadioButton Text="Any" X="30" Y="20" Width="330" Height="15" Value="1"/>
+						<RadioButton Text="Local Subnet" X="30" Y="40" Width="330" Height="15" Value="2"/>
+					</RadioButtonGroup>
+				</Control>
+				<Control Id="PortNumber" Type="Text" X="50" Y="122" Width="330" Height="15" Transparent="yes" Text="http://*:"/>
+				<Control Id="Port" Type="Edit" X="80" Y="120" Width="50" Height="15" Property="PORTNUMBER"/>
+
+				<Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+				<Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Text="!(loc.WixUINext)" Default="yes">
+					<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg" Condition="!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1" />
+				</Control>
+				<Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+					<Publish Event="SpawnDialog" Value="CancelDlg" />
+				</Control>
+			</Dialog>
+		</UI>
+	</Fragment>
+</Wix>

@@ -1,0 +1,60 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+	xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
+	xmlns:fire="http://wixtoolset.org/schemas/v4/wxs/firewall">
+	<Package Name="ANT gRPC Service" Manufacturer="Small Earth Technology" Version="1.0.0.0" UpgradeCode="8ddabed2-98f7-40ea-ae02-f623979fccac" Compressed="true">
+		<MediaTemplate EmbedCab="yes"/>
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+		<DirectoryRef Id="INSTALLFOLDER">
+			<Component Id="FirewallAny" Condition="NETWORKSCOPE = 1" Guid="{63B9DA19-1F7E-42F1-BEDE-8B8FDFE24EE8}">
+				<fire:FirewallException Id="FE_AntGrpcService1"
+										Description="Allow ANT gRPC Service thru firewall."
+										Scope="any"
+										Profile="private"
+										Name="ANT gRPC Service"
+										File="AntGrpcService"/>
+			</Component>
+
+			<Component Id="FirewallLocalSubnet" Condition="NETWORKSCOPE = 2" Guid="{99059F19-3B44-4C39-871C-CFAE86D05BCA}">
+				<fire:FirewallException Id="FE_AntGrpcService2"
+										Description="Allow ANT gRPC Service thru firewall."
+										Scope="localSubnet"
+										Profile="private"
+										Name="ANT gRPC Service"
+										File="AntGrpcService"/>
+			</Component>
+
+			<Component Id="ServiceExecutable">
+				<File Id="AntGrpcService" Source="SourceDir\AntGrpcService.exe" />
+
+				<ServiceInstall Id="ServiceInstaller"
+							  Type="ownProcess"
+							  Name="ANT gRPC Service"
+							  DisplayName="ANT gRPC Service"
+							  Description="ANT gRPC service"
+							  Start="auto"
+							  ErrorControl="normal" Arguments="--urls http://*:[PORTNUMBER]"
+							  />
+
+				<ServiceControl Id="StartService"
+							  Start="install"
+							  Stop="both"
+							  Remove="uninstall"
+							  Name="ANT gRPC Service"
+							  Wait="true"
+								/>
+			</Component>
+		</DirectoryRef>
+		
+		<Feature Id="Main">
+			<ComponentRef Id="FirewallLocalSubnet"/>
+			<ComponentRef Id="FirewallAny"/>
+			<ComponentGroupRef Id="HarvestedComponents" />
+			<ComponentRef Id="ServiceExecutable"/>
+		</Feature>
+
+		<Property Id="NETWORKSCOPE" Value="2"/>
+		<Property Id="PORTNUMBER" Value="5073"/>
+		<ui:WixUI Id="WixUI_NetworkInstallDir" InstallDirectory="INSTALLFOLDER"/>
+	</Package>
+</Wix>

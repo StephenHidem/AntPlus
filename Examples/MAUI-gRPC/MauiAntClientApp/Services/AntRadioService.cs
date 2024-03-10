@@ -70,14 +70,6 @@ namespace MauiAntClientApp.Services
             }
 
             UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
-            //_channel = GrpcChannel.ForAddress(uriBuilder.Uri, new GrpcChannelOptions
-            //{
-            //    HttpHandler = new GrpcWebHandler(new HttpClientHandler
-            //    {
-            //        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
-            //    }),
-            //    Credentials = Grpc.Core.ChannelCredentials.Insecure
-            //});
             _channel = GrpcChannel.ForAddress(uriBuilder.Uri);
             _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
             PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());

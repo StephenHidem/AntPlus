@@ -18,8 +18,8 @@ namespace MauiAntClientApp.ViewModels
         [ObservableProperty]
         private int minutes;
 
-        public int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
-        public int[] MinutesSource => [0, 15, 30, 45];
+        public static int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
+        public static int[] MinutesSource => [0, 15, 30, 45];
 
         public MuscleOxygenViewModel(ILogger<MuscleOxygenViewModel> logger)
         {

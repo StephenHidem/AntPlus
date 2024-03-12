@@ -16,14 +16,14 @@ namespace WpfUsbStickApp.Controls
             DataContext = ctf;
         }
 
-        private void Click_SaveSlope(object sender, System.Windows.RoutedEventArgs e)
+        private async void Click_SaveSlope(object sender, System.Windows.RoutedEventArgs e)
         {
-            sensor.SaveSlopeToFlash(30.0);
+            _ = await sensor.SaveSlopeToFlash(30.0);
         }
 
-        private void Click_SaveSerialNumber(object sender, System.Windows.RoutedEventArgs e)
+        private async void Click_SaveSerialNumber(object sender, System.Windows.RoutedEventArgs e)
         {
-            sensor.SaveSerialNumberToFlash(0x1234);
+            _ = await sensor.SaveSerialNumberToFlash(0x1234);
         }
     }
 }

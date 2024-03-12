@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,24 +11,18 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal partial class MuscleOxygenViewModel : ObservableObject
     {
+        private bool started = false;
+
         public MuscleOxygen MuscleOxygen { get; }
-
         public CommonDataPages CommonDataPages => MuscleOxygen.CommonDataPages;
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(StartSessionCommand), nameof(StopSessionCommand), nameof(LogLapCommand))]
-        private bool started;
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(StartSessionCommand), nameof(StopSessionCommand), nameof(LogLapCommand))]
-        private bool stopped = true;
-
-        public int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
-        public int[] MinutesSource { get; } = { 0, 15, 30, 45 };
 
         [ObservableProperty]
         private int hours;
         [ObservableProperty]
         private int minutes;
+
+        public static int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
+        public static int[] MinutesSource => new int[] { 0, 15, 30, 45 };
 
         public MuscleOxygenViewModel(MuscleOxygen muscleOxygen)
         {
@@ -35,50 +30,57 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand]
-        private async Task SetTime()
+        private async Task<MessagingReturnCode> SetTime()
         {
             TimeSpan ts = new(Hours, Minutes, 0);
-            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.SetTime, ts, DateTime.UtcNow);
+            return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.SetTime, ts, DateTime.UtcNow);
         }
 
         [RelayCommand(CanExecute = nameof(CanStartSession))]
-        private async Task StartSession()
+        private async Task<MessagingReturnCode> StartSession()
         {
-            Started = true;
-            Stopped = false;
+            started = true;
+            CheckCanExecutes();
             TimeSpan ts = new(Hours, Minutes, 0);
-            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
+            return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
         }
 
         private bool CanStartSession()
         {
-            return !Started;
+            return !started;
         }
 
         [RelayCommand(CanExecute = nameof(CanStopSession))]
-        private async Task StopSession()
+        private async Task<MessagingReturnCode> StopSession()
         {
-            Started = false;
-            Stopped = true;
+            started = false;
+            CheckCanExecutes();
             TimeSpan ts = new(Hours, Minutes, 0);
-            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
+            return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
         }
 
         private bool CanStopSession()
         {
-            return !Stopped;
+            return started;
         }
 
         [RelayCommand(CanExecute = nameof(CanLogLap))]
-        private async Task LogLap()
+        private async Task<MessagingReturnCode> LogLap()
         {
             TimeSpan ts = new(Hours, Minutes, 0);
-            _ = await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
+            return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
         }
 
         private bool CanLogLap()
         {
-            return Started;
+            return started;
+        }
+
+        private void CheckCanExecutes()
+        {
+            StartSessionCommand.NotifyCanExecuteChanged();
+            StopSessionCommand.NotifyCanExecuteChanged();
+            LogLapCommand.NotifyCanExecuteChanged();
         }
     }
 }

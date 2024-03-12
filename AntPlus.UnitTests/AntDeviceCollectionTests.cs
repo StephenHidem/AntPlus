@@ -35,10 +35,12 @@ namespace AntPlus.UnitTests
             IAntChannel[] mockChannels = new IAntChannel[8];
             Array.Fill(mockChannels, mockAntChannel.Object);
             mockAntRadio.Setup(r => r.InitializeContinuousScanMode().Result).Returns(mockChannels);
-            return new AntDeviceCollection(
+            AntDeviceCollection adc = new(
                 mockAntRadio.Object,
                 null,
                 3000);
+            Thread.Sleep(2000);     // allow time for background initialization task to complete
+            return adc;
         }
 
         [TestMethod]
@@ -62,7 +64,6 @@ namespace AntPlus.UnitTests
             }
 
             // Act
-            Thread.Sleep(2000);
             semaphore.Release(numberOfDevices);
             Task.WaitAll(tasks);
 
@@ -93,7 +94,6 @@ namespace AntPlus.UnitTests
             }
 
             // Act
-            Thread.Sleep(2000);
             semaphore.Release(numberOfDevices);
             Task.WaitAll(tasks);
 

@@ -1,7 +1,7 @@
 ﻿using AntRadioGrpcService;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
@@ -15,7 +15,7 @@ namespace MauiAntClientApp.Services
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
-        private const int gRPCPort = 7072;              // gRPC port
+        private const int gRPCPort = 5073;              // gRPC port
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
         private readonly ILoggerFactory _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
@@ -32,12 +32,13 @@ namespace MauiAntClientApp.Services
         private string? hostVersion;
 
         public int NumChannels => throw new NotImplementedException();
+        public uint SerialNumber => throw new NotImplementedException();
 
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         public FramerType OpenedFrameType => throw new NotImplementedException();
 
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         public PortType OpenedPortType => throw new NotImplementedException();
-
-        public uint SerialNumber => throw new NotImplementedException();
 
         public event EventHandler<AntResponse>? RadioResponse;
 
@@ -68,16 +69,10 @@ namespace MauiAntClientApp.Services
                 }
             }
 
-            UriBuilder uriBuilder = new("https", ServerIPAddress.ToString(), gRPCPort);
-            _channel = GrpcChannel.ForAddress(uriBuilder.Uri, new GrpcChannelOptions
-            {
-                HttpHandler = new GrpcWebHandler(new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                })
-            });
+            UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
+            _channel = GrpcChannel.ForAddress(uriBuilder.Uri);
             _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
-            PropertiesReply reply = await _client.GetPropertiesAsync(new PropertiesRequest());
+            PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
             ProductDescription = reply.ProductDescription;
             SerialString = reply.SerialString;
             HostVersion = reply.HostVersion;
@@ -90,7 +85,7 @@ namespace MauiAntClientApp.Services
                 _logger.LogError("_channel is null!");
                 return [];
             }
-            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new InitScanModeRequest());
+            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();
             for (byte i = 0; i < reply.NumChannels; i++)
@@ -138,12 +133,12 @@ namespace MauiAntClientApp.Services
             throw new NotImplementedException();
         }
 
-        public AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(byte channelNum, SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime)
         {
             throw new NotImplementedException();
         }
 
-        public AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime)
         {
             throw new NotImplementedException();
         }

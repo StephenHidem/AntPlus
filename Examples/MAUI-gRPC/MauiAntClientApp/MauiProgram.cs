@@ -29,7 +29,6 @@ namespace MauiAntClientApp
                 .RegisterViewModels()
                 .RegisterViews();
 
-
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

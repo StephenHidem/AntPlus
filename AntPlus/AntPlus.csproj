@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>3.0.1.0</AssemblyVersion>
+	<AssemblyVersion>3.0.2.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -24,7 +24,7 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Docunemtaion updates.</PackageReleaseNotes>
+	<PackageReleaseNotes>Attempt to re-initialize radio if scanning channel closed unexpectedly.</PackageReleaseNotes>
   </PropertyGroup>
 	
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

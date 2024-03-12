@@ -1,0 +1,34 @@
+﻿<Project Sdk="WixToolset.Sdk/4.0.4">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <CompilerAdditionalOptions>-v</CompilerAdditionalOptions>
+    <VerboseOutput>false</VerboseOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CompilerAdditionalOptions>
+    </CompilerAdditionalOptions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <CompilerAdditionalOptions>
+    </CompilerAdditionalOptions>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Firewall.wixext" Version="4.0.4" />
+    <PackageReference Include="WixToolset.Heat" Version="4.0.4" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />
+  </ItemGroup>
+  <ItemGroup>
+    <HarvestDirectory Include="$(IntermediateOutputPath)publish\AntGrpcService">
+      <ComponentGroupName>HarvestedComponents</ComponentGroupName>
+      <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+      <SuppressRootDirectory>true</SuppressRootDirectory>
+      <SuppressRegistry>true</SuppressRegistry>
+      <Transforms>Filter.xsl</Transforms>
+    </HarvestDirectory>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Filter.xsl" />
+  </ItemGroup>
+</Project>

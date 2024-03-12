@@ -3,7 +3,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using SmallEarthTech.AntRadioInterface;
 
-namespace AntGrpcServer.Services
+namespace AntGrpcService.Services
 {
     public class AntChannelService(ILogger<AntChannelService> logger, IAntRadio antRadio) : gRPCAntChannel.gRPCAntChannelBase
     {

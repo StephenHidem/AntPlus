@@ -6,6 +6,7 @@ namespace SmallEarthTech.AntRadioInterface
     /// <summary>
     /// Possible port connection types.
     /// </summary>
+    [Obsolete("This enumeration is only used by the underlying native DLL. It will be removed in the next release.")]
     public enum PortType : byte
     {
         /// <summary>The USB port</summary>
@@ -17,6 +18,7 @@ namespace SmallEarthTech.AntRadioInterface
     /// <summary>
     /// Possible framing modes. Use BasicANT unless you know you need to use another.
     /// </summary>
+    [Obsolete("This enumeration is only used by the underlying native DLL. It will be removed in the next release.")]
     public enum FramerType : byte
     {
         /// <summary>The basic ANT</summary>
@@ -213,9 +215,11 @@ namespace SmallEarthTech.AntRadioInterface
         int NumChannels { get; }
         /// <summary>Gets the type of the opened frame.</summary>
         /// <value>The type of the opened frame.</value>
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         FramerType OpenedFrameType { get; }
         /// <summary>Gets the type of the opened port.</summary>
         /// <value>The type of the opened port.</value>
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         PortType OpenedPortType { get; }
 
         /// <summary>Gets the serial number.</summary>

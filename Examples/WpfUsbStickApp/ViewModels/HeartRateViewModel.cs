@@ -60,21 +60,12 @@ namespace WpfUsbStickApp.ViewModels
         }
         private bool CanRequestPage()
         {
-            switch (PageRequested)
+            return PageRequested switch
             {
-                case HeartRate.DataPage.Default:
-                case HeartRate.DataPage.PreviousHeartBeat:
-                    return false;
-                case HeartRate.DataPage.CumulativeOperatingTime:
-                case HeartRate.DataPage.ManufacturerInfo:
-                case HeartRate.DataPage.ProductInfo:
-                case HeartRate.DataPage.SwimInterval:
-                case HeartRate.DataPage.Capabilities:
-                case HeartRate.DataPage.BatteryStatus:
-                    return true;
-                default:
-                    return false;
-            }
+                HeartRate.DataPage.Default or HeartRate.DataPage.PreviousHeartBeat => false,
+                HeartRate.DataPage.CumulativeOperatingTime or HeartRate.DataPage.ManufacturerInfo or HeartRate.DataPage.ProductInfo or HeartRate.DataPage.SwimInterval or HeartRate.DataPage.Capabilities or HeartRate.DataPage.BatteryStatus => true,
+                _ => false,
+            };
         }
 
         [RelayCommand(CanExecute = nameof(CanSetSportMode))]

@@ -4,40 +4,67 @@ option csharp_namespace = "AntRadioGrpcService";
 
 package AntRadioPackage;
 
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
 // The ANT radio gRPC service.
 service gRPCAntRadio {
-	rpc GetProperties (PropertiesRequest) returns (PropertiesReply);
-	rpc Subscribe (SubscribeRequest) returns (stream RadioResponse);
-	rpc InitializeContinuousScanMode (InitScanModeRequest) returns (InitScanModeReply);
+	// Cancels any pending transfers.
+	rpc CancelTransfers (CancelTransfersRequest) returns (google.protobuf.Empty);
+	// Retrieves the ANT radio general characteristics.
+	rpc GetProperties (google.protobuf.Empty) returns (PropertiesReply);
+	// Subcribes to the stream of ANT device broadcast messages. The ANT radio should be configure for continuous scan mode.
+	rpc Subscribe (google.protobuf.Empty) returns (stream AntResponseReply);
+	// Initializes the ANT radio for continuous scan mode. Channel 0 is used to receive broadcasts and the remaining channels are used to send messages to ANT devices.
+	rpc InitializeContinuousScanMode (google.protobuf.Empty) returns (InitScanModeReply);
+	// Gets the requested ANT channel.
 	rpc GetChannel (GetChannelRequest) returns (GetChannelReply);
+	// Gets the ANT radio capabiities.
 	rpc GetDeviceCapabilities (GetDeviceCapabilitiesRequest) returns (GetDeviceCapabilitiesReply);
+	// Gets stored NVM data from the ANT radio.
+	rpc ReadUserNvm (ReadUserNvmRequest) returns (AntResponseReply);
+	// Request a message from the ANT radio and return the response.
+	rpc RequestMessageAndResponse (RequestMessageAndResponseRequest) returns (AntResponseReply);
+	// Writes a raw unformatted message to the ANT radio.
+	rpc WriteRawMessageToDevice (WriteRawMessageToDeviceRequest) returns (google.protobuf.BoolValue);
 }
 
-message PropertiesRequest {}
+message CancelTransfersRequest {
+	// Time to wait for cancellation in milliseconds
+	int32 wait_time = 1;
+}
+
+// Common properties of the ANT radio.
 message PropertiesReply {
+	// ANT radio product description.
 	string product_description = 1;
+	// ANT radio serial number.
 	string serial_string = 2;
+	// ANT radio version number.
 	string host_version = 3;
 }
 
-message SubscribeRequest {}
-message RadioResponse {}
-
-message InitScanModeRequest {}
+// The number of configured channels.
 message InitScanModeReply {
 	int32 num_channels = 1;
 }
 
+// Requested ANT channel.
 message GetChannelRequest {
 	int32 channel_number = 1;
 }
+// This message may change in the future.
 message GetChannelReply {
 }
 
+// ANT radio capabiities request.
 message GetDeviceCapabilitiesRequest {
+	// Returns a new copy if true.
 	optional bool force_copy = 1;
+	// Time to wait for reply from ANT radio.
 	optional uint32 wait_response_time = 2;
 }
+// ANT radio capabiities reply. Consists of number of flags and other characteristics.
 message GetDeviceCapabilitiesReply {
 	uint32 max_ant_channels = 1;
 	uint32 max_networks = 2;
@@ -68,4 +95,49 @@ message GetDeviceCapabilitiesReply {
 	bool selective_data_update = 27;
 	bool single_channel_encryption = 28;
 	uint32 max_data_channels = 29;
+}
+
+message ReadUserNvmRequest {
+	uint32 address = 1;
+	uint32 size = 2;
+	optional uint32 wait_response_time = 3;
+}
+
+// Message ID of request. Note: Where desired, raw byte values can be cast to the enum type. IE: <c>(RequestMessageID)0x4E</c> will compile.
+enum RequestMessageID {
+	// Undefined message ID.
+	REQUEST_MESSAGE_ID_UNDEFINED = 0;
+    // The version number.
+    REQUEST_MESSAGE_ID_VERSION = 0x3E;
+    // The channel identifier.
+    REQUEST_MESSAGE_ID_CHANNEL_ID = 0x51;
+    // The channel status.
+    REQUEST_MESSAGE_ID_CHANNEL_STATUS = 0x52;
+    // The ANT radio capabilities.
+    REQUEST_MESSAGE_ID_CAPABILITIES = 0x54;
+    // The serial number.
+    REQUEST_MESSAGE_ID_SERIAL_NUMBER = 0x61;
+    // The user NVM.
+    REQUEST_MESSAGE_ID_USER_NVM = 0x7C;
+}
+
+message RequestMessageAndResponseRequest {
+	optional uint32 channel_number = 1;
+	RequestMessageID msg_id = 2;
+	uint32 wait_response_time = 3;
+}
+
+message WriteRawMessageToDeviceRequest {
+	uint32 msg_id = 1;
+	bytes msg_data = 2;
+}
+
+message AntResponseReply {
+    uint32 channel_number = 1;
+    uint32 response_id = 2;
+    uint32 channel_id = 3;
+    bytes payload = 4;
+    int32 rssi = 5;
+    int32 threshold_configuration_value = 6;
+    uint32 timestamp = 7;
 }

@@ -23,9 +23,11 @@ namespace SmallEarthTech.AntUsbStick
         public int NumChannels => _antDevice.getNumChannels();
 
         /// <inheritdoc/>
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         public FramerType OpenedFrameType => (FramerType)_antDevice.getOpenedFrameType();
 
         /// <inheritdoc/>
+        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
         public PortType OpenedPortType => (PortType)_antDevice.getOpenedPortType();
 
         /// <inheritdoc/>
@@ -47,6 +49,7 @@ namespace SmallEarthTech.AntUsbStick
 
         private void AntDevice_deviceResponse(ANT_Response response)
         {
+            _logger.LogDebug("RadioResponse: {Channel}, {ResponseId}, {Data}", response.antChannel, (MessageId)response.responseID, BitConverter.ToString(response.messageContents));
             RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="this"
+             x:Class="MauiAntGrpcClient.Views.FitnessEquipment.CapsAndSettingsView">
+    <VerticalStackLayout BindingContext="{x:Reference this}">
+        <Frame>
+            <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="16" RowSpacing="8">
+                <StackLayout>
+                    <Label Text="Supported Training Modes" FontAttributes="Bold" TextDecorations="Underline"/>
+                    <Label Text="{Binding ViewModel.FitnessEquipment.Capabilities, StringFormat='Capabiities: {0}'}"/>
+                    <Label Text="{Binding ViewModel.FitnessEquipment.MaxTrainerResistance, StringFormat='Max. Resistance (Newtons): {0}'}"/>
+                </StackLayout>
+                <Button Grid.Column="1" Text="Request FE Capabilities" Command="{Binding ViewModel.FECapabilitiesRequestCommand}"/>
+            </Grid>
+        </Frame>
+        <Frame>
+            <StackLayout>
+                <Label Text="Resistance Settings" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="*, *, *, *" ColumnSpacing="16" RowSpacing="8">
+                    <Button Text="Set Target Power" Command="{Binding ViewModel.SetTargetPowerCommand}" CommandParameter="{Binding Source={x:Reference TargetPower}, Path=Text}"/>
+                    <Entry Grid.Column="1" x:Name="TargetPower" Placeholder="Target Power"/>
+                    <Button Grid.Row="1" Text="Set Basic Resistance" Command="{Binding ViewModel.SetBasicResistanceCommand}" CommandParameter="{Binding Source={x:Reference BasicResistance}, Path=Text}"/>
+                    <Entry Grid.Column="1" Grid.Row="1" x:Name="BasicResistance" Placeholder="Basic Resistance"/>
+                    <Button Grid.Row="2" Text="Set Track Resistance" Command="{Binding ViewModel.SetTrackResistanceCommand}"/>
+                    <StackLayout Grid.Column="1" Grid.Row="2">
+                        <Entry Placeholder="Grade"/>
+                        <Entry Placeholder="Coeff. of Rolling Resistance"/>
+                    </StackLayout>
+                    <Button Grid.Row="3" Text="Set Wind Resistance" Command="{Binding ViewModel.SetWindResistanceCommand}" CommandParameter="{Binding Source={x:Reference WindResistance}, Path=Text}"/>
+                    <Entry Grid.Column="1" Grid.Row="3" Placeholder="Wind Resistance" x:Name="WindResistance"/>
+                </Grid>
+            </StackLayout>
+        </Frame>
+    </VerticalStackLayout>
+</ContentView>

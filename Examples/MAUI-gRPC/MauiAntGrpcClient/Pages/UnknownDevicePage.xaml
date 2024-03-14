@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:converters="clr-namespace:MauiAntGrpcClient.Converters"
+             xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
+             x:DataType="viewmodels:UnknownDeviceViewModel"
+             x:Class="MauiAntGrpcClient.Pages.UnknownDevicePage"
+             Title="UnknownDevicePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToStringConverter x:Key="ByteArrayToString"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid Margin="10">
+        <Frame>
+            <CollectionView ItemsSource="{Binding UnknownDevice.DataPages}">
+                <CollectionView.Header>
+                    <Label Text="Data Pages" FontAttributes="Bold" TextDecorations="Underline"/>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="sys:Array">
+                        <Label Text="{Binding ., Converter={StaticResource ByteArrayToString}}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Frame>
+        <Label IsVisible="{Binding UnknownDevice.Offline}" Style="{StaticResource OfflineStyle}"/>
+    </Grid>
+</ContentPage>

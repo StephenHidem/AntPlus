@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;assembly=SmallEarthTech.AntPlus"
+             x:DataType="ant:Climber"
+             x:Class="MauiAntGrpcClient.Views.FitnessEquipment.ClimberView">
+    <VerticalStackLayout>
+        <Label Text="Climber" FontAttributes="Bold" TextDecorations="Underline"/>
+        <Label Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
+        <Label Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+        <Label Text="{Binding StrideCycles, StringFormat='Stride Cycles: {0}'}"/>
+        <Label Text="{Binding Capabilities, StringFormat='Capabilities: {0}'}"/>
+    </VerticalStackLayout>
+</ContentView>

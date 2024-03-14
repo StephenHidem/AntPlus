@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="this"
+             x:Class="MauiAntGrpcClient.Views.BicyclePower.PowerView">
+    <VerticalStackLayout BindingContext="{x:Reference this}">
+        <Frame>
+            <StackLayout>
+                <Label Text="Power" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Label Text="{Binding Power.PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
+                <Label Text="{Binding Power.PedalContribution, StringFormat='Pedal Contribution: {0}'}"/>
+                <Label Text="{Binding Power.InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
+                <Label Text="{Binding Power.InstantaneousPower, StringFormat='Instantaneous Power (Watts): {0}'}"/>
+                <Label Text="{Binding Power.AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
+            </StackLayout>
+        </Frame>
+    </VerticalStackLayout>
+</ContentView>

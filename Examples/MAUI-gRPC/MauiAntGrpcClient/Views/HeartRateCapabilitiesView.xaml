@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus;assembly=SmallEarthTech.AntPlus"
+             x:Name="this"
+             x:Class="MauiAntGrpcClient.Views.HeartRateCapabilitiesView">
+
+    <VerticalStackLayout BindingContext="{x:Reference this}">
+        <Frame>
+            <StackLayout>
+                <Label Text="Capabilities" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Label Text="{Binding HeartRateViewModel.HeartRate.Capabilities.Supported, StringFormat='Capabilities Supported: {0}'}"/>
+                <Label Text="{Binding HeartRateViewModel.HeartRate.Capabilities.Enabled, StringFormat='Capabilities Enabled: {0}'}"/>
+            </StackLayout>
+        </Frame>
+
+        <Frame>
+            <StackLayout>
+                <Label Text="Gym Mode" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="24">
+                    <HorizontalStackLayout>
+                        <CheckBox IsChecked="{Binding HeartRateViewModel.EnableGymMode}" IsEnabled="{Binding HeartRateViewModel.IsGymModeSupported}"/>
+                        <Label Text="Enable Gym Mode" VerticalOptions="Center" IsEnabled="{Binding HeartRateViewModel.IsGymModeSupported}"/>
+                    </HorizontalStackLayout>
+                    <Button Grid.Column="1" Text="Set Gym Mode" Command="{Binding HeartRateViewModel.SetGymModeCommand}"/>
+                </Grid>
+            </StackLayout>
+        </Frame>
+
+        <Frame>
+            <StackLayout RadioButtonGroup.GroupName="SportMode" RadioButtonGroup.SelectedValue="{Binding HeartRateViewModel.ModeRequested}">
+                <Label Text="Sport Mode" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="24">
+                    <StackLayout>
+                        <RadioButton Content="Generic" Value="{x:Static ant:SportMode.Generic}"/>
+                        <RadioButton Content="Running" Value="{x:Static ant:SportMode.Running}" IsEnabled="{Binding HeartRateViewModel.IsRunningSupported}"/>
+                        <RadioButton Content="Cycling" Value="{x:Static ant:SportMode.Cycling}" IsEnabled="{Binding HeartRateViewModel.IsCyclingSupported}"/>
+                        <RadioButton Content="Swimming" Value="{x:Static ant:SportMode.Swimming}" IsEnabled="{Binding HeartRateViewModel.IsSwimmingSupported}"/>
+                    </StackLayout>
+                    <Button Grid.Column="1" VerticalOptions="Center" Text="Set Sport Mode" Command="{Binding HeartRateViewModel.SetSportModeCommand}"/>
+                </Grid>
+            </StackLayout>
+        </Frame>
+    </VerticalStackLayout>
+</ContentView>

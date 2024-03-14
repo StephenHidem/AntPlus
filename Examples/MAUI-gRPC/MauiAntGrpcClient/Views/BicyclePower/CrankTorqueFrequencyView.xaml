@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:MauiAntGrpcClient.Views.BicyclePower"
+             xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
+             x:DataType="viewmodels:BicyclePowerViewModel"
+             x:Class="MauiAntGrpcClient.Views.BicyclePower.CrankTorqueFrequencyView">
+    <VerticalStackLayout>
+        <Frame>
+            <StackLayout>
+                <Label Text="Crank Torque Frequency" FontAttributes="Bold" TextDecorations="Underline"/>
+                <Label Text="{Binding BicyclePower.CTFSensor.Slope, StringFormat='Slope (Nm/Hz): {0:F1}'}"/>
+                <Label Text="{Binding BicyclePower.CTFSensor.Cadence, StringFormat='Cadence (RPM): {0:F3}'}"/>
+                <Label Text="{Binding BicyclePower.CTFSensor.Torque, StringFormat='Torque (Nm): {0:F3}'}"/>
+                <Label Text="{Binding BicyclePower.CTFSensor.Power, StringFormat='Power (Watts): {0:F3}'}"/>
+            </StackLayout>
+        </Frame>
+        <Frame>
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+                <Button Text="Calibration Request" Command="{Binding ManualCalRequestCommand}"/>
+                <Label Text="{Binding BicyclePower.CTFSensor.Offset, StringFormat='Calibration Offset (Hz): {0}'}" Grid.Column="1" VerticalOptions="Center"/>
+            </Grid>
+        </Frame>
+        <Frame>
+            <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto" ColumnSpacing="16" RowSpacing="8">
+                <Entry Grid.Column="1" Grid.Row="0" x:Name="Slope" Keyboard="Numeric" Placeholder="Enter a value from 10.0 to 50.0"/>
+                <Button Grid.Column="0" Grid.Row="0" Text="Save Slope to Flash" Command="{Binding SaveSlopeCommand}" CommandParameter="{Binding Source={x:Reference Slope}, Path=Text}"/>
+                <Entry Grid.Column="1" Grid.Row="1" x:Name="SerialNumber" Keyboard="Numeric" Placeholder="0 to 65535"/>
+                <Button Grid.Column="0" Grid.Row="1" Text="Save Serial Number to Flash" Command="{Binding SaveSerialNumberCommand}" CommandParameter="{Binding Source={x:Reference SerialNumber}, Path=Text}"/>
+                <Label Grid.ColumnSpan="2" Grid.Row="2" VerticalOptions="Center" Text="{Binding CtfAckMessage, StringFormat='ACK Message: {0}'}"/>
+            </Grid>
+        </Frame>
+    </VerticalStackLayout>
+</ContentView>

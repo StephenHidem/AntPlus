@@ -38,7 +38,7 @@ namespace AntMulticastServer
             while (!stoppingToken.IsCancellationRequested)
             {
                 UdpReceiveResult result = await _udpClient.ReceiveAsync(stoppingToken);
-                _logger.LogDebug("Multicast reply: {Reply}", BitConverter.ToString(result.Buffer));
+                _logger.LogDebug("Multicast reply: IP - {IP}, Message - {Reply}", result.RemoteEndPoint, BitConverter.ToString(result.Buffer));
                 ChannelId channelId = new(BitConverter.ToUInt32(result.Buffer, 0));
                 byte[] msg = result.Buffer.Skip(4).Take(8).ToArray();
                 uint ackWaitTime = BitConverter.ToUInt32(result.Buffer, 12);

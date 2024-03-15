@@ -15,7 +15,14 @@ namespace AntGrpcService.Services
             _logger.LogInformation("DiscoveryService running. Multicast group {GroupAddress}", grpAddress.ToString());
 
             // create IPv4 UDP client
-            using UdpClient udpClient = new(multicastPort, AddressFamily.InterNetwork);
+            IPAddress? localIPAddress = Dns.GetHostAddresses(Dns.GetHostName()).Where(a => a.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
+            if (localIPAddress == null)
+            {
+                _logger.LogError("Unable to get an IPv4 address for this host.");
+                return;
+            }
+            IPEndPoint localIPEndPoint = new(localIPAddress, multicastPort);
+            using UdpClient udpClient = new(localIPEndPoint);
 
             try
             {

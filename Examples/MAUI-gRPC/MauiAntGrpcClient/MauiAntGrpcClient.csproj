@@ -40,10 +40,9 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\small_earth_icon.svg" Color="Black" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -57,6 +56,11 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\more_arrow.svg" />
+	  <None Remove="Resources\Splash\small_earth_tech.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\small_earth_tech.svg" Color="Black" />
 	</ItemGroup>
 
 	<ItemGroup>

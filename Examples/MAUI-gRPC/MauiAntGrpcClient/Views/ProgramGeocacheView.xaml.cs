@@ -4,12 +4,16 @@ namespace MauiAntGrpcClient.Views;
 
 public partial class ProgramGeocacheView : ContentView
 {
-    public static readonly BindableProperty GeocacheViewModelProperty =
-   BindableProperty.Create(nameof(GeocacheViewModel), typeof(GeocacheViewModel), typeof(ProgramGeocacheView));
-    public GeocacheViewModel GeocacheViewModel
+    public static readonly BindableProperty ProgramGeocacheProperty =
+        BindableProperty.Create(
+            nameof(ProgramGeocache),
+            typeof(GeocacheViewModel),
+            typeof(ProgramGeocacheView));
+
+    public GeocacheViewModel ProgramGeocache
     {
-        get => (GeocacheViewModel)GetValue(GeocacheViewModelProperty);
-        set => SetValue(GeocacheViewModelProperty, value);
+        get => (GeocacheViewModel)GetValue(ProgramGeocacheProperty);
+        set => SetValue(ProgramGeocacheProperty, value);
     }
 
     public ProgramGeocacheView()

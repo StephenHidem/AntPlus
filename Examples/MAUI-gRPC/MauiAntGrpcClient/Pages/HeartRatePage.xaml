@@ -49,7 +49,7 @@
                         </StackLayout>
                     </Frame>
                 </VerticalStackLayout>
-                <views:HeartRateCapabilitiesView HeartRateViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference cap}, Path=IsChecked}"/>
+                <views:HeartRateCapabilitiesView HeartRateCapabilities="{Binding .}" IsVisible="{Binding Source={x:Reference cap}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>
 

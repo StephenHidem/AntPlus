@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:MauiAntGrpcClient.Views"
              xmlns:converters="clr-namespace:MauiAntGrpcClient.Converters"
              xmlns:views="clr-namespace:MauiAntGrpcClient.Views"
              xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
@@ -47,9 +46,9 @@
                         </StackLayout>
                     </Frame>
                 </VerticalStackLayout>
-                
-                <views:ProgramGeocacheView GeocacheViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
-                <controls:CommonDataPagesView CommonDataPages="{Binding Geocache.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+
+                <views:ProgramGeocacheView ProgramGeocache="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
+                <views:CommonDataPagesView CommonDataPages="{Binding Geocache.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>
 

@@ -4,12 +4,16 @@ namespace MauiAntGrpcClient.Views.FitnessEquipment;
 
 public partial class CapsAndSettingsView : ContentView
 {
-    public static readonly BindableProperty ViewModelProperty =
-        BindableProperty.Create(nameof(ViewModel), typeof(FitnessEquipmentViewModel), typeof(CapsAndSettingsView));
-    public FitnessEquipmentViewModel ViewModel
+    public static readonly BindableProperty CapsAndSettingsProperty =
+        BindableProperty.Create(
+            nameof(CapsAndSettings),
+            typeof(FitnessEquipmentViewModel),
+            typeof(CapsAndSettingsView));
+
+    public FitnessEquipmentViewModel CapsAndSettings
     {
-        get => (FitnessEquipmentViewModel)GetValue(ViewModelProperty);
-        set => SetValue(ViewModelProperty, value);
+        get => (FitnessEquipmentViewModel)GetValue(CapsAndSettingsProperty);
+        set => SetValue(CapsAndSettingsProperty, value);
     }
 
     public CapsAndSettingsView()

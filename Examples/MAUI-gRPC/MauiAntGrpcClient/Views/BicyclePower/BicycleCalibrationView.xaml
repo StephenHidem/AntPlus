@@ -2,24 +2,26 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:bike="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
+             xmlns:views="clr-namespace:MauiAntGrpcClient.Views.BicyclePower"
              x:Name="this"
+             x:DataType="views:BicycleCalibrationView"
              x:Class="MauiAntGrpcClient.Views.BicyclePower.BicycleCalibrationView">
     <VerticalStackLayout BindingContext="{x:Reference this}">
         <Frame>
             <StackLayout>
                 <Label Text="Status" FontAttributes="Bold" TextDecorations="Underline"/>
-                <Label Text="{Binding ViewModel.BicyclePower.Calibration.CalibrationStatus, StringFormat='Calibration Status: {0}'}"/>
-                <Label Text="{Binding ViewModel.BicyclePower.Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported: {0}'}"/>
-                <Label Text="{Binding ViewModel.BicyclePower.Calibration.AutoZeroStatus, StringFormat='Auto Zero Status: {0}'}"/>
-                <Label Text="{Binding ViewModel.BicyclePower.Calibration.CalibrationData, StringFormat='Calibration Data: {0}'}"/>
-                <Button Text="Manual Calibration Request" HorizontalOptions="Start" Command="{Binding ViewModel.ManualCalRequestCommand}" Margin="0, 8, 0, 8"/>
-                <Button Text="Toggle Auto Zero Configuration" HorizontalOptions="Start" Command="{Binding ViewModel.SetAutoZeroConfigCommand}" />
+                <Label Text="{Binding BicycleCalibration.BicyclePower.Calibration.CalibrationStatus, StringFormat='Calibration Status: {0}'}"/>
+                <Label Text="{Binding BicycleCalibration.BicyclePower.Calibration.AutoZeroSupported, StringFormat='Auto Zero Supported: {0}'}"/>
+                <Label Text="{Binding BicycleCalibration.BicyclePower.Calibration.AutoZeroStatus, StringFormat='Auto Zero Status: {0}'}"/>
+                <Label Text="{Binding BicycleCalibration.BicyclePower.Calibration.CalibrationData, StringFormat='Calibration Data: {0}'}"/>
+                <Button Text="Manual Calibration Request" HorizontalOptions="Start" Command="{Binding BicycleCalibration.ManualCalRequestCommand}" Margin="0, 8, 0, 8"/>
+                <Button Text="Toggle Auto Zero Configuration" HorizontalOptions="Start" Command="{Binding BicycleCalibration.SetAutoZeroConfigCommand}" />
             </StackLayout>
         </Frame>
         <Frame>
             <StackLayout>
                 <Label Text="Measurement Output Data" FontAttributes="Bold" TextDecorations="Underline"/>
-                <CollectionView BindingContext="{Binding ViewModel.BicyclePower.Calibration}" ItemsSource="{Binding Measurements}">
+                <CollectionView BindingContext="{Binding BicycleCalibration.BicyclePower.Calibration}" ItemsSource="{Binding BicycleCalibration.BicyclePower.Calibration.Measurements}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="bike:MeasurementOutputData">
                             <StackLayout Margin="4">
@@ -36,9 +38,9 @@
             <StackLayout>
                 <Label Text="Custom Calibration Parameters" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="16" RowSpacing="8">
-                    <Button Text="Get Parameters" Command="{Binding ViewModel.GetCustomCalParametersCommand}"/>
-                    <Label Text="{Binding ViewModel.BicyclePower.Calibration.CustomCalibrationParameters, StringFormat='Parameters: {0}'}" Grid.Column="1" VerticalOptions="Center"/>
-                    <Button Text="Set Parameters" Command="{Binding ViewModel.SetCustomCalParametersCommand}" CommandParameter="{Binding Source={x:Reference CustomCalParms}, Path=Text}" Grid.Row="1"/>
+                    <Button Text="Get Parameters" Command="{Binding BicycleCalibration.GetCustomCalParametersCommand}"/>
+                    <Label Text="{Binding BicycleCalibration.BicyclePower.Calibration.CustomCalibrationParameters, StringFormat='Parameters: {0}'}" Grid.Column="1" VerticalOptions="Center"/>
+                    <Button Text="Set Parameters" Command="{Binding BicycleCalibration.SetCustomCalParametersCommand}" CommandParameter="{Binding Source={x:Reference CustomCalParms}, Path=Text}" Grid.Row="1"/>
                     <Entry Placeholder="Enter 6 hae bytes" x:Name="CustomCalParms" Grid.Column="1" Grid.Row="1"/>
                 </Grid>
             </StackLayout>

@@ -50,7 +50,7 @@
                     </Frame>
                 </VerticalStackLayout>
 
-                <views:CapsAndSettingsView ViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference caps}, Path=IsChecked}"/>
+                <views:CapsAndSettingsView CapsAndSettings="{Binding .}" IsVisible="{Binding Source={x:Reference caps}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>
 

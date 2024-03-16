@@ -4,7 +4,7 @@
              xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
              x:DataType="viewmodels:AssetTrackerViewModel"
              xmlns:tracker="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;assembly=SmallEarthTech.AntPlus"
-             xmlns:controls="clr-namespace:MauiAntGrpcClient.Views"
+             xmlns:views="clr-namespace:MauiAntGrpcClient.Views"
              x:Class="MauiAntGrpcClient.Pages.AssetTrackerPage"
              Title="AssetTrackerPage">
     <Grid Margin="10" RowDefinitions="Auto, *">
@@ -35,7 +35,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <controls:CommonDataPagesView CommonDataPages="{Binding Tracker.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <views:CommonDataPagesView CommonDataPages="{Binding Tracker.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>
 

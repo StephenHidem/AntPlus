@@ -6,10 +6,9 @@ public partial class TEPSView : ContentView
 {
     public static readonly BindableProperty TEPSProperty =
         BindableProperty.Create(
-        nameof(TEPS),
-        typeof(TorqueEffectivenessAndPedalSmoothness),
-        typeof(TEPSView)
-    );
+            nameof(TEPS),
+            typeof(TorqueEffectivenessAndPedalSmoothness),
+            typeof(TEPSView));
 
     public TorqueEffectivenessAndPedalSmoothness TEPS
     {

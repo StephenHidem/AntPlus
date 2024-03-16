@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
              x:DataType="viewmodels:MuscleOxygenViewModel"
-             xmlns:controls="clr-namespace:MauiAntGrpcClient.Views"
+             xmlns:views="clr-namespace:MauiAntGrpcClient.Views"
              x:Class="MauiAntGrpcClient.Pages.MuscleOxygenPage"
              Title="MuscleOxygenPage">
     <Grid Margin="10" RowDefinitions="Auto, *">
@@ -53,7 +53,7 @@
             </StackLayout>
         </ScrollView>
 
-        <controls:CommonDataPagesView CommonDataPages="{Binding MuscleOxygen.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+        <views:CommonDataPagesView CommonDataPages="{Binding MuscleOxygen.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
 
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding MuscleOxygen.Offline}" Grid.RowSpan="2"/>
     </Grid>

@@ -6,10 +6,9 @@ public partial class PowerView : ContentView
 {
     public static readonly BindableProperty PowerProperty =
         BindableProperty.Create(
-        nameof(Power),
-        typeof(StandardPowerSensor),
-        typeof(PowerView)
-    );
+            nameof(Power),
+            typeof(StandardPowerSensor),
+            typeof(PowerView));
 
     public StandardPowerSensor Power
     {

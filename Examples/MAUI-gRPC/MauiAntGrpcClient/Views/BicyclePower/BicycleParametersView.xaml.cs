@@ -4,12 +4,16 @@ namespace MauiAntGrpcClient.Views.BicyclePower;
 
 public partial class BicycleParametersView : ContentView
 {
-    public static readonly BindableProperty ViewModelProperty =
-        BindableProperty.Create(nameof(ViewModel), typeof(BicyclePowerViewModel), typeof(BicycleCalibrationView));
-    public BicyclePowerViewModel ViewModel
+    public static readonly BindableProperty BicycleParametersProperty =
+        BindableProperty.Create(
+            nameof(BicycleParameters),
+            typeof(BicyclePowerViewModel),
+            typeof(BicycleParametersView));
+
+    public BicyclePowerViewModel BicycleParameters
     {
-        get => (BicyclePowerViewModel)GetValue(ViewModelProperty);
-        set => SetValue(ViewModelProperty, value);
+        get => (BicyclePowerViewModel)GetValue(BicycleParametersProperty);
+        set => SetValue(BicycleParametersProperty, value);
     }
 
     public BicycleParametersView()

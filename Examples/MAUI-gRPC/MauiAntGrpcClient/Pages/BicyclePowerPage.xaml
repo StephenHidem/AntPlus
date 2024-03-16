@@ -23,8 +23,8 @@
                     <ContentView Content="{Binding SpecificBicycleView}"/>
                 </VerticalStackLayout>
 
-                <bpviews:BicycleCalibrationView ViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference cal}, Path=IsChecked}"/>
-                <bpviews:BicycleParametersView ViewModel="{Binding .}" IsVisible="{Binding Source={x:Reference parm}, Path=IsChecked}"/>
+                <bpviews:BicycleCalibrationView BicycleCalibration="{Binding .}" IsVisible="{Binding Source={x:Reference cal}, Path=IsChecked}"/>
+                <bpviews:BicycleParametersView BicycleParameters="{Binding .}" IsVisible="{Binding Source={x:Reference parm}, Path=IsChecked}"/>
                 <views:CommonDataPagesView CommonDataPages="{Binding BicyclePower.PowerSensor.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
             </VerticalStackLayout>
         </ScrollView>

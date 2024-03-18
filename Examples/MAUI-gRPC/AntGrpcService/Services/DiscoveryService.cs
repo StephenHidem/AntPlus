@@ -12,8 +12,6 @@ namespace AntGrpcService.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("DiscoveryService running. Multicast group {GroupAddress}", grpAddress.ToString());
-
             // create IPv4 UDP client
             IPAddress? localIPAddress = Dns.GetHostAddresses(Dns.GetHostName()).Where(a => a.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
             if (localIPAddress == null)
@@ -28,6 +26,7 @@ namespace AntGrpcService.Services
             {
                 // join multicast group
                 udpClient.JoinMulticastGroup(grpAddress);
+                _logger.LogInformation("DiscoveryService running. Listening on {LocalIp}.", udpClient.Client.LocalEndPoint!.ToString());
 
                 // Loop listening for service requests. UDP is not reliable and multiple clients may request access to service.
                 while (!stoppingToken.IsCancellationRequested)

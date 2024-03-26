@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" revisionNumber="1">
+	<developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.
+       <autoOutline />  -->
+			<para>
+				This example consists of four projects. AntGrpcShared is a class library providing a gRPC client/server to be consumed by the other
+				projects. AntGrpcService is a Windows service that provides services to connect to and communicate with an ANT USB stick.
+				The MauiAntClientApp is a .NET MAUI project and gRPC client that is used to demonstrate Windows/Android applications that work with the
+				remote server application on a local subnet. <legacyBold>I have not tested the other platforms supported by .NET MAUI.</legacyBold>
+			</para>
+			<alert class="note" title="About gRPC">
+				<para>
+					gRPC is a Google defined protocol for remote procedure calls. It is the recommended RPC to use instead of WCF. Also,
+					don't confuse <legacyBold>gRPC channels</legacyBold> with <legacyBold>ANT radio channels</legacyBold>. gRPC is a
+					network protocol, ANT radio channels are a Dynastream/Garmin protocol for ANT radios.
+				</para>
+			</alert>
+			<para>
+				The intent of AntGrpcService is to make the ANT USB stick accessible not only to client applications running on the local
+				host but mobile device emulators and mobile devices connected to the network the service is running on.
+			</para>
+		</introduction>
+
+		<!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="Section1">
+			<title>The MAUI Example Projects</title>
+			<content>
+				<para>
+					AntGrpcShared is the glue that facilitates communication between clients and the service. The benefit of using
+					gRPC is that multiple clients can run simultaneously, both on the local PC and over the network.
+				</para>
+			</content>
+			<!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible. -->
+			<sections>
+				<section address="SubSection1">
+					<title>AntGrpcShared</title>
+					<content>
+						<para>
+							This class library is configured as a gRPC client/server library. The .proto files define the messages and data exchanged
+							between client and server implementations.
+						</para>
+					</content>
+				</section>
+				<section address="SubSection2">
+					<title>AntGrpcService</title>
+					<content>
+						<para>
+							The server is a Windows service that runs on the host PC that has an ANT USB stick connected to it. Three services are
+							provided.
+						</para>
+						<para>
+							The DiscoveryService replies to client messages over a UDP multicast port on the local subnet. This allows clients to obtain
+							the URI of the server and connect to the gRPC channel. Think of it as a poor man's service discovery protocol. No authentication
+							or validation is performed.
+						</para>
+						<para>
+							The AntRadioService provides methods to get information about the connected ANT USB stick, initialize for continuous scan mode,
+							and get channels to communicate with ANT devices via the AntChannelService.
+						</para>
+						<para>
+							The AntChannelService has a method to subscribe to a gRPC stream of ANT messages when the ANT USB stick has been initialized
+							for continuous scan mode. The remaining gRPC/ANT radio channels are used to send extended acknowledged messages to individual
+							ANT devices.
+						</para>
+						<para>
+							<legacyBold>The service can be debugged!</legacyBold> Make sure the service is not installed or disable it in the
+							service controller (<application>services.msc</application>). Select the Debug solution configuration and launch it
+							from Visual Studio. A console window will open. Logging output is displayed in the console window and breakpoints
+							can be set.
+						</para>
+					</content>
+				</section>
+				<section address="SubSection3">
+					<title>MauiAntClientApp</title>
+					<content>
+						<para>
+							The client app is the consumer of the client services provided by AntGrpcShared project. The server URI is first obtained via
+							a UDP multicast message, a gRPC connection to the server is established, and then requests to initialize and communicate with the
+							remote ANT USB stick are invoked.
+						</para>
+					</content>
+				</section>
+				<section address="SubSection4">
+					<title>AntGrpcServicePackage</title>
+					<content>
+						<para>
+							The AntGrpcServicePackage installs the AntGrpcService on the local Windows PC and creates a firewall exception allowing network
+							traffic between the service and any clients on the network. Wix is used to create the MSI file. You must install the
+							Wix toolset to build this project.
+						</para>
+					</content>
+				</section>
+			</sections>
+		</section>
+		<section address="Section2">
+			<title>How It Works</title>
+			<content>
+				<para>
+					UDP multicast is used for service discovery and HTTP is used for communication between client and server. The multicast discovery
+					service is invoked first to obtain the server URI, then the server gRPC channel is established
+					to the server IP address obtained from the reply to the UDP message. I'm assuming the server and client app are on the
+					same local subnet.
+				</para>
+				<para>
+					The UDP multicast endpoint is 239.55.43.6:55437. This is an arbitrary assignment in the multicast address range. You are certainly
+					welcome to select your own address and port. The message sent/received is not relevant in this example, we're just interested in
+					the server IP address in the received message. This is used in the next step to form the URI to connect to the gRPC server channel.
+				</para>
+				<para>
+					The client then connects to the gRPC service. The URI is constructed from the server IP address and the arbitrary port number
+					created when the AntGrpcService project was created. The AntGrpcService launchSettings.json file has the port number. Two protocols
+					are defined in launchSettings.json; I'm using the HTTP protocol and port number. Once the client is connected to the server the client initializes
+					continuous scan mode. The client then subscribes to streaming messages from ANT channel 0 and the client app is up and running.
+				</para>
+			</content>
+		</section>
+		<relatedTopics>
+			<link xlink:href="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4"/>
+			<link xlink:href="721a6d97-52b3-4a6b-8835-4201a92c432c"/>
+			<link xlink:href="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac"/>
+			<link xlink:href="305fe194-b246-4184-b949-35b56b817029"/>
+			<!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

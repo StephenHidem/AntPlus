@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="01001d50-9ea0-4e9c-a933-dbb67b7965cb" revisionNumber="1">
+	<developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+			<!-- <autoOutline /> -->
+
+			<para>
+				This example implements the Small Earth Technology ANT radio interface. It supports Garmin/Dynastream ANT USB sticks and some development
+				boards with USB interfaces. It is also available on
+				<externalLink>
+					<linkText>NuGet.</linkText>
+					<linkUri>https://www.nuget.org/packages/SmallEarthTech.AntUsbStick</linkUri>
+				</externalLink>
+			</para>
+			<alert class="important">
+				<para>Projects that consume this project must set the platform target to x86. This is due to the native DLLs that are a part of this project.</para>
+			</alert>
+
+			<para>
+				AntUsbStick provides two primary classes to consuming applications - AntRadio and AntChannel. AntRadio handles global
+				ANT USB stick radio settings and operation. AntChannel handles individual channel configuration and communication with ANT devices.
+			</para>
+		</introduction>
+
+		<!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="Section1">
+			<content/>
+			<!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible. -->
+			<sections>
+				<section address="SubSection1">
+					<title>AntRadio</title>
+					<content>
+						<para>
+							AntRadio implements IAntRadio, IAntConfiguration, IAntControl, ICrypto, IFitSettings, and IAntUsbRadio
+							interfaces. This is specific to Garmin/Dynastream ANT USB sticks.
+						</para>
+					</content>
+				</section>
+				<section address="SubSection2">
+					<title>AntChannel</title>
+					<content>
+						<para>
+							AntChannel implements the IAntChannel interface. This is specific to Garmin/Dynastream ANT USB sticks.
+						</para>
+					</content>
+				</section>
+				<section address="SubSection3">
+					<title>UsbAntResponse</title>
+					<content>
+						<para>
+							UsbAntResponse derives from AntResponse. It provides access to ANT response messages specific to Garmin/Dynastream ANT USB sticks.
+						</para>
+					</content>
+				</section>
+				<section address="SubSection4">
+					<title>UsbDeviceCapabilities</title>
+					<content>
+						<para>
+							UsbDeviceCapabilities derives from DeviceCapabilities. It provides access to ANT device capabilities specific to Garmin/Dynastream ANT USB sticks.
+						</para>
+					</content>
+				</section>
+			</sections>
+		</section>
+
+		<relatedTopics>
+			<codeEntityReference qualifyHint="false">T:SmallEarthTech.AntUsbStick.AntRadio</codeEntityReference>
+			<codeEntityReference qualifyHint="false">T:SmallEarthTech.AntUsbStick.AntChannel</codeEntityReference>
+			<codeEntityReference qualifyHint="false">T:SmallEarthTech.AntUsbStick.UsbAntResponse</codeEntityReference>
+			<codeEntityReference qualifyHint="false">T:SmallEarthTech.AntUsbStick.UsbDeviceCapabilities</codeEntityReference>
+			<!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

@@ -2,37 +2,30 @@
 <topic id="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" revisionNumber="1">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
-			<para>The topics in this section describe the various changes made to the ANT+ project over the
-life of the project.</para>
+			<para>
+				The topics in this section describe the various changes made to the ANT+ project over the
+				life of the project.
+			</para>
 		</introduction>
-
+		
 		<section>
 			<title>Version History</title>
 			<content>
 				<para>Select a version below to see a description of its changes.</para>
-
 				<list class="bullet">
 					<listItem>
-						<para><link xlink:href="83db2061-7ddc-40a6-b643-d88c6000feed" /></para>
-					</listItem>
-					<listItem>
 						<para>
-							<link xlink:href="47871b73-83b7-4cf4-8842-44d7520804aa" />
+							<link xlink:href="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" />
 						</para>
 					</listItem>
 					<listItem>
 						<para>
-							<link xlink:href="07393f6f-e5a8-47d3-bbcc-6c6dd391afb9" />
+							<link xlink:href="55b5d927-4d00-4e63-9f70-4f35a796c423" />
 						</para>
 					</listItem>
 					<listItem>
 						<para>
-							<link xlink:href="3c9ce4f9-cb16-44d2-84c4-3981f14f2161" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="4da48a04-bc9c-42f8-b053-c84fe501c284" />
+							<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
 						</para>
 					</listItem>
 

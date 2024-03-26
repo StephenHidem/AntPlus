@@ -1,39 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4" visible="True" isDefault="true" title="Welcome to the Small Earth Technology ANT+ Class Library">
+  <Topic id="5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4" visible="True" title="Welcome to the Small Earth Technology ANT+ Class Library">
     <HelpKeywords>
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
   </Topic>
-  <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" isSelected="true" title="MAUI-gRPC Example Overview" />
+  <Topic id="ad0d881c-d17a-471a-a2b7-8464c87a3588" visible="True" noFile="true" title="Examples">
+    <Topic id="01001d50-9ea0-4e9c-a933-dbb67b7965cb" visible="True" />
+    <Topic id="3879f5ad-87f2-4628-adef-bc78a4015241" visible="True" />
+    <Topic id="7e5a578a-ecb8-4bf2-adf3-587b47e3c3ab" visible="True" />
+    <Topic id="639f9a9d-0f90-4a26-90ba-fabf01ec8d07" visible="True" noFile="true" isExpanded="true" title="MAUI-gRPC">
+      <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" title="MAUI/gRPC Example Overview" />
+      <Topic id="721a6d97-52b3-4a6b-8835-4201a92c432c" visible="True" />
+      <Topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" visible="True" />
+      <Topic id="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4" visible="True" />
+      <Topic id="305fe194-b246-4184-b949-35b56b817029" visible="True" />
+    </Topic>
+  </Topic>
+  <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries" />
+  <Topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" visible="True" title="Unity Game Development">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Unity" />
+    </HelpKeywords>
+  </Topic>
   <Topic id="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" visible="True" isExpanded="true" title="Version History">
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />
     </HelpKeywords>
-    <Topic id="83db2061-7ddc-40a6-b643-d88c6000feed" visible="True" title="Version 1.0.0.0">
-      <HelpKeywords>
-        <HelpKeyword index="K" term="version, 1.0.0.0" />
-      </HelpKeywords>
+    <Topic id="55b5d927-4d00-4e63-9f70-4f35a796c423" visible="True" isExpanded="true" title="AntRadioInterface Version History">
+      <Topic id="a5a81f24-5ac3-49e4-8a8a-37566ebd5286" visible="True" title="Version 2.0.0.0" />
+      <Topic id="3bf26a39-5daa-482c-9718-d2bed1141b6c" visible="True" title="Version 2.0.1.0" />
+      <Topic id="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" visible="True" title="Version 2.0.2.0" />
     </Topic>
-    <Topic id="47871b73-83b7-4cf4-8842-44d7520804aa" visible="True" title="Version 2.0.0.0">
-      <HelpKeywords>
-        <HelpKeyword index="K" term="version, 2.0.0.0" />
-      </HelpKeywords>
+    <Topic id="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" visible="True" isExpanded="true" title="AntPlus Version History">
+      <Topic id="b3754de5-1d8d-422e-9071-12d290d4b14d" visible="True" title="Version 2.0.0.0" />
+      <Topic id="607e34e9-cdf4-4f9a-85c6-78f830e1aff8" visible="True" title="Version 2.1.0.0" />
+      <Topic id="892f97e4-a593-403f-bcfe-1b546a86ed2d" visible="True" title="Version 2.2.0.0" />
+      <Topic id="988b09e9-af30-438d-ad2d-0b86a818f97d" visible="True" title="Version 3.0.0.0" />
+      <Topic id="5784e268-84d1-466a-aa3a-e0fb8085a4ff" visible="True" title="Version 3.0.1.0" />
     </Topic>
-    <Topic id="07393f6f-e5a8-47d3-bbcc-6c6dd391afb9" visible="True" title="Version 2.1.0.0">
-      <HelpKeywords>
-        <HelpKeyword index="K" term="version, 2.1.0.0" />
-      </HelpKeywords>
-    </Topic>
-    <Topic id="3c9ce4f9-cb16-44d2-84c4-3981f14f2161" visible="True" title="Version 2.2.0.0">
-      <HelpKeywords>
-        <HelpKeyword index="K" term="version, 2.2.0.0" />
-      </HelpKeywords>
-    </Topic>
-    <Topic id="4da48a04-bc9c-42f8-b053-c84fe501c284" visible="True" title="Version 3.0.0.0">
-      <HelpKeywords>
-        <HelpKeyword index="K" term="version, 3.0.0.0" />
-      </HelpKeywords>
+    <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" isExpanded="true" title="AntUsbStick Version History">
+      <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" isSelected="true" title="Version 2.0.2.0" />
     </Topic>
   </Topic>
 </Topics>

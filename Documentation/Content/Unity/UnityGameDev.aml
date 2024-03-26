@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" revisionNumber="1">
+  <developerWalkthroughDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+
+      <para>
+				This is preliminary information! Setting up Unity is admittedly a cumbersome manual process. I'm actively
+				seeking to streamline this process. In the meantime, here's what I've done.
+			</para>
+			<para><legacyBold>A warm shout out to the good folks who created NuGetForUnity and YetAnotherHttpHandler! Their efforts are deeply appreciated.</legacyBold></para>
+    </introduction>
+
+    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
+
+    <!-- One or more procedure or section with procedure -->
+    <procedure>
+      <title>Setup Your Project</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>Create a Unity project.</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Open Unity Package Manager window and install the following packages.</para>
+						<list class="bullet">
+							<listItem>
+								<para>Install NuGetForUnity from Git URL.
+								<externalLink>
+									<linkText>Instructions are here.</linkText>
+									<linkUri>https://github.com/GlitchEnzo/NuGetForUnity</linkUri>
+								</externalLink>
+								</para>
+							</listItem>
+							<listItem>
+								<para>Install YetAnotherHttpHandler from Git URL.
+								<externalLink>
+									<linkText>Instructions are here.</linkText>
+									<linkUri>https://github.com/Cysharp/YetAnotherHttpHandler</linkUri>
+								</externalLink>
+								</para>
+							</listItem>
+						</list>
+          </content>
+        </step>
+				<step>
+					<content>
+						<para>Select Manage NuGet Packages from the NuGet menu and install the following packages.</para>
+						<list class="bullet">
+							<listItem>
+								<para>Google.Protobuf</para>
+							</listItem>
+							<listItem>
+								<para>Grpc.Net.Client</para>
+							</listItem>
+							<listItem>
+								<para>System.IO.Pipelines</para>
+							</listItem>
+						</list>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>Copy the following files from AntPlus\Examples\MAUI-gRPC\AntGrpcShared\obj\[Debug|Release]\net8.0 to Assets/Scripts</para>
+						<list class="bullet">
+							<listItem>
+								<para>AntChannel.cs</para>
+							</listItem>
+							<listItem>
+								<para>AntChannelGrpc.cs</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio.cs</para>
+							</listItem>
+							<listItem>
+								<para>AntRadioGrpc.cs</para>
+							</listItem>
+						</list>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>Create an AntGrpClient.cs file and add it to Assets/Scripts. Note this <legacyBold>is not</legacyBold> a MonoBehavior. It is a supporting class.</para>
+						<code language="csharp" title="AntGrpClient.cs" source="Content\Unity\AntGrpcClient.cs"/>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>Create an AntRadioScript.cs file and add it to Assets/Scripts. Note this is a MonoBehavior. This script is used to interact with game objects.</para>
+						<code language="csharp" title="AntRadioScript.cs" source="Content\Unity\AntRadioScript.cs"/>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>Create an empty GameObject and add the AntRadioScript component. The script will search for the ANT radio service when Start() is invoked.</para>
+					</content>
+				</step>
+			</steps>
+       <conclusion>
+				 <content>
+					 <para>This is the bare minimum to establish communication with the ANT radio service.</para>
+				 </content>
+			 </conclusion> 
+    </procedure>
+
+    <!-- Optional additional procedure or section with procedure -->
+    <!--<section address="Section1">
+      <title>Optional section title</title>
+      <content>
+        <procedure>
+          <title>Procedure #2</title>
+          <steps class="ordered">
+            <step>
+              <content>
+                <para>First step</para>
+              </content>
+            </step>
+            <step>
+              <content>
+                <para>Second step</para>
+              </content>
+            </step>
+          </steps>
+          --><!-- <conclusion>Optional conclusion</conclusion> --><!--
+        </procedure>
+      </content>
+    </section>-->
+
+    <nextSteps>
+      <content>
+				<para>
+					You should create an AntDeviceCollection in order to be notified of ANT devices and interact with a given ANT device.
+				</para>
+			</content>
+    </nextSteps>
+    
+
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID">Link text</link>
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>

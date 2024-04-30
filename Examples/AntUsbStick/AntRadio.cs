@@ -23,14 +23,6 @@ namespace SmallEarthTech.AntUsbStick
         public int NumChannels => _antDevice.getNumChannels();
 
         /// <inheritdoc/>
-        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
-        public FramerType OpenedFrameType => (FramerType)_antDevice.getOpenedFrameType();
-
-        /// <inheritdoc/>
-        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
-        public PortType OpenedPortType => (PortType)_antDevice.getOpenedPortType();
-
-        /// <inheritdoc/>
         public uint SerialNumber => _antDevice.getSerialNumber();
 
         /// <inheritdoc/>

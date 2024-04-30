@@ -20,7 +20,7 @@
                 <Grid Padding="8" ColumnDefinitions="*, Auto">
                     <StackLayout>
                         <Label Text="{Binding ProductDescription, StringFormat='Description - {0}'}"/>
-                        <Label Text="{Binding SerialString, StringFormat='Serial Number - {0}'}"/>
+                        <Label Text="{Binding SerialNumber, StringFormat='Serial Number - {0}'}"/>
                         <Label Text="{Binding HostVersion, StringFormat='Host Version - {0}'}"/>
                     </StackLayout>
                     <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="1" HeightRequest="32" WidthRequest="32" Command="{Binding ShowRadioCapabilitiesCommand}"/>

@@ -39,7 +39,7 @@ message PropertiesReply {
 	// ANT radio product description.
 	string product_description = 1;
 	// ANT radio serial number.
-	string serial_string = 2;
+	uint32 serial_number = 2;
 	// ANT radio version number.
 	string host_version = 3;
 }

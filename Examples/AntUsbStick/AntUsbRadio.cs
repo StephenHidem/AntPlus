@@ -1,4 +1,5 @@
 ﻿using SmallEarthTech.AntRadioInterface;
+using System;
 
 namespace SmallEarthTech.AntUsbStick
 {
@@ -20,6 +21,7 @@ namespace SmallEarthTech.AntUsbStick
         public string GetProductDescription() => _antDevice.getDeviceUSBInfo().printProductDescription();
 
         /// <inheritdoc/>
+        [Obsolete("This property is redundant. Use AntRadio.SerialNumber. It will be removed in the next release.")]
         public string GetSerialString() => _antDevice.getDeviceUSBInfo().printSerialString();
 
         /// <inheritdoc/>

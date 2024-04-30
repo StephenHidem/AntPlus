@@ -27,7 +27,7 @@ namespace MauiAntGrpcClient.ViewModels
         [ObservableProperty]
         private string? productDescription;
         [ObservableProperty]
-        private string? serialString;
+        private uint? serialNumber;
         [ObservableProperty]
         private string? hostVersion;
         [ObservableProperty]
@@ -41,7 +41,7 @@ namespace MauiAntGrpcClient.ViewModels
             IsBusy = false;
             ServerIPAddress = _antRadioService.ServerIPAddress;
             ProductDescription = _antRadioService.ProductDescription;
-            SerialString = _antRadioService.SerialString;
+            SerialNumber = _antRadioService.SerialNumber;
             HostVersion = _antRadioService.HostVersion;
             AntDevices = _services.GetRequiredService<AntDeviceCollection>();
         }

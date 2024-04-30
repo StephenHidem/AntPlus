@@ -1,5 +1,4 @@
 ﻿using AntRadioGrpcService;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
@@ -11,7 +10,7 @@ using System.Text;
 
 namespace MauiAntGrpcClient.Services
 {
-    public partial class AntRadioService(ILogger<AntRadioService> logger, ILoggerFactory loggerFactory) : ObservableObject, IAntRadio
+    public partial class AntRadioService(ILogger<AntRadioService> logger, ILoggerFactory loggerFactory) : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
@@ -22,23 +21,11 @@ namespace MauiAntGrpcClient.Services
         private readonly ILogger<AntRadioService> _logger = logger ?? NullLogger<AntRadioService>.Instance;
         private GrpcChannel? _channel;
 
-        [ObservableProperty]
-        private IPAddress? serverIPAddress;
-        [ObservableProperty]
-        private string? productDescription;
-        [ObservableProperty]
-        private string? serialString;
-        [ObservableProperty]
-        private string? hostVersion;
-
+        public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
+        public string ProductDescription { get; private set; } = string.Empty;
+        public string HostVersion { get; private set; } = string.Empty;
+        public uint SerialNumber { get; private set; }
         public int NumChannels => throw new NotImplementedException();
-        public uint SerialNumber => throw new NotImplementedException();
-
-        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
-        public FramerType OpenedFrameType => throw new NotImplementedException();
-
-        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
-        public PortType OpenedPortType => throw new NotImplementedException();
 
         public event EventHandler<AntResponse>? RadioResponse;
 
@@ -74,7 +61,7 @@ namespace MauiAntGrpcClient.Services
             _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
             PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
             ProductDescription = reply.ProductDescription;
-            SerialString = reply.SerialString;
+            SerialNumber = reply.SerialNumber;
             HostVersion = reply.HostVersion;
         }
 

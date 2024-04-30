@@ -4,28 +4,6 @@ using System.Threading.Tasks;
 namespace SmallEarthTech.AntRadioInterface
 {
     /// <summary>
-    /// Possible port connection types.
-    /// </summary>
-    [Obsolete("This enumeration is only used by the underlying native DLL. It will be removed in the next release.")]
-    public enum PortType : byte
-    {
-        /// <summary>The USB port</summary>
-        USB = 0x00,
-        /// <summary>The CON port</summary>
-        COM = 0x01
-    };
-
-    /// <summary>
-    /// Possible framing modes. Use BasicANT unless you know you need to use another.
-    /// </summary>
-    [Obsolete("This enumeration is only used by the underlying native DLL. It will be removed in the next release.")]
-    public enum FramerType : byte
-    {
-        /// <summary>The basic ANT</summary>
-        BasicANT = 0x00,
-    };
-
-    /// <summary>
     /// Message ID to request message.
     /// Note: Where desired, raw byte values can be cast to the enum type. IE: <c>(RequestMessageID)0x4E</c> will compile.
     /// </summary>
@@ -210,17 +188,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// Device capabilities
         /// </returns>
         Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime);
-        /// <summary>Gets the number channels.</summary>
-        /// <value>The number channels.</value>
+        /// <summary>Gets the number of channels supported by the ANT radio.</summary>
+        /// <value>The number of channels.</value>
         int NumChannels { get; }
-        /// <summary>Gets the type of the opened frame.</summary>
-        /// <value>The type of the opened frame.</value>
-        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
-        FramerType OpenedFrameType { get; }
-        /// <summary>Gets the type of the opened port.</summary>
-        /// <value>The type of the opened port.</value>
-        [Obsolete("This property is only used by the underlying native DLL. It will be removed in the next release.")]
-        PortType OpenedPortType { get; }
 
         /// <summary>Gets the serial number.</summary>
         uint SerialNumber { get; }

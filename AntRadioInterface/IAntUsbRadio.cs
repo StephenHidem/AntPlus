@@ -1,4 +1,6 @@
-﻿namespace SmallEarthTech.AntRadioInterface
+﻿using System;
+
+namespace SmallEarthTech.AntRadioInterface
 {
     /// <summary>This interface is used for ANT radios specifically connected to the host USB ports.</summary>
     public interface IAntUsbRadio
@@ -25,6 +27,7 @@
 
         /// <summary>Gets the USB device serial number string.</summary>
         /// <returns>The USB serial number string of this device.</returns>
+        [Obsolete("This method is redundant. Use IAntRadio.SerialNumber. It will be removed in the next release.")]
         string GetSerialString();
 
         /// <summary>Resets the ANT radio USB interface.</summary>

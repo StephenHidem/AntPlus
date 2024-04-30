@@ -22,7 +22,7 @@ namespace AntGrpcService.Services
             AntResponse rsp = usbAntRadio.RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID.Version, 500);
             return Task.FromResult(new PropertiesReply
             {
-                SerialString = usbAntRadio.GetSerialString(),
+                SerialNumber = usbAntRadio.SerialNumber,
                 HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0'),
                 ProductDescription = usbAntRadio.GetProductDescription()
             });

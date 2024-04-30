@@ -25,7 +25,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ProductDescription, StringFormat='Product: {0}'}"/>
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding SerialString, StringFormat='Serial #: {0}'}"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding SerialNumber, StringFormat='Serial #: {0}'}"/>
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding HostVersion, StringFormat='Version: {0}'}"/>
                 <Button Grid.Column="2" Grid.RowSpan="2" Content="Capabilities" Click="Capabilities_Click"/>
             </Grid>

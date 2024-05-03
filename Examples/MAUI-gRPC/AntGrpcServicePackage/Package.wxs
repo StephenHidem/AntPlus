@@ -4,7 +4,16 @@
 	<Package Name="ANT gRPC Service" Manufacturer="Small Earth Technology" Version="1.0.0.0" UpgradeCode="8ddabed2-98f7-40ea-ae02-f623979fccac" Compressed="true">
 		<MediaTemplate EmbedCab="yes"/>
 		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
-
+		
+		<ComponentGroup Id="HarvestedComponents">
+			<Files Include="$(PublishOutputPath)**">
+				<Exclude Files="$(PublishOutputPath)*.exe"/>
+				<Exclude Files="$(PublishOutputPath)*.pdb"/>
+				<Exclude Files="$(PublishOutputPath)*.xml"/>
+				<Exclude Files="$(PublishOutputPath)*.targets"/>
+			</Files>
+		</ComponentGroup>
+		
 		<DirectoryRef Id="INSTALLFOLDER">
 			<Component Id="FirewallAny" Condition="NETWORKSCOPE = 1" Guid="{63B9DA19-1F7E-42F1-BEDE-8B8FDFE24EE8}">
 				<fire:FirewallException Id="FE_AntGrpcService1"
@@ -49,8 +58,8 @@
 		<Feature Id="Main">
 			<ComponentRef Id="FirewallLocalSubnet"/>
 			<ComponentRef Id="FirewallAny"/>
-			<ComponentGroupRef Id="HarvestedComponents" />
 			<ComponentRef Id="ServiceExecutable"/>
+			<ComponentGroupRef Id="HarvestedComponents"/>
 		</Feature>
 
 		<Property Id="NETWORKSCOPE" Value="2"/>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" revisionNumber="1">
+<topic id="c8d04cf3-0a23-44ea-a795-7a0e14dba774" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,28 +17,43 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>
-				The AntGrpcServicePackage installs the AntGrpcService on the local Windows PC and creates a firewall exception allowing network
-				traffic between the service and any clients on the network. Wix is used to create the MSI file. You must install the
-				Wix toolset to build this project.
-				Enter the following command from the developer command line -
-				<command>dotnet tool install --global wix</command>
-			</para>
-			<alert class="note" title="Release June 9, 2024 Update">
-				<para>
-					The package has been updated to use WiX Toolset v5.0.0. No more .xsl transforms to remove items from the installer; it's defined in the package.wxs file.
-					You can update your WiX toolset installation from the developer command line -
-          <command>dotnet tool update --global wix</command>
-				</para>
-			</alert>
+      <para>Version 2.1.0.0 was released on June 9, 2024.</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
+    <section address="Section1">
+      <content>
+				<list class="bullet">
+					<listItem>
+						<para>OpenedFrameType and OpenedPortType have been removed in this release.</para>
+					</listItem>
+					<listItem>
+						<para>The GetSerialString method in IAntUsbRadio is redundant and has been marked as obsolete.</para>
+					</listItem>
+				</list>
+      </content>
+      <!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible.
+      <sections>
+          <section address="SubSection1">
+              <title>Sub-section 1</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+          <section address="SubSection2">
+              <title>Sub-section 2</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+      </sections> -->
+    </section>
 
     <relatedTopics>
-			<link xlink:href="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" />
+			<link xlink:href="55b5d927-4d00-4e63-9f70-4f35a796c423" />
 			<!-- One or more of the following:
            - A local link
            - An external link

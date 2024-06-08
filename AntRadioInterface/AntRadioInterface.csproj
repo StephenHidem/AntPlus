@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>2.0.2.0</AssemblyVersion>
+	<AssemblyVersion>2.1.0.0</AssemblyVersion>
 	<TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -23,7 +23,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>OpenedFrameType and OpenedPortType are unused and have been marked obsolete. They will be removed in the next release.</PackageReleaseNotes>
+    <PackageReleaseNotes>OpenedFrameType and OpenedPortType have been removed in this release. The GetSerialString method in IAntUsbRadio is redundant and has been marked as obsolete.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

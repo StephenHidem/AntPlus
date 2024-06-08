@@ -32,7 +32,7 @@ namespace MauiAntGrpcClient.Services
         public async Task FindAntRadioServerAsync()
         {
             IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);
-            byte[] req = Encoding.ASCII.GetBytes("AntRadioServer");
+            byte[] req = Encoding.ASCII.GetBytes("MauiAntGrpcClient discovery request");
             UdpReceiveResult result;
             using UdpClient udpClient = new(AddressFamily.InterNetwork);
 

@@ -58,9 +58,17 @@ namespace MauiAntGrpcClient.Services
         private async void HandleChannelResponseEvents()
         {
             _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
-            await foreach (var update in _response.ResponseStream.ReadAllAsync())
+            try
             {
-                ResponseReceived?.Invoke(this, new GrpcAntResponse(update));
+                await foreach (ChannelResponse? update in _response.ResponseStream.ReadAllAsync())
+                {
+                    ResponseReceived?.Invoke(this, new GrpcAntResponse(update));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error occurred reading from the gRPC stream.");
+                _response?.Dispose();
             }
         }
 

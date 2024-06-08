@@ -4,6 +4,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,15 +18,25 @@ namespace WpfUsbStickApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MainWindowViewModel viewModel;
+        private readonly MainWindowViewModel? viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
-            viewModel = new MainWindowViewModel();
-            BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);
-            DataContext = viewModel;
-            antDevices.MouseDoubleClick += AntDevices_MouseDoubleClick;
+
+            // the view model may throw an exception if ANT radio is not available
+            try
+            {
+                viewModel = new MainWindowViewModel();
+                BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);
+                DataContext = viewModel;
+                antDevices.MouseDoubleClick += AntDevices_MouseDoubleClick;
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show(ex.Message, "Unable to initialize!", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
         }
 
         private void AntDevices_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -86,11 +97,14 @@ namespace WpfUsbStickApp
 
         private async void Capabilities_Click(object sender, RoutedEventArgs e)
         {
-            CapabilitiesWindow capabilitiesWindow = new(await viewModel.UsbAntRadio.GetDeviceCapabilities())
+            if (viewModel != null)
             {
-                Icon = Icon
-            };
-            capabilitiesWindow.Show();
+                CapabilitiesWindow capabilitiesWindow = new(await viewModel.UsbAntRadio.GetDeviceCapabilities())
+                {
+                    Icon = Icon
+                };
+                capabilitiesWindow.Show();
+            }
         }
     }
 }

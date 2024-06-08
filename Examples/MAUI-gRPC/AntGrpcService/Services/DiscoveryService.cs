@@ -33,11 +33,11 @@ namespace AntGrpcService.Services
                 {
                     // wait for request to connect to this server
                     var result = await udpClient.ReceiveAsync(stoppingToken);
-                    _logger.LogInformation("DiscoveryService request: remote endpoint {RemoteEP}, message {Message}", result.RemoteEndPoint, result.Buffer);
+                    _logger.LogInformation("DiscoveryService request: remote endpoint {RemoteEP}, message {Message}", result.RemoteEndPoint, Encoding.ASCII.GetString(result.Buffer));
 
                     // I could check the request for some sort of validation but I will ignore the message for now
                     // send response to requestor's endpoint with our service name
-                    byte[] response = Encoding.ASCII.GetBytes("DiscoveryService");
+                    byte[] response = Encoding.ASCII.GetBytes("AntGrpcServer DiscoveryService response");
                     udpClient.Send(response, response.Length, result.RemoteEndPoint);
                 }
             }

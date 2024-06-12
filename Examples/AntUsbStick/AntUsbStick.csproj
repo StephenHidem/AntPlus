@@ -22,9 +22,9 @@
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PackageId>$(AssemblyName)</PackageId>
 	<PackageIcon>PackageLogo.png</PackageIcon>
-    <PackageReleaseNotes>
-        OpenedFrameType and OpenedPortType have been removed in this release. The GetSerialString and GetProductDescription methods in IAntUsbRadio have been marked as obsolete.
-        Overloads in the interfaces have been removed in favor of optional arguments with default values. The GetDeviceCapabilities method may require rework in implementations.
+    <PackageReleaseNotes>1. OpenedFrameType and OpenedPortType have been removed in this release. 
+2. The GetSerialString and GetProductDescription methods in IAntUsbRadio have been marked as obsolete.
+3. Overloads in the interfaces have been removed in favor of optional arguments with default values. The GetDeviceCapabilities method may require rework in implementations.
     </PackageReleaseNotes>
   </PropertyGroup>
 

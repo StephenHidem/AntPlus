@@ -18,10 +18,11 @@ namespace SmallEarthTech.AntUsbStick
         public ushort GetVID() => _antDevice.getDeviceUSBVID();
 
         /// <inheritdoc/>
+        [Obsolete("This method is redundant. Use IAntRadio.ProductDescription. It will be removed in the next release.")]
         public string GetProductDescription() => _antDevice.getDeviceUSBInfo().printProductDescription();
 
         /// <inheritdoc/>
-        [Obsolete("This property is redundant. Use AntRadio.SerialNumber. It will be removed in the next release.")]
+        [Obsolete("This method is redundant. Use AntRadio.SerialNumber. It will be removed in the next release.")]
         public string GetSerialString() => _antDevice.getDeviceUSBInfo().printSerialString();
 
         /// <inheritdoc/>

@@ -167,30 +167,32 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Gets the channel.</summary>
         /// <param name="num">The number.</param>
         /// <returns>
-        /// ANT channel
+        /// <see cref="IAntChannel"/>
         /// </returns>
         IAntChannel GetChannel(int num);
-        /// <summary>Gets the device capabilities.</summary>
+
+        /// <summary>Gets the device capabilities of the ANT radio.</summary>
+        /// <param name="forceNewCopy">If set to <c>true</c> force new copy. The default is false.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 1500ms.</param>
         /// <returns>
-        /// Device capabilities
+        /// A task encapsulating the <see cref="DeviceCapabilities"/>
         /// </returns>
-        Task<DeviceCapabilities> GetDeviceCapabilities();
-        /// <summary>Gets the device capabilities.</summary>
-        /// <param name="forceNewCopy">if set to <c>true</c> [force new copy].</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
-        /// <returns>
-        /// Device capabilities
-        /// </returns>
-        Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime);
-        /// <summary>Gets the device capabilities.</summary>
-        /// <param name="responseWaitTime">The response wait time.</param>
-        /// <returns>
-        /// Device capabilities
-        /// </returns>
-        Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime);
+        /// <remarks>
+        /// Default arguments are provided by the method interface and are inherited by concrete implementations of IAntRadio.
+        /// It is unlikely the default arguments need to be overridden. Typically a copy of the <see cref="DeviceCapabilities"/> is maintained
+        /// in the concrete implementation of the ANT radio and the response wait time only needs to be overridden if there a large
+        /// latencies getting the response. Use a named argument if you only need to specify a different response wait time -
+        /// e.g. GetDeviceCapabilities(responseWaitTime: 2000).
+        /// </remarks>
+        Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy = false, uint responseWaitTime = 1500);
+
         /// <summary>Gets the number of channels supported by the ANT radio.</summary>
         /// <value>The number of channels.</value>
         int NumChannels { get; }
+
+        /// <summary>Gets the ANT radio product description.</summary>
+        /// <value>The product description.</value>
+        string ProductDescription { get; }
 
         /// <summary>Gets the serial number.</summary>
         uint SerialNumber { get; }
@@ -198,33 +200,19 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Reads the user NVM.</summary>
         /// <param name="address">The address.</param>
         /// <param name="size">The size.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 500ms.</param>
         /// <returns>
         /// <see cref="AntResponse"/>
         /// </returns>
-        AntResponse ReadUserNvm(ushort address, byte size);
-        /// <summary>Reads the user NVM.</summary>
-        /// <param name="address">The address.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
-        /// <returns>
-        /// <see cref="AntResponse"/>
-        /// </returns>
-        AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime);
-        /// <summary>Requests a message and waits to return the response.</summary>
-        /// <param name="channelNum">The radio channel number to use.</param>
-        /// <param name="messageID">The message identifier.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
-        /// <returns>
-        /// <see cref="AntResponse"/>
-        /// </returns>
-        AntResponse RequestMessageAndResponse(byte channelNum, RequestMessageID messageID, uint responseWaitTime);
+        AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime = 500);
         /// <summary>Requests a message and waits to return the response.</summary>
         /// <param name="messageID">The message identifier.</param>
         /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="channelNum">The radio channel number to use. The default is channel 0.</param>
         /// <returns>
         /// <see cref="AntResponse"/>
         /// </returns>
-        AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime);
+        AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime, byte channelNum = 0);
         /// <summary>Converts to string.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         string ToString();

@@ -5,7 +5,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<AssemblyVersion>2.0.2.0</AssemblyVersion>
+	<AssemblyVersion>2.1.0.0</AssemblyVersion>
 	<AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
 	<Version>$(AssemblyVersion)</Version>
 	<Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
@@ -22,7 +22,10 @@
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PackageId>$(AssemblyName)</PackageId>
 	<PackageIcon>PackageLogo.png</PackageIcon>
-	<PackageReleaseNotes>OpenedFrameType and OpenedPortType are unused and have been marked obsolete. They will be removed in the next release.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+        OpenedFrameType and OpenedPortType have been removed in this release. The GetSerialString and GetProductDescription methods in IAntUsbRadio have been marked as obsolete.
+        Overloads in the interfaces have been removed in favor of optional arguments with default values. The GetDeviceCapabilities method may require rework in implementations.
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

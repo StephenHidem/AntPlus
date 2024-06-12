@@ -60,9 +60,9 @@ message GetChannelReply {
 // ANT radio capabiities request.
 message GetDeviceCapabilitiesRequest {
 	// Returns a new copy if true.
-	optional bool force_copy = 1;
+	bool force_copy = 1;
 	// Time to wait for reply from ANT radio.
-	optional uint32 wait_response_time = 2;
+	uint32 wait_response_time = 2;
 }
 // ANT radio capabiities reply. Consists of number of flags and other characteristics.
 message GetDeviceCapabilitiesReply {
@@ -100,7 +100,7 @@ message GetDeviceCapabilitiesReply {
 message ReadUserNvmRequest {
 	uint32 address = 1;
 	uint32 size = 2;
-	optional uint32 wait_response_time = 3;
+	uint32 wait_response_time = 3;
 }
 
 // Message ID of request. Note: Where desired, raw byte values can be cast to the enum type. IE: <c>(RequestMessageID)0x4E</c> will compile.
@@ -122,7 +122,7 @@ enum RequestMessageID {
 }
 
 message RequestMessageAndResponseRequest {
-	optional uint32 channel_number = 1;
+	uint32 channel_number = 1;
 	RequestMessageID msg_id = 2;
 	uint32 wait_response_time = 3;
 }

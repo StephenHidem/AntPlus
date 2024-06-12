@@ -24,7 +24,7 @@ namespace AntGrpcService.Services
             {
                 SerialNumber = usbAntRadio.SerialNumber,
                 HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0'),
-                ProductDescription = usbAntRadio.GetProductDescription()
+                ProductDescription = usbAntRadio.ProductDescription
             });
         }
 
@@ -55,20 +55,7 @@ namespace AntGrpcService.Services
 
         public override async Task<GetDeviceCapabilitiesReply> GetDeviceCapabilities(GetDeviceCapabilitiesRequest request, ServerCallContext context)
         {
-            DeviceCapabilities capabilities;
-            if (request.HasForceCopy && request.HasWaitResponseTime)
-            {
-                capabilities = await _antRadio.GetDeviceCapabilities(request.ForceCopy, request.WaitResponseTime);
-            }
-            else if (request.HasWaitResponseTime)
-            {
-                capabilities = await _antRadio.GetDeviceCapabilities(request.WaitResponseTime);
-            }
-            else
-            {
-                capabilities = await _antRadio.GetDeviceCapabilities();
-            }
-
+            DeviceCapabilities capabilities = await _antRadio.GetDeviceCapabilities(request.ForceCopy, request.WaitResponseTime);
             return new GetDeviceCapabilitiesReply
             {
                 MaxAntChannels = capabilities.MaxANTChannels,
@@ -105,21 +92,13 @@ namespace AntGrpcService.Services
 
         public override Task<AntResponseReply> ReadUserNvm(ReadUserNvmRequest request, ServerCallContext context)
         {
-            AntResponse result = _antRadio.ReadUserNvm((ushort)request.Address, (byte)request.Size);
+            AntResponse result = _antRadio.ReadUserNvm((ushort)request.Address, (byte)request.Size, request.WaitResponseTime);
             return Task.FromResult(FromAntResponse(result));
         }
 
         public override Task<AntResponseReply> RequestMessageAndResponse(RequestMessageAndResponseRequest request, ServerCallContext context)
         {
-            AntResponse result;
-            if (request.HasChannelNumber)
-            {
-                result = _antRadio.RequestMessageAndResponse((byte)request.ChannelNumber, (SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime);
-            }
-            else
-            {
-                result = _antRadio.RequestMessageAndResponse((SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime);
-            }
+            AntResponse result = _antRadio.RequestMessageAndResponse((SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime, (byte)request.ChannelNumber); ;
             return Task.FromResult(FromAntResponse(result));
         }
 

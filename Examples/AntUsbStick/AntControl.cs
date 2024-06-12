@@ -6,22 +6,13 @@ namespace SmallEarthTech.AntUsbStick
     public partial class AntRadio : IAntControl
     {
         /// <inheritdoc/>
-        public void OpenRxScanMode() => _antDevice.openRxScanMode();
+        public bool OpenRxScanMode(uint responseWaitTime = 0) => _antDevice.openRxScanMode(responseWaitTime);
 
         /// <inheritdoc/>
-        public bool OpenRxScanMode(uint responseWaitTime) => _antDevice.openRxScanMode(responseWaitTime);
+        public void RequestMessage(RequestMessageID messageID, byte channelNum = 0) => _antDevice.requestMessage(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID);
 
         /// <inheritdoc/>
-        public void RequestMessage(byte channelNum, RequestMessageID messageID) => _antDevice.requestMessage(channelNum, (ANT_ReferenceLibrary.RequestMessageID)messageID);
-
-        /// <inheritdoc/>
-        public void RequestMessage(RequestMessageID messageID) => _antDevice.requestMessage((ANT_ReferenceLibrary.RequestMessageID)messageID);
-
-        /// <inheritdoc/>
-        public void ResetSystem() => _antDevice.ResetSystem();
-
-        /// <inheritdoc/>
-        public bool ResetSystem(uint responseWaitTime) => _antDevice.ResetSystem(responseWaitTime);
+        public bool ResetSystem(uint responseWaitTime = 500) => _antDevice.ResetSystem(responseWaitTime);
 
     }
 }

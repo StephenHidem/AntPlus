@@ -23,6 +23,7 @@ namespace SmallEarthTech.AntRadioInterface
 
         /// <summary>Gets the USB device product description.</summary>
         /// <returns>The USB product string of this device.</returns>
+        [Obsolete("This method is redundant. Use IAntRadio.ProductDescription. It will be removed in the next release.")]
         string GetProductDescription();
 
         /// <summary>Gets the USB device serial number string.</summary>

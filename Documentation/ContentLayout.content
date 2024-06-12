@@ -31,7 +31,7 @@
       <Topic id="a5a81f24-5ac3-49e4-8a8a-37566ebd5286" visible="True" title="Version 2.0.0.0" />
       <Topic id="3bf26a39-5daa-482c-9718-d2bed1141b6c" visible="True" title="Version 2.0.1.0" />
       <Topic id="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" visible="True" title="Version 2.0.2.0" />
-      <Topic id="c8d04cf3-0a23-44ea-a795-7a0e14dba774" visible="True" isSelected="true" title="Version 2.1.0.0" />
+      <Topic id="c8d04cf3-0a23-44ea-a795-7a0e14dba774" visible="True" title="Version 2.1.0.0" />
     </Topic>
     <Topic id="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" visible="True" isExpanded="true" title="AntPlus Version History">
       <Topic id="b3754de5-1d8d-422e-9071-12d290d4b14d" visible="True" title="Version 2.0.0.0" />
@@ -42,6 +42,7 @@
     </Topic>
     <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" isExpanded="true" title="AntUsbStick Version History">
       <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" title="Version 2.0.2.0" />
+      <Topic id="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" visible="True" isSelected="true" title="Version 2.1.0.0" />
     </Topic>
   </Topic>
 </Topics>

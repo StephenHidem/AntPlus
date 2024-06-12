@@ -23,7 +23,10 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>OpenedFrameType and OpenedPortType have been removed in this release. The GetSerialString method in IAntUsbRadio is redundant and has been marked as obsolete.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+        OpenedFrameType and OpenedPortType have been removed in this release. The GetSerialString and GetProductDescription methods in IAntUsbRadio have been marked as obsolete.
+        Overloads in the interfaces have been removed in favor of optional arguments with default values. The GetDeviceCapabilities method may require rework in implementations.
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

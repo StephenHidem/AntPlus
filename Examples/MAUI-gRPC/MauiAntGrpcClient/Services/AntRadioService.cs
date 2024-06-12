@@ -92,27 +92,10 @@ namespace MauiAntGrpcClient.Services
             throw new NotImplementedException();
         }
 
-        public async Task<DeviceCapabilities> GetDeviceCapabilities()
-        {
-            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest());
-            return new GrpcDeviceCapabilities(caps);
-        }
-
         public async Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
         {
             GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { ForceCopy = forceNewCopy, WaitResponseTime = responseWaitTime });
             return new GrpcDeviceCapabilities(caps);
-        }
-
-        public async Task<DeviceCapabilities> GetDeviceCapabilities(uint responseWaitTime)
-        {
-            GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { WaitResponseTime = responseWaitTime });
-            return new GrpcDeviceCapabilities(caps);
-        }
-
-        public AntResponse ReadUserNvm(ushort address, byte size)
-        {
-            throw new NotImplementedException();
         }
 
         public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime)
@@ -120,12 +103,7 @@ namespace MauiAntGrpcClient.Services
             throw new NotImplementedException();
         }
 
-        public AntResponse RequestMessageAndResponse(byte channelNum, SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime)
+        public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime, byte channelNum)
         {
             throw new NotImplementedException();
         }

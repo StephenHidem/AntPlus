@@ -38,7 +38,7 @@ message ExtDataRequest {
     uint32 channel_number = 1;
     uint32 channel_id = 2;
     bytes data = 3;
-    optional uint32 wait_time = 4;
+    uint32 wait_time = 4;
 }
 
 message MessagingCodeReply {

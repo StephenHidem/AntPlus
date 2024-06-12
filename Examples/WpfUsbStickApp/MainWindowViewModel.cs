@@ -15,7 +15,7 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal class MainWindowViewModel
     {
-        public AntRadio UsbAntRadio { get; }
+        public IAntRadio UsbAntRadio { get; }
         public string ProductDescription { get; }
         public uint SerialNumber { get; }
         public string HostVersion { get; }
@@ -45,7 +45,7 @@ namespace WpfUsbStickApp.ViewModels
                 Build();
 
             UsbAntRadio = (AntRadio)_host.Services.GetRequiredService<IAntRadio>();
-            ProductDescription = UsbAntRadio.GetProductDescription();
+            ProductDescription = UsbAntRadio.ProductDescription;
             SerialNumber = UsbAntRadio.SerialNumber;
             AntResponse rsp = UsbAntRadio.RequestMessageAndResponse(RequestMessageID.Version, 500);
             HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0');

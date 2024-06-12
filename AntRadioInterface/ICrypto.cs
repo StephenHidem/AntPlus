@@ -27,93 +27,63 @@
         /// <param name="memoryOperation">The memory operation.</param>
         /// <param name="nonVolatileKeyIndex">Index of the non volatile key.</param>
         /// <param name="operationData">The operation data.</param>
-        void CryptoKeyNVMOp(EncryptionNVMOp memoryOperation, byte nonVolatileKeyIndex, byte[] operationData);
-        /// <summary>Crypto key NVM operation.</summary>
-        /// <param name="memoryOperation">The memory operation.</param>
-        /// <param name="nonVolatileKeyIndex">Index of the non volatile key.</param>
-        /// <param name="operationData">The operation data.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool CryptoKeyNVMOp(EncryptionNVMOp memoryOperation, byte nonVolatileKeyIndex, byte[] operationData, uint responseWaitTime);
+        bool CryptoKeyNVMOp(EncryptionNVMOp memoryOperation, byte nonVolatileKeyIndex, byte[] operationData, uint responseWaitTime = 0);
         /// <summary>Loads the crypto key from NVM.</summary>
         /// <param name="nonVolatileKeyIndex">Index of the non volatile key.</param>
         /// <param name="volatileKeyIndex">Index of the volatile key.</param>
-        void LoadCryptoKeyFromNVM(byte nonVolatileKeyIndex, byte volatileKeyIndex);
-        /// <summary>Loads the crypto key from NVM.</summary>
-        /// <param name="nonVolatileKeyIndex">Index of the non volatile key.</param>
-        /// <param name="volatileKeyIndex">Index of the volatile key.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool LoadCryptoKeyFromNVM(byte nonVolatileKeyIndex, byte volatileKeyIndex, uint responseWaitTime);
+        bool LoadCryptoKeyFromNVM(byte nonVolatileKeyIndex, byte volatileKeyIndex, uint responseWaitTime = 0);
         /// <summary>Sets the crypto identifier.</summary>
         /// <param name="encryptionID">The encryption identifier.</param>
-        void SetCryptoID(byte[] encryptionID);
-        /// <summary>Sets the crypto identifier.</summary>
-        /// <param name="encryptionID">The encryption identifier.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool SetCryptoID(byte[] encryptionID, uint responseWaitTime);
+        bool SetCryptoID(byte[] encryptionID, uint responseWaitTime = 0);
         /// <summary>Sets the crypto information.</summary>
         /// <param name="encryptionParameter">The encryption parameter.</param>
         /// <param name="parameterData">The parameter data.</param>
-        void SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData);
-        /// <summary>Sets the crypto information.</summary>
-        /// <param name="encryptionParameter">The encryption parameter.</param>
-        /// <param name="parameterData">The parameter data.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData, uint responseWaitTime);
+        bool SetCryptoInfo(EncryptionInfo encryptionParameter, byte[] parameterData, uint responseWaitTime = 0);
         /// <summary>Sets the crypto key.</summary>
         /// <param name="volatileKeyIndex">Index of the volatile key.</param>
         /// <param name="encryptionKey">The encryption key.</param>
-        void SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey);
-        /// <summary>Sets the crypto key.</summary>
-        /// <param name="volatileKeyIndex">Index of the volatile key.</param>
-        /// <param name="encryptionKey">The encryption key.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey, uint responseWaitTime);
+        bool SetCryptoKey(byte volatileKeyIndex, byte[] encryptionKey, uint responseWaitTime = 0);
         /// <summary>Sets the crypto RNG seed.</summary>
         /// <param name="cryptoRNGSeed">The crypto RNG seed.</param>
-        void SetCryptoRNGSeed(byte[] cryptoRNGSeed);
-        /// <summary>Sets the crypto RNG seed.</summary>
-        /// <param name="cryptoRNGSeed">The crypto RNG seed.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool SetCryptoRNGSeed(byte[] cryptoRNGSeed, uint responseWaitTime);
+        bool SetCryptoRNGSeed(byte[] cryptoRNGSeed, uint responseWaitTime = 0);
         /// <summary>Sets the crypto user information.</summary>
         /// <param name="userInfoString">The user information string.</param>
-        void SetCryptoUserInfo(byte[] userInfoString);
-        /// <summary>Sets the crypto user information.</summary>
-        /// <param name="userInfoString">The user information string.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool SetCryptoUserInfo(byte[] userInfoString, uint responseWaitTime);
+        bool SetCryptoUserInfo(byte[] userInfoString, uint responseWaitTime = 0);
         /// <summary>Stores the crypto key to NVM.</summary>
         /// <param name="nonVolatileKeyIndex">Index of the non volatile key.</param>
         /// <param name="encryptionKey">The encryption key.</param>
-        void StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey);
-        /// <summary>Stores the crypto key to NVM.</summary>
-        /// <param name="nonVolatileKeyIndex">Index of the non volatile key.</param>
-        /// <param name="encryptionKey">The encryption key.</param>
-        /// <param name="responseWaitTime">The response wait time.</param>
+        /// <param name="responseWaitTime">The response wait time in milliseconds. The default is 0ms.</param>
         /// <returns>
         /// true if successful
         /// </returns>
-        bool StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey, uint responseWaitTime);
+        bool StoreCryptoKeyToNVM(byte nonVolatileKeyIndex, byte[] encryptionKey, uint responseWaitTime = 0);
     }
 }

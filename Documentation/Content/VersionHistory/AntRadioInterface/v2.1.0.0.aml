@@ -17,7 +17,7 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>Version 2.1.0.0 was released on June 9, 2024.</para>
+      <para>Version 2.1.0.0 was released on June 12, 2024.</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
@@ -30,7 +30,10 @@
 						<para>OpenedFrameType and OpenedPortType have been removed in this release.</para>
 					</listItem>
 					<listItem>
-						<para>The GetSerialString method in IAntUsbRadio is redundant and has been marked as obsolete.</para>
+						<para>The GetSerialString and GetProductString methods in IAntUsbRadio have been marked as obsolete.</para>
+					</listItem>
+					<listItem>
+						<para>Overloads in the interfaces have been removed in favor of optional arguments with default values. The GetDeviceCapabilities method may require rework in implementations.</para>					
 					</listItem>
 				</list>
       </content>

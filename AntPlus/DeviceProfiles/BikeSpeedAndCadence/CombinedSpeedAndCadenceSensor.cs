@@ -89,5 +89,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
             }
             RaisePropertyChange(string.Empty);
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "Bike Speed and Cadence";
+        }
     }
 }

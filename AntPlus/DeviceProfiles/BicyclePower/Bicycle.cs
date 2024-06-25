@@ -115,6 +115,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     {
                         Sensor = SensorType.Power;
                         PowerSensor = new StandardPowerSensor(this, _logger);
+                        RaisePropertyChange("Sensor");
+                        RaisePropertyChange("PowerSensor");
                     }
                     PowerSensor.Parse(dataPage);
                     break;
@@ -123,6 +125,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     {
                         Sensor = SensorType.WheelTorque;
                         PowerSensor = WheelTorqueSensor = new StandardWheelTorqueSensor(this, _logger);
+                        RaisePropertyChange("Sensor");
+                        RaisePropertyChange("WheelTorqueSensor");
+                        RaisePropertyChange("PowerSensor");
                     }
                     WheelTorqueSensor.ParseTorque(dataPage);
                     break;
@@ -131,6 +136,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     {
                         Sensor = SensorType.CrankTorque;
                         PowerSensor = CrankTorqueSensor = new StandardCrankTorqueSensor(this, _logger);
+                        RaisePropertyChange("Sensor");
+                        RaisePropertyChange("CrankTorqueSensor");
+                        RaisePropertyChange("PowerSensor");
                     }
                     CrankTorqueSensor.ParseTorque(dataPage);
                     break;
@@ -138,10 +146,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PowerSensor?.TorqueEffectiveness.Parse(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
-                    Sensor = SensorType.CrankTorqueFrequency;
                     if (CTFSensor == null)
                     {
+                        Sensor = SensorType.CrankTorqueFrequency;
                         CTFSensor = new CrankTorqueFrequencySensor(this, _logger);
+                        RaisePropertyChange("Sensor");
+                        RaisePropertyChange("CTFSensor");
                     }
                     CTFSensor.Parse(dataPage);
                     break;
@@ -160,7 +170,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <inheritdoc />
         public override string ToString()
         {
-            return "Bicycle Power";
+            switch (Sensor)
+            {
+                case SensorType.Power:
+                case SensorType.WheelTorque:
+                case SensorType.CrankTorque:
+                    return PowerSensor.ToString();
+                case SensorType.CrankTorqueFrequency:
+                    return CTFSensor.ToString();
+                default:
+                    return "Bicycle Power";
+            }
         }
     }
 }

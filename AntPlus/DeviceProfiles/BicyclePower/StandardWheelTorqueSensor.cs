@@ -44,5 +44,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 RaisePropertyChange(nameof(AccumulatedDistance));
             }
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "Bike Power (Wheel Torque)";
+        }
     }
 }

@@ -347,7 +347,23 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <inheritdoc />
         public override string ToString()
         {
-            return "Fitness Equipment";
+            switch (GeneralData?.EquipmentType)
+            {
+                case FitnessEquipmentType.Treadmill:
+                    return "Treadmill";
+                case FitnessEquipmentType.Elliptical:
+                    return "Elliptical";
+                case FitnessEquipmentType.Rower:
+                    return "Rower";
+                case FitnessEquipmentType.Climber:
+                    return "Climber";
+                case FitnessEquipmentType.NordicSkier:
+                    return "Nordic Skier";
+                case FitnessEquipmentType.TrainerStationaryBike:
+                    return "Trainer Stationary Bike";
+                default:
+                    return "Fitness Equipment";
+            }
         }
 
         private void HandleFEState(byte state)

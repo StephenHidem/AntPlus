@@ -126,6 +126,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "Bike Power (Crank Torque)";
+        }
+
         /// <summary>Parses the cycling dynamics data pages.</summary>
         /// <param name="dataPage">The data page.</param>
         internal void ParseCyclingDynamics(byte[] dataPage)

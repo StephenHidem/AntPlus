@@ -48,5 +48,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 }
             }
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "Bike Cadence Sensor";
+        }
     }
 }

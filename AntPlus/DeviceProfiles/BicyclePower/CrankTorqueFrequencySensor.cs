@@ -60,6 +60,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             _logger = logger;
         }
 
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "Bike Power (CTF)";
+        }
+
         /// <summary>
         /// Parses the specified data page.
         /// </summary>

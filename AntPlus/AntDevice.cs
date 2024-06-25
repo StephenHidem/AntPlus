@@ -75,13 +75,13 @@ namespace SmallEarthTech.AntPlus
         /// <param name="timeout">Time in milliseconds before firing <see cref="DeviceWentOffline"/>.</param>
         protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
         {
-            logger.LogInformation("Created {AntDevice}", ToString());
             ChannelId = channelId;
             this.antChannel = antChannel;
             _logger = logger;
             deviceTimeout = timeout;
             timeoutTimer = new Timer(TimeoutCallback);
             timeoutTimer.Change(deviceTimeout, Timeout.Infinite);
+            logger.LogInformation("Created {AntDevice}", ToString());
         }
 
         private void TimeoutCallback(object state)

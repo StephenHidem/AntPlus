@@ -67,5 +67,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                 }
             }
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return string.Format("Unknown Device Type: {0}", ChannelId.DeviceType);
+        }
     }
 }

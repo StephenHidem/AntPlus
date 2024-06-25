@@ -104,5 +104,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 RaisePropertyChange(nameof(AveragePower));
             }
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "Bike Power (Power Only)";
+        }
     }
 }

@@ -79,7 +79,6 @@ namespace SmallEarthTech.AntPlus
                     device = CreateAntDevice(e.ChannelId);
                     Add(device);
                     device.DeviceWentOffline += DeviceOffline;
-                    logger.LogDebug("{Device} added.", device);
                 }
                 device.Parse(e.Payload);
             }
@@ -100,14 +99,17 @@ namespace SmallEarthTech.AntPlus
             AntDevice device = (AntDevice)sender;
             device.DeviceWentOffline -= DeviceOffline;
             _ = Remove(device);
-            logger.LogDebug("{Device} removed.", device);
         }
 
         /// <summary>Adds the specified item to the end of the collection.</summary>
         /// <param name="item">The item.</param>
         public new void Add(AntDevice item)
         {
-            lock (CollectionLock) { base.Add(item); }
+            lock (CollectionLock)
+            {
+                base.Add(item);
+                logger.LogDebug("{Device} added.", item);
+            }
         }
 
         /// <summary>Removes the specified item from the collection.</summary>
@@ -115,7 +117,12 @@ namespace SmallEarthTech.AntPlus
         /// <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the original collection.</returns>
         public new bool Remove(AntDevice item)
         {
-            lock (CollectionLock) { return base.Remove(item); }
+            lock (CollectionLock)
+            {
+                bool result = base.Remove(item);
+                logger.LogDebug("{Device} remove.Result = {Result}", item, result);
+                return result;
+            }
         }
 
         private AntDevice CreateAntDevice(ChannelId channelId)
@@ -128,7 +135,9 @@ namespace SmallEarthTech.AntPlus
                 case HeartRate.DeviceClass:
                     return new HeartRate(channelId, channel, _loggerFactory.CreateLogger<HeartRate>(), timeout);
                 case Bicycle.DeviceClass:
-                    return new Bicycle(channelId, channel, _loggerFactory.CreateLogger<Bicycle>(), timeout);
+                    Bicycle bicycle = new Bicycle(channelId, channel, _loggerFactory.CreateLogger<Bicycle>(), timeout);
+                    bicycle.PropertyChanged += Bicycle_PropertyChanged;
+                    return bicycle;
                 case BikeSpeedSensor.DeviceClass:
                     return new BikeSpeedSensor(channelId, channel, _loggerFactory.CreateLogger<BikeSpeedSensor>(), timeout);
                 case BikeCadenceSensor.DeviceClass:
@@ -136,7 +145,9 @@ namespace SmallEarthTech.AntPlus
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
                     return new CombinedSpeedAndCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), timeout);
                 case Equipment.DeviceClass:
-                    return new Equipment(channelId, channel, _loggerFactory.CreateLogger<Equipment>(), timeout);
+                    Equipment equipment = new Equipment(channelId, channel, _loggerFactory.CreateLogger<Equipment>(), timeout);
+                    equipment.PropertyChanged += Equipment_PropertyChanged;
+                    return equipment;
                 case MuscleOxygen.DeviceClass:
                     return new MuscleOxygen(channelId, channel, _loggerFactory.CreateLogger<MuscleOxygen>(), timeout);
                 case Geocache.DeviceClass:
@@ -147,6 +158,46 @@ namespace SmallEarthTech.AntPlus
                     return new StrideBasedSpeedAndDistance(channelId, channel, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), timeout);
                 default:
                     return new UnknownDevice(channelId, channel, _loggerFactory.CreateLogger<UnknownDevice>(), timeout);
+            }
+        }
+
+        /// <summary>
+        /// Refresh the collection when the fitness equipment type is known and disconnect this event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Equipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Equipment.GeneralData):
+                    logger.LogDebug("GeneralData property change.");
+                    ((Equipment)sender).PropertyChanged -= Equipment_PropertyChanged;
+                    _ = Remove((Equipment)sender);
+                    Add((Equipment)sender);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Refresh the collection when the bicycle sensor type is known and disconnect this event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Bicycle_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Sensor":
+                    logger.LogDebug("Sensor property change. SensorType = {0}", ((Bicycle)sender).Sensor);
+                    ((Bicycle)sender).PropertyChanged -= Bicycle_PropertyChanged;
+                    _ = Remove((Bicycle)sender);
+                    Add((Bicycle)sender);
+                    break;
+                default:
+                    break;
             }
         }
     }

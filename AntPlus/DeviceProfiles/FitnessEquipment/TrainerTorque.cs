@@ -1,17 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
     /// This class supports the trainer torque messages.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class TrainerTorque : INotifyPropertyChanged
+    public class TrainerTorque
     {
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
         private byte lastEventCount;
@@ -67,7 +62,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 AveragePower = AverageTorque * AverageAngularVelocity;
                 AverageSpeed = Utils.ComputeAvgSpeed(WheelCircumference, deltaEventCount, deltaPeriod);
                 AccumulatedDistance += Utils.ComputeDeltaDistance(WheelCircumference, deltaTicks);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
             }
         }
     }

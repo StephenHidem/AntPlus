@@ -11,7 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// This is the primary support class for fitness equipment sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public class Equipment : AntDevice
+    public abstract class Equipment : AntDevice
     {
         /// <summary>
         /// The fitness equipment device class ID.
@@ -19,25 +19,47 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public const byte DeviceClass = 17;
 
         /// <summary>
-        /// General main data pages.
+        /// Fitness equipment data pages.
         /// </summary>
-        private enum DataPage
+        public enum DataPage
         {
+            /// <summary>Invalid page</summary>
+            None = 0,
+            /// <summary>Calibration request/response page</summary>
+            CalRequestResponse = 0x01,
+            /// <summary>Calibration progress page</summary>
+            CalProgress = 0x02,
+            /// <summary>General data page</summary>
             GeneralFEData = 0x10,
+            /// <summary>General settings page</summary>
             GeneralSettings = 0x11,
+            /// <summary>General metabolic data page</summary>
             GeneralMetabolicData = 0x12,
+            /// <summary>Treadmill data page</summary>
             TreadmillData = 0x13,
+            /// <summary>Elliptical data page</summary>
             EllipticalData = 0x14,
+            /// <summary>Rower data page</summary>
             RowerData = 0x16,
+            /// <summary>Climber data page</summary>
             ClimberData = 0x17,
+            /// <summary>Nordic Skier data page</summary>
             NordicSkierData = 0x18,
+            /// <summary>Trainer stationary bike data page</summary>
             TrainerStationaryBikeData = 0x19,
+            /// <summary>Trainer torque data page</summary>
             TrainerTorqueData = 0x1A,
+            /// <summary>Basic resistance page</summary>
             BasicResistance = 0x30,
+            /// <summary>Target power page</summary>
             TargetPower = 0x31,
+            /// <summary>Wind resistance page</summary>
             WindResistance = 0x32,
+            /// <summary>Track resistance page</summary>
             TrackResistance = 0x33,
+            /// <summary>Equipment capabilities page</summary>
             FECapabilities = 0x36,
+            /// <summary>User configuration page</summary>
             UserConfiguration = 0x37
         }
 
@@ -92,6 +114,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         [Flags]
         public enum SupportedTrainingModes
         {
+            /// <summary>No training modes supported</summary>
+            None = 0x00,
             /// <summary>Basic resistance</summary>
             BasicResistance = 0x01,
             /// <summary>Target power</summary>
@@ -233,22 +257,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public GeneralSettingsPage GeneralSettings { get; private set; }
         /// <summary>Gets the general metabolic reports.</summary>
         public GeneralMetabolicPage GeneralMetabolic { get; private set; }
-        /// <summary>Gets the treadmill equipment class if detected, else null.</summary>
-        public Treadmill Treadmill { get; private set; }
-        /// <summary>Gets the elliptical equipment class if detected, else null.</summary>
-        public Elliptical Elliptical { get; private set; }
-        /// <summary>Gets the rower equipment class if detected, else null.</summary>
-        public Rower Rower { get; private set; }
-        /// <summary>Gets the climber equipment class if detected, else null.</summary>
-        public Climber Climber { get; private set; }
-        /// <summary>Gets the Nordic skier equipment class if detected, else null.</summary>
-        public NordicSkier NordicSkier { get; private set; }
-        /// <summary>Gets the stationary bike equipment class if detected, else null.</summary>
-        public TrainerStationaryBike TrainerStationaryBike { get; private set; }
         /// <summary>Gets the maximum trainer resistance.</summary>
         public ushort MaxTrainerResistance { get; private set; }
-        /// <summary>Gets the supported capabilities.</summary>
-        public SupportedTrainingModes Capabilities { get; private set; }
+        /// <summary>Gets the supported training modes.</summary>
+        public SupportedTrainingModes TrainingModes { get; private set; }
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
@@ -280,10 +292,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.GeneralFEData:
                     HandleFEState(dataPage[7]);
                     GeneralData.Parse(dataPage);
-                    if (!IsKnownEquipmentType(GeneralData.EquipmentType))
-                    {
-                        CreateSpecificEquipment(GeneralData.EquipmentType);
-                    }
                     RaisePropertyChange(nameof(GeneralData));
 
                     // check for lap toggle
@@ -304,39 +312,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     RaisePropertyChange(nameof(GeneralMetabolic));
                     break;
                 // handle specific FE pages
-                case DataPage.TreadmillData:
-                    HandleFEState(dataPage[7]);
-                    Treadmill?.Parse(dataPage);
-                    break;
-                case DataPage.EllipticalData:
-                    HandleFEState(dataPage[7]);
-                    Elliptical?.Parse(dataPage);
-                    break;
-                case DataPage.RowerData:
-                    HandleFEState(dataPage[7]);
-                    Rower?.Parse(dataPage);
-                    break;
-                case DataPage.ClimberData:
-                    HandleFEState(dataPage[7]);
-                    Climber?.Parse(dataPage);
-                    break;
-                case DataPage.NordicSkierData:
-                    HandleFEState(dataPage[7]);
-                    NordicSkier?.Parse(dataPage);
-                    break;
-                case DataPage.TrainerStationaryBikeData:
-                    HandleFEState(dataPage[7]);
-                    TrainerStationaryBike?.Parse(dataPage);
-                    break;
-                case DataPage.TrainerTorqueData:
-                    HandleFEState(dataPage[7]);
-                    TrainerStationaryBike?.TrainerTorque.Parse(dataPage);
-                    break;
                 case DataPage.FECapabilities:
                     MaxTrainerResistance = BitConverter.ToUInt16(dataPage, 5);
-                    Capabilities = (SupportedTrainingModes)dataPage[7];
+                    TrainingModes = (SupportedTrainingModes)dataPage[7];
                     RaisePropertyChange(nameof(MaxTrainerResistance));
-                    RaisePropertyChange(nameof(Capabilities));
+                    RaisePropertyChange(nameof(TrainingModes));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);
@@ -344,29 +324,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
         }
 
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            switch (GeneralData?.EquipmentType)
-            {
-                case FitnessEquipmentType.Treadmill:
-                    return "Treadmill";
-                case FitnessEquipmentType.Elliptical:
-                    return "Elliptical";
-                case FitnessEquipmentType.Rower:
-                    return "Rower";
-                case FitnessEquipmentType.Climber:
-                    return "Climber";
-                case FitnessEquipmentType.NordicSkier:
-                    return "Nordic Skier";
-                case FitnessEquipmentType.TrainerStationaryBike:
-                    return "Trainer Stationary Bike";
-                default:
-                    return "Fitness Equipment";
-            }
-        }
-
-        private void HandleFEState(byte state)
+        /// <summary>Handles the state of the fitness equipment.</summary>
+        /// <param name="state">The state.</param>
+        protected void HandleFEState(byte state)
         {
             var st = (state & 0x70) >> 4;
             // check for valid state
@@ -386,7 +346,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Sets the percentage of maximum resistance resistance.</summary>
-        /// <param name="resistance">The resistance.</param>
+        /// <param name="resistance">The resistance as a percentage of the maximum resistance.</param>
         /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetBasicResistance(double resistance)
         {
@@ -466,53 +426,56 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             return await RequestDataPage(DataPage.FECapabilities);
         }
 
-        private bool IsKnownEquipmentType(FitnessEquipmentType equipmentType)
+        /// <summary>Gets the fitness equipment if the equipment type is known.</summary>
+        /// <param name="dataPage">The data page.</param>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">The ant channel.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="timeout">The timeout in milliseconds.</param>
+        /// <returns>One of the known fitness equipment classes if known, otherwise null.</returns>
+        public static Equipment GetEquipment(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000)
         {
-            switch (equipmentType)
+            switch ((DataPage)dataPage[0])
             {
-                case FitnessEquipmentType.Treadmill:
-                    return Treadmill != null;
-                case FitnessEquipmentType.Elliptical:
-                    return Elliptical != null;
-                case FitnessEquipmentType.Rower:
-                    return Rower != null;
-                case FitnessEquipmentType.Climber:
-                    return Climber != null;
-                case FitnessEquipmentType.NordicSkier:
-                    return NordicSkier != null;
-                case FitnessEquipmentType.TrainerStationaryBike:
-                    return TrainerStationaryBike != null;
+                case DataPage.GeneralFEData:
+                    switch ((FitnessEquipmentType)dataPage[1])
+                    {
+                        case FitnessEquipmentType.Treadmill:
+                            return new Treadmill(channelId, antChannel, logger, timeout);
+                        case FitnessEquipmentType.Elliptical:
+                            return new Elliptical(channelId, antChannel, logger, timeout);
+                        case FitnessEquipmentType.Rower:
+                            return new Rower(channelId, antChannel, logger, timeout);
+                        case FitnessEquipmentType.Climber:
+                            return new Climber(channelId, antChannel, logger, timeout);
+                        case FitnessEquipmentType.NordicSkier:
+                            return new NordicSkier(channelId, antChannel, logger, timeout);
+                        case FitnessEquipmentType.TrainerStationaryBike:
+                            return new TrainerStationaryBike(channelId, antChannel, logger, timeout);
+                        default:
+                            logger.LogError("Unknown equipment type = {EquipmentType}", dataPage[1]);
+                            break;
+                    }
+                    break;
+                case DataPage.TreadmillData:
+                    return new Treadmill(channelId, antChannel, logger, timeout);
+                case DataPage.EllipticalData:
+                    return new Elliptical(channelId, antChannel, logger, timeout);
+                case DataPage.RowerData:
+                    return new Rower(channelId, antChannel, logger, timeout);
+                case DataPage.ClimberData:
+                    return new Climber(channelId, antChannel, logger, timeout);
+                case DataPage.NordicSkierData:
+                    return new NordicSkier(channelId, antChannel, logger, timeout);
+                case DataPage.TrainerStationaryBikeData:
+                    return new TrainerStationaryBike(channelId, antChannel, logger, timeout);
+                case DataPage.TrainerTorqueData:
+                    return new TrainerStationaryBike(channelId, antChannel, logger, timeout);
                 default:
-                    return false;
-            }
-        }
-
-        private void CreateSpecificEquipment(FitnessEquipmentType equipmentType)
-        {
-            switch (equipmentType)
-            {
-                case FitnessEquipmentType.Treadmill:
-                    Treadmill = new Treadmill();
-                    break;
-                case FitnessEquipmentType.Elliptical:
-                    Elliptical = new Elliptical();
-                    break;
-                case FitnessEquipmentType.Rower:
-                    Rower = new Rower();
-                    break;
-                case FitnessEquipmentType.Climber:
-                    Climber = new Climber();
-                    break;
-                case FitnessEquipmentType.NordicSkier:
-                    NordicSkier = new NordicSkier();
-                    break;
-                case FitnessEquipmentType.TrainerStationaryBike:
-                    TrainerStationaryBike = new TrainerStationaryBike();
-                    break;
-                default:
-                    _logger.LogError("Unknown equipment type = {EquipmentType}", equipmentType);
+                    logger.LogError("Unknown equipment type. Data page = {DataPage}", dataPage);
                     break;
             }
+            return null;
         }
     }
 }

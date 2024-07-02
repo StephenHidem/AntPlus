@@ -3,7 +3,6 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using System.Threading.Tasks;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Equipment;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
@@ -26,12 +25,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockLogger = mockRepository.Create<ILogger<Equipment>>(MockBehavior.Loose);
         }
 
-        private Equipment CreateFitnessEquipment()
+        private Equipment CreateFitnessEquipment(FitnessEquipmentType equipmentType = FitnessEquipmentType.Treadmill)
         {
-            return new Equipment(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+            byte[] dataPage = new byte[8] { (byte)DataPage.GeneralFEData, (byte)equipmentType, 0, 0, 0, 0, 0, 0 };
+            return Equipment.GetEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
         }
 
         [TestMethod]
@@ -55,43 +52,80 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         }
 
         [TestMethod]
-        [DataRow(19, FitnessEquipmentType.Treadmill)]
-        [DataRow(20, FitnessEquipmentType.Elliptical)]
-        [DataRow(22, FitnessEquipmentType.Rower)]
-        [DataRow(23, FitnessEquipmentType.Climber)]
-        [DataRow(24, FitnessEquipmentType.NordicSkier)]
-        [DataRow(25, FitnessEquipmentType.TrainerStationaryBike)]
-        public void Parse_GeneralDataPage_ExpectedEquipmentCreated(int equip, FitnessEquipmentType equipmentType)
+        [DataRow(FitnessEquipmentType.Treadmill)]
+        [DataRow(FitnessEquipmentType.Elliptical)]
+        [DataRow(FitnessEquipmentType.Rower)]
+        [DataRow(FitnessEquipmentType.Climber)]
+        [DataRow(FitnessEquipmentType.NordicSkier)]
+        [DataRow(FitnessEquipmentType.TrainerStationaryBike)]
+        public void GetEquipment_GeneralDataPage_ExpectedEquipment(FitnessEquipmentType equipmentType)
         {
-            // Arrange
-            var fitnessEquipment = CreateFitnessEquipment();
-            byte[] dataPage = { 16, (byte)equip, 0, 0, 0, 0, 0, 0 };
-
-            // Act
-            fitnessEquipment.Parse(
-                dataPage);
+            // Arrange and Act
+            var fitnessEquipment = CreateFitnessEquipment(equipmentType);
 
             // Assert
-            Assert.AreEqual(equipmentType, fitnessEquipment.GeneralData.EquipmentType);
             switch (equipmentType)
             {
                 case FitnessEquipmentType.Treadmill:
-                    Assert.IsNotNull(fitnessEquipment.Treadmill);
+                    Assert.IsInstanceOfType<Treadmill>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Elliptical:
-                    Assert.IsNotNull(fitnessEquipment.Elliptical);
+                    Assert.IsInstanceOfType<Elliptical>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Rower:
-                    Assert.IsNotNull(fitnessEquipment.Rower);
+                    Assert.IsInstanceOfType<Rower>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Climber:
-                    Assert.IsNotNull(fitnessEquipment.Climber);
+                    Assert.IsInstanceOfType<Climber>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.NordicSkier:
-                    Assert.IsNotNull(fitnessEquipment.NordicSkier);
+                    Assert.IsInstanceOfType<NordicSkier>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.TrainerStationaryBike:
-                    Assert.IsNotNull(fitnessEquipment.TrainerStationaryBike);
+                    Assert.IsInstanceOfType<TrainerStationaryBike>(fitnessEquipment);
+                    break;
+                default:
+                    Assert.Fail();
+                    break;
+            }
+        }
+
+        [TestMethod]
+        [DataRow(DataPage.TreadmillData, FitnessEquipmentType.Treadmill)]
+        [DataRow(DataPage.EllipticalData, FitnessEquipmentType.Elliptical)]
+        [DataRow(DataPage.RowerData, FitnessEquipmentType.Rower)]
+        [DataRow(DataPage.ClimberData, FitnessEquipmentType.Climber)]
+        [DataRow(DataPage.NordicSkierData, FitnessEquipmentType.NordicSkier)]
+        [DataRow(DataPage.TrainerStationaryBikeData, FitnessEquipmentType.TrainerStationaryBike)]
+        [DataRow(DataPage.TrainerTorqueData, FitnessEquipmentType.TrainerStationaryBike)]
+        public void GetEquipment_SpecificPage_ExpectedEquipment(DataPage pageNumber, FitnessEquipmentType equipmentType)
+        {
+            // Arrange
+            byte[] dataPage = new byte[8] { (byte)pageNumber, 0, 0, 0, 0, 0, 0, 0 };
+
+            // Act
+            var fitnessEquipment = Equipment.GetEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
+
+            // Assert
+            switch (equipmentType)
+            {
+                case FitnessEquipmentType.Treadmill:
+                    Assert.IsInstanceOfType<Treadmill>(fitnessEquipment);
+                    break;
+                case FitnessEquipmentType.Elliptical:
+                    Assert.IsInstanceOfType<Elliptical>(fitnessEquipment);
+                    break;
+                case FitnessEquipmentType.Rower:
+                    Assert.IsInstanceOfType<Rower>(fitnessEquipment);
+                    break;
+                case FitnessEquipmentType.Climber:
+                    Assert.IsInstanceOfType<Climber>(fitnessEquipment);
+                    break;
+                case FitnessEquipmentType.NordicSkier:
+                    Assert.IsInstanceOfType<NordicSkier>(fitnessEquipment);
+                    break;
+                case FitnessEquipmentType.TrainerStationaryBike:
+                    Assert.IsInstanceOfType<TrainerStationaryBike>(fitnessEquipment);
                     break;
                 default:
                     Assert.Fail();
@@ -202,126 +236,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.IsTrue(fitnessEquipment.MaxTrainerResistance == maxResistance);
-            Assert.IsTrue(fitnessEquipment.Capabilities == trainingModes);
-        }
-
-        [TestMethod]
-        public async Task SetBasicResistance_Message_Matches()
-        {
-            // Arrange
-            var fitnessEquipment = CreateFitnessEquipment();
-            double resistance = 50;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
-                mockChannelId,
-                new byte[8] { 48, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(resistance / 0.5) },
-                500).Result).Returns(MessagingReturnCode.Pass);
-
-            // Act
-            var result = await fitnessEquipment.SetBasicResistance(
-                resistance);
-
-            // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
-        }
-
-        [TestMethod]
-        public async Task SetTargetPower_Message_Matches()
-        {
-            // Arrange
-            var fitnessEquipment = CreateFitnessEquipment();
-            double power = 4000;
-            byte[] expPow = BitConverter.GetBytes((ushort)(power / 0.25));
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
-                mockChannelId,
-                new byte[8] { 49, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, expPow[0], expPow[1] },
-                500).Result).Returns(MessagingReturnCode.Pass);
-
-            // Act
-            var result = await fitnessEquipment.SetTargetPower(
-                power);
-
-            // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
-        }
-
-        [TestMethod]
-        public async Task SetWindResistance_Message_Matches()
-        {
-            // Arrange
-            var fitnessEquipment = CreateFitnessEquipment();
-            double windResistanceCoefficient = 1.86;
-            sbyte windSpeed = 0;
-            double draftingFactor = 0.5;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
-                mockChannelId,
-                new byte[8] { 50, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(windResistanceCoefficient / 0.01), (byte)(windSpeed + 127), (byte)(draftingFactor / 0.01) },
-                500).Result).Returns(MessagingReturnCode.Pass);
-
-            // Act
-            var result = await fitnessEquipment.SetWindResistance(
-                windResistanceCoefficient,
-                windSpeed,
-                draftingFactor);
-
-            // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
-        }
-
-        [TestMethod]
-        public async Task SetTrackResistance_Message_Matches()
-        {
-            // Arrange
-            var fitnessEquipment = CreateFitnessEquipment();
-            double grade = 0;
-            double rollingResistanceCoefficient = 0.004;
-            byte[] expGrade = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
-                mockChannelId,
-                new byte[8] { 51, 0xFF, 0xFF, 0xFF, 0xFF, expGrade[0], expGrade[1], (byte)(rollingResistanceCoefficient / 0.00005) },
-                500).Result).Returns(MessagingReturnCode.Pass);
-
-            // Act
-            var result = await fitnessEquipment.SetTrackResistance(
-                grade,
-                rollingResistanceCoefficient);
-
-            // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
-        }
-
-        [TestMethod]
-        public async Task SetUserConfiguration_Message_Matches()
-        {
-            // Arrange
-            var fitnessEquipment = CreateFitnessEquipment();
-            double userWeight = 355;
-            byte wheelDiameterOffset = 0;
-            double bikeWeight = 24;
-            double wheelDiameter = 1;
-            double gearRatio = 3.2;
-
-            byte[] expWeight = BitConverter.GetBytes((ushort)(userWeight / 0.01));
-            byte[] expBikeWeight = BitConverter.GetBytes((ushort)(bikeWeight / 0.05) << 4);
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
-                mockChannelId,
-                new byte[8] { 55, expWeight[0], expWeight[1], 0xFF, (byte)((wheelDiameterOffset & 0x0F) | (expBikeWeight[0] & 0xF0)), expBikeWeight[1], (byte)(wheelDiameter / 0.01), (byte)(gearRatio / 0.03) },
-                500).Result).Returns(MessagingReturnCode.Pass);
-
-            // Act
-            var result = await fitnessEquipment.SetUserConfiguration(
-                userWeight,
-                wheelDiameterOffset,
-                bikeWeight,
-                wheelDiameter,
-                gearRatio);
-
-            // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
+            Assert.IsTrue(fitnessEquipment.TrainingModes == trainingModes);
         }
     }
 }

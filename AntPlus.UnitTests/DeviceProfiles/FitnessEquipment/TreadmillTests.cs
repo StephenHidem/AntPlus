@@ -1,4 +1,7 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntRadioInterface;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Treadmill;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
@@ -6,11 +9,34 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class TreadmillTests
     {
+        private MockRepository mockRepository;
+        private readonly ChannelId mockChannelId = new(0);
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Equipment>> mockLogger;
+
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<Equipment>>(MockBehavior.Loose);
+        }
+
+        private Treadmill CreateTreadmill()
+        {
+            return new Treadmill(
+                mockChannelId,
+                mockAntChannel.Object,
+                mockLogger.Object);
+        }
+
         [TestMethod]
         public void Parse_InstantaneousCadence_Matches()
         {
             // Arrange
-            var treadmill = new Treadmill();
+            var treadmill = CreateTreadmill();
             byte[] dataPage = new byte[] { 19, 0, 0, 0, 128, 0, 0, 0 };
 
             // Act
@@ -24,7 +50,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_PositiveVerticalDistance_Updated()
         {
             // Arrange
-            var treadmill = new Treadmill();
+            var treadmill = CreateTreadmill();
             byte[] dataPage = new byte[] { 19, 0, 0, 0, 0, 0, 255, 0 };
             treadmill.Parse(dataPage);
             dataPage[6] = 19;
@@ -40,7 +66,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_NegativeVerticalDistance_Updated()
         {
             // Arrange
-            var treadmill = new Treadmill();
+            var treadmill = CreateTreadmill();
             byte[] dataPage = new byte[] { 19, 0, 0, 0, 0, 255, 0, 0 };
             treadmill.Parse(dataPage);
             dataPage[5] = 19;
@@ -58,7 +84,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_Capabilities_Matches(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
-            var treadmill = new Treadmill();
+            var treadmill = CreateTreadmill();
 
             // Act
             treadmill.Parse(

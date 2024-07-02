@@ -1,4 +1,7 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntRadioInterface;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Elliptical;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
@@ -6,11 +9,34 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class EllipticalTests
     {
+        private MockRepository mockRepository;
+        private readonly ChannelId mockChannelId = new(0);
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Equipment>> mockLogger;
+
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<Equipment>>(MockBehavior.Loose);
+        }
+
+        private Elliptical CreateElliptical()
+        {
+            return new Elliptical(
+                mockChannelId,
+                mockAntChannel.Object,
+                mockLogger.Object);
+        }
+
         [TestMethod]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
-            var elliptical = new Elliptical();
+            var elliptical = CreateElliptical();
             byte[] dataPage = new byte[] { 20, 0xFF, 0, 0, 128, 0, 0x80, 0 };
 
             // Act
@@ -26,7 +52,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_PositiveVerticalDistance_Matches()
         {
             // Arrange
-            var elliptical = new Elliptical();
+            var elliptical = CreateElliptical();
             byte[] dataPage = new byte[] { 20, 0xFF, 255, 0, 0, 0, 0, 0 };
             elliptical.Parse(
                 dataPage);
@@ -44,7 +70,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_StrideCount_Matches()
         {
             // Arrange
-            var elliptical = new Elliptical();
+            var elliptical = CreateElliptical();
             byte[] dataPage = new byte[] { 20, 0xFF, 0, 255, 0, 0, 0, 0 };
             elliptical.Parse(
                 dataPage);
@@ -66,7 +92,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_Capabilities_MatchesExpectedValue(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
-            var elliptical = new Elliptical();
+            var elliptical = CreateElliptical();
 
             // Act
             elliptical.Parse(

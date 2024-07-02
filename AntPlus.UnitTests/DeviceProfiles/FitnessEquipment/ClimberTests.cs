@@ -1,4 +1,7 @@
-﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntRadioInterface;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Climber;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
@@ -6,11 +9,34 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
     [TestClass]
     public class ClimberTests
     {
+        private MockRepository mockRepository;
+        private readonly ChannelId mockChannelId = new(0);
+        private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger<Equipment>> mockLogger;
+
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            mockRepository = new MockRepository(MockBehavior.Strict);
+
+            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger<Equipment>>(MockBehavior.Loose);
+        }
+
+        private Climber CreateClimber()
+        {
+            return new Climber(
+                mockChannelId,
+                mockAntChannel.Object,
+                mockLogger.Object);
+        }
+
         [TestMethod]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
-            var climber = new Climber();
+            var climber = CreateClimber();
             byte[] dataPage = new byte[] { 23, 0, 0, 0, 128, 0, 0x80, 0 };
 
             // Act
@@ -27,7 +53,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_Capabilities_Matches(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
-            var treadmill = new Climber();
+            var treadmill = CreateClimber();
 
             // Act
             treadmill.Parse(
@@ -41,7 +67,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_StrideCyclesRollover_MatchesExpectedValue()
         {
             // Arrange
-            var climber = new Climber();
+            var climber = CreateClimber();
             byte[] dataPage = new byte[] { 23, 0xFF, 0xFF, 255, 0, 0, 0, 0 };
             climber.Parse(
                 dataPage);

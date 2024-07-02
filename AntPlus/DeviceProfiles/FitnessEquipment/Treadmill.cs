@@ -1,17 +1,26 @@
-﻿using System;
-using System.ComponentModel;
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
+using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
     /// This class supports the treadmill fitness equipment type.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class Treadmill : INotifyPropertyChanged
+    public class Treadmill : Equipment
     {
         private bool isFirstDataMessage = true;
         private byte prevPos;
         private byte prevNeg;
+
+        /// <summary>Initializes a new instance of the <see cref="Treadmill" /> class.</summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline" />.</param>
+        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        {
+        }
 
         /// <summary>Treadmill specific capabilities.</summary>
         [Flags]
@@ -24,9 +33,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             /// <summary>Transmits negative vertical distance.</summary>
             TxNegVertDistance = 0x02
         }
-
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>Gets the cadence in strides per minute.</summary>
         public byte Cadence { get; private set; }
@@ -42,22 +48,35 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// Parses the specified data page.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void Parse(byte[] dataPage)
+        public override void Parse(byte[] dataPage)
         {
-            Cadence = dataPage[4];
-            Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
-            if (isFirstDataMessage)
+            if ((DataPage)dataPage[0] == DataPage.TreadmillData)
             {
-                prevNeg = dataPage[5];
-                prevPos = dataPage[6];
-                isFirstDataMessage = false;
+                if (isFirstDataMessage)
+                {
+                    prevNeg = dataPage[5];
+                    prevPos = dataPage[6];
+                    isFirstDataMessage = false;
+                }
+                else
+                {
+                    NegVerticalDistance += Utils.CalculateDelta(dataPage[5], ref prevNeg) / -10.0;
+                    PosVerticalDistance += Utils.CalculateDelta(dataPage[6], ref prevPos) / 10.0;
+                    RaisePropertyChange(nameof(NegVerticalDistance));
+                    RaisePropertyChange(nameof(PosVerticalDistance));
+                }
+                Cadence = dataPage[4];
+                Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
+                RaisePropertyChange(nameof(Cadence));
+                RaisePropertyChange(nameof(Capabilities));
             }
             else
             {
-                NegVerticalDistance += Utils.CalculateDelta(dataPage[5], ref prevNeg) / -10.0;
-                PosVerticalDistance += Utils.CalculateDelta(dataPage[6], ref prevPos) / 10.0;
+                base.Parse(dataPage);
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
+
+        /// <inheritdoc />
+        public override string ToString() => "Treadmill";
     }
 }

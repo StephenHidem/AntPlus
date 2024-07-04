@@ -76,7 +76,9 @@ namespace SmallEarthTech.AntPlus
                 device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
                 if (device == null)
                 {
-                    device = CreateAntDevice(e.ChannelId);
+                    // provide channel ID and payload
+                    device = CreateAntDevice(e.ChannelId, e.Payload);
+                    if (device == null) return;     // some device types have additional qualifiers
                     Add(device);
                     device.DeviceWentOffline += DeviceOffline;
                 }
@@ -125,7 +127,7 @@ namespace SmallEarthTech.AntPlus
             }
         }
 
-        private AntDevice CreateAntDevice(ChannelId channelId)
+        private AntDevice CreateAntDevice(ChannelId channelId, byte[] dataPage)
         {
             IAntChannel channel = channels[channelNum++];
             if (channelNum == channels.Length) { channelNum = 1; }
@@ -145,9 +147,7 @@ namespace SmallEarthTech.AntPlus
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
                     return new CombinedSpeedAndCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), timeout);
                 case Equipment.DeviceClass:
-                    Equipment equipment = new Equipment(channelId, channel, _loggerFactory.CreateLogger<Equipment>(), timeout);
-                    equipment.PropertyChanged += Equipment_PropertyChanged;
-                    return equipment;
+                    return Equipment.GetEquipment(dataPage, channelId, channel, _loggerFactory.CreateLogger<Equipment>(), timeout);
                 case MuscleOxygen.DeviceClass:
                     return new MuscleOxygen(channelId, channel, _loggerFactory.CreateLogger<MuscleOxygen>(), timeout);
                 case Geocache.DeviceClass:
@@ -158,26 +158,6 @@ namespace SmallEarthTech.AntPlus
                     return new StrideBasedSpeedAndDistance(channelId, channel, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), timeout);
                 default:
                     return new UnknownDevice(channelId, channel, _loggerFactory.CreateLogger<UnknownDevice>(), timeout);
-            }
-        }
-
-        /// <summary>
-        /// Refresh the collection when the fitness equipment type is known and disconnect this event handler.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Equipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(Equipment.GeneralData):
-                    logger.LogDebug("GeneralData property change.");
-                    ((Equipment)sender).PropertyChanged -= Equipment_PropertyChanged;
-                    _ = Remove((Equipment)sender);
-                    Add((Equipment)sender);
-                    break;
-                default:
-                    break;
             }
         }
 

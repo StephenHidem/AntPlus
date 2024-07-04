@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System.Windows.Controls;
+using WpfUsbStickApp.ViewModels;
 
 namespace WpfUsbStickApp.Controls
 {
@@ -8,10 +9,10 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class TrainerStationaryBikeControl : UserControl
     {
-        public TrainerStationaryBikeControl(Equipment fitnessEquipment)
+        public TrainerStationaryBikeControl(TrainerStationaryBike trainer)
         {
             InitializeComponent();
-            DataContext = fitnessEquipment;
+            DataContext = new TrainerStationaryBikeViewModel(trainer);
         }
     }
 }

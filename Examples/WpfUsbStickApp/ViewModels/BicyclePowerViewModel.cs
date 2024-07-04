@@ -30,7 +30,7 @@ namespace WpfUsbStickApp.ViewModels
                     BicyclePowerControl = new BicycleCrankTorqueControl(bicyclePower);
                     break;
                 case SensorType.CrankTorqueFrequency:
-                    BicyclePowerControl = new CTFControl(BicyclePower.CTFSensor);
+                    BicyclePowerControl = new CTFControl(bicyclePower.CTFSensor);
                     break;
                 default:
                     break;

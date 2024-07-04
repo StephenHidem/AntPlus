@@ -9,7 +9,7 @@
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
         mc:Ignorable="d"
-        Title="{Binding SensorType, StringFormat='Bicycle Power - {0}'}"
+        Title="{Binding BicyclePower}"
         SizeToContent="WidthAndHeight"
         Icon="{Binding BicyclePower.DeviceImageStream}">
     <Grid Margin="10">

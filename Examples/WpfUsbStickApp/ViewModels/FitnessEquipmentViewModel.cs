@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using WpfUsbStickApp.Controls;
 
@@ -14,44 +15,53 @@ namespace WpfUsbStickApp.ViewModels
         public UserControl? FeControl { get; }
 
         [ObservableProperty]
-        private double userWeight;
-        [ObservableProperty]
-        private byte wheelDiameterOffset;
-        [ObservableProperty]
-        private double bikeWeight;
-        [ObservableProperty]
-        private double wheelDiameter;
-        [ObservableProperty]
-        private double gearRatio;
+        public string[]? trainingModes;
+
         [ObservableProperty]
         private TimeSpan lapSplitTime;
 
         public FitnessEquipmentViewModel(Equipment fitnessEquipment)
         {
             FitnessEquipment = fitnessEquipment;
+            TrainingModes = fitnessEquipment.TrainingModes.ToString().Split(',');
             FitnessEquipment.LapToggled += FitnessEquipment_LapToggled;
-            switch (fitnessEquipment.GeneralData.EquipmentType)
+            FitnessEquipment.PropertyChanged += FitnessEquipment_PropertyChanged;
+
+            _ = FitnessEquipment.RequestFECapabilities();
+
+            switch (fitnessEquipment)
             {
-                case Equipment.FitnessEquipmentType.Treadmill:
-                    FeControl = new TreadmillControl(fitnessEquipment);
+                case Climber:
+                    FeControl = new ClimberControl((Climber)fitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.Elliptical:
-                    FeControl = new EllipticalControl(fitnessEquipment);
+                case Elliptical:
+                    FeControl = new EllipticalControl((Elliptical)fitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.Rower:
-                    FeControl = new RowerControl(fitnessEquipment);
+                case NordicSkier:
+                    FeControl = new NordicSkierControl((NordicSkier)fitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.Climber:
-                    FeControl = new ClimberControl(fitnessEquipment);
+                case Rower:
+                    FeControl = new RowerControl((Rower)fitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.NordicSkier:
-                    FeControl = new NordicSkierControl(fitnessEquipment);
+                case TrainerStationaryBike:
+                    FeControl = new TrainerStationaryBikeControl((TrainerStationaryBike)fitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.TrainerStationaryBike:
-                    FeControl = new TrainerStationaryBikeControl(fitnessEquipment);
+                case Treadmill:
+                    FeControl = new TreadmillControl((Treadmill)fitnessEquipment);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void FitnessEquipment_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (sender != null && e.PropertyName == nameof(FitnessEquipment.TrainingModes))
+            {
+                Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    TrainingModes = ((Equipment)sender).TrainingModes.ToString().Split(',');
+                });
             }
         }
 
@@ -64,16 +74,15 @@ namespace WpfUsbStickApp.ViewModels
         }
 
         [RelayCommand]
-        private async Task FECapabilitiesRequest() => await FitnessEquipment.RequestFECapabilities();
-        [RelayCommand]
-        private async Task SetUserConfig() => await FitnessEquipment.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
-        [RelayCommand]
         private async Task SetBasicResistance(string percent) => await FitnessEquipment.SetBasicResistance(double.Parse(percent));
+
         [RelayCommand]
         private async Task SetTargetPower(string power) => await FitnessEquipment.SetTargetPower(double.Parse(power));
+
         [RelayCommand]
         private async Task SetWindResistance() => await FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
+
         [RelayCommand]
-        private async Task SetTrackResistance() => await FitnessEquipment.SetTrackResistance(-15);
+        private async Task SetTrackResistance(string grade) => await FitnessEquipment.SetTrackResistance(double.Parse(grade));
     }
 }

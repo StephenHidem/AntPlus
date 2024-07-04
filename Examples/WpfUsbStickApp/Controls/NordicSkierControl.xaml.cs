@@ -8,7 +8,7 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class NordicSkierControl : UserControl
     {
-        public NordicSkierControl(Equipment fitnessEquipment)
+        public NordicSkierControl(NordicSkier fitnessEquipment)
         {
             InitializeComponent();
             DataContext = fitnessEquipment;

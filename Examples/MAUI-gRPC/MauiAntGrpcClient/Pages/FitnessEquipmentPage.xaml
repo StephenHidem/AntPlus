@@ -5,7 +5,7 @@
              xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
              x:DataType="viewmodels:FitnessEquipmentViewModel"
              x:Class="MauiAntGrpcClient.Pages.FitnessEquipmentPage"
-             Title="FitnessEquipmentPage">
+             Title="{Binding FitnessEquipment}">
     <Grid Margin="10" RowDefinitions="Auto, *">
         <HorizontalStackLayout Spacing="24">
             <RadioButton x:Name="main" Content="General" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>

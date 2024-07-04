@@ -9,9 +9,9 @@
     <Grid>
         <GroupBox Header="Rower">
             <StackPanel>
-                <TextBlock Text="{Binding Rower.StrokeCount, StringFormat='Stroke Count: {0}'}"/>
-                <TextBlock Text="{Binding Rower.Cadence, StringFormat='Cadence: {0}'}"/>
-                <TextBlock Text="{Binding Rower.InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding StrokeCount, StringFormat='Stroke Count: {0}'}"/>
+                <TextBlock Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
                 <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
             </StackPanel>
         </GroupBox>

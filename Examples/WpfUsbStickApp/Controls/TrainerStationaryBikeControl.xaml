@@ -4,27 +4,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
-             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;assembly=AntPlus"
+             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;assembly=SmallEarthTech.AntPlus"
              xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:TrainerStationaryBikeViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:Background="White"
-             d:DataContext="{d:DesignInstance Type=ant:Equipment}">
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         <GroupBox Header="Trainer/Stationary Bike">
-            <StackPanel>
-                <StackPanel DataContext="{Binding TrainerStationaryBike}">
-                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
-                    <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
-                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
-                    <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status: {0}'}"/>
-                    <TextBlock Text="{Binding TargetPower, StringFormat='Target Power: {0}'}"/>
-                    <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F2}'}"/>
-                    <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque: {0:F4}'}"/>
-                    <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power: {0:F2}'}"/>
-                    <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed: {0:F2}'}"/>
-                    <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F2}'}"/>
-                </StackPanel>
+            <StackPanel DataContext="{Binding Trainer}">
+                <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
+                <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status: {0}'}"/>
+                <TextBlock Text="{Binding TargetPower, StringFormat='Target Power: {0}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F2}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque: {0:F4}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power: {0:F2}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed: {0:F2}'}"/>
+                <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F2}'}"/>
                 <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Calibration" Grid.Column="1">
+            <StackPanel>
+                <CheckBox Content="Zero Offset" IsChecked="{Binding CalibrateZeroOffset}"/>
+                <CheckBox Content="Spin Down" IsChecked="{Binding CalibrateSpinDown}"/>
+                <Button Content="Calibrate" Command="{Binding CalibrateCommand}"/>
+                <StackPanel DataContext="{Binding Trainer}">
+                    <Label Content="Calibration Progress"/>
+                    <TextBlock Text="{Binding TemperatureStatus, StringFormat='Temperature Status: {0}'}"/>
+                    <TextBlock Text="{Binding SpeedStatus, StringFormat='Speed Status: {0}'}"/>
+                    <TextBlock Text="{Binding CurrentTemperature, StringFormat='Curent Temperature: {0:F1}°C'}"/>
+                    <TextBlock Text="{Binding TargetSpeed, StringFormat='Target Speed: {0:F3}m/s'}"/>
+                    <TextBlock Text="{Binding TargetSpinDownTime, StringFormat='Target Spin Down Time: {0}ms'}"/>
+                    <Label Content="Calibration Results"/>
+                    <TextBlock Text="{Binding CalibrationStatus, StringFormat='Status: {0}'}"/>
+                    <TextBlock Text="{Binding Temperature, StringFormat='Temperature: {0:F1}°C'}"/>
+                    <TextBlock Text="{Binding SpinDownTime, StringFormat='Spin Down Time: {0}ms'}"/>
+                    <TextBlock Text="{Binding ZeroOffset, StringFormat='Zero Offset: {0}'}"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="User Configuration" Grid.Column="2">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="User Weight (kg):" FontWeight="Normal"/>
+                    <TextBox Grid.Column="1" Width="50" Text="{Binding UserWeight, StringFormat='\{0:F2}'}"/>
+                    <Label Grid.Row="1" Content="Wheel Diameter Offset (mm):" FontWeight="Normal"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Width="50" Text="{Binding WheelDiameterOffset, StringFormat='\{0}'}"/>
+                    <Label Grid.Row="2" Content="Bike Weight (kg):" FontWeight="Normal"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="50" Text="{Binding BikeWeight, StringFormat='\{0:F2}'}"/>
+                    <Label Grid.Row="3" Content="Wheel Diameter (m):" FontWeight="Normal"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Width="50" Text="{Binding WheelDiameter, StringFormat='\{0:F2}'}"/>
+                    <Label Grid.Row="4" Content="Gear Ratio:" FontWeight="Normal"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Width="50" Text="{Binding GearRatio, StringFormat='\{0:F2}'}"/>
+                </Grid>
+                <Button Content="Set Configuration" Command="{Binding SetUserConfigCommand}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

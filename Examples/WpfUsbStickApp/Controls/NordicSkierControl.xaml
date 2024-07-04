@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
+             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;assembly=SmallEarthTech.AntPlus"
+             d:DataContext="{d:DesignInstance Type=ant:NordicSkier}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
     <Grid>
         <GroupBox Header="Nordic Skier">
             <StackPanel>
-                <TextBlock Text="{Binding NordicSkier.StrideCount, StringFormat='Stride Count: {0}'}"/>
-                <TextBlock Text="{Binding NordicSkier.Cadence, StringFormat='Cadence: {0}'}"/>
-                <TextBlock Text="{Binding NordicSkier.InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
+                <TextBlock Text="{Binding StrideCount, StringFormat='Stride Count: {0}'}"/>
+                <TextBlock Text="{Binding Cadence, StringFormat='Cadence: {0}'}"/>
+                <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power: {0}'}"/>
                 <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
             </StackPanel>
         </GroupBox>

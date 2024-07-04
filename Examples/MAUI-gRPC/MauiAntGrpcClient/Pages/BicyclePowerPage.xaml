@@ -6,7 +6,7 @@
              xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
              x:DataType="viewmodels:BicyclePowerViewModel"
              x:Class="MauiAntGrpcClient.Pages.BicyclePowerPage"
-             Title="BicyclePowerPage">
+             Title="{Binding BicyclePower}">
     <Grid Margin="10" RowDefinitions="Auto, *">
         <ScrollView Orientation="Horizontal" IsVisible="{Binding Options}">
             <HorizontalStackLayout Spacing="24">

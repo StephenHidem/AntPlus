@@ -9,12 +9,12 @@
         xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
-        Title="Fitness Equipment" Icon="{Binding FitnessEquipment.DeviceImageStream}">
+        Title="{Binding FitnessEquipment}" Icon="{Binding FitnessEquipment.DeviceImageStream}">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,8 +23,31 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <UserControl Content="{Binding FeControl}"/>
-        <GroupBox Header="General Data" Grid.Column="1" Grid.Row="0">
+        <UserControl Content="{Binding FeControl}" Grid.ColumnSpan="2"/>
+        <GroupBox Header="Control" Grid.Column="2">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Content="Set Target Power (Watts)" Command="{Binding SetTargetPowerCommand}" CommandParameter="{Binding ElementName=TargetPower, Path=Text}"/>
+                    <TextBox Grid.Column="1" x:Name="TargetPower" Width="50"/>
+                    <Button Grid.Row="1" Content="Set Basic Resistance(%)" Command="{Binding SetBasicResistanceCommand}" CommandParameter="{Binding ElementName=BasicResistance, Path=Text}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="BasicResistance" Width="50"/>
+                    <Button Grid.Row="2" Content="Set Track Resistance (% Grade)" Command="{Binding SetTrackResistanceCommand}" CommandParameter="{Binding ElementName=Grade, Path=Text}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" x:Name="Grade" Width="50"/>
+                    <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Set Wind Resistance (Fixed Values)" Command="{Binding SetWindResistanceCommand}"/>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="General Data" Grid.Column="0" Grid.Row="1">
             <StackPanel>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralData.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralData.ElapsedTime, StringFormat='Elapsed Time: {0:hh\\:mm\\:ss}'}"/>
@@ -41,74 +64,19 @@
                 <TextBlock Text="{Binding FitnessEquipment.GeneralSettings.ResistanceLevel, StringFormat='Resistance Level: {0}'}"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="General Metabolic" Grid.Column="1" Grid.Row="2">
+        <GroupBox Header="General Metabolic" Grid.Column="2" Grid.Row="1">
             <StackPanel>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.CaloricBurnRate, StringFormat='Caloric Burn Rate: {0:F1}'}"/>
                 <TextBlock Text="{Binding FitnessEquipment.GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET: {0:F2}'}"/>
             </StackPanel>
         </GroupBox>
-        <uc:CommonDataPagesControl DataContext="{Binding FitnessEquipment.CommonDataPages}" Grid.Column="0" Grid.Row="2"/>
-        <GroupBox Header="Capabilities" Grid.Column="0" Grid.Row="1">
+        <uc:CommonDataPagesControl DataContext="{Binding FitnessEquipment.CommonDataPages}" Grid.Column="1" Grid.Row="2"/>
+        <GroupBox Header="Capabilities" Grid.Column="0" Grid.Row="2">
             <StackPanel>
-                <TextBlock Text="{Binding FitnessEquipment.Capabilities, StringFormat='Capabiities: {0}'}" TextWrapping="Wrap"/>
                 <TextBlock Text="{Binding FitnessEquipment.MaxTrainerResistance, StringFormat='Max. Resistance (Newtons): {0}'}"/>
-                <Button Content="Request FE Capabilities" Command="{Binding FECapabilitiesRequestCommand}"/>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Equipment" Grid.Column="2" Grid.Row="0">
-            <StackPanel>
-                <Label Content="Percent of Max. Resistance:"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Button Content="Set Target Power" Command="{Binding SetTargetPowerCommand}" CommandParameter="{Binding ElementName=TartgetPower, Path=Text}"/>
-                    <TextBox Grid.Column="1" x:Name="TartgetPower" Width="50"/>
-                    <Button Grid.Row="1" Content="Set Basic Resistance" Command="{Binding SetBasicResistanceCommand}" CommandParameter="{Binding ElementName=BasicResistance, Path=Text}"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="BasicResistance" Width="50"/>
-                    <Button Grid.Row="2" Content="Set Track Resistance" Command="{Binding SetTrackResistanceCommand}"/>
-                    <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">
-                        <TextBox Width="50"/>
-                        <TextBox Width="50"/>
-                    </StackPanel>
-                    <Button Grid.Row="3" Content="Set Wind Resistance" Command="{Binding SetWindResistanceCommand}"/>
-                </Grid>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Uer Configuration" Grid.Column="2" Grid.Row="1">
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Label Content="User Weight (kg):" FontWeight="Normal"/>
-                    <TextBox Grid.Column="1" Width="50" Text="{Binding UserWeight, StringFormat='\{0:F2}'}"/>
-                    <Label Grid.Row="1" Content="Wheel Diameter Offset (mm):" FontWeight="Normal"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Width="50" Text="{Binding WheelDiameterOffset, StringFormat='\{0:F2}'}"/>
-                    <Label Grid.Row="2" Content="Bike Weight (kg):" FontWeight="Normal"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Width="50" Text="{Binding BikeWeight, StringFormat='\{0:F2}'}"/>
-                    <Label Grid.Row="3" Content="Wheel Diameter (m):" FontWeight="Normal"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Width="50" Text="{Binding WheelDiameter, StringFormat='\{0:F2}'}"/>
-                    <Label Grid.Row="4" Content="Gear Ratio:" FontWeight="Normal"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" Width="50" Text="{Binding GearRatio, StringFormat='\{0:F2}'}"/>
-                </Grid>
-                <Button Content="Set Configuration" Command="{Binding SetUserConfigCommand}"/>
+                <Label Content="Training Modes:"/>
+                <ListBox ItemsSource="{Binding TrainingModes}" ItemStringFormat="- {0}" BorderThickness="0" />
             </StackPanel>
         </GroupBox>
         <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding FitnessEquipment.Offline, Converter={StaticResource BoolToVisibility}}"/>

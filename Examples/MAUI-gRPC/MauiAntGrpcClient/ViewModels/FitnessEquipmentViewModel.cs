@@ -4,6 +4,7 @@ using MauiAntGrpcClient.Views.FitnessEquipment;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
+using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Equipment;
 
 namespace MauiAntGrpcClient.ViewModels
 {
@@ -28,6 +29,15 @@ namespace MauiAntGrpcClient.ViewModels
         private double gearRatio;
         [ObservableProperty]
         private TimeSpan lapSplitTime;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(
+            nameof(SetBasicResistanceCommand),
+            nameof(SetTargetPowerCommand),
+            nameof(SetWindResistanceCommand),
+            nameof(SetTrackResistanceCommand))]
+        private SupportedTrainingModes supportedTrainingModes;
+        [ObservableProperty]
+        private string[]? capabilities;
 
         public FitnessEquipmentViewModel(ILogger<FitnessEquipmentViewModel> logger)
         {
@@ -40,25 +50,42 @@ namespace MauiAntGrpcClient.ViewModels
             _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             FitnessEquipment = (Equipment)query["Sensor"];
             FitnessEquipment.LapToggled += FitnessEquipment_LapToggled;
-            switch (FitnessEquipment.GeneralData.EquipmentType)
+            FitnessEquipment.PropertyChanged += FitnessEquipment_PropertyChanged;
+
+            switch (FitnessEquipment)
             {
-                case Equipment.FitnessEquipmentType.Treadmill:
-                    SpecificEquipmentView = new TreadmillView(FitnessEquipment.Treadmill);
+                case Treadmill:
+                    SpecificEquipmentView = new TreadmillView((Treadmill)FitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.Elliptical:
-                    SpecificEquipmentView = new EllipticalView(FitnessEquipment.Elliptical);
+                case Elliptical:
+                    SpecificEquipmentView = new EllipticalView((Elliptical)FitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.Rower:
-                    SpecificEquipmentView = new RowerView(FitnessEquipment.Rower);
+                case Rower:
+                    SpecificEquipmentView = new RowerView((Rower)FitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.Climber:
-                    SpecificEquipmentView = new ClimberView(FitnessEquipment.Climber);
+                case Climber:
+                    SpecificEquipmentView = new ClimberView((Climber)FitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.NordicSkier:
-                    SpecificEquipmentView = new NordicSkierView(FitnessEquipment.NordicSkier);
+                case NordicSkier:
+                    SpecificEquipmentView = new NordicSkierView((NordicSkier)FitnessEquipment);
                     break;
-                case Equipment.FitnessEquipmentType.TrainerStationaryBike:
-                    SpecificEquipmentView = new TrainerStationaryBikeView(FitnessEquipment.TrainerStationaryBike);
+                case TrainerStationaryBike:
+                    SpecificEquipmentView = new TrainerStationaryBikeView((TrainerStationaryBike)FitnessEquipment);
+                    break;
+                default:
+                    break;
+            }
+
+            _ = FitnessEquipment.RequestFECapabilities();
+        }
+
+        private void FitnessEquipment_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(FitnessEquipment.TrainingModes):
+                    SupportedTrainingModes = FitnessEquipment.TrainingModes;
+                    Capabilities = FitnessEquipment.TrainingModes.ToString().Split(',');
                     break;
                 default:
                     break;
@@ -71,16 +98,22 @@ namespace MauiAntGrpcClient.ViewModels
         }
 
         [RelayCommand]
-        private async Task<MessagingReturnCode> FECapabilitiesRequest() => await FitnessEquipment.RequestFECapabilities();
-        [RelayCommand]
         private async Task<MessagingReturnCode> SetUserConfig() => await FitnessEquipment.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
-        [RelayCommand]
+
+        [RelayCommand(CanExecute = nameof(CanSetBasicResistance))]
         private async Task<MessagingReturnCode> SetBasicResistance(string percent) => await FitnessEquipment.SetBasicResistance(double.Parse(percent));
-        [RelayCommand]
+        private bool CanSetBasicResistance() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.BasicResistance);
+
+        [RelayCommand(CanExecute = nameof(CanSetTargetPower))]
         private async Task<MessagingReturnCode> SetTargetPower(string power) => await FitnessEquipment.SetTargetPower(double.Parse(power));
-        [RelayCommand]
+        private bool CanSetTargetPower() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.TargetPower);
+
+        [RelayCommand(CanExecute = nameof(CanSetWindResistance))]
         private async Task<MessagingReturnCode> SetWindResistance() => await FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
-        [RelayCommand]
+        private bool CanSetWindResistance() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.Simulation);
+
+        [RelayCommand(CanExecute = nameof(CanSetTrackResistance))]
         private async Task<MessagingReturnCode> SetTrackResistance(string grade) => await FitnessEquipment.SetTrackResistance(double.Parse(grade));
+        private bool CanSetTrackResistance() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.Simulation);
     }
 }

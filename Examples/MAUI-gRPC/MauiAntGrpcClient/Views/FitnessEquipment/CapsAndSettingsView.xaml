@@ -10,10 +10,9 @@
             <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="16" RowSpacing="8">
                 <StackLayout>
                     <Label Text="Supported Training Modes" FontAttributes="Bold" TextDecorations="Underline"/>
-                    <Label Text="{Binding CapsAndSettings.FitnessEquipment.Capabilities, StringFormat='Capabiities: {0}'}"/>
+                    <Label Text="{Binding CapsAndSettings.FitnessEquipment.TrainingModes, StringFormat='Capabiities: {0}'}"/>
                     <Label Text="{Binding CapsAndSettings.FitnessEquipment.MaxTrainerResistance, StringFormat='Max. Resistance (Newtons): {0}'}"/>
                 </StackLayout>
-                <Button Grid.Column="1" Text="Request FE Capabilities" Command="{Binding CapsAndSettings.FECapabilitiesRequestCommand}"/>
             </Grid>
         </Frame>
         <Frame>

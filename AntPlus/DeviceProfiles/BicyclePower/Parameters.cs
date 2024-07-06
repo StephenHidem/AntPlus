@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -26,10 +26,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// Bicycle power parameters.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class Parameters : INotifyPropertyChanged
+    public partial class Parameters : ObservableObject
     {
-        private readonly Bicycle _bicycle;
+        private readonly StandardPowerSensor _powerSensor;
         private readonly ILogger _logger;
 
         /// <summary>
@@ -219,28 +218,30 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>Gets the crank parameters.</summary>
-        public CrankParameters Crank { get; private set; }
+        [ObservableProperty]
+        private CrankParameters crank;
         /// <summary>Gets the peak torque threshold percentage.</summary>
-        public double PeakTorqueThreshold { get; private set; }
+        [ObservableProperty]
+        private double peakTorqueThreshold;
         /// <summary>Gets the rider position time offset.</summary>
-        public byte RiderPositionTimeOffset { get; private set; }
+        [ObservableProperty]
+        private byte riderPositionTimeOffset;
         /// <summary>Gets the advanced capabilities from the advanced setting subpage.</summary>
-        public AdvCapabilities1 AdvancedCapabilities1 { get; private set; }
+        [ObservableProperty]
+        private AdvCapabilities1 advancedCapabilities1;
         /// <summary>Gets the advanced capabilities from the advanced setting subpage.</summary>
-        public AdvCapabilities2 AdvancedCapabilities2 { get; private set; }
+        [ObservableProperty]
+        private AdvCapabilities2 advancedCapabilities2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Parameters"/> class.
         /// </summary>
-        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
+        /// <param name="sensor">The <see cref="StandardPowerSensor"/>.</param>
         /// <param name="logger">Logger to use.</param>
-        public Parameters(Bicycle bicycle, ILogger logger)
+        public Parameters(StandardPowerSensor sensor, ILogger logger)
         {
-            _bicycle = bicycle;
+            _powerSensor = sensor;
             _logger = logger;
         }
 
@@ -254,23 +255,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             {
                 case Subpage.CrankParameters:
                     Crank = new CrankParameters(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Crank)));
                     break;
                 case Subpage.PowerPhaseConfiguration:
                     PeakTorqueThreshold = dataPage[2] <= 200 ? dataPage[2] * 0.5 : double.NaN;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PeakTorqueThreshold)));
                     break;
                 case Subpage.RiderPositionConfiguration:
                     RiderPositionTimeOffset = dataPage[2];
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RiderPositionTimeOffset)));
                     break;
                 case Subpage.AdvancedCapabilities1:
                     AdvancedCapabilities1 = new AdvCapabilities1(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities1)));
                     break;
                 case Subpage.AdvancedCapabilities2:
                     AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AdvancedCapabilities2)));
                     break;
                 default:
                     _logger.LogWarning("Unknown Subpage - {Subpage}.", dataPage[1]);
@@ -283,7 +279,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> GetParameters(Subpage parameterSubpage)
         {
-            return await _bicycle.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
+            return await _powerSensor.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
         }
 
         /// <summary>
@@ -305,7 +301,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 byte cl = (byte)((length - 110) / 0.5);
                 msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
             }
-            return await _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _powerSensor.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -322,7 +318,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public async Task<MessagingReturnCode> SetTransitionTimeOffset(byte offset)
         {
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            return await _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _powerSensor.SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -345,7 +341,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
             byte peak = (byte)(threshold / 0.5);
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            return await _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _powerSensor.SendExtAcknowledgedMessage(msg);
         }
     }
 }

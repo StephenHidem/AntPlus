@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -7,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// The standard crank torque sensor class.
     /// </summary>
     /// <seealso cref="TorqueSensor" />
-    public class StandardCrankTorqueSensor : TorqueSensor
+    public partial class StandardCrankTorqueSensor : TorqueSensor
     {
         /// <summary>Force angle structure.</summary>
         public readonly struct ForceAngle
@@ -96,22 +97,27 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         }
 
         /// <summary>Gets the average cadence in rotations per minute.</summary>
-        public double AverageCadence { get; private set; }
+        [ObservableProperty]
+        private double averageCadence;
         /// <summary>Gets the torque barycenter angle in degrees.</summary>
-        public double TorqueBarycenterAngle { get; private set; }
+        [ObservableProperty]
+        private double torqueBarycenterAngle;
         /// <summary>Gets the right pedal force angle.</summary>
-        public ForceAngle RightForceAngle { get; private set; }
+        [ObservableProperty]
+        private ForceAngle rightForceAngle;
         /// <summary>Gets the left pedal force angle.</summary>
-        public ForceAngle LeftForceAngle { get; private set; }
+        [ObservableProperty]
+        private ForceAngle leftForceAngle;
         /// <summary>Gets the pedal position data.</summary>
-        public PedalPositionPage PedalPosition { get; private set; }
+        [ObservableProperty]
+        private PedalPositionPage pedalPosition;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCrankTorqueSensor"/> class.
         /// </summary>
-        /// <param name="bicycle">The _bicycle.</param>
+        /// <param name="sensor">The standard power sensor.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardCrankTorqueSensor(Bicycle bicycle, ILogger logger) : base(bicycle, logger)
+        public StandardCrankTorqueSensor(StandardPowerSensor sensor, ILogger logger) : base(sensor, logger)
         {
         }
 
@@ -122,7 +128,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             if (deltaEventCount != 0)
             {
                 AverageCadence = 60.0 * deltaEventCount / (deltaPeriod / 2048.0);
-                RaisePropertyChange(nameof(AverageCadence));
             }
         }
 
@@ -134,25 +139,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Parses the cycling dynamics data pages.</summary>
         /// <param name="dataPage">The data page.</param>
-        internal void ParseCyclingDynamics(byte[] dataPage)
+        public void ParseCyclingDynamics(byte[] dataPage)
         {
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.TorqueBarycenter:
                     TorqueBarycenterAngle = dataPage[1] * 0.5 + 30.0;
-                    RaisePropertyChange(nameof(TorqueBarycenterAngle));
                     break;
                 case DataPage.RightForceAngle:
                     RightForceAngle = new ForceAngle(dataPage);
-                    RaisePropertyChange(nameof(RightForceAngle));
                     break;
                 case DataPage.LeftForceAngle:
                     LeftForceAngle = new ForceAngle(dataPage);
-                    RaisePropertyChange(nameof(LeftForceAngle));
                     break;
                 case DataPage.PedalPosition:
                     PedalPosition = new PedalPositionPage(dataPage);
-                    RaisePropertyChange(nameof(PedalPosition));
                     break;
                 default:
                     _logger.LogWarning("ParseCyclingDynamics: Unknown data page = {Page}", dataPage[0]);

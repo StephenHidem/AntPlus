@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
@@ -6,8 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// This class supports messages common to crank/wheel torque sensors.
     /// </summary>
-    /// <seealso cref="StandardPowerSensor" />
-    public abstract class TorqueSensor : StandardPowerSensor
+    public abstract partial class TorqueSensor : ObservableObject
     {
         /// <summary>The is first data message
         /// received</summary>
@@ -24,21 +24,28 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private ushort lastTorque;
         /// <summary>The delta torque</summary>
         protected int deltaTorque;
-        /// <summary>The logger to use.</summary>
+
+        /// <summary>The logger</summary>
         protected ILogger _logger;
+        /// <summary>The standard power sensor.</summary>
+        protected StandardPowerSensor _powerSensor;
 
         /// <summary>Gets the average angular velocity in radians per second.</summary>
-        public double AverageAngularVelocity { get; private set; }
+        [ObservableProperty]
+        private double averageAngularVelocity;
         /// <summary>Gets the average torque in Nm.</summary>
-        public double AverageTorque { get; private set; }
+        [ObservableProperty]
+        private double averageTorque;
         /// <summary>Gets the average power in watts.</summary>
-        public new double AveragePower { get; private set; }
+        [ObservableProperty]
+        private double averagePower;
 
         /// <summary>Initializes a new instance of the <see cref="TorqueSensor" /> class.</summary>
-        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
-        /// <param name="logger">Logger to use.</param>
-        protected TorqueSensor(Bicycle bicycle, ILogger logger) : base(bicycle, logger)
+        /// <param name="sensor">The <see cref="StandardPowerSensor"/>.</param>
+        /// <param name="logger">The logger.</param>
+        protected TorqueSensor(StandardPowerSensor sensor, ILogger logger)
         {
+            _powerSensor = sensor;
             _logger = logger;
         }
 
@@ -46,8 +53,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public virtual void ParseTorque(byte[] dataPage)
         {
-            InstantaneousCadence = dataPage[3];
-            RaisePropertyChange(nameof(InstantaneousCadence));
+            _powerSensor.InstantaneousCadence = dataPage[3];
+            _powerSensor.RaisePropertyChange(nameof(_powerSensor.InstantaneousCadence));
 
             if (isFirstDataMessage)
             {
@@ -71,9 +78,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 AverageAngularVelocity = Utils.ComputeAvgAngularVelocity(deltaEventCount, deltaPeriod);
                 AverageTorque = Utils.ComputeAvgTorque(deltaTorque, deltaEventCount);
                 AveragePower = AverageTorque * AverageAngularVelocity;
-                RaisePropertyChange(nameof(AverageAngularVelocity));
-                RaisePropertyChange(nameof(AverageTorque));
-                RaisePropertyChange(nameof(AveragePower));
             }
         }
     }

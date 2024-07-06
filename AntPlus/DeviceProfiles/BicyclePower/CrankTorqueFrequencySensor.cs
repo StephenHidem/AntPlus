@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,31 +10,30 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// The crank torque frequency sensor class.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class CrankTorqueFrequencySensor : INotifyPropertyChanged
+    public class CrankTorqueFrequencySensor : BicyclePower
     {
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(CrankTorqueFrequencySensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.CrankTorqueFrequency.png");
+        /// <inheritdoc/>
+        public override string ToString() => "Bike Power (CTF)";
+
         /// <summary>Crank torque frequency defined IDs. These are used by methods that save the slope or serial number to the sensor flash or when the zero offset is reported by the sensor.</summary>
         public enum CTFDefinedId
         {
-            /// <summary>The zero offset reported by sensor.</summary>
+            /// <summary>The zero offset ID.</summary>
             ZeroOffset = 1,
             /// <summary>The slope ID.</summary>
             Slope = 2,
             /// <summary>The serial number ID.</summary>
             SerialNumber = 3,
-            /// <summary>The acknowledgement message ID.</summary>
+            /// <summary>The acknowledgement ID.</summary>
             Ack = 0xAC
         }
 
-        private readonly Bicycle _bicycle;
-        private readonly ILogger _logger;
         private bool isFirstPage = true;
         private byte prevUpdateEventCount;
         private ushort prevTimeStamp;
         private ushort prevTorqueTicks;
-
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>Occurs when slope or serial number save acknowledged.</summary>
         public event EventHandler<CTFDefinedId> SaveAcknowledged;
@@ -52,25 +51,37 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public double Power { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
-        /// <param name="bicycle">The <see cref="Bicycle"/> instance.</param>
-        /// <param name="logger">The logger to use.</param>
-        public CrankTorqueFrequencySensor(Bicycle bicycle, ILogger logger)
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public CrankTorqueFrequencySensor(ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000) :
+            base(channelId, antChannel, logger, timeout)
         {
-            _bicycle = bicycle;
-            _logger = logger;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return "Bike Power (CTF)";
         }
 
         /// <summary>
         /// Parses the specified data page.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void Parse(byte[] dataPage)
+        public override void Parse(byte[] dataPage)
+        {
+            base.Parse(dataPage);
+            switch ((DataPage)dataPage[0])
+            {
+                case DataPage.Calibration:
+                    ParseCalibrationMessage(dataPage);
+                    break;
+                case DataPage.CrankTorqueFrequency:
+                    ParseCTFMessage(dataPage);
+                    break;
+                default:
+                    logger.LogWarning("Unknown data page. Page = {Page}", dataPage[0]);
+                    break;
+            }
+        }
+
+        private void ParseCTFMessage(byte[] dataPage)
         {
             byte updateEventCount = dataPage[1];
 
@@ -79,7 +90,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             ushort torqueTicks = BitConverter.ToUInt16(data, 0);
             ushort timeStamp = BitConverter.ToUInt16(data, 2);
             Slope = BitConverter.ToUInt16(data, 4) / 10.0;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Slope)));
+            RaisePropertyChange(nameof(Slope));
 
             if (isFirstPage)
             {
@@ -99,39 +110,35 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
                 Torque = torqueFreq / Slope;
                 Power = Torque * Cadence * Math.PI / 30.0;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cadence)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Torque)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Power)));
+                RaisePropertyChange(nameof(Cadence));
+                RaisePropertyChange(nameof(Torque));
+                RaisePropertyChange(nameof(Power));
             }
         }
 
-        /// <summary>Parses the calibration message.</summary>
-        /// <param name="message">The message.</param>
-        internal void ParseCalibrationMessage(byte[] message)
+        private void ParseCalibrationMessage(byte[] dataPage)
         {
-            _logger.LogDebug("ParseCalibrationMessage: {Msg}", (CTFDefinedId)message[2]);
-            switch ((CTFDefinedId)message[2])
+            switch ((CTFDefinedId)dataPage[2])
             {
                 case CTFDefinedId.ZeroOffset:
-                    Offset = BitConverter.ToUInt16(message.Skip(6).Reverse().ToArray(), 0);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Offset)));
+                    Offset = BitConverter.ToUInt16(dataPage.Skip(6).Reverse().ToArray(), 0);
+                    RaisePropertyChange(nameof(Offset));
                     break;
                 case CTFDefinedId.Ack:
                     // TODO: NEED TO REPORT STATUS OF CTF SAVE FUNCS
-                    SaveAcknowledged?.Invoke(this, (CTFDefinedId)message[3]);
-                    switch ((CTFDefinedId)message[3])
+                    SaveAcknowledged?.Invoke(this, (CTFDefinedId)dataPage[3]);
+                    switch ((CTFDefinedId)dataPage[3])
                     {
                         case CTFDefinedId.Slope:
                             break;
                         case CTFDefinedId.SerialNumber:
                             break;
                         default:
-                            _logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", message[3]);
+                            logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", dataPage[3]);
                             break;
                     }
                     break;
                 default:
-                    _logger.LogWarning("Unexpected CTF message ID = {ID}", message[2]);
                     break;
             }
         }
@@ -152,7 +159,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.Slope, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(slp).Reverse()).ToArray();
-            return await _bicycle.SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Saves the serial number to flash.</summary>
@@ -162,7 +169,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         {
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.SerialNumber, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(serialNumber).Reverse()).ToArray();
-            return await _bicycle.SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
     }
 }

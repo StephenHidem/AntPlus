@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
 using System;
-using System.ComponentModel;
+using System.IO;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -8,9 +9,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// The standard power sensor class. Note that torque sensors report this data page for
     /// displays that may not handle torque sensor messages.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class StandardPowerSensor : INotifyPropertyChanged
+    public class StandardPowerSensor : BicyclePower
     {
+        /// <inheritdoc/>
+        public override Stream DeviceImageStream => typeof(StandardPowerSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
+        /// <inheritdoc/>
+        public override string ToString() => (TorqueSensor == null) ? "Bike Power (Power Only)" : TorqueSensor.ToString();
+
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastEventCount;
         private int deltaEventCount;
@@ -28,15 +33,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             Unused
         }
 
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-        /// <summary>Raises the property change.</summary>
-        /// <param name="propertyName">Name of the property.</param>
-        protected void RaisePropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         /// <summary>Gets the average power in watts.</summary>
         public double AveragePower { get; private set; }
         /// <summary>The pedal power data field provides the user’s power contribution (as a percentage) between the left and right pedals, as
@@ -47,33 +43,83 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <value>The pedal differentiation.</value>
         public PedalDifferentiation PedalContribution { get; private set; }
         /// <summary>Gets the instantaneous pedaling cadence.</summary>
-        public byte InstantaneousCadence { get; protected set; }
+        public byte InstantaneousCadence { get; set; }
         /// <summary>Gets the instantaneous power in watts.</summary>
         public ushort InstantaneousPower { get; private set; }
+
+        /// <summary>Gets the torque sensor.</summary>
+        /// <value>The wheel or crank torque sensor.</value>
+        public TorqueSensor TorqueSensor { get; private set; }
 
         /// <summary>Gets the parameters.</summary>
         public Parameters Parameters { get; private set; }
         /// <summary>Gets the torque effectiveness and pedal smoothness.</summary>
-        public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; } = new TorqueEffectivenessAndPedalSmoothness();
+        public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; }
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
         /// </summary>
-        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardPowerSensor(Bicycle bicycle, ILogger logger)
+        /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
+        public StandardPowerSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000) :
+            base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
-            Parameters = new Parameters(bicycle, logger);
+            Parameters = new Parameters(this, logger);
+            TorqueEffectiveness = new TorqueEffectivenessAndPedalSmoothness();
         }
 
         /// <summary>
         /// Parses the specified data page.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void Parse(byte[] dataPage)
+        public override void Parse(byte[] dataPage)
+        {
+            base.Parse(dataPage);
+            switch ((DataPage)dataPage[0])
+            {
+                case DataPage.GetSetParameters:
+                    Parameters.Parse(dataPage);
+                    break;
+                case DataPage.PowerOnly:
+                    ParsePowerOnly(dataPage);
+                    break;
+                case DataPage.WheelTorque:
+                    if (TorqueSensor == null)
+                    {
+                        TorqueSensor = new StandardWheelTorqueSensor(this, logger);
+                        RaisePropertyChange(nameof(TorqueSensor));
+                    }
+                    TorqueSensor.ParseTorque(dataPage);
+                    break;
+                case DataPage.CrankTorque:
+                    if (TorqueSensor == null)
+                    {
+                        TorqueSensor = new StandardCrankTorqueSensor(this, logger);
+                        RaisePropertyChange(nameof(TorqueSensor));
+                    }
+                    TorqueSensor.ParseTorque(dataPage);
+                    break;
+                case DataPage.TorqueEffectivenessAndPedalSmoothness:
+                    TorqueEffectiveness.Parse(dataPage);
+                    break;
+                case DataPage.RightForceAngle:
+                case DataPage.LeftForceAngle:
+                case DataPage.PedalPosition:
+                case DataPage.TorqueBarycenter:
+                    ((StandardCrankTorqueSensor)TorqueSensor)?.ParseCyclingDynamics(dataPage);
+                    break;
+                default:
+                    CommonDataPages.ParseCommonDataPage(dataPage);
+                    break;
+            }
+        }
+
+        private void ParsePowerOnly(byte[] dataPage)
         {
             PedalPower = (byte)(dataPage[2] & 0x7F);
             PedalContribution = dataPage[2] == 0xFF
@@ -103,12 +149,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 AveragePower = deltaPower / deltaEventCount;
                 RaisePropertyChange(nameof(AveragePower));
             }
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return "Bike Power (Power Only)";
         }
     }
 }

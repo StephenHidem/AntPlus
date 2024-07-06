@@ -26,7 +26,11 @@
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>Attempt to re-initialize radio if scanning channel closed unexpectedly.</PackageReleaseNotes>
   </PropertyGroup>
-	
+
+    <PropertyGroup>
+       <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 	  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
@@ -71,6 +75,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
   </ItemGroup>
 

@@ -1,26 +1,27 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// This class supports torque effectiveness and pedal smoothness messages.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class TorqueEffectivenessAndPedalSmoothness : INotifyPropertyChanged
+    public partial class TorqueEffectivenessAndPedalSmoothness : ObservableObject
     {
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>Gets the left leg torque effectiveness as a percentage.</summary>
-        public double LeftTorqueEffectiveness { get; private set; }
+        [ObservableProperty]
+        private double leftTorqueEffectiveness;
         /// <summary>Gets the right leg torque effectiveness as a percentage.</summary>
-        public double RightTorqueEffectiveness { get; private set; }
+        [ObservableProperty]
+        private double rightTorqueEffectiveness;
         /// <summary>Gets the left pedal smoothness as a percentage.</summary>
-        public double LeftPedalSmoothness { get; private set; }
+        [ObservableProperty]
+        private double leftPedalSmoothness;
         /// <summary>Gets the right pedal smoothness as a percentage.</summary>
-        public double RightPedalSmoothness { get; private set; }
+        [ObservableProperty]
+        private double rightPedalSmoothness;
         /// <summary>Set to true if left and right pedal smoothness is combined.</summary>
-        public bool CombinedPedalSmoothness { get; private set; }
+        [ObservableProperty]
+        private bool combinedPedalSmoothness;
 
         /// <summary>
         /// Parses the torque effectiveness and pedal smoothness data page.
@@ -56,7 +57,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 CombinedPedalSmoothness = false;
                 RightPedalSmoothness = double.NaN;
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

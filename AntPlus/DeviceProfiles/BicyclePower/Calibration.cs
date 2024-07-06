@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,14 +11,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// Bicycle power calibration class.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class Calibration : INotifyPropertyChanged
+    public partial class Calibration : ObservableObject
     {
-        private readonly Bicycle _bicycle;
+        private readonly BicyclePower _sensor;
         private readonly ILogger _logger;
-
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private enum CalibrationRequestId
         {
@@ -74,26 +70,31 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public object CollectionLock = new object();
 
         /// <summary>Gets the calibration status.</summary>
-        public CalibrationResponse CalibrationStatus { get; private set; }
+        [ObservableProperty]
+        private CalibrationResponse calibrationStatus;
         /// <summary>Gets the automatic zero status.</summary>
-        public AutoZero AutoZeroStatus { get; private set; }
+        [ObservableProperty]
+        private AutoZero autoZeroStatus;
         /// <summary>Gets the manufacturer specific calibration data.</summary>
-        public short CalibrationData { get; private set; }
+        [ObservableProperty]
+        private short calibrationData;
         /// <summary>Gets a value indicating whether automatic zero is supported.</summary>
-        public bool AutoZeroSupported { get; private set; }
+        [ObservableProperty]
+        private bool autoZeroSupported;
         /// <summary>Gets the custom calibration parameters.</summary>
-        public byte[] CustomCalibrationParameters { get; private set; }
+        [ObservableProperty]
+        private byte[] customCalibrationParameters;
         /// <summary>Gets the reported measurements collection. There may be one or more measurement data types reported.</summary>
         public ObservableCollection<MeasurementOutputData> Measurements { get; private set; } = new ObservableCollection<MeasurementOutputData>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Calibration"/> class.
         /// </summary>
-        /// <param name="bicycle">The <see cref="Bicycle"/>.</param>
+        /// <param name="sensor">The <see cref="BicyclePower"/>.</param>
         /// <param name="logger">Logger to use.</param>
-        public Calibration(Bicycle bicycle, ILogger logger)
+        public Calibration(BicyclePower sensor, ILogger logger)
         {
-            _bicycle = bicycle;
+            _sensor = sensor;
             _logger = logger;
         }
 
@@ -105,41 +106,29 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             switch ((CalibrationResponseId)dataPage[1])
             {
                 case CalibrationResponseId.CTFDefinedMsg:
-                    _bicycle.CTFSensor.ParseCalibrationMessage(dataPage);
+                    // CTF sensor handles this
                     break;
                 case CalibrationResponseId.AutoZeroSupport:
                     AutoZeroSupported = (dataPage[2] & 0x01) == 0x01;
                     AutoZeroStatus = (dataPage[2] & 0x02) == 0x02 ? AutoZero.On : AutoZero.Off;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroSupported)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.Success:
                     CalibrationStatus = CalibrationResponse.Succeeded;
                     AutoZeroStatus = (AutoZero)dataPage[2];
                     CalibrationData = BitConverter.ToInt16(dataPage, 6);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationData)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.Failed:
                     CalibrationStatus = CalibrationResponse.Failed;
                     AutoZeroStatus = (AutoZero)dataPage[2];
                     CalibrationData = BitConverter.ToInt16(dataPage, 6);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationData)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoZeroStatus)));
                     break;
                 case CalibrationResponseId.CustomCalibration:
                     CalibrationStatus = CalibrationResponse.Succeeded;
                     CustomCalibrationParameters = dataPage.Skip(2).ToArray();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 case CalibrationResponseId.CustomCalibrationUpdate:
                     CalibrationStatus = CalibrationResponse.Succeeded;
                     CustomCalibrationParameters = dataPage.Skip(2).ToArray();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomCalibrationParameters)));
                     break;
                 default:
                     _logger.LogWarning("Unknown CalibrationResponseId = {CalibrationResponseId}.", dataPage[1]);
@@ -166,8 +155,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public async Task<MessagingReturnCode> RequestManualCalibration()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            return await _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            return await _sensor.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Sets the sensor automatic zero configuration.</summary>
@@ -176,8 +164,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public async Task<MessagingReturnCode> SetAutoZeroConfiguration(AutoZero autoZero)
         {
             CalibrationStatus = CalibrationResponse.Unknown;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            return await _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            return await _sensor.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.AutoZeroConfiguration, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Requests the manufacturer specific custom calibration parameters.</summary>
@@ -185,8 +172,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public async Task<MessagingReturnCode> RequestCustomParameters()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
-            return await _bicycle.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            return await _sensor.SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
@@ -201,10 +187,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 throw new ArgumentException("Custom parameters must be 6 bytes in length.");
             }
             CalibrationStatus = CalibrationResponse.InProgress;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CalibrationStatus)));
             byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };
             msg = msg.Concat(customParameters).ToArray();
-            return await _bicycle.SendExtAcknowledgedMessage(msg);
+            return await _sensor.SendExtAcknowledgedMessage(msg);
         }
     }
 }

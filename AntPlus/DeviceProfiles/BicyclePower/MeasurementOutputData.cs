@@ -1,13 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
     /// Measurement data reported during calibration.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class MeasurementOutputData : INotifyPropertyChanged
+    public partial class MeasurementOutputData : ObservableObject
     {
         /// <summary>
         /// Data type of the measurement reported.
@@ -62,18 +61,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             Reserved = 255
         }
 
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>Gets the number of measurement types.</summary>
         public int NumberOfMeasurementTypes { get; }
         /// <summary>Gets the type of this measurement.</summary>
         public DataType MeasurementType { get; }
         /// <summary>Gets the timestamp of the measurement in seconds.</summary>
         /// <remarks>Range is 0 to less than 32 seconds. Rollover is not handled.</remarks>
-        public double Timestamp { get; private set; }
+        [ObservableProperty]
+        private double timestamp;
         /// <summary>Gets the measurement value. The scaling factor is applied.</summary>
-        public double Measurement { get; private set; }
+        [ObservableProperty]
+        private double measurement;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MeasurementOutputData"/> class.
@@ -99,10 +97,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         internal void Parse(byte[] dataPage)
         {
+            sbyte scaleFactor = (sbyte)dataPage[3];
             Timestamp = BitConverter.ToUInt16(dataPage, 4) / 2048.0;
-            Measurement = BitConverter.ToInt16(dataPage, 6) * Math.Pow(2, (sbyte)dataPage[3]);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Timestamp)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Measurement)));
+            Measurement = BitConverter.ToInt16(dataPage, 6) * Math.Pow(2, scaleFactor);
         }
     }
 }

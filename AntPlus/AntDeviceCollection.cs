@@ -136,10 +136,8 @@ namespace SmallEarthTech.AntPlus
             {
                 case HeartRate.DeviceClass:
                     return new HeartRate(channelId, channel, _loggerFactory.CreateLogger<HeartRate>(), timeout);
-                case Bicycle.DeviceClass:
-                    Bicycle bicycle = new Bicycle(channelId, channel, _loggerFactory.CreateLogger<Bicycle>(), timeout);
-                    bicycle.PropertyChanged += Bicycle_PropertyChanged;
-                    return bicycle;
+                case BicyclePower.DeviceClass:
+                    return BicyclePower.GetBicyclePowerSensor(dataPage, channelId, channel, _loggerFactory.CreateLogger<BicyclePower>(), timeout);
                 case BikeSpeedSensor.DeviceClass:
                     return new BikeSpeedSensor(channelId, channel, _loggerFactory.CreateLogger<BikeSpeedSensor>(), timeout);
                 case BikeCadenceSensor.DeviceClass:
@@ -158,26 +156,6 @@ namespace SmallEarthTech.AntPlus
                     return new StrideBasedSpeedAndDistance(channelId, channel, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), timeout);
                 default:
                     return new UnknownDevice(channelId, channel, _loggerFactory.CreateLogger<UnknownDevice>(), timeout);
-            }
-        }
-
-        /// <summary>
-        /// Refresh the collection when the bicycle sensor type is known and disconnect this event handler.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Bicycle_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "Sensor":
-                    logger.LogDebug("Sensor property change. SensorType = {0}", ((Bicycle)sender).Sensor);
-                    ((Bicycle)sender).PropertyChanged -= Bicycle_PropertyChanged;
-                    _ = Remove((Bicycle)sender);
-                    Add((Bicycle)sender);
-                    break;
-                default:
-                    break;
             }
         }
     }

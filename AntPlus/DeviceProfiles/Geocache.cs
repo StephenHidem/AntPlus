@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// Latitude and longitude coordinates are transmitted as 
     /// </remarks>
     /// <seealso cref="AntDevice" />
-    public class Geocache : AntDevice
+    public partial class Geocache : AntDevice
     {
         /// <summary>
         /// The geocache device class ID.
@@ -54,23 +55,33 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private byte loggedVisitsPage;
 
         /// <summary>Gets the trackable identifier.</summary>
-        public string TrackableId { get; private set; }
+        [ObservableProperty]
+        private string trackableId;
         /// <summary>Gets the programming PIN.</summary>
-        public uint? ProgrammingPIN { get; private set; }
+        [ObservableProperty]
+        private uint? programmingPIN;
         /// <summary>Gets the total pages programmed.</summary>
-        public byte? TotalPagesProgrammed { get; private set; }
+        [ObservableProperty]
+        private byte? totalPagesProgrammed;
         /// <summary>Gets the next stage latitude in decimal degrees. North is positive, south is negative.</summary>
-        public double NextStageLatitude { get; private set; }
+        [ObservableProperty]
+        private double nextStageLatitude;
         /// <summary>Gets the next stage longitude in decimal degrees. East is positive, west is negative.</summary>
-        public double NextStageLongitude { get; private set; }
+        [ObservableProperty]
+        private double nextStageLongitude;
         /// <summary>Gets a message from the geocache device, or a next stage hint.</summary>
-        public string Hint => string.Concat(hintPages.Values);
+        [ObservableProperty]
+        private string hint;
         /// <summary>Gets the number of visits logged.</summary>
-        public ushort? NumberOfVisits { get; private set; }
+        [ObservableProperty]
+        private ushort? numberOfVisits;
         /// <summary>Gets the last visit timestamp.</summary>
-        public DateTime? LastVisitTimestamp { get; private set; }
+        [ObservableProperty]
+        private DateTime? lastVisitTimestamp;
         /// <summary>Gets the authentication token.</summary>
-        public byte[] AuthenticationToken { get; private set; } = new byte[0];
+        [ObservableProperty]
+        private byte[] authenticationToken;
+
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
@@ -107,7 +118,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             {
                 case DataPage.TrackableId:
                     TrackableId = ParseId(dataPage);
-                    RaisePropertyChange(nameof(TrackableId));
                     break;
                 case DataPage.PIN:
                     uint pin = BitConverter.ToUInt32(dataPage, 2);
@@ -115,19 +125,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     {
                         ProgrammingPIN = pin;
                     }
-                    RaisePropertyChange(nameof(ProgrammingPIN));
                     if (dataPage[6] != 0xFF)
                     {
                         TotalPagesProgrammed = dataPage[6];
                     }
-                    RaisePropertyChange(nameof(TotalPagesProgrammed));
                     break;
                 case DataPage.AuthenticationPage:
                     if (authRequested)
                     {
                         authRequested = false;
                         AuthenticationToken = dataPage.Skip(1).ToArray();
-                        RaisePropertyChange(nameof(AuthenticationToken));
                     }
                     break;
                 default:
@@ -137,29 +144,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                         {
                             case DataId.Latitude:
                                 NextStageLatitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
-                                RaisePropertyChange(nameof(NextStageLatitude));
                                 break;
                             case DataId.Longitude:
                                 NextStageLongitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
-                                RaisePropertyChange(nameof(NextStageLongitude));
                                 break;
                             case DataId.Hint:
                                 ParseHint(dataPage);
-                                RaisePropertyChange(nameof(Hint));
                                 break;
                             case DataId.LoggedVisits:
                                 loggedVisitsPage = dataPage[0];
                                 NumberOfVisits = BitConverter.ToUInt16(dataPage, 6);
-                                RaisePropertyChange(nameof(NumberOfVisits));
                                 if (NumberOfVisits > 0)
                                 {
                                     LastVisitTimestamp = new DateTime(1989, 12, 31) + TimeSpan.FromSeconds(BitConverter.ToUInt32(dataPage, 2));
                                 }
                                 else { LastVisitTimestamp = null; }
-                                RaisePropertyChange(nameof(LastVisitTimestamp));
                                 break;
                             default:
-                                _logger.LogWarning("Unknown DataId = {DataId}", dataPage[1]);
+                                logger.LogWarning("Unknown DataId = {DataId}", dataPage[1]);
                                 break;
                         }
                     }
@@ -177,6 +179,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             if (!hintPages.ContainsKey(dataPage[0]))
             {
                 hintPages.Add(dataPage[0], Encoding.UTF8.GetString(dataPage, 2, 6).TrimEnd((char)0));
+                Hint = string.Concat(hintPages.Values);
             }
         }
 
@@ -225,9 +228,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             TotalPagesProgrammed = default;
             NextStageLatitude = NextStageLongitude = default;
             hintPages.Clear();
+            Hint = string.Empty;
             NumberOfVisits = default;
             LastVisitTimestamp = default;
-            RaisePropertyChange(string.Empty);
 
             return await RequestDataPage(DataPage.PIN, timeout);
         }
@@ -282,15 +285,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             TotalPagesProgrammed = default;
             NextStageLatitude = NextStageLongitude = default;
             hintPages.Clear();
+            Hint = string.Empty;
             NumberOfVisits = default;
             LastVisitTimestamp = default;
-            RaisePropertyChange(string.Empty);
 
             // set ID to empty string if null
-            if (id is null)
-            {
-                id = string.Empty;
-            }
+            id ??= string.Empty;
 
             // assemble list of messages to send; simplifies error handling
             List<byte[]> messages = new List<byte[]>

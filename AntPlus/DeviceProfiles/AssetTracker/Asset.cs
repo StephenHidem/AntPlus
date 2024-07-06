@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Text;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
@@ -7,8 +7,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// <summary>
     /// This class represents an asset.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class Asset : INotifyPropertyChanged
+    public partial class Asset : ObservableObject
     {
         private bool gotIdPage1, gotIdPage2;
         private string upperName, lowerName;
@@ -63,66 +62,36 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             RemoveAsset = 0x40,
         }
 
-        /// <summary>
-        /// Gets the index of the asset.
-        /// </summary>
-        /// <value>
-        /// The index.
-        /// </value>
-        public int Index { get; private set; }
-        /// <summary>
-        /// Gets the name of the asset.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string Name => upperName + lowerName;
-        /// <summary>
-        /// Gets the type of the asset.
-        /// </summary>
-        /// <value>
-        /// The type.
-        /// </value>
-        public AssetType Type { get; private set; }
-        /// <summary>
-        /// Gets the color of the asset. This is an 8 bit RGB value.
-        /// </summary>
-        /// <value>
-        /// The color. Uses the 3-3-2 bit RGB color palette.
-        /// </value>
-        public byte Color { get; private set; }
+        /// <summary>Gets the index of the asset.</summary>
+        [ObservableProperty]
+        private int index;
+        /// <summary>Gets the name of the asset.</summary>
+        [ObservableProperty]
+        private string name;
+        /// <summary>Gets the type of the asset.</summary>
+        [ObservableProperty]
+        private AssetType type;
+        /// <summary>Gets the color of the asset. This is an 8 bit RGB value.</summary>
+        [ObservableProperty]
+        private byte color;
         /// <summary>Gets the distance.</summary>
-        /// <value>The distance to the asset in meters.</value>
-        public ushort Distance { get; private set; }
+        [ObservableProperty]
+        private ushort distance;
         /// <summary>Gets the bearing.</summary>
-        /// <value>The bearing of the asset in degrees.</value>
-        public double Bearing { get; private set; }
-        /// <summary>
-        /// Gets the status of the asset.
-        /// </summary>
-        /// <value>
-        /// The status.
-        /// </value>
-        public AssetStatus Status { get; private set; }
-        /// <summary>
-        /// Gets the situation of the asset. This typically applies to dogs.
-        /// </summary>
-        /// <value>
-        /// The situation.
-        /// </value>
-        public AssetSituation Situation { get; private set; }
+        [ObservableProperty]
+        private double bearing;
+        /// <summary>Gets the status of the asset.</summary>
+        [ObservableProperty]
+        private AssetStatus status;
+        /// <summary>Gets the situation of the asset. This typically applies to dogs.</summary>
+        [ObservableProperty]
+        private AssetSituation situation;
         /// <summary>Gets the latitude.</summary>
-        /// <value>The latitude of the asset in decimal degrees.</value>
-        public double Latitude => Utils.SemicirclesToDegrees((upperLatitude << 16) | lowerLatitude);
+        [ObservableProperty]
+        private double latitude;
         /// <summary>Gets the longitude.</summary>
-        /// <value>The longitude of the asset in decimal degrees.</value>
-        public double Longitude { get; private set; }
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        /// <returns></returns>
-        public event PropertyChangedEventHandler PropertyChanged;
+        [ObservableProperty]
+        private double longitude;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Asset"/> class.
@@ -140,7 +109,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         internal void ParseIdPage1(byte[] data)
         {
             Color = data[2];
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
             if (!gotIdPage1)
             {
                 upperName = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
@@ -148,7 +116,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             }
             if (gotIdPage1 && gotIdPage2)
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+                Name = upperName + lowerName;
                 gotIdPage1 = gotIdPage2 = false;
             }
         }
@@ -160,7 +128,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         internal void ParseIdPage2(byte[] data)
         {
             Type = (AssetType)data[2];
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Type"));
             if (!gotIdPage2)
             {
                 lowerName = Encoding.UTF8.GetString(data, 3, 5).TrimEnd((char)0);
@@ -168,7 +135,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
             }
             if (gotIdPage1 && gotIdPage2)
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+                Name = upperName + lowerName;
                 gotIdPage1 = gotIdPage2 = false;
             }
         }
@@ -189,13 +156,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                 lowerLatitude = BitConverter.ToUInt16(data, 6);
                 gotLocationPage1 = true;
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Distance"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bearing"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Situation"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
             if (gotLocationPage1 && gotLocationPage2)
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                Latitude = Utils.SemicirclesToDegrees((upperLatitude << 16) | lowerLatitude);
                 gotLocationPage1 = gotLocationPage2 = false;
             }
         }
@@ -212,10 +175,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                 gotLocationPage2 = true;
             }
             Longitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(data, 4));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
             if (gotLocationPage1 && gotLocationPage2)
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                Latitude = Utils.SemicirclesToDegrees((upperLatitude << 16) | lowerLatitude);
                 gotLocationPage1 = gotLocationPage2 = false;
             }
         }

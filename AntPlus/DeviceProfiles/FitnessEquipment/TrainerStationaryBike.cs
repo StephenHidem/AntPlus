@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the stationary bike fitness equipment type.
     /// </summary>
-    public class TrainerStationaryBike : Equipment
+    public partial class TrainerStationaryBike : Equipment
     {
         private bool isFirstDataMessage = true;
         private byte lastEventCount;
@@ -107,48 +108,63 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Gets the average power in watts.</summary>
         /// <value>The average power.</value>
-        public double AveragePower { get; private set; }
+        [ObservableProperty]
+        private double averagePower;
         /// <summary>Gets the instantaneous pedaling cadence in revolutions per minute.</summary>
         /// <value>The instantaneous cadence.</value>
-        public byte InstantaneousCadence { get; private set; }
+        [ObservableProperty]
+        private byte instantaneousCadence;
         /// <summary>Gets the instantaneous power in watts.</summary>
         /// <value>The instantaneous power.</value>
-        public int InstantaneousPower { get; private set; }
+        [ObservableProperty]
+        private int instantaneousPower;
         /// <summary>Gets the trainer status.</summary>
-        public TrainerStatusField TrainerStatus { get; private set; }
+        [ObservableProperty]
+        private TrainerStatusField trainerStatus;
         /// <summary>Gets the trainer target power.</summary>
-        public TargetPowerLimit TargetPower { get; private set; }
+        [ObservableProperty]
+        private TargetPowerLimit targetPower;
         /// <summary>Gets the trainer torque.</summary>
-        public TrainerTorque TrainerTorque { get; private set; } = new TrainerTorque();
+        [ObservableProperty]
+        private TrainerTorque trainerTorque;
 
         /// <summary>Gets the result of the requested calibration.</summary>
         /// <value>The rhe result of calibration</value>
-        public CalibrationResult CalibrationStatus { get; private set; }
+        [ObservableProperty]
+        private CalibrationResult calibrationStatus;
         /// <summary>Gets the current temperature in degrees Celsius.</summary>
         /// <value>The final temperature in degrees C.</value>
-        public double Temperature { get; private set; }
+        [ObservableProperty]
+        private double temperature;
         /// <summary>Gets the zero offset reported by the trainer.</summary>
         /// <value>The zero offset.</value>
-        public ushort ZeroOffset { get; private set; }
+        [ObservableProperty]
+        private ushort zeroOffset;
         /// <summary>Gets the spin down time after calibration has been performed.</summary>
         /// <value>The spin down time in milliseconds.</value>
-        public ushort SpinDownTime { get; private set; }
+        [ObservableProperty]
+        private ushort spinDownTime;
 
         /// <summary>Gets the calibration temperature status.</summary>
         /// <value>The calibration temperature status.</value>
-        public TemperatureCondition TemperatureStatus { get; private set; }
+        [ObservableProperty]
+        private TemperatureCondition temperatureStatus;
         /// <summary>Gets the calibration speed status.</summary>
         /// <value>The calibration speed status.</value>
-        public SpeedCondition SpeedStatus { get; private set; }
+        [ObservableProperty]
+        private SpeedCondition speedStatus;
         /// <summary>Gets the current temperature in degrees Celsius.</summary>
         /// <value>The current temperature in degrees C.</value>
-        public double CurrentTemperature { get; private set; }
+        [ObservableProperty]
+        private double currentTemperature;
         /// <summary>Gets the target speed during calibration.</summary>
         /// <value>The target speed in meters per second.</value>
-        public double TargetSpeed { get; private set; }
+        [ObservableProperty]
+        private double targetSpeed;
         /// <summary>Gets the target spin down time in milliseconds during calibration.</summary>
         /// <value>The target spin down time in milliseconds.</value>
-        public ushort TargetSpinDownTime { get; private set; }
+        [ObservableProperty]
+        private ushort targetSpinDownTime;
 
         /// <summary>
         /// Parses the specified data page.
@@ -165,47 +181,37 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     {
                         CalibrationStatus |= CalibrationResult.TemperatureValid;
                         Temperature = Math.Round(dataPage[3] * 0.5 - 25, 1);
-                        RaisePropertyChange(nameof(Temperature));
                     }
 
                     if (BitConverter.ToUInt16(dataPage, 4) != 0xFFFF)
                     {
                         CalibrationStatus |= CalibrationResult.ZeroOffsetValid;
                         ZeroOffset = BitConverter.ToUInt16(dataPage, 4);
-                        RaisePropertyChange(nameof(ZeroOffset));
                     }
 
                     if (BitConverter.ToUInt16(dataPage, 6) != 0xFFFF)
                     {
                         CalibrationStatus |= CalibrationResult.SpinDownValid;
                         SpinDownTime = BitConverter.ToUInt16(dataPage, 6);
-                        RaisePropertyChange(nameof(SpinDownTime));
                     }
-
-                    RaisePropertyChange(nameof(CalibrationStatus));
                     break;
                 case DataPage.CalProgress:
                     TemperatureStatus = (TemperatureCondition)(dataPage[2] & 0x30);
                     SpeedStatus = (SpeedCondition)(dataPage[2] & 0xC0);
-                    RaisePropertyChange(nameof(TemperatureStatus));
-                    RaisePropertyChange(nameof(SpeedStatus));
 
                     if (dataPage[3] != 0xFF)
                     {
                         CurrentTemperature = Math.Round(dataPage[3] * 0.5 - 25, 1);
-                        RaisePropertyChange(nameof(CurrentTemperature));
                     }
 
                     if (BitConverter.ToUInt16(dataPage, 4) != 0xFFFF)
                     {
                         TargetSpeed = Math.Round(BitConverter.ToUInt16(dataPage, 4) * 0.001, 3);
-                        RaisePropertyChange(nameof(TargetSpeed));
                     }
 
                     if (BitConverter.ToUInt16(dataPage, 6) != 0xFFFF)
                     {
                         TargetSpinDownTime = BitConverter.ToUInt16(dataPage, 6);
-                        RaisePropertyChange(nameof(TargetSpinDownTime));
                     }
                     break;
                 case DataPage.TrainerStationaryBikeData:
@@ -214,10 +220,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     InstantaneousPower = BitConverter.ToUInt16(dataPage, 5) & 0x0FFF;
                     TrainerStatus = (TrainerStatusField)(dataPage[6] & 0x70);
                     TargetPower = (TargetPowerLimit)(dataPage[7] & 0x0F);
-                    RaisePropertyChange(nameof(InstantaneousCadence));
-                    RaisePropertyChange(nameof(InstantaneousPower));
-                    RaisePropertyChange(nameof(TrainerStatus));
-                    RaisePropertyChange(nameof(TargetPower));
 
                     if (isFirstDataMessage)
                     {
@@ -234,13 +236,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                         int deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
                         int deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPower);
                         AveragePower = deltaPower / deltaEventCount;
-                        RaisePropertyChange(nameof(AveragePower));
                     }
                     break;
                 case DataPage.TrainerTorqueData:
                     HandleFEState(dataPage[7]);
                     TrainerTorque.Parse(dataPage);
-                    RaisePropertyChange(nameof(TrainerTorque));
                     break;
                 default:
                     base.Parse(dataPage);

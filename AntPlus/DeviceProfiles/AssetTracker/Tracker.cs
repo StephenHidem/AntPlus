@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// <summary>
     /// This class serves as an asset tracker.
     /// </summary>
-    public class Tracker : AntDevice
+    public partial class Tracker : AntDevice
     {
         /// <summary>
         /// The asset tracker device class ID.
@@ -50,7 +51,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         public ObservableCollection<Asset> Assets { get; } = new ObservableCollection<Asset>();
         /// <summary>Gets a value indicating whether this <see cref="Tracker" /> is disconnected.</summary>
         /// <value><c>true</c> if disconnected; otherwise, <c>false</c>.</value>
-        public bool Disconnected { get; private set; }
+        [ObservableProperty]
+        private bool disconnected;
         /// <summary>
         /// Gets the common data pages.
         /// </summary>
@@ -108,7 +110,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                     break;
                 case DataPage.DisconnectCommand:
                     Disconnected = true;
-                    RaisePropertyChange(nameof(Disconnected));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

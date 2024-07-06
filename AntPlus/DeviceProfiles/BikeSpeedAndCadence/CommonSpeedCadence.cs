@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// This class is common to speed and cadence sensors. Combined speed and cadence sensors do not use this class.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public abstract class CommonSpeedCadence : AntDevice
+    public abstract partial class CommonSpeedCadence : AntDevice
     {
         /// <summary>The is first data message
         /// received.</summary>
@@ -96,15 +97,20 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         }
 
         /// <summary>Gets the cumulative operating time.</summary>
-        public TimeSpan CumulativeOperatingTime { get; private set; }
+        [ObservableProperty]
+        private TimeSpan cumulativeOperatingTime;
         /// <summary>Gets the manufacturer information.</summary>
-        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        [ObservableProperty]
+        private ManufacturerInfoPage manufacturerInfo;
         /// <summary>Gets the product information.</summary>
-        public ProductInfoPage ProductInfo { get; private set; }
+        [ObservableProperty]
+        private ProductInfoPage productInfo;
         /// <summary>Gets the battery status.</summary>
-        public BatteryStatusPage BatteryStatus { get; private set; }
+        [ObservableProperty]
+        private BatteryStatusPage batteryStatus;
         /// <summary>Gets a value indicating whether this sensor has detected stopped condition.</summary>
-        public bool Stopped { get; private set; }
+        [ObservableProperty]
+        private bool stopped;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSpeedCadence"/> class.
@@ -153,26 +159,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     break;
                 case DataPage.CumulativeOperatingTime:
                     CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
-                    RaisePropertyChange(nameof(CumulativeOperatingTime));
                     break;
                 case DataPage.ManufacturerInfo:
                     ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
-                    RaisePropertyChange(nameof(ManufacturerInfo));
                     break;
                 case DataPage.ProductInfo:
                     ProductInfo = new ProductInfoPage(dataPage);
-                    RaisePropertyChange(nameof(ProductInfo));
                     break;
                 case DataPage.BatteryStatus:
                     BatteryStatus = new BatteryStatusPage(dataPage);
-                    RaisePropertyChange(nameof(BatteryStatus));
                     break;
                 case DataPage.Motion:
                     Stopped = dataPage[1] == 0x01;
-                    RaisePropertyChange(nameof(Stopped));
                     break;
                 default:
-                    _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(Parse), BitConverter.ToString(dataPage));
+                    logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(Parse), BitConverter.ToString(dataPage));
                     break;
             }
         }

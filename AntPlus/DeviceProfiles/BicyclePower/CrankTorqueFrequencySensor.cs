@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -10,7 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// The crank torque frequency sensor class.
     /// </summary>
-    public class CrankTorqueFrequencySensor : BicyclePower
+    public partial class CrankTorqueFrequencySensor : BicyclePower
     {
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(CrankTorqueFrequencySensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.CrankTorqueFrequency.png");
@@ -40,15 +41,20 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Gets the zero offset in Hz.</summary>
         /// <remarks>Offset is only received from the sensor when a calibration is requested or bike has been coasting.</remarks>
-        public ushort Offset { get; private set; } = 0;
+        [ObservableProperty]
+        private ushort offset = 0;
         /// <summary>Gets the slope. Slope ranges in value from 10.0Nm/Hz to 50.0Nm/Hz. Resolution is 0.1 Nm/Hz.</summary>
-        public double Slope { get; private set; }
+        [ObservableProperty]
+        private double slope;
         /// <summary>Gets the cadence in revolutions per minute.</summary>
-        public double Cadence { get; private set; }
+        [ObservableProperty]
+        private double cadence;
         /// <summary>Gets the torque in Nm.</summary>
-        public double Torque { get; private set; }
+        [ObservableProperty]
+        private double torque;
         /// <summary>Gets the power in watts.</summary>
-        public double Power { get; private set; }
+        [ObservableProperty]
+        private double power;
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
@@ -90,7 +96,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             ushort torqueTicks = BitConverter.ToUInt16(data, 0);
             ushort timeStamp = BitConverter.ToUInt16(data, 2);
             Slope = BitConverter.ToUInt16(data, 4) / 10.0;
-            RaisePropertyChange(nameof(Slope));
 
             if (isFirstPage)
             {
@@ -110,9 +115,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 double torqueFreq = (1.0 / (elapsedTime / Utils.CalculateDelta(torqueTicks, ref prevTorqueTicks))) - Offset;
                 Torque = torqueFreq / Slope;
                 Power = Torque * Cadence * Math.PI / 30.0;
-                RaisePropertyChange(nameof(Cadence));
-                RaisePropertyChange(nameof(Torque));
-                RaisePropertyChange(nameof(Power));
             }
         }
 
@@ -122,7 +124,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             {
                 case CTFDefinedId.ZeroOffset:
                     Offset = BitConverter.ToUInt16(dataPage.Skip(6).Reverse().ToArray(), 0);
-                    RaisePropertyChange(nameof(Offset));
                     break;
                 case CTFDefinedId.Ack:
                     // TODO: NEED TO REPORT STATUS OF CTF SAVE FUNCS

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 
@@ -7,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the rower fitness equipment type.
     /// </summary>
-    public class Rower : Equipment
+    public partial class Rower : Equipment
     {
         private bool isFirstDataMessage = true;
         private byte prevStroke;
@@ -31,14 +32,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Gets the accumulated stroke count.</summary>
-        public int StrokeCount { get; private set; }
+        [ObservableProperty]
+        private int strokeCount;
         /// <summary>Gets the cadence in strokes per minute.</summary>
-        public byte Cadence { get; private set; }
+        [ObservableProperty]
+        private byte cadence;
         /// <summary>Gets the instantaneous power in watts.</summary>
-        public int InstantaneousPower { get; private set; }
+        [ObservableProperty]
+        private int instantaneousPower;
         /// <summary>Gets the rower specific capabilities.</summary>
         /// <value>The capabilities.</value>
-        public CapabilityFlags Capabilities { get; private set; }
+        [ObservableProperty]
+        private CapabilityFlags capabilities;
 
         /// <summary>
         /// Parses the specified data page.
@@ -57,14 +62,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 else
                 {
                     StrokeCount += Utils.CalculateDelta(dataPage[3], ref prevStroke);
-                    RaisePropertyChange(nameof(StrokeCount));
                 }
                 Cadence = dataPage[4];
                 InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
-                RaisePropertyChange(nameof(Cadence));
-                RaisePropertyChange(nameof(InstantaneousPower));
-                RaisePropertyChange(nameof(Capabilities));
             }
             else { base.Parse(dataPage); }
         }

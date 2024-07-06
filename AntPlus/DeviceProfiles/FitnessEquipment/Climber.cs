@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 
@@ -7,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the climber fitness equipment type.
     /// </summary>
-    public class Climber : Equipment
+    public partial class Climber : Equipment
     {
         private bool isFirstDataMessage = true;
         private byte prevStride;
@@ -31,14 +32,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Gets the stride cycles. Accumulated value of the complete number of stride cycles (i.e. number of steps climbed/2)</summary>
-        public int StrideCycles { get; private set; }
+        [ObservableProperty]
+        private int strideCycles;
         /// <summary>Gets the cadence in stride cycles per minute.</summary>
-        public byte Cadence { get; private set; }
+        [ObservableProperty]
+        private byte cadence;
         /// <summary>Gets the instantaneous power in watts.</summary>
-        public int InstantaneousPower { get; private set; }
+        [ObservableProperty]
+        private int instantaneousPower;
         /// <summary>Gets the climber specific capabilities.</summary>
         /// <value>The capabilities.</value>
-        public CapabilityFlags Capabilities { get; private set; }
+        [ObservableProperty]
+        private CapabilityFlags capabilities;
 
         /// <summary>Parses the specified data page.</summary>
         /// <param name="dataPage">The data page.</param>
@@ -55,14 +60,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 else
                 {
                     StrideCycles += Utils.CalculateDelta(dataPage[3], ref prevStride);
-                    RaisePropertyChange(nameof(StrideCycles));
                 }
                 Cadence = dataPage[4];
                 InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
-                RaisePropertyChange(nameof(Cadence));
-                RaisePropertyChange(nameof(InstantaneousPower));
-                RaisePropertyChange(nameof(Capabilities));
             }
             else { base.Parse(dataPage); }
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 
@@ -7,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the treadmill fitness equipment type.
     /// </summary>
-    public class Treadmill : Equipment
+    public partial class Treadmill : Equipment
     {
         private bool isFirstDataMessage = true;
         private byte prevPos;
@@ -35,14 +36,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Gets the cadence in strides per minute.</summary>
-        public byte Cadence { get; private set; }
+        [ObservableProperty]
+        private byte cadence;
         /// <summary>Gets the accumulated negative vertical distance traveled in meters. Note this is a negative value.</summary>
-        public double NegVerticalDistance { get; private set; }
+        [ObservableProperty]
+        private double negVerticalDistance;
         /// <summary>Gets the accumulated positive vertical distance traveled in meters.</summary>
-        public double PosVerticalDistance { get; private set; }
+        [ObservableProperty]
+        private double posVerticalDistance;
         /// <summary>Gets the treadmill specific capabilities.</summary>
         /// <value>The capabilities.</value>
-        public CapabilityFlags Capabilities { get; private set; }
+        [ObservableProperty]
+        private CapabilityFlags capabilities;
 
         /// <summary>
         /// Parses the specified data page.
@@ -62,13 +67,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 {
                     NegVerticalDistance += Utils.CalculateDelta(dataPage[5], ref prevNeg) / -10.0;
                     PosVerticalDistance += Utils.CalculateDelta(dataPage[6], ref prevPos) / 10.0;
-                    RaisePropertyChange(nameof(NegVerticalDistance));
-                    RaisePropertyChange(nameof(PosVerticalDistance));
                 }
                 Cadence = dataPage[4];
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
-                RaisePropertyChange(nameof(Cadence));
-                RaisePropertyChange(nameof(Capabilities));
             }
             else
             {

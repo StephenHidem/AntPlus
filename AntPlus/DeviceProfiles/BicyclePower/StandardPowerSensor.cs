@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -9,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// The standard power sensor class. Note that torque sensors report this data page for
     /// displays that may not handle torque sensor messages.
     /// </summary>
-    public class StandardPowerSensor : BicyclePower
+    public partial class StandardPowerSensor : BicyclePower
     {
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(StandardPowerSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
@@ -34,27 +35,33 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         }
 
         /// <summary>Gets the average power in watts.</summary>
-        public double AveragePower { get; private set; }
+        [ObservableProperty]
+        private double averagePower;
         /// <summary>The pedal power data field provides the user’s power contribution (as a percentage) between the left and right pedals, as
         /// measured by a pedal power sensor. </summary>
         /// <value>The pedal power.</value>
-        public byte PedalPower { get; private set; }
+        [ObservableProperty]
+        private byte pedalPower;
         /// <summary>Gets the pedal power contribution.</summary>
         /// <value>The pedal differentiation.</value>
-        public PedalDifferentiation PedalContribution { get; private set; }
+        [ObservableProperty]
+        private PedalDifferentiation pedalContribution;
         /// <summary>Gets the instantaneous pedaling cadence.</summary>
-        public byte InstantaneousCadence { get; set; }
+        [ObservableProperty]
+        private byte instantaneousCadence;
         /// <summary>Gets the instantaneous power in watts.</summary>
-        public ushort InstantaneousPower { get; private set; }
+        [ObservableProperty]
+        private ushort instantaneousPower;
 
         /// <summary>Gets the torque sensor.</summary>
         /// <value>The wheel or crank torque sensor.</value>
-        public TorqueSensor TorqueSensor { get; private set; }
-
+        [ObservableProperty]
+        private TorqueSensor torqueSensor;
         /// <summary>Gets the parameters.</summary>
         public Parameters Parameters { get; private set; }
         /// <summary>Gets the torque effectiveness and pedal smoothness.</summary>
         public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; }
+
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
 
@@ -89,19 +96,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParsePowerOnly(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    if (TorqueSensor == null)
-                    {
-                        TorqueSensor = new StandardWheelTorqueSensor(this, logger);
-                        RaisePropertyChange(nameof(TorqueSensor));
-                    }
+                    TorqueSensor ??= new StandardWheelTorqueSensor(this, logger);
                     TorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    if (TorqueSensor == null)
-                    {
-                        TorqueSensor = new StandardCrankTorqueSensor(this, logger);
-                        RaisePropertyChange(nameof(TorqueSensor));
-                    }
+                    TorqueSensor ??= new StandardCrankTorqueSensor(this, logger);
                     TorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
@@ -127,10 +126,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 : (dataPage[2] & 0x80) != 0 ? PedalDifferentiation.RightPedal : PedalDifferentiation.Unknown;
             InstantaneousCadence = dataPage[3];
             InstantaneousPower = BitConverter.ToUInt16(dataPage, 6);
-            RaisePropertyChange(nameof(PedalPower));
-            RaisePropertyChange(nameof(PedalContribution));
-            RaisePropertyChange(nameof(InstantaneousCadence));
-            RaisePropertyChange(nameof(InstantaneousPower));
 
             if (isFirstDataMessage)
             {
@@ -147,7 +142,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
                 deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref lastPower);
                 AveragePower = deltaPower / deltaEventCount;
-                RaisePropertyChange(nameof(AveragePower));
             }
         }
     }

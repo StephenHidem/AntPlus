@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -13,7 +14,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// on the wheel circumference.
     /// </remarks>
     /// <seealso cref="CommonSpeedCadence" />
-    public class BikeSpeedSensor : CommonSpeedCadence
+    public partial class BikeSpeedSensor : CommonSpeedCadence
     {
         /// <summary>
         /// The BikeSpeedSensor device class ID.
@@ -25,9 +26,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// </summary>
         public double WheelCircumference { get; set; } = 2.2;
         /// <summary>Gets the instantaneous speed in meters per second.</summary>
-        public double InstantaneousSpeed { get; private set; }
+        [ObservableProperty]
+        private double instantaneousSpeed;
         /// <summary>Gets the accumulated distance in meters. This value is accumulated since distance was first reported.</summary>
-        public double AccumulatedDistance { get; private set; }
+        [ObservableProperty]
+        private double accumulatedDistance;
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(BikeSpeedSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BikeSpeed.png");
 
@@ -55,8 +58,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
                     InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
                     AccumulatedDistance += WheelCircumference * deltaRevCount;
-                    RaisePropertyChange(nameof(InstantaneousSpeed));
-                    RaisePropertyChange(nameof(AccumulatedDistance));
                 }
             }
         }

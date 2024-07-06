@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using System;
-using System.ComponentModel;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus
@@ -105,16 +105,9 @@ namespace SmallEarthTech.AntPlus
     /// <summary>
     /// This class supports common data pages.  In particular, this class describes the common pages used by ANT+ devices.
     /// </summary>
-    /// <seealso cref="INotifyPropertyChanged" />
-    public class CommonDataPages : INotifyPropertyChanged
+    public partial class CommonDataPages : ObservableObject
     {
         private readonly ILogger _logger;
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        /// <returns></returns>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>Command result.</summary>
         public enum CommandResult
@@ -371,21 +364,29 @@ namespace SmallEarthTech.AntPlus
         }
 
         /// <summary>Gets the command status.</summary>
-        public CommandStatusPage CommandStatus { get; private set; }
+        [ObservableProperty]
+        private CommandStatusPage commandStatus;
         /// <summary>Gets the manufacturer information.</summary>
-        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        [ObservableProperty]
+        private ManufacturerInfoPage manufacturerInfo;
         /// <summary>Gets the product information.</summary>
-        public ProductInfoPage ProductInfo { get; private set; }
+        [ObservableProperty]
+        private ProductInfoPage productInfo;
         /// <summary>Gets the battery status.</summary>
-        public BatteryStatusPage BatteryStatus { get; private set; }
+        [ObservableProperty]
+        private BatteryStatusPage batteryStatus;
         /// <summary>Gets the time and date.</summary>
-        public DateTime TimeAndDate { get; private set; }
+        [ObservableProperty]
+        private DateTime timeAndDate;
         /// <summary>Gets the subfield data.</summary>
-        public SubfieldDataPage SubfieldData { get; private set; }
+        [ObservableProperty]
+        private SubfieldDataPage subfieldData;
         /// <summary>Gets the memory level.</summary>
-        public MemoryLevelPage MemoryLevel { get; private set; }
+        [ObservableProperty]
+        private MemoryLevelPage memoryLevel;
         /// <summary>Gets the error description.</summary>
-        public ErrorDescriptionPage ErrorDescription { get; private set; }
+        [ObservableProperty]
+        private ErrorDescriptionPage errorDescription;
 
         /// <summary>Initializes a new instance of the <see cref="CommonDataPages" /> class.</summary>
         /// <param name="logger">The logger.</param>
@@ -402,7 +403,6 @@ namespace SmallEarthTech.AntPlus
             {
                 case CommonDataPage.CommandStatus:
                     CommandStatus = new CommandStatusPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CommandStatus"));
                     break;
                 case CommonDataPage.MultiComponentManufacturerInfo:
                     break;
@@ -410,33 +410,26 @@ namespace SmallEarthTech.AntPlus
                     break;
                 case CommonDataPage.ManufacturerInfo:
                     ManufacturerInfo = new ManufacturerInfoPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ManufacturerInfo"));
                     break;
                 case CommonDataPage.ProductInfo:
                     ProductInfo = new ProductInfoPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProductInfo"));
                     break;
                 case CommonDataPage.BatteryStatus:
                     BatteryStatus = new BatteryStatusPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BatteryStatus"));
                     break;
                 case CommonDataPage.TimeAndDate:
                     TimeAndDate = new DateTime(2000 + dataPage[7], dataPage[6], dataPage[5] & 0x1F, dataPage[4], dataPage[3], dataPage[2], DateTimeKind.Utc);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeAndDate"));
                     break;
                 case CommonDataPage.SubfieldData:
                     SubfieldData = new SubfieldDataPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SubfieldData"));
                     break;
                 case CommonDataPage.MemoryLevel:
                     MemoryLevel = new MemoryLevelPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MemoryLevel"));
                     break;
                 case CommonDataPage.PairedDevices:
                     break;
                 case CommonDataPage.ErrorDescription:
                     ErrorDescription = new ErrorDescriptionPage(dataPage);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ErrorDescription"));
                     break;
                 default:
                     _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));

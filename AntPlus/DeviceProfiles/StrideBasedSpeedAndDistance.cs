@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -15,7 +16,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     ///elsewhere are also considered SDMs.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public class StrideBasedSpeedAndDistance : AntDevice
+    public partial class StrideBasedSpeedAndDistance : AntDevice
     {
         /// <summary>
         /// The SDM device class ID.
@@ -142,38 +143,49 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Gets the accumulated time duration since SDM sensor was turned on until it is turned off.</summary>
         /// <value>The accumulated time.</value>
-        public double AccumulatedTime { get; private set; }
+        [ObservableProperty]
+        private double accumulatedTime;
         /// <summary>Gets the cadence in strides per minute.</summary>
         /// <value>The stride cadence.</value>
-        public double InstantaneousCadence { get; private set; }
+        [ObservableProperty]
+        private double instantaneousCadence;
         /// <summary>Gets the accumulated stride count.</summary>
         /// <value>The accumulated strides.</value>
-        public int AccumulatedStrideCount { get; private set; }
+        [ObservableProperty]
+        private int accumulatedStrideCount;
         /// <summary>Gets the accumulated distance in meters.</summary>
         /// <value>The accumulated distance.</value>
-        public double AccumulatedDistance { get; private set; }
+        [ObservableProperty]
+        private double accumulatedDistance;
         /// <summary>Gets the instantaneous speed in meters per second.</summary>
         /// <value>The instantaneous speed.</value>
-        public double InstantaneousSpeed { get; private set; }
+        [ObservableProperty]
+        private double instantaneousSpeed;
         /// <summary>Gets the update latency.
         /// The time elapsed between the last speed and distance computation and the transmission of this message.</summary>
         /// <value>The update latency in seconds.</value>
-        public double UpdateLatency { get; private set; }
+        [ObservableProperty]
+        private double updateLatency;
         /// <summary>Gets the status of the SDM sensor.</summary>
         /// <value>The status.</value>
-        public StatusFlags Status { get; private set; }
+        [ObservableProperty]
+        private StatusFlags status;
         /// <summary>Gets the accumulated calories in kcals.</summary>
         /// <value>The accumulated calories.</value>
-        public int AccumulatedCalories { get; private set; }
+        [ObservableProperty]
+        private int accumulatedCalories;
         /// <summary>Gets the sensor broadcast capabilities.</summary>
         /// <value>The capabilities.</value>
-        public CapabilitiesFlags Capabilities { get; private set; } = CapabilitiesFlags.Unknown;
+        [ObservableProperty]
+        private CapabilitiesFlags capabilities;
         /// <summary>Gets the accumulated strides since battery change.</summary>
         /// <value>The stride count summary.</value>
-        public uint StrideCountSummary { get; private set; }
+        [ObservableProperty]
+        private uint strideCountSummary;
         /// <summary>Gets the accumulated distance since battery change.</summary>
         /// <value>The distance summary in meters.</value>
-        public double DistanceSummary { get; private set; }
+        [ObservableProperty]
+        private double distanceSummary;
 
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
@@ -212,22 +224,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                         AccumulatedTime += Utils.CalculateDelta(dataPage[2], ref prevTime) + (dataPage[1] / 200.0);
                         AccumulatedDistance += Utils.CalculateDelta(dataPage[3], ref prevDistance) + (dataPage[4] >> 4) / 16.0;
                         AccumulatedStrideCount += Utils.CalculateDelta(dataPage[6], ref prevStrideCount);
-                        RaisePropertyChange(nameof(AccumulatedTime));
-                        RaisePropertyChange(nameof(AccumulatedDistance));
-                        RaisePropertyChange(nameof(AccumulatedStrideCount));
                     }
                     InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
                     UpdateLatency = dataPage[7] / 32.0;
-                    RaisePropertyChange(nameof(InstantaneousSpeed));
-                    RaisePropertyChange(nameof(UpdateLatency));
                     break;
                 case DataPage.BasePage:
                     InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
                     InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
                     Status = new StatusFlags(dataPage[7]);
-                    RaisePropertyChange(nameof(InstantaneousCadence));
-                    RaisePropertyChange(nameof(InstantaneousSpeed));
-                    RaisePropertyChange(nameof(Status));
                     break;
                 case DataPage.Calories:
                     if (isFirstCalPage)
@@ -238,24 +242,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     else
                     {
                         AccumulatedCalories += Utils.CalculateDelta(dataPage[6], ref prevCals);
-                        RaisePropertyChange(nameof(AccumulatedCalories));
                     }
                     InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
                     InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
                     Status = new StatusFlags(dataPage[7]);
-                    RaisePropertyChange(nameof(InstantaneousCadence));
-                    RaisePropertyChange(nameof(InstantaneousSpeed));
-                    RaisePropertyChange(nameof(Status));
                     break;
                 case DataPage.DistanceAndStridesSummary:
                     StrideCountSummary = BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF;
                     DistanceSummary = BitConverter.ToUInt32(dataPage, 4) / 256.0;
-                    RaisePropertyChange(nameof(StrideCountSummary));
-                    RaisePropertyChange(nameof(DistanceSummary));
                     break;
                 case DataPage.Capabilities:
                     Capabilities = (CapabilitiesFlags)dataPage[1];
-                    RaisePropertyChange(nameof(Capabilities));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);
@@ -269,7 +266,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> RequestSummaryPage()
         {
-            _logger.LogInformation(nameof(RequestSummaryPage));
+            logger.LogInformation(nameof(RequestSummaryPage));
             return await RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
@@ -287,7 +284,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         public async Task<MessagingReturnCode> RequestBroadcastCapabilities()
         {
-            _logger?.LogInformation(nameof(RequestBroadcastCapabilities));
+            logger?.LogInformation(nameof(RequestBroadcastCapabilities));
             return await RequestDataPage(DataPage.Capabilities);
         }
     }

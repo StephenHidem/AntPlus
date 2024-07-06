@@ -54,7 +54,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         public virtual void ParseTorque(byte[] dataPage)
         {
             _powerSensor.InstantaneousCadence = dataPage[3];
-            _powerSensor.RaisePropertyChange(nameof(_powerSensor.InstantaneousCadence));
 
             if (isFirstDataMessage)
             {

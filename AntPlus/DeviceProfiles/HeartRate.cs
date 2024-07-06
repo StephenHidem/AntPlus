@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -25,7 +26,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// to the manufacturer event and ignore other background pages.
     /// </remarks>
     /// <seealso cref="AntDevice" />
-    public class HeartRate : AntDevice
+    public partial class HeartRate : AntDevice
     {
         private byte[] lastDataPage = new byte[8];
 
@@ -251,25 +252,36 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         }
 
         /// <summary>Gets the heart rate data.</summary>
-        public CommonHeartRateData HeartRateData { get; private set; }
+        [ObservableProperty]
+        private CommonHeartRateData heartRateData;
         /// <summary>Gets the cumulative operating time.</summary>
-        public TimeSpan CumulativeOperatingTime { get; private set; }
+        [ObservableProperty]
+        private TimeSpan cumulativeOperatingTime;
         /// <summary>Gets the type of the heart beat event.</summary>
-        public HeartbeatEventType EventType { get; private set; }
+        [ObservableProperty]
+        private HeartbeatEventType eventType;
         /// <summary>Gets the manufacturer information.</summary>
-        public ManufacturerInfoPage ManufacturerInfo { get; private set; }
+        [ObservableProperty]
+        private ManufacturerInfoPage manufacturerInfo;
         /// <summary>Gets the product information.</summary>
-        public ProductInfoPage ProductInfo { get; private set; }
+        [ObservableProperty]
+        private ProductInfoPage productInfo;
         /// <summary>Gets the previous heart beat data.</summary>
-        public PreviousHeartBeatPage PreviousHeartBeat { get; private set; }
+        [ObservableProperty]
+        private PreviousHeartBeatPage previousHeartBeat;
         /// <summary>Gets the swim interval data.</summary>
-        public SwimIntervalPage SwimInterval { get; private set; }
+        [ObservableProperty]
+        private SwimIntervalPage swimInterval;
         /// <summary>Gets the heart rate monitor capabilities.</summary>
-        public CapabilitiesPage Capabilities { get; private set; }
+        [ObservableProperty]
+        private CapabilitiesPage capabilities;
         /// <summary>Gets the battery status.</summary>
-        public BatteryStatusPage BatteryStatus { get; private set; }
+        [ObservableProperty]
+        private BatteryStatusPage batteryStatus;
         /// <summary>Gets the manufacturer specific data.</summary>
-        public ManufacturerSpecificPage ManufacturerSpecific { get; private set; }
+        [ObservableProperty]
+        private ManufacturerSpecificPage manufacturerSpecific;
+
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(HeartRate).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.HeartRate.png");
 
@@ -294,7 +306,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                 prevBeatCount = dataPage[6];
                 lastDataPage = dataPage;
                 HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
-                RaisePropertyChange(nameof(HeartRateData));
                 return;
             }
 
@@ -318,7 +329,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
                 accumulatedHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
                 HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
-                RaisePropertyChange(nameof(HeartRateData));
             }
 
             // handle data page toggle
@@ -332,39 +342,31 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             {
                 case DataPage.CumulativeOperatingTime:
                     CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
-                    RaisePropertyChange(nameof(CumulativeOperatingTime));
                     break;
                 case DataPage.ManufacturerInfo:
                     ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
-                    RaisePropertyChange(nameof(ManufacturerInfo));
                     break;
                 case DataPage.ProductInfo:
                     ProductInfo = new ProductInfoPage(dataPage);
-                    RaisePropertyChange(nameof(ProductInfo));
                     break;
                 case DataPage.PreviousHeartBeat:
                     // fire event if beat count has changed
                     if (deltaHeartBeatCount > 0)
                     {
                         PreviousHeartBeat = new PreviousHeartBeatPage(dataPage);
-                        RaisePropertyChange(nameof(PreviousHeartBeat));
                     }
                     break;
                 case DataPage.SwimInterval:
                     SwimInterval = new SwimIntervalPage(dataPage);
-                    RaisePropertyChange(nameof(SwimInterval));
                     break;
                 case DataPage.Capabilities:
                     Capabilities = new CapabilitiesPage(dataPage);
-                    RaisePropertyChange(nameof(Capabilities));
                     break;
                 case DataPage.BatteryStatus:
                     BatteryStatus = new BatteryStatusPage(dataPage);
-                    RaisePropertyChange(nameof(BatteryStatus));
                     break;
                 case DataPage.DeviceInformation:
                     EventType = (HeartbeatEventType)(dataPage[1] & 0x03);
-                    RaisePropertyChange(nameof(EventType));
                     break;
                 default:
                     // range check manufacturer specific pages
@@ -372,11 +374,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     {
                         // let application parse
                         ManufacturerSpecific = new ManufacturerSpecificPage(dataPage);
-                        RaisePropertyChange(nameof(ManufacturerSpecific));
                     }
                     else
                     {
-                        _logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
+                        logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
                     }
                     break;
             }

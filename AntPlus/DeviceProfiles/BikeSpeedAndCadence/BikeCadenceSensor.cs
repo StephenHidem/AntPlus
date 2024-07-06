@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -9,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// This class supports bike cadence sensors.
     /// </summary>
     /// <seealso cref="CommonSpeedCadence" />
-    public class BikeCadenceSensor : CommonSpeedCadence
+    public partial class BikeCadenceSensor : CommonSpeedCadence
     {
         /// <summary>
         /// The BikeCadenceSensor device class ID.
@@ -17,7 +18,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         public const byte DeviceClass = 122;
 
         /// <summary>Gets the instantaneous cadence in rotations per minute.</summary>
-        public double InstantaneousCadence { get; private set; }
+        [ObservableProperty]
+        private double instantaneousCadence;
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(BikeCadenceSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BikeCadence.png");
 
@@ -44,7 +46,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 {
                     int deltaRevCount = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 6), ref prevRevCount);
                     InstantaneousCadence = 60.0 * deltaRevCount * 1024.0 / deltaEventTime;
-                    RaisePropertyChange(nameof(InstantaneousCadence));
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -12,7 +13,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// ANT+ Managed Network Document – Muscle Oxygen Device Profile, Rev 1.1.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public class MuscleOxygen : AntDevice
+    public partial class MuscleOxygen : AntDevice
     {
         private byte eventCount;
 
@@ -90,17 +91,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         }
 
         /// <summary>Gets a value indicating whether UTC time required.</summary>
-        public bool UtcTimeRequired { get; private set; }
+        [ObservableProperty]
+        private bool utcTimeRequired;
         /// <summary>Gets a value indicating whether ANT-FS is supported.</summary>
-        public bool SupportsAntFs { get; private set; }
+        [ObservableProperty]
+        private bool supportsAntFs;
         /// <summary>Gets the measurement interval.</summary>
-        public MeasurementInterval Interval { get; private set; }
+        [ObservableProperty]
+        private MeasurementInterval interval;
         /// <summary>Gets the total hemoglobin concentration.</summary>
-        public TotalHemoglobin TotalHemoglobinConcentration { get; private set; }
+        [ObservableProperty]
+        private TotalHemoglobin totalHemoglobinConcentration;
         /// <summary>Gets the previous saturated hemoglobin.</summary>
-        public SaturatedHemoglobin PreviousSaturatedHemoglobin { get; private set; }
+        [ObservableProperty]
+        private SaturatedHemoglobin previousSaturatedHemoglobin;
         /// <summary>Gets the current saturated hemoglobin.</summary>
-        public SaturatedHemoglobin CurrentSaturatedHemoglobin { get; private set; }
+        [ObservableProperty]
+        private SaturatedHemoglobin currentSaturatedHemoglobin;
+
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
@@ -192,13 +200,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                             break;
                     }
                     CurrentSaturatedHemoglobin = shg;
-
-                    RaisePropertyChange(nameof(UtcTimeRequired));
-                    RaisePropertyChange(nameof(SupportsAntFs));
-                    RaisePropertyChange(nameof(Interval));
-                    RaisePropertyChange(nameof(TotalHemoglobinConcentration));
-                    RaisePropertyChange(nameof(PreviousSaturatedHemoglobin));
-                    RaisePropertyChange(nameof(CurrentSaturatedHemoglobin));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

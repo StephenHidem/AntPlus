@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,30 +22,18 @@ namespace SmallEarthTech.AntPlus
     /// 2 seconds. Consult the device profile documentation at https://www.thisisant.com for a device and review the channel
     /// period defined for master devices.
     /// </remarks>
-    public abstract class AntDevice : INotifyPropertyChanged, IDisposable
+    public abstract partial class AntDevice : ObservableObject, IDisposable
     {
         private readonly IAntChannel antChannel;
         private Timer timeoutTimer;
         private readonly int deviceTimeout;
 
         /// <summary>The logger for derived classes to use.</summary>
-        protected readonly ILogger _logger;
+        protected readonly ILogger logger;
 
         /// <summary>This field supplies the generic ANT+ image
         /// from the manifest resource stream.</summary>
         public readonly static Stream AntImage = typeof(AntDevice).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AntPlus.png");
-
-        /// <summary>Occurs when a property value changes.</summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Raises the property change event.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        protected void RaisePropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         /// <summary>Occurs when no messages have been received from the device within the specified timeout duration.</summary>
         /// <remarks>
@@ -58,7 +46,8 @@ namespace SmallEarthTech.AntPlus
         /// <value>
         ///   <c>true</c> if offline; otherwise, <c>false</c>.</value>
         /// <remarks>The <see cref="DeviceWentOffline" /> event is also invoked when the device has not received a message within the timeout specified for this device.</remarks>
-        public bool Offline { get; private set; }
+        [ObservableProperty]
+        private bool offline;
 
         /// <summary>Gets the channel identifier.</summary>
         /// <value>The channel identifier.</value>
@@ -77,7 +66,7 @@ namespace SmallEarthTech.AntPlus
         {
             ChannelId = channelId;
             this.antChannel = antChannel;
-            _logger = logger;
+            this.logger = logger;
             deviceTimeout = timeout;
             timeoutTimer = new Timer(TimeoutCallback);
             timeoutTimer.Change(deviceTimeout, Timeout.Infinite);
@@ -88,7 +77,6 @@ namespace SmallEarthTech.AntPlus
         {
             Dispose();
             Offline = true;
-            RaisePropertyChange(nameof(Offline));
             DeviceWentOffline?.Invoke(this, new EventArgs());
         }
 
@@ -96,7 +84,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">The received data page.</param>
         public virtual void Parse(byte[] dataPage)
         {
-            _logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
+            logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
             _ = timeoutTimer?.Change(deviceTimeout, Timeout.Infinite);
         }
 
@@ -129,7 +117,7 @@ namespace SmallEarthTech.AntPlus
             else
             {
                 ArgumentException ex = new ArgumentException("Invalid data page requested.", nameof(page));
-                _logger.LogError(ex, "AntDevice {AntDevice}", ToString());
+                logger.LogError(ex, "AntDevice {AntDevice}", ToString());
                 throw ex;
             }
         }
@@ -149,7 +137,7 @@ namespace SmallEarthTech.AntPlus
 
             if (ret != MessagingReturnCode.Pass)
             {
-                _logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), nameof(SendExtAcknowledgedMessage), ret);
+                logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), nameof(SendExtAcknowledgedMessage), ret);
             }
             return ret;
         }
@@ -157,7 +145,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         public void Dispose()
         {
-            _logger.LogDebug("Disposed {AntDevice}", ToString());
+            logger.LogDebug("Disposed {AntDevice}", ToString());
             timeoutTimer?.Dispose();
             timeoutTimer = null;
         }

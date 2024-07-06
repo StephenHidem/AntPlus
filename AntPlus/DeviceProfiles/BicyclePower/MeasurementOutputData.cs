@@ -25,7 +25,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             RightTorque = 10,
             /// <summary>The torque y axis</summary>
             TorqueYAxis = 11,
-            /// <summary>The torque outboardness</summary>
+            /// <summary>Torque with reference to middle of pedal about the x-axis.</summary>
             TorqueOutboardness = 12,
             /// <summary>The whole sensor force</summary>
             WholeSensorForce = 16,

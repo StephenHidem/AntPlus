@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -11,7 +12,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// This is the primary support class for fitness equipment sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public abstract class Equipment : AntDevice
+    public abstract partial class Equipment : AntDevice
     {
         /// <summary>
         /// The fitness equipment device class ID.
@@ -125,30 +126,38 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>This class supports fitness equipment general data pages.</summary>
-        public class GeneralDataPage
+        public partial class GeneralDataPage : ObservableObject
         {
             private bool isFirstDataMessage = true;
             private byte prevElapsedTime;
             private byte prevDistance;
 
             /// <summary>Gets the type of the equipment.</summary>
-            public FitnessEquipmentType EquipmentType { get; private set; }
+            [ObservableProperty]
+            private FitnessEquipmentType equipmentType;
             /// <summary>Gets the elapsed time.</summary>
-            public TimeSpan ElapsedTime { get; private set; }
+            [ObservableProperty]
+            private TimeSpan elapsedTime;
             /// <summary>Gets the distance traveled in meters. This property is only valid when
             /// <see cref="DistanceTraveledEnabled"/> is enabled.</summary>
-            public int DistanceTraveled { get; private set; }
+            [ObservableProperty]
+            private int distanceTraveled;
             /// <summary>Gets the instantaneous speed.</summary>
             /// <value>The instantaneous speed in meters per second.</value>
-            public double InstantaneousSpeed { get; private set; }
+            [ObservableProperty]
+            private double instantaneousSpeed;
             /// <summary>Gets the instantaneous heart rate.</summary>
-            public byte InstantaneousHeartRate { get; private set; }
+            [ObservableProperty]
+            private byte instantaneousHeartRate;
             /// <summary>Gets the heart rate source.</summary>
-            public HRDataSource HeartRateSource { get; private set; }
+            [ObservableProperty]
+            private HRDataSource heartRateSource;
             /// <summary>Gets the virtual speed flag.</summary>
-            public bool VirtualSpeedFlag { get; private set; }
+            [ObservableProperty]
+            private bool virtualSpeedFlag;
             /// <summary>Gets the distance traveled enabled flag.</summary>
-            public bool DistanceTraveledEnabled { get; private set; }
+            [ObservableProperty]
+            private bool distanceTraveledEnabled;
 
             /// <summary>Parses the specified data page.</summary>
             /// <param name="dataPage">The data page.</param>
@@ -194,14 +203,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>This class supports fitness equipment general settings pages.</summary>
-        public class GeneralSettingsPage
+        public partial class GeneralSettingsPage : ObservableObject
         {
             /// <summary>Gets the length of the cycle.</summary>
-            public double CycleLength { get; private set; }
+            [ObservableProperty]
+            private double cycleLength;
             /// <summary>Gets the incline.</summary>
-            public double Incline { get; private set; }
+            [ObservableProperty]
+            private double incline;
             /// <summary>Gets the resistance level.</summary>
-            public double ResistanceLevel { get; private set; }
+            [ObservableProperty]
+            private double resistanceLevel;
 
             internal void Parse(byte[] dataPage)
             {
@@ -212,17 +224,20 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>This class supports fitness equipment general metabolic pages.</summary>
-        public class GeneralMetabolicPage
+        public partial class GeneralMetabolicPage : ObservableObject
         {
             private bool isFirstDataMessage = true;
             private byte prevCal = 0;
 
             /// <summary>Gets the instantaneous metabolic equivalent.</summary>
-            public double InstantaneousMET { get; private set; }
+            [ObservableProperty]
+            private double instantaneousMET;
             /// <summary>Gets the caloric burn rate.</summary>
-            public double CaloricBurnRate { get; private set; }
+            [ObservableProperty]
+            private double caloricBurnRate;
             /// <summary>Gets the accumulated calories.</summary>
-            public int AccumulatedCalories { get; private set; }
+            [ObservableProperty]
+            private int accumulatedCalories;
 
             internal void Parse(byte[] dataPage)
             {
@@ -250,17 +265,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public event EventHandler LapToggled;
 
         /// <summary>Gets the equipment state.</summary>
-        public FEState State { get; private set; }
+        [ObservableProperty]
+        private FEState state;
         /// <summary>Gets the general data.</summary>
-        public GeneralDataPage GeneralData { get; private set; }
+        [ObservableProperty]
+        private GeneralDataPage generalData;
         /// <summary>Gets the general settings.</summary>
-        public GeneralSettingsPage GeneralSettings { get; private set; }
+        [ObservableProperty]
+        private GeneralSettingsPage generalSettings;
         /// <summary>Gets the general metabolic reports.</summary>
-        public GeneralMetabolicPage GeneralMetabolic { get; private set; }
+        [ObservableProperty]
+        private GeneralMetabolicPage generalMetabolic;
         /// <summary>Gets the maximum trainer resistance.</summary>
-        public ushort MaxTrainerResistance { get; private set; }
+        [ObservableProperty]
+        private ushort maxTrainerResistance;
         /// <summary>Gets the supported training modes.</summary>
-        public SupportedTrainingModes TrainingModes { get; private set; }
+        [ObservableProperty]
+        private SupportedTrainingModes trainingModes;
+
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
@@ -292,7 +314,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.GeneralFEData:
                     HandleFEState(dataPage[7]);
                     GeneralData.Parse(dataPage);
-                    RaisePropertyChange(nameof(GeneralData));
 
                     // check for lap toggle
                     if (lapToggleState != ((dataPage[7] & 0x80) == 0x80))
@@ -304,19 +325,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.GeneralSettings:
                     HandleFEState(dataPage[7]);
                     GeneralSettings.Parse(dataPage);
-                    RaisePropertyChange(nameof(GeneralSettings));
                     break;
                 case DataPage.GeneralMetabolicData:
                     HandleFEState(dataPage[7]);
                     GeneralMetabolic.Parse(dataPage);
-                    RaisePropertyChange(nameof(GeneralMetabolic));
                     break;
                 // handle specific FE pages
                 case DataPage.FECapabilities:
                     MaxTrainerResistance = BitConverter.ToUInt16(dataPage, 5);
                     TrainingModes = (SupportedTrainingModes)dataPage[7];
-                    RaisePropertyChange(nameof(MaxTrainerResistance));
-                    RaisePropertyChange(nameof(TrainingModes));
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);
@@ -336,12 +353,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 if (State != (FEState)st)
                 {
                     State = (FEState)st;
-                    RaisePropertyChange(nameof(State));
                 }
             }
             else
             {
-                _logger.LogWarning("Invalid state. Received {State}", st);
+                logger.LogWarning("Invalid state. Received {State}", st);
             }
         }
 

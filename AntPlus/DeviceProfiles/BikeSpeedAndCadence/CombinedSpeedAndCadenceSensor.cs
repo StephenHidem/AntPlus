@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -10,7 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// This class supports combined speed and cadence sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public class CombinedSpeedAndCadenceSensor : AntDevice
+    public partial class CombinedSpeedAndCadenceSensor : AntDevice
     {
         /// <summary>
         /// The CombinedSpeedAndCadenceSensor device class ID.
@@ -25,15 +26,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         private ushort prevCadenceRevCount;
 
         /// <summary>Gets the instantaneous cadence in revolutions per minute.</summary>
-        public double InstantaneousCadence { get; private set; }
-        /// <summary>
-        /// The wheel circumference in meters. The default is 2.2 meters.
-        /// </summary>
-        public double WheelCircumference { get; set; } = 2.2;
+        [ObservableProperty]
+        private double instantaneousCadence;
+        /// <summary>The wheel circumference in meters. The default is 2.2 meters.</summary>
+        [ObservableProperty]
+        private double wheelCircumference = 2.2;
         /// <summary>Gets the instantaneous speed in meters per second.</summary>
-        public double InstantaneousSpeed { get; private set; }
+        [ObservableProperty]
+        private double instantaneousSpeed;
         /// <summary>Gets the accumulated distance in meters.</summary>
-        public double AccumulatedDistance { get; private set; }
+        [ObservableProperty]
+        private double accumulatedDistance;
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(CombinedSpeedAndCadenceSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.SpeedAndCadence.png");
 
@@ -87,7 +90,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                 InstantaneousSpeed = WheelCircumference * deltaRevCount * 1024.0 / deltaEventTime;
                 AccumulatedDistance += WheelCircumference * deltaRevCount;
             }
-            RaisePropertyChange(string.Empty);
         }
 
         /// <inheritdoc/>

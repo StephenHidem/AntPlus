@@ -5,17 +5,16 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading.Tasks;
 
-namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
+namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     [TestClass]
     public class CrankTorqueFrequencySensorTests
     {
         private MockRepository mockRepository;
 
-        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private Mock<ILogger<BicyclePower>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -23,22 +22,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
-        }
-
-        private Bicycle CreateBicyclePower()
-        {
-            return new Bicycle(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+            mockLogger = mockRepository.Create<ILogger<BicyclePower>>(MockBehavior.Loose);
         }
 
         private CrankTorqueFrequencySensor CreateCrankTorqueFrequencySensor()
         {
-            mockBicycle = CreateBicyclePower();
-            mockBicycle.Parse(new byte[8] { 32, 0, 0, 0, 0, 0, 0, 0 });
-            return mockBicycle.CTFSensor;
+            byte[] page = new byte[8] { (byte)DataPage.CrankTorqueFrequency, 0, 0, 0, 0, 0, 0, 0 };
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object) as CrankTorqueFrequencySensor;
         }
 
         [TestMethod]
@@ -49,7 +39,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 0x01, 0x10, 0x01, 0xFF, 0xFF, 0xFF, 0x11, 0x22 };
 
             // Act
-            mockBicycle.Parse(
+            crankTorqueFrequencySensor.Parse(
                 dataPage);
 
             // Assert
@@ -65,6 +55,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
             // Act
             crankTorqueFrequencySensor.Parse(
+                new byte[8] { 0x20, 0, 0, 0, 0, 0, 0, 0 });
+            crankTorqueFrequencySensor.Parse(
                 dataPage);
 
             // Assert
@@ -79,6 +71,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01 };
 
             // Act
+            crankTorqueFrequencySensor.Parse(
+                new byte[8] { 0x20, 0, 0, 0, 0, 0, 0, 0 });
             crankTorqueFrequencySensor.Parse(
                 dataPage);
 

@@ -4,17 +4,16 @@ using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor;
 
-namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
+namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     [TestClass]
     public class StandardPowerSensorTests
     {
         private MockRepository mockRepository;
 
-        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private Mock<ILogger<BicyclePower>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,22 +21,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
-        }
-
-        private Bicycle CreateBicyclePower()
-        {
-            return new Bicycle(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+            mockLogger = mockRepository.Create<ILogger<BicyclePower>>(MockBehavior.Loose);
         }
 
         private StandardPowerSensor CreateStandardPowerSensor()
         {
-            mockBicycle = CreateBicyclePower();
-            mockBicycle.Parse(new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 });
-            return mockBicycle.PowerSensor;
+            byte[] page = new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object) as StandardPowerSensor;
         }
 
         [TestMethod]
@@ -100,6 +90,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { 16, 1, 0, 0, 0x11, 0x22, 0, 0 };
 
             // Act
+            standardPowerSensor.Parse(
+                new byte[8] { 16, 0, 0, 0, 0, 0, 0, 0 });
             standardPowerSensor.Parse(
                 dataPage);
 

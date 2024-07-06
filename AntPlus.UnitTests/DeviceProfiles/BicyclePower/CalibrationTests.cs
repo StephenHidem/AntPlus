@@ -7,17 +7,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Calibration;
 
-namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
+namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     [TestClass]
     public class CalibrationTests
     {
         private MockRepository mockRepository;
 
-        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private Mock<ILogger<BicyclePower>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -25,21 +24,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<BicyclePower>>(MockBehavior.Loose);
         }
 
-        private Bicycle CreateBicyclePower()
+        private StandardPowerSensor CreateStandardPowerSensor()
         {
-            return new Bicycle(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
-        }
-
-        private Calibration CreateCalibration()
-        {
-            mockBicycle = CreateBicyclePower();
-            return mockBicycle.Calibration;
+            byte[] page = new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object) as StandardPowerSensor;
         }
 
         [TestMethod]
@@ -50,16 +41,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_AutoZeroSupport_ExpectedAutoZeroSupport(int config, bool supported, AutoZero status)
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = new byte[8] { 0x01, 0x12, (byte)config, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle.Parse(
+            sensor.Calibration.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(supported, calibration.AutoZeroSupported);
-            Assert.AreEqual(status, calibration.AutoZeroStatus);
+            Assert.AreEqual(supported, sensor.Calibration.AutoZeroSupported);
+            Assert.AreEqual(status, sensor.Calibration.AutoZeroStatus);
         }
 
         [TestMethod]
@@ -72,16 +63,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_GeneralCalibrationResponse_ExpectedResponse(byte[] dataPage, CalibrationResponse response, AutoZero autoZero)
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(response, calibration.CalibrationStatus);
-            Assert.AreEqual(autoZero, calibration.AutoZeroStatus);
-            Assert.IsTrue(calibration.CalibrationData == 0x1122);
+            Assert.AreEqual(response, sensor.Calibration.CalibrationStatus);
+            Assert.AreEqual(autoZero, sensor.Calibration.AutoZeroStatus);
+            Assert.IsTrue(sensor.Calibration.CalibrationData == 0x1122);
         }
 
         [TestMethod]
@@ -90,15 +81,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_CustomCalibration_ExpectedCustomParameters(int calID)
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = new byte[8] { 1, (byte)calID, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(calibration.CustomCalibrationParameters.SequenceEqual(dataPage.Skip(2).ToArray()));
+            Assert.IsTrue(sensor.Calibration.CustomCalibrationParameters.SequenceEqual(dataPage.Skip(2).ToArray()));
         }
 
         [TestMethod]
@@ -110,15 +101,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_MeasurementOutputData_ExpectedDataType(int val, MeasurementOutputData.DataType expDataType)
         {
             // Arrange
-            var calibration = CreateCalibration();
-            byte[] dataPage = new byte[8] { 3, 0x00, (byte)val, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var sensor = CreateStandardPowerSensor();
+            byte[] dataPage = new byte[8] { 3, 0x01, (byte)val, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expDataType, calibration.Measurements[0].MeasurementType);
+            Assert.AreEqual(expDataType, sensor.Calibration.Measurements[0].MeasurementType);
         }
 
         [TestMethod]
@@ -129,18 +120,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_MeasurementOutputData_ExpectedScaledMeasurement(int scale, int measurement)
         {
             // Arrange
-            var calibration = CreateCalibration();
-            byte[] dataPage = new byte[8] { 3, 0x00, 0x00, (byte)scale, 0x00, 0x00, 0x00, 0x00 };
+            var sensor = CreateStandardPowerSensor();
+            byte[] dataPage = new byte[8] { 3, 0x01, 0x00, (byte)scale, 0x00, 0x00, 0x00, 0x00 };
             dataPage[6] = BitConverter.GetBytes((short)measurement)[0];
             dataPage[7] = BitConverter.GetBytes((short)measurement)[1];
             double expMeasurement = measurement * Math.Pow(2, scale);
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expMeasurement, calibration.Measurements[0].Measurement);
+            Assert.AreEqual(expMeasurement, sensor.Calibration.Measurements[0].Measurement);
         }
 
         [TestMethod]
@@ -150,34 +141,34 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_MeasurementOutputData_ExpectedTimestamp(int timeStamp, double timeSpan)
         {
             // Arrange
-            var calibration = CreateCalibration();
-            byte[] dataPage = new byte[8] { 3, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var sensor = CreateStandardPowerSensor();
+            byte[] dataPage = new byte[8] { 3, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             dataPage[4] = BitConverter.GetBytes((ushort)timeStamp)[0];
             dataPage[5] = BitConverter.GetBytes((ushort)timeStamp)[1];
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(timeSpan, calibration.Measurements[0].Timestamp);
+            Assert.AreEqual(timeSpan, sensor.Calibration.Measurements[0].Timestamp);
         }
 
         [TestMethod]
         public async Task RequestManualCalibration_Request_ExpectedMessage()
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await calibration.RequestManualCalibration();
+            var result = await sensor.Calibration.RequestManualCalibration();
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.InProgress, calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.InProgress, sensor.Calibration.CalibrationStatus);
             mockRepository.VerifyAll();
         }
 
@@ -188,18 +179,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public async Task SetAutoZeroConfiguration_StateUnderTest_ExpectedBehavior(AutoZero autoZero)
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAB, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await calibration.SetAutoZeroConfiguration(
+            var result = await sensor.Calibration.SetAutoZeroConfiguration(
                 autoZero);
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.Unknown, calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.Unknown, sensor.Calibration.CalibrationStatus);
             mockRepository.VerifyAll();
         }
 
@@ -207,17 +198,17 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public async Task RequestCustomParameters_Request_ExpectedMessage()
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xBA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await calibration.RequestCustomParameters();
+            var result = await sensor.Calibration.RequestCustomParameters();
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.InProgress, calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.InProgress, sensor.Calibration.CalibrationStatus);
             mockRepository.VerifyAll();
         }
 
@@ -225,19 +216,19 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public async Task SetCustomParameters_Parameters_ExpectedMessage()
         {
             // Arrange
-            var calibration = CreateCalibration();
+            var sensor = CreateStandardPowerSensor();
             byte[] customParameters = new byte[] { 0x01, 0xBC, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, customParameters,
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await calibration.SetCustomParameters(
+            var result = await sensor.Calibration.SetCustomParameters(
                 customParameters.Skip(2).ToArray());
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.InProgress, calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.InProgress, sensor.Calibration.CalibrationStatus);
             mockRepository.VerifyAll();
         }
     }

@@ -4,17 +4,16 @@ using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System;
 
-namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
+namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     [TestClass]
     public class StandardWheelTorqueSensorTests
     {
         private MockRepository mockRepository;
 
-        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private Mock<ILogger<BicyclePower>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,30 +21,22 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<BicyclePower>>(MockBehavior.Loose);
         }
 
-        private Bicycle CreateBicyclePower()
+        private StandardPowerSensor CreateStandardWheelTorqueSensor()
         {
-            return new Bicycle(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
-        }
-
-        private StandardWheelTorqueSensor CreateStandardWheelTorqueSensor()
-        {
-            mockBicycle = CreateBicyclePower();
-            mockBicycle.Parse(new byte[8] { (byte)DataPage.WheelTorque, 0, 0, 0, 0, 0, 0, 0 });
-            return mockBicycle.WheelTorqueSensor;
+            byte[] page = new byte[8] { (byte)DataPage.WheelTorque, 0, 0, 0, 0, 0, 0, 0 };
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object) as StandardPowerSensor;
         }
 
         [TestMethod]
         public void Parse_WheelTorque_ExpectedTorqueValues()
         {
             // Arrange
-            var standardWheelTorqueSensor = CreateStandardWheelTorqueSensor();
-            byte expInstCad = 60;
+            var sensor = CreateStandardWheelTorqueSensor();
+            var wheelTorqueSensor = sensor.TorqueSensor as StandardWheelTorqueSensor;
+
             double expAvgSpeed = 15;
             double expAvgPower = 178;
             double expAvgAngVel = 2 * Math.PI / (0x439 / 2048.0);
@@ -54,16 +45,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             byte[] dataPage = new byte[8] { (byte)DataPage.WheelTorque, 1, 1, 60, 0x39, 0x04, 0xDE, 0x01 };
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expDistance, standardWheelTorqueSensor.AccumulatedDistance);
-            Assert.AreEqual(expAvgSpeed, standardWheelTorqueSensor.AverageSpeed, 0.01);
-            Assert.AreEqual(expInstCad, standardWheelTorqueSensor.InstantaneousCadence);
-            Assert.AreEqual(expAvgAngVel, standardWheelTorqueSensor.AverageAngularVelocity);
-            Assert.AreEqual(expAvgTorq, standardWheelTorqueSensor.AverageTorque);
-            Assert.AreEqual(expAvgPower, standardWheelTorqueSensor.AveragePower, 0.5);
+            Assert.AreEqual(expDistance, wheelTorqueSensor.AccumulatedDistance, 0.001);
+            Assert.AreEqual(expAvgSpeed, wheelTorqueSensor.AverageSpeed, 0.01);
+            Assert.AreEqual(expAvgAngVel, wheelTorqueSensor.AverageAngularVelocity, 0.001);
+            Assert.AreEqual(expAvgTorq, wheelTorqueSensor.AverageTorque, 0.001);
+            Assert.AreEqual(expAvgPower, wheelTorqueSensor.AveragePower, 0.5);
             mockRepository.VerifyAll();
         }
     }

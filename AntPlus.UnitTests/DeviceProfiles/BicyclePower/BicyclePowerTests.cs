@@ -3,7 +3,7 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 
-namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
+namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     [TestClass]
     public class BicyclePowerTests
@@ -12,7 +12,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
 
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private Mock<ILogger<BicyclePower>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -20,60 +20,45 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger<Bicycle>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<BicyclePower>>(MockBehavior.Loose);
         }
 
-        private Bicycle CreateBicyclePower()
+        private BicyclePower CreateBicyclePower(DataPage dataPage = DataPage.PowerOnly)
         {
-            return new Bicycle(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
+            byte[] page = new byte[8] { (byte)dataPage, 0, 0, 0, 0, 0, 0, 0 };
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object);
         }
 
         [TestMethod]
-        [DataRow(16, SensorType.Power)]
-        [DataRow(17, SensorType.WheelTorque)]
-        [DataRow(18, SensorType.CrankTorque)]
-        [DataRow(32, SensorType.CrankTorqueFrequency)]
-        public void Parse_CreateSensor_ExpectedSensor(int page, SensorType sensorType)
+        [DataRow(DataPage.PowerOnly)]
+        [DataRow(DataPage.WheelTorque)]
+        [DataRow(DataPage.CrankTorque)]
+        [DataRow(DataPage.CrankTorqueFrequency)]
+        public void Parse_CreateSensor_ExpectedSensor(DataPage page)
         {
             // Arrange
-            var bicyclePower = CreateBicyclePower();
-            byte[] dataPage = new byte[8];
-            dataPage[0] = (byte)page;
+            var bicyclePower = CreateBicyclePower(page);
+            //byte[] dataPage = new byte[8];
+            //dataPage[0] = (byte)page;
 
             // Act
-            bicyclePower.Parse(
-                dataPage);
+            //bicyclePower.Parse(
+            //    dataPage);
 
             // Assert
-            Assert.AreEqual(sensorType, bicyclePower.Sensor);
-            switch (sensorType)
+            switch (page)
             {
-                case SensorType.Power:
-                    Assert.IsNotNull(bicyclePower.PowerSensor);
-                    Assert.IsNull(bicyclePower.WheelTorqueSensor);
-                    Assert.IsNull(bicyclePower.CrankTorqueSensor);
-                    Assert.IsNull(bicyclePower.CTFSensor);
+                case DataPage.PowerOnly:
+                    Assert.IsInstanceOfType<StandardPowerSensor>(bicyclePower);
                     break;
-                case SensorType.WheelTorque:
-                    Assert.IsNotNull(bicyclePower.PowerSensor);
-                    Assert.IsNotNull(bicyclePower.WheelTorqueSensor);
-                    Assert.IsNull(bicyclePower.CrankTorqueSensor);
-                    Assert.IsNull(bicyclePower.CTFSensor);
+                case DataPage.WheelTorque:
+                    Assert.IsInstanceOfType<StandardPowerSensor>(bicyclePower);
                     break;
-                case SensorType.CrankTorque:
-                    Assert.IsNotNull(bicyclePower.PowerSensor);
-                    Assert.IsNotNull(bicyclePower.CrankTorqueSensor);
-                    Assert.IsNull(bicyclePower.WheelTorqueSensor);
-                    Assert.IsNull(bicyclePower.CTFSensor);
+                case DataPage.CrankTorque:
+                    Assert.IsInstanceOfType<StandardPowerSensor>(bicyclePower);
                     break;
-                case SensorType.CrankTorqueFrequency:
-                    Assert.IsNull(bicyclePower.PowerSensor);
-                    Assert.IsNotNull(bicyclePower.CTFSensor);
-                    Assert.IsNull(bicyclePower.WheelTorqueSensor);
-                    Assert.IsNull(bicyclePower.CrankTorqueSensor);
+                case DataPage.CrankTorqueFrequency:
+                    Assert.IsInstanceOfType<CrankTorqueFrequencySensor>(bicyclePower);
                     break;
                 default:
                     Assert.Fail();

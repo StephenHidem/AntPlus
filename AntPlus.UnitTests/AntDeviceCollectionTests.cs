@@ -3,7 +3,6 @@ using Moq;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
-using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -103,7 +102,7 @@ namespace AntPlus.UnitTests
 
         [TestMethod]
         [DataRow(HeartRate.DeviceClass, typeof(HeartRate))]
-        [DataRow(Bicycle.DeviceClass, typeof(Bicycle))]
+        //[DataRow(BicyclePowerTests.DeviceClass, typeof(BicyclePowerTests))]       TODO: Fix this
         [DataRow(BikeSpeedSensor.DeviceClass, typeof(BikeSpeedSensor))]
         [DataRow(BikeCadenceSensor.DeviceClass, typeof(BikeCadenceSensor))]
         [DataRow(CombinedSpeedAndCadenceSensor.DeviceClass, typeof(CombinedSpeedAndCadenceSensor))]

@@ -3,17 +3,16 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 
-namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
+namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     [TestClass]
     public class TorqueEffectivenessAndPedalSmoothnessTests
     {
         private MockRepository mockRepository;
 
-        private Bicycle mockBicycle;
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Bicycle>> mockLogger;
+        private Mock<ILogger<BicyclePower>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -21,22 +20,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
             mockRepository = new MockRepository(MockBehavior.Loose);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<Bicycle>>();
+            mockLogger = mockRepository.Create<ILogger<BicyclePower>>();
         }
 
-        private Bicycle CreateBicyclePower()
+        private StandardPowerSensor CreateStandardPowerSensor()
         {
-            return new Bicycle(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object);
-        }
-
-        private TorqueEffectivenessAndPedalSmoothness CreateTorqueEffectivenessAndPedalSmoothness()
-        {
-            mockBicycle = CreateBicyclePower();
-            mockBicycle.Parse(new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 });
-            return mockBicycle.PowerSensor.TorqueEffectiveness;
+            byte[] page = new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object) as StandardPowerSensor;
         }
 
         [TestMethod]
@@ -46,16 +36,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_TorqueEffectivenessAndPedalSmoothness_ExpectedTorqueEffectiveness(int value, double expPct)
         {
             // Arrange
-            var torqueEffectiveness = CreateTorqueEffectivenessAndPedalSmoothness();
+            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = new byte[8] { (byte)DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, (byte)value, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expPct, torqueEffectiveness.LeftTorqueEffectiveness);
-            Assert.AreEqual(expPct, torqueEffectiveness.RightTorqueEffectiveness);
+            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.LeftTorqueEffectiveness);
+            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.RightTorqueEffectiveness);
         }
 
         [TestMethod]
@@ -66,17 +56,17 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePower
         public void Parse_TorqueEffectivenessAndPedalSmoothness_ExpectedPedalSmoothness(int left, int right, double expPct, bool expCombined)
         {
             // Arrange
-            var torqueEffectiveness = CreateTorqueEffectivenessAndPedalSmoothness();
+            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = new byte[8] { (byte)DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, 0xFF, 0xFF, (byte)left, (byte)right, 0xFF, 0xFF };
 
             // Act
-            mockBicycle.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expPct, torqueEffectiveness.LeftPedalSmoothness);
-            Assert.AreEqual(expPct, torqueEffectiveness.RightPedalSmoothness);
-            Assert.AreEqual(expCombined, torqueEffectiveness.CombinedPedalSmoothness);
+            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.LeftPedalSmoothness);
+            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.RightPedalSmoothness);
+            Assert.AreEqual(expCombined, sensor.TorqueEffectiveness.CombinedPedalSmoothness);
         }
     }
 }

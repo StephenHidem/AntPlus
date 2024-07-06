@@ -48,8 +48,8 @@ namespace WpfUsbStickApp
                     HeartRateWindow heartRateWindow = new((HeartRate)antDevice);
                     heartRateWindow.Show();
                     break;
-                case Bicycle.DeviceClass:
-                    BicyclePowerWindow bpWindow = new((Bicycle)antDevice);
+                case BicyclePower.DeviceClass:
+                    BicyclePowerWindow bpWindow = new((BicyclePower)antDevice);
                     bpWindow.Show();
                     break;
                 case BikeSpeedSensor.DeviceClass:

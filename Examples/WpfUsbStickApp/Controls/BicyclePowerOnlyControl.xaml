@@ -4,13 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUsbStickApp.Controls"
-             xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
-             xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=AntPlus"
-             d:DataContext="{d:DesignInstance Type=dp:Bicycle}"
+             xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
+             d:DataContext="{d:DesignInstance Type=ant:StandardPowerSensor}"
              mc:Ignorable="d" Background="White">
     <Grid>
         <GroupBox Header="Power">
-            <StackPanel DataContext="{Binding PowerSensor}">
+            <StackPanel>
                 <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
                 <TextBlock Text="{Binding PedalContribution, StringFormat='Pedal Contribution: {0}'}"/>
                 <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>

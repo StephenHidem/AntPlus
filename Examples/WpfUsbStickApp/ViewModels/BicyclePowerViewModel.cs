@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -7,32 +6,44 @@ using WpfUsbStickApp.Controls;
 
 namespace WpfUsbStickApp.ViewModels
 {
-    public partial class BicyclePowerViewModel : ObservableObject
+    public partial class BicyclePowerViewModel
     {
-        public Bicycle BicyclePower { get; }
-        public SensorType SensorType => BicyclePower.Sensor;
+        public BicyclePower BicyclePower { get; }
 
         public UserControl? BicyclePowerControl { get; }
 
-        public BicyclePowerViewModel(Bicycle bicyclePower)
+        public BicyclePowerViewModel(BicyclePower bicyclePower)
         {
-            BicyclePower = bicyclePower;
-
-            switch (bicyclePower.Sensor)
+            switch (bicyclePower)
             {
-                case SensorType.Power:
-                    BicyclePowerControl = new BicyclePowerOnlyControl(bicyclePower);
+                case StandardPowerSensor:
+                    StandardPowerSensor sensor = (StandardPowerSensor)bicyclePower;
+                    BicyclePower = sensor;
+                    if (sensor.TorqueSensor == null)
+                    {
+                        BicyclePowerControl = new BicyclePowerOnlyControl(sensor);
+                    }
+                    else
+                    {
+                        switch (sensor.TorqueSensor)
+                        {
+                            case StandardCrankTorqueSensor:
+                                BicyclePowerControl = new BicycleCrankTorqueControl(sensor);
+                                break;
+                            case StandardWheelTorqueSensor:
+                                BicyclePowerControl = new BicycleWheelTorqueControl(sensor);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     break;
-                case SensorType.WheelTorque:
-                    BicyclePowerControl = new BicycleWheelTorqueControl(bicyclePower);
-                    break;
-                case SensorType.CrankTorque:
-                    BicyclePowerControl = new BicycleCrankTorqueControl(bicyclePower);
-                    break;
-                case SensorType.CrankTorqueFrequency:
-                    BicyclePowerControl = new CTFControl(bicyclePower.CTFSensor);
+                case CrankTorqueFrequencySensor:
+                    BicyclePower = (CrankTorqueFrequencySensor)bicyclePower;
+                    BicyclePowerControl = new CTFControl((CrankTorqueFrequencySensor)bicyclePower);
                     break;
                 default:
+                    BicyclePowerControl = null;
                     break;
             }
         }
@@ -42,20 +53,20 @@ namespace WpfUsbStickApp.ViewModels
 
         [RelayCommand(CanExecute = nameof(CanSetAutoZeroConfig))]
         private async Task SetAutoZeroConfig() => await BicyclePower.Calibration.SetAutoZeroConfiguration(Calibration.AutoZero.On);
-        private bool CanSetAutoZeroConfig() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+        private bool CanSetAutoZeroConfig() => BicyclePower is not CrankTorqueFrequencySensor;
 
         [RelayCommand(CanExecute = nameof(CanGetCustomCalParameters))]
         private async Task GetCustomCalParameters() => await BicyclePower.Calibration.RequestCustomParameters();
-        private bool CanGetCustomCalParameters() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+        private bool CanGetCustomCalParameters() => BicyclePower is not CrankTorqueFrequencySensor;
 
         [RelayCommand(CanExecute = nameof(CanSetCustomCalParameters))]
         private async Task SetCustomCalParameters() => await BicyclePower.Calibration.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
-        private bool CanSetCustomCalParameters() => BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
+        private bool CanSetCustomCalParameters() => BicyclePower is not CrankTorqueFrequencySensor;
 
         [RelayCommand]
-        private async Task GetParameters(Subpage subpage) => await BicyclePower.PowerSensor.Parameters.GetParameters(subpage);
+        private async Task GetParameters(Subpage subpage) => await ((StandardPowerSensor)BicyclePower).Parameters.GetParameters(subpage);
 
         [RelayCommand]
-        private async Task SetCrankLength(string length) => await BicyclePower.PowerSensor.Parameters.SetCrankLength(double.Parse(length));
+        private async Task SetCrankLength(string length) => await ((StandardPowerSensor)BicyclePower).Parameters.SetCrankLength(double.Parse(length));
     }
 }

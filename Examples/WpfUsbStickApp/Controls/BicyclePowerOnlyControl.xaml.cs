@@ -8,15 +8,12 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class BicyclePowerOnlyControl : UserControl
     {
-        public BicyclePowerOnlyControl(Bicycle bicyclePower)
+        public BicyclePowerOnlyControl(StandardPowerSensor sensor)
         {
             InitializeComponent();
-            DataContext = bicyclePower;
+            DataContext = sensor;
         }
 
-        public BicyclePowerOnlyControl()
-        {
-            InitializeComponent();
-        }
+        public BicyclePowerOnlyControl() { InitializeComponent(); }
     }
 }

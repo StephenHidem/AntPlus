@@ -10,7 +10,7 @@ namespace WpfUsbStickApp.Views
     /// </summary>
     public partial class BicyclePowerWindow : Window
     {
-        public BicyclePowerWindow(Bicycle bicyclePower)
+        public BicyclePowerWindow(BicyclePower bicyclePower)
         {
             InitializeComponent();
             BindingOperations.EnableCollectionSynchronization(bicyclePower.Calibration.Measurements, bicyclePower.Calibration.CollectionLock);

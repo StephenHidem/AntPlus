@@ -12,7 +12,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// This is the primary support class for fitness equipment sensors.
     /// </summary>
     /// <seealso cref="AntDevice" />
-    public abstract partial class Equipment : AntDevice
+    public abstract partial class FitnessEquipment : AntDevice
     {
         /// <summary>
         /// The fitness equipment device class ID.
@@ -286,16 +286,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(Equipment).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.FE-C.png");
+        public override Stream DeviceImageStream => typeof(FitnessEquipment).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.FE-C.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Equipment"/> class.
+        /// Initializes a new instance of the <see cref="FitnessEquipment"/> class.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public Equipment(ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
             GeneralData = new GeneralDataPage();
@@ -307,7 +307,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
-
             switch ((DataPage)dataPage[0])
             {
                 // handle general pages
@@ -443,13 +442,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Gets the fitness equipment if the equipment type is known.</summary>
+        /// <remarks>
+        /// The specific fitness equipment type can be determined from the general data page or the FE specific data pages. Null will be
+        /// returned for all other pages. Therefore, callers of this method need to check for a null return type.
+        /// </remarks>
         /// <param name="dataPage">The data page.</param>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">The ant channel.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="timeout">The timeout in milliseconds.</param>
         /// <returns>One of the known fitness equipment classes if known, otherwise null.</returns>
-        public static Equipment GetEquipment(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000)
+        public static FitnessEquipment GetFitnessEquipment(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000)
         {
             switch ((DataPage)dataPage[0])
             {

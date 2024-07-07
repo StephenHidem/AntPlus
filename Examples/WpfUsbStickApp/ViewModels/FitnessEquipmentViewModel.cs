@@ -11,7 +11,7 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal partial class FitnessEquipmentViewModel : ObservableObject
     {
-        public Equipment FitnessEquipment { get; }
+        public FitnessEquipment FitnessEquipment { get; }
         public UserControl? FeControl { get; }
 
         [ObservableProperty]
@@ -20,7 +20,7 @@ namespace WpfUsbStickApp.ViewModels
         [ObservableProperty]
         private TimeSpan lapSplitTime;
 
-        public FitnessEquipmentViewModel(Equipment fitnessEquipment)
+        public FitnessEquipmentViewModel(FitnessEquipment fitnessEquipment)
         {
             FitnessEquipment = fitnessEquipment;
             TrainingModes = fitnessEquipment.TrainingModes.ToString().Split(',');
@@ -60,7 +60,7 @@ namespace WpfUsbStickApp.ViewModels
             {
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    TrainingModes = ((Equipment)sender).TrainingModes.ToString().Split(',');
+                    TrainingModes = ((FitnessEquipment)sender).TrainingModes.ToString().Split(',');
                 });
             }
         }
@@ -69,7 +69,7 @@ namespace WpfUsbStickApp.ViewModels
         {
             if (sender != null)
             {
-                LapSplitTime = ((Equipment)sender).GeneralData.ElapsedTime;
+                LapSplitTime = ((FitnessEquipment)sender).GeneralData.ElapsedTime;
             }
         }
 

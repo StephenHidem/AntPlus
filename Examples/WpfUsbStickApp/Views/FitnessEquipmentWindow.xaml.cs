@@ -9,7 +9,7 @@ namespace WpfUsbStickApp.Views
     /// </summary>
     public partial class FitnessEquipmentWindow : Window
     {
-        public FitnessEquipmentWindow(Equipment fitnessEquipment)
+        public FitnessEquipmentWindow(FitnessEquipment fitnessEquipment)
         {
             InitializeComponent();
             DataContext = new FitnessEquipmentViewModel(fitnessEquipment);

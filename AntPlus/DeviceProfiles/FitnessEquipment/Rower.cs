@@ -8,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the rower fitness equipment type.
     /// </summary>
-    public partial class Rower : Equipment
+    public partial class Rower : FitnessEquipment
     {
         private bool isFirstDataMessage = true;
         private byte prevStroke;
@@ -18,7 +18,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline" />.</param>
-        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
         }
 
@@ -51,6 +51,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
             if ((DataPage)dataPage[0] == DataPage.RowerData)
             {
                 HandleFEState(dataPage[7]);
@@ -67,7 +68,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
             }
-            else { base.Parse(dataPage); }
         }
 
         /// <inheritdoc />

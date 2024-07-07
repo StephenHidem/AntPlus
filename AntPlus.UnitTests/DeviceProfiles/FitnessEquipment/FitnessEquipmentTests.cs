@@ -3,7 +3,7 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Equipment;
+using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
@@ -14,7 +14,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Equipment>> mockLogger;
+        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,13 +22,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<Equipment>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>>(MockBehavior.Loose);
         }
 
-        private Equipment CreateFitnessEquipment(FitnessEquipmentType equipmentType = FitnessEquipmentType.Treadmill)
+        private SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment CreateFitnessEquipment(FitnessEquipmentType equipmentType = FitnessEquipmentType.Treadmill)
         {
             byte[] dataPage = new byte[8] { (byte)DataPage.GeneralFEData, (byte)equipmentType, 0, 0, 0, 0, 0, 0 };
-            return Equipment.GetEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
+            return GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             byte[] dataPage = new byte[8] { (byte)pageNumber, 0, 0, 0, 0, 0, 0, 0 };
 
             // Act
-            var fitnessEquipment = Equipment.GetEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
+            var fitnessEquipment = GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
 
             // Assert
             switch (equipmentType)

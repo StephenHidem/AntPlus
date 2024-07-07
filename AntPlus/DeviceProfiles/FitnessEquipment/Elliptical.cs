@@ -8,7 +8,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <summary>
     /// This class supports the elliptical fitness equipment type.
     /// </summary>
-    public partial class Elliptical : Equipment
+    public partial class Elliptical : FitnessEquipment
     {
         private bool isFirstDataMessage = true;
         private byte prevPos;
@@ -19,7 +19,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline" />.</param>
-        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<Equipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
         }
 
@@ -58,6 +58,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
+            base.Parse(dataPage);
             if ((DataPage)dataPage[0] == DataPage.EllipticalData)
             {
                 HandleFEState(dataPage[7]);
@@ -76,7 +77,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
             }
-            else { base.Parse(dataPage); }
         }
 
         /// <inheritdoc />

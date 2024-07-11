@@ -44,16 +44,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.LeftTorqueEffectiveness);
-            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.RightTorqueEffectiveness);
+            Assert.AreEqual(expPct, sensor.LeftTorqueEffectiveness);
+            Assert.AreEqual(expPct, sensor.RightTorqueEffectiveness);
         }
 
         [TestMethod]
-        [DataRow(0, 0, 0, false)]
-        [DataRow(200, 200, 100, false)]
-        [DataRow(0xFF, 0xFF, double.NaN, false)]
-        [DataRow(100, 0xFE, 50, true)]
-        public void Parse_TorqueEffectivenessAndPedalSmoothness_ExpectedPedalSmoothness(int left, int right, double expPct, bool expCombined)
+        [DataRow(0, 0, 0, 0, false)]
+        [DataRow(200, 200, 100, 100, false)]
+        [DataRow(0xFF, 0xFF, double.NaN, double.NaN, false)]
+        [DataRow(100, 0xFE, 50, double.NaN, true)]
+        public void Parse_TorqueEffectivenessAndPedalSmoothness_ExpectedPedalSmoothness(int left, int right, double expLeftPct, double expRightPct, bool expCombined)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
@@ -64,9 +64,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.LeftPedalSmoothness);
-            Assert.AreEqual(expPct, sensor.TorqueEffectiveness.RightPedalSmoothness);
-            Assert.AreEqual(expCombined, sensor.TorqueEffectiveness.CombinedPedalSmoothness);
+            Assert.AreEqual(expLeftPct, sensor.LeftPedalSmoothness);
+            Assert.AreEqual(expRightPct, sensor.RightPedalSmoothness);
+            Assert.AreEqual(expCombined, sensor.CombinedPedalSmoothness);
         }
     }
 }

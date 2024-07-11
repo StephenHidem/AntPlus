@@ -5,7 +5,6 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Calibration;
 
 namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
@@ -45,12 +44,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             byte[] dataPage = new byte[8] { 0x01, 0x12, (byte)config, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
-            sensor.Calibration.Parse(
+            sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(supported, sensor.Calibration.AutoZeroSupported);
-            Assert.AreEqual(status, sensor.Calibration.AutoZeroStatus);
+            Assert.AreEqual(supported, sensor.AutoZeroSupported);
+            Assert.AreEqual(status, sensor.AutoZeroStatus);
         }
 
         [TestMethod]
@@ -70,9 +69,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.AreEqual(response, sensor.Calibration.CalibrationStatus);
-            Assert.AreEqual(autoZero, sensor.Calibration.AutoZeroStatus);
-            Assert.IsTrue(sensor.Calibration.CalibrationData == 0x1122);
+            Assert.AreEqual(response, sensor.CalibrationStatus);
+            Assert.AreEqual(autoZero, sensor.AutoZeroStatus);
+            Assert.IsTrue(sensor.CalibrationData == 0x1122);
         }
 
         [TestMethod]
@@ -89,16 +88,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.IsTrue(sensor.Calibration.CustomCalibrationParameters.SequenceEqual(dataPage.Skip(2).ToArray()));
+            Assert.IsTrue(sensor.CustomCalibrationParameters.SequenceEqual(dataPage.Skip(2).ToArray()));
         }
 
         [TestMethod]
-        [DataRow(0, MeasurementOutputData.DataType.ProgressCountdown)]
-        [DataRow(1, MeasurementOutputData.DataType.TimeCountdown)]
-        [DataRow(8, MeasurementOutputData.DataType.WholeSensorTorque)]
-        [DataRow(42, MeasurementOutputData.DataType.Reserved)]
-        [DataRow(254, MeasurementOutputData.DataType.Reserved)]
-        public void Parse_MeasurementOutputData_ExpectedDataType(int val, MeasurementOutputData.DataType expDataType)
+        [DataRow(0, MeasurementType.ProgressCountdown)]
+        [DataRow(1, MeasurementType.TimeCountdown)]
+        [DataRow(8, MeasurementType.WholeSensorTorque)]
+        [DataRow(42, MeasurementType.Reserved)]
+        [DataRow(254, MeasurementType.Reserved)]
+        public void Parse_MeasurementOutputData_ExpectedDataType(int val, MeasurementType expDataType)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
@@ -109,7 +108,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expDataType, sensor.Calibration.Measurements[0].MeasurementType);
+            Assert.AreEqual(expDataType, sensor.Measurements[0].MeasurementType);
         }
 
         [TestMethod]
@@ -131,7 +130,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expMeasurement, sensor.Calibration.Measurements[0].Measurement);
+            Assert.AreEqual(expMeasurement, sensor.Measurements[0].Measurement);
         }
 
         [TestMethod]
@@ -151,7 +150,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 dataPage);
 
             // Assert
-            Assert.AreEqual(timeSpan, sensor.Calibration.Measurements[0].Timestamp);
+            Assert.AreEqual(timeSpan, sensor.Measurements[0].Timestamp);
         }
 
         [TestMethod]
@@ -164,11 +163,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await sensor.Calibration.RequestManualCalibration();
+            var result = await sensor.RequestManualCalibration();
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.InProgress, sensor.Calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.InProgress, sensor.CalibrationStatus);
             mockRepository.VerifyAll();
         }
 
@@ -185,12 +184,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await sensor.Calibration.SetAutoZeroConfiguration(
+            var result = await sensor.SetAutoZeroConfiguration(
                 autoZero);
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.Unknown, sensor.Calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.Unknown, sensor.CalibrationStatus);
             mockRepository.VerifyAll();
         }
 
@@ -204,11 +203,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await sensor.Calibration.RequestCustomParameters();
+            var result = await sensor.RequestCustomParameters();
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.InProgress, sensor.Calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.InProgress, sensor.CalibrationStatus);
             mockRepository.VerifyAll();
         }
 
@@ -223,12 +222,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await sensor.Calibration.SetCustomParameters(
+            var result = await sensor.SetCustomParameters(
                 customParameters.Skip(2).ToArray());
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            Assert.AreEqual(CalibrationResponse.InProgress, sensor.Calibration.CalibrationStatus);
+            Assert.AreEqual(CalibrationResponse.InProgress, sensor.CalibrationStatus);
             mockRepository.VerifyAll();
         }
     }

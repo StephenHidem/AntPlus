@@ -5,8 +5,6 @@ using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System.Data;
 using System.Threading.Tasks;
-using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Parameters;
-using static SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.Parameters.CrankParameters;
 
 namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
@@ -43,90 +41,90 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, (byte)val, 0, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, (byte)val, 0, 0, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expCrankLen, sensor.Parameters.Crank.CrankLength);
+            Assert.AreEqual(expCrankLen, sensor.Crank.CrankLength);
         }
 
         [TestMethod]
-        [DataRow(0, CrankLengthStatus.Invalid)]
-        [DataRow(1, CrankLengthStatus.Default)]
-        [DataRow(2, CrankLengthStatus.ManuallySet)]
-        [DataRow(3, CrankLengthStatus.AutoOrFixed)]
-        public void Parse_CrankParameters_ExpectedCrankStatus(int val, CrankLengthStatus expCrankStatus)
+        [DataRow(0, StandardPowerSensor.CrankParameters.CrankLengthStatus.Invalid)]
+        [DataRow(1, StandardPowerSensor.CrankParameters.CrankLengthStatus.Default)]
+        [DataRow(2, StandardPowerSensor.CrankParameters.CrankLengthStatus.ManuallySet)]
+        [DataRow(3, StandardPowerSensor.CrankParameters.CrankLengthStatus.AutoOrFixed)]
+        public void Parse_CrankParameters_ExpectedCrankStatus(int val, StandardPowerSensor.CrankParameters.CrankLengthStatus expCrankStatus)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expCrankStatus, sensor.Parameters.Crank.CrankStatus);
+            Assert.AreEqual(expCrankStatus, sensor.Crank.CrankStatus);
         }
 
         [TestMethod]
-        [DataRow(0x00, SensorMisMatchStatus.Undefined)]
-        [DataRow(0x04, SensorMisMatchStatus.RightSensorOlder)]
-        [DataRow(0x08, SensorMisMatchStatus.LeftSensorOlder)]
-        [DataRow(0x0C, SensorMisMatchStatus.Identical)]
-        public void Parse_CrankParameters_ExpectedSensorMismatchStatus(int val, SensorMisMatchStatus expSensorSWStatus)
+        [DataRow(0x00, StandardPowerSensor.CrankParameters.SensorMisMatchStatus.Undefined)]
+        [DataRow(0x04, StandardPowerSensor.CrankParameters.SensorMisMatchStatus.RightSensorOlder)]
+        [DataRow(0x08, StandardPowerSensor.CrankParameters.SensorMisMatchStatus.LeftSensorOlder)]
+        [DataRow(0x0C, StandardPowerSensor.CrankParameters.SensorMisMatchStatus.Identical)]
+        public void Parse_CrankParameters_ExpectedSensorMismatchStatus(int val, StandardPowerSensor.CrankParameters.SensorMisMatchStatus expSensorSWStatus)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expSensorSWStatus, sensor.Parameters.Crank.MismatchStatus);
+            Assert.AreEqual(expSensorSWStatus, sensor.Crank.MismatchStatus);
         }
 
         [TestMethod]
-        [DataRow(0x00, SensorAvailabilityStatus.Undefined)]
-        [DataRow(0x10, SensorAvailabilityStatus.LeftPresent)]
-        [DataRow(0x20, SensorAvailabilityStatus.RightPresent)]
-        [DataRow(0x30, SensorAvailabilityStatus.BothPresent)]
-        public void Parse_CrankParameters_ExpectedSensorAvailabilityStatus(int val, SensorAvailabilityStatus expSensorAvailability)
+        [DataRow(0x00, StandardPowerSensor.CrankParameters.SensorAvailabilityStatus.Undefined)]
+        [DataRow(0x10, StandardPowerSensor.CrankParameters.SensorAvailabilityStatus.LeftPresent)]
+        [DataRow(0x20, StandardPowerSensor.CrankParameters.SensorAvailabilityStatus.RightPresent)]
+        [DataRow(0x30, StandardPowerSensor.CrankParameters.SensorAvailabilityStatus.BothPresent)]
+        public void Parse_CrankParameters_ExpectedSensorAvailabilityStatus(int val, StandardPowerSensor.CrankParameters.SensorAvailabilityStatus expSensorAvailability)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expSensorAvailability, sensor.Parameters.Crank.AvailabilityStatus);
+            Assert.AreEqual(expSensorAvailability, sensor.Crank.AvailabilityStatus);
         }
 
         [TestMethod]
-        [DataRow(0x00, CustomCalibrationStatus.NotSupported)]
-        [DataRow(0x40, CustomCalibrationStatus.NotRequired)]
-        [DataRow(0x80, CustomCalibrationStatus.Required)]
-        [DataRow(0xC0, CustomCalibrationStatus.Reserved)]
-        public void Parse_CrankParameters_ExpectedCustomCalStatus(int val, CustomCalibrationStatus expCustomCal)
+        [DataRow(0x00, StandardPowerSensor.CrankParameters.CustomCalibrationStatus.NotSupported)]
+        [DataRow(0x40, StandardPowerSensor.CrankParameters.CustomCalibrationStatus.NotRequired)]
+        [DataRow(0x80, StandardPowerSensor.CrankParameters.CustomCalibrationStatus.Required)]
+        [DataRow(0xC0, StandardPowerSensor.CrankParameters.CustomCalibrationStatus.Reserved)]
+        public void Parse_CrankParameters_ExpectedCustomCalStatus(int val, StandardPowerSensor.CrankParameters.CustomCalibrationStatus expCustomCal)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expCustomCal, sensor.Parameters.Crank.CustomCalibration);
+            Assert.AreEqual(expCustomCal, sensor.Crank.CustomCalibration);
         }
 
         [TestMethod]
@@ -137,14 +135,14 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expPeak, sensor.Parameters.PeakTorqueThreshold);
+            Assert.AreEqual(expPeak, sensor.PeakTorqueThreshold);
         }
 
         [TestMethod]
@@ -152,158 +150,158 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, 128, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.RiderPositionConfiguration, 128, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(128, sensor.Parameters.RiderPositionTimeOffset);
+            Assert.AreEqual(128, sensor.RiderPositionTimeOffset);
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities1.InteroperableCapabilities.None)]
-        [DataRow(0x01, AdvCapabilities1.InteroperableCapabilities.FourHz)]
-        [DataRow(0x02, AdvCapabilities1.InteroperableCapabilities.EightHz)]
-        [DataRow(0x10, AdvCapabilities1.InteroperableCapabilities.AutoZero)]
-        [DataRow(0x20, AdvCapabilities1.InteroperableCapabilities.AutoCrankLength)]
-        [DataRow(0x40, AdvCapabilities1.InteroperableCapabilities.TEandPS)]
+        [DataRow(0, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.None)]
+        [DataRow(0x01, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.FourHz)]
+        [DataRow(0x02, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.EightHz)]
+        [DataRow(0x10, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoZero)]
+        [DataRow(0x20, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoCrankLength)]
+        [DataRow(0x40, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.TEandPS)]
         [DataRow(0xFF,
-            AdvCapabilities1.InteroperableCapabilities.FourHz |
-            AdvCapabilities1.InteroperableCapabilities.EightHz |
-            AdvCapabilities1.InteroperableCapabilities.AutoZero |
-            AdvCapabilities1.InteroperableCapabilities.AutoCrankLength |
-            AdvCapabilities1.InteroperableCapabilities.TEandPS
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.FourHz |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.EightHz |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoZero |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoCrankLength |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.TEandPS
             )]
-        public void Parse_AdvCap1Parameters_ExpectedMask(int mask, AdvCapabilities1.InteroperableCapabilities expMask)
+        public void Parse_AdvCap1Parameters_ExpectedMask(int mask, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities expMask)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expMask, sensor.Parameters.AdvancedCapabilities1.Mask);
+            Assert.AreEqual(expMask, sensor.AdvancedCapabilities1.Mask);
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities1.InteroperableCapabilities.None)]
-        [DataRow(0x01, AdvCapabilities1.InteroperableCapabilities.FourHz)]
-        [DataRow(0x02, AdvCapabilities1.InteroperableCapabilities.EightHz)]
-        [DataRow(0x10, AdvCapabilities1.InteroperableCapabilities.AutoZero)]
-        [DataRow(0x20, AdvCapabilities1.InteroperableCapabilities.AutoCrankLength)]
-        [DataRow(0x40, AdvCapabilities1.InteroperableCapabilities.TEandPS)]
+        [DataRow(0, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.None)]
+        [DataRow(0x01, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.FourHz)]
+        [DataRow(0x02, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.EightHz)]
+        [DataRow(0x10, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoZero)]
+        [DataRow(0x20, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoCrankLength)]
+        [DataRow(0x40, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.TEandPS)]
         [DataRow(0xFF,
-            AdvCapabilities1.InteroperableCapabilities.FourHz |
-            AdvCapabilities1.InteroperableCapabilities.EightHz |
-            AdvCapabilities1.InteroperableCapabilities.AutoZero |
-            AdvCapabilities1.InteroperableCapabilities.AutoCrankLength |
-            AdvCapabilities1.InteroperableCapabilities.TEandPS
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.FourHz |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.EightHz |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoZero |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.AutoCrankLength |
+            StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities.TEandPS
             )]
-        public void Parse_AdvCap1Parameters_ExpectedValue(int value, AdvCapabilities1.InteroperableCapabilities expValue)
+        public void Parse_AdvCap1Parameters_ExpectedValue(int value, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities expValue)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expValue, sensor.Parameters.AdvancedCapabilities1.Value);
+            Assert.AreEqual(expValue, sensor.AdvancedCapabilities1.Value);
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities2.InteroperableCapabilities.None)]
-        [DataRow(0x01, AdvCapabilities2.InteroperableCapabilities.FourHz)]
-        [DataRow(0x02, AdvCapabilities2.InteroperableCapabilities.EightHz)]
-        [DataRow(0x08, AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz)]
-        [DataRow(0x10, AdvCapabilities2.InteroperableCapabilities.PCO8Hz)]
-        [DataRow(0x20, AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz)]
-        [DataRow(0x40, AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz)]
+        [DataRow(0, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.None)]
+        [DataRow(0x01, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.FourHz)]
+        [DataRow(0x02, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.EightHz)]
+        [DataRow(0x08, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz)]
+        [DataRow(0x10, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PCO8Hz)]
+        [DataRow(0x20, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz)]
+        [DataRow(0x40, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz)]
         [DataRow(0xFF,
-            AdvCapabilities2.InteroperableCapabilities.FourHz |
-            AdvCapabilities2.InteroperableCapabilities.EightHz |
-            AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz |
-            AdvCapabilities2.InteroperableCapabilities.PCO8Hz |
-            AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz |
-            AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.FourHz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.EightHz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PCO8Hz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz
             )]
-        public void Parse_AdvCap2Parameters_ExpectedMask(int mask, AdvCapabilities2.InteroperableCapabilities expMask)
+        public void Parse_AdvCap2Parameters_ExpectedMask(int mask, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities expMask)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities2, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expMask, sensor.Parameters.AdvancedCapabilities2.Mask);
+            Assert.AreEqual(expMask, sensor.AdvancedCapabilities2.Mask);
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities2.InteroperableCapabilities.None)]
-        [DataRow(0x01, AdvCapabilities2.InteroperableCapabilities.FourHz)]
-        [DataRow(0x02, AdvCapabilities2.InteroperableCapabilities.EightHz)]
-        [DataRow(0x08, AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz)]
-        [DataRow(0x10, AdvCapabilities2.InteroperableCapabilities.PCO8Hz)]
-        [DataRow(0x20, AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz)]
-        [DataRow(0x40, AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz)]
+        [DataRow(0, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.None)]
+        [DataRow(0x01, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.FourHz)]
+        [DataRow(0x02, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.EightHz)]
+        [DataRow(0x08, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz)]
+        [DataRow(0x10, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PCO8Hz)]
+        [DataRow(0x20, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz)]
+        [DataRow(0x40, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz)]
         [DataRow(0xFF,
-            AdvCapabilities2.InteroperableCapabilities.FourHz |
-            AdvCapabilities2.InteroperableCapabilities.EightHz |
-            AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz |
-            AdvCapabilities2.InteroperableCapabilities.PCO8Hz |
-            AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz |
-            AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.FourHz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.EightHz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PowerPhase8Hz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.PCO8Hz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.RiderPosition8Hz |
+            StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities.TorqueBarycenter8Hz
             )]
-        public void Parse_AdvCap2Parameters_ExpectedValue(int value, AdvCapabilities2.InteroperableCapabilities expValue)
+        public void Parse_AdvCap2Parameters_ExpectedValue(int value, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities expValue)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities2, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expValue, sensor.Parameters.AdvancedCapabilities2.Value);
+            Assert.AreEqual(expValue, sensor.AdvancedCapabilities2.Value);
         }
 
         [TestMethod]
-        [DataRow(0, AdvCapabilities1.InteropProp.None)]
-        [DataRow(0x01, AdvCapabilities1.InteropProp.DefaultCrankLength)]
-        [DataRow(0x02, AdvCapabilities1.InteropProp.RequiresCrankLength)]
-        [DataRow(0x03, AdvCapabilities1.InteropProp.DefaultCrankLength | AdvCapabilities1.InteropProp.RequiresCrankLength)]
-        public void Parse_AdvCap1Parameters_ExpectedProperties(int value, AdvCapabilities1.InteropProp expProp)
+        [DataRow(0, StandardPowerSensor.AdvCapabilities1.InteropProp.None)]
+        [DataRow(0x01, StandardPowerSensor.AdvCapabilities1.InteropProp.DefaultCrankLength)]
+        [DataRow(0x02, StandardPowerSensor.AdvCapabilities1.InteropProp.RequiresCrankLength)]
+        [DataRow(0x03, StandardPowerSensor.AdvCapabilities1.InteropProp.DefaultCrankLength | StandardPowerSensor.AdvCapabilities1.InteropProp.RequiresCrankLength)]
+        public void Parse_AdvCap1Parameters_ExpectedProperties(int value, StandardPowerSensor.AdvCapabilities1.InteropProp expProp)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)Subpage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expProp, sensor.Parameters.AdvancedCapabilities1.InteroperableProperties);
+            Assert.AreEqual(expProp, sensor.AdvancedCapabilities1.InteroperableProperties);
         }
 
         [TestMethod]
-        [DataRow(Subpage.CrankParameters)]
-        [DataRow(Subpage.AdvancedCapabilities1)]
-        [DataRow(Subpage.AdvancedCapabilities2)]
-        [DataRow(Subpage.RiderPositionConfiguration)]
-        [DataRow(Subpage.PowerPhaseConfiguration)]
-        public async Task GetParameters_RequestedSubpage_ExpectedDataPage(Subpage page)
+        [DataRow(SubPage.CrankParameters)]
+        [DataRow(SubPage.AdvancedCapabilities1)]
+        [DataRow(SubPage.AdvancedCapabilities2)]
+        [DataRow(SubPage.RiderPositionConfiguration)]
+        [DataRow(SubPage.PowerPhaseConfiguration)]
+        public async Task GetParameters_RequestedSubpage_ExpectedDataPage(SubPage page)
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
@@ -322,7 +320,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.Parameters.GetParameters(
+            await sensor.GetParameters(
                 page);
 
             // Assert
@@ -339,7 +337,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             byte expVal = (byte)((length - 110) / 0.5);
             byte[] dataPage = new byte[8] {
                 (byte)DataPage.GetSetParameters,
-                (byte)Subpage.CrankParameters,
+                (byte)SubPage.CrankParameters,
                 0xFF,
                 0xFF,
                 expVal,
@@ -352,7 +350,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.Parameters.SetCrankLength(
+            await sensor.SetCrankLength(
                 length);
 
             // Assert
@@ -367,7 +365,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             byte offset = 128;
             byte[] dataPage = new byte[8] {
                 (byte)DataPage.GetSetParameters,
-                (byte)Subpage.RiderPositionConfiguration,
+                (byte)SubPage.RiderPositionConfiguration,
                 offset,
                 0xFF,
                 0xFF,
@@ -380,7 +378,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.Parameters.SetTransitionTimeOffset(
+            await sensor.SetTransitionTimeOffset(
                 offset);
 
             // Assert
@@ -395,7 +393,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             double threshold = 50;
             byte[] dataPage = new byte[8] {
                 (byte)DataPage.GetSetParameters,
-                (byte)Subpage.PowerPhaseConfiguration,
+                (byte)SubPage.PowerPhaseConfiguration,
                 (byte)(threshold / 0.5),
                 0xFF,
                 0xFF,
@@ -408,7 +406,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 Returns(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.Parameters.SetPeakTorqueThreshold(
+            await sensor.SetPeakTorqueThreshold(
                 threshold);
 
             // Assert

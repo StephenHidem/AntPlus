@@ -5,7 +5,7 @@ using System;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
-    /// This class supports messages common to crank/wheel torque sensors.
+    /// This class supports messages common to <see cref="StandardCrankTorqueSensor"/> and <see cref="StandardWheelTorqueSensor"/>.
     /// </summary>
     public abstract partial class TorqueSensor : ObservableObject
     {
@@ -27,9 +27,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>The logger</summary>
         protected ILogger _logger;
-        /// <summary>The standard power sensor.</summary>
-        protected StandardPowerSensor _powerSensor;
 
+        /// <summary>Gets the instantaneous pedaling cadence. 0xFF indicates invalid.</summary>
+        [ObservableProperty]
+        private byte instantaneousCadence;
         /// <summary>Gets the average angular velocity in radians per second.</summary>
         [ObservableProperty]
         private double averageAngularVelocity;
@@ -41,11 +42,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private double averagePower;
 
         /// <summary>Initializes a new instance of the <see cref="TorqueSensor" /> class.</summary>
-        /// <param name="sensor">The <see cref="StandardPowerSensor"/>.</param>
         /// <param name="logger">The logger.</param>
-        protected TorqueSensor(StandardPowerSensor sensor, ILogger logger)
+        protected TorqueSensor(ILogger logger)
         {
-            _powerSensor = sensor;
             _logger = logger;
         }
 
@@ -53,7 +52,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public virtual void ParseTorque(byte[] dataPage)
         {
-            _powerSensor.InstantaneousCadence = dataPage[3];
+            InstantaneousCadence = dataPage[3];
 
             if (isFirstDataMessage)
             {

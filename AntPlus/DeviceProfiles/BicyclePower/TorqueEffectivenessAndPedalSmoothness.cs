@@ -2,21 +2,18 @@
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
-    /// <summary>
-    /// This class supports torque effectiveness and pedal smoothness messages.
-    /// </summary>
-    public partial class TorqueEffectivenessAndPedalSmoothness : ObservableObject
+    public partial class StandardPowerSensor
     {
-        /// <summary>Gets the left leg torque effectiveness as a percentage.</summary>
+        /// <summary>Gets the left leg torque effectiveness as a percentage. NaN indicates invalid.</summary>
         [ObservableProperty]
         private double leftTorqueEffectiveness;
-        /// <summary>Gets the right leg torque effectiveness as a percentage.</summary>
+        /// <summary>Gets the right leg torque effectiveness as a percentage. NaN indicates invalid.</summary>
         [ObservableProperty]
         private double rightTorqueEffectiveness;
-        /// <summary>Gets the left pedal smoothness as a percentage.</summary>
+        /// <summary>Gets the left pedal smoothness as a percentage. NaN indicates invalid.</summary>
         [ObservableProperty]
         private double leftPedalSmoothness;
-        /// <summary>Gets the right pedal smoothness as a percentage.</summary>
+        /// <summary>Gets the right pedal smoothness as a percentage. NaN indicates invalid. Check <see cref="CombinedPedalSmoothness"/>.</summary>
         [ObservableProperty]
         private double rightPedalSmoothness;
         /// <summary>Set to true if left and right pedal smoothness is combined.</summary>
@@ -28,7 +25,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// Note that if the right and left pedal smoothness is combined, the right and left values will be the same.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void Parse(byte[] dataPage)
+        private void ParseTEPS(byte[] dataPage)
         {
             if (dataPage[2] != 0xFF) { LeftTorqueEffectiveness = dataPage[2] * 0.5; }
             else { LeftTorqueEffectiveness = double.NaN; }
@@ -49,7 +46,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 else
                 {
                     CombinedPedalSmoothness = true;
-                    RightPedalSmoothness = dataPage[4] * 0.5;
+                    RightPedalSmoothness = double.NaN;
                 }
             }
             else

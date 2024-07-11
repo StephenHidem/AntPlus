@@ -36,13 +36,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private ushort prevTimeStamp;
         private ushort prevTorqueTicks;
 
-        /// <summary>Occurs when slope or serial number save acknowledged.</summary>
-        public event EventHandler<CTFDefinedId> SaveAcknowledged;
-
         /// <summary>Gets the zero offset in Hz.</summary>
         /// <remarks>Offset is only received from the sensor when a calibration is requested or bike has been coasting.</remarks>
         [ObservableProperty]
-        private ushort offset = 0;
+        private ushort offset;
         /// <summary>Gets the slope. Slope ranges in value from 10.0Nm/Hz to 50.0Nm/Hz. Resolution is 0.1 Nm/Hz.</summary>
         [ObservableProperty]
         private double slope;
@@ -79,6 +76,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCalibrationMessage(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
+                    if (CalibrationStatus == CalibrationResponse.InProgress) CalibrationStatus = CalibrationResponse.Succeeded;
                     ParseCTFMessage(dataPage);
                     break;
                 default:
@@ -89,6 +87,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         private void ParseCTFMessage(byte[] dataPage)
         {
+            // clear calibration pending
+            if (CalibrationStatus == CalibrationResponse.InProgress)
+            {
+                CalibrationStatus = CalibrationResponse.Succeeded;
+            }
+
             byte updateEventCount = dataPage[1];
 
             // the data is in big endian order; this also flips the order of the fields
@@ -126,8 +130,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     Offset = BitConverter.ToUInt16(dataPage.Skip(6).Reverse().ToArray(), 0);
                     break;
                 case CTFDefinedId.Ack:
-                    // TODO: NEED TO REPORT STATUS OF CTF SAVE FUNCS
-                    SaveAcknowledged?.Invoke(this, (CTFDefinedId)dataPage[3]);
+                    CalibrationStatus = CalibrationResponse.Succeeded;
                     switch ((CTFDefinedId)dataPage[3])
                     {
                         case CTFDefinedId.Slope:
@@ -156,6 +159,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 throw new ArgumentOutOfRangeException(nameof(slope));
             }
 
+            CalibrationStatus = CalibrationResponse.InProgress;
             ushort slp = Convert.ToUInt16(slope * 10.0);    // scale by resolution
 
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.Slope, 0xFF, 0xFF, 0xFF };
@@ -168,6 +172,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SaveSerialNumberToFlash(ushort serialNumber)
         {
+            CalibrationStatus = CalibrationResponse.InProgress;
             byte[] msg = new byte[] { (byte)DataPage.Calibration, 0x10, (byte)CTFDefinedId.SerialNumber, 0xFF, 0xFF, 0xFF };
             msg = msg.Concat(BitConverter.GetBytes(serialNumber).Reverse()).ToArray();
             return await SendExtAcknowledgedMessage(msg);

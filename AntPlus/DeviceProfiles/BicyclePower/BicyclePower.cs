@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
+using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
@@ -37,41 +39,44 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     }
 
     /// <summary>Base class for bicycle power sensors.</summary>
-    abstract public class BicyclePower : AntDevice
+    /// <remarks>
+    /// Bicycle Power sensors fall into two main categories - <see cref="StandardPowerSensor"/> and <see cref="CrankTorqueFrequencySensor"/>.
+    /// <para>
+    /// Standard power sensors may support <see cref="TorqueSensor"/> in addition to the power only profile. The property <see cref="StandardPowerSensor.TorqueSensor"/>
+    /// is set when a <see cref="StandardCrankTorqueSensor"/> or <see cref="StandardWheelTorqueSensor"/> message is received.
+    /// </para>
+    /// <para>
+    /// The <see cref="CrankTorqueFrequencySensor"/> class is somewhat unique among bicycle power sensors. It provides limited commonality and functionality compared to
+    /// StandardPowerSensors.
+    /// </para>
+    /// </remarks>
+    public abstract partial class BicyclePower : AntDevice
     {
         /// <summary>
         /// The device class ID.
         /// </summary>
         public const byte DeviceClass = 11;
 
-        /// <summary>Gets the calibration class.</summary>
-        public Calibration Calibration { get; private set; }
+        /// <summary>The calibration operation status common to all bicycle power sensors.</summary>
+        [ObservableProperty]
+        private CalibrationResponse calibrationStatus;
 
         /// <summary>Initializes a new instance of the <see cref="BicyclePower" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">The ant channel.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="timeout">The timeout.</param>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000)
+            : base(channelId, antChannel, logger, timeout)
         {
-            Calibration = new Calibration(this, logger);
         }
 
-        /// <inheritdoc/>
-        public override void Parse(byte[] dataPage)
+        /// <summary>Requests manual calibration.</summary>
+        /// <returns><see cref="MessagingReturnCode"/></returns>
+        public virtual async Task<MessagingReturnCode> RequestManualCalibration()
         {
-            base.Parse(dataPage);
-            switch ((DataPage)dataPage[0])
-            {
-                case DataPage.Calibration:
-                    Calibration.Parse(dataPage);
-                    break;
-                case DataPage.MeasurementOutput:
-                    Calibration.ParseMeasurementOutputData(dataPage);
-                    break;
-                default:
-                    break;
-            }
+            CalibrationStatus = CalibrationResponse.InProgress;
+            return await SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.ManualZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         /// <summary>Gets the bicycle power sensor.</summary>
@@ -81,7 +86,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="logger">The logger.</param>
         /// <param name="timeout">The timeout.</param>
         /// <returns>
-        ///   <br />
+        /// A <see cref="CrankTorqueFrequencySensor"/> is returned if a <see cref="DataPage.CrankTorqueFrequency"/> page has been received.
+        /// Otherwise, a <see cref="StandardPowerSensor"/> is returned.
         /// </returns>
         public static BicyclePower GetBicyclePowerSensor(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILogger<BicyclePower> logger, int timeout = 2000)
         {

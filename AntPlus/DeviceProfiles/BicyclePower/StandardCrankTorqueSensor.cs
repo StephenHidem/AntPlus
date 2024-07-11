@@ -5,7 +5,7 @@ using System;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
-    /// The standard crank torque sensor class.
+    /// The standard bicycle power crank torque sensor class.
     /// </summary>
     /// <seealso cref="TorqueSensor" />
     public partial class StandardCrankTorqueSensor : TorqueSensor
@@ -115,9 +115,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCrankTorqueSensor"/> class.
         /// </summary>
-        /// <param name="sensor">The standard power sensor.</param>
         /// <param name="logger">Logger to use.</param>
-        public StandardCrankTorqueSensor(StandardPowerSensor sensor, ILogger logger) : base(sensor, logger)
+        public StandardCrankTorqueSensor(ILogger logger) : base(logger)
         {
         }
 
@@ -132,10 +131,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         }
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return "Bike Power (Crank Torque)";
-        }
+        public override string ToString() => "Bike Power (Crank Torque)";
 
         /// <summary>Parses the cycling dynamics data pages.</summary>
         /// <param name="dataPage">The data page.</param>

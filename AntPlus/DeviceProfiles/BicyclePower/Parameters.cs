@@ -9,7 +9,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// <summary>
     /// Parameters sub-pages.
     /// </summary>
-    public enum Subpage
+    public enum SubPage
     {
         /// <summary>The crank parameters</summary>
         CrankParameters = 0x01,
@@ -23,14 +23,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         AdvancedCapabilities2 = 0xFE
     }
 
-    /// <summary>
-    /// Bicycle power parameters.
-    /// </summary>
-    public partial class Parameters : ObservableObject
+    public partial class StandardPowerSensor
     {
-        private readonly StandardPowerSensor _powerSensor;
-        private readonly ILogger _logger;
-
         /// <summary>
         /// Various crank parameters.
         /// </summary>
@@ -119,6 +113,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 AutoCrankLength = (dataPage[6] & 0x01) != 0;
             }
         }
+
         /// <summary>
         /// Advanced capabilities.
         /// </summary>
@@ -235,41 +230,30 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private AdvCapabilities2 advancedCapabilities2;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Parameters"/> class.
-        /// </summary>
-        /// <param name="sensor">The <see cref="StandardPowerSensor"/>.</param>
-        /// <param name="logger">Logger to use.</param>
-        public Parameters(StandardPowerSensor sensor, ILogger logger)
-        {
-            _powerSensor = sensor;
-            _logger = logger;
-        }
-
-        /// <summary>
         /// Parses the specified data page.
         /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void Parse(byte[] dataPage)
+        private void ParseParameters(byte[] dataPage)
         {
-            switch ((Subpage)dataPage[1])
+            switch ((SubPage)dataPage[1])
             {
-                case Subpage.CrankParameters:
+                case SubPage.CrankParameters:
                     Crank = new CrankParameters(dataPage);
                     break;
-                case Subpage.PowerPhaseConfiguration:
+                case SubPage.PowerPhaseConfiguration:
                     PeakTorqueThreshold = dataPage[2] <= 200 ? dataPage[2] * 0.5 : double.NaN;
                     break;
-                case Subpage.RiderPositionConfiguration:
+                case SubPage.RiderPositionConfiguration:
                     RiderPositionTimeOffset = dataPage[2];
                     break;
-                case Subpage.AdvancedCapabilities1:
+                case SubPage.AdvancedCapabilities1:
                     AdvancedCapabilities1 = new AdvCapabilities1(dataPage);
                     break;
-                case Subpage.AdvancedCapabilities2:
+                case SubPage.AdvancedCapabilities2:
                     AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("Unknown Subpage - {Subpage}.", dataPage[1]);
+                    logger.LogWarning("Unknown SubPage - {SubPage}.", dataPage[1]);
                     break;
             }
         }
@@ -277,9 +261,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Gets the requested parameters subpage.</summary>
         /// <param name="parameterSubpage">The parameter subpage.</param>
         /// <returns><see cref="MessagingReturnCode"/></returns>
-        public async Task<MessagingReturnCode> GetParameters(Subpage parameterSubpage)
+        public async Task<MessagingReturnCode> GetParameters(SubPage parameterSubpage)
         {
-            return await _powerSensor.RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
+            return await RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
         }
 
         /// <summary>
@@ -294,14 +278,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             if (length > 236.5)
             {
                 // set crank length to auto
-                msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, 0xFE, 0x00, 0x00, 0xFF };
+                msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0xFE, 0x00, 0x00, 0xFF };
             }
             else
             {
                 byte cl = (byte)((length - 110) / 0.5);
-                msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
+                msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, cl, 0x00, 0x00, 0xFF };
             }
-            return await _powerSensor.SendExtAcknowledgedMessage(msg);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -317,8 +301,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> SetTransitionTimeOffset(byte offset)
         {
-            byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            return await _powerSensor.SendExtAcknowledgedMessage(msg);
+            byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)SubPage.RiderPositionConfiguration, offset, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>
@@ -340,8 +324,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                 throw new ArgumentOutOfRangeException("Parameter threshold range is 0 to 100 percent.");
             }
             byte peak = (byte)(threshold / 0.5);
-            byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)Subpage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            return await _powerSensor.SendExtAcknowledgedMessage(msg);
+            byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            return await SendExtAcknowledgedMessage(msg);
         }
     }
 }

@@ -4,10 +4,10 @@ using Microsoft.Extensions.Logging;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
     /// <summary>
-    /// The standard wheel torque sensor.
+    /// The standard bicycle power wheel torque sensor.
     /// </summary>
     /// <remarks>
-    /// Set the wheel circumference if the default value is incorrect. The calculations rely
+    /// Set the wheel circumference if the default value is incorrect. The distance and speed calculations rely
     /// on the wheel circumference.
     /// </remarks>
     /// <seealso cref="TorqueSensor" />
@@ -30,9 +30,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private double accumulatedDistance;
 
         /// <summary>Initializes a new instance of the <see cref="StandardWheelTorqueSensor" /> class.</summary>
-        /// <param name="sensor">The standard power sensor.</param>
         /// <param name="logger">The logger to use.</param>
-        public StandardWheelTorqueSensor(StandardPowerSensor sensor, ILogger logger) : base(sensor, logger)
+        public StandardWheelTorqueSensor(ILogger logger) : base(logger)
         {
         }
 

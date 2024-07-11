@@ -144,8 +144,8 @@ namespace SmallEarthTech.AntPlus
                     return new BikeCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<BikeCadenceSensor>(), timeout);
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
                     return new CombinedSpeedAndCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), timeout);
-                case Equipment.DeviceClass:
-                    return Equipment.GetEquipment(dataPage, channelId, channel, _loggerFactory.CreateLogger<Equipment>(), timeout);
+                case FitnessEquipment.DeviceClass:
+                    return FitnessEquipment.GetFitnessEquipment(dataPage, channelId, channel, _loggerFactory.CreateLogger<FitnessEquipment>(), timeout);
                 case MuscleOxygen.DeviceClass:
                     return new MuscleOxygen(channelId, channel, _loggerFactory.CreateLogger<MuscleOxygen>(), timeout);
                 case Geocache.DeviceClass:

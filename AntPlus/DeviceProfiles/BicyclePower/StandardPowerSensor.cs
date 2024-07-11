@@ -15,7 +15,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(StandardPowerSensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.BicyclePower.png");
         /// <inheritdoc/>
-        public override string ToString() => (TorqueSensor == null) ? "Bike Power (Power Only)" : TorqueSensor.ToString();
+        public override string ToString() => "Bike Power";
 
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastEventCount;
@@ -39,14 +39,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private double averagePower;
         /// <summary>The pedal power data field provides the user’s power contribution (as a percentage) between the left and right pedals, as
         /// measured by a pedal power sensor. </summary>
-        /// <value>The pedal power.</value>
+        /// <value>The pedal power. 127 indicates pedal power is unused. Check <see cref="PedalContribution"/>.</value>
         [ObservableProperty]
         private byte pedalPower;
         /// <summary>Gets the pedal power contribution.</summary>
         /// <value>The pedal differentiation.</value>
         [ObservableProperty]
         private PedalDifferentiation pedalContribution;
-        /// <summary>Gets the instantaneous pedaling cadence.</summary>
+        /// <summary>Gets the instantaneous pedaling cadence. 0xFF indicates invalid.</summary>
         [ObservableProperty]
         private byte instantaneousCadence;
         /// <summary>Gets the instantaneous power in watts.</summary>
@@ -57,10 +57,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <value>The wheel or crank torque sensor.</value>
         [ObservableProperty]
         private TorqueSensor torqueSensor;
-        /// <summary>Gets the parameters.</summary>
-        public Parameters Parameters { get; private set; }
-        /// <summary>Gets the torque effectiveness and pedal smoothness.</summary>
-        public TorqueEffectivenessAndPedalSmoothness TorqueEffectiveness { get; private set; }
 
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
@@ -76,41 +72,49 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
-            Parameters = new Parameters(this, logger);
-            TorqueEffectiveness = new TorqueEffectivenessAndPedalSmoothness();
         }
 
-        /// <summary>
-        /// Parses the specified data page.
-        /// </summary>
-        /// <param name="dataPage">The data page.</param>
+        /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
             switch ((DataPage)dataPage[0])
             {
+                case DataPage.Calibration:
+                    ParseCalibrationPage(dataPage);
+                    break;
                 case DataPage.GetSetParameters:
-                    Parameters.Parse(dataPage);
+                    ParseParameters(dataPage);
+                    break;
+                case DataPage.MeasurementOutput:
+                    ParseMeasurementOutputData(dataPage);
                     break;
                 case DataPage.PowerOnly:
                     ParsePowerOnly(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    TorqueSensor ??= new StandardWheelTorqueSensor(this, logger);
+                    TorqueSensor ??= new StandardWheelTorqueSensor(logger);
                     TorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    TorqueSensor ??= new StandardCrankTorqueSensor(this, logger);
+                    TorqueSensor ??= new StandardCrankTorqueSensor(logger);
                     TorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    TorqueEffectiveness.Parse(dataPage);
+                    ParseTEPS(dataPage);
                     break;
+                case DataPage.TorqueBarycenter:
                 case DataPage.RightForceAngle:
                 case DataPage.LeftForceAngle:
                 case DataPage.PedalPosition:
-                case DataPage.TorqueBarycenter:
-                    ((StandardCrankTorqueSensor)TorqueSensor)?.ParseCyclingDynamics(dataPage);
+                    if (TorqueSensor is StandardCrankTorqueSensor sensor)
+                    {
+                        sensor.ParseCyclingDynamics(dataPage);
+                    }
+                    else
+                    {
+                        logger.LogWarning("Unexpected Cycling Dynamics message. A StandardCrankTorqueSensor is not present.");
+                    }
                     break;
                 default:
                     CommonDataPages.ParseCommonDataPage(dataPage);

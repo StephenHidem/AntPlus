@@ -31,7 +31,7 @@
             </Grid>
         </GroupBox>
         <GroupBox Header="ANT Devices" Grid.Row="1">
-            <ListView x:Name="antDevices" ItemsSource="{Binding AntDevices}">
+            <ListView x:Name="antDevicesList" ItemsSource="{Binding AntDevices}" MouseDoubleClick="AntDevices_MouseDoubleClick">
                 <ListView.View>
                     <GridView >
                         <GridViewColumn Header="Image">

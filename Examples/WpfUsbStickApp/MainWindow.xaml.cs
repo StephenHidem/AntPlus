@@ -30,7 +30,6 @@ namespace WpfUsbStickApp
                 viewModel = new MainWindowViewModel();
                 BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);
                 DataContext = viewModel;
-                antDevices.MouseDoubleClick += AntDevices_MouseDoubleClick;
             }
             catch (Exception ex)
             {

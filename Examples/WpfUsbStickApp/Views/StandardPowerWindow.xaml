@@ -1,0 +1,110 @@
+﻿<Window x:Class="WpfUsbStickApp.Views.StandardPowerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfUsbStickApp.Views"
+        xmlns:dp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
+        d:DataContext="{d:DesignInstance Type=vm:BicyclePowerViewModel}"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Title="Standard Bicycle Power">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <UserControl Content="{Binding BicyclePowerControl}"/>
+            <GroupBox Header="Torque Effectiveness and Pedal Smoothness">
+                <StackPanel DataContext="{Binding Sensor}">
+                    <TextBlock Text="{Binding CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness: {0}'}"/>
+                    <TextBlock Text="{Binding LeftPedalSmoothness, StringFormat='Left Pedal Smoothness: {0}'}"/>
+                    <TextBlock Text="{Binding LeftTorqueEffectiveness, StringFormat='Left Torque Effectiveness: {0}'}"/>
+                    <TextBlock Text="{Binding RightPedalSmoothness, StringFormat='Right Pedal Smoothness: {0}'}"/>
+                    <TextBlock Text="{Binding RightTorqueEffectiveness, StringFormat='Right Torque Effectiveness: {0}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <uc:CommonDataPagesControl DataContext="{Binding Sensor.CommonDataPages}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <GroupBox Header="Standard Power">
+                <StackPanel DataContext="{Binding Sensor}">
+                    <TextBlock Text="{Binding PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
+                    <TextBlock Text="{Binding PedalContribution, StringFormat='Pedal Contribution: {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousPower, StringFormat='Instantaneous Power (Watts): {0}'}"/>
+                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Calibration">
+                <StackPanel>
+                    <StackPanel DataContext="{Binding Sensor}">
+                        <TextBlock Text="{Binding CalibrationStatus, StringFormat='Calibration Status: {0}'}"/>
+                        <TextBlock Text="{Binding AutoZeroSupported, StringFormat='Auto Zero Supported: {0}'}"/>
+                        <TextBlock Text="{Binding AutoZeroStatus, StringFormat='Auto Zero Status: {0}'}"/>
+                        <TextBlock Text="{Binding CalibrationData, StringFormat='Calibration Data: {0}'}"/>
+                        <TextBlock Text="{Binding CustomCalibrationParameters, StringFormat='Custom Cal Parameters: {0}'}"/>
+                        <GroupBox Header="Measurement Output">
+                            <ListView ItemsSource="{Binding Measurements}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Measurement Type" DisplayMemberBinding="{Binding Path=MeasurementType}"/>
+                                        <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Path=Timestamp}"/>
+                                        <GridViewColumn Header="Measurement" DisplayMemberBinding="{Binding Path=Measurement}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </GroupBox>
+                    </StackPanel>
+                    <Button Content="Manual Cal Request" Command="{Binding ManualCalRequestCommand}"/>
+                    <Button Content="Set Auto Zero Configuration" Command="{Binding SetAutoZeroConfigCommand}"/>
+                    <Button Content="Get Custom Calibration Parameters" Command="{Binding GetCustomCalParametersCommand}"/>
+                    <Button Content="Set Custom Calibration Parameters" Command="{Binding SetCustomCalParametersCommand}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <GroupBox Header="Parameters" Grid.Column="2">
+            <StackPanel>
+                <StackPanel DataContext="{Binding Sensor}">
+                    <TextBlock Text="{Binding Crank.CrankLength, StringFormat='Crank Length: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.CrankStatus, StringFormat='Crank Length Status: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.MismatchStatus, StringFormat='SW Mismatch Status: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.AvailabilityStatus, StringFormat='Availability Status: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.CustomCalibration, StringFormat='Custom Calibration: {0}'}"/>
+                    <TextBlock Text="{Binding Crank.AutoCrankLength, StringFormat='Auto Crank Length: {0}'}"/>
+                    <TextBlock Text="{Binding PeakTorqueThreshold, StringFormat='Peak Torque Threshold: {0}'}"/>
+                    <TextBlock Text="{Binding RiderPositionTimeOffset, StringFormat='Rider Position Time Offset: {0}'}"/>
+                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.ColumnSpan="3" Content="Get Crank Length" Command="{Binding GetParametersCommand}"
+                                CommandParameter="{x:Static dp:SubPage.CrankParameters}"/>
+                    <Button Grid.Row="1" Grid.ColumnSpan="3" Content="Get Peak Torque Threshold" Command="{Binding GetParametersCommand}"
+                                CommandParameter="{x:Static dp:SubPage.PowerPhaseConfiguration}"/>
+                    <Button Grid.Row="2" Grid.ColumnSpan="3" Content="Get Rider Position Time Offset" Command="{Binding GetParametersCommand}"
+                                CommandParameter="{x:Static dp:SubPage.RiderPositionConfiguration}"/>
+                    <Button Grid.Row="3" Content="Set Crank Length" Command="{Binding SetCrankLengthCommand}" CommandParameter="{Binding ElementName=CrankLength, Path=Text}"/>
+                    <StackPanel Grid.Row="3" Grid.Column="2" VerticalAlignment="Center">
+                        <CheckBox Content="Auto Crank Length" IsChecked="{Binding AutoCrankLength}" IsThreeState="False"/>
+                        <TextBox x:Name="CrankLength" Text="110" Width="50" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding Sensor.Offline, Converter={StaticResource BoolToVisibility}}"/>
+    </Grid>
+</Window>

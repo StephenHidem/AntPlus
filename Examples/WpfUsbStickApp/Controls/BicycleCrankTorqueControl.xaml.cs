@@ -8,7 +8,7 @@ namespace WpfUsbStickApp.Controls
     /// </summary>
     public partial class BicycleCrankTorqueControl : UserControl
     {
-        public BicycleCrankTorqueControl(StandardPowerSensor sensor)
+        public BicycleCrankTorqueControl(TorqueSensor sensor)
         {
             InitializeComponent();
             DataContext = sensor;

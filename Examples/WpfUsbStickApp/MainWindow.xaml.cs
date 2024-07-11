@@ -49,8 +49,16 @@ namespace WpfUsbStickApp
                     heartRateWindow.Show();
                     break;
                 case BicyclePower.DeviceClass:
-                    BicyclePowerWindow bpWindow = new((BicyclePower)antDevice);
-                    bpWindow.Show();
+                    if (antDevice is CrankTorqueFrequencySensor)
+                    {
+                        CTFWindow ctfw = new((CrankTorqueFrequencySensor)antDevice);
+                        ctfw.Show();
+                    }
+                    else
+                    {
+                        StandardPowerWindow bpw = new((StandardPowerSensor)antDevice);
+                        bpw.Show();
+                    }
                     break;
                 case BikeSpeedSensor.DeviceClass:
                     BikeSpeedWindow bikeSpeedWindow = new((BikeSpeedSensor)antDevice);
@@ -64,8 +72,8 @@ namespace WpfUsbStickApp
                     BikeSpeedAndCadenceWindow speedAndCadenceWindow = new((CombinedSpeedAndCadenceSensor)antDevice);
                     speedAndCadenceWindow.Show();
                     break;
-                case Equipment.DeviceClass:
-                    FitnessEquipmentWindow fitnessEquipmentWindow = new((Equipment)antDevice);
+                case FitnessEquipment.DeviceClass:
+                    FitnessEquipmentWindow fitnessEquipmentWindow = new((FitnessEquipment)antDevice);
                     fitnessEquipmentWindow.Show();
                     break;
                 case MuscleOxygen.DeviceClass:

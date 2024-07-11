@@ -5,22 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
              xmlns:ant="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
-             d:DataContext="{d:DesignInstance Type=ant:StandardPowerSensor}"
+             d:DataContext="{d:DesignInstance Type=ant:StandardWheelTorqueSensor}"
              mc:Ignorable="d" 
              d:Background="White">
     <Grid>
         <StackPanel>
             <GroupBox Header="Wheel Torque">
                 <StackPanel>
-                    <TextBlock Text="{Binding TorqueSensor.AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
-                    <TextBlock Text="{Binding TorqueSensor.AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
-                    <TextBlock Text="{Binding TorqueSensor.AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
                     <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
-                    <TextBlock Text="{Binding TorqueSensor.AverageSpeed, StringFormat='Average Speed (km/h): {0:F3}'}"/>
-                    <TextBlock Text="{Binding TorqueSensor.AccumulatedDistance, StringFormat='Accumulated Distance (m): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AverageSpeed, StringFormat='Average Speed (km/h): {0:F3}'}"/>
+                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance (m): {0:F3}'}"/>
                 </StackPanel>
             </GroupBox>
-            <uc:BicyclePowerOnlyControl DataContext="{Binding .}"/>
         </StackPanel>
     </Grid>
 </UserControl>

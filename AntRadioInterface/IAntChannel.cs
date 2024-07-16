@@ -263,16 +263,6 @@ namespace SmallEarthTech.AntRadioInterface
         /// </returns>
         bool SendBroadcastData(byte[] data);
 
-        /// <overloads>Sends acknowledged message</overloads>
-        /// <summary>
-        /// Sends the given data as an acknowledged transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
-        /// Throws exception if data > 8-bytes in length
-        /// </summary>
-        /// <param name="data">data to send (length 8 or less)</param>
-        /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
-        /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
-        MessagingReturnCode SendAcknowledgedData(byte[] data, UInt32 ackWaitTime);
-
         /// <overloads>Sends burst transfer</overloads>
         /// <summary>
         /// Sends the given data as a burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
@@ -281,6 +271,15 @@ namespace SmallEarthTech.AntRadioInterface
         /// <param name="completeWaitTime">Time in ms to wait for completion of transfer</param>
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
         MessagingReturnCode SendBurstTransfer(byte[] data, UInt32 completeWaitTime);
+
+        /// <overloads>Sends burst transfer</overloads>
+        /// <summary>
+        /// Sends the given data as a burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
+        /// </summary>
+        /// <param name="data">data to send, can be any length</param>
+        /// <param name="completeWaitTime">Time in ms to wait for completion of transfer</param>
+        /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
+        Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, UInt32 completeWaitTime);
 
         /// <summary>Sends the given data as an extended broadcast transmission.
         /// Throws exception if data &gt; 8-bytes in length</summary>
@@ -292,13 +291,39 @@ namespace SmallEarthTech.AntRadioInterface
         /// </returns>
         bool SendExtBroadcastData(ChannelId channelId, byte[] data);
 
+        /// <summary>
+        /// Sends the given data as an acknowledged transmission.
+        /// Throws exception if data > 8-bytes in length
+        /// </summary>
+        /// <param name="data">data to send (length 8 or less)</param>
+        /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
+        /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
+        MessagingReturnCode SendAcknowledgedData(byte[] data, UInt32 ackWaitTime);
+
+        /// <summary>
+        /// Sends the given data as an acknowledged transmission.
+        /// Throws exception if data > 8-bytes in length
+        /// </summary>
+        /// <param name="data">data to send (length 8 or less)</param>
+        /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
+        /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
+        Task<MessagingReturnCode> SendAcknowledgedDataAsync(byte[] data, UInt32 ackWaitTime);
+
         /// <summary>Sends the given data as an extended acknowledged transmission.
         /// Throws exception if data &gt; 8-bytes in length</summary>
         /// <param name="channelId">Channel ID assigned to a device</param>
         /// <param name="data">Data to send (length 8 or less)</param>
         /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
-        Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime);
+        MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime);
+
+        /// <summary>Sends the given data as an extended acknowledged transmission.
+        /// Throws exception if data &gt; 8-bytes in length</summary>
+        /// <param name="channelId">Channel ID assigned to a device</param>
+        /// <param name="data">Data to send (length 8 or less)</param>
+        /// <param name="ackWaitTime">Time in ms to wait for acknowledgement</param>
+        /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
+        Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime);
 
         /// <summary>Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled</summary>
         /// <param name="channelId">Channel ID assigned to a device</param>
@@ -307,6 +332,14 @@ namespace SmallEarthTech.AntRadioInterface
         /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
         /// <overloads>Sends extended burst data</overloads>
         MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, UInt32 completeWaitTime);
+
+        /// <summary>Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled</summary>
+        /// <param name="channelId">Channel ID assigned to a device</param>
+        /// <param name="data">data to send, can be any length</param>
+        /// <param name="completeWaitTime">Time in ms to wait for completion of transfer</param>
+        /// <returns>0=fail, 1=pass, 2=timeout, 3=cancelled</returns>
+        /// <overloads>Sends extended burst data</overloads>
+        Task<MessagingReturnCode> SendExtBurstTransferAsync(ChannelId channelId, byte[] data, UInt32 completeWaitTime);
 
         /// <overloads>Closes the channel</overloads>
         /// <summary>

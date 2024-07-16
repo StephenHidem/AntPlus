@@ -94,12 +94,6 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public MessagingReturnCode SendAcknowledgedData(byte[] data, uint ackWaitTime)
-        {
-            return (MessagingReturnCode)_antChannel.sendAcknowledgedData((byte[])data, ackWaitTime);
-        }
-
-        /// <inheritdoc/>
         public bool SendBroadcastData(byte[] data)
         {
             return _antChannel.sendBroadcastData(data);
@@ -108,22 +102,71 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public MessagingReturnCode SendBurstTransfer(byte[] data, uint completeWaitTime)
         {
-            return (MessagingReturnCode)_antChannel.sendBurstTransfer(data, completeWaitTime);
+            lock (_lock)
+            {
+                return (MessagingReturnCode)_antChannel.sendBurstTransfer(data, completeWaitTime);
+            }
         }
 
         /// <inheritdoc/>
-        public Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        public async Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, uint completeWaitTime)
+        {
+            return await Task.Run(() =>
+            {
+                lock (_lock)
+                {
+                    return (MessagingReturnCode)_antChannel.sendBurstTransfer(data, completeWaitTime);
+                }
+            });
+        }
+
+        /// <inheritdoc/>
+        public MessagingReturnCode SendAcknowledgedData(byte[] data, uint ackWaitTime)
         {
             lock (_lock)
             {
-                MessagingReturnCode rc = (MessagingReturnCode)_antChannel.sendExtAcknowledgedData(
-                (ushort)channelId.DeviceNumber,
-                channelId.DeviceType,
-                BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
-
-                _logger.LogInformation("SendExtAcknowledgedData: Channel # = {ChannelNumber}, Channel ID = 0x{ChannelId:X8}, Return code = {MRC}, data = {Data}", ChannelNumber, channelId.Id, rc, BitConverter.ToString(data));
-                return Task.FromResult(rc);
+                return (MessagingReturnCode)_antChannel.sendAcknowledgedData((byte[])data, ackWaitTime);
             }
+        }
+
+        /// <inheritdoc/>
+        public async Task<MessagingReturnCode> SendAcknowledgedDataAsync(byte[] data, uint ackWaitTime)
+        {
+            return await Task.Run(() =>
+            {
+                lock (_lock)
+                {
+                    return (MessagingReturnCode)_antChannel.sendAcknowledgedData((byte[])data, ackWaitTime);
+                }
+
+            });
+        }
+
+        /// <inheritdoc/>
+        public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        {
+            lock (_lock)
+            {
+                return (MessagingReturnCode)_antChannel.sendExtAcknowledgedData(
+                            (ushort)channelId.DeviceNumber,
+                            channelId.DeviceType,
+                            BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime)
+        {
+            return await Task.Run(() =>
+            {
+                lock (_lock)
+                {
+                    return (MessagingReturnCode)_antChannel.sendExtAcknowledgedData(
+                                (ushort)channelId.DeviceNumber,
+                                channelId.DeviceType,
+                                BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
+                }
+            });
         }
 
         /// <inheritdoc/>
@@ -135,7 +178,28 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, uint completeWaitTime)
         {
-            return (MessagingReturnCode)_antChannel.sendExtBurstTransfer((ushort)channelId.DeviceNumber, channelId.DeviceType, BitConverter.GetBytes(channelId.Id)[3], data, completeWaitTime);
+            lock (_lock)
+            {
+                return (MessagingReturnCode)_antChannel.sendExtBurstTransfer(
+                    (ushort)channelId.DeviceNumber,
+                    channelId.DeviceType,
+                    BitConverter.GetBytes(channelId.Id)[3], data, completeWaitTime);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<MessagingReturnCode> SendExtBurstTransferAsync(ChannelId channelId, byte[] data, uint completeWaitTime)
+        {
+            return await Task.Run(() =>
+            {
+                lock (_lock)
+                {
+                    return (MessagingReturnCode)_antChannel.sendExtBurstTransfer(
+                        (ushort)channelId.DeviceNumber,
+                        channelId.DeviceType,
+                        BitConverter.GetBytes(channelId.Id)[3], data, completeWaitTime);
+                }
+            });
         }
 
         /// <inheritdoc/>

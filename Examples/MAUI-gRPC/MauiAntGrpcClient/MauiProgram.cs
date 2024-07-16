@@ -25,7 +25,7 @@ namespace MauiAntGrpcClient
                 })
                 .RegisterAppServices()
                 .RegisterViewModels()
-                .RegisterViews();
+                .RegisterPages();
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -50,6 +50,7 @@ namespace MauiAntGrpcClient
             mauiAppBuilder.Services.AddTransient<BikeCadenceViewModel>();
             mauiAppBuilder.Services.AddTransient<BikeSpeedViewModel>();
             mauiAppBuilder.Services.AddTransient<BikeSpeedAndCadenceViewModel>();
+            mauiAppBuilder.Services.AddTransient<CTFViewModel>();
             mauiAppBuilder.Services.AddTransient<FitnessEquipmentViewModel>();
             mauiAppBuilder.Services.AddTransient<GeocacheViewModel>();
             mauiAppBuilder.Services.AddTransient<HeartRateViewModel>();
@@ -59,7 +60,7 @@ namespace MauiAntGrpcClient
             return mauiAppBuilder;
         }
 
-        private static MauiAppBuilder RegisterViews(this MauiAppBuilder mauiAppBuilder)
+        private static MauiAppBuilder RegisterPages(this MauiAppBuilder mauiAppBuilder)
         {
             mauiAppBuilder.Services.AddTransient<HomePage>();
             mauiAppBuilder.Services.AddTransient<RadioCapabilitiesPage>();
@@ -68,6 +69,7 @@ namespace MauiAntGrpcClient
             mauiAppBuilder.Services.AddTransient<BikeCadencePage>();
             mauiAppBuilder.Services.AddTransient<BikeSpeedAndCadencePage>();
             mauiAppBuilder.Services.AddTransient<BikeSpeedPage>();
+            mauiAppBuilder.Services.AddTransient<CTFPage>();
             mauiAppBuilder.Services.AddTransient<FitnessEquipmentPage>();
             mauiAppBuilder.Services.AddTransient<GeocachePage>();
             mauiAppBuilder.Services.AddTransient<HeartRatePage>();

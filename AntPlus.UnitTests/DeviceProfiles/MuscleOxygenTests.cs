@@ -125,7 +125,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Arrange
             TimeSpan localTimeOffset = new(6, 0, 0);
             DateTime currentTimeStamp = DateTime.UtcNow;
-            mockAntChannel.Setup(s => s.SendExtAcknowledgedData(
+            mockAntChannel.Setup(s => s.SendExtAcknowledgedDataAsync(
                 cid, It.Is<byte[]>(cmd => (CommandId)cmd[1] == command &&
                 cmd[3] == localTimeOffset.TotalMinutes / 15 &&
                 BitConverter.ToUInt32(cmd, 4) == (uint)(currentTimeStamp - new DateTime(1989, 12, 31)).TotalSeconds),

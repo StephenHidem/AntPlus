@@ -54,7 +54,7 @@ namespace AntGrpcService.Services
         public override async Task<MessagingCodeReply> SendExtAcknowledgedData(ExtDataRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"{nameof(SendExtAcknowledgedData)}");
-            SmallEarthTech.AntRadioInterface.MessagingReturnCode reply = await AntRadioService.AntChannels[request.ChannelNumber].SendExtAcknowledgedData(new ChannelId(request.ChannelId), [.. request.Data], request.WaitTime);
+            SmallEarthTech.AntRadioInterface.MessagingReturnCode reply = await AntRadioService.AntChannels[request.ChannelNumber].SendExtAcknowledgedDataAsync(new ChannelId(request.ChannelId), [.. request.Data], request.WaitTime);
             return new MessagingCodeReply { ReturnCode = (AntChannelGrpcService.MessagingReturnCode)reply };
         }
     }

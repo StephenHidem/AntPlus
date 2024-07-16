@@ -58,7 +58,7 @@ namespace WpfUsbStickApp.ViewModels
         {
             if (sender != null && e.PropertyName == nameof(FitnessEquipment.TrainingModes))
             {
-                Application.Current.Dispatcher.BeginInvoke(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(() =>
                 {
                     TrainingModes = ((FitnessEquipment)sender).TrainingModes.ToString().Split(',');
                 });

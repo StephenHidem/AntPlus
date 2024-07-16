@@ -50,9 +50,6 @@ namespace WpfUsbStickApp.ViewModels
             }
             await Trainer.CalibrationRequest(req);
         }
-        private bool CanCalibrate()
-        {
-            return CalibrateSpinDown || CalibrateZeroOffset;
-        }
+        private bool CanCalibrate() => CalibrateSpinDown || CalibrateZeroOffset;
     }
 }

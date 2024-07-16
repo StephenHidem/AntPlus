@@ -44,52 +44,41 @@ namespace WpfUsbStickApp
             switch (antDevice?.ChannelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
-                    HeartRateWindow heartRateWindow = new((HeartRate)antDevice);
-                    heartRateWindow.Show();
+                    new HeartRateWindow((HeartRate)antDevice).Show();
                     break;
                 case BicyclePower.DeviceClass:
-                    if (antDevice is CrankTorqueFrequencySensor)
+                    if (antDevice is CrankTorqueFrequencySensor sensor)
                     {
-                        CTFWindow ctfw = new((CrankTorqueFrequencySensor)antDevice);
-                        ctfw.Show();
+                        new CTFWindow(sensor).Show();
                     }
                     else
                     {
-                        StandardPowerWindow bpw = new((StandardPowerSensor)antDevice);
-                        bpw.Show();
+                        new StandardPowerWindow((StandardPowerSensor)antDevice).Show();
                     }
                     break;
                 case BikeSpeedSensor.DeviceClass:
-                    BikeSpeedWindow bikeSpeedWindow = new((BikeSpeedSensor)antDevice);
-                    bikeSpeedWindow.Show();
+                    new BikeSpeedWindow((BikeSpeedSensor)antDevice).Show();
                     break;
                 case BikeCadenceSensor.DeviceClass:
-                    BikeCadenceWindow bikeCadenceWindow = new((BikeCadenceSensor)antDevice);
-                    bikeCadenceWindow.Show();
+                    new BikeCadenceWindow((BikeCadenceSensor)antDevice).Show();
                     break;
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
-                    BikeSpeedAndCadenceWindow speedAndCadenceWindow = new((CombinedSpeedAndCadenceSensor)antDevice);
-                    speedAndCadenceWindow.Show();
+                    new BikeSpeedAndCadenceWindow((CombinedSpeedAndCadenceSensor)antDevice).Show();
                     break;
                 case FitnessEquipment.DeviceClass:
-                    FitnessEquipmentWindow fitnessEquipmentWindow = new((FitnessEquipment)antDevice);
-                    fitnessEquipmentWindow.Show();
+                    new FitnessEquipmentWindow((FitnessEquipment)antDevice).Show();
                     break;
                 case MuscleOxygen.DeviceClass:
-                    MuscleOxygenWindow muscleOxygenWindow = new((MuscleOxygen)antDevice);
-                    muscleOxygenWindow.Show();
+                    new MuscleOxygenWindow((MuscleOxygen)antDevice).Show();
                     break;
                 case Geocache.DeviceClass:
-                    GeocacheWindow geocacheWindow = new((Geocache)antDevice);
-                    geocacheWindow.Show();
+                    new GeocacheWindow((Geocache)antDevice).Show();
                     break;
                 case Tracker.DeviceClass:
-                    AssetTrackerWindow tracker = new((Tracker)antDevice);
-                    tracker.Show();
+                    new AssetTrackerWindow((Tracker)antDevice).Show();
                     break;
                 case StrideBasedSpeedAndDistance.DeviceClass:
-                    StrideBasedMonitorWindow sdmWindow = new((StrideBasedSpeedAndDistance)antDevice);
-                    sdmWindow.Show();
+                    new StrideBasedMonitorWindow((StrideBasedSpeedAndDistance)antDevice).Show();
                     break;
                 default:
                     // unknown device

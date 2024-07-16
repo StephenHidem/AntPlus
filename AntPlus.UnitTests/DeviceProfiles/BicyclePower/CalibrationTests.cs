@@ -158,7 +158,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0xAA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -179,7 +179,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xAB, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0xAB, (byte)autoZero, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -198,7 +198,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0xBA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0xBA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -217,7 +217,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var sensor = CreateStandardPowerSensor();
             byte[] customParameters = new byte[] { 0x01, 0xBC, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, customParameters,
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, customParameters,
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 

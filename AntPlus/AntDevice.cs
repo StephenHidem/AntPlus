@@ -112,7 +112,7 @@ namespace SmallEarthTech.AntPlus
             {
                 byte[] msg = new byte[] { (byte)CommonDataPage.RequestDataPage, 0, 0, descriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
                 BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-                return await antChannel.SendExtAcknowledgedData(ChannelId, msg, ackWaitTime);
+                return await antChannel.SendExtAcknowledgedDataAsync(ChannelId, msg, ackWaitTime);
             }
             else
             {
@@ -132,7 +132,7 @@ namespace SmallEarthTech.AntPlus
             MessagingReturnCode ret;
             do
             {
-                ret = await antChannel.SendExtAcknowledgedData(ChannelId, message, ackWaitTime);
+                ret = await antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, ackWaitTime);
             } while (ret != MessagingReturnCode.Pass && --retries > 0);
 
             if (ret != MessagingReturnCode.Pass)

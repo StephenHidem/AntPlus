@@ -8,15 +8,11 @@ namespace WpfUsbStickApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            try
+            if (value is byte[] bytes)
             {
-                byte[] bytes = (byte[])value;
                 return BitConverter.ToString(bytes);
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

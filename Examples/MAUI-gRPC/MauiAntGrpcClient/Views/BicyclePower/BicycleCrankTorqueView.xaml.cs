@@ -1,12 +1,12 @@
-using MauiAntGrpcClient.ViewModels;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 
 namespace MauiAntGrpcClient.Views.BicyclePower;
 
 public partial class BicycleCrankTorqueView : ContentView
 {
-    public BicycleCrankTorqueView(BicyclePowerViewModel viewModel)
+    public BicycleCrankTorqueView(StandardCrankTorqueSensor sensor)
     {
-        BindingContext = viewModel;
+        BindingContext = sensor;
         InitializeComponent();
     }
 }

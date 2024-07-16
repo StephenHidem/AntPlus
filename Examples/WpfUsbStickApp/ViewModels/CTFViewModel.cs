@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using System.Windows;
 
 namespace WpfUsbStickApp.ViewModels
 {
@@ -8,13 +9,9 @@ namespace WpfUsbStickApp.ViewModels
     {
         public CrankTorqueFrequencySensor Sensor { get; }
 
-        [ObservableProperty]
-        private string operationResult;
-
         public CTFViewModel(CrankTorqueFrequencySensor sensor)
         {
             Sensor = sensor;
-            OperationResult = "Unknown";
             Sensor.PropertyChanged += Sensor_PropertyChanged;
         }
 
@@ -22,7 +19,7 @@ namespace WpfUsbStickApp.ViewModels
         {
             if (e.PropertyName == "CalibrationStatus")
             {
-                App.Current.Dispatcher.Invoke(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(() =>
                 {
                     ManualCalRequestCommand.NotifyCanExecuteChanged();
                     SaveSlopeCommand.NotifyCanExecuteChanged();
@@ -49,6 +46,6 @@ namespace WpfUsbStickApp.ViewModels
             _ = Sensor.SaveSerialNumberToFlash(ushort.Parse(serialNumber));
         }
 
-        private bool CheckCanExecute => ((BicyclePower)Sensor).CalibrationStatus != CalibrationResponse.InProgress;
+        private bool CheckCanExecute => Sensor.CalibrationStatus != CalibrationResponse.InProgress;
     }
 }

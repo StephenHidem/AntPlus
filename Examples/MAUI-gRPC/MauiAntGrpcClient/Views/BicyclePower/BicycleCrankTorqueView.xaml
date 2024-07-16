@@ -2,21 +2,19 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:MauiAntGrpcClient.Views.BicyclePower"
-             xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
-             x:DataType="viewmodels:BicyclePowerViewModel"
+             xmlns:bp="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;assembly=SmallEarthTech.AntPlus"
+             x:DataType="bp:StandardCrankTorqueSensor"
              x:Class="MauiAntGrpcClient.Views.BicyclePower.BicycleCrankTorqueView">
     <VerticalStackLayout>
         <Frame>
             <StackLayout>
                 <Label Text="Crank Torque" FontAttributes="Bold" TextDecorations="Underline"/>
-                <Label Text="{Binding BicyclePower.CrankTorqueSensor.AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
-                <Label Text="{Binding BicyclePower.CrankTorqueSensor.AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
-                <Label Text="{Binding BicyclePower.CrankTorqueSensor.AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
-                <Label Text="{Binding BicyclePower.CrankTorqueSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
-                <Label Text="{Binding BicyclePower.CrankTorqueSensor.AverageCadence, StringFormat='AverageCadence (RPM): {0}'}"/>
+                <Label Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
+                <Label Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
+                <Label Text="{Binding AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
+                <Label Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
+                <Label Text="{Binding AverageCadence, StringFormat='Average Cadence (RPM): {0}'}"/>
             </StackLayout>
         </Frame>
-        <views:PowerView Power="{Binding BicyclePower.PowerSensor}"/>
-        <views:TEPSView TEPS="{Binding BicyclePower.PowerSensor.TorqueEffectiveness}"/>
     </VerticalStackLayout>
 </ContentView>

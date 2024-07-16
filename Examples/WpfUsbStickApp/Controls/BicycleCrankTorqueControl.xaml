@@ -16,7 +16,7 @@
                     <TextBlock Text="{Binding AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
                     <TextBlock Text="{Binding AverageTorque, StringFormat='Average Torque (Nm): {0:F3}'}"/>
                     <TextBlock Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
-                    <TextBlock Text="{Binding AverageCadence, StringFormat='AverageCadence (RPM): {0}'}"/>
+                    <TextBlock Text="{Binding AverageCadence, StringFormat='Average Cadence (RPM): {0}'}"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

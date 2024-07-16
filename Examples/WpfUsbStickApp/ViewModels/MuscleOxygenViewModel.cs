@@ -44,11 +44,7 @@ namespace WpfUsbStickApp.ViewModels
             TimeSpan ts = new(Hours, Minutes, 0);
             return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StartSession, ts, DateTime.UtcNow);
         }
-
-        private bool CanStartSession()
-        {
-            return !started;
-        }
+        private bool CanStartSession() => !started;
 
         [RelayCommand(CanExecute = nameof(CanStopSession))]
         private async Task<MessagingReturnCode> StopSession()
@@ -58,11 +54,7 @@ namespace WpfUsbStickApp.ViewModels
             TimeSpan ts = new(Hours, Minutes, 0);
             return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.StopSession, ts, DateTime.UtcNow);
         }
-
-        private bool CanStopSession()
-        {
-            return started;
-        }
+        private bool CanStopSession() => started;
 
         [RelayCommand(CanExecute = nameof(CanLogLap))]
         private async Task<MessagingReturnCode> LogLap()
@@ -70,11 +62,7 @@ namespace WpfUsbStickApp.ViewModels
             TimeSpan ts = new(Hours, Minutes, 0);
             return await MuscleOxygen.SendCommand(MuscleOxygen.CommandId.Lap, ts, DateTime.UtcNow);
         }
-
-        private bool CanLogLap()
-        {
-            return started;
-        }
+        private bool CanLogLap() => started;
 
         private void CheckCanExecutes()
         {

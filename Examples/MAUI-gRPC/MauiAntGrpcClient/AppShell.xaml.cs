@@ -14,6 +14,7 @@ namespace MauiAntGrpcClient
             Routing.RegisterRoute("BicyclePower", typeof(BicyclePowerPage));
             Routing.RegisterRoute("BikeCadence", typeof(BikeCadencePage));
             Routing.RegisterRoute("BikeSpeed", typeof(BikeSpeedPage));
+            Routing.RegisterRoute("CrankTorqueFrequency", typeof(CTFPage));
             Routing.RegisterRoute("SpeedAndCadence", typeof(BikeSpeedAndCadencePage));
             Routing.RegisterRoute("FitnessEquipment", typeof(FitnessEquipmentPage));
             Routing.RegisterRoute("Geocache", typeof(GeocachePage));

@@ -40,16 +40,12 @@ namespace WpfUsbStickApp.ViewModels
 
         private void HeartRate_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
+            if (e.PropertyName == nameof(HeartRate.Capabilities))
             {
-                case nameof(HeartRate.Capabilities):
-                    Application.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        SetSportModeCommand.NotifyCanExecuteChanged();
-                    });
-                    break;
-                default:
-                    break;
+                _ = Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    SetSportModeCommand.NotifyCanExecuteChanged();
+                });
             }
         }
 

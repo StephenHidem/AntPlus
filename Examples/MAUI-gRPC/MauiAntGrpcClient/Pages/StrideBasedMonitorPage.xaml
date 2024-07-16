@@ -16,17 +16,17 @@
             <StackLayout>
                 <Frame>
                     <StackLayout>
-                        <Label Text="{Binding SDM.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
-                        <Label Text="{Binding SDM.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
-                        <Label Text="{Binding SDM.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
-                        <Label Text="{Binding SDM.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
-                        <Label Text="{Binding SDM.AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
-                        <Label Text="{Binding SDM.AccumulatedTime, StringFormat='Accumulated Time: {0:F2}'}"/>
-                        <Label Text="{Binding SDM.UpdateLatency, StringFormat='Update Latency: {0}'}"/>
-                        <Label Text="{Binding SDM.Status.Location, StringFormat='Location: {0}'}"/>
-                        <Label Text="{Binding SDM.Status.Health, StringFormat='Health: {0}'}"/>
-                        <Label Text="{Binding SDM.Status.Battery, StringFormat='Battery: {0}'}"/>
-                        <Label Text="{Binding SDM.Status.State, StringFormat='State: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.AccumulatedStrideCount, StringFormat='Accumulated Stride Count: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.AccumulatedTime, StringFormat='Accumulated Time: {0:F2}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.UpdateLatency, StringFormat='Update Latency: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.Status.Location, StringFormat='Location: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.Status.Health, StringFormat='Health: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.Status.Battery, StringFormat='Battery: {0}'}"/>
+                        <Label Text="{Binding StrideSpeedDistanceMonitor.Status.State, StringFormat='State: {0}'}"/>
                     </StackLayout>
                 </Frame>
 
@@ -35,8 +35,8 @@
                         <Button Text="Request Summaries" Command="{Binding RequestSummaryCommand}"/>
                         <StackLayout Grid.Column="1" Margin="8">
                             <Label Text="Summaries" FontAttributes="Bold" TextDecorations="Underline"/>
-                            <Label Text="{Binding SDM.StrideCountSummary, StringFormat='Stride Count: {0}'}"/>
-                            <Label Text="{Binding SDM.DistanceSummary, StringFormat='Distance: {0}'}"/>
+                            <Label Text="{Binding StrideSpeedDistanceMonitor.StrideCountSummary, StringFormat='Stride Count: {0}'}"/>
+                            <Label Text="{Binding StrideSpeedDistanceMonitor.DistanceSummary, StringFormat='Distance: {0}'}"/>
                         </StackLayout>
                     </Grid>
                 </Frame>
@@ -46,15 +46,15 @@
                         <Button Text="Request Capabilities" Command="{Binding RequestCapabilitiesCommand}"/>
                         <StackLayout Grid.Column="1">
                             <Label Text="Capabilities" FontAttributes="Bold" TextDecorations="Underline"/>
-                            <Label Text="{Binding SDM.Capabilities}"/>
+                            <Label Text="{Binding StrideSpeedDistanceMonitor.Capabilities}"/>
                         </StackLayout>
                     </Grid>
                 </Frame>
             </StackLayout>
         </ScrollView>
 
-        <views:CommonDataPagesView CommonDataPages="{Binding SDM.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+        <views:CommonDataPagesView CommonDataPages="{Binding StrideSpeedDistanceMonitor.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
 
-        <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding SDM.Offline}" Grid.RowSpan="2"/>
+        <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding StrideSpeedDistanceMonitor.Offline}" Grid.RowSpan="2"/>
     </Grid>
 </ContentPage>

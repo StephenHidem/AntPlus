@@ -10,7 +10,7 @@ namespace MauiAntGrpcClient.Converters
             {
                 return BitConverter.ToString(bytes);
             }
-            return null;
+            return string.Empty;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

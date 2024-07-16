@@ -4,19 +4,12 @@ using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 
 namespace MauiAntGrpcClient.ViewModels
 {
-    public partial class AssetTrackerViewModel : ObservableObject, IQueryAttributable
+    public partial class AssetTrackerViewModel(ILogger<AssetTrackerViewModel> logger) : ObservableObject, IQueryAttributable
     {
-        private readonly ILogger<AssetTrackerViewModel> _logger;
+        private readonly ILogger<AssetTrackerViewModel> _logger = logger;
 
         [ObservableProperty]
-        private Tracker tracker = null!;
-
-
-        public AssetTrackerViewModel(ILogger<AssetTrackerViewModel> logger)
-        {
-            _logger = logger;
-            _logger.LogInformation("Created AssetTrackerViewModel");
-        }
+        private Tracker? tracker;
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

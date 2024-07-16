@@ -1,21 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiAntGrpcClient.Views.FitnessEquipment;
-using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
-using SmallEarthTech.AntRadioInterface;
-using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Equipment;
+using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment;
 
 namespace MauiAntGrpcClient.ViewModels
 {
     public partial class FitnessEquipmentViewModel : ObservableObject, IQueryAttributable
     {
-        private readonly ILogger<FitnessEquipmentViewModel> _logger;
-
         [ObservableProperty]
-        private Equipment fitnessEquipment = null!;
+        private FitnessEquipment? fitnessEquipment;
         [ObservableProperty]
-        private ContentView specificEquipmentView = null!;
+        private ContentView? specificEquipmentView;
 
         [ObservableProperty]
         private double userWeight;
@@ -39,16 +35,9 @@ namespace MauiAntGrpcClient.ViewModels
         [ObservableProperty]
         private string[]? capabilities;
 
-        public FitnessEquipmentViewModel(ILogger<FitnessEquipmentViewModel> logger)
-        {
-            _logger = logger;
-            _logger.LogInformation("Created FitnessEquipment");
-        }
-
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
-            FitnessEquipment = (Equipment)query["Sensor"];
+            FitnessEquipment = (FitnessEquipment)query["Sensor"];
             FitnessEquipment.LapToggled += FitnessEquipment_LapToggled;
             FitnessEquipment.PropertyChanged += FitnessEquipment_PropertyChanged;
 
@@ -81,39 +70,38 @@ namespace MauiAntGrpcClient.ViewModels
 
         private void FitnessEquipment_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
+            if (e.PropertyName == "TrainingModes")
             {
-                case nameof(FitnessEquipment.TrainingModes):
-                    SupportedTrainingModes = FitnessEquipment.TrainingModes;
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    SupportedTrainingModes = FitnessEquipment!.TrainingModes;
                     Capabilities = FitnessEquipment.TrainingModes.ToString().Split(',');
-                    break;
-                default:
-                    break;
+                });
             }
         }
 
         private void FitnessEquipment_LapToggled(object? sender, EventArgs e)
         {
-            LapSplitTime = ((Equipment)sender!).GeneralData.ElapsedTime;
+            LapSplitTime = ((FitnessEquipment)sender!).GeneralData.ElapsedTime;
         }
 
         [RelayCommand]
-        private async Task<MessagingReturnCode> SetUserConfig() => await FitnessEquipment.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
+        private async Task SetUserConfig() => _ = await FitnessEquipment!.SetUserConfiguration(UserWeight, WheelDiameterOffset, BikeWeight, WheelDiameter, GearRatio);
 
         [RelayCommand(CanExecute = nameof(CanSetBasicResistance))]
-        private async Task<MessagingReturnCode> SetBasicResistance(string percent) => await FitnessEquipment.SetBasicResistance(double.Parse(percent));
-        private bool CanSetBasicResistance() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.BasicResistance);
+        private async Task SetBasicResistance(string percent) => _ = await FitnessEquipment!.SetBasicResistance(double.Parse(percent));
+        private bool CanSetBasicResistance() => FitnessEquipment != null && FitnessEquipment.TrainingModes.HasFlag(SupportedTrainingModes.BasicResistance);
 
         [RelayCommand(CanExecute = nameof(CanSetTargetPower))]
-        private async Task<MessagingReturnCode> SetTargetPower(string power) => await FitnessEquipment.SetTargetPower(double.Parse(power));
-        private bool CanSetTargetPower() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.TargetPower);
+        private async Task SetTargetPower(string power) => _ = await FitnessEquipment!.SetTargetPower(double.Parse(power));
+        private bool CanSetTargetPower() => FitnessEquipment != null && FitnessEquipment.TrainingModes.HasFlag(SupportedTrainingModes.TargetPower);
 
         [RelayCommand(CanExecute = nameof(CanSetWindResistance))]
-        private async Task<MessagingReturnCode> SetWindResistance() => await FitnessEquipment.SetWindResistance(0.51, -30, 0.9);
-        private bool CanSetWindResistance() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.Simulation);
+        private async Task SetWindResistance() => _ = await FitnessEquipment!.SetWindResistance(0.51, -30, 0.9);
+        private bool CanSetWindResistance() => FitnessEquipment != null && FitnessEquipment.TrainingModes.HasFlag(SupportedTrainingModes.Simulation);
 
         [RelayCommand(CanExecute = nameof(CanSetTrackResistance))]
-        private async Task<MessagingReturnCode> SetTrackResistance(string grade) => await FitnessEquipment.SetTrackResistance(double.Parse(grade));
-        private bool CanSetTrackResistance() => FitnessEquipment.TrainingModes.HasFlag(Equipment.SupportedTrainingModes.Simulation);
+        private async Task SetTrackResistance(string grade) => _ = await FitnessEquipment!.SetTrackResistance(double.Parse(grade));
+        private bool CanSetTrackResistance() => FitnessEquipment != null && FitnessEquipment.TrainingModes.HasFlag(SupportedTrainingModes.Simulation);
     }
 }

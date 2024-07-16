@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiAntGrpcClient.Services;
-using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
@@ -13,9 +12,8 @@ using System.Net;
 
 namespace MauiAntGrpcClient.ViewModels
 {
-    public partial class HomePageViewModel(ILogger<HomePageViewModel> logger, IAntRadio antRadioService, IServiceProvider services) : ObservableObject
+    public partial class HomePageViewModel(IAntRadio antRadioService, IServiceProvider services) : ObservableObject
     {
-        private readonly ILogger<HomePageViewModel> _logger = logger;
         private readonly AntRadioService _antRadioService = (AntRadioService)antRadioService;
         private readonly IServiceProvider _services = services;
 
@@ -35,7 +33,6 @@ namespace MauiAntGrpcClient.ViewModels
 
         public async Task SearchAsync()
         {
-            _logger.LogInformation($"{nameof(SearchAsync)}");
             IsBusy = true;
             await _antRadioService.FindAntRadioServerAsync();
             IsBusy = false;
@@ -60,7 +57,6 @@ namespace MauiAntGrpcClient.ViewModels
         [RelayCommand]
         private async Task ShowDetails(AntDevice antDevice)
         {
-            _logger.LogInformation("ShowDetails {Ant}", antDevice);
             switch (antDevice)
             {
                 case Tracker:
@@ -68,9 +64,14 @@ namespace MauiAntGrpcClient.ViewModels
                     { "Sensor", (Tracker)antDevice },
                 });
                     break;
-                case Bicycle:
+                case StandardPowerSensor:
                     await Shell.Current.GoToAsync("BicyclePower", new Dictionary<string, object> {
-                    { "Sensor", (Bicycle)antDevice },
+                    { "Sensor", (BicyclePower)antDevice },
+                });
+                    break;
+                case CrankTorqueFrequencySensor:
+                    await Shell.Current.GoToAsync("CrankTorqueFrequency", new Dictionary<string, object> {
+                    { "Sensor", (CrankTorqueFrequencySensor)antDevice },
                 });
                     break;
                 case BikeSpeedSensor:
@@ -88,9 +89,9 @@ namespace MauiAntGrpcClient.ViewModels
                     { "Sensor", (BikeCadenceSensor)antDevice }
                 });
                     break;
-                case Equipment:
+                case FitnessEquipment:
                     await Shell.Current.GoToAsync("FitnessEquipment", new Dictionary<string, object> {
-                    { "Sensor", (Equipment)antDevice }
+                    { "Sensor", (FitnessEquipment)antDevice }
                 });
                     break;
                 case Geocache:

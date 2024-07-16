@@ -42,7 +42,7 @@ namespace AntMulticastServer
                 ChannelId channelId = new(BitConverter.ToUInt32(result.Buffer, 0));
                 byte[] msg = result.Buffer.Skip(4).Take(8).ToArray();
                 uint ackWaitTime = BitConverter.ToUInt32(result.Buffer, 12);
-                _ = await channel[1].SendExtAcknowledgedData(channelId, msg, ackWaitTime);
+                _ = await channel[1].SendExtAcknowledgedDataAsync(channelId, msg, ackWaitTime);
             }
 
             // remove handler

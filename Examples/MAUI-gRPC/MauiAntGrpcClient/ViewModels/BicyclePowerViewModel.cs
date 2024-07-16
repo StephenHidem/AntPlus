@@ -1,123 +1,81 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiAntGrpcClient.Views.BicyclePower;
-using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
-using SmallEarthTech.AntRadioInterface;
 using System.ComponentModel;
 
 namespace MauiAntGrpcClient.ViewModels
 {
-    public partial class BicyclePowerViewModel(ILogger<BicyclePowerViewModel> logger) : ObservableObject, IQueryAttributable
+    public partial class BicyclePowerViewModel : ObservableObject, IQueryAttributable
     {
-        private readonly ILogger<BicyclePowerViewModel> _logger = logger;
-        public SensorType SensorType => BicyclePower.Sensor;
+        [ObservableProperty]
+        private StandardPowerSensor? sensor;
 
         [ObservableProperty]
-        private Bicycle bicyclePower = null!;
-        [ObservableProperty]
-        private ContentView specificBicycleView = null!;
-        [ObservableProperty]
-        private bool options;
+        private bool autoCrankLength;
 
         [ObservableProperty]
-        private string ctfAckMessage = null!;
+        private ContentView? torqueSensorView;
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            BicyclePower = (Bicycle)query["Sensor"];
-            BicyclePower.Calibration.PropertyChanged += OnPropertyChanged;
-            switch (BicyclePower.Sensor)
+            Sensor = (StandardPowerSensor)query["Sensor"];
+            Sensor.PropertyChanged += OnPropertyChanged;
+            if (Sensor.TorqueSensor != null)
             {
-                case SensorType.Power:
-                    SpecificBicycleView = new BicyclePowerOnlyView(this);
-                    break;
-                case SensorType.WheelTorque:
-                    SpecificBicycleView = new BicycleWheelTorqueView(this);
-                    break;
-                case SensorType.CrankTorque:
-                    SpecificBicycleView = new BicycleCrankTorqueView(this);
-                    break;
-                case SensorType.CrankTorqueFrequency:
-                    SpecificBicycleView = new CrankTorqueFrequencyView(this);
-                    BicyclePower.CTFSensor.SaveAcknowledged += CTFSensor_SaveAcknowledged;
-                    break;
-                default:
-                    break;
+                switch (Sensor.TorqueSensor)
+                {
+                    case StandardCrankTorqueSensor:
+                        TorqueSensorView = new BicycleCrankTorqueView((StandardCrankTorqueSensor)Sensor.TorqueSensor);
+                        break;
+                    case StandardWheelTorqueSensor:
+                        TorqueSensorView = new BicycleWheelTorqueView((StandardWheelTorqueSensor)Sensor.TorqueSensor);
+                        break;
+                    default:
+                        break;
+                }
             }
-            Options = BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _logger.LogInformation("Sender: {Sender}, Property: {PropName}", sender, e.PropertyName);
             if (e.PropertyName == "AutoZeroSupported")
             {
                 SetAutoZeroConfigCommand.NotifyCanExecuteChanged();
             }
             if (sender != null && e.PropertyName == "CalibrationStatus")
             {
-                _logger.LogInformation("{Status}", ((Calibration)sender).CalibrationStatus);
             }
         }
 
-        private void CTFSensor_SaveAcknowledged(object? sender, CrankTorqueFrequencySensor.CTFDefinedId e)
+        [RelayCommand(CanExecute = nameof(CheckCanExecute))]
+        private async Task ManualCalRequest() => _ = await Sensor!.RequestManualCalibration();
+
+        [RelayCommand(CanExecute = nameof(CheckCanExecute))]
+        private async Task SetAutoZeroConfig() => _ = await Sensor!.SetAutoZeroConfiguration(Sensor.AutoZeroStatus == AutoZero.Off ? AutoZero.On : AutoZero.Off);
+
+        [RelayCommand(CanExecute = nameof(CheckCanExecute))]
+        private async Task GetCustomCalParameters() => _ = await Sensor!.RequestCustomParameters();
+
+        [RelayCommand(CanExecute = nameof(CheckCanExecute))]
+        private async Task SetCustomCalParameters(string parameters) => _ = await Sensor!.SetCustomParameters(Convert.FromHexString(parameters));
+
+        [RelayCommand(CanExecute = nameof(CheckCanExecute))]
+        private async Task GetParameters(SubPage subpage) => _ = await Sensor!.GetParameters(subpage);
+
+        [RelayCommand(CanExecute = nameof(CheckCanExecute))]
+        private async Task SetCrankLength(string length)
         {
-            switch (e)
+            if (AutoCrankLength)
             {
-                case CrankTorqueFrequencySensor.CTFDefinedId.Slope:
-                    CtfAckMessage = "Slope saved.";
-                    break;
-                case CrankTorqueFrequencySensor.CTFDefinedId.SerialNumber:
-                    CtfAckMessage = "Serial number saved.";
-                    break;
-                default:
-                    break;
+                _ = await Sensor!.SetCrankLength(0xFE);
+            }
+            else
+            {
+                _ = await Sensor!.SetCrankLength(double.Parse(length));
             }
         }
 
-        [RelayCommand]
-        private async Task<MessagingReturnCode> ManualCalRequest() => await BicyclePower.Calibration.RequestManualCalibration();
-
-        [RelayCommand(CanExecute = nameof(CanSetAutoZeroConfig))]
-        private async Task<MessagingReturnCode> SetAutoZeroConfig() => await BicyclePower.Calibration.SetAutoZeroConfiguration(BicyclePower.Calibration.AutoZeroStatus == Calibration.AutoZero.Off ? Calibration.AutoZero.On : Calibration.AutoZero.Off);
-        private bool CanSetAutoZeroConfig()
-        {
-            return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency && BicyclePower.Calibration.AutoZeroSupported;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanGetCustomCalParameters))]
-        private async Task<MessagingReturnCode> GetCustomCalParameters() => await BicyclePower.Calibration.RequestCustomParameters();
-        private bool CanGetCustomCalParameters()
-        {
-            return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanSetCustomCalParameters))]
-        private async Task<MessagingReturnCode> SetCustomCalParameters(string parameters) => await BicyclePower.Calibration.SetCustomParameters(Convert.FromHexString(parameters));
-        private bool CanSetCustomCalParameters()
-        {
-            return BicyclePower != null && BicyclePower.Sensor != SensorType.CrankTorqueFrequency;
-        }
-
-        [RelayCommand]
-        private async Task<MessagingReturnCode> GetParameters(Subpage subpage) => await BicyclePower.PowerSensor.Parameters.GetParameters(subpage);
-
-        [RelayCommand]
-        private async Task<MessagingReturnCode> SetCrankLength(string length) => await BicyclePower.PowerSensor.Parameters.SetCrankLength(Convert.ToDouble(length));
-
-        [RelayCommand]
-        private async Task<MessagingReturnCode> SaveSlope(string slope)
-        {
-            CtfAckMessage = "Save slope";
-            return await BicyclePower.CTFSensor.SaveSlopeToFlash(Convert.ToDouble(slope));
-        }
-
-        [RelayCommand]
-        private async Task<MessagingReturnCode> SaveSerialNumber(string sn)
-        {
-            CtfAckMessage = "Save SN";
-            return await BicyclePower.CTFSensor.SaveSerialNumberToFlash(Convert.ToUInt16(sn));
-        }
+        private bool CheckCanExecute => Sensor?.CalibrationStatus != CalibrationResponse.InProgress;
     }
 }

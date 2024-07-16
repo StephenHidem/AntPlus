@@ -113,7 +113,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             // Arrange
             var trainer = CreateTrainer();
             byte[] dataPage = new byte[] { 0x01, (byte)request, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 dataPage,
                 500).Result).Returns(MessagingReturnCode.Pass);
@@ -259,7 +259,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             // Arrange
             var trainer = CreateTrainer();
             double resistance = 50;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 48, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(resistance / 0.5) },
                 500).Result).Returns(MessagingReturnCode.Pass);
@@ -280,7 +280,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             var trainer = CreateTrainer();
             double power = 4000;
             byte[] expPow = BitConverter.GetBytes((ushort)(power / 0.25));
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 49, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, expPow[0], expPow[1] },
                 500).Result).Returns(MessagingReturnCode.Pass);
@@ -302,7 +302,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             double windResistanceCoefficient = 1.86;
             sbyte windSpeed = 0;
             double draftingFactor = 0.5;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 50, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(windResistanceCoefficient / 0.01), (byte)(windSpeed + 127), (byte)(draftingFactor / 0.01) },
                 500).Result).Returns(MessagingReturnCode.Pass);
@@ -326,7 +326,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             double grade = 0;
             double rollingResistanceCoefficient = 0.004;
             byte[] expGrade = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 51, 0xFF, 0xFF, 0xFF, 0xFF, expGrade[0], expGrade[1], (byte)(rollingResistanceCoefficient / 0.00005) },
                 500).Result).Returns(MessagingReturnCode.Pass);
@@ -354,7 +354,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             byte[] expWeight = BitConverter.GetBytes((ushort)(userWeight / 0.01));
             byte[] expBikeWeight = BitConverter.GetBytes((ushort)(bikeWeight / 0.05) << 4);
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 55, expWeight[0], expWeight[1], 0xFF, (byte)((wheelDiameterOffset & 0x0F) | (expBikeWeight[0] & 0xF0)), expBikeWeight[1], (byte)(wheelDiameter / 0.01), (byte)(gearRatio / 0.03) },
                 500).Result).Returns(MessagingReturnCode.Pass);

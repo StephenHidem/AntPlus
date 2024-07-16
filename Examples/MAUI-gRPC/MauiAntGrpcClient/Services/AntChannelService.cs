@@ -123,11 +123,6 @@ namespace MauiAntGrpcClient.Services
             throw new NotImplementedException();
         }
 
-        public MessagingReturnCode SendAcknowledgedData(byte[] data, uint ackWaitTime)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool SendBroadcastData(byte[] data)
         {
             throw new NotImplementedException();
@@ -138,7 +133,34 @@ namespace MauiAntGrpcClient.Services
             throw new NotImplementedException();
         }
 
-        public async Task<MessagingReturnCode> SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        public Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, uint completeWaitTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MessagingReturnCode SendAcknowledgedData(byte[] data, uint ackWaitTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MessagingReturnCode> SendAcknowledgedDataAsync(byte[] data, uint ackWaitTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+        {
+            var reply = _client.SendExtAcknowledgedData(new ExtDataRequest
+            {
+                ChannelNumber = ChannelNumber,
+                ChannelId = channelId.Id,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = ackWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
+        }
+
+        public async Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime)
         {
             var reply = await _client.SendExtAcknowledgedDataAsync(new ExtDataRequest
             {
@@ -156,6 +178,11 @@ namespace MauiAntGrpcClient.Services
         }
 
         public MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, uint completeWaitTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MessagingReturnCode> SendExtBurstTransferAsync(ChannelId channelId, byte[] data, uint completeWaitTime)
         {
             throw new NotImplementedException();
         }

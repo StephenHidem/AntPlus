@@ -10,15 +10,19 @@ namespace WpfUsbStickApp.ViewModels
 {
     internal partial class GeocacheViewModel : ObservableObject
     {
-        private bool pinReq, authReq, programming, logVisit;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RequestPINCommand))]
+        [NotifyCanExecuteChangedFor(nameof(LogVisitCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RequestAuthenticationCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
+        private bool isBusy;
 
-        private readonly Geocache geocache;
-        public Geocache Geocache => geocache;
+        [ObservableProperty]
+        private Geocache geocache;
 
         [ObservableProperty]
         private string? trackableId;
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
         private uint? pin;
         [ObservableProperty]
         private double? latitude;
@@ -29,100 +33,54 @@ namespace WpfUsbStickApp.ViewModels
 
         public GeocacheViewModel(Geocache geocache)
         {
-            this.geocache = geocache;
-            geocache.PropertyChanged += Geocache_PropertyChanged;
+            Geocache = geocache;
+            Geocache.PropertyChanged += OnPropertyChanged;
         }
 
-        private void Geocache_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
+            if (e.PropertyName == "NumberOfVisits")
             {
-                case nameof(Geocache.ProgrammingPIN):
-                    if (pinReq)
-                    {
-                        pinReq = false;
-                        CheckCanExecutes();
-                    }
-                    break;
-                case nameof(Geocache.NumberOfVisits):
-                    if (logVisit)
-                    {
-                        logVisit = false;
-                    }
-                    CheckCanExecutes();
-                    break;
-                case nameof(Geocache.AuthenticationToken):
-                    if (authReq)
-                    {
-                        authReq = false;
-                        CheckCanExecutes();
-                    }
-                    break;
-                default:
-                    break;
+                _ = Application.Current.Dispatcher.BeginInvoke(() => { LogVisitCommand.NotifyCanExecuteChanged(); });
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanRequestPin))]
         private async Task RequestPIN()
         {
-            pinReq = true;
-            CheckCanExecutes();
-            _ = await Task.Run(() => geocache.RequestPinPage());
+            IsBusy = true;
+            _ = await Geocache.RequestPinPage();
+            IsBusy = false;
         }
-        private bool CanRequestPin()
-        {
-            return !geocache.Offline && !programming && !pinReq & !logVisit && !authReq;
-        }
+        private bool CanRequestPin() => !Geocache.Offline && !IsBusy;
 
         [RelayCommand(CanExecute = nameof(CanLogVisit))]
         private async Task LogVisit()
         {
-            logVisit = true;
-            CheckCanExecutes();
-            _ = await geocache.UpdateLoggedVisits();
+            IsBusy = true;
+            _ = await Geocache.UpdateLoggedVisits();
+            IsBusy = false;
         }
-        private bool CanLogVisit()
-        {
-            return !geocache.Offline && !programming && !pinReq && !logVisit && !authReq && geocache.NumberOfVisits != null;
-        }
+        private bool CanLogVisit() => !Geocache.Offline && !IsBusy && Geocache.NumberOfVisits != null;
 
         [RelayCommand(CanExecute = nameof(CanRequestAuthentication))]
         private async Task RequestAuthentication()
         {
-            authReq = true;
-            CheckCanExecutes();
+            IsBusy = true;
             Random rnd = new();
-            _ = await geocache.RequestAuthentication((uint)rnd.Next());
+            _ = await Geocache.RequestAuthentication((uint)rnd.Next());
+            IsBusy = false;
         }
-        private bool CanRequestAuthentication()
-        {
-            return !geocache.Offline && !programming && !pinReq && !logVisit && !authReq;
-        }
+        private bool CanRequestAuthentication() => !Geocache.Offline && !IsBusy;
 
         [RelayCommand(CanExecute = nameof(CanProgramGeocache))]
         private async Task ProgramGeocache()
         {
-            programming = true;
-            CheckCanExecutes();
-            _ = await geocache.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
-            programming = false;
-            CheckCanExecutes();
+            // we want to capture the updated logged visits
+            IsBusy = true;
+            _ = await Geocache.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
+            IsBusy = false;
         }
-        private bool CanProgramGeocache()
-        {
-            return !geocache.Offline && !programming && !pinReq && !logVisit && !authReq;
-        }
-
-        private void CheckCanExecutes()
-        {
-            _ = Application.Current.Dispatcher.BeginInvoke(() =>
-            {
-                RequestPINCommand.NotifyCanExecuteChanged();
-                LogVisitCommand.NotifyCanExecuteChanged();
-                RequestAuthenticationCommand.NotifyCanExecuteChanged();
-                ProgramGeocacheCommand.NotifyCanExecuteChanged();
-            });
-        }
+        private bool CanProgramGeocache() => !Geocache.Offline && !IsBusy;
     }
 }

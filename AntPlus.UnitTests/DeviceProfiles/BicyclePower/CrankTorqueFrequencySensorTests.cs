@@ -87,7 +87,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             double slope = 34.5;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0x10, 0x02, 0xFF, 0xFF, 0xFF, 0x01, 0x59 },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0x10, 0x02, 0xFF, 0xFF, 0xFF, 0x01, 0x59 },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
@@ -118,7 +118,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             ushort serialNumber = 12345;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedData(mockChannelId, new byte[] { 0x01, 0x10, 0x03, 0xFF, 0xFF, 0xFF, 0x30, 0x39 },
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0x10, 0x03, 0xFF, 0xFF, 0xFF, 0x30, 0x39 },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 

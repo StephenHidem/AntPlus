@@ -272,7 +272,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             SubSportMode subSportMode = default;
             byte[] msg = new byte[] { (byte)CommonDataPage.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode };
             mockAntChannel.Setup(ac =>
-            ac.SendExtAcknowledgedData(mockChannelId, msg, It.IsAny<uint>()).Result).
+            ac.SendExtAcknowledgedDataAsync(mockChannelId, msg, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
             // Act
@@ -294,7 +294,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             bool gymMode = false;
             byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0x00 };
             mockAntChannel.Setup(ac =>
-            ac.SendExtAcknowledgedData(mockChannelId, msg, It.IsAny<uint>()).Result).
+            ac.SendExtAcknowledgedDataAsync(mockChannelId, msg, It.IsAny<uint>()).Result).
                 Returns(MessagingReturnCode.Pass);
 
             // Act

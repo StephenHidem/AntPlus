@@ -1,22 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles;
-using SmallEarthTech.AntRadioInterface;
 using System.ComponentModel;
 
 namespace MauiAntGrpcClient.ViewModels
 {
     public partial class GeocacheViewModel : ObservableObject, IQueryAttributable
     {
-        private readonly ILogger<GeocacheViewModel> _logger;
-        private bool pinReq, authReq, programming, logVisit;
-
         [ObservableProperty]
-        private Geocache geocache = null!;
-
-        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RequestPINCommand))]
+        [NotifyCanExecuteChangedFor(nameof(LogVisitCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RequestAuthenticationCommand))]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
+        private bool isBusy;
+
+        [ObservableProperty]
+        private Geocache? geocache;
+
+        [ObservableProperty]
         private uint? pin;
         [ObservableProperty]
         private string trackableId = string.Empty;
@@ -27,127 +28,56 @@ namespace MauiAntGrpcClient.ViewModels
         [ObservableProperty]
         private string hint = string.Empty;
 
-        public GeocacheViewModel(ILogger<GeocacheViewModel> logger)
-        {
-            _logger = logger;
-            _logger.LogInformation("Created Geocache");
-        }
-
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             Geocache = (Geocache)query["Sensor"];
             Geocache.PropertyChanged += Geocache_PropertyChanged;
         }
 
         private void Geocache_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
+            if (e.PropertyName == "NumberOfVisits")
             {
-                case nameof(Geocache.ProgrammingPIN):
-                    if (pinReq)
-                    {
-                        pinReq = false;
-                        CheckCanExecutes();
-                    }
-                    break;
-                case nameof(Geocache.NumberOfVisits):
-                    if (logVisit)
-                    {
-                        logVisit = false;
-                    }
-                    CheckCanExecutes();
-                    break;
-                case nameof(Geocache.AuthenticationToken):
-                    if (authReq)
-                    {
-                        authReq = false;
-                        CheckCanExecutes();
-                    }
-                    break;
-                default:
-                    break;
+                MainThread.BeginInvokeOnMainThread(() => { LogVisitCommand.NotifyCanExecuteChanged(); });
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanRequestPin))]
-        private async Task<MessagingReturnCode> RequestPIN()
+        private async Task RequestPIN()
         {
-            pinReq = true;
-            CheckCanExecutes();
-            return await Geocache.RequestPinPage();
+            IsBusy = true;
+            _ = await Geocache!.RequestPinPage();
+            IsBusy = false;
         }
-        private bool CanRequestPin()
-        {
-            if (Geocache != null)
-            {
-                return !Geocache.Offline && !programming && !pinReq && !authReq;
-            }
-            return false;
-        }
+        private bool CanRequestPin() => Geocache != null && !Geocache.Offline && !IsBusy;
 
         [RelayCommand(CanExecute = nameof(CanLogVisit))]
-        private async Task<MessagingReturnCode> LogVisit()
+        private async Task LogVisit()
         {
-            logVisit = true;
-            CheckCanExecutes();
-            return await Geocache.UpdateLoggedVisits();
+            IsBusy = true;
+            _ = await Geocache!.UpdateLoggedVisits();
+            IsBusy = false;
         }
-        private bool CanLogVisit()
-        {
-            if (Geocache != null)
-            {
-                return !Geocache.Offline && !programming && !logVisit && !pinReq && !authReq && Geocache.NumberOfVisits != null;
-            }
-            return false;
-        }
+        private bool CanLogVisit() => Geocache != null && !Geocache.Offline && !IsBusy && Geocache.NumberOfVisits != null;
 
         [RelayCommand(CanExecute = nameof(CanRequestAuthentication))]
-        private async Task<MessagingReturnCode> RequestAuthentication()
+        private async Task RequestAuthentication()
         {
-            authReq = true;
-            CheckCanExecutes();
+            IsBusy = true;
             Random rnd = new();
-            return await Geocache.RequestAuthentication((uint)rnd.Next());
+            _ = await Geocache!.RequestAuthentication((uint)rnd.Next());
+            IsBusy = false;
         }
-        private bool CanRequestAuthentication()
-        {
-            if (Geocache != null)
-            {
-                return !Geocache.Offline && !programming && !pinReq && !logVisit && !authReq;
-            }
-            return false;
-        }
+        private bool CanRequestAuthentication() => Geocache != null && !Geocache.Offline && !IsBusy;
 
         [RelayCommand(CanExecute = nameof(CanProgramGeocache))]
-        private async Task<MessagingReturnCode> ProgramGeocache()
+        private async Task ProgramGeocache()
         {
             // we want to capture the updated logged visits
-            programming = logVisit = true;
-            CheckCanExecutes();
-            MessagingReturnCode result = await Geocache.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
-            programming = false;
-            CheckCanExecutes();
-            return result;
+            IsBusy = true;
+            _ = await Geocache!.ProgramGeocache(TrackableId, Pin, Latitude, Longitude, Hint);
+            IsBusy = false;
         }
-        private bool CanProgramGeocache()
-        {
-            if (Geocache != null)
-            {
-                return !Geocache.Offline && !programming && !pinReq && !logVisit && !authReq;
-            }
-            return false;
-        }
-
-        private void CheckCanExecutes()
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                RequestPINCommand.NotifyCanExecuteChanged();
-                LogVisitCommand.NotifyCanExecuteChanged();
-                RequestAuthenticationCommand.NotifyCanExecuteChanged();
-                ProgramGeocacheCommand.NotifyCanExecuteChanged();
-            });
-        }
+        private bool CanProgramGeocache() => Geocache != null && !Geocache.Offline && !IsBusy;
     }
 }

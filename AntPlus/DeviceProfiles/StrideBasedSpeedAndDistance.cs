@@ -22,6 +22,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// The SDM device class ID.
         /// </summary>
         public const byte DeviceClass = 124;
+
+        private const uint channelCount = 8134;
         private bool isFirstDefaultPage = true;
         private bool isFirstCalPage = true;
         private byte prevCals;
@@ -199,7 +201,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="StrideBasedSpeedAndDistance(ChannelId, IAntChannel, ILogger, int)"/>
+        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages, channelCount)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

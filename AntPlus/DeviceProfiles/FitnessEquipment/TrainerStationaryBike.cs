@@ -21,11 +21,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline" />.</param>
-        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
         {
+            TrainerTorque = new TrainerTorque();
         }
 
-        //private Equipment _equipment;
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="TrainerStationaryBike(ChannelId, IAntChannel, ILogger, int)" />
+        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages)
+        {
+            TrainerTorque = new TrainerTorque();
+        }
 
         /// <summary>The trainer status bit field is used to indicate whether the trainer requires calibration and/or configuration data to be sent.</summary>
         [Flags]
@@ -173,6 +181,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
+            if (handledPage) return;
+
             switch ((DataPage)dataPage[0])
             {
                 case DataPage.CalRequestResponse:
@@ -244,6 +254,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     TrainerTorque.Parse(dataPage);
                     break;
                 default:
+                    CommonDataPages.ParseCommonDataPage(dataPage);
                     break;
             }
         }

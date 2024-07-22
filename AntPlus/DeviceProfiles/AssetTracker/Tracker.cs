@@ -12,6 +12,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// </summary>
     public partial class Tracker : AntDevice
     {
+        private const uint channelCount = 2048;
+
         /// <summary>
         /// The asset tracker device class ID.
         /// </summary>
@@ -61,13 +63,27 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         public override Stream DeviceImageStream => typeof(Tracker).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AssetTracker.png");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Tracker"/> class. The default timeout is 500ms.
+        /// Initializes a new instance of the <see cref="Tracker"/> class.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger<Tracker> logger, int timeout = 500) : base(channelId, antChannel, logger, timeout)
+        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 500)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tracker"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages, channelCount)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

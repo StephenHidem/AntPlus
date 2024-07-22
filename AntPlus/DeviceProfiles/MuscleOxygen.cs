@@ -15,6 +15,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class MuscleOxygen : AntDevice
     {
+        private const uint channelCount = 8192;
         private byte eventCount;
 
         /// <summary>
@@ -120,7 +121,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger<MuscleOxygen> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="MuscleOxygen(ChannelId, IAntChannel, ILogger, int)"/>
+        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages, channelCount)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

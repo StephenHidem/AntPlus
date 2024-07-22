@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
-    /// This class supports the trainer torque messages.
+    /// This class supports trainer torque messages.
     /// </summary>
-    public class TrainerTorque
+    public partial class TrainerTorque : ObservableObject
     {
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte lastTicks;
@@ -16,21 +17,27 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>
         /// Wheel circumference in meters. The default is 2.2 meters.
         /// </summary>
-        public double WheelCircumference { get; set; } = 2.2;
+        [ObservableProperty]
+        private double wheelCircumference = 2.2;
         /// <summary>Gets the average angular velocity in radians per second.</summary>
-        public double AverageAngularVelocity { get; private set; }
+        [ObservableProperty]
+        private double averageAngularVelocity;
         /// <summary>Gets the average torque in Nm.</summary>
-        public double AverageTorque { get; private set; }
+        [ObservableProperty]
+        private double averageTorque;
         /// <summary>Gets the average power in watts.</summary>
-        public double AveragePower { get; private set; }
+        [ObservableProperty]
+        private double averagePower;
         /// <summary>
         /// Average speed in kilometers per hour.
         /// </summary>
-        public double AverageSpeed { get; private set; }
+        [ObservableProperty]
+        private double averageSpeed;
         /// <summary>
         /// Distance in meters.
         /// </summary>
-        public double AccumulatedDistance { get; private set; }
+        [ObservableProperty]
+        private double accumulatedDistance;
 
         /// <summary>
         /// Parses the specified data page.

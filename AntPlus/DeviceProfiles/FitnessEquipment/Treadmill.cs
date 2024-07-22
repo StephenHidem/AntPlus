@@ -19,7 +19,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline" />.</param>
-        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="Treadmill(ChannelId, IAntChannel, ILogger, int)" />
+        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages)
         {
         }
 
@@ -56,6 +64,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
+            if (handledPage) return;
+
             if ((DataPage)dataPage[0] == DataPage.TreadmillData)
             {
                 if (isFirstDataMessage)
@@ -71,6 +81,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 }
                 Cadence = dataPage[4];
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x03);
+            }
+            else
+            {
+                CommonDataPages.ParseCommonDataPage(dataPage);
             }
         }
 

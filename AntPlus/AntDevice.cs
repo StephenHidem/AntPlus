@@ -24,9 +24,10 @@ namespace SmallEarthTech.AntPlus
     /// </remarks>
     public abstract partial class AntDevice : ObservableObject, IDisposable
     {
-        private readonly IAntChannel antChannel;
-        private Timer timeoutTimer;
-        private readonly int deviceTimeout;
+        private readonly IAntChannel _antChannel;
+        private Timer _timeoutTimer;
+        private readonly int _deviceTimeout;
+        private const double _baseTransmissionFrequency = 32768;  // base ANT device data transmission period in Hz
 
         /// <summary>The logger for derived classes to use.</summary>
         protected readonly ILogger logger;
@@ -65,12 +66,27 @@ namespace SmallEarthTech.AntPlus
         protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
         {
             ChannelId = channelId;
-            this.antChannel = antChannel;
+            _antChannel = antChannel;
             this.logger = logger;
-            deviceTimeout = timeout;
-            timeoutTimer = new Timer(TimeoutCallback);
-            timeoutTimer.Change(deviceTimeout, Timeout.Infinite);
-            logger.LogInformation("Created {AntDevice}", ToString());
+            _deviceTimeout = timeout;
+            _timeoutTimer = new Timer(TimeoutCallback);
+            _timeoutTimer.Change(_deviceTimeout, Timeout.Infinite);
+            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}", ToString(), _deviceTimeout);
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <param name="channelCount">The channel count. This is a multiple of the base transmission frequency.
+        /// See the master Channel Period specified in the specific ANT device specification for the count value.
+        /// </param>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, uint missedMessages, uint channelCount)
+        {
+            ChannelId = channelId;
+            _antChannel = antChannel;
+            this.logger = logger;
+            _deviceTimeout = (int)Math.Ceiling((missedMessages / (_baseTransmissionFrequency / channelCount)) * 1000);
+            _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
+            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}", ToString(), _deviceTimeout);
         }
 
         private void TimeoutCallback(object state)
@@ -85,7 +101,7 @@ namespace SmallEarthTech.AntPlus
         public virtual void Parse(byte[] dataPage)
         {
             logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
-            _ = timeoutTimer?.Change(deviceTimeout, Timeout.Infinite);
+            _ = _timeoutTimer?.Change(_deviceTimeout, Timeout.Infinite);
         }
 
         /// <inheritdoc/>
@@ -112,7 +128,7 @@ namespace SmallEarthTech.AntPlus
             {
                 byte[] msg = new byte[] { (byte)CommonDataPage.RequestDataPage, 0, 0, descriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
                 BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-                return await antChannel.SendExtAcknowledgedDataAsync(ChannelId, msg, ackWaitTime);
+                return await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, msg, ackWaitTime);
             }
             else
             {
@@ -132,7 +148,7 @@ namespace SmallEarthTech.AntPlus
             MessagingReturnCode ret;
             do
             {
-                ret = await antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, ackWaitTime);
+                ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, ackWaitTime);
             } while (ret != MessagingReturnCode.Pass && --retries > 0);
 
             if (ret != MessagingReturnCode.Pass)
@@ -146,8 +162,8 @@ namespace SmallEarthTech.AntPlus
         public void Dispose()
         {
             logger.LogDebug("Disposed {AntDevice}", ToString());
-            timeoutTimer?.Dispose();
-            timeoutTimer = null;
+            _timeoutTimer?.Dispose();
+            _timeoutTimer = null;
         }
     }
 }

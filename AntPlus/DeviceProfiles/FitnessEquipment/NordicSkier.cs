@@ -18,7 +18,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline" />.</param>
-        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger<FitnessEquipment> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="NordicSkier(ChannelId, IAntChannel, ILogger, int)" />
+        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages)
         {
         }
 
@@ -52,6 +60,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
+            if (handledPage) return;
+
             if ((DataPage)dataPage[0] == DataPage.NordicSkierData)
             {
                 HandleFEState(dataPage[7]);
@@ -67,6 +77,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 Cadence = dataPage[4];
                 InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
                 Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
+            }
+            else
+            {
+                CommonDataPages.ParseCommonDataPage(dataPage);
             }
         }
     }

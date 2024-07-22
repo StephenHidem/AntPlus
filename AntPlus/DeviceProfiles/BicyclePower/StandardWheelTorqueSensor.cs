@@ -30,7 +30,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private double accumulatedDistance;
 
         /// <summary>Initializes a new instance of the <see cref="StandardWheelTorqueSensor" /> class.</summary>
-        /// <param name="logger">The logger to use.</param>
+        /// <param name="logger">The _logger to use.</param>
         public StandardWheelTorqueSensor(ILogger logger) : base(logger)
         {
         }

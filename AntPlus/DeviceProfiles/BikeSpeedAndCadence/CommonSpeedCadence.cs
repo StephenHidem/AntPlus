@@ -12,6 +12,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <seealso cref="AntDevice" />
     public abstract partial class CommonSpeedCadence : AntDevice
     {
+        private const uint channelCount = 8118;
+
         /// <summary>The is first data message
         /// received.</summary>
         protected bool isFirstDataMessage = true;     // used for accumulated values
@@ -119,7 +121,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="CommonSpeedCadence(ChannelId, IAntChannel, ILogger, int)"/>
+        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages, channelCount)
         {
         }
 

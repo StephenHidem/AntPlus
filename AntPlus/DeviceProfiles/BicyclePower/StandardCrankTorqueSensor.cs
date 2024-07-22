@@ -152,7 +152,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     PedalPosition = new PedalPositionPage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("ParseCyclingDynamics: Unknown data page = {Page}", dataPage[0]);
+                    using (_logger.BeginScope(nameof(StandardCrankTorqueSensor)))
+                    {
+                        _logger.LogWarning("ParseCyclingDynamics: Unknown data page = {Page}", dataPage[0]);
+                    }
                     break;
             }
         }

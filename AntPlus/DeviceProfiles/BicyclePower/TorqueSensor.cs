@@ -25,7 +25,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>The delta torque</summary>
         protected int deltaTorque;
 
-        /// <summary>The logger</summary>
+        /// <summary>The _logger</summary>
         protected ILogger _logger;
 
         /// <summary>Gets the instantaneous pedaling cadence. 0xFF indicates invalid.</summary>
@@ -42,7 +42,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private double averagePower;
 
         /// <summary>Initializes a new instance of the <see cref="TorqueSensor" /> class.</summary>
-        /// <param name="logger">The logger.</param>
+        /// <param name="logger">The _logger.</param>
         protected TorqueSensor(ILogger logger)
         {
             _logger = logger;

@@ -41,7 +41,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <param name="antChannel">The ant channel.</param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Timeout in milliseconds.</param>
-        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeSpeedSensor> logger, ushort timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="BikeSpeedSensor(ChannelId, IAntChannel, ILogger, int)"/>
+        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages)
         {
         }
 

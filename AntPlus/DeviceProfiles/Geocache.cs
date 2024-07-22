@@ -19,6 +19,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class Geocache : AntDevice
     {
+        private const uint channelCount = 65535;
+
         /// <summary>
         /// The geocache device class ID.
         /// </summary>
@@ -93,12 +95,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
         /// <param name="logger">Logger to use.</param>
-        /// <param name="timeout">Device offline timeout. The default is 8000 milliseconds.</param>
+        /// <param name="timeout">Device offline timeout. The default is 16000 milliseconds.</param>
         /// <remarks>
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
         /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
-        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int timeout = 8000) : base(channelId, antChannel, logger, timeout)
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 16000)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="Geocache(ChannelId,IAntChannel, ILogger, int)"/>
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages, channelCount)
         {
             CommonDataPages = new CommonDataPages(logger);
         }
@@ -218,7 +229,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         }
 
         /// <summary>Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
-        /// <param name="timeout">Request timeout in milliseconds. The default is 16000 milliseconds.</param>
+        /// <param name="timeout">Request _timeout in milliseconds. The default is 16000 milliseconds.</param>
         /// <returns>Status of the request. See <see cref="MessagingReturnCode" />.</returns>
         public async Task<MessagingReturnCode> RequestPinPage(uint timeout = 16000)
         {

@@ -28,6 +28,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class HeartRate : AntDevice
     {
+        private const uint channelCount = 8070;
         private byte[] lastDataPage = new byte[8];
 
         /// <summary>
@@ -290,7 +291,15 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="antChannel"></param>
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">Time in milliseconds before firing <see cref="AntDevice.DeviceWentOffline"/>.</param>
-        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
+        /// <inheritdoc cref="HeartRate(ChannelId, IAntChannel, ILogger, int)"/>
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
+            : base(channelId, antChannel, logger, missedMessages, channelCount)
         {
         }
 

@@ -21,7 +21,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
             mockLogger = mockRepository.Create<ILogger<CombinedSpeedAndCadenceSensor>>(MockBehavior.Loose);
-            _sensor = new CombinedSpeedAndCadenceSensor(new ChannelId(0), mockAntChannel.Object, mockLogger.Object);
+            _sensor = new CombinedSpeedAndCadenceSensor(new ChannelId(0), mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
             byte[] dataPage = new byte[8];
             _sensor.Parse(dataPage);
         }

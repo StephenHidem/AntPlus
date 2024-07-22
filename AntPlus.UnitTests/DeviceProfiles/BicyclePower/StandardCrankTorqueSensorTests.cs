@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
@@ -14,7 +14,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<BicyclePower>> mockLogger;
+        private Mock<NullLoggerFactory> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,13 +22,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger<BicyclePower>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
         }
 
         private StandardPowerSensor CreateStandardCrankTorqueSensor()
         {
             byte[] page = new byte[8] { (byte)DataPage.CrankTorque, 0, 0, 0, 0, 0, 0, 0 };
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object) as StandardPowerSensor;
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, missedMessages: 8) as StandardPowerSensor;
         }
 
         [TestMethod]

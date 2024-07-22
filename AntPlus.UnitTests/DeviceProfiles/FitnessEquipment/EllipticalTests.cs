@@ -29,7 +29,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             return new Elliptical(
                 mockChannelId,
                 mockAntChannel.Object,
-                mockLogger.Object);
+                mockLogger.Object, missedMessages: 8);
         }
 
         [TestMethod]

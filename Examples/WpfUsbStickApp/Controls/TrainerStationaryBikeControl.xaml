@@ -23,12 +23,13 @@
                 <TextBlock Text="{Binding AveragePower, StringFormat='Average Power: {0}'}"/>
                 <TextBlock Text="{Binding TrainerStatus, StringFormat='Trainer Status: {0}'}"/>
                 <TextBlock Text="{Binding TargetPower, StringFormat='Target Power: {0}'}"/>
+                <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
+                <Label Content="Trainer Torque"/>
                 <TextBlock Text="{Binding TrainerTorque.AverageAngularVelocity, StringFormat='Average Angular Velocity: {0:F2}'}"/>
                 <TextBlock Text="{Binding TrainerTorque.AverageTorque, StringFormat='Average Torque: {0:F4}'}"/>
                 <TextBlock Text="{Binding TrainerTorque.AveragePower, StringFormat='Average Power: {0:F2}'}"/>
                 <TextBlock Text="{Binding TrainerTorque.AverageSpeed, StringFormat='Average Speed: {0:F2}'}"/>
                 <TextBlock Text="{Binding TrainerTorque.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F2}'}"/>
-                <TextBlock Text="{Binding State, StringFormat='State: {0}'}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Calibration" Grid.Column="1">

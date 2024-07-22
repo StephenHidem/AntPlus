@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiAntGrpcClient.Services;
+using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
@@ -40,7 +41,7 @@ namespace MauiAntGrpcClient.ViewModels
             ProductDescription = _antRadioService.ProductDescription;
             SerialNumber = _antRadioService.SerialNumber;
             HostVersion = _antRadioService.HostVersion;
-            AntDevices = _services.GetRequiredService<AntDeviceCollection>();
+            AntDevices = new AntDeviceCollection(_antRadioService, _services.GetRequiredService<ILoggerFactory>(), missedMessages: 8);
         }
 
         [RelayCommand(CanExecute = nameof(CanShowRadioCapabilities))]

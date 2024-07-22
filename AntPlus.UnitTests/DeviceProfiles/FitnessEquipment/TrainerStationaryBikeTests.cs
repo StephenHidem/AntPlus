@@ -31,7 +31,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             return new TrainerStationaryBike(
                 mockChannelId,
                 mockAntChannel.Object,
-                mockLogger.Object);
+                mockLogger.Object, missedMessages: 8);
         }
 
         [TestMethod]

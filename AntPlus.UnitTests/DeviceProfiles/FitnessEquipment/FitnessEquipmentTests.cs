@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
@@ -14,7 +14,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>> mockLogger;
+        private Mock<NullLoggerFactory> mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,13 +22,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
         }
 
         private SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment CreateFitnessEquipment(FitnessEquipmentType equipmentType = FitnessEquipmentType.Treadmill)
         {
             byte[] dataPage = new byte[8] { (byte)DataPage.GeneralFEData, (byte)equipmentType, 0, 0, 0, 0, 0, 0 };
-            return GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
+            return GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             byte[] dataPage = new byte[8] { (byte)pageNumber, 0, 0, 0, 0, 0, 0, 0 };
 
             // Act
-            var fitnessEquipment = GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object);
+            var fitnessEquipment = GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
 
             // Assert
             switch (equipmentType)

@@ -14,7 +14,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <seealso cref="AntDevice" />
     public abstract partial class FitnessEquipment : AntDevice
     {
-        private const uint channelCount = 8192;
+        /// <inheritdoc/>
+        public override int ChannelCount => 8192;
 
         /// <summary>
         /// Flag indicating the data page was handled by <see cref="Parse(byte[])"/>.
@@ -314,7 +315,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="FitnessEquipment(ChannelId, IAntChannel, ILogger, int)"/>
         protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);
             GeneralData = new GeneralDataPage();

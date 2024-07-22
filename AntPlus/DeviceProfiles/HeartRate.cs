@@ -28,8 +28,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class HeartRate : AntDevice
     {
-        private const uint channelCount = 8070;
         private byte[] lastDataPage = new byte[8];
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8070;
 
         /// <summary>
         /// The heart rate device class ID.
@@ -299,7 +301,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="HeartRate(ChannelId, IAntChannel, ILogger, int)"/>
         public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
         }
 
@@ -349,6 +351,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
             switch ((DataPage)(dataPage[0] & 0x7F))
             {
+                case DataPage.Default:
+                    // this has been handled
+                    break;
                 case DataPage.CumulativeOperatingTime:
                     CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
                     break;

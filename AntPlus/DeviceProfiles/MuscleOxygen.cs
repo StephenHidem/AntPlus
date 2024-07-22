@@ -15,8 +15,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class MuscleOxygen : AntDevice
     {
-        private const uint channelCount = 8192;
         private byte eventCount;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8192;
 
         /// <summary>
         /// The muscle oxygen device class ID.
@@ -130,7 +132,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="MuscleOxygen(ChannelId, IAntChannel, ILogger, int)"/>
         public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

@@ -13,6 +13,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public class UnknownDevice : AntDevice
     {
+        /// <inheritdoc/>
+        public override int ChannelCount => 8192;
+
         /// <summary>
         /// The collection lock.
         /// </summary>
@@ -49,7 +52,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="UnknownDevice(ChannelId, IAntChannel, ILogger, int)"/>
         public UnknownDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, 32768)
+            : base(channelId, antChannel, logger, missedMessages)
         {
         }
 

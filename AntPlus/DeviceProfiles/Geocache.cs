@@ -19,7 +19,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class Geocache : AntDevice
     {
-        private const uint channelCount = 65535;
+        /// <inheritdoc/>
+        public override int ChannelCount => 65535;
 
         /// <summary>
         /// The geocache device class ID.
@@ -109,7 +110,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="Geocache(ChannelId,IAntChannel, ILogger, int)"/>
         public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

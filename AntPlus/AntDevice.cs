@@ -29,6 +29,10 @@ namespace SmallEarthTech.AntPlus
         private readonly int _deviceTimeout;
         private const double _baseTransmissionFrequency = 32768;  // base ANT device data transmission period in Hz
 
+        /// <summary>This is a multiple of the base transmission frequency. All derived classes must implement this property.
+        /// See the master Channel Period specified in the specific ANT device specification for the count value.</summary>
+        public abstract int ChannelCount { get; }
+
         /// <summary>The logger for derived classes to use.</summary>
         protected readonly ILogger logger;
 
@@ -71,22 +75,19 @@ namespace SmallEarthTech.AntPlus
             _deviceTimeout = timeout;
             _timeoutTimer = new Timer(TimeoutCallback);
             _timeoutTimer.Change(_deviceTimeout, Timeout.Infinite);
-            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}", ToString(), _deviceTimeout);
+            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
         }
 
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
-        /// <param name="channelCount">The channel count. This is a multiple of the base transmission frequency.
-        /// See the master Channel Period specified in the specific ANT device specification for the count value.
-        /// </param>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
-        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, uint missedMessages, uint channelCount)
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
         {
             ChannelId = channelId;
             _antChannel = antChannel;
             this.logger = logger;
-            _deviceTimeout = (int)Math.Ceiling((missedMessages / (_baseTransmissionFrequency / channelCount)) * 1000);
+            _deviceTimeout = (int)Math.Ceiling((missedMessages / (_baseTransmissionFrequency / ChannelCount)) * 1000);
             _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
-            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}", ToString(), _deviceTimeout);
+            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
         }
 
         private void TimeoutCallback(object state)

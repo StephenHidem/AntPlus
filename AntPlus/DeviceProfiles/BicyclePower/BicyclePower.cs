@@ -52,7 +52,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// </remarks>
     public abstract partial class BicyclePower : AntDevice
     {
-        private const uint channelCount = 8182;
+        /// <inheritdoc/>
+        public override int ChannelCount => 8182;
 
         /// <summary>
         /// The device class ID.
@@ -76,7 +77,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="BicyclePower(ChannelId, IAntChannel, ILogger, int)"/>
         public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
         }
 

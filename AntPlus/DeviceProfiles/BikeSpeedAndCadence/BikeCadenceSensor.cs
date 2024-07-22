@@ -12,6 +12,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <seealso cref="CommonSpeedCadence" />
     public partial class BikeCadenceSensor : CommonSpeedCadence
     {
+        /// <inheritdoc/>
+        public override int ChannelCount => 8102;
+
         /// <summary>
         /// The BikeCadenceSensor device class ID.
         /// </summary>

@@ -15,6 +15,13 @@ namespace SmallEarthTech.AntPlus
     /// <summary>
     /// This is a thread safe observable collection of ANT devices.
     /// </summary>
+    /// <remarks>
+    /// This class will create an <see cref="AntDevice"/> from one of the supported ANT device classes and add
+    /// it to the collection as they are discovered. An important consideration is when the device is no longer
+    /// available. You may supply a timeout duration or the number of missed messages. <b><u>You should prefer missed messages</u></b>
+    /// as this scales the timeout duration based on the broadcast transmission rate of the particular ANT device.
+    /// The timeout/missed messages will be applied globally to ANT devices created by this collection.
+    /// </remarks>
     public class AntDeviceCollection : ObservableCollection<AntDevice>
     {
         /// <summary>
@@ -32,7 +39,7 @@ namespace SmallEarthTech.AntPlus
         private int _channelNum = 1;
         private ILoggerFactory _loggerFactory;
         private ILogger<AntDeviceCollection> _logger;
-        private readonly ushort _timeout;
+        private readonly int _timeout;
         private IAntChannel[] _channels;
         private readonly byte _missedMessages;
         private readonly Func<ChannelId, byte[], AntDevice> CreateAntDevice;
@@ -48,7 +55,7 @@ namespace SmallEarthTech.AntPlus
         /// The ILoggerFactory is used to create <see cref="ILogger{TCategoryName}"/> instances for discovered ANT devices.
         /// If the factory is null, the <see cref="NullLoggerFactory"/> is used and no logging is generated.
         /// </remarks>
-        public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, ushort antDeviceTimeout = 2000)
+        public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, int antDeviceTimeout = 2000)
         {
             CommonCtor(antRadio, loggerFactory);
             _logger.LogInformation("Created AntDeviceCollection: antDeviceTimeout = {0}", antDeviceTimeout);
@@ -57,7 +64,7 @@ namespace SmallEarthTech.AntPlus
         }
 
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
-        /// <inheritdoc cref="AntDeviceCollection(IAntRadio, ILoggerFactory, ushort)"/>
+        /// <inheritdoc cref="AntDeviceCollection(IAntRadio, ILoggerFactory, int)"/>
         public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, byte missedMessages)
         {
             CommonCtor(antRadio, loggerFactory);

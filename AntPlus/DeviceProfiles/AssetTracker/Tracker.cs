@@ -12,7 +12,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// </summary>
     public partial class Tracker : AntDevice
     {
-        private const uint channelCount = 2048;
+        /// <inheritdoc/>
+        public override int ChannelCount => 2048;
 
         /// <summary>
         /// The asset tracker device class ID.
@@ -83,7 +84,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <param name="logger">Logger to use.</param>
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

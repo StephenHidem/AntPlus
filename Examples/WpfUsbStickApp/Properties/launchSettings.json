@@ -9,7 +9,7 @@
     },
     "LogLevel Debug": {
       "commandName": "Project",
-      "commandLineArgs": "--Logging:LogLevel:Default=Debug\r\n--Timeout=1800"
+      "commandLineArgs": "--Logging:LogLevel:Default=Debug"
     }
   }
 }

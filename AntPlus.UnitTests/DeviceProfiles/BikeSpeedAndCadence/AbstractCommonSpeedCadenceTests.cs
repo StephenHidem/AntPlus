@@ -10,6 +10,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 {
     internal class AbstractCommonSpeedCadence : CommonSpeedCadence
     {
+        /// <inheritdoc/>
+        public override int ChannelCount => 8118;
+
         public AbstractCommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
         {
         }

@@ -18,6 +18,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class StrideBasedSpeedAndDistance : AntDevice
     {
+        /// <inheritdoc/>
+        public override int ChannelCount => 8134;
+
         /// <summary>
         /// The SDM device class ID.
         /// </summary>
@@ -210,7 +213,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <inheritdoc cref="StrideBasedSpeedAndDistance(ChannelId, IAntChannel, ILogger, int)"/>
         public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages, channelCount)
+            : base(channelId, antChannel, logger, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

@@ -29,7 +29,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             return new Climber(
                 mockChannelId,
                 mockAntChannel.Object,
-                mockLogger.Object, missedMessages: 8);
+                mockLogger.Object, null, 8);
         }
 
         [TestMethod]

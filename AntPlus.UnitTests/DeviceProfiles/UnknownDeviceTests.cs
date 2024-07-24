@@ -17,7 +17,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_EmptyPageCollection_PageAdded()
         {
             // Arrange
-            UnknownDevice unknownDevice = new(cid, null, mockLogger.Object, missedMessages: 8);
+            UnknownDevice unknownDevice = new(cid, null, mockLogger.Object, null, 8);
             byte[] dataPage = { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
 
             // Act
@@ -33,7 +33,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_Update_PageUpdated()
         {
             // Arrange
-            UnknownDevice unknownDevice = new(cid, null, mockLogger.Object, missedMessages: 8);
+            UnknownDevice unknownDevice = new(cid, null, mockLogger.Object, null, 8);
             byte[] dataPage = { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
             byte[] updatePage = { 0x11, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x88 };
 

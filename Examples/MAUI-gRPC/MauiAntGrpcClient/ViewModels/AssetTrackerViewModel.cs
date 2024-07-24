@@ -13,7 +13,6 @@ namespace MauiAntGrpcClient.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            _logger.LogInformation($"{nameof(ApplyQueryAttributes)}");
             Tracker = (Tracker)query["Sensor"];
         }
     }

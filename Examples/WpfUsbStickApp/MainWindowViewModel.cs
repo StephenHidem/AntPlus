@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -11,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace WpfUsbStickApp.ViewModels
 {
@@ -59,19 +59,11 @@ namespace WpfUsbStickApp.ViewModels
             }
 
             // create the device collection
-            IConfiguration configuration = _host.Services.GetRequiredService<IConfiguration>();
-            byte? missedMessages = configuration.GetValue<byte?>("MissedMessages");
-            int? timeout = configuration.GetValue<int?>("Timeout");
-            if (timeout != null)
-            {
-                // app is configured to use the ANT device timeout
-                AntDevices = new(radio, loggerFactory, antDeviceTimeout: (ushort)timeout);
-            }
-            else
-            {
-                // prefer configuring app to use missed message count and default to 8 messages
-                AntDevices = new(radio, loggerFactory, missedMessages: missedMessages ?? 8);
-            }
+            //IConfiguration configuration = _host.Services.GetRequiredService<IConfiguration>();
+            //byte? missedMessages = configuration.GetValue<byte?>("MissedMessages");
+            //int? timeout = configuration.GetValue<int?>("Timeout");
+            //AntDevices = new(radio, loggerFactory, timeout, missedMessages);
+            AntDevices = new(radio, loggerFactory, Timeout.Infinite);
         }
     }
 }

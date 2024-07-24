@@ -32,7 +32,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             return new HeartRate(
                 mockChannelId,
                 mockAntChannel.Object,
-                mockLogger.Object, missedMessages: 8);
+                mockLogger.Object, null, 8);
         }
 
         [TestMethod]

@@ -53,7 +53,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_OutOfOrderDataPages_AllPropertiesCorrect()
         {
             // Arrange
-            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null, 8);
             List<byte[]> dataPages = new() { dp0, dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, cp80, cp81, cp82,
                 dp0, dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, cp80, cp81, cp82 };
 
@@ -83,7 +83,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         {
             // Arrange
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
-            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null, 8);
             byte[] token = { 1, 2, 3, 4, 5, 6, 7 };
             byte[] page = new byte[] { 32 }.Concat(token).ToArray();
             var result = await geocache.RequestAuthentication(0);
@@ -103,7 +103,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Arrange
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
             List<byte[]> dataPages = new() { dp0, dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9 };
-            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null, 8);
             foreach (byte[] page in dataPages) { geocache.Parse(page); }
 
             // Act
@@ -124,7 +124,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public async Task UpdateLoggedVisits_LoggedVisitPageUnprogrammed_ThrowsException()
         {
             // Arrange
-            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null, 8);
 
             // Act and Assert
             await Assert.ThrowsExceptionAsync<InvalidOperationException>(() => geocache.UpdateLoggedVisits());
@@ -135,7 +135,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         {
             // Arrange
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
-            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null, 8);
             geocache.Parse(dp8);    // initialize logged visits
             DateTime dateTime = DateTime.UtcNow;
 
@@ -153,7 +153,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Arrange
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
             List<byte[]> dataPages = new() { dp0, dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9 };
-            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null, 8);
             foreach (byte[] page in dataPages) { geocache.Parse(page); }
 
             // Act

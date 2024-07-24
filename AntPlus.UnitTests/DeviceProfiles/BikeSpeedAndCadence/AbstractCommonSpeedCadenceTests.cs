@@ -13,7 +13,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
         /// <inheritdoc/>
         public override int ChannelCount => 8118;
 
-        public AbstractCommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout = 2000) : base(channelId, antChannel, logger, timeout)
+        public AbstractCommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger)
+            : base(channelId, antChannel, logger, 2000, null)
         {
         }
 

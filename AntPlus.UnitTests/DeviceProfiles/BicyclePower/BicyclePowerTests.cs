@@ -26,7 +26,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         private BicyclePower CreateBicyclePower(DataPage dataPage = DataPage.PowerOnly)
         {
             byte[] page = new byte[8] { (byte)dataPage, 0, 0, 0, 0, 0, 0, 0 };
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, missedMessages: 8);
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8);
         }
 
         [TestMethod]

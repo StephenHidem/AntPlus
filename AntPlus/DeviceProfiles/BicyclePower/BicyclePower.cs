@@ -65,19 +65,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private CalibrationResponse calibrationStatus;
 
         /// <summary>Initializes a new instance of the <see cref="BicyclePower" /> class.</summary>
-        /// <param name="channelId">The channel identifier.</param>
-        /// <param name="antChannel">The ant channel.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="timeout">The timeout.</param>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
-            : base(channelId, antChannel, logger, timeout)
-        {
-        }
-
-        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
-        /// <inheritdoc cref="BicyclePower(ChannelId, IAntChannel, ILogger, int)"/>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger logger, byte missedMessages)
-            : base(channelId, antChannel, logger, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
+        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+            : base(channelId, antChannel, logger, timeout, missedMessages)
         {
         }
 
@@ -95,41 +85,23 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="antChannel">The ANT channel.</param>
         /// <param name="loggerFactory">The logger factory to use to create loggers for variants of bicycle power.</param>
         /// <param name="timeout">The timeout.</param>
+        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
         /// <returns>
         /// A <see cref="CrankTorqueFrequencySensor"/> is returned if a <see cref="DataPage.CrankTorqueFrequency"/> page has been received.
         /// Otherwise, a <see cref="StandardPowerSensor"/> is returned.
         /// </returns>
-        public static BicyclePower GetBicyclePowerSensor(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILoggerFactory loggerFactory, int timeout)
+        public static BicyclePower GetBicyclePowerSensor(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILoggerFactory loggerFactory, int? timeout, byte? missedMessages = default)
         {
             if ((DataPage)dataPage[0] == DataPage.CrankTorqueFrequency)
             {
                 // return CTF sensor
-                CrankTorqueFrequencySensor sensor = new CrankTorqueFrequencySensor(channelId, antChannel, loggerFactory.CreateLogger<CrankTorqueFrequencySensor>(), timeout);
+                CrankTorqueFrequencySensor sensor = new CrankTorqueFrequencySensor(channelId, antChannel, loggerFactory.CreateLogger<CrankTorqueFrequencySensor>(), timeout, missedMessages);
                 sensor.Parse(dataPage);
                 return sensor;
             }
             else
             {
-                StandardPowerSensor sensor = new StandardPowerSensor(channelId, antChannel, loggerFactory.CreateLogger<StandardPowerSensor>(), timeout);
-                sensor.Parse(dataPage);
-                return sensor;
-            }
-        }
-
-        /// <param name="missedMessages">The number of missed messages before signaling the device went offline.</param>
-        /// <inheritdoc cref="GetBicyclePowerSensor(byte[], ChannelId, IAntChannel, ILoggerFactory, int)"/>
-        public static BicyclePower GetBicyclePowerSensor(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILoggerFactory loggerFactory, byte missedMessages)
-        {
-            if ((DataPage)dataPage[0] == DataPage.CrankTorqueFrequency)
-            {
-                // return CTF sensor
-                CrankTorqueFrequencySensor sensor = new CrankTorqueFrequencySensor(channelId, antChannel, loggerFactory.CreateLogger<CrankTorqueFrequencySensor>(), missedMessages);
-                sensor.Parse(dataPage);
-                return sensor;
-            }
-            else
-            {
-                StandardPowerSensor sensor = new StandardPowerSensor(channelId, antChannel, loggerFactory.CreateLogger<StandardPowerSensor>(), missedMessages);
+                StandardPowerSensor sensor = new StandardPowerSensor(channelId, antChannel, loggerFactory.CreateLogger<StandardPowerSensor>(), timeout, missedMessages);
                 sensor.Parse(dataPage);
                 return sensor;
             }

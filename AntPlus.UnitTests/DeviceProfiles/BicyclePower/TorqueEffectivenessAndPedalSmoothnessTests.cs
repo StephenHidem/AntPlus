@@ -26,7 +26,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         private StandardPowerSensor CreateStandardPowerSensor()
         {
             byte[] page = new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, missedMessages: 8) as StandardPowerSensor;
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8) as StandardPowerSensor;
         }
 
         [TestMethod]

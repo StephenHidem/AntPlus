@@ -30,7 +30,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// Initializes a new instance of the <see cref="BikeCadenceSensor"/> class.
         /// </summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public BikeCadenceSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeCadenceSensor> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
         }

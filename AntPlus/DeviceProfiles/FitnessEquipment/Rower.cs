@@ -15,7 +15,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Initializes a new instance of the <see cref="Rower" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger<Rower> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
         }

@@ -67,7 +67,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// Initializes a new instance of the <see cref="Tracker"/> class.
         /// </summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public Tracker(ChannelId channelId, IAntChannel antChannel, ILogger<Tracker> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);

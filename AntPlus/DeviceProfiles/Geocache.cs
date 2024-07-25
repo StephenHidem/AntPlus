@@ -98,7 +98,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
         /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
-        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);

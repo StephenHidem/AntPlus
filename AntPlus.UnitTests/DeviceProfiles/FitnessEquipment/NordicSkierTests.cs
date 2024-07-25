@@ -12,7 +12,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         private MockRepository mockRepository;
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>> mockLogger;
+        private Mock<ILogger<NordicSkier>> mockLogger;
 
 
         [TestInitialize]
@@ -21,7 +21,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment>>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger<NordicSkier>>(MockBehavior.Loose);
         }
 
         private NordicSkier CreateNordicSkier()

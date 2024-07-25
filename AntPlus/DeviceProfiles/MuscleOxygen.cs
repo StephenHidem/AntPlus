@@ -120,7 +120,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Initializes a new instance of the <see cref="MuscleOxygen" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger<MuscleOxygen> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);

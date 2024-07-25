@@ -41,7 +41,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// Initializes a new instance of the <see cref="UnknownDevice"/> class.
         /// </summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public UnknownDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public UnknownDevice(ChannelId channelId, IAntChannel antChannel, ILogger<UnknownDevice> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
         }

@@ -290,7 +290,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
         }

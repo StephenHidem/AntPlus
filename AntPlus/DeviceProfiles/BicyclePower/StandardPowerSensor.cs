@@ -65,7 +65,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
         /// </summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public StandardPowerSensor(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public StandardPowerSensor(ChannelId channelId, IAntChannel antChannel, ILogger<StandardPowerSensor> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
             CommonDataPages = new CommonDataPages(logger);

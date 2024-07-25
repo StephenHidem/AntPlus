@@ -15,7 +15,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Initializes a new instance of the <see cref="Climber" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Climber(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        public Climber(ChannelId channelId, IAntChannel antChannel, ILogger<Climber> logger, int? timeout = default, byte? missedMessages = default)
             : base(channelId, antChannel, logger, timeout, missedMessages)
         {
         }

@@ -45,14 +45,14 @@ namespace AntPlus.UnitTests
         public void MultithreadedAdd_Collection_ExpectedCount()
         {
             // Arrange
-            Mock<ILogger<UnknownDevice>> mockLogger = new();
+            Mock<ILogger> mockLogger = new();
             var antDeviceCollection = CreateAntDeviceCollection();
             int numberOfDevices = 16;
             using SemaphoreSlim semaphore = new(0, numberOfDevices);
             Task[] tasks = new Task[numberOfDevices];
             for (int i = 0; i < numberOfDevices; i++)
             {
-                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, 500);
+                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500, null);
                 tasks[i] = Task.Run(() =>
                 {
                     semaphore.Wait();
@@ -81,7 +81,7 @@ namespace AntPlus.UnitTests
             Task[] tasks = new Task[numberOfDevices];
             for (int i = 0; i < numberOfDevices; i++)
             {
-                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, 500);
+                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500, null);
                 antDeviceCollection.Add(antDevice.Object);
                 tasks[i] = Task.Run(() =>
                 {

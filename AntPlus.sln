@@ -39,6 +39,8 @@ Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "AntGrpcServicePackage", "Ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiAntGrpcClient", "Examples\MAUI-gRPC\MauiAntGrpcClient\MauiAntGrpcClient.csproj", "{345DB049-64E5-4C30-88FA-CCEB6E179C4B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntPlus.Extensions.Hosting", "AntPlus.Extensions.Hosting\AntPlus.Extensions.Hosting.csproj", "{23BAEF2C-A12C-469C-89C9-1DDE65377E28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -233,6 +235,22 @@ Global
 		{345DB049-64E5-4C30-88FA-CCEB6E179C4B}.Release|x86.ActiveCfg = Release|Any CPU
 		{345DB049-64E5-4C30-88FA-CCEB6E179C4B}.Release|x86.Build.0 = Release|Any CPU
 		{345DB049-64E5-4C30-88FA-CCEB6E179C4B}.Release|x86.Deploy.0 = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|x64.Build.0 = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Debug|x86.Build.0 = Debug|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|ARM64.Build.0 = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|x64.ActiveCfg = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|x64.Build.0 = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|x86.ActiveCfg = Release|Any CPU
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

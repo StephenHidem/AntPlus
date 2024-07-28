@@ -48,7 +48,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>
         /// The object that created this response (ie: The corresponding ANTChannel or ANTDevice instance).
         /// </summary>
-        public object Sender { get; protected set; }
+        public object? Sender { get; protected set; }
 
         /// <summary>
         /// The channel parameter received in the message. Note: For some messages this is not applicable.
@@ -75,13 +75,13 @@ namespace SmallEarthTech.AntRadioInterface
         /// The channel identifier.
         /// </value>
         [DataMember]
-        public ChannelId ChannelId { get; protected set; }
+        public ChannelId? ChannelId { get; protected set; }
 
         /// <summary>
         /// The data page payload.
         /// </summary>
         [DataMember]
-        public byte[] Payload { get; protected set; } = null;
+        public byte[]? Payload { get; protected set; }
 
         /// <summary>
         /// Gets the RSSI in dBm.

@@ -197,6 +197,9 @@ namespace SmallEarthTech.AntRadioInterface
         /// <summary>Gets the serial number.</summary>
         uint SerialNumber { get; }
 
+        /// <summary>Gets the radio version string.</summary>
+        string Version { get; }
+
         /// <summary>Reads the user NVM.</summary>
         /// <param name="address">The address.</param>
         /// <param name="size">The size.</param>
@@ -213,9 +216,6 @@ namespace SmallEarthTech.AntRadioInterface
         /// <see cref="AntResponse"/>
         /// </returns>
         AntResponse RequestMessageAndResponse(RequestMessageID messageID, uint responseWaitTime, byte channelNum = 0);
-        /// <summary>Converts to string.</summary>
-        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
-        string ToString();
         /// <summary>Writes the raw message to device.</summary>
         /// <param name="msgID">The MSG identifier.</param>
         /// <param name="msgData">The MSG data.</param>

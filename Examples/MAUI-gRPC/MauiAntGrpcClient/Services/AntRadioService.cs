@@ -23,11 +23,11 @@ namespace MauiAntGrpcClient.Services
 
         public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
         public string ProductDescription { get; private set; } = string.Empty;
-        public string HostVersion { get; private set; } = string.Empty;
+        public string Version { get; private set; } = string.Empty;
         public uint SerialNumber { get; private set; }
         public int NumChannels => throw new NotImplementedException();
 
-        public event EventHandler<AntResponse>? RadioResponse;
+        public event EventHandler<AntResponse>? RadioResponse { add { } remove { } }
 
         public async Task FindAntRadioServerAsync()
         {
@@ -62,7 +62,7 @@ namespace MauiAntGrpcClient.Services
             PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
             ProductDescription = reply.ProductDescription;
             SerialNumber = reply.SerialNumber;
-            HostVersion = reply.HostVersion;
+            Version = reply.Version;
         }
 
         public async Task<IAntChannel[]> InitializeContinuousScanMode()

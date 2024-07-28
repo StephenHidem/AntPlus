@@ -23,7 +23,7 @@ namespace AntGrpcService.Services
             return Task.FromResult(new PropertiesReply
             {
                 SerialNumber = usbAntRadio.SerialNumber,
-                HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0'),
+                Version = Encoding.Default.GetString(rsp.Payload!).TrimEnd('\0'),
                 ProductDescription = usbAntRadio.ProductDescription
             });
         }
@@ -143,7 +143,7 @@ namespace AntGrpcService.Services
             {
                 ChannelNumber = antResponse.ChannelNumber,
                 ResponseId = antResponse.ResponseId,
-                ChannelId = antResponse.ChannelId.Id,
+                ChannelId = antResponse.ChannelId!.Id,
                 Payload = ByteString.CopyFrom(antResponse.Payload),
                 Rssi = antResponse.Rssi,
                 ThresholdConfigurationValue = antResponse.ThresholdConfigurationValue,

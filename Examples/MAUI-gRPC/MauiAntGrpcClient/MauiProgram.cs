@@ -3,6 +3,7 @@ using MauiAntGrpcClient.Pages;
 using MauiAntGrpcClient.Services;
 using MauiAntGrpcClient.ViewModels;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 
 namespace MauiAntGrpcClient
@@ -22,6 +23,7 @@ namespace MauiAntGrpcClient
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
+                .UseMauiAntPlus()
                 .RegisterAppServices()
                 .RegisterViewModels()
                 .RegisterPages();

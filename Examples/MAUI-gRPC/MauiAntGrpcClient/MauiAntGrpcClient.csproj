@@ -74,6 +74,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\AntPlus.Extensions.Hosting\AntPlus.Extensions.Hosting.csproj" />
 	  <ProjectReference Include="..\..\..\AntPlus\AntPlus.csproj" />
 	  <ProjectReference Include="..\..\..\AntRadioInterface\AntRadioInterface.csproj" />
 	  <ProjectReference Include="..\AntGrpcShared\AntGrpcShared.csproj" />

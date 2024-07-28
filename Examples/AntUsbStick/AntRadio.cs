@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
@@ -27,6 +28,9 @@ namespace SmallEarthTech.AntUsbStick
 
         /// <inheritdoc/>
         public uint SerialNumber => _antDevice.getSerialNumber();
+
+        /// <inheritdoc/>
+        public string Version => Encoding.Default.GetString(RequestMessageAndResponse(RequestMessageID.Version, 500).Payload).TrimEnd('\0');
 
         /// <inheritdoc/>
         public void CancelTransfers(int cancelWaitTime) => _antDevice.cancelTransfers(cancelWaitTime);

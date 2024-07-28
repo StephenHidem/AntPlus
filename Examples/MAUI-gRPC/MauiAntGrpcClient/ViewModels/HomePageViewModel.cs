@@ -1,13 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiAntGrpcClient.Services;
-using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 using System.Net;
 
@@ -30,7 +30,7 @@ namespace MauiAntGrpcClient.ViewModels
         [ObservableProperty]
         private string? hostVersion;
         [ObservableProperty]
-        public AntDeviceCollection? antDevices;
+        public AntCollection? antDevices;
 
         public async Task SearchAsync()
         {
@@ -40,8 +40,8 @@ namespace MauiAntGrpcClient.ViewModels
             ServerIPAddress = _antRadioService.ServerIPAddress;
             ProductDescription = _antRadioService.ProductDescription;
             SerialNumber = _antRadioService.SerialNumber;
-            HostVersion = _antRadioService.HostVersion;
-            AntDevices = new AntDeviceCollection(_antRadioService, _services.GetRequiredService<ILoggerFactory>(), missedMessages: 8);
+            HostVersion = _antRadioService.Version;
+            AntDevices = _services.GetRequiredService<AntCollection>();
         }
 
         [RelayCommand(CanExecute = nameof(CanShowRadioCapabilities))]

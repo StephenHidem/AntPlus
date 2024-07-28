@@ -3,14 +3,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
 
 namespace WpfUsbStickApp.ViewModels
 {
@@ -23,7 +22,7 @@ namespace WpfUsbStickApp.ViewModels
 
         private readonly IHost _host;
 
-        public AntDeviceCollection AntDevices { get; }
+        public AntCollection AntDevices { get; }
         public static Stream AntImage => AntDevice.AntImage;
 
         public MainWindowViewModel()
@@ -38,16 +37,21 @@ namespace WpfUsbStickApp.ViewModels
             // dependency services
             _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
                 UseSerilog().
+                UseAntPlus().
+                ConfigureServices(services =>
+                {
+                    // add the implementation of IAntRadio
+                    services.AddSingleton<IAntRadio, AntRadio>();
+                }).
                 Build();
 
             ILoggerFactory loggerFactory = _host.Services.GetRequiredService<ILoggerFactory>();
 
-            AntRadio radio = new(loggerFactory);
+            IAntRadio radio = _host.Services.GetRequiredService<IAntRadio>();
             DeviceCapabilities = radio.GetDeviceCapabilities().Result;
             ProductDescription = radio.ProductDescription;
             SerialNumber = radio.SerialNumber;
-            AntResponse rsp = radio.RequestMessageAndResponse(RequestMessageID.Version, 500);
-            HostVersion = Encoding.Default.GetString(rsp.Payload).TrimEnd('\0');
+            HostVersion = radio.Version;
 
             // log app info
             var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name!.StartsWith("Ant"));
@@ -59,11 +63,7 @@ namespace WpfUsbStickApp.ViewModels
             }
 
             // create the device collection
-            //IConfiguration configuration = _host.Services.GetRequiredService<IConfiguration>();
-            //byte? missedMessages = configuration.GetValue<byte?>("MissedMessages");
-            //int? timeout = configuration.GetValue<int?>("Timeout");
-            //AntDevices = new(radio, loggerFactory, timeout, missedMessages);
-            AntDevices = new(radio, loggerFactory, Timeout.Infinite);
+            AntDevices = _host.Services.GetRequiredService<AntCollection>();
         }
     }
 }

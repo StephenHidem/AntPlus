@@ -16,7 +16,7 @@ namespace MauiAntGrpcClient.Services
         private event EventHandler<AntResponse>? ResponseReceived;
         private AsyncServerStreamingCall<ChannelResponse>? _response;
 
-        public event EventHandler<AntResponse> ChannelResponse
+        public event EventHandler<AntResponse>? ChannelResponse
         {
             add
             {

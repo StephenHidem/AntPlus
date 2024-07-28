@@ -41,7 +41,7 @@ message PropertiesReply {
 	// ANT radio serial number.
 	uint32 serial_number = 2;
 	// ANT radio version number.
-	string host_version = 3;
+	string version = 3;
 }
 
 // The number of configured channels.

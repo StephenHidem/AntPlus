@@ -24,7 +24,7 @@ namespace AntGrpcService.Services
                 {
                     await responseStream.WriteAsync(new ChannelResponse
                     {
-                        ChannelId = channelResponse.ChannelId.Id,       // TODO: NULL COALESCE CHANNELID
+                        ChannelId = channelResponse.ChannelId!.Id,
                         ChannelNumber = channelResponse.ChannelNumber,
                         ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
                         Payload = ByteString.CopyFrom(channelResponse.Payload),

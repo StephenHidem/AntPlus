@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <Authors>Stephen Hidem</Authors>
+    <Title>ANT+ Class Library Hosting Extensions</Title>
+    <Copyright>© $(Authors) 2024. All rights reserved.</Copyright>
+    <Description>Useful extensions for hosting in DI containers.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Maui.Core" Version="8.0.70" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AntPlus\AntPlus\AntPlus.csproj" />
+    <ProjectReference Include="..\..\AntPlus\AntRadioInterface\AntRadioInterface.csproj" />
+  </ItemGroup>
+
+</Project>

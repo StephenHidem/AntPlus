@@ -454,7 +454,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// returned for all other pages. Therefore, callers of this method need to check for a null return type.
         /// </remarks>
         /// <param name="dataPage">The data page.</param>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">The ant channel.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="missedMessages">The missed messages.</param>
         /// <returns>One of the known fitness equipment classes if known, otherwise null.</returns>
         public static FitnessEquipment GetFitnessEquipment(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILoggerFactory loggerFactory, int? timeout = default, byte? missedMessages = default)
         {

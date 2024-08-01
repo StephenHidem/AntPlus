@@ -9,7 +9,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     public partial class AntCollection
     {
         /// <summary>
-        /// This implementation of IAntChannel supports sending messages to ANT devices. The implementation is very
+        /// This implementation of IAntChannel supports sending messages to ANT devices. This implementation is very
         /// limited in its support; only <see cref="SendAcknowledgedData(byte[], uint)"/> and <see cref="SendAcknowledgedDataAsync(byte[], uint)"/>
         /// are implemented. It is only intended to be used by the <see cref="AntCollection"/> class to provide the IAntChannel
         /// argument when creating ANT devices. All messages to be sent to devices are coordinated by this class.

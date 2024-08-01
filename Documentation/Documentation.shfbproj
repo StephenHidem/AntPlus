@@ -34,6 +34,7 @@
       <DocumentationSource sourceFile="..\AntPlus\AntPlus.csproj" />
       <DocumentationSource sourceFile="..\AntRadioInterface\AntRadioInterface.csproj" />
       <DocumentationSource sourceFile="..\Examples\AntUsbStick\AntUsbStick.csproj" />
+      <DocumentationSource sourceFile="..\AntPlus.Extensions.Hosting\Hosting.csproj" />
     </DocumentationSources>
     <HelpFileFormat>Website</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
@@ -78,8 +79,8 @@
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, NonBrowsable</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="CommunityToolkit.Mvvm.ComponentModel" isExposed="True" xmlns="">
-  <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
-</Filter>
+        <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
+      </Filter>
     </ApiFilter>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
@@ -104,11 +105,13 @@
     <Folder Include="Content\Examples\" />
     <Folder Include="Content" />
     <Folder Include="Content\Examples\MAUI-gRPC\" />
+    <Folder Include="Content\HostingExtensions" />
     <Folder Include="Content\Unity" />
     <Folder Include="Content\VersionHistory" />
     <Folder Include="Content\VersionHistory\AntPlus" />
     <Folder Include="Content\VersionHistory\AntRadioInterface" />
     <Folder Include="Content\VersionHistory\AntUsbStick" />
+    <Folder Include="Content\VersionHistory\HostingExtensions" />
     <Folder Include="icons" />
     <Folder Include="media" />
   </ItemGroup>
@@ -139,6 +142,8 @@
     <None Include="Content\VersionHistory\AntRadioInterface\AntRadioInterfaceVersionHistory.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\AntUsbStickVersionHistory.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v2.1.0.0.aml" />
+    <None Include="Content\VersionHistory\HostingExtensions\HostingExtensionsVersionHistory.aml" />
+    <None Include="Content\VersionHistory\HostingExtensions\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

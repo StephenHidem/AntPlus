@@ -1,6 +1,6 @@
 ﻿namespace SmallEarthTech.AntPlus.Extensions.Hosting
 {
-    public static partial class HostBuilderExtensions
+    public static partial class HostExtensions
     {
         /// <summary>
         /// This class provides timeout options. The <see cref="AntCollection"/> class uses the options pattern and

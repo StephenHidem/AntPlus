@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Nullable>enable</Nullable>
+    <AssemblyName>SmallEarthTech.AntPlus.Extensions.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>SmallEarthTech.AntPlus.Extensions.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <Authors>Stephen Hidem</Authors>
+    <Title>ANT+ Class Library Hosting Extensions</Title>
+    <Copyright>© $(Authors) 2024. All rights reserved.</Copyright>
+    <Description>Useful ANT+ extensions for hosting in DI containers. Simple and easy to use! Includes support for .NET MAUI and Windows apps.</Description>
+    <PackageTags>ant; ant+; antplus; smallearthtech</PackageTags>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageIcon>PackageLogo.png</PackageIcon>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>
+	<PackageReleaseNotes>Hosting extensions for the ANT+ Class Library supporting .NET MAUI and Window applications using depencency injection (made easy!).</PackageReleaseNotes>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Maui.Core" Version="8.0.70" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AntPlus\AntPlus\AntPlus.csproj" />
+    <ProjectReference Include="..\..\AntPlus\AntRadioInterface\AntRadioInterface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PackageLogo.png">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

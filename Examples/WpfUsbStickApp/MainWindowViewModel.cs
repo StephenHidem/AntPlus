@@ -37,15 +37,13 @@ namespace WpfUsbStickApp.ViewModels
             // dependency services
             _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
                 UseSerilog().
-                UseAntPlus().
+                UseAntPlus().   // this adds all the required dependencies to use the ANT+ class library
                 ConfigureServices(services =>
                 {
-                    // add the implementation of IAntRadio
+                    // add the implementation of IAntRadio to the host
                     services.AddSingleton<IAntRadio, AntRadio>();
                 }).
                 Build();
-
-            ILoggerFactory loggerFactory = _host.Services.GetRequiredService<ILoggerFactory>();
 
             IAntRadio radio = _host.Services.GetRequiredService<IAntRadio>();
             DeviceCapabilities = radio.GetDeviceCapabilities().Result;
@@ -62,7 +60,7 @@ namespace WpfUsbStickApp.ViewModels
                 logger?.LogInformation("{AntAssembly}", asm.FullName);
             }
 
-            // create the device collection
+            // create the device collection - this starts scanning for devices
             AntDevices = _host.Services.GetRequiredService<AntCollection>();
         }
     }

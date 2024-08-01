@@ -2,17 +2,11 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SmallEarthTech.AntPlus.DeviceProfiles;
-using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
-using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
-using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
-using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment;
-using static SmallEarthTech.AntPlus.Extensions.Hosting.HostBuilderExtensions;
 
 namespace SmallEarthTech.AntPlus.Extensions.Hosting
 {
@@ -20,8 +14,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     /// This class largely mirrors <see cref="AntDeviceCollection"/> but is designed specifically to be integrated into
     /// an application via dependency injection.
     /// </summary>
-    /// <seealso cref="System.Collections.ObjectModel.ObservableCollection&lt;SmallEarthTech.AntPlus.AntDevice&gt;" />
-    public partial class AntCollection : ObservableCollection<AntDevice>
+    public partial class AntCollection : ObservableCollection<AntDevice>, IDisposable
     {
         /// <summary>
         /// The collection lock typically used by WPF applications to synchronize UI updates when devices are added or
@@ -40,13 +33,13 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         private SendMessageChannel? _channel;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AntCollection"/> class.
+        /// Initializes a new instance of the <see cref="AntCollection"/> class. The ANT radio is initialized for continuous scan mode.
         /// </summary>
         /// <param name="services">The service provider.</param>
         /// <param name="antRadio">The ANT radio.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="options">The timeout options.</param>
-        public AntCollection(IServiceProvider services, IAntRadio antRadio, ILogger<AntCollection> logger, IOptions<TimeoutOptions> options)
+        /// <param name="options">The ANT device timeout options.</param>
+        public AntCollection(IServiceProvider services, IAntRadio antRadio, ILogger<AntCollection> logger, IOptions<HostExtensions.TimeoutOptions> options)
         {
             _services = services;
             _logger = logger;
@@ -58,25 +51,35 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             {
                 _channels = await antRadio.InitializeContinuousScanMode();
                 _channel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
-                _channels[0].ChannelResponse += Channel_ChannelResponse;
+                _channels[0].ChannelResponse += MessageHandler;
             });
 
             _logger.LogInformation("Created AntDeviceCollection: Timeout = {Timeout} MissedMessages = {MissedMessages}", _timeout, _missedMessages);
         }
 
-        private void Channel_ChannelResponse(object? sender, AntResponse e)
+        /// <summary>
+        /// The collection message handler. All messages received from the ANT radio pass through here. New devices are added to the
+        /// collection and the message is dispatched to the device for processing.
+        /// </summary>
+        /// <param name="sender">The ANT radio.</param>
+        /// <param name="e">The ANT response.</param>
+        private void MessageHandler(object? sender, AntResponse e)
         {
             if (e.ChannelId != null)
             {
+                // see if the device is in the collection
                 AntDevice? device;
                 device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+
+                // create the device if not in the collection
                 if (device == null)
                 {
                     // get the device type
                     Type? deviceType = GetAntDeviceType(e.ChannelId, e.Payload!);
-                    if (deviceType == null) return;
+                    if (deviceType == null) return;     // exit if unable to determine device type
 
-                    // create ant device from services
+                    // create ant device from service provider and apply timeout options
+                    // the ActivatorUtilities allow us to inject ctor parameters into the requested service
                     if (_missedMessages != null)
                     {
                         device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!, _missedMessages);
@@ -90,10 +93,12 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                         device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!);
                     }
 
-                    if (device == null) return;     // some device types have additional qualifiers
+                    if (device == null) return;     // exit if unable to create the device
                     Add(device);
                     device.DeviceWentOffline += DeviceOffline;
                 }
+
+                // dispatch the message to the device
                 device.Parse(e.Payload);
             }
             else
@@ -102,9 +107,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     e.ChannelNumber,
                     (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
-
-                // attempt to reopen channel 0 for Rx continuous scan mode
-                //_ = await _antRadio.InitializeContinuousScanMode();
+                Dispose();
             }
         }
 
@@ -115,8 +118,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             _ = Remove(device);
         }
 
-        /// <summary>Adds the specified <see cref="AntDevice"> to the end of the collection.</summary>
-        /// <param name="item">The <see cref="AntDevice">.</param>
+        /// <summary>Adds the specified <see cref="AntDevice"/> to the end of the collection.</summary>
+        /// <param name="item">The <see cref="AntDevice"/>.</param>
         public new void Add(AntDevice item)
         {
             lock (CollectionLock)
@@ -126,8 +129,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             }
         }
 
-        /// <summary>Removes the specified <see cref="AntDevice"> from the collection.</summary>
-        /// <param name="item">The <see cref="AntDevice">.</param>
+        /// <summary>Removes the specified <see cref="AntDevice"/> from the collection.</summary>
+        /// <param name="item">The <see cref="AntDevice"/>.</param>
         /// <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the original collection.</returns>
         public new bool Remove(AntDevice item)
         {
@@ -144,96 +147,39 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="page">The page received from the device.</param>
-        /// <returns>The type of the device. Fitness equipment may return null if <see cref="GetFitnessEquipmentType(byte[])"/> can't determine type.</returns>
+        /// <returns>The type of the device.</returns>
         private Type? GetAntDeviceType(ChannelId channelId, byte[] page)
         {
-            return channelId.DeviceType switch
-            {
-                HeartRate.DeviceClass => typeof(HeartRate),
-                BicyclePower.DeviceClass => GetBicyclePowerType(page),
-                BikeSpeedSensor.DeviceClass => typeof(BikeSpeedSensor),
-                BikeCadenceSensor.DeviceClass => typeof(BikeCadenceSensor),
-                CombinedSpeedAndCadenceSensor.DeviceClass => typeof(CombinedSpeedAndCadenceSensor),
-                FitnessEquipment.DeviceClass => GetFitnessEquipmentType(page),
-                MuscleOxygen.DeviceClass => typeof(MuscleOxygen),
-                Geocache.DeviceClass => typeof(Geocache),
-                Tracker.DeviceClass => typeof(Tracker),
-                StrideBasedSpeedAndDistance.DeviceClass => typeof(StrideBasedSpeedAndDistance),
-                _ => typeof(UnknownDevice),
-            };
-        }
+            // check if the ServiceCollection is null
+            if (HostExtensions.ServiceCollection == null) throw new InvalidOperationException("The ServiceCollection is null. UseAntPlus() or UseMauiAntPlus() must be invoked when building app services.");
 
-        /// <summary>
-        /// Gets the type of the bicycle power sensor.
-        /// </summary>
-        /// <remarks>
-        /// <see cref="CrankTorqueFrequencySensor"/>s only broadcast their main page. Other bicycle power sensors broadcast
-        /// any number of other pages. This allows the method to determine the sensor type.
-        /// </remarks>
-        /// <param name="page">The page broadcast by the device.</param>
-        /// <returns></returns>
-        private Type GetBicyclePowerType(byte[] page)
-        {
-            if ((DeviceProfiles.BicyclePower.DataPage)page[0] == DeviceProfiles.BicyclePower.DataPage.CrankTorqueFrequency)
-            {
-                // CTF sensor
-                return typeof(CrankTorqueFrequencySensor);
-            }
+            SelectImplementation? selector = _services.GetKeyedService<SelectImplementation>(channelId.DeviceType);
+            if (selector != null) { return selector.SelectImplementationType(page); }
             else
             {
-                return typeof(StandardPowerSensor);
+                return HostExtensions.ServiceCollection.
+                        FirstOrDefault(d =>
+                        d.ServiceType == typeof(AntDevice) &&
+                        d.IsKeyedService &&
+                        d.ServiceKey is byte key &&
+                        key == channelId.DeviceType)?.
+                        KeyedImplementationType ?? typeof(UnknownDevice);
             }
         }
 
         /// <summary>
-        /// Gets the type of the fitness equipment.
+        /// Release the ANT channels.
         /// </summary>
-        /// <remarks>
-        /// The fitness equipment type can be determined from the <see cref="FitnessEquipment.DataPage.GeneralFEData"/> page
-        /// or pages specific to the equipment type. Any other page will return null.
-        /// </remarks>
-        /// <param name="page">The page broadcast by the equipment.</param>
-        /// <returns></returns>
-        private Type? GetFitnessEquipmentType(byte[] page)
+        public void Dispose()
         {
-            switch ((FitnessEquipment.DataPage)page[0])
+            if (_channels != null)
             {
-                case FitnessEquipment.DataPage.GeneralFEData:
-                    switch ((FitnessEquipmentType)page[1])
-                    {
-                        case FitnessEquipmentType.Treadmill:
-                            return typeof(Treadmill);
-                        case FitnessEquipmentType.Elliptical:
-                            return typeof(Elliptical);
-                        case FitnessEquipmentType.Rower:
-                            return typeof(Rower);
-                        case FitnessEquipmentType.Climber:
-                            return typeof(Climber);
-                        case FitnessEquipmentType.NordicSkier:
-                            return typeof(NordicSkier);
-                        case FitnessEquipmentType.TrainerStationaryBike:
-                            return typeof(TrainerStationaryBike);
-                        default:
-                            _logger.LogError("Unknown equipment type = {EquipmentType}", page[1]);
-                            return null;
-                    }
-                case FitnessEquipment.DataPage.TreadmillData:
-                    return typeof(Treadmill);
-                case FitnessEquipment.DataPage.EllipticalData:
-                    return typeof(Elliptical);
-                case FitnessEquipment.DataPage.RowerData:
-                    return typeof(Rower);
-                case FitnessEquipment.DataPage.ClimberData:
-                    return typeof(Climber);
-                case FitnessEquipment.DataPage.NordicSkierData:
-                    return typeof(NordicSkier);
-                case FitnessEquipment.DataPage.TrainerStationaryBikeData:
-                    return typeof(TrainerStationaryBike);
-                case FitnessEquipment.DataPage.TrainerTorqueData:
-                    return typeof(TrainerStationaryBike);
-                default:
-                    _logger.LogError("Unknown equipment type. Data page = {DataPage}", page);
-                    return null;
+                _channels[0].ChannelResponse -= MessageHandler;
+                foreach (IAntChannel item in _channels)
+                {
+                    item.Dispose();
+                }
+                _channels = null;
             }
         }
     }

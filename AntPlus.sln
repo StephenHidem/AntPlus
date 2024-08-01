@@ -39,7 +39,9 @@ Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "AntGrpcServicePackage", "Ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiAntGrpcClient", "Examples\MAUI-gRPC\MauiAntGrpcClient\MauiAntGrpcClient.csproj", "{345DB049-64E5-4C30-88FA-CCEB6E179C4B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntPlus.Extensions.Hosting", "AntPlus.Extensions.Hosting\AntPlus.Extensions.Hosting.csproj", "{23BAEF2C-A12C-469C-89C9-1DDE65377E28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosting", "AntPlus.Extensions.Hosting\Hosting.csproj", "{23BAEF2C-A12C-469C-89C9-1DDE65377E28}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{A9204EC0-5B4E-4AC9-ACEC-A96C5B258218}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -264,6 +266,7 @@ Global
 		{07EDC306-53AC-425A-B0C8-1D7FFF2F3CAE} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
 		{25927FFB-7C08-45D5-A7C2-D20C65170CDD} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
 		{345DB049-64E5-4C30-88FA-CCEB6E179C4B} = {DCD13C1B-C4BC-4B55-A425-B92256F6BEE9}
+		{23BAEF2C-A12C-469C-89C9-1DDE65377E28} = {A9204EC0-5B4E-4AC9-ACEC-A96C5B258218}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B254219-260F-4D16-9D59-77A2386597E8}

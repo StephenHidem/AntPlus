@@ -28,7 +28,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private StandardPowerSensor CreateStandardPowerSensor()
         {
-            byte[] page = new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] page = new byte[8] { (byte)BicyclePower.DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
             return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8) as StandardPowerSensor;
         }
 
@@ -41,7 +41,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, (byte)val, 0, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, (byte)val, 0, 0, 0xFF };
 
             // Act
             sensor.Parse(
@@ -60,7 +60,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
@@ -79,7 +79,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
@@ -98,7 +98,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
@@ -117,7 +117,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF };
 
             // Act
             sensor.Parse(
@@ -135,7 +135,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -150,7 +150,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.RiderPositionConfiguration, 128, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.RiderPositionConfiguration, 128, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -178,7 +178,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -206,7 +206,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
 
             // Act
             sensor.Parse(
@@ -236,7 +236,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -266,7 +266,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF };
 
             // Act
             sensor.Parse(
@@ -285,7 +285,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -312,7 +312,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 (byte)page,
                 0xFF,
                 4,
-                (byte)DataPage.GetSetParameters,
+                (byte)BicyclePower.DataPage.GetSetParameters,
                 (byte)SmallEarthTech.AntPlus.CommandType.DataPage
             };
             mockAntChannel.Setup(ac =>
@@ -336,7 +336,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             var sensor = CreateStandardPowerSensor();
             byte expVal = (byte)((length - 110) / 0.5);
             byte[] dataPage = new byte[8] {
-                (byte)DataPage.GetSetParameters,
+                (byte)BicyclePower.DataPage.GetSetParameters,
                 (byte)SubPage.CrankParameters,
                 0xFF,
                 0xFF,
@@ -364,7 +364,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             var sensor = CreateStandardPowerSensor();
             byte offset = 128;
             byte[] dataPage = new byte[8] {
-                (byte)DataPage.GetSetParameters,
+                (byte)BicyclePower.DataPage.GetSetParameters,
                 (byte)SubPage.RiderPositionConfiguration,
                 offset,
                 0xFF,
@@ -392,7 +392,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             var sensor = CreateStandardPowerSensor();
             double threshold = 50;
             byte[] dataPage = new byte[8] {
-                (byte)DataPage.GetSetParameters,
+                (byte)BicyclePower.DataPage.GetSetParameters,
                 (byte)SubPage.PowerPhaseConfiguration,
                 (byte)(threshold / 0.5),
                 0xFF,

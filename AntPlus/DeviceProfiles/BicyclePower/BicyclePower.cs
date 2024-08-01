@@ -5,39 +5,6 @@ using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 {
-    /// <summary>
-    /// Main data pages.
-    /// </summary>
-    public enum DataPage
-    {
-        /// <summary>Unknown</summary>
-        Unknown,
-        /// <summary>Calibration</summary>
-        Calibration,
-        /// <summary>Get/Set Parameters</summary>
-        GetSetParameters,
-        /// <summary>Measurement Output</summary>
-        MeasurementOutput,
-        /// <summary>Power Only</summary>
-        PowerOnly = 0x10,
-        /// <summary>Wheel Torque</summary>
-        WheelTorque,
-        /// <summary>Crank Torque</summary>
-        CrankTorque,
-        /// <summary>Torque effectiveness and pedal smoothness</summary>
-        TorqueEffectivenessAndPedalSmoothness,
-        /// <summary>Torque barycenter</summary>
-        TorqueBarycenter,
-        /// <summary>Crank torque frequency</summary>
-        CrankTorqueFrequency = 0x20,
-        /// <summary>Right force angle</summary>
-        RightForceAngle = 0xE0,
-        /// <summary>Left force angle</summary>
-        LeftForceAngle = 0xE1,
-        /// <summary>Pedal position</summary>
-        PedalPosition = 0xE2
-    }
-
     /// <summary>Base class for bicycle power sensors.</summary>
     /// <remarks>
     /// Bicycle Power sensors fall into two main categories - <see cref="StandardPowerSensor"/> and <see cref="CrankTorqueFrequencySensor"/>.
@@ -59,6 +26,39 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// The device class ID.
         /// </summary>
         public const byte DeviceClass = 11;
+
+        /// <summary>
+        /// Main data pages.
+        /// </summary>
+        public enum DataPage
+        {
+            /// <summary>Unknown</summary>
+            Unknown,
+            /// <summary>Calibration</summary>
+            Calibration,
+            /// <summary>Get/Set Parameters</summary>
+            GetSetParameters,
+            /// <summary>Measurement Output</summary>
+            MeasurementOutput,
+            /// <summary>Power Only</summary>
+            PowerOnly = 0x10,
+            /// <summary>Wheel Torque</summary>
+            WheelTorque,
+            /// <summary>Crank Torque</summary>
+            CrankTorque,
+            /// <summary>Torque effectiveness and pedal smoothness</summary>
+            TorqueEffectivenessAndPedalSmoothness,
+            /// <summary>Torque barycenter</summary>
+            TorqueBarycenter,
+            /// <summary>Crank torque frequency</summary>
+            CrankTorqueFrequency = 0x20,
+            /// <summary>Right force angle</summary>
+            RightForceAngle = 0xE0,
+            /// <summary>Left force angle</summary>
+            LeftForceAngle = 0xE1,
+            /// <summary>Pedal position</summary>
+            PedalPosition = 0xE2
+        }
 
         /// <summary>The calibration operation status common to all bicycle power sensors.</summary>
         [ObservableProperty]

@@ -26,7 +26,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private StandardPowerSensor CreateStandardWheelTorqueSensor()
         {
-            byte[] page = new byte[8] { (byte)DataPage.WheelTorque, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] page = new byte[8] { (byte)BicyclePower.DataPage.WheelTorque, 0, 0, 0, 0, 0, 0, 0 };
             return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8) as StandardPowerSensor;
         }
 
@@ -42,7 +42,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             double expAvgAngVel = 2 * Math.PI / (0x439 / 2048.0);
             double expAvgTorq = 14.9375;
             double expDistance = 2.2;
-            byte[] dataPage = new byte[8] { (byte)DataPage.WheelTorque, 1, 1, 60, 0x39, 0x04, 0xDE, 0x01 };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.WheelTorque, 1, 1, 60, 0x39, 0x04, 0xDE, 0x01 };
 
             // Act
             sensor.Parse(

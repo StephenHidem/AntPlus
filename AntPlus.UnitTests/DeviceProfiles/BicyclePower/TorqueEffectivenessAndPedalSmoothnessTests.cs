@@ -25,7 +25,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private StandardPowerSensor CreateStandardPowerSensor()
         {
-            byte[] page = new byte[8] { (byte)DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] page = new byte[8] { (byte)BicyclePower.DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0 };
             return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8) as StandardPowerSensor;
         }
 
@@ -37,7 +37,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, (byte)value, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, (byte)value, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -57,7 +57,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var sensor = CreateStandardPowerSensor();
-            byte[] dataPage = new byte[8] { (byte)DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, 0xFF, 0xFF, (byte)left, (byte)right, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, 0xFF, 0xFF, (byte)left, (byte)right, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(

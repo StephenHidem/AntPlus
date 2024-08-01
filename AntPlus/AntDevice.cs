@@ -154,7 +154,7 @@ namespace SmallEarthTech.AntPlus
 
             if (ret != MessagingReturnCode.Pass)
             {
-                logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), nameof(SendExtAcknowledgedMessage), ret);
+                logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), "SendExtAcknowledgedDataAsync", ret);
             }
             return ret;
         }

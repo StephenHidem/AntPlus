@@ -23,18 +23,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
         }
 
-        private BicyclePower CreateBicyclePower(DataPage dataPage = DataPage.PowerOnly)
+        private BicyclePower CreateBicyclePower(BicyclePower.DataPage dataPage = BicyclePower.DataPage.PowerOnly)
         {
             byte[] page = new byte[8] { (byte)dataPage, 0, 0, 0, 0, 0, 0, 0 };
             return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8);
         }
 
         [TestMethod]
-        [DataRow(DataPage.PowerOnly)]
-        [DataRow(DataPage.WheelTorque)]
-        [DataRow(DataPage.CrankTorque)]
-        [DataRow(DataPage.CrankTorqueFrequency)]
-        public void Parse_CreateSensor_ExpectedSensor(DataPage page)
+        [DataRow(BicyclePower.DataPage.PowerOnly)]
+        [DataRow(BicyclePower.DataPage.WheelTorque)]
+        [DataRow(BicyclePower.DataPage.CrankTorque)]
+        [DataRow(BicyclePower.DataPage.CrankTorqueFrequency)]
+        public void Parse_CreateSensor_ExpectedSensor(BicyclePower.DataPage page)
         {
             // Arrange
             var bicyclePower = CreateBicyclePower(page);
@@ -48,16 +48,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Assert
             switch (page)
             {
-                case DataPage.PowerOnly:
+                case BicyclePower.DataPage.PowerOnly:
                     Assert.IsInstanceOfType<StandardPowerSensor>(bicyclePower);
                     break;
-                case DataPage.WheelTorque:
+                case BicyclePower.DataPage.WheelTorque:
                     Assert.IsInstanceOfType<StandardPowerSensor>(bicyclePower);
                     break;
-                case DataPage.CrankTorque:
+                case BicyclePower.DataPage.CrankTorque:
                     Assert.IsInstanceOfType<StandardPowerSensor>(bicyclePower);
                     break;
-                case DataPage.CrankTorqueFrequency:
+                case BicyclePower.DataPage.CrankTorqueFrequency:
                     Assert.IsInstanceOfType<CrankTorqueFrequencySensor>(bicyclePower);
                     break;
                 default:

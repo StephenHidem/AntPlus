@@ -27,7 +27,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private StandardPowerSensor CreateStandardCrankTorqueSensor()
         {
-            byte[] page = new byte[8] { (byte)DataPage.CrankTorque, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] page = new byte[8] { (byte)BicyclePower.DataPage.CrankTorque, 0, 0, 0, 0, 0, 0, 0 };
             return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8) as StandardPowerSensor;
         }
 
@@ -39,12 +39,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var sensor = CreateStandardCrankTorqueSensor();
             var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
-            byte[] dataPage = new byte[8] { (byte)DataPage.RightForceAngle, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.RightForceAngle, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
-            dataPage[0] = (byte)DataPage.LeftForceAngle;
+            dataPage[0] = (byte)BicyclePower.DataPage.LeftForceAngle;
             sensor.Parse(
                 dataPage);
 
@@ -65,12 +65,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var sensor = CreateStandardCrankTorqueSensor();
             var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
-            byte[] dataPage = new byte[8] { (byte)DataPage.RightForceAngle, 0xFF, 0xFF, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.RightForceAngle, 0xFF, 0xFF, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
                 dataPage);
-            dataPage[0] = (byte)DataPage.LeftForceAngle;
+            dataPage[0] = (byte)BicyclePower.DataPage.LeftForceAngle;
             sensor.Parse(
                 dataPage);
 
@@ -91,7 +91,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var sensor = CreateStandardCrankTorqueSensor();
             var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
-            byte[] dataPage = new byte[8] { (byte)DataPage.PedalPosition, 0xFF, (byte)pos, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.PedalPosition, 0xFF, (byte)pos, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -107,7 +107,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var sensor = CreateStandardCrankTorqueSensor();
             var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
-            byte[] dataPage = new byte[8] { (byte)DataPage.PedalPosition, 0xFF, 0xFF, 128, 64, 0xE0, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.PedalPosition, 0xFF, 0xFF, 128, 64, 0xE0, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -128,7 +128,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Arrange
             var sensor = CreateStandardCrankTorqueSensor();
             var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
-            byte[] dataPage = new byte[8] { (byte)DataPage.TorqueBarycenter, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.TorqueBarycenter, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             // Act
             sensor.Parse(
@@ -149,7 +149,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             double expAvgAngVel = 2 * Math.PI;
             double expAvgTorq = 44.875;
             double expAvgPow = 282;
-            byte[] dataPage = new byte[8] { (byte)DataPage.CrankTorque, 1, 1, 60, 0x00, 0x08, 0x9C, 0x05 };
+            byte[] dataPage = new byte[8] { (byte)BicyclePower.DataPage.CrankTorque, 1, 1, 60, 0x00, 0x08, 0x9C, 0x05 };
 
             // Act
             sensor.Parse(

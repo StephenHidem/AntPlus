@@ -137,18 +137,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public void ParseCyclingDynamics(byte[] dataPage)
         {
-            switch ((DataPage)dataPage[0])
+            switch ((BicyclePower.DataPage)dataPage[0])
             {
-                case DataPage.TorqueBarycenter:
+                case BicyclePower.DataPage.TorqueBarycenter:
                     TorqueBarycenterAngle = dataPage[1] * 0.5 + 30.0;
                     break;
-                case DataPage.RightForceAngle:
+                case BicyclePower.DataPage.RightForceAngle:
                     RightForceAngle = new ForceAngle(dataPage);
                     break;
-                case DataPage.LeftForceAngle:
+                case BicyclePower.DataPage.LeftForceAngle:
                     LeftForceAngle = new ForceAngle(dataPage);
                     break;
-                case DataPage.PedalPosition:
+                case BicyclePower.DataPage.PedalPosition:
                     PedalPosition = new PedalPositionPage(dataPage);
                     break;
                 default:

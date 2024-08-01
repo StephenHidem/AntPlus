@@ -18,14 +18,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         public override int ChannelCount => 8192;
 
         /// <summary>
-        /// Flag indicating the data page was handled by <see cref="Parse(byte[])"/>.
-        /// </summary>
-        protected bool handledPage;
-
-        /// <summary>
         /// The fitness equipment device class ID.
         /// </summary>
         public const byte DeviceClass = 17;
+
+        /// <summary>
+        /// Flag indicating the data page was handled by <see cref="Parse(byte[])"/>.
+        /// </summary>
+        protected bool handledPage;
 
         /// <summary>
         /// Fitness equipment data pages.

@@ -23,8 +23,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <summary>
         /// Adds AntPlus classes to host builder service collection.
         /// </summary>
-        /// <param name="builder"><see cref="IHostBuilder"/></param>
-        /// <returns><see cref="IHostBuilder"/></returns>
+        /// <param name="builder">The host app builder</param>
+        /// <returns>The host app builder</returns>
         public static IHostBuilder UseAntPlus(this IHostBuilder builder)
         {
             builder.ConfigureServices((context, collection) =>
@@ -37,8 +37,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <summary>
         /// Adds AntPlus classes to MAUI builder service collection.
         /// </summary>
-        /// <param name="builder"><see cref="MauiAppBuilder"/></param>
-        /// <returns><see cref="MauiAppBuilder"/></returns>
+        /// <param name="builder">The MAUI host app builder</param>
+        /// <returns>The MAUI host app builder</returns>
         public static MauiAppBuilder UseMauiAntPlus(this MauiAppBuilder builder)
         {
             AddServices(builder.Services);

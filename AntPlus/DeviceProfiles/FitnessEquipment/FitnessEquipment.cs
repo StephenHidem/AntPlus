@@ -14,13 +14,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     /// <seealso cref="AntDevice" />
     public abstract partial class FitnessEquipment : AntDevice
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 8192;
-
         /// <summary>
-        /// The fitness equipment device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 17;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8192;
 
         /// <summary>
         /// Flag indicating the data page was handled by <see cref="Parse(byte[])"/>.
@@ -363,7 +363,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                logger.LogWarning("Invalid state. Received {State}", st);
+                _logger.LogWarning("Invalid state. Received {State}", st);
             }
         }
 

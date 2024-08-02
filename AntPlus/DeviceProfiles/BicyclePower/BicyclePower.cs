@@ -19,13 +19,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// </remarks>
     public abstract partial class BicyclePower : AntDevice
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 8182;
-
         /// <summary>
-        /// The device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 11;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8182;
 
         /// <summary>
         /// Main data pages.

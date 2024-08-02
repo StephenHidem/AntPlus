@@ -17,13 +17,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     {
         private byte eventCount;
 
-        /// <inheritdoc/>
-        public override int ChannelCount => 8192;
-
         /// <summary>
-        /// The muscle oxygen device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 31;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8192;
 
         /// <summary>
         /// Main data pages.

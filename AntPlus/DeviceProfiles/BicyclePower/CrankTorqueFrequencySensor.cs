@@ -77,7 +77,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCTFMessage(dataPage);
                     break;
                 default:
-                    logger.LogWarning("Unknown data page. Page = {Page}", dataPage[0]);
+                    _logger.LogWarning("Unknown data page. Page = {Page}", dataPage[0]);
                     break;
             }
         }
@@ -135,7 +135,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                         case CTFDefinedId.SerialNumber:
                             break;
                         default:
-                            logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", dataPage[3]);
+                            _logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", dataPage[3]);
                             break;
                     }
                     break;

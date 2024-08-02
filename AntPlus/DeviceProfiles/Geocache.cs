@@ -19,13 +19,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class Geocache : AntDevice
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 65535;
-
         /// <summary>
-        /// The geocache device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 19;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 65535;
 
         /// <summary>
         /// Main data pages.
@@ -162,7 +162,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                                 else { LastVisitTimestamp = null; }
                                 break;
                             default:
-                                logger.LogWarning("Unknown DataId = {DataId}", dataPage[1]);
+                                _logger.LogWarning("Unknown DataId = {DataId}", dataPage[1]);
                                 break;
                         }
                     }

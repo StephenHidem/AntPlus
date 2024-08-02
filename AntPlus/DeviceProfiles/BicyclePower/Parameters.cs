@@ -253,7 +253,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
                     break;
                 default:
-                    logger.LogWarning("Unknown SubPage - {SubPage}.", dataPage[1]);
+                    _logger.LogWarning("Unknown SubPage - {SubPage}.", dataPage[1]);
                     break;
             }
         }

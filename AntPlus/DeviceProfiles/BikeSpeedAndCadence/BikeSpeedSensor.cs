@@ -16,13 +16,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <seealso cref="CommonSpeedCadence" />
     public partial class BikeSpeedSensor : CommonSpeedCadence
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 8118;
-
         /// <summary>
-        /// The BikeSpeedSensor device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 123;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8118;
 
         /// <summary>
         /// The wheel circumference in meters. The default is 2.2 meters.

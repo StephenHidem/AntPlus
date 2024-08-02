@@ -12,13 +12,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     /// </summary>
     public partial class Tracker : AntDevice
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 2048;
-
         /// <summary>
-        /// The asset tracker device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 41;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 2048;
 
         /// <summary>
         /// Main data pages.

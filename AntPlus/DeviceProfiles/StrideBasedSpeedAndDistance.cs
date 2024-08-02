@@ -18,15 +18,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <seealso cref="AntDevice" />
     public partial class StrideBasedSpeedAndDistance : AntDevice
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 8134;
-
         /// <summary>
-        /// The SDM device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 124;
 
-        private const uint channelCount = 8134;
+        /// <inheritdoc/>
+        public override int ChannelCount => 8134;
+
         private bool isFirstDefaultPage = true;
         private bool isFirstCalPage = true;
         private byte prevCals;
@@ -269,7 +268,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns><see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> RequestSummaryPage()
         {
-            logger.LogInformation(nameof(RequestSummaryPage));
+            _logger.LogInformation(nameof(RequestSummaryPage));
             return await RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
@@ -287,7 +286,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         public async Task<MessagingReturnCode> RequestBroadcastCapabilities()
         {
-            logger?.LogInformation(nameof(RequestBroadcastCapabilities));
+            _logger.LogInformation(nameof(RequestBroadcastCapabilities));
             return await RequestDataPage(DataPage.Capabilities);
         }
     }

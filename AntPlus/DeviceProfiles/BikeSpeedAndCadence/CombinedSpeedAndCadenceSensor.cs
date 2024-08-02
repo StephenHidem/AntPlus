@@ -13,13 +13,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
     /// <seealso cref="AntDevice" />
     public partial class CombinedSpeedAndCadenceSensor : AntDevice
     {
-        /// <inheritdoc/>
-        public override int ChannelCount => 8086;
-
         /// <summary>
-        /// The CombinedSpeedAndCadenceSensor device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 121;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8086;
 
         private bool isFirstDataMessage = true;     // used for accumulated values
         private byte[] lastDataPage = new byte[8];

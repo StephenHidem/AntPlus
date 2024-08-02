@@ -90,11 +90,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParsePowerOnly(dataPage);
                     break;
                 case DataPage.WheelTorque:
-                    TorqueSensor ??= new StandardWheelTorqueSensor(logger);
+                    TorqueSensor ??= new StandardWheelTorqueSensor(_logger);
                     TorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.CrankTorque:
-                    TorqueSensor ??= new StandardCrankTorqueSensor(logger);
+                    TorqueSensor ??= new StandardCrankTorqueSensor(_logger);
                     TorqueSensor.ParseTorque(dataPage);
                     break;
                 case DataPage.TorqueEffectivenessAndPedalSmoothness:
@@ -110,7 +110,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     }
                     else
                     {
-                        logger.LogWarning("Unexpected Cycling Dynamics message. A StandardCrankTorqueSensor is not present.");
+                        _logger.LogWarning("Unexpected Cycling Dynamics message. A StandardCrankTorqueSensor is not present.");
                     }
                     break;
                 default:

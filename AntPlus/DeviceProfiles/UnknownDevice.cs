@@ -50,7 +50,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public override void Parse(byte[] dataPage)
         {
             base.Parse(dataPage);
-            logger.LogDebug("Data page = {0}", BitConverter.ToString(dataPage));
+            _logger.LogDebug("Data page = {0}", BitConverter.ToString(dataPage));
 
             byte[] page = DataPages.FirstOrDefault(p => p[0] == dataPage[0]);
             if (page == null)

@@ -79,7 +79,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         private void ParseCalibrationPage(byte[] page)
         {
-            logger.LogDebug("CalibrationResponseId: {Id}", (CalibrationResponseId)page[1]);
+            _logger.LogDebug("CalibrationResponseId: {Id}", (CalibrationResponseId)page[1]);
             switch ((CalibrationResponseId)page[1])
             {
                 case CalibrationResponseId.AutoZeroSupport:
@@ -102,7 +102,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     CustomCalibrationParameters = page.Skip(2).ToArray();
                     break;
                 default:
-                    logger.LogWarning("Unknown CalibrationResponseId = {CalibrationResponseId}.", page[1]);
+                    _logger.LogWarning("Unknown CalibrationResponseId = {CalibrationResponseId}.", page[1]);
                     break;
             }
         }

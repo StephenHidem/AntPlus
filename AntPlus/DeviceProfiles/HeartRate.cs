@@ -30,13 +30,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     {
         private byte[] lastDataPage = new byte[8];
 
-        /// <inheritdoc/>
-        public override int ChannelCount => 8070;
-
         /// <summary>
-        /// The heart rate device class ID.
+        /// The device type value transmitted in the channel ID.
         /// </summary>
         public const byte DeviceClass = 120;
+
+        /// <inheritdoc/>
+        public override int ChannelCount => 8070;
 
         /// <summary>
         /// Heart rate device data pages.
@@ -381,7 +381,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     }
                     else
                     {
-                        logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
+                        _logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
                     }
                     break;
             }

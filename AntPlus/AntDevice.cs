@@ -34,7 +34,7 @@ namespace SmallEarthTech.AntPlus
         public abstract int ChannelCount { get; }
 
         /// <summary>The logger for derived classes to use.</summary>
-        protected readonly ILogger logger;
+        protected readonly ILogger _logger;
 
         /// <summary>This field supplies the generic ANT+ image
         /// from the manifest resource stream.</summary>
@@ -68,16 +68,15 @@ namespace SmallEarthTech.AntPlus
         /// <param name="logger">Logger to use.</param>
         /// <param name="timeout">
         /// Time in milliseconds before firing <see cref="DeviceWentOffline"/>.
-        /// To disable the device timeout, set the timeout argument to <see cref="Timeout.Infinite"/> and skip 
+        /// To disable the device timeout, set the timeout argument to -1 and skip 
         /// setting the missedMessages argument.
         /// </param>
         /// <param name="missedMessages">Number of missed messages before firing <see cref="DeviceWentOffline"/>.</param>
-        /// <remarks>To disable the device timeout, set the timeout argument to <see cref="Timeout.Infinite"/>.</remarks>
         protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
         {
             ChannelId = channelId;
             _antChannel = antChannel;
-            this.logger = logger;
+            _logger = logger;
             if (timeout == null)
             {
                 _deviceTimeout = (int)Math.Ceiling(((missedMessages ?? 8) / (_baseTransmissionFrequency / ChannelCount)) * 1000);
@@ -87,7 +86,7 @@ namespace SmallEarthTech.AntPlus
                 _deviceTimeout = (int)timeout;
             }
             _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
-            logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
+            _logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
         }
 
         private void TimeoutCallback(object state)
@@ -101,7 +100,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">The received data page.</param>
         public virtual void Parse(byte[] dataPage)
         {
-            logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
+            _logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
             _ = _timeoutTimer?.Change(_deviceTimeout, Timeout.Infinite);
         }
 
@@ -134,7 +133,7 @@ namespace SmallEarthTech.AntPlus
             else
             {
                 ArgumentException ex = new ArgumentException("Invalid data page requested.", nameof(page));
-                logger.LogError(ex, "AntDevice {AntDevice}", ToString());
+                _logger.LogError(ex, "AntDevice {AntDevice}", ToString());
                 throw ex;
             }
         }
@@ -154,7 +153,7 @@ namespace SmallEarthTech.AntPlus
 
             if (ret != MessagingReturnCode.Pass)
             {
-                logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), "SendExtAcknowledgedDataAsync", ret);
+                _logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), "SendExtAcknowledgedDataAsync", ret);
             }
             return ret;
         }
@@ -162,7 +161,7 @@ namespace SmallEarthTech.AntPlus
         /// <inheritdoc/>
         public void Dispose()
         {
-            logger.LogDebug("Disposed {AntDevice}", ToString());
+            _logger.LogDebug("Disposed {AntDevice}", ToString());
             _timeoutTimer?.Dispose();
             _timeoutTimer = null;
         }

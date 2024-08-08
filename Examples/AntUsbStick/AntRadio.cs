@@ -1,9 +1,9 @@
 ﻿using ANT_Managed_Library;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
@@ -11,9 +11,8 @@ namespace SmallEarthTech.AntUsbStick
     /// <summary>This class implements the IAntRadio interface.</summary>
     public partial class AntRadio : IAntRadio, IDisposable
     {
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly ILogger<IAntRadio> _logger;
-        private readonly ANT_Device _antDevice;
+        private readonly ILogger<AntRadio> _logger;
+        private ANT_Device _antDevice;
         private IAntChannel[] _channels = new IAntChannel[0];
         private readonly object _lock = new object();
 
@@ -36,14 +35,25 @@ namespace SmallEarthTech.AntUsbStick
         public void CancelTransfers(int cancelWaitTime) => _antDevice.cancelTransfers(cancelWaitTime);
 
         /// <summary>Initializes a new instance of the <see cref="AntRadio" /> class.</summary>
-        /// <param name="loggerFactory">The factory is used to create <see cref="ILogger"/>s for AntChannels.</param>
-        public AntRadio(ILoggerFactory loggerFactory)
+        /// <param name="logger">The logger</param>
+        public AntRadio(ILogger<AntRadio> logger)
         {
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            _logger = _loggerFactory.CreateLogger<AntRadio>();
+            _logger = logger;
             _antDevice = new ANT_Device();
             _antDevice.deviceResponse += AntDevice_deviceResponse;
             _logger.LogDebug("Created AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+        }
+
+        /// <inheritdoc/>
+        public void Reinitialize()
+        {
+            _logger.LogDebug("Attempt to reinitialize.");
+            _antDevice.deviceResponse -= AntDevice_deviceResponse;
+            _antDevice.Dispose();
+            Thread.Sleep(1000);
+            _antDevice = new ANT_Device();
+            _antDevice.deviceResponse += AntDevice_deviceResponse;
+            _logger.LogDebug("Reinitialized AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
         }
 
         private void AntDevice_deviceResponse(ANT_Response response)
@@ -101,7 +111,7 @@ namespace SmallEarthTech.AntUsbStick
         }
 
         /// <inheritdoc/>
-        public IAntChannel GetChannel(int num) => new AntChannel(_antDevice.getChannel(num), _loggerFactory.CreateLogger<AntChannel>());
+        public IAntChannel GetChannel(int num) => new AntChannel(_antDevice.getChannel(num), _logger);
 
         /// <inheritdoc/>
         public Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy = false, uint responseWaitTime = 1500)

@@ -1,5 +1,6 @@
 ﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using System.Windows;
+using System.Windows.Data;
 using WpfUsbStickApp.ViewModels;
 
 namespace WpfUsbStickApp.Views
@@ -12,6 +13,7 @@ namespace WpfUsbStickApp.Views
         public StandardPowerWindow(StandardPowerSensor sensor)
         {
             InitializeComponent();
+            BindingOperations.EnableCollectionSynchronization(sensor.Measurements, sensor.CollectionLock);
             DataContext = new BicyclePowerViewModel(sensor);
         }
     }

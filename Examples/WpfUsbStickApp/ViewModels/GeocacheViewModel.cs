@@ -21,7 +21,7 @@ namespace WpfUsbStickApp.ViewModels
         private Geocache geocache;
 
         [ObservableProperty]
-        private string? trackableId;
+        private string trackableId = string.Empty;
         [ObservableProperty]
         private uint? pin;
         [ObservableProperty]
@@ -29,7 +29,7 @@ namespace WpfUsbStickApp.ViewModels
         [ObservableProperty]
         private double? longitude;
         [ObservableProperty]
-        private string? hint;
+        private string hint = string.Empty;
 
         public GeocacheViewModel(Geocache geocache)
         {

@@ -33,7 +33,7 @@ namespace AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500, null);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500);
 
             // Assert
             Assert.AreEqual((uint)expectedDeviceNumber, antDevice.Object.ChannelId.DeviceNumber);
@@ -48,7 +48,7 @@ namespace AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500, null);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500);
 
             // Assert
             Assert.AreEqual(expectedDeviceType, antDevice.Object.ChannelId.DeviceType);
@@ -63,7 +63,7 @@ namespace AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500, null);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500);
 
             // Assert
             Assert.AreEqual(expectedResult, antDevice.Object.ChannelId.IsPairingBitSet);
@@ -78,7 +78,7 @@ namespace AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500, null);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500);
 
             // Assert
             Assert.AreEqual(expectedResult, antDevice.Object.ChannelId.AreGlobalDataPagesUsed);
@@ -99,7 +99,7 @@ namespace AntPlus.UnitTests
             ChannelId cid = new((uint)channelId);
 
             // Act
-            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500, null);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)500);
 
             // Assert
             Assert.AreEqual(expectedTransmissionType, antDevice.Object.ChannelId.TransmissionType);
@@ -111,7 +111,7 @@ namespace AntPlus.UnitTests
             // Arrange
             bool offline = false;
             ChannelId cid = new(0);
-            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)50, null);
+            Mock<AntDevice> antDevice = new(cid, mockAntChannel.Object, mockLogger.Object, (int)50);
             antDevice.Object.DeviceWentOffline += (sender, e) => { offline = antDevice.Object.Offline; };
 
             // Act

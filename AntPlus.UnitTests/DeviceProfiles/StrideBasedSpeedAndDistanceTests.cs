@@ -29,7 +29,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
             return new StrideBasedSpeedAndDistance(
                 cid,
                 mockAntChannel.Object,
-                mockLogger.Object, null, 8);
+                mockLogger.Object, null);
         }
 
         [TestMethod]

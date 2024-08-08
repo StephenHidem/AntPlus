@@ -52,7 +52,7 @@ namespace AntPlus.UnitTests
             Task[] tasks = new Task[numberOfDevices];
             for (int i = 0; i < numberOfDevices; i++)
             {
-                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500, null);
+                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500);
                 tasks[i] = Task.Run(() =>
                 {
                     semaphore.Wait();
@@ -81,7 +81,7 @@ namespace AntPlus.UnitTests
             Task[] tasks = new Task[numberOfDevices];
             for (int i = 0; i < numberOfDevices; i++)
             {
-                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500, null);
+                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500);
                 antDeviceCollection.Add(antDevice.Object);
                 tasks[i] = Task.Run(() =>
                 {

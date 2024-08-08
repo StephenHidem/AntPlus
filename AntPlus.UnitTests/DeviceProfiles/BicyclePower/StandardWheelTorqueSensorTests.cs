@@ -27,7 +27,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         private StandardPowerSensor CreateStandardWheelTorqueSensor()
         {
             byte[] page = new byte[8] { (byte)BicyclePower.DataPage.WheelTorque, 0, 0, 0, 0, 0, 0, 0 };
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8) as StandardPowerSensor;
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as StandardPowerSensor;
         }
 
         [TestMethod]

@@ -30,8 +30,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
                 mockChannelId,
                 mockAntChannel.Object,
                 mockLogger.Object,
-                null,
-                8);
+                null);
         }
 
         [TestMethod]

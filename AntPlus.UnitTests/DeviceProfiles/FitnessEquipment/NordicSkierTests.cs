@@ -29,7 +29,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             return new NordicSkier(
                 mockChannelId,
                 mockAntChannel.Object,
-                mockLogger.Object, null, 8);
+                mockLogger.Object, null);
         }
 
         [TestMethod]

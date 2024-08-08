@@ -23,10 +23,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
         }
 
-        private BicyclePower CreateBicyclePower(BicyclePower.DataPage dataPage = BicyclePower.DataPage.PowerOnly)
+        private BicyclePower CreateBicyclePower(BicyclePower.DataPage dataPage)
         {
             byte[] page = new byte[8] { (byte)dataPage, 0, 0, 0, 0, 0, 0, 0 };
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, null, 8);
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000);
         }
 
         [TestMethod]
@@ -38,12 +38,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         {
             // Arrange
             var bicyclePower = CreateBicyclePower(page);
-            //byte[] dataPage = new byte[8];
-            //dataPage[0] = (byte)page;
-
-            // Act
-            //bicyclePower.Parse(
-            //    dataPage);
 
             // Assert
             switch (page)

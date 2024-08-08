@@ -1,0 +1,45 @@
+﻿<Window x:Class="WpfUsbStickApp.Views.BikeRadarWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfUsbStickApp.Views"
+        xmlns:vm="clr-namespace:WpfUsbStickApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:BikeRadarViewModel}"
+        xmlns:uc="clr-namespace:WpfUsbStickApp.Controls"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Title="Bike Radar" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <GroupBox Header="Bike Radar State and Targets">
+                <StackPanel>
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding BikeRadar.State, StringFormat='State: {0}'}" Grid.Column="0" Padding="8,0, 8, 0"/>
+                        <TextBlock Text="{Binding BikeRadar.ClearTargets, StringFormat='Clear Targets: {0}'}" Grid.Column="1" Padding="8,0, 8, 0"/>
+                        <Button Content="Shutdown" Command="{Binding ShutdownCommand}" Grid.Column="2"/>
+                        <Button Content="Abort Shutdown" Command="{Binding AbortShutdownCommand}" Grid.Column="3"/>
+                    </Grid>
+                    <ListView ItemsSource="{Binding BikeRadar.RadarTargets}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Threat Level" DisplayMemberBinding="{Binding Path=ThreatLevel}"/>
+                                <GridViewColumn Header="Threat Side" DisplayMemberBinding="{Binding Path=ThreatSide}"/>
+                                <GridViewColumn Header="Range" DisplayMemberBinding="{Binding Path=Range, StringFormat='\{0:F3}'}"/>
+                                <GridViewColumn Header="Closing Speed" DisplayMemberBinding="{Binding Path=ClosingSpeed, StringFormat='\{0:F2}'}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
+            </GroupBox>
+            <uc:CommonDataPagesControl DataContext="{Binding BikeRadar.CommonDataPages}"/>
+        </StackPanel>
+        <TextBlock Style="{StaticResource OfflineStyle}" Visibility="{Binding BikeRadar.Offline, Converter={StaticResource BoolToVisibility}}"/>
+    </Grid>
+</Window>

@@ -13,12 +13,17 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="CustomAntDevice\BikeRadar.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CustomAntDevice\BikeRadar.png" />
   </ItemGroup>
 
   <ItemGroup>

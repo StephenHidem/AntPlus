@@ -8,6 +8,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using WpfUsbStickApp.CustomAntDevice;
 using WpfUsbStickApp.ViewModels;
 using WpfUsbStickApp.Views;
 
@@ -61,6 +62,9 @@ namespace WpfUsbStickApp
                     break;
                 case BikeCadenceSensor.DeviceClass:
                     new BikeCadenceWindow((BikeCadenceSensor)antDevice).Show();
+                    break;
+                case BikeRadar.DeviceClass:
+                    new BikeRadarWindow((BikeRadar)antDevice).Show();
                     break;
                 case CombinedSpeedAndCadenceSensor.DeviceClass:
                     new BikeSpeedAndCadenceWindow((CombinedSpeedAndCadenceSensor)antDevice).Show();

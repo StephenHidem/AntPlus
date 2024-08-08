@@ -10,6 +10,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using WpfUsbStickApp.CustomAntDevice;
 
 namespace WpfUsbStickApp.ViewModels
 {
@@ -42,6 +43,9 @@ namespace WpfUsbStickApp.ViewModels
                 {
                     // add the implementation of IAntRadio to the host
                     services.AddSingleton<IAntRadio, AntRadio>();
+
+                    // add custom device to the host
+                    services.AddKeyedTransient<AntDevice, BikeRadar>(BikeRadar.DeviceClass);
                 }).
                 Build();
 
@@ -60,8 +64,10 @@ namespace WpfUsbStickApp.ViewModels
                 logger?.LogInformation("{AntAssembly}", asm.FullName);
             }
 
-            // create the device collection - this starts scanning for devices
+            // create the device collection
             AntDevices = _host.Services.GetRequiredService<AntCollection>();
+            // this starts scanning for devices
+            _ = AntDevices.Initialize();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace SmallEarthTech.AntPlus
     public abstract partial class AntDevice : ObservableObject, IDisposable
     {
         private readonly IAntChannel _antChannel;
-        private Timer _timeoutTimer;
+        private Timer? _timeoutTimer;
         private readonly int _deviceTimeout;
         private const double _baseTransmissionFrequency = 32768;  // base ANT device data transmission period in Hz
 
@@ -45,7 +45,7 @@ namespace SmallEarthTech.AntPlus
         /// Consumers can also use the <see cref="Offline"/> property instead of this event for databinding
         /// purposes.
         /// </remarks>
-        public event EventHandler DeviceWentOffline;
+        public event EventHandler? DeviceWentOffline;
 
         /// <summary>Gets a value indicating whether this <see cref="AntDevice" /> is offline.</summary>
         /// <value>
@@ -60,7 +60,7 @@ namespace SmallEarthTech.AntPlus
 
         /// <summary>Gets the device image stream from the embedded resource image associated with the derived device class.</summary>
         /// <value>The device image stream.</value>
-        public abstract Stream DeviceImageStream { get; }
+        public abstract Stream? DeviceImageStream { get; }
 
         /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
@@ -71,19 +71,35 @@ namespace SmallEarthTech.AntPlus
         /// To disable the device timeout, set the timeout argument to -1 and skip 
         /// setting the missedMessages argument.
         /// </param>
-        /// <param name="missedMessages">Number of missed messages before firing <see cref="DeviceWentOffline"/>.</param>
-        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
         {
             ChannelId = channelId;
             _antChannel = antChannel;
             _logger = logger;
-            if (timeout == null)
+            _deviceTimeout = timeout;
+            _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
+            _logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AntDevice"/> class.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="antChannel">Channel to send messages to.</param>
+        /// <param name="logger">Logger to use.</param>
+        /// <param name="timeoutOptions">Timeout options.</param>
+        protected AntDevice(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? timeoutOptions)
+        {
+            ChannelId = channelId;
+            _antChannel = antChannel;
+            _logger = logger;
+            if (timeoutOptions?.Timeout == null)
             {
-                _deviceTimeout = (int)Math.Ceiling(((missedMessages ?? 8) / (_baseTransmissionFrequency / ChannelCount)) * 1000);
+                _deviceTimeout = (int)Math.Ceiling(((timeoutOptions?.MissedMessages ?? 8) / (_baseTransmissionFrequency / ChannelCount)) * 1000);
             }
             else
             {
-                _deviceTimeout = (int)timeout;
+                _deviceTimeout = (int)timeoutOptions.Timeout;
             }
             _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
             _logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
@@ -91,6 +107,7 @@ namespace SmallEarthTech.AntPlus
 
         private void TimeoutCallback(object state)
         {
+            _logger.LogDebug("TimeoutCallback {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
             Dispose();
             Offline = true;
             DeviceWentOffline?.Invoke(this, new EventArgs());

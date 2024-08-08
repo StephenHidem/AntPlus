@@ -40,9 +40,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <summary>
         /// Initializes a new instance of the <see cref="BikeSpeedSensor"/> class.
         /// </summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeSpeedSensor> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeSpeedSensor> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BikeSpeedSensor"/> class.
+        /// </summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public BikeSpeedSensor(ChannelId channelId, IAntChannel antChannel, ILogger<BikeSpeedSensor> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

@@ -199,9 +199,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>
         /// Initializes a new instance of the <see cref="StrideBasedSpeedAndDistance"/> class.
         /// </summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StrideBasedSpeedAndDistance"/> class.
+        /// </summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

@@ -115,9 +115,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSpeedCadence"/> class.
         /// </summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommonSpeedCadence"/> class.
+        /// </summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public CommonSpeedCadence(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

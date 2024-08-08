@@ -55,11 +55,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         private bool authRequested;
         private bool programmingGeocache;
-        private byte loggedVisitsPage;
+        private byte? loggedVisitsPage;
 
         /// <summary>Gets the trackable identifier.</summary>
         [ObservableProperty]
-        private string trackableId;
+        private string trackableId = string.Empty;
         /// <summary>Gets the programming PIN.</summary>
         [ObservableProperty]
         private uint? programmingPIN;
@@ -74,7 +74,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private double nextStageLongitude;
         /// <summary>Gets a message from the geocache device, or a next stage hint.</summary>
         [ObservableProperty]
-        private string hint;
+        private string hint = string.Empty;
         /// <summary>Gets the number of visits logged.</summary>
         [ObservableProperty]
         private ushort? numberOfVisits;
@@ -83,7 +83,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private DateTime? lastVisitTimestamp;
         /// <summary>Gets the authentication token.</summary>
         [ObservableProperty]
-        private byte[] authenticationToken;
+        private byte[]? authenticationToken;
 
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
@@ -93,13 +93,27 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>
         /// Initializes a new instance of the <see cref="Geocache"/> class.
         /// </summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
         /// <remarks>
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
         /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
-        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Geocache"/> class.
+        /// </summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        /// <remarks>
+        /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
+        /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
+        /// </remarks>
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
             CommonDataPages = new CommonDataPages(logger);
         }
@@ -232,7 +246,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             Hint = string.Empty;
             NumberOfVisits = default;
             LastVisitTimestamp = default;
-
+            _logger.LogDebug("RequestPinPage");
             return await RequestDataPage(DataPage.PIN, timeout);
         }
 
@@ -241,6 +255,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
         public async Task<MessagingReturnCode> RequestAuthentication(uint gpsSerialNumber)
         {
+            _logger.LogDebug($"{nameof(RequestAuthentication)}");
             authRequested = true;
             Random random = new Random();
             byte[] nonce = new byte[2];
@@ -255,17 +270,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
         public async Task<MessagingReturnCode> UpdateLoggedVisits()
         {
+            _logger.LogDebug($"{nameof(UpdateLoggedVisits)}");
             // check that a logged visits page has been programmed
-            if (loggedVisitsPage == 0)
+            if (loggedVisitsPage == null || NumberOfVisits == null)
             {
                 throw new InvalidOperationException("The geocache has not been programmed with a logged visits pages. Program the geocache; this will set a logged visits page.");
             }
             NumberOfVisits++;
             LastVisitTimestamp = DateTime.UtcNow;
             uint timestamp = (uint)(DateTime.UtcNow - new DateTime(1989, 12, 31)).TotalSeconds;
-            return await SendExtAcknowledgedMessage(new byte[] { loggedVisitsPage, (byte)DataId.LoggedVisits }.
+            return await SendExtAcknowledgedMessage(new byte[] { (byte)loggedVisitsPage, (byte)DataId.LoggedVisits }.
                 Concat(BitConverter.GetBytes(timestamp)).
-                Concat(BitConverter.GetBytes((short)NumberOfVisits)).ToArray(), 16000);
+                Concat(BitConverter.GetBytes((ushort)NumberOfVisits)).ToArray(), 16000);
         }
 
         /// <summary>Programs the geocache.</summary>
@@ -277,6 +293,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
         public async Task<MessagingReturnCode> ProgramGeocache(string id, uint? pin, double? latitude, double? longitude, string hint)
         {
+            _logger.LogDebug($"{nameof(ProgramGeocache)}");
             programmingGeocache = true;
             byte page = 1;  // initial page number for optional pages
 

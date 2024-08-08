@@ -54,9 +54,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private double power;
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public CrankTorqueFrequencySensor(ChannelId channelId, IAntChannel antChannel, ILogger<CrankTorqueFrequencySensor> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public CrankTorqueFrequencySensor(ChannelId channelId, IAntChannel antChannel, ILogger<CrankTorqueFrequencySensor> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public CrankTorqueFrequencySensor(ChannelId channelId, IAntChannel antChannel, ILogger<CrankTorqueFrequencySensor> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

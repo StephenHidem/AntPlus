@@ -270,20 +270,20 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// capture any relevant state from the equipment and/or specific equipment for user consumption. For
         /// example, it may be useful to capture elapsed time and accumulated distance from the class.
         /// </remarks>
-        public event EventHandler LapToggled;
+        public event EventHandler? LapToggled;
 
         /// <summary>Gets the equipment state.</summary>
         [ObservableProperty]
         private FEState state;
         /// <summary>Gets the general data.</summary>
         [ObservableProperty]
-        private GeneralDataPage generalData;
+        private GeneralDataPage generalData = new GeneralDataPage();
         /// <summary>Gets the general settings.</summary>
         [ObservableProperty]
-        private GeneralSettingsPage generalSettings;
+        private GeneralSettingsPage generalSettings = new GeneralSettingsPage();
         /// <summary>Gets the general metabolic reports.</summary>
         [ObservableProperty]
-        private GeneralMetabolicPage generalMetabolic;
+        private GeneralMetabolicPage generalMetabolic = new GeneralMetabolicPage();
         /// <summary>Gets the maximum trainer resistance.</summary>
         [ObservableProperty]
         private ushort maxTrainerResistance;
@@ -299,14 +299,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>
         /// Initializes a new instance of the <see cref="FitnessEquipment"/> class.
         /// </summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
         {
             CommonDataPages = new CommonDataPages(logger);
-            GeneralData = new GeneralDataPage();
-            GeneralSettings = new GeneralSettingsPage();
-            GeneralMetabolic = new GeneralMetabolicPage();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FitnessEquipment"/> class.
+        /// </summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
+        {
+            CommonDataPages = new CommonDataPages(logger);
         }
 
         /// <inheritdoc/>
@@ -458,9 +465,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="antChannel">The ant channel.</param>
         /// <param name="loggerFactory">The logger factory.</param>
         /// <param name="timeout">The timeout.</param>
-        /// <param name="missedMessages">The missed messages.</param>
         /// <returns>One of the known fitness equipment classes if known, otherwise null.</returns>
-        public static FitnessEquipment GetFitnessEquipment(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILoggerFactory loggerFactory, int? timeout = default, byte? missedMessages = default)
+        public static FitnessEquipment? GetFitnessEquipment(byte[] dataPage, ChannelId channelId, IAntChannel antChannel, ILoggerFactory loggerFactory, int timeout)
         {
             switch ((DataPage)dataPage[0])
             {
@@ -468,36 +474,36 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     switch ((FitnessEquipmentType)dataPage[1])
                     {
                         case FitnessEquipmentType.Treadmill:
-                            return new Treadmill(channelId, antChannel, loggerFactory.CreateLogger<Treadmill>(), timeout, missedMessages);
+                            return new Treadmill(channelId, antChannel, loggerFactory.CreateLogger<Treadmill>(), timeout);
                         case FitnessEquipmentType.Elliptical:
-                            return new Elliptical(channelId, antChannel, loggerFactory.CreateLogger<Elliptical>(), timeout, missedMessages);
+                            return new Elliptical(channelId, antChannel, loggerFactory.CreateLogger<Elliptical>(), timeout);
                         case FitnessEquipmentType.Rower:
-                            return new Rower(channelId, antChannel, loggerFactory.CreateLogger<Rower>(), timeout, missedMessages);
+                            return new Rower(channelId, antChannel, loggerFactory.CreateLogger<Rower>(), timeout);
                         case FitnessEquipmentType.Climber:
-                            return new Climber(channelId, antChannel, loggerFactory.CreateLogger<Climber>(), timeout, missedMessages);
+                            return new Climber(channelId, antChannel, loggerFactory.CreateLogger<Climber>(), timeout);
                         case FitnessEquipmentType.NordicSkier:
-                            return new NordicSkier(channelId, antChannel, loggerFactory.CreateLogger<NordicSkier>(), timeout, missedMessages);
+                            return new NordicSkier(channelId, antChannel, loggerFactory.CreateLogger<NordicSkier>(), timeout);
                         case FitnessEquipmentType.TrainerStationaryBike:
-                            return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout, missedMessages);
+                            return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                         default:
                             loggerFactory.CreateLogger<FitnessEquipment>().LogError("Unknown equipment type = {EquipmentType}", dataPage[1]);
                             break;
                     }
                     break;
                 case DataPage.TreadmillData:
-                    return new Treadmill(channelId, antChannel, loggerFactory.CreateLogger<Treadmill>(), timeout, missedMessages);
+                    return new Treadmill(channelId, antChannel, loggerFactory.CreateLogger<Treadmill>(), timeout);
                 case DataPage.EllipticalData:
-                    return new Elliptical(channelId, antChannel, loggerFactory.CreateLogger<Elliptical>(), timeout, missedMessages);
+                    return new Elliptical(channelId, antChannel, loggerFactory.CreateLogger<Elliptical>(), timeout);
                 case DataPage.RowerData:
-                    return new Rower(channelId, antChannel, loggerFactory.CreateLogger<Rower>(), timeout, missedMessages);
+                    return new Rower(channelId, antChannel, loggerFactory.CreateLogger<Rower>(), timeout);
                 case DataPage.ClimberData:
-                    return new Climber(channelId, antChannel, loggerFactory.CreateLogger<Climber>(), timeout, missedMessages);
+                    return new Climber(channelId, antChannel, loggerFactory.CreateLogger<Climber>(), timeout);
                 case DataPage.NordicSkierData:
-                    return new NordicSkier(channelId, antChannel, loggerFactory.CreateLogger<NordicSkier>(), timeout, missedMessages);
+                    return new NordicSkier(channelId, antChannel, loggerFactory.CreateLogger<NordicSkier>(), timeout);
                 case DataPage.TrainerStationaryBikeData:
-                    return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout, missedMessages);
+                    return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                 case DataPage.TrainerTorqueData:
-                    return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout, missedMessages);
+                    return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                 default:
                     loggerFactory.CreateLogger<FitnessEquipment>().LogError("Unknown equipment type. Data page = {DataPage}", dataPage);
                     break;

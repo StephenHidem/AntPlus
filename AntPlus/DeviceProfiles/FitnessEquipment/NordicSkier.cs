@@ -14,9 +14,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStride;
 
         /// <summary>Initializes a new instance of the <see cref="NordicSkier" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger<NordicSkier> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger<NordicSkier> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="NordicSkier" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger<NordicSkier> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

@@ -15,9 +15,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStride;
 
         /// <summary>Initializes a new instance of the <see cref="Elliptical" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<Elliptical> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<Elliptical> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Elliptical" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<Elliptical> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

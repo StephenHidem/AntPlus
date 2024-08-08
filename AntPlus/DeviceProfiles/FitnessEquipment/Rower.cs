@@ -14,9 +14,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStroke;
 
         /// <summary>Initializes a new instance of the <see cref="Rower" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger<Rower> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger<Rower> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Rower" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public Rower(ChannelId channelId, IAntChannel antChannel, ILogger<Rower> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

@@ -289,9 +289,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public override Stream DeviceImageStream => typeof(HeartRate).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.HeartRate.png");
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="HeartRate"/> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

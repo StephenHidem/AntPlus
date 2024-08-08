@@ -10,7 +10,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
     public partial class Asset : ObservableObject
     {
         private bool gotIdPage1, gotIdPage2;
-        private string upperName, lowerName;
+        private string upperName = string.Empty, lowerName = string.Empty;
         private bool gotLocationPage1, gotLocationPage2;
         private ushort lowerLatitude, upperLatitude;
 
@@ -67,7 +67,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         private int index;
         /// <summary>Gets the name of the asset.</summary>
         [ObservableProperty]
-        private string name;
+        private string name = string.Empty;
         /// <summary>Gets the type of the asset.</summary>
         [ObservableProperty]
         private AssetType type;

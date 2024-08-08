@@ -56,7 +56,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Gets the torque sensor.</summary>
         /// <value>The wheel or crank torque sensor.</value>
         [ObservableProperty]
-        private TorqueSensor torqueSensor;
+        private TorqueSensor? torqueSensor;
 
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
@@ -64,9 +64,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
         /// </summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public StandardPowerSensor(ChannelId channelId, IAntChannel antChannel, ILogger<StandardPowerSensor> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public StandardPowerSensor(ChannelId channelId, IAntChannel antChannel, ILogger<StandardPowerSensor> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+            CommonDataPages = new CommonDataPages(logger);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StandardPowerSensor"/> class.
+        /// </summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public StandardPowerSensor(ChannelId channelId, IAntChannel antChannel, ILogger<StandardPowerSensor> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
             CommonDataPages = new CommonDataPages(logger);
         }

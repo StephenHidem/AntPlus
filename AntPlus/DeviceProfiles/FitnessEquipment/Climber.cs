@@ -14,9 +14,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevStride;
 
         /// <summary>Initializes a new instance of the <see cref="Climber" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Climber(ChannelId channelId, IAntChannel antChannel, ILogger<Climber> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public Climber(ChannelId channelId, IAntChannel antChannel, ILogger<Climber> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Climber" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public Climber(ChannelId channelId, IAntChannel antChannel, ILogger<Climber> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

@@ -17,11 +17,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private CalibrationRequestResponse _request;
 
         /// <summary>Initializes a new instance of the <see cref="TrainerStationaryBike" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger<TrainerStationaryBike> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger<TrainerStationaryBike> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
         {
-            TrainerTorque = new TrainerTorque();
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="TrainerStationaryBike" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger<TrainerStationaryBike> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
+        {
         }
 
         /// <summary>The trainer status bit field is used to indicate whether the trainer requires calibration and/or configuration data to be sent.</summary>
@@ -123,7 +129,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private TargetPowerLimit targetPower;
         /// <summary>Gets the trainer torque.</summary>
         [ObservableProperty]
-        private TrainerTorque trainerTorque;
+        private TrainerTorque trainerTorque = new TrainerTorque();
 
         /// <summary>Gets the result of the requested calibration.</summary>
         /// <value>The rhe result of calibration</value>

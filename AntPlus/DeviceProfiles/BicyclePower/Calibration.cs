@@ -73,7 +73,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private short calibrationData;
         /// <summary>Gets the custom calibration parameters.</summary>
         [ObservableProperty]
-        private byte[] customCalibrationParameters;
+        private byte[]? customCalibrationParameters;
         /// <summary>Gets the reported measurements collection. There may be one or more measurement data types reported.</summary>
         public ObservableCollection<MeasurementOutputData> Measurements { get; private set; } = new ObservableCollection<MeasurementOutputData>();
 

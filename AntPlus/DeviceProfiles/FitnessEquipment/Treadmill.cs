@@ -15,9 +15,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private byte prevNeg;
 
         /// <summary>Initializes a new instance of the <see cref="Treadmill" /> class.</summary>
-        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int?, byte?)"/>
-        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger<Treadmill> logger, int? timeout = default, byte? missedMessages = default)
-            : base(channelId, antChannel, logger, timeout, missedMessages)
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, int)"/>
+        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger<Treadmill> logger, int timeout)
+            : base(channelId, antChannel, logger, timeout)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Treadmill" /> class.</summary>
+        /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
+        public Treadmill(ChannelId channelId, IAntChannel antChannel, ILogger<Treadmill> logger, TimeoutOptions? options)
+            : base(channelId, antChannel, logger, options)
         {
         }
 

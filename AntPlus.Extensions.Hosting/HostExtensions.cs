@@ -63,7 +63,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             // bicycle power and implementation selector
             collection.AddKeyedTransient<AntDevice, CrankTorqueFrequencySensor>(BicyclePower.DeviceClass);
             collection.AddKeyedTransient<AntDevice, StandardPowerSensor>(BicyclePower.DeviceClass);
-            collection.AddKeyedSingleton<SelectImplementation, SelectBicyclePowerImplementation>(BicyclePower.DeviceClass);
+            collection.AddKeyedSingleton<ISelectImplementation, SelectBicyclePowerImplementation>(BicyclePower.DeviceClass);
 
             // fitness equipment and implementation selector
             collection.AddKeyedTransient<AntDevice, Climber>(FitnessEquipment.DeviceClass);
@@ -72,7 +72,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             collection.AddKeyedTransient<AntDevice, Rower>(FitnessEquipment.DeviceClass);
             collection.AddKeyedTransient<AntDevice, TrainerStationaryBike>(FitnessEquipment.DeviceClass);
             collection.AddKeyedTransient<AntDevice, Treadmill>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedSingleton<SelectImplementation, SelectFitnessEquipmentImplementation>(FitnessEquipment.DeviceClass);
+            collection.AddKeyedSingleton<ISelectImplementation, SelectFitnessEquipmentImplementation>(FitnessEquipment.DeviceClass);
 
             // options and the ANT collection
             collection.AddOptions<TimeoutOptions>().BindConfiguration(nameof(TimeoutOptions));

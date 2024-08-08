@@ -6,42 +6,33 @@ using System;
 namespace SmallEarthTech.AntPlus.Extensions.Hosting
 {
     /// <summary>
-    /// This class defines a single method to get the implementation type of an ANT device.
+    /// This interface defines a single method to get the implementation type of an ANT device.
     /// </summary>
-    public abstract class SelectImplementation
+    public interface ISelectImplementation
     {
-        /// <summary>
-        /// The logger used by derived classes.
-        /// </summary>
-        protected ILogger _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SelectImplementation"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        protected SelectImplementation(ILogger logger)
-        {
-            _logger = logger;
-        }
-
         /// <summary>
         /// Selects the type of the implementation.
         /// </summary>
         /// <param name="page">The data page used to pick an implementation.</param>
         /// <returns>null if an implementation could not be found.</returns>
-        public abstract Type? SelectImplementationType(byte[] page);
+        public Type? SelectImplementationType(byte[] page);
     }
 
-    /// <inheritdoc />
-    /// <seealso cref="SelectImplementation" />
-    internal class SelectBicyclePowerImplementation : SelectImplementation
+    #region SelectBicyclePowerImplementation
+    /// <summary>
+    /// Selects the bicycle power implementation type.
+    /// </summary>
+    internal class SelectBicyclePowerImplementation : ISelectImplementation
     {
+        private readonly ILogger<SelectBicyclePowerImplementation> _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectBicyclePowerImplementation"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public SelectBicyclePowerImplementation(ILogger<SelectBicyclePowerImplementation> logger) : base(logger)
+        public SelectBicyclePowerImplementation(ILogger<SelectBicyclePowerImplementation> logger)
         {
+            _logger = logger;
         }
 
         /// <summary>
@@ -52,9 +43,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// any number of other pages. This allows the method to determine the sensor type.
         /// </remarks>
         /// <inheritdoc />
-        public override Type? SelectImplementationType(byte[] page)
+        public Type? SelectImplementationType(byte[] page)
         {
-            _logger.LogInformation("Selecting implementation type.");
+            _logger.LogDebug("Selecting implementation type. DataPage = {DataPage}", BitConverter.ToString(page));
             if ((BicyclePower.DataPage)page[0] == BicyclePower.DataPage.CrankTorqueFrequency)
             {
                 // CTF sensor
@@ -66,17 +57,22 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             }
         }
     }
+    #endregion
 
-    /// <inheritdoc />
-    /// <seealso cref="SelectImplementation" />
-    internal class SelectFitnessEquipmentImplementation : SelectImplementation
+    /// <summary>
+    /// Selects the fitness equipment implementation type.
+    /// </summary>
+    internal class SelectFitnessEquipmentImplementation : ISelectImplementation
     {
+        private readonly ILogger<SelectFitnessEquipmentImplementation> _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectFitnessEquipmentImplementation"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public SelectFitnessEquipmentImplementation(ILogger<SelectFitnessEquipmentImplementation> logger) : base(logger)
+        public SelectFitnessEquipmentImplementation(ILogger<SelectFitnessEquipmentImplementation> logger)
         {
+            _logger = logger;
         }
 
         /// <summary>
@@ -87,9 +83,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// or pages specific to the equipment type. Any other page will return null.
         /// </remarks>
         /// <inheritdoc />
-        public override Type? SelectImplementationType(byte[] page)
+        public Type? SelectImplementationType(byte[] page)
         {
-            _logger.LogInformation("Selecting implementation type.");
+            _logger.LogDebug("Selecting implementation type. DataPage = {DataPage}", BitConverter.ToString(page));
             switch ((FitnessEquipment.DataPage)page[0])
             {
                 case FitnessEquipment.DataPage.GeneralFEData:
@@ -126,7 +122,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                 case FitnessEquipment.DataPage.TrainerTorqueData:
                     return typeof(TrainerStationaryBike);
                 default:
-                    _logger.LogWarning("Unknown equipment type data page. Data page = {DataPage}", page);
+                    _logger.LogWarning("Unknown equipment type.");
                     return null;
             }
         }

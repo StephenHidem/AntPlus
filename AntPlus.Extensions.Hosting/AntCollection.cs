@@ -25,9 +25,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         public object CollectionLock = new object();
 
         private readonly IServiceProvider _services;
+        private readonly IAntRadio _antRadio;
         private readonly ILogger<AntCollection> _logger;
-        private readonly int? _timeout;
-        private readonly byte? _missedMessages;
+        private readonly TimeoutOptions _timeout;
 
         private IAntChannel[]? _channels;
         private SendMessageChannel? _channel;
@@ -39,22 +39,24 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <param name="antRadio">The ANT radio.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="options">The ANT device timeout options.</param>
-        public AntCollection(IServiceProvider services, IAntRadio antRadio, ILogger<AntCollection> logger, IOptions<HostExtensions.TimeoutOptions> options)
+        public AntCollection(IServiceProvider services, IAntRadio antRadio, ILogger<AntCollection> logger, IOptions<TimeoutOptions> options)
         {
             _services = services;
+            _antRadio = antRadio;
             _logger = logger;
-            _timeout = options.Value.Timeout;
-            _missedMessages = options.Value.MissedMessages;
+            _timeout = options.Value;
+            _logger.LogInformation("Created AntCollection");
+        }
 
-            // gRPC clients need to run asynchronously
-            Task.Run(async () =>
-            {
-                _channels = await antRadio.InitializeContinuousScanMode();
-                _channel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
-                _channels[0].ChannelResponse += MessageHandler;
-            });
-
-            _logger.LogInformation("Created AntDeviceCollection: Timeout = {Timeout} MissedMessages = {MissedMessages}", _timeout, _missedMessages);
+        /// <summary>
+        /// Initializes the ANT radio and ANT channels for use by this collection.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Initialize()
+        {
+            _channels = await _antRadio.InitializeContinuousScanMode();
+            _channel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
+            _channels[0].ChannelResponse += MessageHandler;
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <param name="e">The ANT response.</param>
         private void MessageHandler(object? sender, AntResponse e)
         {
-            if (e.ChannelId != null)
+            if (e.ChannelId != null && e.Payload != null)
             {
                 // see if the device is in the collection
                 AntDevice? device;
@@ -80,18 +82,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
 
                     // create ant device from service provider and apply timeout options
                     // the ActivatorUtilities allow us to inject ctor parameters into the requested service
-                    if (_missedMessages != null)
-                    {
-                        device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!, _missedMessages);
-                    }
-                    else if (_timeout != null)
-                    {
-                        device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!, _timeout);
-                    }
-                    else
-                    {
-                        device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!);
-                    }
+                    device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!, _timeout);
 
                     if (device == null) return;     // exit if unable to create the device
                     Add(device);
@@ -107,7 +98,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     e.ChannelNumber,
                     (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
-                Dispose();
+                Dispose();  // clear the channels
+                _antRadio.Reinitialize();
+                Task.Run(() => { _ = Initialize(); });
             }
         }
 
@@ -153,7 +146,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             // check if the ServiceCollection is null
             if (HostExtensions.ServiceCollection == null) throw new InvalidOperationException("The ServiceCollection is null. UseAntPlus() or UseMauiAntPlus() must be invoked when building app services.");
 
-            SelectImplementation? selector = _services.GetKeyedService<SelectImplementation>(channelId.DeviceType);
+            ISelectImplementation? selector = _services.GetKeyedService<ISelectImplementation>(channelId.DeviceType);
             if (selector != null) { return selector.SelectImplementationType(page); }
             else
             {

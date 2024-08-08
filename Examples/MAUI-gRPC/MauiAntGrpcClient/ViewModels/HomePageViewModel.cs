@@ -42,6 +42,8 @@ namespace MauiAntGrpcClient.ViewModels
             SerialNumber = _antRadioService.SerialNumber;
             HostVersion = _antRadioService.Version;
             AntDevices = _services.GetRequiredService<AntCollection>();
+            // this starts scanning for devices
+            await AntDevices.Initialize();
         }
 
         [RelayCommand(CanExecute = nameof(CanShowRadioCapabilities))]
@@ -56,7 +58,7 @@ namespace MauiAntGrpcClient.ViewModels
         }
 
         [RelayCommand]
-        private async Task ShowDetails(AntDevice antDevice)
+        private static async Task ShowDetails(AntDevice antDevice)
         {
             switch (antDevice)
             {

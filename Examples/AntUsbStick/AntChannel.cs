@@ -10,14 +10,14 @@ namespace SmallEarthTech.AntUsbStick
     /// <summary>This class contains the implementation of IAntChannel.</summary>
     public class AntChannel : IAntChannel
     {
-        private readonly ILogger<AntChannel> _logger;
+        private readonly ILogger _logger;
         private readonly ANT_Channel _antChannel;
         private readonly object _lock = new object();
 
         /// <inheritdoc/>
         public event EventHandler<AntResponse> ChannelResponse;
 
-        internal AntChannel(ANT_Channel channel, ILogger<AntChannel> logger)
+        internal AntChannel(ANT_Channel channel, ILogger logger)
         {
             _logger = logger;
             _antChannel = channel;

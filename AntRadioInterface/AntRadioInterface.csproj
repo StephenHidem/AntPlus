@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>2.1.0.0</AssemblyVersion>
+	<AssemblyVersion>3.0.0.0</AssemblyVersion>
 	<TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -10,7 +10,7 @@
     <Title>ANT+ Radio Interface Class Library</Title>
     <Version>$(AssemblyVersion)</Version>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
-    <PackageProjectUrl>http://stephenhidem.github.io/AntPlus</PackageProjectUrl>
+    <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>
     <RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
     <Description>The AntRadioInterface defines an interface to interact with an ANT radio to send and receive from an ANT device. Use this package to create a concrete implementation of an ANT radio.</Description>
@@ -23,9 +23,9 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>1. OpenedFrameType and OpenedPortType have been removed in this release. 
-2. The GetSerialString and GetProductDescription methods in IAntUsbRadio have been marked as obsolete.
-3. Overloads in the interfaces have been removed in favor of optional arguments with default values. The GetDeviceCapabilities method may require rework in implementations.
+    <PackageReleaseNotes>1. IAntChannel - Added asynchronous methods to SendAcknowledged and SendExtAcknowledged messages.
+2. IAntRadio - Added Reinitialize method and Version property to interface declaration.
+
     </PackageReleaseNotes>
   </PropertyGroup>
 

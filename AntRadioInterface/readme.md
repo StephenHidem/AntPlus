@@ -6,7 +6,7 @@ classes to derive from (AntResponse and DeviceCapabilities). These classes and i
 See AntUsbStick in the [repository](https://github.com/StephenHidem/AntPlus/tree/master/Examples/AntUsbStick) for an example
 that supports the Dynastream/Garmin ANT USB stick.
 One important thing to note is this example uses the .NET and native DLLs provided in Dynastream's PC SDK.
-##### Addtional Links
+### Additional Links
 * [Documentation](https://stephenhidem.github.io/AntPlus/html/e3aaa19e-2c22-c645-29dd-df0b206bf71f.htm)
 * [Examples](https://github.com/StephenHidem/AntPlus/tree/master/Examples) - See AntUsbStick for an example implementation.
 * [Issues](https://github.com/StephenHidem/AntPlus/issues) - Mention AntRadioInterface in the issue title.

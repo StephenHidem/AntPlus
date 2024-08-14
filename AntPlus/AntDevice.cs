@@ -19,7 +19,7 @@ namespace SmallEarthTech.AntPlus
     /// <see cref="Geocache"/>.
     /// 
     /// A reasonable rule of thumb is to set the timeout at 8 messages times the channel period per second; typically
-    /// 2 seconds. Consult the device profile documentation at https://www.thisisant.com for a device and review the channel
+    /// 2 seconds. Consult the device profile documentation at https://www.thisisant.com for a device and consult the channel
     /// period defined for master devices.
     /// </remarks>
     public abstract partial class AntDevice : ObservableObject, IDisposable

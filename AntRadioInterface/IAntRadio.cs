@@ -161,15 +161,7 @@ namespace SmallEarthTech.AntRadioInterface
         ///     return Task.FromResult(_channels);
         /// }</code></example>
         Task<IAntChannel[]> InitializeContinuousScanMode();
-        /// <summary>
-        /// Reinitializes the ANT radio.
-        /// </summary>
-        /// <remarks>
-        /// Invoke this method if the radio is no longer usable. Implementation will release all
-        /// resources associated with this radio, attempt to find an ANT radio, and acquire necessary
-        /// resources to resume operation. Normally this would include any channels used.
-        /// </remarks>
-        void Reinitialize();
+
         /// <summary>Cancels the transfers.</summary>
         /// <param name="cancelWaitTime">The cancel wait time.</param>
         void CancelTransfers(int cancelWaitTime);

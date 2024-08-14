@@ -49,10 +49,10 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         }
 
         /// <summary>
-        /// Initializes the ANT radio and ANT channels for use by this collection.
+        /// Initializes the ANT radio for continuous scan mode and setup ANT channels for use by this collection.
         /// </summary>
-        /// <returns></returns>
-        public async Task Initialize()
+        /// <returns>Task of type void</returns>
+        public async Task StartScanning()
         {
             _channels = await _antRadio.InitializeContinuousScanMode();
             _channel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
@@ -99,8 +99,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
                 Dispose();  // clear the channels
-                _antRadio.Reinitialize();
-                Task.Run(() => { _ = Initialize(); });
             }
         }
 
@@ -167,6 +165,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             if (_channels != null)
             {
+                _logger.LogDebug("AntCollection: Dispose");
                 _channels[0].ChannelResponse -= MessageHandler;
                 foreach (IAntChannel item in _channels)
                 {

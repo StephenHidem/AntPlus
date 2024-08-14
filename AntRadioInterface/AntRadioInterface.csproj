@@ -24,7 +24,7 @@
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageReleaseNotes>1. IAntChannel - Added asynchronous methods to SendAcknowledged and SendExtAcknowledged messages.
-2. IAntRadio - Added Reinitialize method and Version property to interface declaration.
+2. IAntRadio - Added Version property to interface declaration.
 
     </PackageReleaseNotes>
   </PropertyGroup>

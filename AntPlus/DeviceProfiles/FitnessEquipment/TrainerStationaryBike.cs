@@ -25,8 +25,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Initializes a new instance of the <see cref="TrainerStationaryBike" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger<TrainerStationaryBike> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public TrainerStationaryBike(ChannelId channelId, IAntChannel antChannel, ILogger<TrainerStationaryBike> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
         }
 
@@ -259,7 +259,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Calibrations the request.</summary>
         /// <param name="request">The request.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         /// <exception cref="System.ArgumentException">Invalid calibration request.</exception>
         public async Task<MessagingReturnCode> CalibrationRequest(CalibrationRequestResponse request)
         {

@@ -109,7 +109,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Sets the sensor automatic zero configuration.</summary>
         /// <param name="autoZero">The automatic zero.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetAutoZeroConfiguration(AutoZero autoZero)
         {
             CalibrationStatus = CalibrationResponse.Unknown;
@@ -117,7 +117,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         }
 
         /// <summary>Requests the manufacturer specific custom calibration parameters.</summary>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestCustomParameters()
         {
             CalibrationStatus = CalibrationResponse.InProgress;
@@ -127,7 +127,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
         /// maximum of 6 bytes.</summary>
         /// <param name="customParameters">The custom parameters. Defined by the manufacturer.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         /// <exception cref="System.ArgumentException">Custom parameters must be 6 bytes in length.</exception>
         public async Task<MessagingReturnCode> SetCustomParameters(byte[] customParameters)
         {

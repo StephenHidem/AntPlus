@@ -297,8 +297,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Initializes a new instance of the <see cref="HeartRate"/> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public HeartRate(ChannelId channelId, IAntChannel antChannel, ILogger<HeartRate> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
         }
 
@@ -399,7 +399,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </summary>
         /// <param name="sportMode">The sport mode.</param>
         /// <param name="subSportMode">The sub sport mode.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetSportMode(SportMode sportMode, SubSportMode subSportMode = SubSportMode.None)
         {
             return await SendExtAcknowledgedMessage(CommonDataPages.FormatModeSettingsPage(sportMode, subSportMode));
@@ -416,7 +416,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         /// <param name="applyGymMode">if set to <c>true</c> apply gym mode. Displays cannot rely on this field as older sensors do not decode it. The Gym Mode bit shall be set to the last received value from the capabilities page if Apply Gym Mode is set to false.</param>
         /// <param name="gymMode">if set to <c>true</c> gym mode is enabled.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetHRFeature(bool applyGymMode, bool gymMode)
         {
             byte[] msg = new byte[] { (byte)DataPage.HRFeature, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(applyGymMode ? 0xFF : 0x7F), (byte)(gymMode ? 0x80 : 0x00) };

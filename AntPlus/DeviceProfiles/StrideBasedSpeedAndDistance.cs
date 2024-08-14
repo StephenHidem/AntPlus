@@ -210,8 +210,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// Initializes a new instance of the <see cref="StrideBasedSpeedAndDistance"/> class.
         /// </summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public StrideBasedSpeedAndDistance(ChannelId channelId, IAntChannel antChannel, ILogger<StrideBasedSpeedAndDistance> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
             CommonDataPages = new CommonDataPages(logger);
         }
@@ -275,7 +275,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>
         /// Requests the total cumulative distance and stride count since the last battery change.
         /// </summary>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestSummaryPage()
         {
             _logger.LogInformation(nameof(RequestSummaryPage));
@@ -285,7 +285,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>
         /// Requests the SDM broadcast capabilities page.
         /// </summary>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         /// <remarks>Page 22 is used to indicate the specific broadcast data capabilities of a sensor.
         /// The SDM shall be able to transmit the capabilities page upon request.
         /// Note that legacy SDMs were only required to support Page 22 if any

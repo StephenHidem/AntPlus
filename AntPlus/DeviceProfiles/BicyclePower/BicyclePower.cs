@@ -73,8 +73,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Initializes a new instance of the <see cref="BicyclePower" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public BicyclePower(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
         }
 

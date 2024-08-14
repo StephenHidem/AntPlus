@@ -23,8 +23,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Initializes a new instance of the <see cref="Elliptical" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<Elliptical> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public Elliptical(ChannelId channelId, IAntChannel antChannel, ILogger<Elliptical> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
         }
 

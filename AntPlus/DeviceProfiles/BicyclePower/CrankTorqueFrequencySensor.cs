@@ -62,8 +62,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Initializes a new instance of the <see cref="CrankTorqueFrequencySensor" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public CrankTorqueFrequencySensor(ChannelId channelId, IAntChannel antChannel, ILogger<CrankTorqueFrequencySensor> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public CrankTorqueFrequencySensor(ChannelId channelId, IAntChannel antChannel, ILogger<CrankTorqueFrequencySensor> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
         }
 
@@ -153,7 +153,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Saves the slope to flash.</summary>
         /// <param name="slope">The slope. Valid range is 10.0 to 50.0 Nm/Hz. Resolution is 0.1 Nm/Hz.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Invalid slope value.</exception>
         public async Task<MessagingReturnCode> SaveSlopeToFlash(double slope)
         {
@@ -173,7 +173,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         /// <summary>Saves the serial number to flash.</summary>
         /// <param name="serialNumber">The serial number.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SaveSerialNumberToFlash(ushort serialNumber)
         {
             CalibrationStatus = CalibrationResponse.InProgress;

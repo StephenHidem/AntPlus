@@ -137,7 +137,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="transmissionResponse">The transmission response. The default is to send 4 messages.</param>
         /// <param name="commandType">Type of the command. The default is <see cref="CommandType.DataPage"/>.</param>
         /// <param name="slaveSerialNumber">The slave serial number. The default is 0xFFFF.</param>
-        /// <returns>Returns the <see cref="MessagingReturnCode"/>.</returns>
+        /// <returns>Status of the request.</returns>
         /// <exception cref="System.ArgumentException">Invalid data page requested.</exception>
         public async Task<MessagingReturnCode> RequestDataPage<T>(T page, uint ackWaitTime = 500, byte descriptor1 = 0xFF, byte descriptor2 = 0xFF, byte transmissionResponse = 4, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF) where T : Enum
         {
@@ -158,7 +158,7 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Sends an acknowledged message to the ANT device.</summary>
         /// <param name="message">The message.</param>
         /// <param name="ackWaitTime">Time in milliseconds to wait for the device acknowledgment. The default is 500ms.</param>
-        /// <returns>Returns the <see cref="MessagingReturnCode"/>.</returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SendExtAcknowledgedMessage(byte[] message, uint ackWaitTime = 500)
         {
             int retries = 3;

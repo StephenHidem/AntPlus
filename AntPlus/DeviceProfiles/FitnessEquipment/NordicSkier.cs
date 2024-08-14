@@ -22,8 +22,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Initializes a new instance of the <see cref="NordicSkier" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger<NordicSkier> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public NordicSkier(ChannelId channelId, IAntChannel antChannel, ILogger<NordicSkier> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
         }
 

@@ -112,8 +112,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// The geocache typically broadcasts its presence at 0.5Hz. The geocache changes its message rate to 4Hz upon
         /// receiving a request such as <see cref="RequestPinPage"/>. Set the timeout appropriate for your use case.
         /// </remarks>
-        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public Geocache(ChannelId channelId, IAntChannel antChannel, ILogger<Geocache> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
             CommonDataPages = new CommonDataPages(logger);
         }
@@ -234,7 +234,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
         /// <param name="timeout">Request _timeout in milliseconds. The default is 16000 milliseconds.</param>
-        /// <returns>Status of the request. See <see cref="MessagingReturnCode" />.</returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestPinPage(uint timeout = 16000)
         {
             // clear any previous state
@@ -252,7 +252,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Requests the authentication token from the geocache.</summary>
         /// <param name="gpsSerialNumber">The GPS serial number.</param>
-        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestAuthentication(uint gpsSerialNumber)
         {
             _logger.LogDebug($"{nameof(RequestAuthentication)}");
@@ -267,7 +267,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Updates the logged visits count and last visit timestamp.</summary>
         /// <exception cref="InvalidOperationException">The geocache has not been programmed.</exception>
-        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> UpdateLoggedVisits()
         {
             _logger.LogDebug($"{nameof(UpdateLoggedVisits)}");
@@ -290,7 +290,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="latitude">The latitude in decimal degrees.</param>
         /// <param name="longitude">The longitude in decimal degrees.</param>
         /// <param name="hint">The next stage hint or message.</param>
-        /// <returns>Status of the request. See <see cref="MessagingReturnCode"/>.</returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> ProgramGeocache(string id, uint? pin, double? latitude, double? longitude, string hint)
         {
             _logger.LogDebug($"{nameof(ProgramGeocache)}");

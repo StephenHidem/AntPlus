@@ -310,8 +310,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// Initializes a new instance of the <see cref="FitnessEquipment"/> class.
         /// </summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        protected FitnessEquipment(ChannelId channelId, IAntChannel antChannel, ILogger logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
             CommonDataPages = new CommonDataPages(logger);
         }
@@ -376,7 +376,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Sets the percentage of maximum resistance resistance.</summary>
         /// <param name="resistance">The resistance as a percentage of the maximum resistance.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetBasicResistance(double resistance)
         {
             byte[] res = new byte[] { (byte)(resistance / 0.5) };
@@ -387,7 +387,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
         /// <summary>Sets the target power in wats.</summary>
         /// <param name="power">The power in watts. Resolution is 0.25 watt.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetTargetPower(double power)
         {
             byte[] pow = BitConverter.GetBytes((ushort)(power / 0.25));
@@ -400,7 +400,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="windResistanceCoefficient">The wind resistance coefficient. Resolution is 0.01 kg/m.</param>
         /// <param name="windSpeed">The wind speed in km/h.</param>
         /// <param name="draftingFactor">The drafting scale factor. Range is 0 to 1.00.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetWindResistance(double windResistanceCoefficient, sbyte windSpeed, double draftingFactor)
         {
             byte[] wrc = new byte[] { (byte)(windResistanceCoefficient / 0.01) };
@@ -415,7 +415,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <summary>Sets the track resistance.</summary>
         /// <param name="grade">The grade. Set as a percentage of vertical displacement to horizontal displacement.</param>
         /// <param name="rollingResistanceCoefficient">The rolling resistance coefficient.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetTrackResistance(double grade, double rollingResistanceCoefficient = 0.004)
         {
             byte[] grd = BitConverter.GetBytes((ushort)((grade + 200) / 0.01));
@@ -432,7 +432,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="bikeWeight">The bike weight in kg.</param>
         /// <param name="wheelDiameter">The wheel diameter in meters.</param>
         /// <param name="gearRatio">The gear ratio.</param>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SetUserConfiguration(double userWeight, byte wheelDiameterOffset, double bikeWeight, double wheelDiameter, double gearRatio)
         {
             byte[] uw = BitConverter.GetBytes((ushort)(userWeight / 0.01));
@@ -449,7 +449,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Requests the fitness equipment capabilities.</summary>
-        /// <returns><see cref="MessagingReturnCode"/></returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestFECapabilities()
         {
             return await RequestDataPage(DataPage.FECapabilities);

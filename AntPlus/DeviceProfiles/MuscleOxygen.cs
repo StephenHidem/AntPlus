@@ -128,8 +128,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         /// <summary>Initializes a new instance of the <see cref="MuscleOxygen" /> class.</summary>
         /// <inheritdoc cref="AntDevice(ChannelId, IAntChannel, ILogger, TimeoutOptions?)"/>
-        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger<MuscleOxygen> logger, TimeoutOptions? options)
-            : base(channelId, antChannel, logger, options)
+        public MuscleOxygen(ChannelId channelId, IAntChannel antChannel, ILogger<MuscleOxygen> logger, TimeoutOptions? timeoutOptions)
+            : base(channelId, antChannel, logger, timeoutOptions)
         {
             CommonDataPages = new CommonDataPages(logger);
         }
@@ -220,7 +220,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="command">The command.</param>
         /// <param name="localTimeOffset">The local time offset.</param>
         /// <param name="currentTimeStamp">The current time stamp.</param>
-        /// <returns>The MessagingReturnCode.</returns>
+        /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SendCommand(CommandId command, TimeSpan localTimeOffset, DateTime currentTimeStamp)
         {
             sbyte offset = (sbyte)(localTimeOffset.TotalMinutes / 15);

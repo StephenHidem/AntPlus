@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
@@ -41,19 +40,13 @@ namespace SmallEarthTech.AntUsbStick
             _logger = logger;
             _antDevice = new ANT_Device();
             _antDevice.deviceResponse += AntDevice_deviceResponse;
+            _antDevice.serialError += AntDevice_SerialError;
             _logger.LogDebug("Created AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
         }
 
-        /// <inheritdoc/>
-        public void Reinitialize()
+        private void AntDevice_SerialError(ANT_Device sender, ANT_Device.serialErrorCode error, bool isCritical)
         {
-            _logger.LogDebug("Attempt to reinitialize.");
-            _antDevice.deviceResponse -= AntDevice_deviceResponse;
-            _antDevice.Dispose();
-            Thread.Sleep(1000);
-            _antDevice = new ANT_Device();
-            _antDevice.deviceResponse += AntDevice_deviceResponse;
-            _logger.LogDebug("Reinitialized AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+            _logger.LogDebug($"Sender: {sender} Error: {error} Critical: {isCritical}");
         }
 
         private void AntDevice_deviceResponse(ANT_Response response)
@@ -106,8 +99,14 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public void Dispose()
         {
-            _logger.LogDebug("Disposed AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
-            _antDevice.Dispose();
+            if (_antDevice != null)
+            {
+                _logger.LogDebug("Disposed AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+                _antDevice.deviceResponse -= AntDevice_deviceResponse;
+                _antDevice.serialError -= AntDevice_SerialError;
+                _antDevice.Dispose();
+                _antDevice = null;
+            }
         }
 
         /// <inheritdoc/>

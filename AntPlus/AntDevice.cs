@@ -27,7 +27,7 @@ namespace SmallEarthTech.AntPlus
         private readonly IAntChannel _antChannel;
         private Timer? _timeoutTimer;
         private readonly int _deviceTimeout;
-        private const double _baseTransmissionFrequency = 32768;  // base ANT device data transmission period in Hz
+        private const double _baseTransmissionFrequency = 32768;  // base ANT device data transmission frequency in Hz
 
         /// <summary>This is a multiple of the base transmission frequency. All derived classes must implement this property.
         /// See the master Channel Period specified in the specific ANT device specification for the count value.</summary>

@@ -76,9 +76,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                 // create the device if not in the collection
                 if (device == null)
                 {
-                    // get the device type
+                    // get the device implementation type
                     Type? deviceType = GetAntDeviceType(e.ChannelId, e.Payload!);
-                    if (deviceType == null) return;     // exit if unable to determine device type
+                    if (deviceType == null) return;     // exit if unable to determine device implementation type
 
                     // create ant device from service provider and apply timeout options
                     // the ActivatorUtilities allow us to inject ctor parameters into the requested service
@@ -134,18 +134,18 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         }
 
         /// <summary>
-        /// Gets the type of the ANT device.
+        /// Gets the implementation type of the ANT device.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="page">The page received from the device.</param>
-        /// <returns>The type of the device.</returns>
+        /// <returns>The implementation type of the device.</returns>
         private Type? GetAntDeviceType(ChannelId channelId, byte[] page)
         {
-            // check if the ServiceCollection is null
-            if (HostExtensions.ServiceCollection == null) throw new InvalidOperationException("The ServiceCollection is null. UseAntPlus() or UseMauiAntPlus() must be invoked when building app services.");
-
             ISelectImplementation? selector = _services.GetKeyedService<ISelectImplementation>(channelId.DeviceType);
-            if (selector != null) { return selector.SelectImplementationType(page); }
+            if (selector != null)
+            {
+                return selector.SelectImplementationType(page);
+            }
             else
             {
                 return HostExtensions.ServiceCollection.

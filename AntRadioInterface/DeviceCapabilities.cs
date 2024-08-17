@@ -1,7 +1,7 @@
 ﻿namespace SmallEarthTech.AntRadioInterface
 {
-    /// <summary>The radio capabilities interface.</summary>
-    public class DeviceCapabilities
+    /// <summary>The radio capabilities class.</summary>
+    public abstract class DeviceCapabilities
     {
         /// <summary>
         /// Number of channels available.

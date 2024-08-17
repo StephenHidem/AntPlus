@@ -43,7 +43,7 @@ namespace SmallEarthTech.AntRadioInterface
     /// Derive from AntResponse to support a concrete implementation (i.e. USB ANT radio).
     /// </summary>
     [DataContract(Name = "AntResponse", Namespace = "http://www.smallearthtech.com")]
-    public class AntResponse
+    public abstract class AntResponse
     {
         /// <summary>
         /// The object that created this response (ie: The corresponding ANTChannel or ANTDevice instance).

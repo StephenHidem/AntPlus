@@ -13,10 +13,9 @@ using System.Net;
 
 namespace MauiAntGrpcClient.ViewModels
 {
-    public partial class HomePageViewModel(IAntRadio antRadioService, IServiceProvider services) : ObservableObject
+    public partial class HomePageViewModel(IAntRadio antRadioService, AntCollection antCollection) : ObservableObject
     {
         private readonly AntRadioService _antRadioService = (AntRadioService)antRadioService;
-        private readonly IServiceProvider _services = services;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ShowRadioCapabilitiesCommand))]
@@ -41,9 +40,8 @@ namespace MauiAntGrpcClient.ViewModels
             ProductDescription = _antRadioService.ProductDescription;
             SerialNumber = _antRadioService.SerialNumber;
             HostVersion = _antRadioService.Version;
-            AntDevices = _services.GetRequiredService<AntCollection>();
-            // this starts scanning for devices
-            await AntDevices.Initialize();
+            AntDevices = antCollection;
+            await AntDevices.StartScanning();
         }
 
         [RelayCommand(CanExecute = nameof(CanShowRadioCapabilities))]

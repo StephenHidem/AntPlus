@@ -5,24 +5,23 @@
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
   </Topic>
-  <Topic id="ad0d881c-d17a-471a-a2b7-8464c87a3588" visible="True" noFile="true" isExpanded="true" title="Examples">
-    <Topic id="01001d50-9ea0-4e9c-a933-dbb67b7965cb" visible="True" />
-    <Topic id="3879f5ad-87f2-4628-adef-bc78a4015241" visible="True" />
-    <Topic id="7e5a578a-ecb8-4bf2-adf3-587b47e3c3ab" visible="True" />
-    <Topic id="639f9a9d-0f90-4a26-90ba-fabf01ec8d07" visible="True" noFile="true" isExpanded="true" title="MAUI-gRPC">
-      <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" title="MAUI/gRPC Example Overview" />
+  <Topic id="825ed94a-e668-4d28-85ff-53cbb962a355" visible="True" isExpanded="true" title="ANT+ Hosting Extensions Overview">
+    <Topic id="0e424769-d4c6-4a98-9384-a810421ad5e1" visible="True" title="How-To: Create and Add a Custom AntDevice to Host" />
+  </Topic>
+  <Topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" visible="True" isExpanded="true" isSelected="true" title="Examples Overview">
+    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" isExpanded="true" title="MAUI-gRPC">
       <Topic id="721a6d97-52b3-4a6b-8835-4201a92c432c" visible="True" />
       <Topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" visible="True" />
       <Topic id="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4" visible="True" />
       <Topic id="305fe194-b246-4184-b949-35b56b817029" visible="True" />
     </Topic>
   </Topic>
-  <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries" />
   <Topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" visible="True" title="Unity Game Development">
     <HelpKeywords>
       <HelpKeyword index="K" term="Unity" />
     </HelpKeywords>
   </Topic>
+  <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries" />
   <Topic id="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" visible="True" isExpanded="true" title="Version History">
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />
@@ -32,6 +31,7 @@
       <Topic id="3bf26a39-5daa-482c-9718-d2bed1141b6c" visible="True" title="Version 2.0.1.0" />
       <Topic id="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" visible="True" title="Version 2.0.2.0" />
       <Topic id="c8d04cf3-0a23-44ea-a795-7a0e14dba774" visible="True" title="Version 2.1.0.0" />
+      <Topic id="df9ea172-ed2e-4ee8-b2e6-c0df91b731a1" visible="True" title="Version 3.0.0.0" />
     </Topic>
     <Topic id="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" visible="True" isExpanded="true" title="AntPlus Version History">
       <Topic id="b3754de5-1d8d-422e-9071-12d290d4b14d" visible="True" title="Version 2.0.0.0" />
@@ -39,13 +39,15 @@
       <Topic id="892f97e4-a593-403f-bcfe-1b546a86ed2d" visible="True" title="Version 2.2.0.0" />
       <Topic id="988b09e9-af30-438d-ad2d-0b86a818f97d" visible="True" title="Version 3.0.0.0" />
       <Topic id="5784e268-84d1-466a-aa3a-e0fb8085a4ff" visible="True" title="Version 3.0.1.0" />
+      <Topic id="44f85400-6285-4dbe-8f65-d28b68108fc1" visible="True" title="Version 4.0.0.0" />
     </Topic>
     <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" isExpanded="true" title="AntUsbStick Version History">
       <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" title="Version 2.0.2.0" />
       <Topic id="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" visible="True" title="Version 2.1.0.0" />
+      <Topic id="ea422e45-03fe-4b1d-bc19-280e03ea4729" visible="True" title="Version 3.0.0.0" />
     </Topic>
-    <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" isExpanded="true" title="Hosting Extensions Version History">
-      <Topic id="0677519c-d5ba-4c5d-b400-f10dc75a33a7" visible="True" isSelected="true" title="Version 1.0.0.0" />
+    <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" title="Hosting Extensions Version History">
+      <Topic id="0677519c-d5ba-4c5d-b400-f10dc75a33a7" visible="True" title="Version 1.0.0.0" />
     </Topic>
   </Topic>
 </Topics>

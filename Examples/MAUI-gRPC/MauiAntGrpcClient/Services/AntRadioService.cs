@@ -65,11 +65,6 @@ namespace MauiAntGrpcClient.Services
             Version = reply.Version;
         }
 
-        public void Reinitialize()
-        {
-
-        }
-
         public async Task<IAntChannel[]> InitializeContinuousScanMode()
         {
             if (_channel == null)

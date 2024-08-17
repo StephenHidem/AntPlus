@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="825ed94a-e668-4d28-85ff-53cbb962a355" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+
+      <para>
+				The ANT+ Hosting Extensions simplify integrating the ANT+ Class Library into applications that use
+				dependency injection (DI) to compose the host application. MAUI applications use this pattern extensively
+				and other Windows applications can employ various host builders for DI.
+			</para>
+    </introduction>
+
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section address="Section1">
+      <title>HostExtension Class</title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+					This class provides two static methods to add the ANT+ classes to the host builder. UseAntPlus() is
+					used with IHostBuilder implementations and UseMauiAntPlus() is used by MauiAppBuilder implementations.
+					Their purpose is identical; inject all the ANT+ devices and support infrastructure into the DI container.
+					The TimeoutOptions class will also be added to the DI container and the configuration is bound by the container.
+				</para>
+      </content>
+      <!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible.
+      <sections>
+          <section address="SubSection1">
+              <title>Sub-section 1</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+          <section address="SubSection2">
+              <title>Sub-section 2</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+      </sections> -->
+    </section>
+		<section>
+			<title>Setting TimeoutOptions</title>
+			<content>
+				<para>
+					The global timeout setting can come from a variety of sources such as the command line or appsettings.json.
+					Two options are available - <system>MissedMessages</system> and <system>Timeout</system> Timeout is in milliseconds and MissedMessages is the
+					number of messages missed before signalling the ANT device is considered offline. If no timeout setting
+					is specified the timeout will default to 8 missed messages. Timeouts can be disabled by setting <system>Timeout=-1</system>. This is
+					equivalent to Timeout.Infinite.
+				</para>
+			  <alert class="note">
+					<para>Prefer MissedMessages as this will scale the timeout based on the broadcast rate of specific ANT devices.</para>
+				</alert>
+				<para>Setting the option from the command line: <system>--TimeoutOptions:MissedMessages=8</system>.</para>
+				<para>Setting the option from appsetings.json:</para>
+				<code language="none" source="..\..\AntPlus\Examples\WpfUsbStickApp\appsettings.json"/>
+			</content>
+		</section>
+		<section>
+			<title>ISelectImplementation Interface</title>
+			<content>
+				<para>
+					This is a simple interface that defines a single method - SelectImplementationType(). The purpose of
+					this method is to provide a mechanism for selecting one specific implementation from multiple implementations
+					of the same device class. Examples of this are bicycle power and fitness equipment sensors. A data page is
+          decoded and a specific implementation type is returned or null if the implementation could not be
+					determined from the data page.
+				</para>
+	      <alert class="note">
+					<para>You only need to implement this interface for device classes with multiple implementations.</para>
+				</alert>
+				<para>
+					Support for ANT+ devices not supported by the ANT+ Class Library can be added to the DI container and
+					device types that support multiple implementations will implement this interface and add it to the DI container.
+				  It is added to the DI contain with the AddKeyedSingleton() method with the device class value specified
+					as the key. For example - <codeInline>AddKeyedSingleton&lt;ISelectImplementation, SelectBicyclePowerImplementation&gt;(BicyclePower.DeviceClass);</codeInline>
+				</para>
+				<para>Here's the SelectBicyclePowerImplementation class -</para>
+				<code language="c#" source="..\..\AntPlus\AntPlus.Extensions.Hosting\ISelectImplementation.cs" region="SelectBicyclePowerImplementation"/>
+			</content>
+		</section>
+		<section>
+			<title>AntCollection Class</title>
+			<content>
+				<para>
+					This class replaces the AntDeviceCollection class. It is a thread-safe ObservableCollection of AntDevices.
+					It exploits the benefits of dependency injection and handles the addition of custom AntDevice to the DI
+					container. It automatically brings in the TimeoutOptions, resolves any AntDevices present in the DI
+					container, and resolves any ISelectImplementations required to resolve an AntDevice type.
+				</para>
+			</content>
+		</section>
+		<relatedTopics>
+			<link xlink:href="0e424769-d4c6-4a98-9384-a810421ad5e1"/>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

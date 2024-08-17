@@ -41,8 +41,11 @@ namespace WpfUsbStickApp
 
         private void AntDevices_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            AntDevice? antDevice = ((ListView)sender).SelectedItem as AntDevice;
-            switch (antDevice?.ChannelId.DeviceType)
+            // get the selected AntDevice
+            if (((ListView)sender).SelectedItem is not AntDevice antDevice) { return; }
+
+            // display the specific AntDevice window
+            switch (antDevice.ChannelId.DeviceType)
             {
                 case HeartRate.DeviceClass:
                     new HeartRateWindow((HeartRate)antDevice).Show();
@@ -86,11 +89,7 @@ namespace WpfUsbStickApp
                     break;
                 default:
                     // unknown device
-                    if (antDevice is AntDevice ad)
-                    {
-                        UnknownDeviceWindow unknownDeviceWindow = new((UnknownDevice)ad);
-                        unknownDeviceWindow.Show();
-                    }
+                    new UnknownDeviceWindow((UnknownDevice)antDevice).Show();
                     break;
             }
         }
@@ -101,7 +100,7 @@ namespace WpfUsbStickApp
             {
                 CapabilitiesWindow capabilitiesWindow = new(viewModel.DeviceCapabilities)
                 {
-                    Icon = Icon
+                    Icon = Icon     // sets capabilities window icon to main window icon
                 };
                 capabilitiesWindow.Show();
             }

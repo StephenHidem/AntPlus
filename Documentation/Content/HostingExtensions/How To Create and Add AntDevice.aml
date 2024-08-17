@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0e424769-d4c6-4a98-9384-a810421ad5e1" revisionNumber="1">
+  <developerHowToDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+    <introduction>
+			<para>
+				This how-to walks through the steps taken to create a custom AntDevice and add it to the host container.
+				We will use the ANT+ device profile Bike Radar to illustrate the procedure. The example WpfUsbStickApp
+				illustrates the full example.
+			</para>
+			<para>
+				Classes derived from AntDevice inherit from the CommunityToolkit.Mvvm NuGet package. This is a very
+				useful package providing robust support for notifications, commanding, and more.
+			</para>
+    </introduction>
+
+    <!-- Optional procedures followed by optional code example but must have
+         at least one procedure or code example -->
+    <procedure>
+      <title>Create the custom ANT device class</title>
+      <steps class="ordered">
+				<step>
+					<content>
+						<para>Add the NuGet package SmallEartTech.AntPlus.Extensions.Hosting to the application project.</para>
+					</content>
+				</step>
+				<step>
+          <content>
+            <para>Add a new class named BikeRadar and derive from AntDevice.</para>
+						<para>
+							AntDevice is declared as an ObservableObject. Therefore, your class declaration will include
+							the partial modifier.
+						</para>
+						<code language="c#">
+							namespace WpfUsbStickApp.CustomAntDevice
+							{
+								public partial class BikeRadar : AntDevice
+								{
+								}
+							}
+						</code>
+          </content>
+        </step>
+				<step>
+					<content>
+						<para>
+							Add a PNG file to use as an image/icon to the project and set the build action to "Embedded Resource".
+							The Bike Radar image was copied from the Bike Radar specification and saved as a PNG in the
+							CustomAntDevice solution folder.
+						</para>
+					</content>				
+				</step>
+        <step>
+          <content>
+            <para>
+							Implement required properties in the BikeRadar class. You will override ChannelCount, DeviceImageStream,
+							and ToString.
+						</para>
+						<alert class="important">
+							<para>
+								You need to manually declare your ANT specific device class! This const is used as a key when
+								added to the DI container and the AntCollection will instantiate a device with this key.
+							</para>
+						</alert>
+						<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="DeviceClass and Overrides"/>
+						<para>
+							Generate the constructor from quick refactorings. This should add some more required namespaces.
+							Change the constructor signature to declare the device specific logger. Bike Radar also supports
+							CommonDataPages. The list of radar targets is initialized.
+						</para>
+						<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="Ctor"/>
+          </content>
+        </step>
+				<step>
+					<content>
+						<para>Define the device specific data pages.</para>
+						<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="DataPages"/>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>
+							Add custom properties the device supports. Add CommonDataPages property if the device supports it.
+						</para>
+						<alert class="note">
+							<para>
+								The CommunityToolkit.Mvvm supports properties with ObservableProperty attribute. This attribute
+								requires the property declaration to be private and the first letter of the property name set as
+								lowercase. The CommunityToolkit generated partial class uses this private declaration as a
+								backing store and will create a public property with the first letter capitalized.
+							</para>
+						</alert>
+						<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="Custom Properties"/>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>
+							Override Parse. Set the custom properties and/or internal state according to the data page.
+							Parse common data pages in the default clause.
+						</para>
+						<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="Parse"/>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>
+							Add custom methods to send commands to the ANT device.
+						</para>
+						<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="Custom Methods"/>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>Add your custom device to the host services collection. This must be a keyed transient.</para>
+						<code language="c#">
+						// dependency services
+						_host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
+							UseSerilog().
+							UseAntPlus().   // this adds all the required dependencies to use the ANT+ class library
+							ConfigureServices(services =>
+							{
+								// add the implementation of IAntRadio to the host
+								services.AddSingleton&lt;IAntRadio, AntRadio&gt;();
+
+								// add custom device to the host
+								services.AddKeyedTransient&lt;AntDevice, BikeRadar&gt;(BikeRadar.DeviceClass);
+							}).
+							Build();
+						</code>
+					</content>
+				</step>
+      </steps>
+       <conclusion>
+				 <content>
+					 <para>
+						 You have now added a custom device to the services that can be instantiated by AntCollection.
+						 The next steps would be to implement the view and view model for your custom ANT device to use
+						 in your application.
+					 </para>
+				 </content>
+			 </conclusion> 
+    </procedure>
+
+    <!-- <codeExample>Optional code example</codeExample> -->
+
+    <!-- <buildInstructions>Optional instructions for building a
+         code example.</buildInstructions> -->
+
+    <!-- <robustProgramming>Optional discussion of error handling and other
+         issues related to writing solid code.</robustProgramming> -->
+
+    <!-- <security>Optional discussion of security issues.</security> -->
+
+    <relatedTopics>
+      <link xlink:href="825ed94a-e668-4d28-85ff-53cbb962a355"/>
+      <link xlink:href="27d74052-f564-4aaa-97a0-5f166ffd5ce3"/>
+      <externalLink>
+          <linkText>CommunityToolkit.Mvvm</linkText>
+          <linkUri>https://github.com/CommunityToolkit/dotnet</linkUri>
+      </externalLink>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID">Link text</link>
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerHowToDocument>
+</topic>

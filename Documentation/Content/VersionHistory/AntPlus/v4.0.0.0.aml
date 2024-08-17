@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="3879f5ad-87f2-4628-adef-bc78a4015241" revisionNumber="1">
+<topic id="44f85400-6285-4dbe-8f65-d28b68108fc1" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -16,32 +16,36 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
-      <para>
-				The WpfUsbStickApp example demonstrates connecting to a Garmin/Dynastream ANT USB stick, enumerating ANT devices,
-  			and interacting with an ANT device. The ANT USB stick is initialized for receive scan mode. The ANT+ class library
-				AntDeviceCollection serves the role of enumerating ANT devices and interacting with them.
-		  </para>
-			<alert class="note">
-				<para>This project uses the AntUsbSick project. Therefore, the platform target is set to x86. This is due to the native DLLs that are a part of this project.</para>
-			</alert>
-			<para>
-				
-			</para>
-		</introduction>
+
+      <para>Version 4.0.0.0 was release August 2024</para>
+    </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
-      <title>Notes About the AntDeviceCollection</title>
       <content>
-        <!-- Uncomment this to create a sub-section outline
-        <autoOutline /> -->
-        <para>
-					The AntDeviceCollection is the focal point of this example. It's an observable collection that the application
-					subscribes to via XAML binding. An ANT device can be selected and the device can be interacted with.
-				</para>
-      </content>
+				<list class="bullet">
+					<listItem>
+						<para>All device profiles inherit the CommunityToolkit.Mvvm from AntDevice. This makes it much easier tor the device profiles to participate as view models.</para>
+					</listItem>
+				</list>
+				<list class="bullet">
+					<listItem>
+						<para>ChannelCount was added to AntDevice and device profiles to enable scaling the device timeouts based on the number of missed messags.</para>
+					</listItem>
+				</list>
+				<list class="bullet">
+					<listItem>
+						<para>Device timeouts can be disabled by setting the timeout argument to -1 (Timeout.Infinite).</para>
+					</listItem>
+				</list>
+				<list class="bullet">
+					<listItem>
+						<para>Added TimeoutOptions class to provide support to ANT+ hosting extensions.</para>
+					</listItem>
+				</list>
+			</content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
@@ -61,10 +65,8 @@
     </section>
 
     <relatedTopics>
-	    <codeEntityReference qualifyHint="false">N:SmallEarthTech.AntPlus</codeEntityReference>
-	    <codeEntityReference qualifyHint="false">T:SmallEarthTech.AntPlus.AntDeviceCollection</codeEntityReference>
-	    <codeEntityReference qualifyHint="false">T:SmallEarthTech.AntPlus.AntDevice</codeEntityReference>
-      <!-- One or more of the following:
+			<link xlink:href="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" />
+			<!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference

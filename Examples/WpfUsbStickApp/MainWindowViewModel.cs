@@ -28,7 +28,7 @@ namespace WpfUsbStickApp.ViewModels
 
         public MainWindowViewModel()
         {
-            // Initialize early, without access to configuration or services
+            // Initialize Serilog early, without access to configuration or services
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Debug(outputTemplate:
                     "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}) {Message:lj}{NewLine}{Exception}") // + file or centralized logging
@@ -66,8 +66,7 @@ namespace WpfUsbStickApp.ViewModels
 
             // create the device collection
             AntDevices = _host.Services.GetRequiredService<AntCollection>();
-            // this starts scanning for devices
-            _ = AntDevices.Initialize();
+            _ = AntDevices.StartScanning();
         }
     }
 }

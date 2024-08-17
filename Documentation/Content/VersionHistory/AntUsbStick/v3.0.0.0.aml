@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" revisionNumber="1">
+<topic id="ea422e45-03fe-4b1d-bc19-280e03ea4729" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,7 +17,7 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>Version 2.0.1.0 was released on January 3, 2024.</para>
+      <para>Version 3.0.0.0 was released August 2024.</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
@@ -27,22 +27,10 @@
       <content>
 				<list class="bullet">
 					<listItem>
-						<para>
-							<link xlink:href="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="ea422e45-03fe-4b1d-bc19-280e03ea4729" />
-						</para>
+						<para>Implemented changes to IAntChannel and IAntRadio.</para>
 					</listItem>
 				</list>
-      </content>
+			</content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
@@ -62,7 +50,7 @@
     </section>
 
     <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+			<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
 			<!-- One or more of the following:
            - A local link
            - An external link

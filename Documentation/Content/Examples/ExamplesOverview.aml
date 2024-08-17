@@ -1,46 +1,116 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" revisionNumber="1">
-	<developerConceptualDocument
+<topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" revisionNumber="1">
+  <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-		<!--
+    <!--
     <summary>
       <para>Optional summary abstract</para>
     </summary>
     -->
 
-		<introduction>
-			<!-- Uncomment this to generate an outline of the section and sub-section
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
            titles.  Specify a numeric value as the inner text to limit it to
            a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.
-       <autoOutline />  -->
-			<para>
-				These examples consists of four projects. AntGrpcShared is a class library providing a gRPC client/server to be consumed by the other
-				projects. AntGrpcService is a Windows service that provides services to connect to and communicate with an ANT USB stick.
-				The MauiAntClientApp is a .NET MAUI project and gRPC client that is used to demonstrate Windows/Android applications that work with the
-				remote server application on a local subnet. <legacyBold>I have not tested the other platforms supported by .NET MAUI.</legacyBold>
-			</para>
-			<alert class="note" title="About gRPC">
-				<para>
-					gRPC is a Google defined protocol for remote procedure calls. It is the recommended RPC to use instead of WCF. Also,
-					don't confuse <legacyBold>gRPC channels</legacyBold> with <legacyBold>ANT radio channels</legacyBold>. gRPC is a
-					network protocol, ANT radio channels are a Dynastream/Garmin protocol for ANT radios.
-				</para>
-			</alert>
-			<para>
-				The intent of AntGrpcService is to make the ANT USB stick accessible not only to client applications running on the local
-				host but mobile device emulators and mobile devices connected to the network the service is running on.
-			</para>
-		</introduction>
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
 
-		<!-- Add one or more top-level section elements.  These are collapsible.
+      <para>
+				These examples illustrate how to use the class libraries.
+			</para>
+    </introduction>
+
+    <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-		<section address="Section1">
+    <section address="Section1">
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+      </content>
+			<sections>
+				<section>
+					<title>AntUsbStick Class Library</title>
+					<content>
+						<para>
+							This example implements the Small Earth Technology ANT radio interface. This class library is used by the example applications.
+							It supports Garmin/Dynastream ANT USB sticks and some development boards with USB interfaces. It is also available on
+							<externalLink>
+								<linkText>NuGet.</linkText>
+								<linkUri>https://www.nuget.org/packages/SmallEarthTech.AntUsbStick</linkUri>
+							</externalLink>
+						</para>
+						<alert class="important">
+							<para>Projects that consume this library must set the platform target to x86. This is due to the native DLLs that are a part of this library.</para>
+						</alert>
+						<para>
+							AntUsbStick provides two primary classes to consuming applications - AntRadio and AntChannel. AntRadio handles global
+							ANT USB stick radio settings and operation. AntChannel handles individual channel configuration and communication with ANT devices.
+						</para>
+						<para>
+							AntRadio implements IAntRadio, IAntConfiguration, IAntControl, ICrypto, IFitSettings, and IAntUsbRadio
+							interfaces. This is specific to Garmin/Dynastream ANT USB sticks.
+							UsbAntResponse derives from AntResponse. It provides access to ANT response messages specific to Garmin/Dynastream ANT USB sticks.
+							UsbDeviceCapabilities derives from DeviceCapabilities. It provides access to ANT device capabilities specific to Garmin/Dynastream ANT USB sticks.
+						</para>
+					</content>
+				</section>
+				<section>
+					<title>WpfUsbStickApp WPF Application</title>
+					<content>
+						<para>
+							The WpfUsbStickApp example demonstrates a host builder, using the <link xlink:href="825ed94a-e668-4d28-85ff-53cbb962a355">hosting extensions</link>,
+							connecting to a Garmin/Dynastream ANT USB stick, enumerating ANT devices via the AntCollection service,
+							and interacting with ANT devices. The ANT USB stick class library is initialized for continuous receive scan mode.
+						</para>
+						<alert class="note">
+							<para>This project uses the AntUsbSick library. Therefore, the platform target is set to x86. This is due to the native DLLs that are a part of this project.</para>
+						</alert>
+					</content>
+				</section>
+				<section>
+					<title>AntMulticastServer Console Application</title>
+					<content>
+						<alert class="warning">
+							<para>
+								This application is no longer being updated or maintained. It was intended to support Xamarin apps. Xamarin has been superceded by .NET MAUI.
+							</para>
+						</alert>
+						<para>
+							This application creates an IPv6 UdpClient bound to port number 2000. The UdpClient directs all messages received from the
+							AntDeviceCollection to the multicast group [::] (all interfaces on the local subnet), port number 55436. A Xamarin
+							client example (Android only) is available as a separate solution at
+							<externalLink>
+								<linkText>XamAntClientApp.</linkText>
+								<linkUri>https://github.com/StephenHidem/XamAntClientApp/</linkUri>
+							</externalLink>
+						</para>
+					</content>
+				</section>
+			</sections>
+		</section>
+		<section address="Section4">
 			<title>The MAUI Example Projects</title>
 			<content>
+				<para>
+					This group of examples is comprised of four projects. AntGrpcShared is a class library providing a gRPC client/server to be consumed by the other
+					projects. AntGrpcService is a Windows service that provides services to connect to and communicate with an ANT USB stick.
+					The MauiAntClientApp is a .NET MAUI project and gRPC client that is used to demonstrate Windows/Android applications that work with the
+					remote server application on a local subnet. <legacyBold>I have not tested the other platforms supported by .NET MAUI.</legacyBold>
+				</para>
+				<alert class="note" title="About gRPC">
+					<para>
+						gRPC is a Google defined protocol for remote procedure calls. It is the recommended RPC to use instead of WCF. Do not
+						confuse <legacyBold>gRPC channels</legacyBold> with <legacyBold>ANT radio channels</legacyBold>. gRPC is a
+						network protocol, ANT radio channels are a Dynastream/Garmin protocol for ANT radios.
+					</para>
+				</alert>
+				<para>
+					The intent of AntGrpcService is to make the ANT USB stick accessible not only to client applications running on the local
+					host but mobile device emulators and mobile devices connected to the network the service is running on.
+				</para>
 				<para>
 					AntGrpcShared is the glue that facilitates communication between clients and the service. The benefit of using
 					gRPC is that multiple clients can run simultaneously, both on the local PC and over the network.
@@ -109,34 +179,9 @@
 				</section>
 			</sections>
 		</section>
-		<section address="Section2">
-			<title>How It Works</title>
-			<content>
-				<para>
-					UDP multicast is used for service discovery and HTTP is used for communication between client and server. The multicast discovery
-					service is invoked first to obtain the server URI, then the server gRPC channel is established
-					to the server IP address obtained from the reply to the UDP message. I'm assuming the server and client app are on the
-					same local subnet.
-				</para>
-				<para>
-					The UDP multicast endpoint is 239.55.43.6:55437. This is an arbitrary assignment in the multicast address range. You are certainly
-					welcome to select your own address and port. The message sent/received is not relevant in this example, we're just interested in
-					the server IP address in the received message. This is used in the next step to form the URI to connect to the gRPC server channel.
-				</para>
-				<para>
-					The client then connects to the gRPC service. The URI is constructed from the server IP address and the arbitrary port number
-					created when the AntGrpcService project was created. The AntGrpcService launchSettings.json file has the port number. Two protocols
-					are defined in launchSettings.json; I'm using the HTTP protocol and port number. Once the client is connected to the server the client initializes
-					continuous scan mode. The client then subscribes to streaming messages from ANT channel 0 and the client app is up and running.
-				</para>
-			</content>
-		</section>
+
 		<relatedTopics>
-			<link xlink:href="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4"/>
-			<link xlink:href="721a6d97-52b3-4a6b-8835-4201a92c432c"/>
-			<link xlink:href="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac"/>
-			<link xlink:href="305fe194-b246-4184-b949-35b56b817029"/>
-			<!-- One or more of the following:
+      <!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference
@@ -171,6 +216,6 @@
       <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
       <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
       -->
-		</relatedTopics>
-	</developerConceptualDocument>
+    </relatedTopics>
+  </developerConceptualDocument>
 </topic>

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System;
 
@@ -24,17 +23,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     /// </summary>
     internal class SelectBicyclePowerImplementation : ISelectImplementation
     {
-        private readonly ILogger<SelectBicyclePowerImplementation> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SelectBicyclePowerImplementation"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public SelectBicyclePowerImplementation(ILogger<SelectBicyclePowerImplementation> logger)
-        {
-            _logger = logger;
-        }
-
         /// <summary>
         /// Gets the type of the bicycle power sensor.
         /// </summary>
@@ -45,7 +33,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <inheritdoc />
         public Type? SelectImplementationType(byte[] page)
         {
-            _logger.LogDebug("Selecting implementation type. DataPage = {DataPage}", BitConverter.ToString(page));
             if ((BicyclePower.DataPage)page[0] == BicyclePower.DataPage.CrankTorqueFrequency)
             {
                 // CTF sensor
@@ -64,17 +51,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     /// </summary>
     internal class SelectFitnessEquipmentImplementation : ISelectImplementation
     {
-        private readonly ILogger<SelectFitnessEquipmentImplementation> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SelectFitnessEquipmentImplementation"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public SelectFitnessEquipmentImplementation(ILogger<SelectFitnessEquipmentImplementation> logger)
-        {
-            _logger = logger;
-        }
-
         /// <summary>
         /// Gets the type of the fitness equipment.
         /// </summary>
@@ -85,7 +61,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <inheritdoc />
         public Type? SelectImplementationType(byte[] page)
         {
-            _logger.LogDebug("Selecting implementation type. DataPage = {DataPage}", BitConverter.ToString(page));
             switch ((FitnessEquipment.DataPage)page[0])
             {
                 case FitnessEquipment.DataPage.GeneralFEData:
@@ -104,7 +79,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                         case FitnessEquipment.FitnessEquipmentType.TrainerStationaryBike:
                             return typeof(TrainerStationaryBike);
                         default:
-                            _logger.LogError("Unknown equipment type = {EquipmentType}", page[1]);
                             return null;
                     }
                 case FitnessEquipment.DataPage.TreadmillData:
@@ -122,7 +96,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                 case FitnessEquipment.DataPage.TrainerTorqueData:
                     return typeof(TrainerStationaryBike);
                 default:
-                    _logger.LogWarning("Unknown equipment type.");
                     return null;
             }
         }

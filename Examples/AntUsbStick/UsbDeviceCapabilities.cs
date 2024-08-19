@@ -12,7 +12,7 @@ namespace SmallEarthTech.AntUsbStick
 
         /// <summary>Initializes a new instance of the <see cref="UsbDeviceCapabilities" /> class.</summary>
         /// <param name="capabilities">The capabilities.</param>
-        public UsbDeviceCapabilities(ANT_DeviceCapabilities capabilities)
+        internal UsbDeviceCapabilities(ANT_DeviceCapabilities capabilities)
         {
             MaxANTChannels = capabilities.maxANTChannels;
             MaxNetworks = capabilities.maxNetworks;

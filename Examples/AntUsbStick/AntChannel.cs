@@ -119,10 +119,7 @@ namespace SmallEarthTech.AntUsbStick
         {
             return await Task.Run(() =>
             {
-                lock (_lock)
-                {
-                    return (MessagingReturnCode)_antChannel.sendBurstTransfer(data, completeWaitTime);
-                }
+                return SendBurstTransfer(data, completeWaitTime);
             });
         }
 
@@ -140,11 +137,7 @@ namespace SmallEarthTech.AntUsbStick
         {
             return await Task.Run(() =>
             {
-                lock (_lock)
-                {
-                    return (MessagingReturnCode)_antChannel.sendAcknowledgedData((byte[])data, ackWaitTime);
-                }
-
+                return SendAcknowledgedData(data, ackWaitTime);
             });
         }
 
@@ -165,13 +158,7 @@ namespace SmallEarthTech.AntUsbStick
         {
             return await Task.Run(() =>
             {
-                lock (_lock)
-                {
-                    return (MessagingReturnCode)_antChannel.sendExtAcknowledgedData(
-                                (ushort)channelId.DeviceNumber,
-                                channelId.DeviceType,
-                                BitConverter.GetBytes(channelId.Id)[3], data, ackWaitTime);
-                }
+                return SendExtAcknowledgedData(channelId, data, ackWaitTime);
             });
         }
 
@@ -198,13 +185,7 @@ namespace SmallEarthTech.AntUsbStick
         {
             return await Task.Run(() =>
             {
-                lock (_lock)
-                {
-                    return (MessagingReturnCode)_antChannel.sendExtBurstTransfer(
-                        (ushort)channelId.DeviceNumber,
-                        channelId.DeviceType,
-                        BitConverter.GetBytes(channelId.Id)[3], data, completeWaitTime);
-                }
+                return SendExtBurstTransfer(channelId, data, completeWaitTime);
             });
         }
 

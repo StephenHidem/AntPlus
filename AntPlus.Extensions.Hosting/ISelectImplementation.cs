@@ -61,43 +61,27 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <inheritdoc />
         public Type? SelectImplementationType(byte[] page)
         {
-            switch ((FitnessEquipment.DataPage)page[0])
+            return (FitnessEquipment.DataPage)page[0] switch
             {
-                case FitnessEquipment.DataPage.GeneralFEData:
-                    switch ((FitnessEquipment.FitnessEquipmentType)page[1])
-                    {
-                        case FitnessEquipment.FitnessEquipmentType.Treadmill:
-                            return typeof(Treadmill);
-                        case FitnessEquipment.FitnessEquipmentType.Elliptical:
-                            return typeof(Elliptical);
-                        case FitnessEquipment.FitnessEquipmentType.Rower:
-                            return typeof(Rower);
-                        case FitnessEquipment.FitnessEquipmentType.Climber:
-                            return typeof(Climber);
-                        case FitnessEquipment.FitnessEquipmentType.NordicSkier:
-                            return typeof(NordicSkier);
-                        case FitnessEquipment.FitnessEquipmentType.TrainerStationaryBike:
-                            return typeof(TrainerStationaryBike);
-                        default:
-                            return null;
-                    }
-                case FitnessEquipment.DataPage.TreadmillData:
-                    return typeof(Treadmill);
-                case FitnessEquipment.DataPage.EllipticalData:
-                    return typeof(Elliptical);
-                case FitnessEquipment.DataPage.RowerData:
-                    return typeof(Rower);
-                case FitnessEquipment.DataPage.ClimberData:
-                    return typeof(Climber);
-                case FitnessEquipment.DataPage.NordicSkierData:
-                    return typeof(NordicSkier);
-                case FitnessEquipment.DataPage.TrainerStationaryBikeData:
-                    return typeof(TrainerStationaryBike);
-                case FitnessEquipment.DataPage.TrainerTorqueData:
-                    return typeof(TrainerStationaryBike);
-                default:
-                    return null;
-            }
+                FitnessEquipment.DataPage.GeneralFEData => (FitnessEquipment.FitnessEquipmentType)page[1] switch
+                {
+                    FitnessEquipment.FitnessEquipmentType.Treadmill => typeof(Treadmill),
+                    FitnessEquipment.FitnessEquipmentType.Elliptical => typeof(Elliptical),
+                    FitnessEquipment.FitnessEquipmentType.Rower => typeof(Rower),
+                    FitnessEquipment.FitnessEquipmentType.Climber => typeof(Climber),
+                    FitnessEquipment.FitnessEquipmentType.NordicSkier => typeof(NordicSkier),
+                    FitnessEquipment.FitnessEquipmentType.TrainerStationaryBike => typeof(TrainerStationaryBike),
+                    _ => null,
+                },
+                FitnessEquipment.DataPage.TreadmillData => typeof(Treadmill),
+                FitnessEquipment.DataPage.EllipticalData => typeof(Elliptical),
+                FitnessEquipment.DataPage.RowerData => typeof(Rower),
+                FitnessEquipment.DataPage.ClimberData => typeof(Climber),
+                FitnessEquipment.DataPage.NordicSkierData => typeof(NordicSkier),
+                FitnessEquipment.DataPage.TrainerStationaryBikeData => typeof(TrainerStationaryBike),
+                FitnessEquipment.DataPage.TrainerTorqueData => typeof(TrainerStationaryBike),
+                _ => null,
+            };
         }
     }
 }

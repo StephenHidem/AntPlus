@@ -39,7 +39,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// </summary>
         /// <param name="builder">The MAUI host app builder</param>
         /// <returns>The MAUI host app builder</returns>
-        public static MauiAppBuilder UseMauiAntPlus(this MauiAppBuilder builder)
+        public static MauiAppBuilder UseAntPlus(this MauiAppBuilder builder)
         {
             AddServices(builder.Services);
             return builder;

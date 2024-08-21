@@ -36,10 +36,6 @@ namespace SmallEarthTech.AntPlus
         /// <summary>The logger for derived classes to use.</summary>
         protected readonly ILogger _logger;
 
-        /// <summary>This field supplies the generic ANT+ image
-        /// from the manifest resource stream.</summary>
-        public readonly static Stream AntImage = typeof(AntDevice).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AntPlus.png");
-
         /// <summary>Occurs when no messages have been received from the device within the specified timeout duration.</summary>
         /// <remarks>
         /// Consumers can also use the <see cref="Offline"/> property instead of this event for databinding

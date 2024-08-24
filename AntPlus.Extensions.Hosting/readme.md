@@ -18,16 +18,16 @@ complete library is ready to be used by the app. Here's a snippet from the WPF s
     // create the device collection - this starts scanning for devices
     AntDevices = _host.Services.GetRequiredService<AntCollection>();
 ```
-MAUI apps can use `UseMauiAntPlus()` to add the dependencies to `MauiApp.CreateBuilder()`.
+MAUI apps can also invoke `UseAntPlus()` to add the dependencies to `MauiApp.CreateBuilder()`.
 
 An ==important== benefit of using dependency injection is that you can now add ANT devices not supported by the current
-ANT+ Class Library. A detailed guide on how to do this available in the documentation. You can also set the global
+ANT+ Class Library. A detailed guide on how to do this is available in the documentation. You can also set the global
 ANT device timeout from a variety of sources such as the command line, appsettings.json, etc. and let the DI container
 inject them into the ANT+ Class Library.
 
-##### Addtional Links
-* [Documentation](https://stephenhidem.github.io/AntPlus/html/40537603-f0ed-f134-8e97-bd58d1d8b17d.htm)
-* [Examples](https://github.com/StephenHidem/AntPlus/tree/master/Examples) - MAUI-gRPC and WpfUsbStickApp examples.
-* [Issues](https://github.com/StephenHidem/AntPlus/issues) - Mention AntPlus class library in the issue title.
+### Addtional Links
+* [Documentation](https://stephenhidem.github.io/AntPlus/html/5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4.htm)
+* [Examples Overview](https://stephenhidem.github.io/AntPlus/html/27d74052-f564-4aaa-97a0-5f166ffd5ce3.htm)
+* [Issues](https://github.com/StephenHidem/AntPlus/issues) - Mention hosting extensions in the issue title.
 * [Discussions](https://github.com/StephenHidem/AntPlus/discussions) - Post questions and join discussions.
 

@@ -27,7 +27,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// Gets the type of the bicycle power sensor.
         /// </summary>
         /// <remarks>
-        /// <see cref="CrankTorqueFrequencySensor"/>s only broadcast their main page. Other bicycle power sensors broadcast
+        /// <see cref="CrankTorqueFrequencySensor"/> sensors only broadcast their main page. Other bicycle power sensors broadcast
         /// any number of other pages. This allows the method to determine the sensor type.
         /// </remarks>
         /// <inheritdoc />

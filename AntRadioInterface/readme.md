@@ -7,7 +7,7 @@ See AntUsbStick in the [repository](https://github.com/StephenHidem/AntPlus/tree
 that supports the Dynastream/Garmin ANT USB stick.
 One important thing to note is this example uses the .NET and native DLLs provided in Dynastream's PC SDK.
 ### Additional Links
-* [Documentation](https://stephenhidem.github.io/AntPlus/html/e3aaa19e-2c22-c645-29dd-df0b206bf71f.htm)
-* [Examples](https://github.com/StephenHidem/AntPlus/tree/master/Examples) - See AntUsbStick for an example implementation.
+* [Documentation](https://stephenhidem.github.io/AntPlus/html/5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4.htm)
+* [Examples Overview](https://stephenhidem.github.io/AntPlus/html/27d74052-f564-4aaa-97a0-5f166ffd5ce3.htm)
 * [Issues](https://github.com/StephenHidem/AntPlus/issues) - Mention AntRadioInterface in the issue title.
 * [Discussions](https://github.com/StephenHidem/AntPlus/discussions) - Post questions and join discussions.

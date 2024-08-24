@@ -12,61 +12,16 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
 			<!-- <autoOutline /> -->
-			<para>API documentation for the Small Earth Technology ANT+ classes.</para>
+			<para>API documentation for the Small Earth Technology ANT+ classes and extensions.</para>
 		</introduction>
 		<!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-		<section address="Section1">
-			<title>Class Libraries</title>
-			<content>
-				<!-- Uncomment this to create a sub-section outline
-        <autoOutline /> -->
-				<table>
-					<row>
-						<entry>
-							<codeEntityReference qualifyHint="false">G:SmallEarthTech.AntPlus</codeEntityReference>
-						</entry>
-						<entry>
-							<para>Classes that support various ANT+ devices.</para>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							<codeEntityReference qualifyHint="false">N:SmallEarthTech.AntRadioInterface</codeEntityReference>
-						</entry>
-						<entry>
-							<para>Abstract classes defining an ANT radio and channel.</para>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							<codeEntityReference qualifyHint="false">N:SmallEarthTech.AntUsbStick</codeEntityReference>
-						</entry>
-						<entry>
-							<para>Concrete implementation of the AntRadioInterface using Dynastream/Garmin ANT USB sticks.</para>
-						</entry>
-					</row>
-				</table>
-			</content>
-			<!-- If a section contains a sections element, its content creates
-           sub-sections.  These are not collapsible.
-      <sections>
-          <section address="SubSection1">
-              <title>Sub-section 1</title>
-              <content>
-                  <para>Sub-section content.</para>
-              </content>
-          </section>
-          <section address="SubSection2">
-              <title>Sub-section 2</title>
-              <content>
-                  <para>Sub-section content.</para>
-              </content>
-          </section>
-      </sections> -->
-		</section>
 		<relatedTopics>
+			<codeEntityReference qualifyHint="false">G:SmallEarthTech.AntPlus</codeEntityReference>
+			<codeEntityReference qualifyHint="false">N:SmallEarthTech.AntRadioInterface</codeEntityReference>
+			<codeEntityReference qualifyHint="false">N:SmallEarthTech.AntUsbStick</codeEntityReference>
+			<codeEntityReference qualifyHint="false">N:SmallEarthTech.AntPlus.Extensions.Hosting</codeEntityReference>
 			<!-- One or more of the following:
            - A local link
            - An external link

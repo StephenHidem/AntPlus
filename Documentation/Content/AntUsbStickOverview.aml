@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="df9ea172-ed2e-4ee8-b2e6-c0df91b731a1" revisionNumber="1">
+<topic id="ec2cfcb5-62f1-4593-8295-b6b7cadab615" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,47 +17,53 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>Version 2.1.0.0 was released on August 2024.</para>
+      <para>
+				This class library provides a concrete implementation of the AntRadioInterface. The underlying hardware implementation is
+				based on the ANT libraries provided by Garmin/Dynastream. All interfaces and abstract classes defined by the AntRadioInterface.
+				are implemented.
+			</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-    <section address="Section1">
-      <content>
-				<list class="bullet">
-					<listItem>
-						<para>IAntChannel - Added asynchronous methods to SendAcknowledged and SendExtAcknowledged messages.</para>
-					</listItem>
-					<listItem>
-						<para>IAntRadio - Added Version property to interface declaration.</para>
-					</listItem>
-					<listItem>
-						<para>DeviceCapabilities and AntResponse declared as abstract classes.</para>
-					</listItem>
-				</list>
+		<section>
+			<title>UsbAntResponse</title>
+			<content>
+				<para>
+					The constructor takes ANT_Response as an argument. The argument is parsed and the base class AntResponse properties are populated.
+				</para>
 			</content>
-      <!-- If a section contains a sections element, its content creates
-           sub-sections.  These are not collapsible.
-      <sections>
-          <section address="SubSection1">
-              <title>Sub-section 1</title>
-              <content>
-                  <para>Sub-section content.</para>
-              </content>
-          </section>
-          <section address="SubSection2">
-              <title>Sub-section 2</title>
-              <content>
-                  <para>Sub-section content.</para>
-              </content>
-          </section>
-      </sections> -->
-    </section>
+		</section>
+		<section>
+			<title>UsbDeviceCapabilities</title>
+			<content>
+				<para>
+					The constructor takes ANT_DeviceCapabilities as an argument. The argument is parsed and the base class DeviceCapabilities properties are populated.
+				</para>
+			</content>
+		</section>
+		<section>
+			<title>AntRadio</title>
+			<content>
+				<para>
+					AntRadio consists of a number of partial classes that implement IAntRadio, IAntConfiguration, IAntControl, IAntUsbRadio, ICrypto, and IFitSettings.
+				</para>
+			</content>
+		</section>
+		<section>
+			<title>AntChannel</title>
+			<content>
+				<para>
+					AntChannel implements IAntChannel. This class employs locks to prevent overwriting the channel ID and data waiting to be sent to an ANT device.
+				</para>
+			</content>
+		</section>
 
-    <relatedTopics>
-			<link xlink:href="55b5d927-4d00-4e63-9f70-4f35a796c423" />
-			<!-- One or more of the following:
+		<relatedTopics>
+      <link xlink:href="2c4b4d97-d5ec-44ef-846e-d8849c278fad"/>
+			<codeEntityReference>N:SmallEarthTech.AntUsbStick</codeEntityReference>
+      <!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference

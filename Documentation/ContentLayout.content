@@ -5,10 +5,13 @@
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
   </Topic>
+  <Topic id="2c4b4d97-d5ec-44ef-846e-d8849c278fad" visible="True" title="AntRadioInterface Class Library Overview" />
+  <Topic id="ec2cfcb5-62f1-4593-8295-b6b7cadab615" visible="True" isSelected="true" title="AntUsbStick Class Library Overview" />
+  <Topic id="fc7d6894-c2f6-45d3-8edb-8c82ab0bb422" visible="True" title="AntPlus Class Library Overview" />
   <Topic id="825ed94a-e668-4d28-85ff-53cbb962a355" visible="True" isExpanded="true" title="ANT+ Hosting Extensions Overview">
     <Topic id="0e424769-d4c6-4a98-9384-a810421ad5e1" visible="True" title="How-To: Create and Add a Custom AntDevice to Host" />
   </Topic>
-  <Topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" visible="True" isExpanded="true" isSelected="true" title="Examples Overview">
+  <Topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" visible="True" isExpanded="true" title="Examples Overview">
     <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" isExpanded="true" title="MAUI-gRPC">
       <Topic id="721a6d97-52b3-4a6b-8835-4201a92c432c" visible="True" />
       <Topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" visible="True" />
@@ -21,7 +24,7 @@
       <HelpKeyword index="K" term="Unity" />
     </HelpKeywords>
   </Topic>
-  <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries" />
+  <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries API" />
   <Topic id="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" visible="True" isExpanded="true" title="Version History">
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />

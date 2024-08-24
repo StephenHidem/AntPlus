@@ -33,8 +33,8 @@
         <!-- Uncomment this to create a sub-section outline
         <autoOutline /> -->
         <para>
-					This class provides two static methods to add the ANT+ classes to the host builder. UseAntPlus() is
-					used with IHostBuilder implementations and UseMauiAntPlus() is used by MauiAppBuilder implementations.
+					This class provides two static methods to add the ANT+ classes to the host builder. UseAntPlus() is overloaded
+					to work with IHostBuilder implementations and MauiAppBuilder implementations.
 					Their purpose is identical; inject all the ANT+ devices and support infrastructure into the DI container.
 					The TimeoutOptions class will also be added to the DI container and the configuration is bound by the container.
 				</para>

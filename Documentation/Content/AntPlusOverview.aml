@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fc7d6894-c2f6-45d3-8edb-8c82ab0bb422" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para>
+				The AntPlus class library supports a number of ANT+ device profiles as defined by Garmin/Dynastream. All device profiles
+				are based on the abstract class AntDevice. Common data pages and timeout options are provided to support the device profiles.
+				The following device profiles are supported -
+			</para>
+			<list class="bullet">
+				<listItem>
+					<para>Asset Tracker</para>
+				</listItem>
+				<listItem>
+					<para>Bicycle Power</para>
+					<list class="bullet">
+						<listItem>
+							<para>Crank Torque Frequency Sensor</para>
+						</listItem>
+						<listItem>
+							<para>Standard Power Sensor</para>
+						</listItem>
+						<listItem>
+							<para>Standard Crank Torque Sensor</para>
+						</listItem>
+						<listItem>
+							<para>Standard Wheel Torque Sensor</para>
+						</listItem>
+					</list>
+				</listItem>
+				<listItem>
+					<para>Bike Speed and Cadence</para>
+					<list class="bullet">
+						<listItem>
+							<para>Bike Cadence Sensor</para>
+						</listItem>
+						<listItem>
+							<para>Bike Speed Sensor</para>
+						</listItem>
+						<listItem>
+							<para>Combined Speed and Cadence Sensor</para>
+						</listItem>
+					</list>
+				</listItem>
+				<listItem>
+					<para>Fitness Equipment</para>
+					<list class="bullet">
+						<listItem>
+							<para>Climber</para>
+						</listItem>
+						<listItem>
+							<para>Elliptical</para>
+						</listItem>
+						<listItem>
+							<para>Nordic Skier</para>
+						</listItem>
+						<listItem>
+							<para>Rower</para>
+						</listItem>
+						<listItem>
+							<para>Trainer/Stationary Bike</para>
+						</listItem>
+						<listItem>
+							<para>Treadmill</para>
+						</listItem>
+					</list>
+				</listItem>
+				<listItem>
+					<para>Geocache</para>
+				</listItem>
+				<listItem>
+					<para>Heart Rate</para>
+				</listItem>
+				<listItem>
+					<para>Muscle Oxygen</para>
+				</listItem>
+				<listItem>
+					<para>Stride Based Speed and Distance Monitor</para>
+				</listItem>
+				<listItem>
+					<para>Unknown</para>
+				</listItem>
+			</list>
+			<para>
+				See <codeEntityReference qualifyHint="false">G:SmallEarthTech.AntPlus.DeviceProfiles</codeEntityReference> for specific device details.
+			</para>
+    </introduction>
+
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+		<section>
+			<title>AntDevice</title>
+			<content>
+				<para>
+					This abstract class provides properties and methods common to all ANT devices. The virtual Parse method handles resetting the
+					device timeout each time a message is received. The RequestDataPage method sends a data page request to the ANT device.
+					The SendExtAcknowledgedMessage method sends commands/requests to the ANT device.
+				</para>
+			</content>
+		</section>
+		<section>
+			<title>CommonDataPages</title>
+			<content>
+				<para>
+					CommonDataPages are typically added to derived AntDevice classes as a read-only property if the ANT device supports common data pages.
+				</para>
+				<code language="c#">public CommonDataPages CommonDataPages { get; }</code>
+				<para>
+					The AntDevice constructor will create and assign the CommonDataPages class. Here's an example from the BikeRadar class -
+				</para>
+				<code language="c#" source="..\..\AntPlus\Examples\WpfUsbStickApp\CustomAntDevice\BikeRadar.cs" region="Ctor"/>
+			</content>
+		</section>
+		<section>
+			<title>AntDeviceCollection</title>
+			<content>
+				<para>
+					This is a thread-safe observable collection of ANT devices. The constructor will initialize the ANT radio for continuous scan
+					mode and direct all messages received from the ANT radio to a private handler. This handler will select an ANT device from
+					the collection or create a new ANT device and add it to the collection. The message is then passed to the ANT device parser
+					for handling by the device.
+				</para>
+				<alert class="note">
+					<para>
+						Prefer AntCollection and the hosting extensions if your application uses dependency injection. See <link xlink:href="825ed94a-e668-4d28-85ff-53cbb962a355"/> for details.
+					</para>
+				</alert>
+			</content>
+		</section>
+		<section>
+			<title>TimeoutOptions</title>
+			<content>
+				<para>
+					Set either Timeout in milliseconds or MissedMessages to the number of missed messages before signaling device offline.
+					Prefer MissedMessages as this scales the timeout to the ANT device broadcast message rate. Set Timeout to -1 to
+					disable ANT device timeouts.
+				</para>
+			</content>
+		</section>
+		<relatedTopics>
+			<codeEntityReference qualifyHint="false">G:SmallEarthTech.AntPlus.DeviceProfiles</codeEntityReference>
+			<link xlink:href="825ed94a-e668-4d28-85ff-53cbb962a355"/>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

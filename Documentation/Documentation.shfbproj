@@ -117,6 +117,9 @@
     <Folder Include="media" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\AntPlusOverview.aml" />
+    <None Include="Content\AntRadioInterfaceOverview.aml" />
+    <None Include="Content\AntUsbStickOverview.aml" />
     <None Include="Content\Examples\ExamplesOverview.aml" />
     <None Include="Content\HostingExtensions\HostingExtensionsOverview.aml" />
     <None Include="Content\HostingExtensions\How To Create and Add AntDevice.aml" />

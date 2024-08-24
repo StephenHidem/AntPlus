@@ -12,19 +12,18 @@ using System.Linq;
 using System.Reflection;
 using WpfUsbStickApp.CustomAntDevice;
 
-namespace WpfUsbStickApp.ViewModels
+namespace WpfUsbStickApp
 {
     internal class MainWindowViewModel
     {
+        private readonly IHost _host;
+
         public DeviceCapabilities DeviceCapabilities { get; }
         public string ProductDescription { get; }
         public uint SerialNumber { get; }
         public string HostVersion { get; }
-
-        private readonly IHost _host;
-
         public AntCollection AntDevices { get; }
-        public static Stream AntImage => AntDevice.AntImage;
+        public static Stream? AntImage => typeof(AntDevice).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.AntPlus.png");
 
         public MainWindowViewModel()
         {
@@ -56,7 +55,7 @@ namespace WpfUsbStickApp.ViewModels
             HostVersion = radio.Version;
 
             // log app info
-            var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name!.StartsWith("Ant"));
+            var antAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(asm => asm.Name!.Contains("Ant"));
             var logger = _host.Services.GetRequiredService<ILogger<App>>();
             logger.LogInformation("{App}", Assembly.GetExecutingAssembly().GetName().FullName);
             foreach (var asm in antAssemblies)
@@ -64,7 +63,7 @@ namespace WpfUsbStickApp.ViewModels
                 logger?.LogInformation("{AntAssembly}", asm.FullName);
             }
 
-            // create the device collection
+            // create the device collection and start scanning for broadcasting ANT devices
             AntDevices = _host.Services.GetRequiredService<AntCollection>();
             _ = AntDevices.StartScanning();
         }

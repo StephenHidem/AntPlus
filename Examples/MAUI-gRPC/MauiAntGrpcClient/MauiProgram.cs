@@ -23,7 +23,7 @@ namespace MauiAntGrpcClient
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
-                .UseMauiAntPlus()
+                .UseAntPlus()
                 .RegisterAppServices()
                 .RegisterViewModels()
                 .RegisterPages();

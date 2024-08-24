@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using WpfUsbStickApp.CustomAntDevice;
-using WpfUsbStickApp.ViewModels;
 using WpfUsbStickApp.Views;
 
 namespace WpfUsbStickApp

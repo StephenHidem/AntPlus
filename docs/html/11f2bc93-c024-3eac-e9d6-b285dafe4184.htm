@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html ><html lang="en-US"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="shortcut icon" href="../icons/favicon.ico" /><link rel="stylesheet" href="../css/bulma.css" /><link rel="stylesheet" href="../css/font-awesome.min.css" /><link rel="stylesheet" href="../css/presentationStyle.css" /><link rel="stylesheet" href="../css/vs.min.css" /><script src="../scripts/jquery-3.5.1.min.js"></script><script src="../scripts/clipboard.min.js"></script><script src="../scripts/highlight.min.js"></script><script src="../scripts/presentationStyle.js"></script><title>AntChannel Methods</title><meta name="Title" content="Methods" /><meta name="Help.Id" content="Methods.T:SmallEarthTech.AntUsbStick.AntChannel" /><meta name="Help.ContentType" content="Reference" /><meta name="container" content="SmallEarthTech.AntUsbStick" /><meta name="guid" content="11f2bc93-c024-3eac-e9d6-b285dafe4184" /><meta name="tocFile" content="../toc/IDACH.xml" /></head><body><div class="fixedLayout"><div id="Header" class="fixedHeader"><div class="pageHeader level mb-0 py-2 px-4"><div id="TitleContainer" class="level-left"><div class="level-item"><img src="../icons/Help.png" /></div><div id="DocumentationTitle" class="level-item">Small Earth Technology ANT+ Class Library</div></div><div id="LangFilterSearchContainer" class="level-right"><div class="level-item"><div class="dropdown is-hoverable"><div class="dropdown-trigger"><button class="button" aria-haspopup="true" aria-controls="dropdown-menu"><span id="CurrentLanguage"></span><span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span></button></div><div class="dropdown-menu" role="menu"><div id="LanguageSelections" class="dropdown-content"><a class="dropdown-item languageFilterItem" data-languageId="cs">C#</a><a class="dropdown-item languageFilterItem" data-languageId="vb">VB</a><a class="dropdown-item languageFilterItem" data-languageId="cpp">C++</a><a class="dropdown-item languageFilterItem" data-languageId="fs">F#</a></div></div></div></div><div class="level-item"><form id="SearchForm" action="#" onsubmit="TransferToSearchPage(); return false;"><div class="field"><div class="control has-icons-left"><input id="SearchTerms" class="input" type="text" maxlength="200" placeholder="Search" /><span class="icon is-small is-left"><i class="fa fa-search"></i></span><button id="SearchButton" type="submit" class="is-hidden"></button></div></div></form></div></div></div></div><div class="fixedContent"><nav class="breadcrumb my-1 px-2 border-bottom" role="navigation"><ul id="TopicBreadcrumbs" /></nav><div id="ContentContainer" class="columns pl-5 pr-5 fixedContent"><div id="ShowHideTOCColumn" class="column is-hidden-tablet"><a id="ShowHideTOC">Show/Hide TOC</a></div><div id="TOCColumn" class="column is-hidden-mobile"><nav class="toc"><ul id="TableOfContents" class="toc-menu" /></nav></div><div id="Resizer" class="is-hidden"></div><div id="TopicContent" class="column content is-7"><h1>Ant<wbr />Channel Methods</h1><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>Methods</h2><div id="IDADASection"><table id="MethodList" class="table is-hoverable"><tr><td><a href="f958fc38-d59b-c32d-c072-8f6e241cb669.htm">AssignChannel</a></td><td>
+            Assign an ANT channel along with its main parameters.
+            Throws exception if the network number is invalid.
+            </td></tr><tr><td><a href="2539b0e9-6754-2353-97a5-dd491b5f84f3.htm">AssignChannelExt</a></td><td>
+            Assign an ANT channel, using extended channel assignment
+            Throws exception if the network number is invalid.
+            </td></tr><tr><td><a href="400bf816-646a-6dcb-d5d1-58a92371542f.htm">CloseChannel</a></td><td>
+            Close this channel
+            </td></tr><tr><td><a href="bc1853ed-b4f4-0c03-b9db-a97c0a201344.htm">ConfigFrequencyAgility</a></td><td>
+            This function configures the three operating RF frequencies for ANT frequency agility mode
+            and should be used with the AdvFrequencyAgility extended channel assignment flag.
+            Should not be used with shared, or Tx/Rx only channel types.
+            This feature is not available on all ANT devices.
+            </td></tr><tr><td><a href="1cdc9ea9-dca7-34e8-9fc4-4f39d964ed80.htm">Dispose</a></td><td>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</td></tr><tr><td><a href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)" target="_blank" rel="noopener noreferrer">Equals</a></td><td>Determines whether the specified object is equal to the current object.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr><tr><td><a href="https://learn.microsoft.com/dotnet/api/system.object.finalize" target="_blank" rel="noopener noreferrer">Finalize</a></td><td>Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr><tr><td><a href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode" target="_blank" rel="noopener noreferrer">GetHashCode</a></td><td>Serves as the default hash function.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr><tr><td><a href="https://learn.microsoft.com/dotnet/api/system.object.gettype" target="_blank" rel="noopener noreferrer">GetType</a></td><td>Gets the <a href="https://learn.microsoft.com/dotnet/api/system.type" target="_blank" rel="noopener noreferrer">Type</a> of the current instance.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr><tr><td><a href="30e9472d-7fa4-9ff1-352a-a321b53f842d.htm">IncludeExcludeListAddChannel</a></td><td>
+            Add the given channel ID to the channel's inclusion/exclusion list.
+            The channelID is then included or excluded from the wild card search depending on how the list is configured.
+            Throws exception if listIndex &gt; 3.
+            </td></tr><tr><td><a href="2c1cb75c-8c2a-fe9c-4e4d-6a30193c2c2a.htm">IncludeExcludeListConfigure</a></td><td>
+            Configures the inclusion/exclusion list. If isExclusionList is true the channel IDs will be
+            excluded from any wild card search on this channel. Otherwise the IDs are the only IDs accepted in the search.
+            Throws exception if list size is greater than 4.
+            </td></tr><tr><td><a href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone" target="_blank" rel="noopener noreferrer">MemberwiseClone</a></td><td>Creates a shallow copy of the current <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr><tr><td><a href="3f2e2813-7ae3-56e4-c89d-22df4e103b14.htm">OpenChannel</a></td><td>
+            Opens this channel
+            </td></tr><tr><td><a href="cf85b210-3479-d94d-fff3-5b8ab9b87d60.htm">RequestChannelID</a></td><td>Requests the channel identifier.</td></tr><tr><td><a href="8a387338-9343-dbf4-5398-b6e18b0c99eb.htm">RequestStatus</a></td><td>
+            Returns current channel status.
+            Throws exception on timeout.
+            </td></tr><tr><td><a href="4ce54b14-2bf5-52f7-e627-6a228affe697.htm">SendAcknowledgedData</a></td><td>
+            Sends the given data as an acknowledged transmission.
+            Throws exception if data &gt; 8-bytes in length
+            </td></tr><tr><td><a href="98971463-b793-e099-4472-d1897fb19263.htm">SendAcknowledgedDataAsync</a></td><td>
+            Sends the given data as an acknowledged transmission.
+            Throws exception if data &gt; 8-bytes in length
+            </td></tr><tr><td><a href="07c157cb-894a-e82d-5a4a-4eceadf96930.htm">SendBroadcastData</a></td><td>
+            Sends the given data on the broadcast transmission.
+            Throws exception if data &gt; 8-bytes in length
+            </td></tr><tr><td><a href="1595203e-f355-708e-3b6e-9028c8b551be.htm">SendBurstTransfer</a></td><td>
+            Sends the given data as a burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
+            </td></tr><tr><td><a href="b92de7c8-c7e2-b13a-2a3f-3e7182037bd3.htm">SendBurstTransferAsync</a></td><td>
+            Sends the given data as a burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled
+            </td></tr><tr><td><a href="1b0f2ee7-08bd-5a37-48a1-6b3de9f85e76.htm">SendExtAcknowledgedData</a></td><td>Sends the given data as an extended acknowledged transmission.
+            Throws exception if data &gt; 8-bytes in length</td></tr><tr><td><a href="ab343e6f-80c0-2041-39b2-aec2cb02a830.htm">SendExtAcknowledgedDataAsync</a></td><td>Sends the given data as an extended acknowledged transmission.
+            Throws exception if data &gt; 8-bytes in length</td></tr><tr><td><a href="d62de0a8-beeb-2f74-01a1-11af9146fcdc.htm">SendExtBroadcastData</a></td><td>Sends the given data as an extended broadcast transmission.
+            Throws exception if data &gt; 8-bytes in length</td></tr><tr><td><a href="67689b19-0fe1-3e6e-12d6-3fd7214dd804.htm">SendExtBurstTransfer</a></td><td>Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled</td></tr><tr><td><a href="1421f0f2-2f50-6bf8-7b8b-3f20fb15c79f.htm">SendExtBurstTransferAsync</a></td><td>Sends the given data as an extended burst transmission. Returns: 0=fail, 1=pass, 2=timeout, 3=cancelled</td></tr><tr><td><a href="ee196a9e-a742-5b5b-4b92-c3630afa9bf3.htm">SetChannelFreq</a></td><td>
+            Set this channel's RF frequency, with the given offset from 2400Mhz.
+            Note: Changing this frequency may affect the ability to certify the product in certain areas of the world.
+            </td></tr><tr><td><a href="4db18e4e-19d4-3f1c-502c-67e2ae5aa78e.htm">SetChannelID</a></td><td>Set the Channel ID of this channel.
+            Throws exception if device type is &gt; 127.</td></tr><tr><td><a href="74ed0fe5-8517-72c3-7b66-b6f9dc7bf9ee.htm">SetChannelID_UsingSerial</a></td><td>
+            Identical to setChannelID, except last two bytes of serial number are used for device number.
+            Not available on all ANT devices.
+            Throws exception if device type is &gt; 127.
+            </td></tr><tr><td><a href="8c5fc671-31a8-6c79-ef50-40fd716abf5a.htm">SetChannelPeriod</a></td><td>
+            Set this channel's messaging period
+            </td></tr><tr><td><a href="b49edb55-deb7-fc34-ebff-49628f22c03e.htm">SetChannelSearchTimeout</a></td><td>
+            Set the search timeout
+            </td></tr><tr><td><a href="8b035d5a-b99d-b8cb-6dcf-b1b75802cbf6.htm">SetChannelTransmitPower</a></td><td>
+            Set the transmission power of this channel
+            Throws exception if device is not capable of per-channel transmit power.
+            </td></tr><tr><td><a href="fd8a9131-54d0-c9ab-f0a7-a5c92752d3ee.htm">SetLowPrioritySearchTimeout</a></td><td>
+            Sets the search timeout for the channel's low-priority search, where it will not interrupt other open channels.
+            When this period expires the channel will drop to high-priority search.
+            This feature is not available in all ANT devices.
+            </td></tr><tr><td><a href="0d3b8b52-6602-a869-74b5-0c6d9b0ab6b2.htm">SetProximitySearch</a></td><td>
+            Enables a one time proximity requirement for searching.  Only ANT devices within the set proximity bin can be acquired.
+            Search threshold values are not correlated to specific distances as this will be dependent on the system design.
+            This feature is not available on all ANT devices.
+            Throws exception if given bin value is &gt; 10.
+            </td></tr><tr><td><a href="dc240340-b56e-a84d-fd55-e69a4692ed5e.htm">SetSearchThresholdRSSI</a></td><td>
+            Set this channel's RSSI threshold (ARCT)
+            </td></tr><tr><td><a href="https://learn.microsoft.com/dotnet/api/system.object.tostring" target="_blank" rel="noopener noreferrer">ToString</a></td><td>Returns a string that represents the current object.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr><tr><td><a href="60455b09-88e8-ee07-87c4-cc1c7a63ca1c.htm">UnassignChannel</a></td><td>
+            Unassign this channel.
+            </td></tr></table></div><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>See Also</h2><div id="seeAlsoSection"><h4>Reference</h4><div><a href="4424ab0c-2c93-e1a5-f4de-99eb1669ddf8.htm">AntChannel Class</a></div><div><a href="bf8a5d40-6d1a-6d79-a57f-fd17688d7682.htm">SmallEarthTech.AntUsbStick Namespace</a></div></div></div><div id="InThisArticleColumn" class="column is-hidden-mobile"><nav class="menu sticky is-hidden"><p class="menu-label"><strong>In This Article</strong></p><ul id="InThisArticleMenu" class="menu-list"><li><a class="quickLink">Methods</a></li><li><a class="quickLink">See Also</a></li></ul></nav></div></div></div><footer id="PageFooter" class="footer border-top py-3 fixedFooter"><div class="columns"><div id="FooterContent" class="column"><p>© 2022 Stephen Hidem.</p> 
+				</div></div></footer></div><script>$(function(){
+SetDefaultLanguage("cs");
+LoadTocFile(null, null);
+InitializeQuickLinks();
+
+$(".toggleSection" ).click(function () {
+    SectionExpandCollapse(this);
+});
+
+$(".toggleSection").keypress(function () {
+    SectionExpandCollapseCheckKey(this, event)
+});
+});</script></body></html>

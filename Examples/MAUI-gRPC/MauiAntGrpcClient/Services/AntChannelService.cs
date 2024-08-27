@@ -10,7 +10,7 @@ namespace MauiAntGrpcClient.Services
 {
     internal class AntChannelService : IAntChannel
     {
-        private readonly ILogger<AntChannelService> _logger;
+        private readonly ILogger _logger;
         private readonly gRPCAntChannel.gRPCAntChannelClient _client;
         private readonly object _lock = new();
         private event EventHandler<AntResponse>? ResponseReceived;
@@ -47,7 +47,7 @@ namespace MauiAntGrpcClient.Services
 
         public byte ChannelNumber { get; }
 
-        public AntChannelService(ILogger<AntChannelService> logger, byte antChannel, GrpcChannel grpcChannel)
+        public AntChannelService(ILogger logger, byte antChannel, GrpcChannel grpcChannel)
         {
             _logger = logger;
             ChannelNumber = antChannel;

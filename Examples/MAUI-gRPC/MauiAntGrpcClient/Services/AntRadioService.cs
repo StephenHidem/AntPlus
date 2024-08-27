@@ -2,7 +2,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System.Net;
 using System.Net.Sockets;
@@ -10,15 +9,14 @@ using System.Text;
 
 namespace MauiAntGrpcClient.Services
 {
-    public partial class AntRadioService(ILogger<AntRadioService> logger, ILoggerFactory loggerFactory) : IAntRadio
+    public partial class AntRadioService(ILogger<AntRadioService> logger) : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 5073;              // gRPC port
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
-        private readonly ILoggerFactory _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-        private readonly ILogger<AntRadioService> _logger = logger ?? NullLogger<AntRadioService>.Instance;
+        private readonly ILogger<AntRadioService> _logger = logger;
         private GrpcChannel? _channel;
 
         public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
@@ -74,10 +72,9 @@ namespace MauiAntGrpcClient.Services
             }
             InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
-            ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();
             for (byte i = 0; i < reply.NumChannels; i++)
             {
-                channels[i] = new AntChannelService(logger, i, _channel);
+                channels[i] = new AntChannelService(_logger, i, _channel);
             }
             return channels;
         }

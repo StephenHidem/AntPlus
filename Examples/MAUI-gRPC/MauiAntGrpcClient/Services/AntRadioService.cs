@@ -17,7 +17,7 @@ namespace MauiAntGrpcClient.Services
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
         private readonly ILogger<AntRadioService> _logger = logger;
-        private GrpcChannel? _channel;
+        private GrpcChannel? _grpcChannel;
 
         public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
         public string ProductDescription { get; private set; } = string.Empty;
@@ -55,8 +55,8 @@ namespace MauiAntGrpcClient.Services
             }
 
             UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
-            _channel = GrpcChannel.ForAddress(uriBuilder.Uri);
-            _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
+            _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri);
+            _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
             PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
             ProductDescription = reply.ProductDescription;
             SerialNumber = reply.SerialNumber;
@@ -65,16 +65,16 @@ namespace MauiAntGrpcClient.Services
 
         public async Task<IAntChannel[]> InitializeContinuousScanMode()
         {
-            if (_channel == null)
+            if (_grpcChannel == null)
             {
-                _logger.LogError("_channel is null!");
+                _logger.LogError("_grpcChannel is null!");
                 return [];
             }
             InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             for (byte i = 0; i < reply.NumChannels; i++)
             {
-                channels[i] = new AntChannelService(_logger, i, _channel);
+                channels[i] = new AntChannelService(_logger, i, _grpcChannel);
             }
             return channels;
         }

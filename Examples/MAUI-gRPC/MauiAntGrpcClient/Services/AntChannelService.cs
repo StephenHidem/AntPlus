@@ -47,28 +47,31 @@ namespace MauiAntGrpcClient.Services
 
         public byte ChannelNumber { get; }
 
-        public AntChannelService(ILogger logger, byte antChannel, GrpcChannel grpcChannel)
+        public AntChannelService(ILogger logger, byte channelNumber, GrpcChannel grpcChannel)
         {
             _logger = logger;
-            ChannelNumber = antChannel;
+            ChannelNumber = channelNumber;
             _client = new gRPCAntChannel.gRPCAntChannelClient(grpcChannel);
-            _logger.LogInformation("Created AntChannelService, ANT channel {AntChannel}.", antChannel);
+            _logger.LogInformation("Created AntChannelService, ANT channel {AntChannel}.", ChannelNumber);
         }
 
         private async void HandleChannelResponseEvents()
         {
-            _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber });
             try
             {
-                await foreach (ChannelResponse? update in _response.ResponseStream.ReadAllAsync())
+                _response = _client.Subscribe(new SubscribeRequest { ChannelNumber = ChannelNumber }, cancellationToken: App.CancellationTokenSource.Token);
+                await foreach (ChannelResponse? update in _response.ResponseStream.ReadAllAsync(App.CancellationTokenSource.Token))
                 {
                     ResponseReceived?.Invoke(this, new GrpcAntResponse(update));
                 }
             }
-            catch (Exception ex)
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.Cancelled)
             {
-                _logger.LogWarning(ex, "Error occurred reading from the gRPC stream.");
-                _response?.Dispose();
+                _logger.LogInformation("RpcException: operation cancelled");
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("OperationCanceledException");
             }
         }
 

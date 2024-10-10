@@ -2,7 +2,7 @@
 
 namespace AntGrpcService.Services
 {
-    public class AntChannelSubscriber : IAntChannelSubscriber
+    public sealed class AntChannelSubscriber : IAntChannelSubscriber
     {
         private readonly IAntChannel _antChannel;
 
@@ -11,17 +11,17 @@ namespace AntGrpcService.Services
         public AntChannelSubscriber(IAntChannel antChannel)
         {
             _antChannel = antChannel;
-            _antChannel.ChannelResponse += ChannelResponse;
+            _antChannel.ChannelResponse += SendChannelResponse;
         }
 
-        private void ChannelResponse(object? sender, AntResponse e)
+        private void SendChannelResponse(object? sender, AntResponse e)
         {
             OnAntResponse?.Invoke(this, e);
         }
 
         public void Dispose()
         {
-            _antChannel.ChannelResponse -= ChannelResponse;
+            _antChannel.ChannelResponse -= SendChannelResponse;
         }
     }
 }

@@ -4,6 +4,8 @@ option csharp_namespace = "AntChannelGrpcService";
 
 package AntRadioPackage;
 
+import "google/protobuf/wrappers.proto";
+
 // The AntChannel gRPC service.
 service gRPCAntChannel {
     // Subscribe to channel response event.
@@ -18,7 +20,7 @@ message SubscribeRequest {
 message ChannelResponse {
     uint32 channel_number = 1;
     uint32 response_id = 2;
-    uint32 channel_id = 3;
+    google.protobuf.UInt32Value channel_id = 3;
     bytes payload = 4;
     int32 rssi = 5;
     int32 threshold_configuration_value = 6;

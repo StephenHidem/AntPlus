@@ -38,6 +38,7 @@ namespace MauiAntGrpcClient
         private static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
         {
             mauiAppBuilder.Services.AddSingleton<IAntRadio, AntRadioService>();
+            mauiAppBuilder.Services.AddSingleton<CancellationTokenSource>();
             return mauiAppBuilder;
         }
 

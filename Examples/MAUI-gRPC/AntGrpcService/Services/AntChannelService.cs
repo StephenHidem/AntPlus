@@ -5,14 +5,20 @@ using SmallEarthTech.AntRadioInterface;
 
 namespace AntGrpcService.Services
 {
+    /// <summary>
+    /// Server-side implementation of gRPCAntChannel.
+    /// </summary>
+    /// <param name="logger">AntChannelService logger.</param>
+    /// <param name="antRadio">ANT radio to use.</param>
+    /// <param name="subscriberFactory">ANT channel subscriber factory.</param>
     public class AntChannelService(ILogger<AntChannelService> logger, IAntRadio antRadio, IAntChannelSubscriberFactory subscriberFactory) : gRPCAntChannel.gRPCAntChannelBase
     {
-        public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<ChannelResponse> responseStream, ServerCallContext context)
+        public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<ChannelResponseUpdate> responseStream, ServerCallContext context)
         {
             logger.LogInformation("Subscriber entered. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
             using IAntChannelSubscriber subscriber = subscriberFactory.CreateAntChannelSubscriber(antRadio.GetChannel((int)request.ChannelNumber));
 
-            // create a response handler and add it to subscriber
+            // create a response handler delegate and add it to subscriber
             async void handler(object? sender, AntResponse args) => await WriteUpdateAsync(responseStream, args);
             subscriber.OnAntResponse += handler;
 
@@ -24,12 +30,19 @@ namespace AntGrpcService.Services
             logger.LogInformation("Subscriber exited. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
         }
 
-        private async Task WriteUpdateAsync(IServerStreamWriter<ChannelResponse> responseStream, AntResponse channelResponse)
+        /// <summary>
+        /// Writes the ANT response update to the stream.
+        /// </summary>
+        /// <param name="responseStream">Subscribed stream.</param>
+        /// <param name="channelResponse">ANT channel response received.</param>
+        /// <returns>Task to await</returns>
+        private async Task WriteUpdateAsync(IServerStreamWriter<ChannelResponseUpdate> responseStream, AntResponse channelResponse)
         {
             try
             {
-                await responseStream.WriteAsync(new ChannelResponse
+                await responseStream.WriteAsync(new ChannelResponseUpdate
                 {
+                    // build channel response update message
                     ChannelId = channelResponse.ChannelId?.Id,
                     ChannelNumber = channelResponse.ChannelNumber,
                     ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
@@ -46,6 +59,11 @@ namespace AntGrpcService.Services
             }
         }
 
+        /// <summary>
+        /// This task completes when the connection is closed by the client.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>Task that completes when canceled.</returns>
         private static Task AwaitCancellation(CancellationToken token)
         {
             var completion = new TaskCompletionSource();

@@ -9,14 +9,13 @@ using System.Text;
 
 namespace MauiAntGrpcClient.Services
 {
-    public partial class AntRadioService(ILogger<AntRadioService> logger) : IAntRadio
+    public partial class AntRadioService(ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource) : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 5073;              // gRPC port
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
-        private readonly ILogger<AntRadioService> _logger = logger;
         private GrpcChannel? _grpcChannel;
 
         public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
@@ -45,12 +44,12 @@ namespace MauiAntGrpcClient.Services
                     result = await udpClient.ReceiveAsync(cts.Token);
                     ServerIPAddress = result.RemoteEndPoint.Address;
                     string msg = Encoding.ASCII.GetString(result.Buffer);
-                    _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
+                    logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
                     break;
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("FindAntRadioServerAsync: OperationCanceledException. Retry.");
+                    logger.LogInformation("FindAntRadioServerAsync: OperationCanceledException. Retry.");
                 }
             }
 
@@ -67,15 +66,16 @@ namespace MauiAntGrpcClient.Services
         {
             if (_grpcChannel == null)
             {
-                _logger.LogError("_grpcChannel is null!");
+                logger.LogError("_grpcChannel is null!");
                 return [];
             }
             InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             for (byte i = 0; i < reply.NumChannels; i++)
             {
-                channels[i] = new AntChannelService(_logger, i, _grpcChannel);
+                channels[i] = new AntChannelService(logger, i, _grpcChannel);
             }
+            channels[0].HandleChannelResponseEvents(cancellationTokenSource.Token);
             return channels;
         }
 

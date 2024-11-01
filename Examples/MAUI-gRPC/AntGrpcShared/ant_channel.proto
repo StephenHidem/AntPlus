@@ -9,7 +9,7 @@ import "google/protobuf/wrappers.proto";
 // The AntChannel gRPC service.
 service gRPCAntChannel {
     // Subscribe to channel response event.
-    rpc Subscribe (SubscribeRequest) returns (stream ChannelResponse);
+    rpc Subscribe (SubscribeRequest) returns (stream ChannelResponseUpdate);
     // Sends an extended acknowledged data message.
     rpc SendExtAcknowledgedData (ExtDataRequest) returns (MessagingCodeReply);
 }
@@ -17,7 +17,7 @@ service gRPCAntChannel {
 message SubscribeRequest {
     uint32 channel_number = 1;
 }
-message ChannelResponse {
+message ChannelResponseUpdate {
     uint32 channel_number = 1;
     uint32 response_id = 2;
     google.protobuf.UInt32Value channel_id = 3;

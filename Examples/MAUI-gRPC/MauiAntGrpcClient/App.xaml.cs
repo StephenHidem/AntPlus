@@ -6,10 +6,12 @@ namespace MauiAntGrpcClient
     public partial class App : Application
     {
         // provides an application-wide cancellation token source
-        public readonly static CancellationTokenSource CancellationTokenSource = new();
+        //public readonly static CancellationTokenSource CancellationTokenSource = new();
+        private readonly CancellationTokenSource _cts;
 
-        public App()
+        public App(CancellationTokenSource cancellationTokenSource)
         {
+            _cts = cancellationTokenSource;
             InitializeComponent();
 
             MainPage = new AppShell();
@@ -22,7 +24,7 @@ namespace MauiAntGrpcClient
             window.Destroying += (s, e) =>
             {
                 Debug.WriteLine("App: destroying window.");
-                CancellationTokenSource.Cancel();
+                _cts.Cancel();
             };
             return window;
         }

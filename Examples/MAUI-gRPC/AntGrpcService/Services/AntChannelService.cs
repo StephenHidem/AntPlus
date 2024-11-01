@@ -62,7 +62,7 @@ namespace AntGrpcService.Services
         /// <summary>
         /// This task completes when the connection is closed by the client.
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="token">Client cancellation token</param>
         /// <returns>Task that completes when canceled.</returns>
         private static Task AwaitCancellation(CancellationToken token)
         {

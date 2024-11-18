@@ -18,6 +18,8 @@
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<AssemblyVersion>1.0.1.0</AssemblyVersion>
+	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>

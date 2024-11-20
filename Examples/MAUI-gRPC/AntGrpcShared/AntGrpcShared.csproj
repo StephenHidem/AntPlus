@@ -7,6 +7,9 @@
     <Authors>Stephen Hidem</Authors>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<FileVersion>2.0.0.0</FileVersion>
+	<Version>$(VersionPrefix)2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

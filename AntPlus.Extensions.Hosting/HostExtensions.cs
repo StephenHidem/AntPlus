@@ -12,7 +12,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     /// <summary>
     /// This class provides static methods to configure the application host builder. MAUI apps and standard Windows apps are supported. 
     /// </summary>
-    public static partial class HostExtensions
+    public static class HostExtensions
     {
         /// <summary>
         /// Gets the service collection. This allows the <see cref="AntCollection"/> to enumerate the service collection to find

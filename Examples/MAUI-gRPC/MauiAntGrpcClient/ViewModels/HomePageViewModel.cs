@@ -37,10 +37,10 @@ namespace MauiAntGrpcClient.ViewModels
         {
             _antCollection = antCollection;
             _antRadioService = (AntRadioService)antRadioService;
-            _ = Task.Run(() => { _ = SearchAsync(); });
+            _ = Task.Run(() => { SearchAsync(); });
         }
 
-        private async Task SearchAsync()
+        private async void SearchAsync()
         {
             try
             {

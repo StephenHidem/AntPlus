@@ -26,6 +26,15 @@ namespace MauiAntGrpcClient.Services
 
         public event EventHandler<AntResponse>? RadioResponse { add { } remove { } }
 
+        /// <summary>
+        /// Searches for an ANT radio server. A receive task creates a UdpClient and then sends a
+        /// message to the multicast endpoint every 2 seconds until a server responds. The server
+        /// IP address in the response is then used to connect to the server via gRPC.
+        /// 
+        /// Note: this method is cancellable and can throw an OperationCanceledException.
+        /// </summary>
+        /// <returns>A void Task.</returns>
+        /// <exception cref="OperationCanceledException">Thrown when the CancellationTokenSource is canceled.</exception>
         public async Task FindAntRadioServerAsync()
         {
             IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);

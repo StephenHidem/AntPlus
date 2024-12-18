@@ -47,7 +47,7 @@ namespace AntGrpcService.Services
 
         public override Task<GetChannelReply> GetChannel(GetChannelRequest request, ServerCallContext context)
         {
-            _logger.LogDebug($"{nameof(GetChannel)}");
+            _logger.LogDebug("GetChannel: Channel = {ChannelNumber}", request.ChannelNumber);
             _ = _antRadio.GetChannel(request.ChannelNumber);
 
             return Task.FromResult(new GetChannelReply());

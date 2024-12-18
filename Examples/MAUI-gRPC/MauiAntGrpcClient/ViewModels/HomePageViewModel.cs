@@ -9,13 +9,15 @@ using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
+using System.Diagnostics;
 using System.Net;
 
 namespace MauiAntGrpcClient.ViewModels
 {
-    public partial class HomePageViewModel(IAntRadio antRadioService, AntCollection antCollection) : ObservableObject
+    public partial class HomePageViewModel : ObservableObject
     {
-        private readonly AntRadioService _antRadioService = (AntRadioService)antRadioService;
+        private readonly AntRadioService _antRadioService;
+        private readonly AntCollection _antCollection;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ShowRadioCapabilitiesCommand))]
@@ -31,17 +33,32 @@ namespace MauiAntGrpcClient.ViewModels
         [ObservableProperty]
         public AntCollection? antDevices;
 
-        public async Task SearchAsync()
+        public HomePageViewModel(IAntRadio antRadioService, AntCollection antCollection)
         {
-            IsBusy = true;
-            await _antRadioService.FindAntRadioServerAsync();
-            IsBusy = false;
-            ServerIPAddress = _antRadioService.ServerIPAddress;
-            ProductDescription = _antRadioService.ProductDescription;
-            SerialNumber = _antRadioService.SerialNumber;
-            HostVersion = _antRadioService.Version;
-            AntDevices = antCollection;
-            await AntDevices.StartScanning();
+            _antCollection = antCollection;
+            _antRadioService = (AntRadioService)antRadioService;
+            _ = Task.Run(() => { SearchAsync(); });
+        }
+
+        private async void SearchAsync()
+        {
+            try
+            {
+                IsBusy = true;
+                await _antRadioService.FindAntRadioServerAsync();
+                MainThread.BeginInvokeOnMainThread(() => IsBusy = false);
+                ServerIPAddress = _antRadioService.ServerIPAddress;
+                ProductDescription = _antRadioService.ProductDescription;
+                SerialNumber = _antRadioService.SerialNumber;
+                HostVersion = _antRadioService.Version;
+                AntDevices = _antCollection;
+                await AntDevices.StartScanning();
+            }
+            catch (OperationCanceledException)
+            {
+                // app is exiting
+                Debug.WriteLine("SearchAsync: OperationCancelledException");
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanShowRadioCapabilities))]

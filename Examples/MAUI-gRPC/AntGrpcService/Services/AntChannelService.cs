@@ -5,56 +5,76 @@ using SmallEarthTech.AntRadioInterface;
 
 namespace AntGrpcService.Services
 {
-    public class AntChannelService(ILogger<AntChannelService> logger, IAntRadio antRadio) : gRPCAntChannel.gRPCAntChannelBase
+    /// <summary>
+    /// Server-side implementation of gRPCAntChannel.
+    /// </summary>
+    /// <param name="logger">AntChannelService logger.</param>
+    /// <param name="antRadio">ANT radio to use.</param>
+    /// <param name="subscriberFactory">ANT channel subscriber factory.</param>
+    public class AntChannelService(ILogger<AntChannelService> logger, IAntRadio antRadio, IAntChannelSubscriberFactory subscriberFactory) : gRPCAntChannel.gRPCAntChannelBase
     {
-        private readonly ILogger<AntChannelService> _logger = logger;
-        private readonly IAntRadio _antRadio = antRadio;
-        private TaskCompletionSource<AntResponse>? _response;
-
-        public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<ChannelResponse> responseStream, ServerCallContext context)
+        public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<ChannelResponseUpdate> responseStream, ServerCallContext context)
         {
-            _logger.LogInformation("Subscribe called. {ChannelNumber}", request.ChannelNumber);
-            IAntChannel antChannel = _antRadio.GetChannel((int)request.ChannelNumber);
-            antChannel.ChannelResponse += AntChannelService_ChannelResponse;
-            while (!context.CancellationToken.IsCancellationRequested)
-            {
-                _response = new TaskCompletionSource<AntResponse>();
-                AntResponse channelResponse = await _response.Task;
-                try
-                {
-                    await responseStream.WriteAsync(new ChannelResponse
-                    {
-                        ChannelId = channelResponse.ChannelId!.Id,
-                        ChannelNumber = channelResponse.ChannelNumber,
-                        ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
-                        Payload = ByteString.CopyFrom(channelResponse.Payload),
-                        ResponseId = channelResponse.ResponseId,
-                        Rssi = channelResponse.Rssi,
-                        Timestamp = channelResponse.Timestamp
-                    });
-                }
-                catch (InvalidOperationException e)
-                {
-                    _logger.LogInformation("Subscription closed. {Msg}", e.Message);
-                    break;
-                }
-            }
-            antChannel.ChannelResponse -= AntChannelService_ChannelResponse;
-            _logger.LogInformation("Subscribe exited. {ChannelNumber}", request.ChannelNumber);
+            logger.LogInformation("Subscriber entered. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
+            using IAntChannelSubscriber subscriber = subscriberFactory.CreateAntChannelSubscriber(antRadio.GetChannel((int)request.ChannelNumber));
+
+            // create a response handler delegate and add it to subscriber
+            async void handler(object? sender, AntResponse args) => await WriteUpdateAsync(responseStream, args);
+            subscriber.OnAntResponse += handler;
+
+            await AwaitCancellation(context.CancellationToken);
+
+            // remove our response handler from the subscriber
+            subscriber.OnAntResponse -= handler;
+
+            logger.LogInformation("Subscriber exited. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
         }
 
-        private void AntChannelService_ChannelResponse(object? sender, AntResponse e)
+        /// <summary>
+        /// Writes the ANT response update to the stream.
+        /// </summary>
+        /// <param name="responseStream">Subscribed stream.</param>
+        /// <param name="channelResponse">ANT channel response received.</param>
+        /// <returns>Task to await</returns>
+        private async Task WriteUpdateAsync(IServerStreamWriter<ChannelResponseUpdate> responseStream, AntResponse channelResponse)
         {
-            if (sender != null && _response != null && !_response.TrySetResult(e))
+            try
             {
-                ((IAntChannel)sender).ChannelResponse -= AntChannelService_ChannelResponse;
+                await responseStream.WriteAsync(new ChannelResponseUpdate
+                {
+                    // build channel response update message
+                    ChannelId = channelResponse.ChannelId?.Id,
+                    ChannelNumber = channelResponse.ChannelNumber,
+                    ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
+                    Payload = ByteString.CopyFrom(channelResponse.Payload),
+                    ResponseId = channelResponse.ResponseId,
+                    Rssi = channelResponse.Rssi,
+                    Timestamp = channelResponse.Timestamp
+                });
             }
+            catch (Exception e)
+            {
+                // Handle any errors caused by broken connection, etc.
+                logger.LogError(e, "Failed to write message. Channel = {ChannelNumber}", channelResponse.ChannelNumber);
+            }
+        }
+
+        /// <summary>
+        /// This task completes when the connection is closed by the client.
+        /// </summary>
+        /// <param name="token">Client cancellation token</param>
+        /// <returns>Task that completes when canceled.</returns>
+        private static Task AwaitCancellation(CancellationToken token)
+        {
+            var completion = new TaskCompletionSource();
+            token.Register(() => completion.SetResult());
+            return completion.Task;
         }
 
         public override async Task<MessagingCodeReply> SendExtAcknowledgedData(ExtDataRequest request, ServerCallContext context)
         {
-            _logger.LogInformation($"{nameof(SendExtAcknowledgedData)}");
             SmallEarthTech.AntRadioInterface.MessagingReturnCode reply = await AntRadioService.AntChannels[request.ChannelNumber].SendExtAcknowledgedDataAsync(new ChannelId(request.ChannelId), [.. request.Data], request.WaitTime);
+            logger.LogDebug("SendExtAcknowledgedData: Reply = {Reply}", reply);
             return new MessagingCodeReply { ReturnCode = (AntChannelGrpcService.MessagingReturnCode)reply };
         }
     }

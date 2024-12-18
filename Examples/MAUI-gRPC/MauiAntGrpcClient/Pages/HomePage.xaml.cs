@@ -8,6 +8,5 @@ public partial class HomePage : ContentPage
     {
         BindingContext = viewModel;
         InitializeComponent();
-        _ = viewModel.SearchAsync();
     }
 }

@@ -70,21 +70,14 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             if (e.ChannelId != null && e.Payload != null)
             {
                 // see if the device is in the collection
-                AntDevice? device;
-                device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+                AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
 
                 // create the device if not in the collection
                 if (device == null)
                 {
-                    // get the device implementation type
-                    Type? deviceType = GetAntDeviceType(e.ChannelId, e.Payload!);
-                    if (deviceType == null) return;     // exit if unable to determine device implementation type
+                    // create an ANT device from the AntResponse parameter
+                    device = CreateAntDevice(e);
 
-                    // create ant device from service provider and apply timeout options
-                    // the ActivatorUtilities allow us to inject ctor parameters into the requested service
-                    device = (AntDevice?)ActivatorUtilities.CreateInstance(_services, deviceType, e.ChannelId, _channel!, _timeout);
-
-                    if (device == null) return;     // exit if unable to create the device
                     Add(device);
                     device.DeviceWentOffline += DeviceOffline;
                 }
@@ -134,28 +127,36 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         }
 
         /// <summary>
-        /// Gets the implementation type of the ANT device.
+        /// Creates the ANT device from the AntResponse.
         /// </summary>
-        /// <param name="channelId">The channel identifier.</param>
-        /// <param name="page">The page received from the device.</param>
-        /// <returns>The implementation type of the device.</returns>
-        private Type? GetAntDeviceType(ChannelId channelId, byte[] page)
+        /// <param name="response"></param>
+        /// <returns>An ANT device in the service collection, including UnknownDevice.</returns>
+        private AntDevice CreateAntDevice(AntResponse response)
         {
-            ISelectImplementation? selector = _services.GetKeyedService<ISelectImplementation>(channelId.DeviceType);
+            Type deviceType;
+
+            // see if there is an implementation selector for the ANT device type
+            ISelectImplementation? selector = _services.GetKeyedService<ISelectImplementation>(response.ChannelId!.DeviceType);
             if (selector != null)
             {
-                return selector.SelectImplementationType(page);
+                deviceType = selector.SelectImplementationType(response.Payload!) ?? typeof(UnknownDevice);
             }
             else
             {
-                return HostExtensions.ServiceCollection.
+                // search the service collection for an implementation type
+                // return UnknownDevice if keyed implementation type doesn't exist
+                deviceType = HostExtensions.ServiceCollection.
                         FirstOrDefault(d =>
                         d.ServiceType == typeof(AntDevice) &&
                         d.IsKeyedService &&
                         d.ServiceKey is byte key &&
-                        key == channelId.DeviceType)?.
+                        key == response.ChannelId.DeviceType)?.
                         KeyedImplementationType ?? typeof(UnknownDevice);
             }
+
+            // Create ant device from service provider and apply timeout options.
+            // The ActivatorUtilities allow us to inject ctor parameters into the requested service.
+            return (AntDevice)ActivatorUtilities.CreateInstance(_services, deviceType, response.ChannelId, _channel!, _timeout);
         }
 
         /// <summary>

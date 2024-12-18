@@ -2,7 +2,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using SmallEarthTech.AntRadioInterface;
 using System.Net;
 using System.Net.Sockets;
@@ -10,16 +9,14 @@ using System.Text;
 
 namespace MauiAntGrpcClient.Services
 {
-    public partial class AntRadioService(ILogger<AntRadioService> logger, ILoggerFactory loggerFactory) : IAntRadio
+    public partial class AntRadioService(ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource) : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 5073;              // gRPC port
 
         private gRPCAntRadio.gRPCAntRadioClient? _client;
-        private readonly ILoggerFactory _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-        private readonly ILogger<AntRadioService> _logger = logger ?? NullLogger<AntRadioService>.Instance;
-        private GrpcChannel? _channel;
+        private GrpcChannel? _grpcChannel;
 
         public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
         public string ProductDescription { get; private set; } = string.Empty;
@@ -29,56 +26,68 @@ namespace MauiAntGrpcClient.Services
 
         public event EventHandler<AntResponse>? RadioResponse { add { } remove { } }
 
+        /// <summary>
+        /// Searches for an ANT radio server. A receive task creates a UdpClient and then sends a
+        /// message to the multicast endpoint every 2 seconds until a server responds. The server
+        /// IP address in the response is then used to connect to the server via gRPC.
+        /// 
+        /// Note: this method is cancellable and can throw an OperationCanceledException.
+        /// </summary>
+        /// <returns>A void Task.</returns>
+        /// <exception cref="OperationCanceledException">Thrown when the CancellationTokenSource is canceled.</exception>
         public async Task FindAntRadioServerAsync()
         {
             IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);
             byte[] req = Encoding.ASCII.GetBytes("MauiAntGrpcClient discovery request");
-            UdpReceiveResult result;
-            using UdpClient udpClient = new(AddressFamily.InterNetwork);
 
-            while (true)
+            // initiate receive
+            using UdpClient udpClient = new(0);
+            Task<UdpReceiveResult> receiveTask = udpClient.ReceiveAsync();
+
+            // loop every 2 seconds sending a message to the any listening servers
+            while (!cancellationTokenSource.IsCancellationRequested)
             {
-                using CancellationTokenSource cts = new(2000);
-
                 // send request for ANT radio server
                 _ = udpClient.Send(req, req.Length, multicastEndPoint);
-                try
+
+                // wait for response from server, timeout, or cancellation
+                if (receiveTask.Wait(2000, cancellationTokenSource.Token))
                 {
-                    result = await udpClient.ReceiveAsync(cts.Token);
+                    UdpReceiveResult result = receiveTask.Result;
                     ServerIPAddress = result.RemoteEndPoint.Address;
                     string msg = Encoding.ASCII.GetString(result.Buffer);
-                    _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
+                    logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
+
+                    UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
+                    _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri);
+                    _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
+                    PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
+                    ProductDescription = reply.ProductDescription;
+                    SerialNumber = reply.SerialNumber;
+                    Version = reply.Version;
                     break;
                 }
-                catch (OperationCanceledException)
+                else
                 {
-                    _logger.LogInformation("FindAntRadioServerAsync: OperationCanceledException. Retry.");
+                    logger.LogInformation("FindAntRadioServerAsync: Timeout. Retry.");
                 }
             }
-
-            UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
-            _channel = GrpcChannel.ForAddress(uriBuilder.Uri);
-            _client = new gRPCAntRadio.gRPCAntRadioClient(_channel);
-            PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
-            ProductDescription = reply.ProductDescription;
-            SerialNumber = reply.SerialNumber;
-            Version = reply.Version;
         }
 
         public async Task<IAntChannel[]> InitializeContinuousScanMode()
         {
-            if (_channel == null)
+            if (_grpcChannel == null)
             {
-                _logger.LogError("_channel is null!");
+                logger.LogError("_grpcChannel is null!");
                 return [];
             }
             InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
-            ILogger<AntChannelService> logger = _loggerFactory.CreateLogger<AntChannelService>();
             for (byte i = 0; i < reply.NumChannels; i++)
             {
-                channels[i] = new AntChannelService(logger, i, _channel);
+                channels[i] = new AntChannelService(logger, i, _grpcChannel);
             }
+            channels[0].HandleChannelResponseEvents(cancellationTokenSource.Token);
             return channels;
         }
 

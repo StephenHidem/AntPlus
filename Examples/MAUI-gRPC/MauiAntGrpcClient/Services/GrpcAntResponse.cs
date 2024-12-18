@@ -5,9 +5,9 @@ namespace MauiAntGrpcClient.Services
 {
     internal class GrpcAntResponse : AntResponse
     {
-        public GrpcAntResponse(ChannelResponse response)
+        public GrpcAntResponse(ChannelResponseUpdate response)
         {
-            ChannelId = new ChannelId(response.ChannelId);
+            ChannelId = response.ChannelId != null ? new ChannelId((uint)response.ChannelId) : null;
             ChannelNumber = (byte)response.ChannelNumber;
             ThresholdConfigurationValue = (sbyte)response.ThresholdConfigurationValue;
             Payload = [.. response.Payload];

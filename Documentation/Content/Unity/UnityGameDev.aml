@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" revisionNumber="1">
-  <developerWalkthroughDocument
+	<developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -18,105 +18,16 @@
       <!-- <autoOutline /> -->
 
       <para>
-				This is preliminary information! Setting up Unity is admittedly a cumbersome manual process. I'm actively
-				seeking to streamline this process. In the meantime, here's what I've done.
+				I've created a Unity example project to demonstrate integrating elements of the ANT+ class library and extensions.
+				The repository is located
+				<externalLink>
+				  <linkText>here.</linkText>
+				  <linkUri>https://github.com/StephenHidem/Unity-ANT-gRPC</linkUri>
+			  </externalLink>
+				The README contains important information!
 			</para>
 			<para><legacyBold>A warm shout out to the good folks who created NuGetForUnity and YetAnotherHttpHandler! Their efforts are deeply appreciated.</legacyBold></para>
     </introduction>
-
-    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
-
-    <!-- One or more procedure or section with procedure -->
-    <procedure>
-      <title>Setup Your Project</title>
-      <steps class="ordered">
-        <step>
-          <content>
-            <para>Create a Unity project.</para>
-          </content>
-        </step>
-        <step>
-          <content>
-            <para>Open Unity Package Manager window and install the following packages.</para>
-						<list class="bullet">
-							<listItem>
-								<para>Install NuGetForUnity from Git URL.
-								<externalLink>
-									<linkText>Instructions are here.</linkText>
-									<linkUri>https://github.com/GlitchEnzo/NuGetForUnity</linkUri>
-								</externalLink>
-								</para>
-							</listItem>
-							<listItem>
-								<para>Install YetAnotherHttpHandler from Git URL.
-								<externalLink>
-									<linkText>Instructions are here.</linkText>
-									<linkUri>https://github.com/Cysharp/YetAnotherHttpHandler</linkUri>
-								</externalLink>
-								</para>
-							</listItem>
-						</list>
-          </content>
-        </step>
-				<step>
-					<content>
-						<para>Select Manage NuGet Packages from the NuGet menu and install the following packages.</para>
-						<list class="bullet">
-							<listItem>
-								<para>Google.Protobuf</para>
-							</listItem>
-							<listItem>
-								<para>Grpc.Net.Client</para>
-							</listItem>
-							<listItem>
-								<para>System.IO.Pipelines</para>
-							</listItem>
-						</list>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>Copy the following files from AntPlus\Examples\MAUI-gRPC\AntGrpcShared\obj\[Debug|Release]\net8.0 to Assets/Scripts</para>
-						<list class="bullet">
-							<listItem>
-								<para>AntChannel.cs</para>
-							</listItem>
-							<listItem>
-								<para>AntChannelGrpc.cs</para>
-							</listItem>
-							<listItem>
-								<para>AntRadio.cs</para>
-							</listItem>
-							<listItem>
-								<para>AntRadioGrpc.cs</para>
-							</listItem>
-						</list>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>Create an AntGrpClient.cs file and add it to Assets/Scripts. Note this <legacyBold>is not</legacyBold> a MonoBehavior. It is a supporting class.</para>
-						<code language="csharp" title="AntGrpClient.cs" source="Content\Unity\AntGrpcClient.cs"/>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>Create an AntRadioScript.cs file and add it to Assets/Scripts. Note this is a MonoBehavior. This script is used to interact with game objects.</para>
-						<code language="csharp" title="AntRadioScript.cs" source="Content\Unity\AntRadioScript.cs"/>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>Create an empty GameObject and add the AntRadioScript component. The script will search for the ANT radio service when Start() is invoked.</para>
-					</content>
-				</step>
-			</steps>
-       <conclusion>
-				 <content>
-					 <para>This is the bare minimum to establish communication with the ANT radio service.</para>
-				 </content>
-			 </conclusion> 
-    </procedure>
 
     <!-- Optional additional procedure or section with procedure -->
     <!--<section address="Section1">
@@ -140,15 +51,6 @@
         </procedure>
       </content>
     </section>-->
-
-    <nextSteps>
-      <content>
-				<para>
-					You should create an AntDeviceCollection in order to be notified of ANT devices and interact with a given ANT device.
-				</para>
-			</content>
-    </nextSteps>
-    
 
     <relatedTopics>
       <!-- One or more of the following:
@@ -183,5 +85,5 @@
       <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
       -->
     </relatedTopics>
-  </developerWalkthroughDocument>
+  </developerConceptualDocument>
 </topic>

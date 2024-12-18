@@ -31,11 +31,14 @@
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
                                     <VisualStateGroup x:Name="CheckedStates">
-                                        <VisualState x:Name="Checked"/>
+                                        <VisualState x:Name="Checked">
+                                            <VisualState.Setters>
+                                                <Setter TargetName="Indicator" Property="BoxView.IsVisible" Value="Visible"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
                                         <VisualState x:Name="Unchecked">
                                             <VisualState.Setters>
-                                                <Setter TargetName="Indicator" Property="BoxView.BackgroundColor" Value="Transparent"/>
-                                                <Setter TargetName="Indicator" Property="BoxView.Color" Value="Transparent"/>
+                                                <Setter TargetName="Indicator" Property="BoxView.IsVisible" Value="Hidden"/>
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>

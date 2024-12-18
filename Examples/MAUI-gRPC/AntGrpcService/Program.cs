@@ -20,6 +20,7 @@ LoggerProviderOptions.RegisterProviderOptions<
 builder.Host.UseWindowsService();
 
 // Add services to the container.
+builder.Services.AddSingleton<IAntChannelSubscriberFactory, AntChannelSubscriberFactory>();
 builder.Services.AddGrpc();
 builder.Services.AddSingleton<IAntRadio, AntRadio>();
 builder.Services.AddHostedService<DiscoveryService>();
@@ -29,6 +30,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.MapGrpcService<AntRadioService>();
 app.MapGrpcService<AntChannelService>();
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+});
 
 app.Run();

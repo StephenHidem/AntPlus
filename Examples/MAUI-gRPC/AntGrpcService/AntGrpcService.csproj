@@ -12,11 +12,12 @@
 		<PublishSingleFile>true</PublishSingleFile>
 		<PublishReadyToRun>true</PublishReadyToRun>
 		<SelfContained>true</SelfContained>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>

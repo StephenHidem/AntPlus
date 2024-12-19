@@ -19,9 +19,9 @@
 
       <para>
 				I've created a Unity example project to demonstrate integrating elements of the ANT+ class library and extensions.
-				The repository is located
+				The repository is located at
 				<externalLink>
-				  <linkText>here.</linkText>
+				  <linkText>Unity ANT gRPC.</linkText>
 				  <linkUri>https://github.com/StephenHidem/Unity-ANT-gRPC</linkUri>
 			  </externalLink>
 				The README contains important information!

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntRadioInterface;
 using System.Threading;
@@ -121,5 +122,22 @@ namespace AntPlus.UnitTests
             Assert.IsTrue(offline == true);
             Assert.IsTrue(antDevice.Object.Offline == true);
         }
+
+        [TestMethod]
+        [DataRow((uint)0x0FFF0001, (uint)0x00000001)]
+        public void Test_ToJSON(uint channelId, uint expectedDeviceNumber)
+        {
+            // Arrange
+            ChannelId cid = new((uint)channelId);
+            string expectedString = "{\"ChannelCount\":8192,\"DataPages\":[],\"ChannelId\":{\"Id\":268369921,\"DeviceType\":127,\"DeviceNumber\":1,\"IsPairingBitSet\":true,\"TransmissionType\":3,\"AreGlobalDataPagesUsed\":true},\"Offline\":false,\"AntDeviceType\":\"UnknownDevice\"}";
+            Mock<ILogger<UnknownDevice>> mockUnknownDeviceLogger = mockRepository.Create<ILogger<UnknownDevice>>(MockBehavior.Loose);
+            UnknownDevice mockDevice = new(cid, mockAntChannel.Object, mockUnknownDeviceLogger.Object, (int)500); // Must be an actual device, because you can't serialize mocks
+                                                                                                                  // Act
+            string jsonString = mockDevice.ToJSON();
+            // Assert
+            Assert.AreEqual(expectedString, jsonString);
+        }
+
+
     }
 }

@@ -3,7 +3,10 @@ using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -122,6 +125,22 @@ namespace SmallEarthTech.AntPlus
         public override string ToString()
         {
             return GetType().Name;
+        }
+
+        /// <summary>
+        /// Extracts the properties of the AntDevice and returns it as a JSON string.
+        /// </summary>
+        /// <returns>A JSON string representing the AntDevice</returns>
+        public string ToJSON()
+        {
+            Dictionary<string, object> extractedValues = new Dictionary<string, object>();
+            foreach (PropertyInfo propertyInfo in this.GetType().GetProperties())
+            {
+                if (propertyInfo.Name == "DeviceImageStream") { continue; } //Can't serialize a stream
+                extractedValues[propertyInfo.Name] = propertyInfo.GetValue(this, null);
+            }
+            extractedValues["AntDeviceType"] = this.GetType().Name;
+            return JsonSerializer.Serialize(extractedValues);
         }
 
         /// <summary>Requests the data page.</summary>

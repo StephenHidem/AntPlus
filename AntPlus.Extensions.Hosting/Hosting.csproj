@@ -14,7 +14,7 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Hosting extensions for the ANT+ Class Library supporting .NET MAUI and Window applications using depencency injection (made easy!).</PackageReleaseNotes>
+	<PackageReleaseNotes>Added extension method to add services to IServiceCollection.</PackageReleaseNotes>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>

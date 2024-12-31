@@ -12,7 +12,7 @@
     <Topic id="0e424769-d4c6-4a98-9384-a810421ad5e1" visible="True" title="How-To: Create and Add a Custom AntDevice to Host" />
   </Topic>
   <Topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" visible="True" isExpanded="true" title="Examples Overview">
-    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" isExpanded="true" title="MAUI-gRPC">
+    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" title="MAUI-gRPC">
       <Topic id="721a6d97-52b3-4a6b-8835-4201a92c432c" visible="True" />
       <Topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" visible="True" />
       <Topic id="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4" visible="True" />
@@ -22,6 +22,11 @@
   <Topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" visible="True" title="Unity Game Development">
     <HelpKeywords>
       <HelpKeyword index="K" term="Unity" />
+    </HelpKeywords>
+  </Topic>
+  <Topic id="342d7748-ce61-4376-8c3e-baf56ee0e1f1" visible="True" title="Godot Game Development">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Godot" />
     </HelpKeywords>
   </Topic>
   <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries API" />
@@ -51,7 +56,7 @@
     </Topic>
     <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" isExpanded="true" title="Hosting Extensions Version History">
       <Topic id="0677519c-d5ba-4c5d-b400-f10dc75a33a7" visible="True" title="Version 1.0.0.0" />
-      <Topic id="5c5fc223-4f8c-4a17-bb09-8f0d1d3f2cac" visible="True" isSelected="true" title="Version 1.0.1.0" />
+      <Topic id="5c5fc223-4f8c-4a17-bb09-8f0d1d3f2cac" visible="True" isSelected="true" title="Version 1.1.0.0" />
     </Topic>
   </Topic>
 </Topics>

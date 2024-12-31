@@ -107,6 +107,7 @@
     <Folder Include="Content" />
     <Folder Include="Content\Examples\MAUI-gRPC\" />
     <Folder Include="Content\HostingExtensions" />
+    <Folder Include="Content\Godot" />
     <Folder Include="Content\Unity" />
     <Folder Include="Content\VersionHistory" />
     <Folder Include="Content\VersionHistory\AntPlus" />
@@ -121,6 +122,7 @@
     <None Include="Content\AntRadioInterfaceOverview.aml" />
     <None Include="Content\AntUsbStickOverview.aml" />
     <None Include="Content\Examples\ExamplesOverview.aml" />
+    <None Include="Content\Godot\GodotGameDev.aml" />
     <None Include="Content\HostingExtensions\HostingExtensionsOverview.aml" />
     <None Include="Content\HostingExtensions\How To Create and Add AntDevice.aml" />
     <None Include="Content\VersionHistory\AntPlus\v3.0.1.0.aml" />
@@ -140,8 +142,6 @@
     <None Include="Content\Examples\MAUI-gRPC\AntGrpcShared.aml" />
     <None Include="Content\Examples\MAUI-gRPC\MauiAntGrpcClient.aml" />
     <None Include="Content\Examples\MAUI-gRPC\MauiExampleOverview.aml" />
-    <None Include="Content\Unity\AntGrpcClient.cs" />
-    <None Include="Content\Unity\AntRadioScript.cs" />
     <None Include="Content\Unity\UnityGameDev.aml" />
     <None Include="Content\VersionHistory\AntPlus\AntPllusVersionHistory.aml" />
     <None Include="Content\VersionHistory\AntPlus\v2.0.0.0.aml" />
@@ -151,7 +151,7 @@
     <None Include="Content\VersionHistory\AntUsbStick\v3.0.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\HostingExtensionsVersionHistory.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.0.0.0.aml" />
-    <None Include="Content\VersionHistory\HostingExtensions\v1.0.1.0.aml" />
+    <None Include="Content\VersionHistory\HostingExtensions\v1.1.0.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

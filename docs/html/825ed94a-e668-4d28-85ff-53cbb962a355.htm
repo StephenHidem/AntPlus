@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html ><html lang="en-US"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="shortcut icon" href="../icons/favicon.ico" /><link rel="stylesheet" href="../css/bulma.css" /><link rel="stylesheet" href="../css/font-awesome.min.css" /><link rel="stylesheet" href="../css/presentationStyle.css" /><link rel="stylesheet" href="../css/vs.min.css" /><script src="../scripts/jquery-3.5.1.min.js"></script><script src="../scripts/clipboard.min.js"></script><script src="../scripts/highlight.min.js"></script><script src="../scripts/presentationStyle.js"></script><title>ANT+ Hosting Extensions Overview</title><meta name="Title" content="ANT+ Hosting Extensions Overview" /><meta name="Help.Id" content="825ed94a-e668-4d28-85ff-53cbb962a355" /><meta name="Help.ContentType" content="Concepts" /><meta name="guid" content="825ed94a-e668-4d28-85ff-53cbb962a355" /><meta name="Description" content="The ANT+ Hosting Extensions simplify integrating the ANT+ Class Library into applications that use dependency injection (DI) to compose the host application." /><meta name="tocFile" content="../toc/Root.xml" /></head><body><div class="fixedLayout"><div id="Header" class="fixedHeader"><div class="pageHeader level mb-0 py-2 px-4"><div id="TitleContainer" class="level-left"><div class="level-item"><img src="../icons/Help.png" /></div><div id="DocumentationTitle" class="level-item">Small Earth Technology ANT+ Class Library</div></div><div id="LangFilterSearchContainer" class="level-right"><div class="level-item"><div class="dropdown is-hoverable"><div class="dropdown-trigger"><button class="button" aria-haspopup="true" aria-controls="dropdown-menu"><span id="CurrentLanguage"></span><span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span></button></div><div class="dropdown-menu" role="menu"><div id="LanguageSelections" class="dropdown-content"><a class="dropdown-item languageFilterItem" data-languageId="cs">C#</a><a class="dropdown-item languageFilterItem" data-languageId="vb">VB</a><a class="dropdown-item languageFilterItem" data-languageId="cpp">C++</a><a class="dropdown-item languageFilterItem" data-languageId="fs">F#</a></div></div></div></div><div class="level-item"><form id="SearchForm" action="#" onsubmit="TransferToSearchPage(); return false;"><div class="field"><div class="control has-icons-left"><input id="SearchTerms" class="input" type="text" maxlength="200" placeholder="Search" /><span class="icon is-small is-left"><i class="fa fa-search"></i></span><button id="SearchButton" type="submit" class="is-hidden"></button></div></div></form></div></div></div></div><div class="fixedContent"><nav class="breadcrumb my-1 px-2 border-bottom" role="navigation"><ul id="TopicBreadcrumbs" /></nav><div id="ContentContainer" class="columns pl-5 pr-5 fixedContent"><div id="ShowHideTOCColumn" class="column is-hidden-tablet"><a id="ShowHideTOC">Show/Hide TOC</a></div><div id="TOCColumn" class="column is-hidden-mobile"><nav class="toc"><ul id="TableOfContents" class="toc-menu" /></nav></div><div id="Resizer" class="is-hidden"></div><div id="TopicContent" class="column content is-7"><h1>ANT+ Hosting Extensions Overview</h1><div><p>
+				The ANT+ Hosting Extensions simplify integrating the ANT+ Class Library into applications that use
+				dependency injection (DI) to compose the host application. MAUI applications use this pattern extensively
+				and other Windows applications can employ various host builders for DI.
+			</p></div><h2 id="Section1" class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>HostExtension Class</h2><div id="IDDABSection"><p>
+			This class provides two extension methods to add the ANT+ classes to the host builder. UseAntPlus() is overloaded
+			to work with IHostBuilder implementations and MauiAppBuilder implementations.
+			Their purpose is identical; inject all the ANT+ devices and support infrastructure into the DI container.
+		</p><p>
+			An additional extension method, AddAntPlusServices(), is provided to add the ANT+ classes to an IServiceCollection when UseAntPlus()
+			is not suitable.
+		</p><p>
+			The TimeoutOptions class will also be added to the DI container and the configuration is bound by the container.
+		</p></div><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>Setting TimeoutOptions</h2><div id="IDEABSection"><p>
+					The global timeout setting can come from a variety of sources such as the command line or appsettings.json.
+					Two options are available - <strong>MissedMessages</strong> and <strong>Timeout</strong> Timeout is in milliseconds and MissedMessages is the
+					number of messages missed before signalling the ANT device is considered offline. If no timeout setting
+					is specified the timeout will default to 8 missed messages. Timeouts can be disabled by setting <strong>Timeout=-1</strong>. This is
+					equivalent to Timeout.Infinite.
+				</p><article class="message is-info"><div class="message-header"><p><span class="icon"><i class="fa fa-info-circle"></i></span>  Note</p></div><div class="message-body"><p>Prefer MissedMessages as this will scale the timeout based on the broadcast rate of specific ANT devices.</p></div></article><p>Setting the option from the command line: <strong>--TimeoutOptions:MissedMessages=8</strong>.</p><p>Setting the option from appsetings.json:</p><div class="codeSnippet"><div class="codeHeader"><span class="codeHeaderTitle"> </span><button class="button is-small is-light copyCode" title="Copy"><span class="icon is-small"><i class="fa fa-copy"></i></span><span>Copy</span></button></div><div class="codePanel hljs"><pre xml:space="preserve"><code class="language-plaintext">{
+  "TimeoutOptions": {
+    "MissedMessages": 8,
+    "Timeout": null
+  }
+}</code></pre></div></div></div><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>ISelectImplementation Interface</h2><div id="IDFABSection"><p>
+					This is a simple interface that defines a single method - SelectImplementationType(). The purpose of
+					this method is to provide a mechanism for selecting one specific implementation from multiple implementations
+					of the same device class. Examples of this are bicycle power and fitness equipment sensors. A data page is
+          decoded and a specific implementation type is returned or null if the implementation could not be
+					determined from the data page.
+				</p><article class="message is-info"><div class="message-header"><p><span class="icon"><i class="fa fa-info-circle"></i></span>  Note</p></div><div class="message-body"><p>You only need to implement this interface for device classes with multiple implementations.</p></div></article><p>
+					Support for ANT+ devices not supported by the ANT+ Class Library can be added to the DI container and
+					device types that support multiple implementations will implement this interface and add it to the DI container.
+				  It is added to the DI contain with the AddKeyedSingleton() method with the device class value specified
+					as the key. For example - <span class="code">AddKeyedSingleton&lt;ISelectImplementation, SelectBicyclePowerImplementation&gt;(BicyclePower.DeviceClass);</span></p><p>Here's the SelectBicyclePowerImplementation class -</p><div class="codeSnippet"><div class="codeHeader"><span class="codeHeaderTitle">C#</span><button class="button is-small is-light copyCode" title="Copy"><span class="icon is-small"><i class="fa fa-copy"></i></span><span>Copy</span></button></div><div class="codePanel hljs"><pre xml:space="preserve"><code class="language-c#">/// &lt;summary&gt;
+/// Selects the bicycle power implementation type.
+/// &lt;/summary&gt;
+internal class SelectBicyclePowerImplementation : ISelectImplementation
+{
+    /// &lt;summary&gt;
+    /// Gets the type of the bicycle power sensor.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// &lt;see cref="CrankTorqueFrequencySensor"/&gt; sensors only broadcast their main page. Other bicycle power sensors broadcast
+    /// any number of other pages. This allows the method to determine the sensor type.
+    /// &lt;/remarks&gt;
+    /// &lt;inheritdoc /&gt;
+    public Type? SelectImplementationType(byte[] page)
+    {
+        if ((BicyclePower.DataPage)page[0] == BicyclePower.DataPage.CrankTorqueFrequency)
+        {
+            // CTF sensor
+            return typeof(CrankTorqueFrequencySensor);
+        }
+        else
+        {
+            return typeof(StandardPowerSensor);
+        }
+    }
+}</code></pre></div></div></div><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>AntCollection Class</h2><div id="IDGABSection"><p>
+					This class replaces the AntDeviceCollection class. It is a thread-safe ObservableCollection of AntDevices.
+					It exploits the benefits of dependency injection and handles the addition of custom AntDevice to the DI
+					container. It automatically brings in the TimeoutOptions, resolves any AntDevices present in the DI
+					container, and resolves any ISelectImplementations required to resolve an AntDevice type.
+				</p></div><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>See Also</h2><div id="seeAlsoSection"><h4>Other Resources</h4><div><a href="0e424769-d4c6-4a98-9384-a810421ad5e1.htm">How-To: Create and Add a Custom AntDevice to Host</a></div></div></div><div id="InThisArticleColumn" class="column is-hidden-mobile"><nav class="menu sticky is-hidden"><p class="menu-label"><strong>In This Article</strong></p><ul id="InThisArticleMenu" class="menu-list"><li><a class="quickLink">HostExtension Class</a></li><li><a class="quickLink">Setting TimeoutOptions</a></li><li><a class="quickLink">ISelectImplementation Interface</a></li><li><a class="quickLink">AntCollection Class</a></li><li><a class="quickLink">See Also</a></li></ul></nav></div></div></div><footer id="PageFooter" class="footer border-top py-3 fixedFooter"><div class="columns"><div id="FooterContent" class="column"><p>© 2022 Stephen Hidem.</p> 
+				</div></div></footer></div><script>$(function(){
+SetDefaultLanguage("cs");
+LoadTocFile(null, null);
+InitializeQuickLinks();
+
+$(".toggleSection" ).click(function () {
+    SectionExpandCollapse(this);
+});
+
+$(".toggleSection").keypress(function () {
+    SectionExpandCollapseCheckKey(this, event)
+});
+hljs.highlightAll();
+});</script></body></html>

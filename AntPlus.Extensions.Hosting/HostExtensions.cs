@@ -15,13 +15,13 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     public static class HostExtensions
     {
         /// <summary>
-        /// Gets the service collection. This allows the <see cref="AntCollection"/> to enumerate the service collection to find
+        /// Gets the service services. This allows the <see cref="AntCollection"/> to enumerate the service services to find
         /// the desired implementation type.
         /// </summary>
         internal static IServiceCollection? ServiceCollection;
 
         /// <summary>
-        /// Adds AntPlus classes to host builder service collection.
+        /// Adds AntPlus classes to host builder service services.
         /// </summary>
         /// <param name="builder">The host app builder</param>
         /// <returns>The host app builder</returns>
@@ -29,54 +29,67 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             builder.ConfigureServices((context, collection) =>
             {
-                AddServices(collection);
+                AddAntPlusServices(collection);
             });
             return builder;
         }
 
         /// <summary>
-        /// Adds AntPlus classes to MAUI builder service collection.
+        /// Adds AntPlus classes to MAUI builder service services.
         /// </summary>
         /// <param name="builder">The MAUI host app builder</param>
         /// <returns>The MAUI host app builder</returns>
         public static MauiAppBuilder UseAntPlus(this MauiAppBuilder builder)
         {
-            AddServices(builder.Services);
+            AddAntPlusServices(builder.Services);
             return builder;
         }
 
-        private static void AddServices(IServiceCollection collection)
+        /// <summary>
+        /// Adds AntPlus services to the specified service collection.
+        /// </summary>
+        /// <remarks>
+        /// Use this method to add AntPlus services to the service collection when UseAntPlus() is not
+        /// suitable, for example, when using a custom host builder.
+        /// <code language="cs">
+        ///     builder.ConfigureServices((context, services) => services.AddAntPlusServices());
+        /// </code>
+        /// </remarks>
+        /// <param name="services">The service collection.</param>
+        /// <returns>The service collection with added services.</returns>
+        public static IServiceCollection AddAntPlusServices(this IServiceCollection services)
         {
-            ServiceCollection = collection;
+            ServiceCollection = services;
 
             // add devices with a single implementation
-            collection.AddKeyedTransient<AntDevice, HeartRate>(HeartRate.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, BikeCadenceSensor>(BikeCadenceSensor.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, BikeSpeedSensor>(BikeSpeedSensor.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, CombinedSpeedAndCadenceSensor>(CombinedSpeedAndCadenceSensor.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, MuscleOxygen>(MuscleOxygen.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, Geocache>(Geocache.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, Tracker>(Tracker.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, StrideBasedSpeedAndDistance>(StrideBasedSpeedAndDistance.DeviceClass);
-            collection.AddTransient<AntDevice, UnknownDevice>();
+            services.AddKeyedTransient<AntDevice, HeartRate>(HeartRate.DeviceClass);
+            services.AddKeyedTransient<AntDevice, BikeCadenceSensor>(BikeCadenceSensor.DeviceClass);
+            services.AddKeyedTransient<AntDevice, BikeSpeedSensor>(BikeSpeedSensor.DeviceClass);
+            services.AddKeyedTransient<AntDevice, CombinedSpeedAndCadenceSensor>(CombinedSpeedAndCadenceSensor.DeviceClass);
+            services.AddKeyedTransient<AntDevice, MuscleOxygen>(MuscleOxygen.DeviceClass);
+            services.AddKeyedTransient<AntDevice, Geocache>(Geocache.DeviceClass);
+            services.AddKeyedTransient<AntDevice, Tracker>(Tracker.DeviceClass);
+            services.AddKeyedTransient<AntDevice, StrideBasedSpeedAndDistance>(StrideBasedSpeedAndDistance.DeviceClass);
+            services.AddTransient<AntDevice, UnknownDevice>();
 
             // bicycle power and implementation selector
-            collection.AddKeyedTransient<AntDevice, CrankTorqueFrequencySensor>(BicyclePower.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, StandardPowerSensor>(BicyclePower.DeviceClass);
-            collection.AddKeyedSingleton<ISelectImplementation, SelectBicyclePowerImplementation>(BicyclePower.DeviceClass);
+            services.AddKeyedTransient<AntDevice, CrankTorqueFrequencySensor>(BicyclePower.DeviceClass);
+            services.AddKeyedTransient<AntDevice, StandardPowerSensor>(BicyclePower.DeviceClass);
+            services.AddKeyedSingleton<ISelectImplementation, SelectBicyclePowerImplementation>(BicyclePower.DeviceClass);
 
             // fitness equipment and implementation selector
-            collection.AddKeyedTransient<AntDevice, Climber>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, Elliptical>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, NordicSkier>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, Rower>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, TrainerStationaryBike>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedTransient<AntDevice, Treadmill>(FitnessEquipment.DeviceClass);
-            collection.AddKeyedSingleton<ISelectImplementation, SelectFitnessEquipmentImplementation>(FitnessEquipment.DeviceClass);
+            services.AddKeyedTransient<AntDevice, Climber>(FitnessEquipment.DeviceClass);
+            services.AddKeyedTransient<AntDevice, Elliptical>(FitnessEquipment.DeviceClass);
+            services.AddKeyedTransient<AntDevice, NordicSkier>(FitnessEquipment.DeviceClass);
+            services.AddKeyedTransient<AntDevice, Rower>(FitnessEquipment.DeviceClass);
+            services.AddKeyedTransient<AntDevice, TrainerStationaryBike>(FitnessEquipment.DeviceClass);
+            services.AddKeyedTransient<AntDevice, Treadmill>(FitnessEquipment.DeviceClass);
+            services.AddKeyedSingleton<ISelectImplementation, SelectFitnessEquipmentImplementation>(FitnessEquipment.DeviceClass);
 
-            // options and the ANT collection
-            collection.AddOptions<TimeoutOptions>().BindConfiguration(nameof(TimeoutOptions));
-            collection.AddSingleton<AntCollection>();
+            // options and the ANT services
+            services.AddOptions<TimeoutOptions>().BindConfiguration(nameof(TimeoutOptions));
+            services.AddSingleton<AntCollection>();
+            return services;
         }
     }
 }

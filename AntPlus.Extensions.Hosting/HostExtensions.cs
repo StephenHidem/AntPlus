@@ -10,7 +10,8 @@ using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 namespace SmallEarthTech.AntPlus.Extensions.Hosting
 {
     /// <summary>
-    /// This class provides static methods to configure the application host builder. MAUI apps and standard Windows apps are supported. 
+    /// Provides extension methods for configuring AntPlus services in a host builder or custom
+    /// DI container.
     /// </summary>
     public static class HostExtensions
     {
@@ -21,7 +22,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         internal static IServiceCollection? ServiceCollection;
 
         /// <summary>
-        /// Adds AntPlus classes to host builder service services.
+        /// Adds AntPlus classes to host builder services.
         /// </summary>
         /// <param name="builder">The host app builder</param>
         /// <returns>The host app builder</returns>
@@ -35,7 +36,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         }
 
         /// <summary>
-        /// Adds AntPlus classes to MAUI builder service services.
+        /// Adds AntPlus classes to MAUI builder services.
         /// </summary>
         /// <param name="builder">The MAUI host app builder</param>
         /// <returns>The MAUI host app builder</returns>

@@ -24,9 +24,7 @@ namespace MauiAntGrpcClient
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
                 .UseAntPlus()
-                .RegisterAppServices()
-                .RegisterViewModels()
-                .RegisterPages();
+                .RegisterAppServices();
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -39,44 +37,22 @@ namespace MauiAntGrpcClient
         {
             mauiAppBuilder.Services.AddSingleton<IAntRadio, AntRadioService>();
             mauiAppBuilder.Services.AddSingleton<CancellationTokenSource>();
-            return mauiAppBuilder;
-        }
 
-        private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
-        {
-            mauiAppBuilder.Services.AddSingleton<HomePageViewModel>();
-            mauiAppBuilder.Services.AddTransient<RadioCapabilitiesViewModel>();
-            mauiAppBuilder.Services.AddTransient<AssetTrackerViewModel>();
-            mauiAppBuilder.Services.AddTransient<BicyclePowerViewModel>();
-            mauiAppBuilder.Services.AddTransient<BikeCadenceViewModel>();
-            mauiAppBuilder.Services.AddTransient<BikeSpeedViewModel>();
-            mauiAppBuilder.Services.AddTransient<BikeSpeedAndCadenceViewModel>();
-            mauiAppBuilder.Services.AddTransient<CTFViewModel>();
-            mauiAppBuilder.Services.AddTransient<FitnessEquipmentViewModel>();
-            mauiAppBuilder.Services.AddTransient<GeocacheViewModel>();
-            mauiAppBuilder.Services.AddTransient<HeartRateViewModel>();
-            mauiAppBuilder.Services.AddTransient<MuscleOxygenViewModel>();
-            mauiAppBuilder.Services.AddTransient<SDMViewModel>();
-            mauiAppBuilder.Services.AddTransient<UnknownDeviceViewModel>();
-            return mauiAppBuilder;
-        }
+            mauiAppBuilder.Services.AddTransientWithShellRoute<HomePage, HomePageViewModel>("Home");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<RadioCapabilitiesPage, RadioCapabilitiesViewModel>("RadioCapabilities");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<AssetTrackerPage, AssetTrackerViewModel>("AssetTracker");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<BicyclePowerPage, BicyclePowerViewModel>("BicyclePower");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<BikeCadencePage, BikeCadenceViewModel>("BikeCadence");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<BikeSpeedPage, BikeSpeedViewModel>("BikeSpeed");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<BikeSpeedAndCadencePage, BikeSpeedAndCadenceViewModel>("SpeedAndCadence");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<CTFPage, CTFViewModel>("CrankTorqueFrequency");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<FitnessEquipmentPage, FitnessEquipmentViewModel>("FitnessEquipment");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<GeocachePage, GeocacheViewModel>("Geocache");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<HeartRatePage, HeartRateViewModel>("HeartRate");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<MuscleOxygenPage, MuscleOxygenViewModel>("MuscleOxygen");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<StrideBasedMonitorPage, SDMViewModel>("StrideBasedMonitor");
+            mauiAppBuilder.Services.AddTransientWithShellRoute<UnknownDevicePage, UnknownDeviceViewModel>("UnknownDevice");
 
-        private static MauiAppBuilder RegisterPages(this MauiAppBuilder mauiAppBuilder)
-        {
-            mauiAppBuilder.Services.AddTransient<HomePage>();
-            mauiAppBuilder.Services.AddTransient<RadioCapabilitiesPage>();
-            mauiAppBuilder.Services.AddTransient<AssetTrackerPage>();
-            mauiAppBuilder.Services.AddTransient<BicyclePowerPage>();
-            mauiAppBuilder.Services.AddTransient<BikeCadencePage>();
-            mauiAppBuilder.Services.AddTransient<BikeSpeedAndCadencePage>();
-            mauiAppBuilder.Services.AddTransient<BikeSpeedPage>();
-            mauiAppBuilder.Services.AddTransient<CTFPage>();
-            mauiAppBuilder.Services.AddTransient<FitnessEquipmentPage>();
-            mauiAppBuilder.Services.AddTransient<GeocachePage>();
-            mauiAppBuilder.Services.AddTransient<HeartRatePage>();
-            mauiAppBuilder.Services.AddTransient<MuscleOxygenPage>();
-            mauiAppBuilder.Services.AddTransient<StrideBasedMonitorPage>();
-            mauiAppBuilder.Services.AddTransient<UnknownDevicePage>();
             return mauiAppBuilder;
         }
     }

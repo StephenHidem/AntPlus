@@ -5,8 +5,6 @@ namespace MauiAntGrpcClient
 {
     public partial class App : Application
     {
-        // provides an application-wide cancellation token source
-        //public readonly static CancellationTokenSource CancellationTokenSource = new();
         private readonly CancellationTokenSource _cts;
 
         public App(CancellationTokenSource cancellationTokenSource)

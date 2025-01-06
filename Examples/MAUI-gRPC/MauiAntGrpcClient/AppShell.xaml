@@ -11,7 +11,6 @@
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate pages:HomePage}"
-        Route="HomePage" />
+        ContentTemplate="{DataTemplate pages:HomePage}" />
 
 </Shell>

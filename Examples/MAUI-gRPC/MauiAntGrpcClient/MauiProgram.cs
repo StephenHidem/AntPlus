@@ -35,23 +35,25 @@ namespace MauiAntGrpcClient
 
         private static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
         {
-            mauiAppBuilder.Services.AddSingleton<IAntRadio, AntRadioService>();
-            mauiAppBuilder.Services.AddSingleton<CancellationTokenSource>();
+            mauiAppBuilder.Services
+                .AddSingleton<IAntRadio, AntRadioService>()
+                .AddSingleton<CancellationTokenSource>()
 
-            mauiAppBuilder.Services.AddTransientWithShellRoute<HomePage, HomePageViewModel>("Home");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<RadioCapabilitiesPage, RadioCapabilitiesViewModel>("RadioCapabilities");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<AssetTrackerPage, AssetTrackerViewModel>("AssetTracker");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<BicyclePowerPage, BicyclePowerViewModel>("BicyclePower");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<BikeCadencePage, BikeCadenceViewModel>("BikeCadence");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<BikeSpeedPage, BikeSpeedViewModel>("BikeSpeed");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<BikeSpeedAndCadencePage, BikeSpeedAndCadenceViewModel>("SpeedAndCadence");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<CTFPage, CTFViewModel>("CrankTorqueFrequency");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<FitnessEquipmentPage, FitnessEquipmentViewModel>("FitnessEquipment");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<GeocachePage, GeocacheViewModel>("Geocache");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<HeartRatePage, HeartRateViewModel>("HeartRate");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<MuscleOxygenPage, MuscleOxygenViewModel>("MuscleOxygen");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<StrideBasedMonitorPage, SDMViewModel>("StrideBasedMonitor");
-            mauiAppBuilder.Services.AddTransientWithShellRoute<UnknownDevicePage, UnknownDeviceViewModel>("UnknownDevice");
+                // Register the pages and view models with shell routes
+                .AddTransientWithShellRoute<HomePage, HomePageViewModel>("Home")
+                .AddTransientWithShellRoute<RadioCapabilitiesPage, RadioCapabilitiesViewModel>("RadioCapabilities")
+                .AddTransientWithShellRoute<AssetTrackerPage, AssetTrackerViewModel>("AssetTracker")
+                .AddTransientWithShellRoute<BicyclePowerPage, BicyclePowerViewModel>("BicyclePower")
+                .AddTransientWithShellRoute<BikeCadencePage, BikeCadenceViewModel>("BikeCadence")
+                .AddTransientWithShellRoute<BikeSpeedPage, BikeSpeedViewModel>("BikeSpeed")
+                .AddTransientWithShellRoute<BikeSpeedAndCadencePage, BikeSpeedAndCadenceViewModel>("SpeedAndCadence")
+                .AddTransientWithShellRoute<CTFPage, CTFViewModel>("CrankTorqueFrequency")
+                .AddTransientWithShellRoute<FitnessEquipmentPage, FitnessEquipmentViewModel>("FitnessEquipment")
+                .AddTransientWithShellRoute<GeocachePage, GeocacheViewModel>("Geocache")
+                .AddTransientWithShellRoute<HeartRatePage, HeartRateViewModel>("HeartRate")
+                .AddTransientWithShellRoute<MuscleOxygenPage, MuscleOxygenViewModel>("MuscleOxygen")
+                .AddTransientWithShellRoute<StrideBasedMonitorPage, SDMViewModel>("StrideBasedMonitor")
+                .AddTransientWithShellRoute<UnknownDevicePage, UnknownDeviceViewModel>("UnknownDevice");
 
             return mauiAppBuilder;
         }

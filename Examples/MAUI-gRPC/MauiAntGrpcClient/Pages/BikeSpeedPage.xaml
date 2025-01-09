@@ -13,6 +13,7 @@
                         <Label Text="Speed and Distance" FontAttributes="Bold" TextDecorations="Underline"/>
                         <Label Text="{Binding BikeSpeedSensor.InstantaneousSpeed, StringFormat='Instantaneous Speed: {0:F3}'}"/>
                         <Label Text="{Binding BikeSpeedSensor.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
+                        <Label Text="{Binding BikeSpeedSensor.CumulativeOperatingTime, StringFormat='Operating Time: {0}'}"/>
                         <Label Text="{Binding BikeSpeedSensor.Stopped, StringFormat='Stopped: {0}'}"/>
                     </StackLayout>
                 </Frame>
@@ -36,12 +37,6 @@
                         <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
                         <Label Text="{Binding BikeSpeedSensor.BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
                         <Label Text="{Binding BikeSpeedSensor.BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
-                    </StackLayout>
-                </Frame>
-                <Frame>
-                    <StackLayout>
-                        <Label Text="Cumulative Operating Time" FontAttributes="Bold" TextDecorations="Underline"/>
-                        <Label Text="{Binding BikeSpeedSensor.CumulativeOperatingTime, StringFormat='Operating Time: {0}'}"/>
                     </StackLayout>
                 </Frame>
             </StackLayout>

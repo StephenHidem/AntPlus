@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
 using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;
@@ -10,7 +11,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using WpfUsbStickApp.CustomAntDevice;
 
 namespace WpfUsbStickApp
 {
@@ -43,7 +43,7 @@ namespace WpfUsbStickApp
                     // add the implementation of IAntRadio to the host
                     services.AddSingleton<IAntRadio, AntRadio>();
 
-                    // add custom device to the host
+                    // add bike radar to the host
                     services.AddKeyedTransient<AntDevice, BikeRadar>(BikeRadar.DeviceClass);
                 }).
                 Build();

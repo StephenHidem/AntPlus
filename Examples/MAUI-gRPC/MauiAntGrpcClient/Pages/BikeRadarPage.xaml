@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:MauiAntGrpcClient.Views"
+             xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
+             xmlns:bikeradar="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar"
+             x:DataType="viewmodels:BikeRadarViewModel"
+             x:Class="MauiAntGrpcClient.Pages.BikeRadarPage"
+             Title="BikeRadarPage">
+    <Grid Margin="10" RowDefinitions="Auto, *">
+        <HorizontalStackLayout Spacing="24">
+            <RadioButton x:Name="radar" Content="Bike Radar" Style="{StaticResource TabbedRadioButton}" IsChecked="True"/>
+            <RadioButton x:Name="cdp" Content="Common Data Pages"  Style="{StaticResource TabbedRadioButton}" />
+        </HorizontalStackLayout>
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout>
+                <VerticalStackLayout IsVisible="{Binding Source={x:Reference radar}, Path=IsChecked}">
+                    <Frame>
+                        <StackLayout>
+                            <Label Text="Bike Radar State and Targets" FontAttributes="Bold" TextDecorations="Underline"/>
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding BikeRadar.State, StringFormat='State: {0}'}" Grid.Column="0" VerticalOptions="Center"/>
+                                <Label Text="{Binding BikeRadar.ClearTargets, StringFormat='Clear Targets: {0}'}" Grid.Column="1" VerticalOptions="Center"/>
+                                <Button Text="Shutdown" Command="{Binding ShutdownCommand}" Grid.Column="2" Margin="8"/>
+                                <Button Text="Abort Shutdown" Command="{Binding AbortShutdownCommand}" Grid.Column="3" Margin="8"/>
+                            </Grid>
+                            <CollectionView ItemsSource="{Binding BikeRadar.RadarTargets}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="bikeradar:BikeRadar+RadarTarget">
+                                        <Frame>
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding ThreatLevel, StringFormat='Threat Level: {0}'}"/>
+                                                <Label Text="{Binding ThreatSide, StringFormat='Threat Side: {0}'}"/>
+                                                <Label Text="{Binding Range, StringFormat='Range: {0:F3}'}"/>
+                                                <Label Text="{Binding ClosingSpeed, StringFormat='Closing Speed: {0:F2}'}"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+                <views:CommonDataPagesView CommonDataPages="{Binding BikeRadar.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+        <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding BikeRadar.Offline}"/>
+    </Grid>
+</ContentPage>

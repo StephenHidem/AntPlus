@@ -2,13 +2,13 @@
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using WpfUsbStickApp.CustomAntDevice;
 using WpfUsbStickApp.Views;
 
 namespace WpfUsbStickApp

@@ -3,6 +3,8 @@ using MauiAntGrpcClient.Pages;
 using MauiAntGrpcClient.Services;
 using MauiAntGrpcClient.ViewModels;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
 using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 
@@ -53,7 +55,11 @@ namespace MauiAntGrpcClient
                 .AddTransientWithShellRoute<HeartRatePage, HeartRateViewModel>("HeartRate")
                 .AddTransientWithShellRoute<MuscleOxygenPage, MuscleOxygenViewModel>("MuscleOxygen")
                 .AddTransientWithShellRoute<StrideBasedMonitorPage, SDMViewModel>("StrideBasedMonitor")
-                .AddTransientWithShellRoute<UnknownDevicePage, UnknownDeviceViewModel>("UnknownDevice");
+                .AddTransientWithShellRoute<UnknownDevicePage, UnknownDeviceViewModel>("UnknownDevice")
+
+                // register the BikeRadar device, page, and view model
+                .AddKeyedScoped<AntDevice, BikeRadar>(BikeRadar.DeviceClass)
+                .AddTransientWithShellRoute<BikeRadarPage, BikeRadarViewModel>("BikeRadar");
 
             return mauiAppBuilder;
         }

@@ -5,6 +5,7 @@ using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
+using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntPlus.Extensions.Hosting;
@@ -130,6 +131,11 @@ namespace MauiAntGrpcClient.ViewModels
                 case StrideBasedSpeedAndDistance:
                     await Shell.Current.GoToAsync("StrideBasedMonitor", new Dictionary<string, object> {
                     { "Sensor", (StrideBasedSpeedAndDistance)antDevice }
+                });
+                    break;
+                case BikeRadar:
+                    await Shell.Current.GoToAsync("BikeRadar", new Dictionary<string, object> {
+                    { "Sensor", (BikeRadar)antDevice }
                 });
                     break;
                 case UnknownDevice:

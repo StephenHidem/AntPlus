@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 
-namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar
+namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
     public partial class BikeRadar : AntDevice
     {

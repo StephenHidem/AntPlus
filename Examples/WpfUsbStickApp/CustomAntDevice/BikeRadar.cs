@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar
+namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
     public partial class BikeRadar : AntDevice
     {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using SmallEarthTech.AntPlus;
-using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.Extensions.Hosting;
 using SmallEarthTech.AntRadioInterface;
 using SmallEarthTech.AntUsbStick;

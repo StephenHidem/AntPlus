@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:MauiAntGrpcClient.Views"
              xmlns:viewmodels="clr-namespace:MauiAntGrpcClient.ViewModels"
-             xmlns:bikeradar="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar"
+             xmlns:bikeradar="clr-namespace:SmallEarthTech.AntPlus.DeviceProfiles"
              x:DataType="viewmodels:BikeRadarViewModel"
              x:Class="MauiAntGrpcClient.Pages.BikeRadarPage"
              Title="BikeRadarPage">

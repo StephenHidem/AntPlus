@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using System.ComponentModel;
 
 namespace MauiAntGrpcClient.ViewModels

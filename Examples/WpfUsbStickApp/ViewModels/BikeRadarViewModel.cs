@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using SmallEarthTech.AntPlus.DeviceProfiles.BikeRadar;
+using SmallEarthTech.AntPlus.DeviceProfiles;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;

@@ -1,8 +1,11 @@
 ﻿using AntRadioGrpcService;
 using SmallEarthTech.AntRadioInterface;
 
-namespace MauiAntGrpcClient.Services
+namespace AntGrpcShared.ClientServices
 {
+    /// <summary>
+    /// Represents the device capabilities of the ANT radio.
+    /// </summary>
     public class GrpcDeviceCapabilities : DeviceCapabilities
     {
         /// <summary>Initializes a new instance of the <see cref="GrpcDeviceCapabilities" /> class.</summary>

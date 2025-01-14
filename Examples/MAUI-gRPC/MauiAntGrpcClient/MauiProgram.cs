@@ -1,6 +1,6 @@
-﻿using CommunityToolkit.Maui;
+﻿using AntGrpcShared.ClientServices;
+using CommunityToolkit.Maui;
 using MauiAntGrpcClient.Pages;
-using MauiAntGrpcClient.Services;
 using MauiAntGrpcClient.ViewModels;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus;

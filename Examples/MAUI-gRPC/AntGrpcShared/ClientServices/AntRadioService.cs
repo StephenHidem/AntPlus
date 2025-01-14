@@ -3,28 +3,59 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace MauiAntGrpcClient.Services
+namespace AntGrpcShared.ClientServices
 {
-    public partial class AntRadioService(ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource) : IAntRadio
+    /// <summary>
+    /// Service for interacting with ANT radio using gRPC.
+    /// </summary>
+    public class AntRadioService : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 5073;              // gRPC port
 
+        private readonly ILogger<AntRadioService> _logger;
+        private readonly CancellationTokenSource _cancellationTokenSource;
         private gRPCAntRadio.gRPCAntRadioClient? _client;
         private GrpcChannel? _grpcChannel;
 
+        /// <summary>
+        /// Gets the IP address of the server.
+        /// </summary>
         public IPAddress ServerIPAddress { get; private set; } = IPAddress.None;
-        public string ProductDescription { get; private set; } = string.Empty;
-        public string Version { get; private set; } = string.Empty;
-        public uint SerialNumber { get; private set; }
+
+        /// <inheritdoc/>
         public int NumChannels => throw new NotImplementedException();
 
-        public event EventHandler<AntResponse>? RadioResponse { add { } remove { } }
+        /// <inheritdoc/>
+        public string ProductDescription { get; private set; } = string.Empty;
+
+        /// <inheritdoc/>
+        public uint SerialNumber { get; private set; }
+
+        /// <inheritdoc/>
+        public string Version { get; private set; } = string.Empty;
+
+        /// <inheritdoc/>
+        public event EventHandler<AntResponse>? RadioResponse;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AntRadioService"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="cancellationTokenSource">The cancellation token source.</param>
+        public AntRadioService(ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource)
+        {
+            _logger = logger;
+            _cancellationTokenSource = cancellationTokenSource;
+        }
 
         /// <summary>
         /// Searches for an ANT radio server. A receive task creates a UdpClient and then sends a
@@ -37,28 +68,28 @@ namespace MauiAntGrpcClient.Services
         /// <exception cref="OperationCanceledException">Thrown when the CancellationTokenSource is canceled.</exception>
         public async Task FindAntRadioServerAsync()
         {
-            IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);
+            IPEndPoint multicastEndPoint = new IPEndPoint(grpAddress, multicastPort);
             byte[] req = Encoding.ASCII.GetBytes("MauiAntGrpcClient discovery request");
 
             // initiate receive
-            using UdpClient udpClient = new(0);
+            using UdpClient udpClient = new UdpClient(0);
             Task<UdpReceiveResult> receiveTask = udpClient.ReceiveAsync();
 
             // loop every 2 seconds sending a message to the any listening servers
-            while (!cancellationTokenSource.IsCancellationRequested)
+            while (!_cancellationTokenSource.IsCancellationRequested)
             {
                 // send request for ANT radio server
                 _ = udpClient.Send(req, req.Length, multicastEndPoint);
 
                 // wait for response from server, timeout, or cancellation
-                if (receiveTask.Wait(2000, cancellationTokenSource.Token))
+                if (receiveTask.Wait(2000, _cancellationTokenSource.Token))
                 {
                     UdpReceiveResult result = receiveTask.Result;
                     ServerIPAddress = result.RemoteEndPoint.Address;
                     string msg = Encoding.ASCII.GetString(result.Buffer);
-                    logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
+                    _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
 
-                    UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
+                    UriBuilder uriBuilder = new UriBuilder("http", ServerIPAddress.ToString(), gRPCPort);
                     _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri);
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
                     PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
@@ -69,54 +100,61 @@ namespace MauiAntGrpcClient.Services
                 }
                 else
                 {
-                    logger.LogInformation("FindAntRadioServerAsync: Timeout. Retry.");
+                    _logger.LogInformation("FindAntRadioServerAsync: Timeout. Retry.");
                 }
             }
         }
 
-        public async Task<IAntChannel[]> InitializeContinuousScanMode()
-        {
-            if (_grpcChannel == null)
-            {
-                logger.LogError("_grpcChannel is null!");
-                return [];
-            }
-            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
-            AntChannelService[] channels = new AntChannelService[reply.NumChannels];
-            for (byte i = 0; i < reply.NumChannels; i++)
-            {
-                channels[i] = new AntChannelService(logger, i, _grpcChannel);
-            }
-            channels[0].HandleChannelResponseEvents(cancellationTokenSource.Token);
-            return channels;
-        }
-
+        /// <inheritdoc/>
         public void CancelTransfers(int cancelWaitTime)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public IAntChannel GetChannel(int num)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy, uint responseWaitTime)
+        /// <inheritdoc/>
+        public async Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy = false, uint responseWaitTime = 1500)
         {
             GetDeviceCapabilitiesReply caps = await _client!.GetDeviceCapabilitiesAsync(new GetDeviceCapabilitiesRequest { ForceCopy = forceNewCopy, WaitResponseTime = responseWaitTime });
             return new GrpcDeviceCapabilities(caps);
         }
 
-        public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime)
+        /// <inheritdoc/>
+        public async Task<IAntChannel[]> InitializeContinuousScanMode()
+        {
+            if (_grpcChannel == null)
+            {
+                throw new InvalidOperationException("gRPC channel is not initialized. Invoke FindAntRadioServerAsync method prior to invoking this method.");
+            }
+
+            InitScanModeReply reply = await _client!.InitializeContinuousScanModeAsync(new Empty());
+            AntChannelService[] channels = new AntChannelService[reply.NumChannels];
+            for (byte i = 0; i < reply.NumChannels; i++)
+            {
+                channels[i] = new AntChannelService(_logger, i, _grpcChannel);
+            }
+            channels[0].HandleChannelResponseEvents(_cancellationTokenSource.Token);
+            return channels;
+        }
+
+        /// <inheritdoc/>
+        public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime = 500)
         {
             throw new NotImplementedException();
         }
 
-        public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime, byte channelNum)
+        /// <inheritdoc/>
+        public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime, byte channelNum = 0)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public bool WriteRawMessageToDevice(byte msgID, byte[] msgData)
         {
             throw new NotImplementedException();

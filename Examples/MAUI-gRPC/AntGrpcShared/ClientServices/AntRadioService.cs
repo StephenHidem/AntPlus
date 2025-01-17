@@ -23,6 +23,7 @@ namespace AntGrpcShared.ClientServices
 
         private readonly ILogger<AntRadioService> _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly GrpcChannelOptions _grpcChannelOptions;
         private gRPCAntRadio.gRPCAntRadioClient? _client;
         private GrpcChannel? _grpcChannel;
 
@@ -51,10 +52,14 @@ namespace AntGrpcShared.ClientServices
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="cancellationTokenSource">The cancellation token source.</param>
-        public AntRadioService(ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource)
+        /// <param name="grpcChannelOptions">Optional gRPC channel configuration options.</param>
+        public AntRadioService(
+            ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource,
+            GrpcChannelOptions? grpcChannelOptions = null)
         {
             _logger = logger;
             _cancellationTokenSource = cancellationTokenSource;
+            _grpcChannelOptions = grpcChannelOptions ?? new GrpcChannelOptions();
         }
 
         /// <summary>
@@ -90,7 +95,7 @@ namespace AntGrpcShared.ClientServices
                     _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
 
                     UriBuilder uriBuilder = new UriBuilder("http", ServerIPAddress.ToString(), gRPCPort);
-                    _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri);
+                    _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
                     PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
                     ProductDescription = reply.ProductDescription;

@@ -9,7 +9,7 @@ namespace AntGrpcShared.ClientServices
     public class GrpcDeviceCapabilities : DeviceCapabilities
     {
         /// <summary>Initializes a new instance of the <see cref="GrpcDeviceCapabilities" /> class.</summary>
-        /// <param name="capabilities">The capabilities.</param>
+        /// <param name="capabilities">The ANT radio capabilities.</param>
         public GrpcDeviceCapabilities(GetDeviceCapabilitiesReply capabilities)
         {
             MaxANTChannels = (byte)capabilities.MaxAntChannels;

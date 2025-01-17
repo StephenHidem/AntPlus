@@ -14,35 +14,58 @@ service gRPCAntChannel {
     rpc SendExtAcknowledgedData (ExtDataRequest) returns (MessagingCodeReply);
 }
 
+// Request to subscribe to channel response event.
 message SubscribeRequest {
+    // The channel number to subscribe to.
     uint32 channel_number = 1;
 }
+
+// Channel response update.
 message ChannelResponseUpdate {
+    // The channel number.
     uint32 channel_number = 1;
+    // The response ID.
     uint32 response_id = 2;
+    // The channel ID.
     google.protobuf.UInt32Value channel_id = 3;
+    // The data payload.
     bytes payload = 4;
+    // The RSSI value.
     int32 rssi = 5;
+    // The threshold configuration value.
     int32 threshold_configuration_value = 6;
+    // The timestamp.
     uint32 timestamp = 7;
 }
 
 // The int status codes returned by the acknowledged and broadcast messaging functions.
 enum MessagingReturnCode {
+    // The messaging function failed.
     MESSAGING_RETURN_CODE_FAIL = 0;
+    // The messaging function passed.
     MESSAGING_RETURN_CODE_PASS = 1;
+    // The messaging function timed out.
     MESSAGING_RETURN_CODE_TIMEOUT = 2;
+    // The messaging function was cancelled.
     MESSAGING_RETURN_CODE_CANCELLED = 3;
+    // The messaging function received invalid parameters.
     MESSAGING_RETURN_CODE_INVALID_PARAMS = 4;
 }
 
+// Request to send an extended acknowledged data message.
 message ExtDataRequest {
+    // The channel number.
     uint32 channel_number = 1;
+    // The channel ID.
     uint32 channel_id = 2;
+    // The data payload.
     bytes data = 3;
+    // The wait time in milliseconds.
     uint32 wait_time = 4;
 }
 
+// The response to a messaging function.
 message MessagingCodeReply {
+    // The return code.
     MessagingReturnCode return_code = 1;
 }

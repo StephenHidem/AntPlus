@@ -203,15 +203,17 @@ namespace SmallEarthTech.AntPlus
 
             internal ProductInfoPage(byte[] dataPage)
             {
+                // create a number format info provider with a decimal separator of '.'
+                System.Globalization.NumberFormatInfo nfi = new System.Globalization.NumberFormatInfo() { NumberDecimalSeparator = "." };
                 if (dataPage[2] != 0xFF)
                 {
                     // supplemental SW revision is valid
-                    SoftwareRevision = Version.Parse(((dataPage[3] * 100.0 + dataPage[2]) / 1000.0).ToString("N3"));
+                    SoftwareRevision = Version.Parse(((dataPage[3] * 100.0 + dataPage[2]) / 1000.0).ToString("N3", nfi));
                 }
                 else
                 {
                     // only main SW revision is present
-                    SoftwareRevision = Version.Parse((dataPage[3] / 10.0).ToString("N3"));
+                    SoftwareRevision = Version.Parse((dataPage[3] / 10.0).ToString("N3", nfi));
                 }
                 SerialNumber = BitConverter.ToUInt32(dataPage, 4);
             }

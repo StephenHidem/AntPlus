@@ -21,50 +21,13 @@
 							This application creates an IPv6 UdpClient bound to port number 2000. The UdpClient directs all messages received from the
 							AntDeviceCollection to the multicast group [::] (all interfaces on the local subnet), port number 55436. A Xamarin
 							client example (Android only) is available as a separate solution at
-							<a href="https://github.com/StephenHidem/XamAntClientApp/" target="_blank" rel="noopener noreferrer">XamAntClientApp.</a></p></div><h2 id="Section4"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>The MAUI Example Projects</h2><div id="IDEABSection"><p>
+							<a href="https://github.com/StephenHidem/XamAntClientApp/" target="_blank" rel="noopener noreferrer">XamAntClientApp.</a></p></div><h2 id="Section4"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>.NET MAUI/gRPC Example Projects</h2><div id="IDEABSection"><p>
 					This group of examples is comprised of four projects. AntGrpcShared is a class library providing a gRPC client/server to be consumed by the other
 					projects. AntGrpcService is a Windows service that provides services to connect to and communicate with an ANT USB stick.
 					The MauiAntClientApp is a .NET MAUI project and gRPC client that is used to demonstrate Windows/Android applications that work with the
-					remote server application on a local subnet. <strong>I have not tested the other platforms supported by .NET MAUI.</strong></p><article class="message is-info"><div class="message-header"><p><span class="icon"><i class="fa fa-info-circle"></i></span>  About gRPC</p></div><div class="message-body"><p>
-						gRPC is a Google defined protocol for remote procedure calls. It is the recommended RPC to use instead of WCF. Do not
-						confuse <strong>gRPC channels</strong> with <strong>ANT radio channels</strong>. gRPC is a
-						network protocol, ANT radio channels are a Dynastream/Garmin protocol for ANT radios.
-					</p></div></article><p>
-					The intent of AntGrpcService is to make the ANT USB stick accessible not only to client applications running on the local
-					host but mobile device emulators and mobile devices connected to the network the service is running on.
-				</p><p>
-					AntGrpcShared is the glue that facilitates communication between clients and the service. The benefit of using
-					gRPC is that multiple clients can run simultaneously, both on the local PC and over the network.
-				</p><h4 id="SubSection1">AntGrpcShared</h4><p>
-							This class library is configured as a gRPC client/server library. The .proto files define the messages and data exchanged
-							between client and server implementations.
-						</p><h4 id="SubSection2">AntGrpcService</h4><p>
-							The server is a Windows service that runs on the host PC that has an ANT USB stick connected to it. Three services are
-							provided.
-						</p><p>
-							The DiscoveryService replies to client messages over a UDP multicast port on the local subnet. This allows clients to obtain
-							the URI of the server and connect to the gRPC channel. Think of it as a poor man's service discovery protocol. No authentication
-							or validation is performed.
-						</p><p>
-							The AntRadioService provides methods to get information about the connected ANT USB stick, initialize for continuous scan mode,
-							and get channels to communicate with ANT devices via the AntChannelService.
-						</p><p>
-							The AntChannelService has a method to subscribe to a gRPC stream of ANT messages when the ANT USB stick has been initialized
-							for continuous scan mode. The remaining gRPC/ANT radio channels are used to send extended acknowledged messages to individual
-							ANT devices.
-						</p><p><strong>The service can be debugged!</strong> Make sure the service is not installed or disable it in the
-							service controller (<strong>services.msc</strong>). Select the Debug solution configuration and launch it
-							from Visual Studio. A console window will open. Logging output is displayed in the console window and breakpoints
-							can be set.
-						</p><h4 id="SubSection3">MauiAntClientApp</h4><p>
-							The client app is the consumer of the client services provided by AntGrpcShared project. The server URI is first obtained via
-							a UDP multicast message, a gRPC connection to the server is established, and then requests to initialize and communicate with the
-							remote ANT USB stick are invoked.
-						</p><h4 id="SubSection4">AntGrpcServicePackage</h4><p>
-							The AntGrpcServicePackage installs the AntGrpcService on the local Windows PC and creates a firewall exception allowing network
-							traffic between the service and any clients on the network. Wix is used to create the MSI file. You must install the
-							Wix toolset to build this project.
-						</p></div></div><div id="InThisArticleColumn" class="column is-hidden-mobile"><nav class="menu sticky is-hidden"><p class="menu-label"><strong>In This Article</strong></p><ul id="InThisArticleMenu" class="menu-list"><ul class="menu"><li><a class="quickLink">AntUsbStick Class Library</a></li><li><a class="quickLink">WpfUsbStickApp WPF Application</a></li><li><a class="quickLink">AntMulticastServer Console Application</a></li></ul></ul><li><a class="quickLink">The MAUI Example Projects</a><ul class="menu"><li><a class="quickLink">AntGrpcShared</a></li><li><a class="quickLink">AntGrpcService</a></li><li><a class="quickLink">MauiAntClientApp</a></li><li><a class="quickLink">AntGrpcServicePackage</a></li></ul></li></nav></div></div></div><footer id="PageFooter" class="footer border-top py-3 fixedFooter"><div class="columns"><div id="FooterContent" class="column"><p>© 2022 Stephen Hidem.</p> 
+					remote server application on a local subnet. <strong>I have not tested the other platforms supported by .NET MAUI.</strong></p><p>
+					See the <a href="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca.htm">MAUI-gRPC Examples</a> topic for more information.
+				</p></div></div><div id="InThisArticleColumn" class="column is-hidden-mobile"><nav class="menu sticky is-hidden"><p class="menu-label"><strong>In This Article</strong></p><ul id="InThisArticleMenu" class="menu-list"><ul class="menu"><li><a class="quickLink">AntUsbStick Class Library</a></li><li><a class="quickLink">WpfUsbStickApp WPF Application</a></li><li><a class="quickLink">AntMulticastServer Console Application</a></li></ul></ul><li><a class="quickLink">.NET MAUI/gRPC Example Projects</a></li></nav></div></div></div><footer id="PageFooter" class="footer border-top py-3 fixedFooter"><div class="columns"><div id="FooterContent" class="column"><p>© 2022 Stephen Hidem.</p> 
 				</div></div></footer></div><script>$(function(){
 SetDefaultLanguage("cs");
 LoadTocFile(null, null);

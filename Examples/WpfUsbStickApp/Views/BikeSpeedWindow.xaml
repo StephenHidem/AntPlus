@@ -13,8 +13,9 @@
         <StackPanel DataContext="{Binding BikeSpeedSensor}">
             <GroupBox Header="Speed and Distance">
                 <StackPanel>
-                    <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed: {0}'}"/>
-                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0}'}"/>
+                    <TextBlock Text="{Binding InstantaneousSpeed, StringFormat='Instantaneous Speed: {0:F3}'}"/>
+                    <TextBlock Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
+                    <TextBlock Text="{Binding CumulativeOperatingTime, StringFormat='Operating Time: {0}'}"/>
                     <TextBlock Text="{Binding Stopped, StringFormat='Stopped: {0}'}"/>
                 </StackPanel>
             </GroupBox>

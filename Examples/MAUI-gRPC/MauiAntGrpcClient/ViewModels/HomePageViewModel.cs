@@ -1,6 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AntGrpcShared.ClientServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MauiAntGrpcClient.Services;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
@@ -130,6 +130,11 @@ namespace MauiAntGrpcClient.ViewModels
                 case StrideBasedSpeedAndDistance:
                     await Shell.Current.GoToAsync("StrideBasedMonitor", new Dictionary<string, object> {
                     { "Sensor", (StrideBasedSpeedAndDistance)antDevice }
+                });
+                    break;
+                case BikeRadar:
+                    await Shell.Current.GoToAsync("BikeRadar", new Dictionary<string, object> {
+                    { "Sensor", (BikeRadar)antDevice }
                 });
                     break;
                 case UnknownDevice:

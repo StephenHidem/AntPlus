@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace SmallEarthTech.AntPlus
@@ -203,15 +204,16 @@ namespace SmallEarthTech.AntPlus
 
             internal ProductInfoPage(byte[] dataPage)
             {
+                // SW revision is in the form of X.Y regardless of current culture
                 if (dataPage[2] != 0xFF)
                 {
                     // supplemental SW revision is valid
-                    SoftwareRevision = Version.Parse(((dataPage[3] * 100.0 + dataPage[2]) / 1000.0).ToString("N3"));
+                    SoftwareRevision = Version.Parse(((dataPage[3] * 100.0 + dataPage[2]) / 1000.0).ToString("N3", NumberFormatInfo.InvariantInfo));
                 }
                 else
                 {
                     // only main SW revision is present
-                    SoftwareRevision = Version.Parse((dataPage[3] / 10.0).ToString("N3"));
+                    SoftwareRevision = Version.Parse((dataPage[3] / 10.0).ToString("N3", NumberFormatInfo.InvariantInfo));
                 }
                 SerialNumber = BitConverter.ToUInt32(dataPage, 4);
             }

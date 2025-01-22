@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>4.0.0.0</AssemblyVersion>
+	<AssemblyVersion>4.0.1.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -24,10 +24,7 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>1. All device profiles employ the CommunityToolkit.Mvvm. This makes it much easier tor the device profiles to participate as view models.
-2. ChannelCount was added to AntDevice and device profiles to enable scaling the device timeouts based on the number of missed messags.
-3. Device timeouts can be disabled by setting the timeout argument to -1 (Timeout.Infinite).
-4. Added TimeoutOptions class to provide support to ANT+ hosting extensions.</PackageReleaseNotes>
+	<PackageReleaseNotes>Bug fix: Parsing ProductInfoPage failed in cultures that use "decimal comma" for decimal separator. Added culture invariant NumberFormatInfo with NumberDecimalSeparator = ".". Issue #34.</PackageReleaseNotes>
   </PropertyGroup>
 
     <PropertyGroup>

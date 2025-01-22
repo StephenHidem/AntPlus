@@ -127,6 +127,7 @@
     <None Include="Content\HostingExtensions\How To Create and Add AntDevice.aml" />
     <None Include="Content\VersionHistory\AntPlus\v3.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v4.0.0.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v4.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.0.0.aml" />

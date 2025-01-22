@@ -1,10 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles
 {
@@ -15,7 +11,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         public override int ChannelCount => 4084;   // from master channel period in Bike Radar spec
 
-        public override Stream? DeviceImageStream => GetType().Assembly.GetManifestResourceStream("WpfUsbStickApp.CustomAntDevice.BikeRadar.png");
+        public override Stream? DeviceImageStream => GetType().Assembly.GetManifestResourceStream("MauiAntGrpcClient.CustomAntDevice.BikeRadar.png");
 
         public override string ToString() => "Bike Radar";
         #endregion
@@ -77,7 +73,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         private DeviceState state;
         [ObservableProperty]
         private bool clearTargets;
-        public List<RadarTarget> RadarTargets { get; } = new();
+        public List<RadarTarget> RadarTargets { get; } = [];
         public CommonDataPages CommonDataPages { get; }
         #endregion
 

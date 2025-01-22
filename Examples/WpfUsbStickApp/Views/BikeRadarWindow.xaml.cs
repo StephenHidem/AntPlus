@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using WpfUsbStickApp.CustomAntDevice;
+﻿using SmallEarthTech.AntPlus.DeviceProfiles;
+using System.Windows;
 using WpfUsbStickApp.ViewModels;
 
 namespace WpfUsbStickApp.Views

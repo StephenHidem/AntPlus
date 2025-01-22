@@ -17,10 +17,10 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>
+			<para>
 				This project generates the server and client gRPC messaging protocols for other projects to use. Two protocol files are
 				defined - ant_radio.proto and ant_channel.proto. These are compiled by the protobuf compiler into C# classes, yielding
-				source files for clients and servers, which in turn are compiled into the class library.
+				source files for clients and servers, which in turn are compiled into the AntGrpcShared class library.
 			</para>
 			<alert class="note" title="About gRPC">
 				<para>
@@ -28,23 +28,47 @@
 				</para>
 			</alert>
 			<para>
-				Servers/services will derive from gRPCAntRadio.gRPCAntRadioBase and gRPCAntChannel.gRPCAntChannelBase.
+				Servers/services will derive from gRPCAntRadio.gRPCAntRadioBase and gRPCAntChannel.gRPCAntChannelBase. See
+				the AntGrpcService project for an example of how to implement these services.
 			</para>
 			<para>
-				Clients will reference gRPCAntRadio.gRPCAntRadioClient and gRPCAntChannel.gRPCAntChannelClient.
+				Clients will use the AntRadioService and AntChannelService classes to communicate with the server. These classes
+				are defined in the <application>AntGrpcShared.ClientServices</application> namespace. These classes greatly simplify integration of ANT gRPC
+				into client-side applications. Reference this project or copy the assembly into your client application to use these classes.
 			</para>
-			<alert class="note" title="Implementation">
-				<para>
-					This is a minimal implementation that supports the examples. It will be expanded upon in the near future.
-				</para>
-			</alert>
 		</introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="S1">
+			<title>AntRadioService Class</title>
+			<content>
+				<para>
+					The AntRadioService implements IAntRadio and provides services for managing the ANT radio server. It
+					extends IAntRadio with a method, FindAntRadioServerAsync, to find and connect to the server. It also
+					exposes the server IP address property.
+				</para>
+				<para>
+					The AntRadioService class is currently configured to use the multicast address 239.55.43.6, port 55437 for server
+					discovery. The server must be running on the same subnet as the client for discovery to work. The gRPC
+					channel is created using the server IP address and port number 5073. This matches the gRPC server configuration
+					implemented in the AntGrpcService project.
+				</para>
+			</content>
+		</section>
+		<section address="S2">
+			<title>AntChannelService Class</title>
+			<content>
+				<para>
+					The AntChannelService implements IAntChannel and provides services for managing the ANT radio server
+					channels. It extends IAntChannel with a method, HandleChannelResponseUpdates, which subscribes to and
+					handles channel response updates.
+				</para>
+			</content>
+		</section>
 
-    <relatedTopics>
+		<relatedTopics>
 			<link xlink:href="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" />
 			<!-- One or more of the following:
            - A local link

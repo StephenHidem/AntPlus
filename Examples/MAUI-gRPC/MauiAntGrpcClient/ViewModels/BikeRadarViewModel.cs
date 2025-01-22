@@ -1,20 +1,20 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows;
 
-namespace WpfUsbStickApp.ViewModels
+namespace MauiAntGrpcClient.ViewModels
 {
-    internal partial class BikeRadarViewModel
+    public partial class BikeRadarViewModel : ObservableObject, IQueryAttributable
     {
         private bool _shutdown;
 
-        public BikeRadar BikeRadar { get; }
+        [ObservableProperty]
+        private BikeRadar? bikeRadar;
 
-        public BikeRadarViewModel(BikeRadar bikeRadar)
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            BikeRadar = bikeRadar;
+            BikeRadar = (BikeRadar)query["Sensor"];
             BikeRadar.PropertyChanged += BikeRadar_PropertyChanged;
         }
 
@@ -23,7 +23,7 @@ namespace WpfUsbStickApp.ViewModels
             // notify UI if state changed or device went offline
             if (e.PropertyName == nameof(BikeRadar.State) || e.PropertyName == nameof(BikeRadar.Offline))
             {
-                _ = Application.Current.Dispatcher.InvokeAsync(() =>
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
                     ShutdownCommand.NotifyCanExecuteChanged();
                     AbortShutdownCommand.NotifyCanExecuteChanged();
@@ -37,12 +37,12 @@ namespace WpfUsbStickApp.ViewModels
             _shutdown = true;
             ShutdownCommand.NotifyCanExecuteChanged();
             AbortShutdownCommand.NotifyCanExecuteChanged();
-            _ = await BikeRadar.Shutdown(BikeRadar.Command.Shutdown);
+            _ = await BikeRadar!.Shutdown(BikeRadar.Command.Shutdown);
         }
 
-        private bool CanExecuteShutdown() => !_shutdown && !BikeRadar.Offline
-            && BikeRadar.State == BikeRadar.DeviceState.Broadcasting
-            || BikeRadar.State == BikeRadar.DeviceState.ShutdownAborted;
+        private bool CanExecuteShutdown() => !_shutdown && BikeRadar != null && !BikeRadar.Offline
+            && (BikeRadar.State == BikeRadar.DeviceState.Broadcasting
+            || BikeRadar.State == BikeRadar.DeviceState.ShutdownAborted);
 
         [RelayCommand(CanExecute = nameof(CanExecuteAbortShutdown))]
         public async Task AbortShutdown()
@@ -50,10 +50,10 @@ namespace WpfUsbStickApp.ViewModels
             _shutdown = false;
             ShutdownCommand.NotifyCanExecuteChanged();
             AbortShutdownCommand.NotifyCanExecuteChanged();
-            _ = await BikeRadar.Shutdown(BikeRadar.Command.AbortShutdown);
+            _ = await BikeRadar!.Shutdown(BikeRadar.Command.AbortShutdown);
         }
 
-        private bool CanExecuteAbortShutdown() => _shutdown && !BikeRadar.Offline
+        private bool CanExecuteAbortShutdown() => _shutdown && BikeRadar != null && !BikeRadar.Offline
             && BikeRadar.State == BikeRadar.DeviceState.ShutdownRequested;
     }
 }

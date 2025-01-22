@@ -46,10 +46,10 @@ namespace AntGrpcShared.ClientServices
         }
 
         /// <summary>
-        /// Handles channel response events.
+        /// Handles channel response updates.
         /// </summary>
         /// <param name="cancellationToken">Cancels subscription to ChannelResponseUpdate.</param>
-        public async void HandleChannelResponseEvents(CancellationToken cancellationToken)
+        public async void HandleChannelResponseUpdates(CancellationToken cancellationToken)
         {
             using var response = _client.Subscribe(new SubscribeRequest { ChannelNumber = _channelNumber }, cancellationToken: cancellationToken);
             try

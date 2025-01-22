@@ -144,7 +144,7 @@ namespace AntGrpcShared.ClientServices
             {
                 channels[i] = new AntChannelService(_logger, i, _grpcChannel);
             }
-            channels[0].HandleChannelResponseEvents(_cancellationTokenSource.Token);
+            channels[0].HandleChannelResponseUpdates(_cancellationTokenSource.Token);
             return channels;
         }
 

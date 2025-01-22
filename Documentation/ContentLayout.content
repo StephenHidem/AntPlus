@@ -12,7 +12,7 @@
     <Topic id="0e424769-d4c6-4a98-9384-a810421ad5e1" visible="True" title="How-To: Create and Add a Custom AntDevice to Host" />
   </Topic>
   <Topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" visible="True" isExpanded="true" title="Examples Overview">
-    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" title="MAUI-gRPC">
+    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" title="MAUI-gRPC Examples">
       <Topic id="721a6d97-52b3-4a6b-8835-4201a92c432c" visible="True" />
       <Topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" visible="True" />
       <Topic id="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4" visible="True" />
@@ -48,6 +48,7 @@
       <Topic id="988b09e9-af30-438d-ad2d-0b86a818f97d" visible="True" title="Version 3.0.0.0" />
       <Topic id="5784e268-84d1-466a-aa3a-e0fb8085a4ff" visible="True" title="Version 3.0.1.0" />
       <Topic id="44f85400-6285-4dbe-8f65-d28b68108fc1" visible="True" title="Version 4.0.0.0" />
+      <Topic id="10a23545-666c-497d-a851-14eb7ac619e8" visible="True" isSelected="true" title="Version 4.0.1.0" />
     </Topic>
     <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" isExpanded="true" title="AntUsbStick Version History">
       <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" title="Version 2.0.2.0" />
@@ -56,7 +57,7 @@
     </Topic>
     <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" isExpanded="true" title="Hosting Extensions Version History">
       <Topic id="0677519c-d5ba-4c5d-b400-f10dc75a33a7" visible="True" title="Version 1.0.0.0" />
-      <Topic id="5c5fc223-4f8c-4a17-bb09-8f0d1d3f2cac" visible="True" isSelected="true" title="Version 1.1.0.0" />
+      <Topic id="5c5fc223-4f8c-4a17-bb09-8f0d1d3f2cac" visible="True" title="Version 1.1.0.0" />
     </Topic>
   </Topic>
 </Topics>

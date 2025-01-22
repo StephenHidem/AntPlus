@@ -113,13 +113,14 @@ namespace AntGrpcShared.ClientServices
         /// <inheritdoc/>
         public void CancelTransfers(int cancelWaitTime)
         {
-            throw new NotImplementedException();
+            _client!.CancelTransfers(new CancelTransfersRequest { WaitTime = cancelWaitTime });
         }
 
         /// <inheritdoc/>
         public IAntChannel GetChannel(int num)
         {
-            throw new NotImplementedException();
+            _ = _client!.GetChannel(new GetChannelRequest { ChannelNumber = (byte)num });
+            return new AntChannelService(_logger, (byte)num, _grpcChannel!);
         }
 
         /// <inheritdoc/>
@@ -150,19 +151,22 @@ namespace AntGrpcShared.ClientServices
         /// <inheritdoc/>
         public AntResponse ReadUserNvm(ushort address, byte size, uint responseWaitTime = 500)
         {
-            throw new NotImplementedException();
+            AntResponseReply response = _client!.ReadUserNvm(new ReadUserNvmRequest { Address = address, Size = size, WaitResponseTime = responseWaitTime });
+            return new GrpcAntResponse(response);
         }
 
         /// <inheritdoc/>
         public AntResponse RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID messageID, uint responseWaitTime, byte channelNum = 0)
         {
-            throw new NotImplementedException();
+            AntResponseReply response = _client!.RequestMessageAndResponse(new RequestMessageAndResponseRequest { MsgId = (AntRadioGrpcService.RequestMessageID)messageID, WaitResponseTime = responseWaitTime, ChannelNumber = channelNum });
+            return new GrpcAntResponse(response);
         }
 
         /// <inheritdoc/>
         public bool WriteRawMessageToDevice(byte msgID, byte[] msgData)
         {
-            throw new NotImplementedException();
+            BoolValue reply = _client!.WriteRawMessageToDevice(new WriteRawMessageToDeviceRequest { MsgId = msgID, MsgData = Google.Protobuf.ByteString.CopyFrom(msgData) });
+            return reply.Value;
         }
     }
 }

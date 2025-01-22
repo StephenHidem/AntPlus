@@ -7,7 +7,11 @@ using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BasicChannelStatusCode = SmallEarthTech.AntRadioInterface.BasicChannelStatusCode;
+using ChannelType = SmallEarthTech.AntRadioInterface.ChannelType;
+using ChannelTypeExtended = SmallEarthTech.AntRadioInterface.ChannelTypeExtended;
 using MessagingReturnCode = SmallEarthTech.AntRadioInterface.MessagingReturnCode;
+using TransmitPower = SmallEarthTech.AntRadioInterface.TransmitPower;
 
 namespace AntGrpcShared.ClientServices
 {
@@ -68,25 +72,43 @@ namespace AntGrpcShared.ClientServices
         /// <inheritdoc/>
         public bool AssignChannel(ChannelType channelTypeByte, byte networkNumber, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.AssignChannel(new AssignChannelRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelType = (AntChannelGrpcService.ChannelType)(uint)channelTypeByte,
+                NetworkNumber = networkNumber,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool AssignChannelExt(ChannelType channelTypeByte, byte networkNumber, ChannelTypeExtended extAssignByte, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.AssignChannelExt(new AssignChannelExtRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelType = (AntChannelGrpcService.ChannelType)(uint)channelTypeByte,
+                NetworkNumber = networkNumber,
+                ChannelTypeExtended = (AntChannelGrpcService.ChannelTypeExtended)(uint)extAssignByte,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool CloseChannel(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.CloseChannel(new CloseChannelRequest { ChannelNumber = _channelNumber, WaitTime = responseWaitTime }).Value;
         }
 
         /// <inheritdoc/>
         public bool ConfigFrequencyAgility(byte freq1, byte freq2, byte freq3, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.ConfigureFrequencyAgility(new ConfigureFrequencyAgilityRequest
+            {
+                ChannelNumber = _channelNumber,
+                Frequencies = ByteString.CopyFrom(new byte[] { freq1, freq2, freq3 }),
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
@@ -98,61 +120,107 @@ namespace AntGrpcShared.ClientServices
         /// <inheritdoc/>
         public bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.IncludeExcludeListAddChannel(new IncludeExcludeChannelRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelId = channelId.Id,
+                ListIndex = listIndex,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool IncludeExcludeListConfigure(byte listSize, bool isExclusionList, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.IncludeExcludeListConfigure(new ConfigureIncludeExcludeChannelListRequest
+            {
+                ChannelNumber = _channelNumber,
+                ListSize = listSize,
+                IsExclusionList = isExclusionList,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool OpenChannel(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.OpenChannel(new OpenChannelRequest { ChannelNumber = _channelNumber, WaitTime = responseWaitTime }).Value;
         }
 
         /// <inheritdoc/>
         public ChannelId RequestChannelID(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return new ChannelId(_client.RequestChannelId(new ChannelIdRequest { ChannelNumber = _channelNumber, WaitTime = responseWaitTime }).Value);
         }
 
         /// <inheritdoc/>
         public ChannelStatus RequestStatus(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = _client.RequestChannelStatus(new ChannelStatusRequest { ChannelNumber = _channelNumber, WaitTime = responseWaitTime });
+            return new ChannelStatus
+            {
+                BasicStatus = (BasicChannelStatusCode)reply.BasicChannelStatusCode,
+                ChannelType = (ChannelType)reply.ChannelType,
+                networkNumber = (byte)reply.NetworkNumber
+            };
         }
 
         /// <inheritdoc/>
         public MessagingReturnCode SendAcknowledgedData(byte[] data, uint ackWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = _client.SendAcknowledgedData(new DataRequest
+            {
+                ChannelNumber = _channelNumber,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = ackWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         /// <inheritdoc/>
-        public Task<MessagingReturnCode> SendAcknowledgedDataAsync(byte[] data, uint ackWaitTime)
+        public async Task<MessagingReturnCode> SendAcknowledgedDataAsync(byte[] data, uint ackWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = await _client.SendAcknowledgedDataAsync(new DataRequest
+            {
+                ChannelNumber = _channelNumber,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = ackWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         /// <inheritdoc/>
         public bool SendBroadcastData(byte[] data)
         {
-            throw new NotImplementedException();
+            return _client.SendBroadcastData(new DataRequest
+            {
+                ChannelNumber = _channelNumber,
+                Data = ByteString.CopyFrom(data)
+            }).Value;
         }
 
         /// <inheritdoc/>
         public MessagingReturnCode SendBurstTransfer(byte[] data, uint completeWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = _client.SendBurstTransfer(new DataRequest
+            {
+                ChannelNumber = _channelNumber,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = completeWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         /// <inheritdoc/>
-        public Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, uint completeWaitTime)
+        public async Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, uint completeWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = await _client.SendBurstTransferAsync(new DataRequest
+            {
+                ChannelNumber = _channelNumber,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = completeWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         /// <inheritdoc/>
@@ -184,79 +252,138 @@ namespace AntGrpcShared.ClientServices
         /// <inheritdoc/>
         public bool SendExtBroadcastData(ChannelId channelId, byte[] data)
         {
-            throw new NotImplementedException();
+            return _client.SendExtBroadcastData(new ExtDataRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelId = channelId.Id,
+                Data = ByteString.CopyFrom(data)
+            }).Value;
         }
 
         /// <inheritdoc/>
         public MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, uint completeWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = _client.SendExtBurstTransfer(new ExtDataRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelId = channelId.Id,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = completeWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         /// <inheritdoc/>
-        public Task<MessagingReturnCode> SendExtBurstTransferAsync(ChannelId channelId, byte[] data, uint completeWaitTime)
+        public async Task<MessagingReturnCode> SendExtBurstTransferAsync(ChannelId channelId, byte[] data, uint completeWaitTime)
         {
-            throw new NotImplementedException();
+            var reply = await _client.SendExtBurstTransferAsync(new ExtDataRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelId = channelId.Id,
+                Data = ByteString.CopyFrom(data),
+                WaitTime = completeWaitTime
+            });
+            return (MessagingReturnCode)reply.ReturnCode;
         }
 
         /// <inheritdoc/>
         public bool SetChannelFreq(byte RFFreqOffset, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetChannelFrequency(new SetChannelFrequencyRequest
+            {
+                ChannelNumber = _channelNumber,
+                Frequency = RFFreqOffset,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetChannelID(ChannelId channelId, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetChannelId(new SetChannelIdRequest
+            {
+                ChannelNumber = _channelNumber,
+                ChannelId = channelId.Id,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetChannelID_UsingSerial(ChannelId channelId, uint waitResponseTime)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();    // TODO: Implement this method
         }
 
         /// <inheritdoc/>
         public bool SetChannelPeriod(ushort messagePeriod, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetChannelPeriod(new SetChannelPeriodRequest
+            {
+                ChannelNumber = _channelNumber,
+                Period = messagePeriod,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetChannelSearchTimeout(byte searchTimeout, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetChannelSearchTimeout(new SetChannelSearchTimeoutRequest
+            {
+                ChannelNumber = _channelNumber,
+                SearchTimeout = searchTimeout,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetChannelTransmitPower(TransmitPower transmitPower, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetChannelTransmitPower(new SetTransmitPowerRequest
+            {
+                ChannelNumber = _channelNumber,
+                TransmitPower = (AntChannelGrpcService.TransmitPower)transmitPower,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetLowPrioritySearchTimeout(byte lowPriorityTimeout, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetLowPriorityChannelSearchTimeout(new SetLowPrioritySearchTimeoutRequest
+            {
+                ChannelNumber = _channelNumber,
+                SearchTimeout = lowPriorityTimeout,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetProximitySearch(byte thresholdBin, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetProximitySearch(new SetProximitySearchRequest
+            {
+                ChannelNumber = _channelNumber,
+                SearchThreshold = thresholdBin,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool SetSearchThresholdRSSI(byte thresholdRSSI, uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.SetSearchThresholdRssi(new SetSearchThresholdRssiRequest
+            {
+                ChannelNumber = _channelNumber,
+                SearchThresholdRssi = thresholdRSSI,
+                WaitTime = responseWaitTime
+            }).Value;
         }
 
         /// <inheritdoc/>
         public bool UnassignChannel(uint responseWaitTime)
         {
-            throw new NotImplementedException();
+            return _client.UnassignChannel(new UnassignChannelRequest { ChannelNumber = _channelNumber, WaitTime = responseWaitTime }).Value;
         }
     }
 }

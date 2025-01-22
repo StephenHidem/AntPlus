@@ -10,8 +10,54 @@ import "google/protobuf/wrappers.proto";
 service gRPCAntChannel {
     // Subscribe to channel response event.
     rpc Subscribe (SubscribeRequest) returns (stream ChannelResponseUpdate);
+    // Assign a channel.
+    rpc AssignChannel (AssignChannelRequest) returns (google.protobuf.BoolValue);
+    // Assign a channel with extended parameters.
+    rpc AssignChannelExt (AssignChannelExtRequest) returns (google.protobuf.BoolValue);
+    // Close the channel.
+    rpc CloseChannel (CloseChannelRequest) returns (google.protobuf.BoolValue);
+    // Configure frequency agility.
+    rpc ConfigureFrequencyAgility (ConfigureFrequencyAgilityRequest) returns (google.protobuf.BoolValue);
+    // Include or exclude a channel.
+    rpc IncludeExcludeListAddChannel (IncludeExcludeChannelRequest) returns (google.protobuf.BoolValue);
+    // Configure include or exclude channel list.
+    rpc IncludeExcludeListConfigure (ConfigureIncludeExcludeChannelListRequest) returns (google.protobuf.BoolValue);
+    // Open channel.
+    rpc OpenChannel (OpenChannelRequest) returns (google.protobuf.BoolValue);
+    // Request channel ID.
+    rpc RequestChannelId (ChannelIdRequest) returns (google.protobuf.UInt32Value);
+    // Request channel status.
+    rpc RequestChannelStatus (ChannelStatusRequest) returns (ChannelStatusReply);
+    // Send an acknowledged data message.
+    rpc SendAcknowledgedData (DataRequest) returns (MessagingCodeReply);
+    // Send broadcast data message.
+    rpc SendBroadcastData (DataRequest) returns (google.protobuf.BoolValue);
+    // Send burst transfer.
+    rpc SendBurstTransfer (DataRequest) returns (MessagingCodeReply);
     // Sends an extended acknowledged data message.
     rpc SendExtAcknowledgedData (ExtDataRequest) returns (MessagingCodeReply);
+    // Send an extended broadcast data message.
+    rpc SendExtBroadcastData (ExtDataRequest) returns (google.protobuf.BoolValue);
+    // Send an extended burst transfer.
+    rpc SendExtBurstTransfer (ExtDataRequest) returns (MessagingCodeReply);
+    // Set channel frequency.
+    rpc SetChannelFrequency (SetChannelFrequencyRequest) returns (google.protobuf.BoolValue);
+    // Set channel ID.
+    rpc SetChannelId (SetChannelIdRequest) returns (google.protobuf.BoolValue);
+    // Set channel period.
+    rpc SetChannelPeriod (SetChannelPeriodRequest) returns (google.protobuf.BoolValue);
+    // Set channel search timeout
+    rpc SetChannelSearchTimeout (SetChannelSearchTimeoutRequest) returns (google.protobuf.BoolValue);
+    // Set transmit power.
+    rpc SetChannelTransmitPower (SetTransmitPowerRequest) returns (google.protobuf.BoolValue);
+    // Set low priority channel search timeout.
+    rpc SetLowPriorityChannelSearchTimeout (SetLowPrioritySearchTimeoutRequest) returns (google.protobuf.BoolValue);
+    // Set proximity search.
+    rpc SetProximitySearch (SetProximitySearchRequest) returns (google.protobuf.BoolValue);
+    // Set search threshold rssi.
+    rpc SetSearchThresholdRssi (SetSearchThresholdRssiRequest) returns (google.protobuf.BoolValue);
+    // Unassign channel.
+    rpc UnassignChannel (UnassignChannelRequest) returns (google.protobuf.BoolValue);
 }
 
 // Request to subscribe to channel response event.
@@ -52,7 +98,17 @@ enum MessagingReturnCode {
     MESSAGING_RETURN_CODE_INVALID_PARAMS = 4;
 }
 
-// Request to send an extended acknowledged data message.
+// Request to send an data message.
+message DataRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The data payload.
+    bytes data = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Request to send an extended data message.
 message ExtDataRequest {
     // The channel number.
     uint32 channel_number = 1;
@@ -68,4 +124,245 @@ message ExtDataRequest {
 message MessagingCodeReply {
     // The return code.
     MessagingReturnCode return_code = 1;
+}
+
+// The channel type.
+enum ChannelType {
+    // The channel is a receive channel.
+    CHANNEL_TYPE_RECEIVE = 0;
+    // The channel is a transmit channel.
+    CHANNEL_TYPE_TRANSMIT = 0x10;
+    // The channel is a shared channel.
+    CHANNEL_TYPE_SHARED = 0x20;
+    // Tx/Rx only or Rx always wild card
+    CHANNEL_TYPE_WILDCARD = 0x40;
+}
+
+// The extended channel type.
+enum ChannelTypeExtended {
+    CHANNEL_TYPE_EXTENDED_UNDEFINED = 0;
+    // The channel always searches.
+    CHANNEL_TYPE_EXTENDED_ALWAYS_SEARCH = 0x01;
+    // The channel is frequency agile.
+    CHANNEL_TYPE_EXTENDED_FREQUENCY_AGILITY = 0x04;
+    // The channel is fast start.
+    CHANNEL_TYPE_EXTENDED_FAST_START = 0x10;
+    // The channel is async TX.
+    CHANNEL_TYPE_EXTENDED_ASYNC_TX = 0x20;
+}
+
+// Request to assign a channel.
+message AssignChannelRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The channel type.
+    ChannelType channel_type = 2;
+    // The network number.
+    uint32 network_number = 3;
+    // The wait time in milliseconds.
+    uint32 wait_time = 4;
+}
+
+// Request to assign a channel with extended parameters.
+message AssignChannelExtRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The channel type.
+    ChannelType channel_type = 2;
+    // The extended channel type.
+    ChannelTypeExtended channel_type_extended = 3;
+    // The network number.
+    uint32 network_number = 4;
+    // The wait time in milliseconds.
+    uint32 wait_time = 5;
+}
+
+// Request to close a channel.
+message CloseChannelRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The wait time in milliseconds.
+    uint32 wait_time = 2;
+}
+
+// Request to configure frequency agility.
+message ConfigureFrequencyAgilityRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The frequency to use.
+    bytes frequencies = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Request to include or exclude a channel.
+message IncludeExcludeChannelRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The channel ID.
+    uint32 channel_id = 2;
+    // The list index.
+    uint32 list_index = 3;
+    // The wait time in milliseconds.
+    uint32 wait_time = 4;
+}
+
+// Configure include or exclude channel list request.
+message ConfigureIncludeExcludeChannelListRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The list size.
+    uint32 list_size = 2;
+    // Is exclusion list.
+    bool is_exclusion_list = 3;
+    // The wait time in milliseconds.
+    uint32 wait_time = 4;
+}
+
+// Request to open a channel.
+message OpenChannelRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The wait time in milliseconds.
+    uint32 wait_time = 2;
+}
+
+// Request to get the channel ID.
+message ChannelIdRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The wait time in milliseconds.
+    uint32 wait_time = 2;
+}
+
+// Request to get the channel status.
+message ChannelStatusRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The wait time in milliseconds.
+    uint32 wait_time = 2;
+}
+
+// Set channel frequency request.
+message SetChannelFrequencyRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The frequency.
+    uint32 frequency = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Set channel ID request.
+message SetChannelIdRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The channel ID.
+    uint32 channel_id = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Set channel period request.
+message SetChannelPeriodRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The period.
+    uint32 period = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Set channel search timeout.
+message SetChannelSearchTimeoutRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The timeout in 2.5 second units.
+    uint32 search_timeout = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Set low priority search timeout request.
+message SetLowPrioritySearchTimeoutRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The timeout in 2.5 second units.
+    uint32 search_timeout = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// BasicChannelStatusCode enum.
+enum BasicChannelStatusCode {
+    // The channel is unassigned.
+    BASIC_CHANNEL_STATUS_CODE_UNASSIGNED = 0;
+    // The channel is assigned.
+    BASIC_CHANNEL_STATUS_CODE_ASSIGNED = 1;
+    // The channel is searching.
+    BASIC_CHANNEL_STATUS_CODE_SEARCHING = 2;
+    // The channel is tracking.
+    BASIC_CHANNEL_STATUS_CODE_TRACKING = 3;
+    // The channel is closed.
+    BASIC_CHANNEL_STATUS_CODE_CLOSED = 4;
+}
+
+// Channel status reply.
+message ChannelStatusReply {
+    // The BasicChannelStatusCode.
+    BasicChannelStatusCode basic_channel_status_code = 1;
+    // The network number.
+    uint32 network_number = 2;
+    // The channel type.
+    ChannelType channel_type = 3;
+}
+
+// Transmit power levels.
+enum TransmitPower {
+    // The transmit power is -20 dBm.
+    TRANSMIT_POWER_MINUS_20_DBM = 0;
+    // The transmit power is -10 dBm.
+    TRANSMIT_POWER_MINUS_10_DBM = 1;
+    // The transmit power is -5 dBm.
+    TRANSMIT_POWER_MINUS_5_DBM = 2;
+    // The transmit power is 0 dBm.
+    TRANSMIT_POWER_0_DBM = 3;
+}
+
+// Set transmit power request.
+message SetTransmitPowerRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The transmit power level.
+    TransmitPower transmit_power = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Set proximity search request.
+message SetProximitySearchRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The search threshold.
+    uint32 search_threshold = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Set search threshold rssi request.
+message SetSearchThresholdRssiRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The search threshold RSSI.
+    uint32 search_threshold_rssi = 2;
+    // The wait time in milliseconds.
+    uint32 wait_time = 3;
+}
+
+// Unassign channel request.
+message UnassignChannelRequest {
+    // The channel number.
+    uint32 channel_number = 1;
+    // The wait time in milliseconds.
+    uint32 wait_time = 2;
 }

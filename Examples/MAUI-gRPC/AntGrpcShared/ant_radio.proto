@@ -29,6 +29,7 @@ service gRPCAntRadio {
 	rpc WriteRawMessageToDevice (WriteRawMessageToDeviceRequest) returns (google.protobuf.BoolValue);
 }
 
+// Cancel transfers request.
 message CancelTransfersRequest {
 	// Time to wait for cancellation in milliseconds
 	int32 wait_time = 1;

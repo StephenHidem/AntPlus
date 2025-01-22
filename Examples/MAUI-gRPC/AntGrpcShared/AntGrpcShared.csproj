@@ -7,7 +7,7 @@
     <Authors>Stephen Hidem</Authors>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<AssemblyVersion>2.1.0.0</AssemblyVersion>
 	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
   </PropertyGroup>
 
@@ -23,6 +23,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\AntRadioInterface\AntRadioInterface.csproj" />
   </ItemGroup>
 
   <ItemGroup>

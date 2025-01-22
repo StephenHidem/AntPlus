@@ -1,13 +1,16 @@
 ﻿using AntRadioGrpcService;
 using SmallEarthTech.AntRadioInterface;
 
-namespace MauiAntGrpcClient.Services
+namespace AntGrpcShared.ClientServices
 {
-    public class GrpcDeviceCapabilities : DeviceCapabilities
+    /// <summary>
+    /// Represents the device capabilities of the ANT radio.
+    /// </summary>
+    internal class GrpcDeviceCapabilities : DeviceCapabilities
     {
         /// <summary>Initializes a new instance of the <see cref="GrpcDeviceCapabilities" /> class.</summary>
-        /// <param name="capabilities">The capabilities.</param>
-        public GrpcDeviceCapabilities(GetDeviceCapabilitiesReply capabilities)
+        /// <param name="capabilities">The ANT radio capabilities.</param>
+        internal GrpcDeviceCapabilities(GetDeviceCapabilitiesReply capabilities)
         {
             MaxANTChannels = (byte)capabilities.MaxAntChannels;
             MaxNetworks = (byte)capabilities.MaxNetworks;

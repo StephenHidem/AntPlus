@@ -29,6 +29,7 @@ service gRPCAntRadio {
 	rpc WriteRawMessageToDevice (WriteRawMessageToDeviceRequest) returns (google.protobuf.BoolValue);
 }
 
+// Cancel transfers request.
 message CancelTransfersRequest {
 	// Time to wait for cancellation in milliseconds
 	int32 wait_time = 1;
@@ -46,11 +47,13 @@ message PropertiesReply {
 
 // The number of configured channels.
 message InitScanModeReply {
+	// The number of channels.
 	int32 num_channels = 1;
 }
 
 // Requested ANT channel.
 message GetChannelRequest {
+	// The channel number.
 	int32 channel_number = 1;
 }
 // This message may change in the future.
@@ -66,40 +69,73 @@ message GetDeviceCapabilitiesRequest {
 }
 // ANT radio capabiities reply. Consists of number of flags and other characteristics.
 message GetDeviceCapabilitiesReply {
+	// Maximum number of ANT channels.
 	uint32 max_ant_channels = 1;
+	// Maximum number of networks.
 	uint32 max_networks = 2;
+	// Indicates if there are no receive channels.
 	bool no_receive_channels = 3;
+	// Indicates if there are no transmit channels.
 	bool no_transmit_channels = 4;
+	// Indicates if there are no receive messages.
 	bool no_receive_messages = 5;
+	// Indicates if there are no transmit messages.
 	bool no_transmit_messages = 6;
+	// Indicates if there are no acknowledgment messages.
 	bool no_ack_messages = 7;
+	// Indicates if there are no burst messages.
 	bool no_burst_messages = 8;
+	// Indicates if private networks are supported.
 	bool private_networks = 9;
+	// Indicates if the serial number is available.
 	bool serial_number = 10;
+	// Indicates if per-channel transmit power is supported.
 	bool per_channel_transmit_power = 11;
+	// Indicates if low priority search is supported.
 	bool low_priority_search = 12;
+	// Indicates if script support is available.
 	bool script_support = 13;
+	// Indicates if search list is supported.
 	bool search_list = 14;
+	// Indicates if onboard LED is available.
 	bool onboard_led = 15;
+	// Indicates if extended messaging is supported.
 	bool extended_messaging = 16;
+	// Indicates if scan mode support is available.
 	bool scan_mode_support = 17;
+	// Indicates if extended channel assignment is supported.
 	bool extended_channel_assignment = 18;
+	// Indicates if proximity search is supported.
 	bool proximity_search = 19;
+	// Indicates if ANT-FS support is available.
 	bool antfs_support = 20;
+	// Indicates if FIT support is available.
 	bool fit_support = 21;
+	// Indicates if advanced burst is supported.
 	bool advanced_burst = 22;
+	// Indicates if event buffering is supported.
 	bool event_buffering = 23;
+	// Indicates if event filtering is supported.
 	bool event_filtering = 24;
+	// Indicates if high duty search is supported.
 	bool high_duty_search = 25;
+	// Indicates if search sharing is supported.
 	bool search_sharing = 26;
+	// Indicates if selective data update is supported.
 	bool selective_data_update = 27;
+	// Indicates if single channel encryption is supported.
 	bool single_channel_encryption = 28;
+	// Maximum number of data channels.
 	uint32 max_data_channels = 29;
 }
 
+// Request to read user NVM data from the ANT radio.
 message ReadUserNvmRequest {
+	// The address to read from.
 	uint32 address = 1;
+	// The size of the data to read.
 	uint32 size = 2;
+	// The response wait time in milliseconds.
 	uint32 wait_response_time = 3;
 }
 
@@ -121,23 +157,38 @@ enum RequestMessageID {
     REQUEST_MESSAGE_ID_USER_NVM = 0x7C;
 }
 
+// Request to get a message from the ANT radio.
 message RequestMessageAndResponseRequest {
+	// The channel number.
 	uint32 channel_number = 1;
+	// The message ID.
 	RequestMessageID msg_id = 2;
+	// The response wait time in milliseconds.
 	uint32 wait_response_time = 3;
 }
 
+// Request to write a raw message to the ANT radio.
 message WriteRawMessageToDeviceRequest {
+	// The message ID.
 	uint32 msg_id = 1;
+	// The message data.
 	bytes msg_data = 2;
 }
 
+// ANT response message.
 message AntResponseReply {
+	// The channel number.
     uint32 channel_number = 1;
+	// The response ID.
     uint32 response_id = 2;
+	// The channel ID.
     uint32 channel_id = 3;
+	// The payload.
     bytes payload = 4;
+	// The RSSI.
     int32 rssi = 5;
+	// The threshold configuration value.
     int32 threshold_configuration_value = 6;
+	// The timestamp.
     uint32 timestamp = 7;
 }

@@ -19,7 +19,7 @@
 
       <para>
 				This example creates an AntGrpcService that may run as a console application or installed and run as a Windows service.
-				You can debug and set breakpoints if this ample is run as a console application.
+				You can debug and set breakpoints if this example is run as a console application.
 			</para>
 			<alert class="security note">
 				<para>
@@ -34,12 +34,6 @@
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
-      <title>Services</title>
-      <content>
-        <!-- Uncomment this to create a sub-section outline
-        <autoOutline /> -->
-        <para>There following three services are implemented.</para>
-      </content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible. -->
       <sections>

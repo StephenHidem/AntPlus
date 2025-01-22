@@ -92,7 +92,7 @@
 			</sections>
 		</section>
 		<section address="Section4">
-			<title>The MAUI Example Projects</title>
+			<title>.NET MAUI/gRPC Example Projects</title>
 			<content>
 				<para>
 					This group of examples is comprised of four projects. AntGrpcShared is a class library providing a gRPC client/server to be consumed by the other
@@ -100,84 +100,12 @@
 					The MauiAntClientApp is a .NET MAUI project and gRPC client that is used to demonstrate Windows/Android applications that work with the
 					remote server application on a local subnet. <legacyBold>I have not tested the other platforms supported by .NET MAUI.</legacyBold>
 				</para>
-				<alert class="note" title="About gRPC">
-					<para>
-						gRPC is a Google defined protocol for remote procedure calls. It is the recommended RPC to use instead of WCF. Do not
-						confuse <legacyBold>gRPC channels</legacyBold> with <legacyBold>ANT radio channels</legacyBold>. gRPC is a
-						network protocol, ANT radio channels are a Dynastream/Garmin protocol for ANT radios.
-					</para>
-				</alert>
 				<para>
-					The intent of AntGrpcService is to make the ANT USB stick accessible not only to client applications running on the local
-					host but mobile device emulators and mobile devices connected to the network the service is running on.
-				</para>
-				<para>
-					AntGrpcShared is the glue that facilitates communication between clients and the service. The benefit of using
-					gRPC is that multiple clients can run simultaneously, both on the local PC and over the network.
+					See the <link xlink:href="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca">MAUI-gRPC Examples</link> topic for more information.
 				</para>
 			</content>
 			<!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible. -->
-			<sections>
-				<section address="SubSection1">
-					<title>AntGrpcShared</title>
-					<content>
-						<para>
-							This class library is configured as a gRPC client/server library. The .proto files define the messages and data exchanged
-							between client and server implementations.
-						</para>
-					</content>
-				</section>
-				<section address="SubSection2">
-					<title>AntGrpcService</title>
-					<content>
-						<para>
-							The server is a Windows service that runs on the host PC that has an ANT USB stick connected to it. Three services are
-							provided.
-						</para>
-						<para>
-							The DiscoveryService replies to client messages over a UDP multicast port on the local subnet. This allows clients to obtain
-							the URI of the server and connect to the gRPC channel. Think of it as a poor man's service discovery protocol. No authentication
-							or validation is performed.
-						</para>
-						<para>
-							The AntRadioService provides methods to get information about the connected ANT USB stick, initialize for continuous scan mode,
-							and get channels to communicate with ANT devices via the AntChannelService.
-						</para>
-						<para>
-							The AntChannelService has a method to subscribe to a gRPC stream of ANT messages when the ANT USB stick has been initialized
-							for continuous scan mode. The remaining gRPC/ANT radio channels are used to send extended acknowledged messages to individual
-							ANT devices.
-						</para>
-						<para>
-							<legacyBold>The service can be debugged!</legacyBold> Make sure the service is not installed or disable it in the
-							service controller (<application>services.msc</application>). Select the Debug solution configuration and launch it
-							from Visual Studio. A console window will open. Logging output is displayed in the console window and breakpoints
-							can be set.
-						</para>
-					</content>
-				</section>
-				<section address="SubSection3">
-					<title>MauiAntClientApp</title>
-					<content>
-						<para>
-							The client app is the consumer of the client services provided by AntGrpcShared project. The server URI is first obtained via
-							a UDP multicast message, a gRPC connection to the server is established, and then requests to initialize and communicate with the
-							remote ANT USB stick are invoked.
-						</para>
-					</content>
-				</section>
-				<section address="SubSection4">
-					<title>AntGrpcServicePackage</title>
-					<content>
-						<para>
-							The AntGrpcServicePackage installs the AntGrpcService on the local Windows PC and creates a firewall exception allowing network
-							traffic between the service and any clients on the network. Wix is used to create the MSI file. You must install the
-							Wix toolset to build this project.
-						</para>
-					</content>
-				</section>
-			</sections>
 		</section>
 
 		<relatedTopics>

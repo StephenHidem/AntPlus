@@ -115,7 +115,8 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy = false, uint responseWaitTime = 1500)
         {
-            return Task.FromResult(new UsbDeviceCapabilities(_antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime)) as DeviceCapabilities);
+            ANT_DeviceCapabilities deviceCapabilities = _antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime);
+            return Task.FromResult<DeviceCapabilities>(new UsbDeviceCapabilities(deviceCapabilities));
         }
 
         /// <inheritdoc/>

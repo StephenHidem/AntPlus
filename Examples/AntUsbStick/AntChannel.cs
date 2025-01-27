@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
 {
-    /// <summary>This class contains the implementation of IAntChannel.</summary>
+    /// <summary>This class implements the IAntChannel interface.</summary>
     public class AntChannel : IAntChannel
     {
         private readonly ILogger _logger;

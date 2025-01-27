@@ -7,7 +7,7 @@ namespace SmallEarthTech.AntUsbStick
     /// This class exposes the ANT radio capabilities.
     /// </summary>
     /// <seealso cref="DeviceCapabilities" />
-    public class UsbDeviceCapabilities : DeviceCapabilities
+    internal class UsbDeviceCapabilities : DeviceCapabilities
     {
 
         /// <summary>Initializes a new instance of the <see cref="UsbDeviceCapabilities" /> class.</summary>

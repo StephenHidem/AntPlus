@@ -19,46 +19,25 @@
 
       <para>
 				This class library provides a concrete implementation of the AntRadioInterface. The underlying hardware implementation is
-				based on the ANT libraries provided by Garmin/Dynastream. All interfaces and abstract classes defined by the AntRadioInterface.
-				are implemented.
+				based on the ANT libraries provided by Garmin/Dynastream.
+			</para>
+			<para>
+				The AntRadio class consists of a number of partial classes that implement IAntRadio, IAntConfiguration, IAntControl,
+				IAntUsbRadio, ICrypto, and IFitSettings.
+			</para>
+			<para>
+				The AntChannel class implements IAntChannel. The AntChannel class employs locks to prevent overwriting the channel
+				ID and data waiting to be sent to an ANT device.
+			</para>
+			<para>
+				The abstract classes AntResponse and DeviceCapabilities are implemented internally to support the class library.
+				UsbAntDeviceCapabilities and UsbAntResponse are the concrete implementations of the abstract classes.
 			</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-		<section>
-			<title>UsbAntResponse</title>
-			<content>
-				<para>
-					The constructor takes ANT_Response as an argument. The argument is parsed and the base class AntResponse properties are populated.
-				</para>
-			</content>
-		</section>
-		<section>
-			<title>UsbDeviceCapabilities</title>
-			<content>
-				<para>
-					The constructor takes ANT_DeviceCapabilities as an argument. The argument is parsed and the base class DeviceCapabilities properties are populated.
-				</para>
-			</content>
-		</section>
-		<section>
-			<title>AntRadio</title>
-			<content>
-				<para>
-					AntRadio consists of a number of partial classes that implement IAntRadio, IAntConfiguration, IAntControl, IAntUsbRadio, ICrypto, and IFitSettings.
-				</para>
-			</content>
-		</section>
-		<section>
-			<title>AntChannel</title>
-			<content>
-				<para>
-					AntChannel implements IAntChannel. This class employs locks to prevent overwriting the channel ID and data waiting to be sent to an ANT device.
-				</para>
-			</content>
-		</section>
 
 		<relatedTopics>
       <link xlink:href="2c4b4d97-d5ec-44ef-846e-d8849c278fad"/>

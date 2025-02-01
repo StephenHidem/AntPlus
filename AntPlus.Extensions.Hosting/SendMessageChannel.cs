@@ -10,15 +10,15 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
     {
         /// <summary>
         /// This implementation of IAntChannel supports sending messages to ANT devices. This implementation is very
-        /// limited in its support; only <see cref="SendAcknowledgedData(byte[], uint)"/> and <see cref="SendAcknowledgedDataAsync(byte[], uint)"/>
-        /// are implemented. It is only intended to be used by the <see cref="AntCollection"/> class to provide the IAntChannel
+        /// limited in its support; only <see cref="SendExtAcknowledgedDataAsync(ChannelId, byte[], uint)"/>
+        /// is implemented. It is only intended to be used by the <see cref="AntCollection"/> class to provide the IAntChannel
         /// argument when creating ANT devices. All messages to be sent to devices are coordinated by this class.
         /// </summary>
         /// <remarks>
-        /// <see cref="AntCollection"/> passes an array of ANT channels to send messages. The messaging strategy is to find a channel that is not
-        /// busy and dispatch that message on that channel.
+        /// <see cref="AntCollection"/> passes an array of ANT channels to send messages. The messaging strategy is to find a
+        /// channel that is not busy and dispatch the message on that channel.
         /// </remarks>
-        /// <seealso cref="SmallEarthTech.AntRadioInterface.IAntChannel" />
+        /// <seealso cref="IAntChannel" />
         private class SendMessageChannel : IAntChannel
         {
             private readonly IAntChannel[] _channels;
@@ -29,7 +29,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
 
             public event EventHandler<AntResponse>? ChannelResponse { add { } remove { } }
 
-            internal SendMessageChannel(IAntChannel[] channels, ILogger<AntCollection> logger)
+            public SendMessageChannel(IAntChannel[] channels, ILogger<AntCollection> logger)
             {
                 _channels = channels;
                 _logger = logger;
@@ -66,52 +66,41 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
 
             public Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, uint completeWaitTime) => throw new NotImplementedException();
 
-            public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
-            {
-                int index = Task.Run(() =>
-                {
-                    int i = -1;
-                    // block task while all channels are busy
-                    while (i == -1)
-                    {
-                        i = Array.FindIndex(_busyFlags, f => !f);
-                        if (i == -1) Thread.Sleep(100);     // release this thread's time slice if we can't find an available channel
-                    }
-                    _busyFlags[i] = true;
-                    return i;
-                }).Result;
+            public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime) => throw new NotImplementedException();
 
-                _logger.LogDebug("SendExtAcknowledgedData: channel index = {ChannelIndex}, channel ID = 0x{ChanelId:X8}, busyFlags = {BusyFlags}", index, channelId.Id, _busyFlags);
-                var result = _channels[index].SendExtAcknowledgedData(
-                            channelId,
-                            data,
-                            ackWaitTime);
-                _busyFlags[index] = false;
-                return result;
+            public Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime)
+            {
+                TaskCompletionSource<MessagingReturnCode> tcs = new TaskCompletionSource<MessagingReturnCode>();
+                GetAvailableChannelIndexAsync()
+                    .ContinueWith(antecedent =>
+                    {
+                        int index = antecedent.Result;
+                        _logger.LogDebug("SendExtAcknowledgedDataAsync: Invoke. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
+                        _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
+                        .ContinueWith(innerAntecedent =>
+                        {
+                            _logger.LogDebug("SendExtAcknowledgedDataAsync: Completed. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
+                            _busyFlags[index] = false;
+                            tcs.SetResult(innerAntecedent.Result);
+                        });
+                    });
+                return tcs.Task;
             }
 
-            public async Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime)
+            private Task<int> GetAvailableChannelIndexAsync()
             {
-                int index = await Task.Run(() =>
+                return Task.Run(() =>
                 {
+                    _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}", Task.CurrentId);
                     int i = -1;
-                    // block task while all channels are busy
                     while (i == -1)
                     {
-                        i = Array.FindIndex(_busyFlags, f => !f);
-                        if (i == -1) Thread.Sleep(100);     // release this thread's time slice if we can't find an available channel
+                        i = Array.FindIndex(_busyFlags, flag => !flag);
+                        if (i == -1) Thread.Sleep(100);
                     }
                     _busyFlags[i] = true;
                     return i;
                 });
-
-                _logger.LogDebug("SendExtAcknowledgedDataAsync: channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, busyFlags = {BusyFlags}", index, channelId.Id, _busyFlags);
-                var result = await _channels[index].SendExtAcknowledgedDataAsync(
-                            channelId,
-                            data,
-                            ackWaitTime);
-                _busyFlags[index] = false;
-                return result;
             }
 
             public bool SendExtBroadcastData(ChannelId channelId, byte[] data) => throw new NotImplementedException();

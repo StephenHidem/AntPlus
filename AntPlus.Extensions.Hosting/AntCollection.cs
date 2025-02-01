@@ -30,7 +30,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         private readonly TimeoutOptions _timeout;
 
         private IAntChannel[]? _channels;
-        private SendMessageChannel? _channel;
+        private SendMessageChannel? _sendMessageChannel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AntCollection"/> class. The ANT radio is initialized for continuous scan mode.
@@ -55,7 +55,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         public async Task StartScanning()
         {
             _channels = await _antRadio.InitializeContinuousScanMode();
-            _channel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
+            _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
         }
 
@@ -156,7 +156,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
 
             // Create ant device from service provider and apply timeout options.
             // The ActivatorUtilities allow us to inject ctor parameters into the requested service.
-            return (AntDevice)ActivatorUtilities.CreateInstance(_services, deviceType, response.ChannelId, _channel!, _timeout);
+            return (AntDevice)ActivatorUtilities.CreateInstance(_services, deviceType, response.ChannelId, _sendMessageChannel!, _timeout);
         }
 
         /// <summary>

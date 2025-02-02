@@ -10,10 +10,9 @@ namespace Hosting.UnitTests
     public class SendMessageChannelTests
     {
         private readonly Mock<IAntChannel> _mockChannel;
-        //private readonly Mock<ILogger<AntCollection>> _mockLogger;
         private readonly object _sendMessageChannel;
 
-        public class ConsoleLogger<T> : ILogger<T>
+        public class DebugLogger<T> : ILogger<T>
         {
             IDisposable? ILogger.BeginScope<TState>(TState state) => null;
             public bool IsEnabled(LogLevel logLevel) => true;
@@ -26,9 +25,8 @@ namespace Hosting.UnitTests
         public SendMessageChannelTests()
         {
             _mockChannel = new Mock<IAntChannel>();
-            //_mockLogger = new Mock<ILogger<AntCollection>>();
             Type sendMessageChannelType = typeof(AntCollection).GetNestedType("SendMessageChannel", BindingFlags.NonPublic)!;
-            _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType, new[] { _mockChannel.Object, _mockChannel.Object }, new ConsoleLogger<AntCollection>())!;
+            _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType, new[] { _mockChannel.Object, _mockChannel.Object, _mockChannel.Object }, new DebugLogger<AntCollection>())!;
         }
 
         [Fact]

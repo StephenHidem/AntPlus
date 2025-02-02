@@ -24,6 +24,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             private readonly IAntChannel[] _channels;
             private readonly ILogger<AntCollection> _logger;
             private readonly bool[] _busyFlags;
+            private readonly object _channelLock = new object();
 
             public byte ChannelNumber => throw new NotImplementedException();
 
@@ -76,11 +77,15 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     {
                         int index = antecedent.Result;
                         _logger.LogDebug("SendExtAcknowledgedDataAsync: Invoke. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
+                        //Thread.Sleep(1000);
                         _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
                         .ContinueWith(innerAntecedent =>
                         {
                             _logger.LogDebug("SendExtAcknowledgedDataAsync: Completed. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
-                            _busyFlags[index] = false;
+                            lock (_channelLock)
+                            {
+                                _busyFlags[index] = false;
+                            }
                             tcs.SetResult(innerAntecedent.Result);
                         });
                     });
@@ -91,14 +96,21 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             {
                 return Task.Run(() =>
                 {
-                    _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}", Task.CurrentId);
+                    _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, _busyFlags = {BusyFlags}", Task.CurrentId, _busyFlags);
                     int i = -1;
                     while (i == -1)
                     {
-                        i = Array.FindIndex(_busyFlags, flag => !flag);
-                        if (i == -1) Thread.Sleep(100);
+                        lock (_channelLock)
+                        {
+                            i = Array.FindIndex(_busyFlags, flag => !flag);
+                            if (i != -1)
+                            {
+                                _busyFlags[i] = true;
+                                break;
+                            }
+                        }
+                        Thread.Sleep(100);
                     }
-                    _busyFlags[i] = true;
                     return i;
                 });
             }

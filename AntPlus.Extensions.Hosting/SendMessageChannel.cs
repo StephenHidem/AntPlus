@@ -16,7 +16,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// </summary>
         /// <remarks>
         /// <see cref="AntCollection"/> passes an array of ANT channels to send messages. The messaging strategy is to find a
-        /// channel that is not busy and dispatch the message on that channel.
+        /// channel that is not busy and dispatch the message on that channel or wait until a channel becomes available.
         /// </remarks>
         /// <seealso cref="IAntChannel" />
         private class SendMessageChannel : IAntChannel
@@ -69,6 +69,15 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
 
             public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime) => throw new NotImplementedException();
 
+            /// <summary>
+            /// Sends the extended acknowledged data asynchronously.
+            /// </summary>
+            /// <param name="channelId">ANT device channel ID</param>
+            /// <param name="data">Message to send</param>
+            /// <param name="ackWaitTime">Time to wait for an acknowledgment in milliseconds</param>
+            /// <returns>
+            /// The messaging return code.
+            /// </returns>
             public Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime)
             {
                 TaskCompletionSource<MessagingReturnCode> tcs = new TaskCompletionSource<MessagingReturnCode>();
@@ -77,14 +86,15 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     {
                         int index = antecedent.Result;
                         _logger.LogDebug("SendExtAcknowledgedDataAsync: Invoke. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
-                        //Thread.Sleep(1000);
                         _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
                         .ContinueWith(innerAntecedent =>
                         {
                             _logger.LogDebug("SendExtAcknowledgedDataAsync: Completed. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
                             lock (_channelLock)
                             {
+                                // release the channel and notify this channel is available
                                 _busyFlags[index] = false;
+                                Monitor.Pulse(_channelLock);
                             }
                             tcs.SetResult(innerAntecedent.Result);
                         });
@@ -92,24 +102,30 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                 return tcs.Task;
             }
 
+            /// <summary>
+            /// Gets the available channel index.
+            /// </summary>
+            /// <remarks>
+            /// Returns the index of the first available channel. If no channel is available, the calling thread will wait
+            /// </remarks>
+            /// <returns>
+            /// The index of the available channel.
+            /// </returns>
             private Task<int> GetAvailableChannelIndexAsync()
             {
                 return Task.Run(() =>
                 {
-                    _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, _busyFlags = {BusyFlags}", Task.CurrentId, _busyFlags);
-                    int i = -1;
-                    while (i == -1)
+                    int i;
+                    lock (_channelLock)
                     {
-                        lock (_channelLock)
+                        // find an available channel
+                        while ((i = Array.FindIndex(_busyFlags, flag => !flag)) == -1)
                         {
-                            i = Array.FindIndex(_busyFlags, flag => !flag);
-                            if (i != -1)
-                            {
-                                _busyFlags[i] = true;
-                                break;
-                            }
+                            _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, all channels are busy", Task.CurrentId);
+                            Monitor.Wait(_channelLock);
                         }
-                        Thread.Sleep(100);
+                        _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", Task.CurrentId, _busyFlags, i);
+                        _busyFlags[i] = true;
                     }
                     return i;
                 });

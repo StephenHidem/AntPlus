@@ -21,7 +21,7 @@ complete library is ready to be used by the app. Here's a snippet from the WPF s
 MAUI apps can also invoke `UseAntPlus()` to add the dependencies to `MauiApp.CreateBuilder()`.
 
 An ==important== benefit of using dependency injection is that you can now add ANT devices not supported by the current
-ANT+ Class Library. A detailed guide on how to do this is available in the documentation. You can also set the global
+ANT+ Class Library. A detailed guide on how to do this is available in the [documentation](https://stephenhidem.github.io/AntPlus/html/0e424769-d4c6-4a98-9384-a810421ad5e1.htm). You can also set the global
 ANT device timeout from a variety of sources such as the command line, appsettings.json, etc. and let the DI container
 inject them into the ANT+ Class Library.
 

@@ -91,7 +91,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     e.ChannelNumber,
                     (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
-                Dispose();  // clear the channels
             }
         }
 

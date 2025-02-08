@@ -24,7 +24,8 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Bug fix: Parsing ProductInfoPage failed in cultures that use "decimal comma" for decimal separator. Added culture invariant NumberFormatInfo with NumberDecimalSeparator = ".". Issue #34.</PackageReleaseNotes>
+	<PackageReleaseNotes>Breaking changes:
+The AntDeviceCollection constructor no longer initiates ANT device scanning. Call the new method StartScanning after instantiating the AntDeviceCollection.</PackageReleaseNotes>
   </PropertyGroup>
 
     <PropertyGroup>

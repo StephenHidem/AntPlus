@@ -3,9 +3,12 @@ using Moq;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
+using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +21,8 @@ namespace AntPlus.UnitTests
 
         private Mock<IAntRadio> mockAntRadio;
         private Mock<IAntChannel> mockAntChannel;
+        private Mock<ILogger> mockLogger;
+        private Mock<ILoggerFactory> mockLoggerFactory;
 
         [TestInitialize]
         public void TestInitialize()
@@ -26,27 +31,28 @@ namespace AntPlus.UnitTests
 
             mockAntRadio = mockRepository.Create<IAntRadio>();
             mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockLogger = mockRepository.Create<ILogger>();
+            mockLoggerFactory = mockRepository.Create<ILoggerFactory>();
+            mockLoggerFactory.Setup(m => m.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
         }
 
         private AntDeviceCollection CreateAntDeviceCollection()
         {
-            IAntChannel[] mockChannels = new IAntChannel[8];
-            Array.Fill(mockChannels, mockAntChannel.Object);
-            mockAntRadio.Setup(r => r.InitializeContinuousScanMode().Result).Returns(mockChannels);
+            var mockChannels = new Mock<IAntChannel>[8];
+            Array.Fill(mockChannels, mockAntChannel);
+            mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync(mockChannels.Select(m => m.Object).ToArray());
             AntDeviceCollection adc = new(
                 mockAntRadio.Object,
-                null,
-                3000);
-            Thread.Sleep(2000);     // allow time for background initialization task to complete
+                mockLoggerFactory.Object);
             return adc;
         }
 
         [TestMethod]
-        public void MultithreadedAdd_Collection_ExpectedCount()
+        public async Task MultithreadedAdd_Collection_ExpectedCount()
         {
             // Arrange
-            Mock<ILogger> mockLogger = new();
             var antDeviceCollection = CreateAntDeviceCollection();
+            await antDeviceCollection.StartScanning();
             int numberOfDevices = 16;
             using SemaphoreSlim semaphore = new(0, numberOfDevices);
             Task[] tasks = new Task[numberOfDevices];
@@ -71,11 +77,11 @@ namespace AntPlus.UnitTests
         }
 
         [TestMethod]
-        public void MultithreadedRemove_Collection_ExpectedCount()
+        public async Task MultithreadedRemove_Collection_ExpectedCount()
         {
             // Arrange
-            Mock<ILogger<UnknownDevice>> mockLogger = new();
             var antDeviceCollection = CreateAntDeviceCollection();
+            await antDeviceCollection.StartScanning();
             int numberOfDevices = 16;
             using SemaphoreSlim semaphore = new(0, numberOfDevices);
             Task[] tasks = new Task[numberOfDevices];
@@ -102,16 +108,16 @@ namespace AntPlus.UnitTests
 
         [TestMethod]
         [DataRow(HeartRate.DeviceClass, typeof(HeartRate))]
-        //[DataRow(BicyclePowerTests.DeviceClass, typeof(BicyclePowerTests))]       TODO: Fix this
+        [DataRow(BicyclePower.DeviceClass, typeof(StandardPowerSensor))]
         [DataRow(BikeSpeedSensor.DeviceClass, typeof(BikeSpeedSensor))]
         [DataRow(BikeCadenceSensor.DeviceClass, typeof(BikeCadenceSensor))]
         [DataRow(CombinedSpeedAndCadenceSensor.DeviceClass, typeof(CombinedSpeedAndCadenceSensor))]
-        //[DataRow(Equipment.DeviceClass, typeof(Treadmill))]       TODO: Fix this
+        [DataRow(FitnessEquipment.DeviceClass, typeof(UnknownDevice))]
         [DataRow(MuscleOxygen.DeviceClass, typeof(MuscleOxygen))]
         [DataRow(Geocache.DeviceClass, typeof(Geocache))]
         [DataRow(Tracker.DeviceClass, typeof(Tracker))]
         [DataRow(StrideBasedSpeedAndDistance.DeviceClass, typeof(StrideBasedSpeedAndDistance))]
-        public void ChannelResponseEvent_Collection_ExpectedDeviceInCollection(byte deviceClass, Type deviceType)
+        public async Task ChannelResponseEvent_Collection_ExpectedDeviceInCollection(byte deviceClass, Type deviceType)
         {
             // Arrange
             byte[] id = new byte[4] { 1, 0, deviceClass, 0 };
@@ -120,6 +126,7 @@ namespace AntPlus.UnitTests
             mockAntChannel.SetupRemove(m => m.ChannelResponse -= It.IsAny<EventHandler<AntResponse>>());
             var mockResponse = new MockResponse(cid, new byte[8]);
             var antDeviceCollection = CreateAntDeviceCollection();
+            await antDeviceCollection.StartScanning();
 
             // Act
             mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, mockResponse);
@@ -136,5 +143,82 @@ namespace AntPlus.UnitTests
                 Payload = payload;
             }
         }
+
+        //[TestMethod]
+        //public async Task DeviceOffline_RemovesDeviceFromCollection()
+        //{
+        //    // Arrange
+        //    var antDeviceCollection = CreateAntDeviceCollection();
+        //    await antDeviceCollection.StartScanning();
+        //    Mock<AntDevice> antDevice = new(new ChannelId(1), mockAntChannel.Object, Mock.Of<ILogger>(), 50);
+        //    antDeviceCollection.Add(antDevice.Object);
+
+        //    // Act
+        //    antDevice.Raise(d => d.DeviceWentOffline += null, EventArgs.Empty);
+        //    //Thread.Sleep(100);
+
+        //    // Assert
+        //    Assert.AreEqual(0, antDeviceCollection.Count);
+        //}
+
+        [TestMethod]
+        public async Task MessageHandler_NullChannelId_LogsCritical()
+        {
+            // Arrange
+            var antDeviceCollection = CreateAntDeviceCollection();
+            await antDeviceCollection.StartScanning();
+            var response = new MockResponse(null, new byte[8]);
+
+            // Act
+            mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, response);
+
+            // Assert
+            mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Critical,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("ChannelId or Payload is null")),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task MessageHandler_NullPayload_LogsCritical()
+        {
+            // Arrange
+            var antDeviceCollection = CreateAntDeviceCollection();
+            await antDeviceCollection.StartScanning();
+            var response = new MockResponse(new ChannelId(1), null);
+
+            // Act
+            mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, response);
+
+            // Assert
+            mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Critical,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("ChannelId or Payload is null")),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                Times.Once);
+        }
+
+        //[TestMethod]
+        //public void CreateAntDevice_ValidChannelId_CreatesCorrectDevice()
+        //{
+        //    // Arrange
+        //    var antDeviceCollection = CreateAntDeviceCollection();
+        //    var channelId = new ChannelId(1) { DeviceType = HeartRate.DeviceClass };
+        //    var dataPage = new byte[8];
+
+        //    // Act
+        //    var device = antDeviceCollection.CreateAntDevice(channelId, dataPage);
+
+        //    // Assert
+        //    Assert.IsInstanceOfType(device, typeof(HeartRate));
+        //}
+
     }
 }

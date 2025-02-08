@@ -1,11 +1,15 @@
 using Microsoft.Extensions.Logging;
 using Moq;
-using SmallEarthTech.AntPlus.Extensions.Hosting;
+using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
-namespace Hosting.UnitTests
+namespace AntPlus.UnitTests
 {
+    [TestClass]
     public class SendMessageChannelTests
     {
         private readonly Mock<IAntChannel> _mockChannel;
@@ -14,12 +18,12 @@ namespace Hosting.UnitTests
         public SendMessageChannelTests()
         {
             _mockChannel = new Mock<IAntChannel>();
-            Type sendMessageChannelType = typeof(AntCollection).GetNestedType("SendMessageChannel", BindingFlags.NonPublic)!;
-            _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType, new[] { _mockChannel.Object, _mockChannel.Object, _mockChannel.Object }, Mock.Of<ILogger<AntCollection>>())!;
+            Type sendMessageChannelType = typeof(AntDeviceCollection).GetNestedType("SendMessageChannel", BindingFlags.NonPublic)!;
+            _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType, new[] { _mockChannel.Object, _mockChannel.Object, _mockChannel.Object }, Mock.Of<ILogger<AntDeviceCollection>>())!;
         }
 
-        [Fact]
-        public void AllUnimplementedMethods_ThrowNotImplementedException()
+        [TestMethod]
+        public void AllMethods_ThrowNotImplementedException()
         {
             var methods = new (string MethodName, object[] Parameters)[]
             {
@@ -54,23 +58,23 @@ namespace Hosting.UnitTests
                 ("UnassignChannel", new object[] { (uint)500 })
             };
 
-            foreach (var (MethodName, Parameters) in methods)
+            foreach (var method in methods)
             {
-                var methodInfo = _sendMessageChannel.GetType().GetMethod(MethodName);
-                Assert.NotNull(methodInfo);
+                var methodInfo = _sendMessageChannel.GetType().GetMethod(method.MethodName);
+                Assert.IsNotNull(methodInfo);
 
-                var exception = Assert.Throws<TargetInvocationException>(() => methodInfo.Invoke(_sendMessageChannel, Parameters));
-                Assert.IsType<NotImplementedException>(exception.InnerException);
+                var exception = Assert.ThrowsException<TargetInvocationException>(() => methodInfo.Invoke(_sendMessageChannel, method.Parameters));
+                Assert.IsInstanceOfType(exception.InnerException, typeof(NotImplementedException));
             }
 
             var propertyInfo = _sendMessageChannel.GetType().GetProperty("ChannelNumber");
-            Assert.NotNull(propertyInfo);
+            Assert.IsNotNull(propertyInfo);
 
-            var propertyException = Assert.Throws<TargetInvocationException>(() => propertyInfo.GetGetMethod()!.Invoke(_sendMessageChannel, null));
-            Assert.IsType<NotImplementedException>(propertyException.InnerException);
+            var propertyException = Assert.ThrowsException<TargetInvocationException>(() => propertyInfo.GetGetMethod()!.Invoke(_sendMessageChannel, null));
+            Assert.IsInstanceOfType(propertyException.InnerException, typeof(NotImplementedException));
         }
 
-        [Fact]
+        [TestMethod]
         public async Task SendExtAcknowledgedDataAsync_InvokesMethodMultipleTimesAndReturnsPass()
         {
             var channelId = new ChannelId(0);
@@ -82,7 +86,7 @@ namespace Hosting.UnitTests
                         .ReturnsAsync(messagingReturnCode);
 
             var methodInfo = _sendMessageChannel.GetType().GetMethod("SendExtAcknowledgedDataAsync");
-            Assert.NotNull(methodInfo);
+            Assert.IsNotNull(methodInfo);
 
             // Act
             var tasks = new List<Task<MessagingReturnCode>>();
@@ -96,9 +100,10 @@ namespace Hosting.UnitTests
             // Assert
             foreach (var result in results)
             {
-                Assert.Equal(messagingReturnCode, result);
+                Assert.AreEqual(messagingReturnCode, result);
             }
             _mockChannel.Verify(c => c.SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime), Times.Exactly(tasks.Count));
         }
+
     }
 }

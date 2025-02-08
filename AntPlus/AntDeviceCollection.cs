@@ -23,7 +23,7 @@ namespace SmallEarthTech.AntPlus
     /// as this scales the timeout duration based on the broadcast transmission rate of the particular ANT device.
     /// The timeout/missed messages will be applied globally to ANT devices created by this collection.
     /// </remarks>
-    public class AntDeviceCollection : ObservableCollection<AntDevice>
+    public partial class AntDeviceCollection : ObservableCollection<AntDevice>
     {
         /// <summary>
         /// The collection lock.
@@ -37,11 +37,11 @@ namespace SmallEarthTech.AntPlus
         public object CollectionLock = new object();
 
         private readonly IAntRadio _antRadio;
-        private int _channelNum = 1;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AntDeviceCollection> _logger;
         private readonly int _timeout;
         private IAntChannel[]? _channels;
+        private SendMessageChannel? _sendMessageChannel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AntDeviceCollection" /> class. The ANT radio is configured
@@ -53,6 +53,8 @@ namespace SmallEarthTech.AntPlus
         /// <remarks>
         /// The ILoggerFactory is used to create <see cref="ILogger{TCategoryName}"/> instances for discovered ANT devices.
         /// If the factory is null, the <see cref="NullLoggerFactory"/> is used and no logging is generated.
+        /// The <see cref="StartScanning"/> method must be called to initialize the ANT radio for continuous scan mode and setup
+        /// reception of ANT messages.
         /// </remarks>
         public AntDeviceCollection(IAntRadio antRadio, ILoggerFactory loggerFactory, int antDeviceTimeout = 2000)
         {
@@ -60,42 +62,43 @@ namespace SmallEarthTech.AntPlus
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             _timeout = antDeviceTimeout;
-
-            // gRPC clients need to run asynchronously
-            Task.Run(async () =>
-            {
-                _channels = await antRadio.InitializeContinuousScanMode();
-                _channels[0].ChannelResponse += Channel_ChannelResponse;
-            });
-
             _logger.LogInformation("Created AntDeviceCollection: antDeviceTimeout = {0}", antDeviceTimeout);
         }
 
-        private async void Channel_ChannelResponse(object sender, AntResponse e)
+        /// <summary>
+        /// Initializes the ANT radio for continuous scan mode and setup ANT channels for use by this collection.
+        /// </summary>
+        /// <returns>Task of type void</returns>
+        public async Task StartScanning()
         {
-            if (e.ChannelId != null)
+            _channels = await _antRadio.InitializeContinuousScanMode();
+            _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
+            _channels[0].ChannelResponse += MessageHandler;
+        }
+
+        private void MessageHandler(object sender, AntResponse e)
+        {
+            if (e.ChannelId != null && e.Payload != null)
             {
-                AntDevice? device;
-                device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+                // see if the device is in the collection
+                AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+
+                // create the device if not in the collection
                 if (device == null)
                 {
-                    // provide channel ID and payload
-                    device = CreateAntDevice(e.ChannelId, e.Payload!);
-                    if (device == null) return;     // some device types have additional qualifiers
+                    // create the device and add it to the collection
+                    device = CreateAntDevice(e.ChannelId, e.Payload);
                     Add(device);
                     device.DeviceWentOffline += DeviceOffline;
                 }
-                device.Parse(e.Payload!);
+                device.Parse(e.Payload);    // dispatch the message to the device for processing
             }
             else
             {
-                _logger.LogCritical("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
+                _logger.LogCritical("ChannelId or Payload is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
                     e.ChannelNumber,
                     (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
-
-                // attempt to reopen channel 0 for Rx continuous scan mode
-                _ = await _antRadio.InitializeContinuousScanMode();
             }
         }
 
@@ -130,23 +133,21 @@ namespace SmallEarthTech.AntPlus
             }
         }
 
-        private AntDevice? CreateAntDevice(ChannelId channelId, byte[] dataPage)
+        private AntDevice CreateAntDevice(ChannelId channelId, byte[] dataPage)
         {
-            IAntChannel channel = _channels![_channelNum++];
-            if (_channelNum == _channels.Length) { _channelNum = 1; }
             return channelId.DeviceType switch
             {
-                HeartRate.DeviceClass => new HeartRate(channelId, channel, _loggerFactory.CreateLogger<HeartRate>(), _timeout),
-                BicyclePower.DeviceClass => BicyclePower.GetBicyclePowerSensor(dataPage, channelId, channel, _loggerFactory, _timeout),
-                BikeSpeedSensor.DeviceClass => new BikeSpeedSensor(channelId, channel, _loggerFactory.CreateLogger<BikeSpeedSensor>(), _timeout),
-                BikeCadenceSensor.DeviceClass => new BikeCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<BikeCadenceSensor>(), _timeout),
-                CombinedSpeedAndCadenceSensor.DeviceClass => new CombinedSpeedAndCadenceSensor(channelId, channel, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), _timeout),
-                FitnessEquipment.DeviceClass => FitnessEquipment.GetFitnessEquipment(dataPage, channelId, channel, _loggerFactory, _timeout),
-                MuscleOxygen.DeviceClass => new MuscleOxygen(channelId, channel, _loggerFactory.CreateLogger<MuscleOxygen>(), _timeout),
-                Geocache.DeviceClass => new Geocache(channelId, channel, _loggerFactory.CreateLogger<Geocache>(), _timeout),
-                Tracker.DeviceClass => new Tracker(channelId, channel, _loggerFactory.CreateLogger<Tracker>(), _timeout),
-                StrideBasedSpeedAndDistance.DeviceClass => new StrideBasedSpeedAndDistance(channelId, channel, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), _timeout),
-                _ => new UnknownDevice(channelId, channel, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
+                BicyclePower.DeviceClass => BicyclePower.GetBicyclePowerSensor(dataPage, channelId, _sendMessageChannel!, _loggerFactory, _timeout),
+                BikeSpeedSensor.DeviceClass => new BikeSpeedSensor(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<BikeSpeedSensor>(), _timeout),
+                BikeCadenceSensor.DeviceClass => new BikeCadenceSensor(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<BikeCadenceSensor>(), _timeout),
+                CombinedSpeedAndCadenceSensor.DeviceClass => new CombinedSpeedAndCadenceSensor(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), _timeout),
+                FitnessEquipment.DeviceClass => FitnessEquipment.GetFitnessEquipment(dataPage, channelId, _sendMessageChannel!, _loggerFactory, _timeout) ?? (AntDevice)new UnknownDevice(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
+                MuscleOxygen.DeviceClass => new MuscleOxygen(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<MuscleOxygen>(), _timeout),
+                Geocache.DeviceClass => new Geocache(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<Geocache>(), _timeout),
+                Tracker.DeviceClass => new Tracker(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<Tracker>(), _timeout),
+                StrideBasedSpeedAndDistance.DeviceClass => new StrideBasedSpeedAndDistance(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), _timeout),
+                HeartRate.DeviceClass => new HeartRate(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<HeartRate>(), _timeout),
+                _ => new UnknownDevice(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
             };
         }
     }

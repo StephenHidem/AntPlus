@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
@@ -14,7 +14,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private readonly ChannelId mockChannelId = new(0);
         private Mock<IAntChannel> mockAntChannel;
-        private Mock<NullLoggerFactory> mockLogger;
+        private Mock<ILogger> mockLogger;
+        private Mock<ILoggerFactory> mockLoggerFactory;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,13 +23,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             mockRepository = new MockRepository(MockBehavior.Strict);
 
             mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
+            mockLogger = mockRepository.Create<ILogger>(MockBehavior.Loose);
+            mockLoggerFactory = mockRepository.Create<ILoggerFactory>();
+            mockLoggerFactory.Setup(m => m.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
         }
 
         private CrankTorqueFrequencySensor CreateCrankTorqueFrequencySensor()
         {
             byte[] page = new byte[8] { (byte)BicyclePower.DataPage.CrankTorqueFrequency, 0, 0, 0, 0, 0, 0, 0 };
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as CrankTorqueFrequencySensor;
+            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLoggerFactory.Object, 2000) as CrankTorqueFrequencySensor;
         }
 
         [TestMethod]
@@ -129,6 +132,58 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Parse_UnknownDataPage_LogsWarning()
+        {
+            // Arrange
+            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
+            byte[] dataPage = new byte[8] { 0xFF, 0, 0, 0, 0, 0, 0, 0 };
+
+            // Act
+            crankTorqueFrequencySensor.Parse(dataPage);
+
+            // Assert
+            mockLogger.Verify(
+                m => m.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public void ParseCTFMessage_SameUpdateEventCountAndTorqueTicks_NoCalculations()
+        {
+            // Arrange
+            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
+            byte[] dataPage = new byte[8] { 0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01 };
+
+            // Act
+            crankTorqueFrequencySensor.Parse(dataPage);
+            crankTorqueFrequencySensor.Parse(dataPage);
+
+            // Assert
+            Assert.AreEqual(60, crankTorqueFrequencySensor.Cadence);
+            Assert.AreEqual(0.1, crankTorqueFrequencySensor.Torque);
+            Assert.AreEqual(0.628, crankTorqueFrequencySensor.Power, 0.001);
+        }
+
+        [TestMethod]
+        public void ParseCalibrationMessage_UnknownCTFDefinedId_NoAction()
+        {
+            // Arrange
+            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
+            byte[] dataPage = new byte[8] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 };
+
+            // Act
+            crankTorqueFrequencySensor.Parse(dataPage);
+
+            // Assert
+            // No exception should be thrown
         }
     }
 }

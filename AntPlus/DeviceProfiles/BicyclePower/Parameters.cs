@@ -263,7 +263,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> GetParameters(SubPage parameterSubpage)
         {
-            return await RequestDataPage(DataPage.GetSetParameters, 500, (byte)parameterSubpage);
+            return await RequestDataPage(DataPage.GetSetParameters, (byte)parameterSubpage);
         }
 
         /// <summary>

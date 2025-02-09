@@ -138,7 +138,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                 {
                     Assets.Add(asset);
                 }
-                _ = RequestDataPage(DataPage.AssetId1, 500, 255, 255, 4, CommandType.DataPageSet);
+                _ = RequestDataPage(DataPage.AssetId1, 255, 255, 4, CommandType.DataPageSet);
             }
             return asset;
         }

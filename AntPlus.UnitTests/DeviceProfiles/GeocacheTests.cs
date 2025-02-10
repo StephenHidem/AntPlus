@@ -45,7 +45,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
-            mockAntChannel = mockRepository.Create<IAntChannel>();
+            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
             mockLogger = mockRepository.Create<ILogger<Geocache>>(MockBehavior.Loose);
         }
 
@@ -174,6 +174,41 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.AreEqual(string.Empty, geocache.Hint);
             Assert.AreEqual(default, geocache.NumberOfVisits);
             Assert.AreEqual(default, geocache.LastVisitTimestamp);
+        }
+
+        [TestMethod]
+        public async Task EraseGeocache_Success_ReturnsPass()
+        {
+            // Arrange
+            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result)
+                .Returns(MessagingReturnCode.Pass);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null);
+
+            // Act
+            var result = await geocache.EraseGeocache();
+
+            // Assert
+            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            mockAntChannel.Verify(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()), Times.Exactly(32));
+        }
+
+        [TestMethod]
+        public async Task EraseGeocache_Failure_ReturnsError()
+        {
+            // Arrange
+            mockAntChannel.SetupSequence(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result)
+                .Returns(MessagingReturnCode.Pass)
+                .Returns(MessagingReturnCode.Fail)
+                .Returns(MessagingReturnCode.Fail)
+                .Returns(MessagingReturnCode.Fail);
+            Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null);
+
+            // Act
+            var result = await geocache.EraseGeocache();
+
+            // Assert
+            Assert.AreEqual(MessagingReturnCode.Fail, result);
+            mockAntChannel.Verify(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()), Times.AtLeastOnce);
         }
     }
 }

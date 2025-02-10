@@ -20,6 +20,7 @@
             <Label Text="Hint:"/>
             <Editor Text="{Binding ProgramGeocache.Hint}" MaxLength="168" AutoSize="TextChanges"/>
             <Button Text="Program Geocache" Command="{Binding ProgramGeocache.ProgramGeocacheCommand}"/>
+            <Button Text="Erase Geocache" Command="{Binding ProgramGeocache.EraseGeocacheCommand}" Margin="0, 8, 0, 8"/>
         </VerticalStackLayout>
     </Frame>
 </ContentView>

@@ -15,6 +15,7 @@ namespace WpfUsbStickApp.ViewModels
         [NotifyCanExecuteChangedFor(nameof(LogVisitCommand))]
         [NotifyCanExecuteChangedFor(nameof(RequestAuthenticationCommand))]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
+        [NotifyCanExecuteChangedFor(nameof(EraseGeocacheCommand))]
         private bool isBusy;
 
         [ObservableProperty]
@@ -23,7 +24,7 @@ namespace WpfUsbStickApp.ViewModels
         [ObservableProperty]
         private string trackableId = string.Empty;
         [ObservableProperty]
-        private uint? pin;
+        private uint pin;
         [ObservableProperty]
         private double? latitude;
         [ObservableProperty]
@@ -82,5 +83,14 @@ namespace WpfUsbStickApp.ViewModels
             IsBusy = false;
         }
         private bool CanProgramGeocache() => !Geocache.Offline && !IsBusy;
+
+        [RelayCommand(CanExecute = nameof(CanEraseGeocache))]
+        private async Task EraseGeocache()
+        {
+            IsBusy = true;
+            _ = await Geocache.EraseGeocache();
+            IsBusy = false;
+        }
+        private bool CanEraseGeocache() => !Geocache.Offline && !IsBusy;
     }
 }

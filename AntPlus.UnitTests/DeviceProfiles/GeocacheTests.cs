@@ -189,7 +189,22 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.AreEqual(MessagingReturnCode.Pass, result);
-            mockAntChannel.Verify(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()), Times.Exactly(32));
+            mockAntChannel.Verify(ac => ac.SendExtAcknowledgedDataAsync(
+                cid,
+                It.Is<byte[]>(msg =>
+                    msg.Length == 8 &&
+                    msg[0] == 0 &&
+                    msg.Skip(1).All(el => el == 0)),
+                It.IsAny<uint>()),
+                Times.Once);
+            mockAntChannel.Verify(ac => ac.SendExtAcknowledgedDataAsync(
+                cid,
+                It.Is<byte[]>(msg =>
+                    msg.Length == 8 &&
+                    msg[0] >= 1 && msg[0] <= 31 &&
+                    msg.Skip(1).All(el => el == 0xFF)),
+                It.IsAny<uint>()),
+                Times.Exactly(31));
         }
 
         [TestMethod]
@@ -198,8 +213,6 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Arrange
             mockAntChannel.SetupSequence(ac => ac.SendExtAcknowledgedDataAsync(cid, It.IsAny<byte[]>(), It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass)
-                .Returns(MessagingReturnCode.Fail)
-                .Returns(MessagingReturnCode.Fail)
                 .Returns(MessagingReturnCode.Fail);
             Geocache geocache = new(cid, mockAntChannel.Object, mockLogger.Object, null);
 

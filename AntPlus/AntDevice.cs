@@ -155,12 +155,7 @@ namespace SmallEarthTech.AntPlus
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> SendExtAcknowledgedMessage(byte[] message)
         {
-            int retries = 3;
-            MessagingReturnCode ret;
-            do
-            {
-                ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, (uint)_deviceTimeout);
-            } while (ret != MessagingReturnCode.Pass && --retries > 0);
+            MessagingReturnCode ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, (uint)_deviceTimeout);
 
             if (ret != MessagingReturnCode.Pass)
             {

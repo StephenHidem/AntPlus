@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" revisionNumber="1">
+<topic id="01235973-8fca-4be5-9fb3-13e8fe5b03b3" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,58 +17,52 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>Version 2.0.1.0 was released on January 3, 2024.</para>
-    </introduction>
+			<para>Release Date: February 12, 2025</para>
+		</introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-    <section address="Section1">
-      <content>
+		<section address="AntUsbStick_3_1_0_0">
+			<content>
+				<para>Changes in this release:</para>
 				<list class="bullet">
 					<listItem>
 						<para>
-							<link xlink:href="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" />
+							<legacyBold>Internal Changes:</legacyBold>
 						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="ea422e45-03fe-4b1d-bc19-280e03ea4729" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="01235973-8fca-4be5-9fb3-13e8fe5b03b3" />
-						</para>
-					
+						<list class="bullet">
+							<listItem>
+								<para>
+									<legacyBold>UsbAntDeviceCapabilities</legacyBold> and <legacyBold>UsbAntResponse</legacyBold> classes have been changed from <legacyBold>public</legacyBold> to <legacyBold>internal</legacyBold>. These classes are now only used internally within the project.
+								</para>
+							</listItem>
+							<listItem>
+								<para>Updated logging statements to use structured logging with named placeholders.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Renamed Channel_DeviceNotification to OnDeviceNotification.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Renamed Channel_ChannelResponse to OnChannelResponse.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Changed logging level for OnChannelResponse from LogDebug to LogTrace. This reduces the noise in logs.</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio: Renamed AntDevice_deviceResponse to OnDeviceResponse.</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio: Renamed AntDevice_SerialError to OnAntDeviceSerialError.</para>
+							</listItem>
+						</list>
 					</listItem>
 				</list>
-      </content>
-      <!-- If a section contains a sections element, its content creates
-           sub-sections.  These are not collapsible.
-      <sections>
-          <section address="SubSection1">
-              <title>Sub-section 1</title>
-              <content>
-                  <para>Sub-section content.</para>
-              </content>
-          </section>
-          <section address="SubSection2">
-              <title>Sub-section 2</title>
-              <content>
-                  <para>Sub-section content.</para>
-              </content>
-          </section>
-      </sections> -->
-    </section>
+			</content>
+		</section>
 
-    <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+		<relatedTopics>
+			<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
 			<!-- One or more of the following:
            - A local link
            - An external link

@@ -13,8 +13,10 @@
 	<Authors>Stephen Hidem</Authors>
 	<Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
-	<PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
+	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageTags>ant; ant+; antplus; antusbstick; smallearthtech</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>

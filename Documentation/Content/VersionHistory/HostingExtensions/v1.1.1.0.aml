@@ -16,11 +16,30 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
-
-      <para>Fixed potential race condition sending multiple messages to multiple ANT devices managed by the AntCollection class.</para>
+			<para>Release Date: February 12, 2025</para>
     </introduction>
 
-    <relatedTopics>
+		<section address="HostExtensions_1_1_1_0">
+			<content>
+				<para>Changes in this release:</para>
+				<list class="bullet">
+					<listItem>
+						<para>
+							<legacyBold>Internal Changes:</legacyBold>
+						</para>
+						<list class="bullet">
+							<listItem>
+								<para>
+									Fixed potential race condition sending multiple messages to multiple ANT devices managed by the AntCollection class.
+								</para>
+							</listItem>
+						</list>
+					</listItem>
+				</list>
+			</content>
+		</section>
+
+		<relatedTopics>
 			<link xlink:href="be2ad779-f723-47b4-a6ab-00691c896a8e" />
 			<!-- One or more of the following:
            - A local link

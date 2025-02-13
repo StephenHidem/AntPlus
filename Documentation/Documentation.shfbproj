@@ -151,6 +151,7 @@
     <None Include="Content\VersionHistory\AntUsbStick\AntUsbStickVersionHistory.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v2.1.0.0.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v3.0.0.0.aml" />
+    <None Include="Content\VersionHistory\AntUsbStick\v3.1.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\HostingExtensionsVersionHistory.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.1.0.0.aml" />

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="69e0beb6-59b3-441e-95d7-3c51cc27aba3" revisionNumber="1">
+<topic id="01235973-8fca-4be5-9fb3-13e8fe5b03b3" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -16,10 +16,14 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
-			<para>Release Date: February 12, 2025</para>
-    </introduction>
 
-		<section address="HostExtensions_1_1_1_0">
+			<para>Release Date: February 12, 2025</para>
+		</introduction>
+
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="AntUsbStick_3_1_0_0">
 			<content>
 				<para>Changes in this release:</para>
 				<list class="bullet">
@@ -30,8 +34,26 @@
 						<list class="bullet">
 							<listItem>
 								<para>
-									Fixed potential race condition sending multiple messages to multiple ANT devices managed by the AntCollection class.
+									<legacyBold>UsbAntDeviceCapabilities</legacyBold> and <legacyBold>UsbAntResponse</legacyBold> classes have been changed from <legacyBold>public</legacyBold> to <legacyBold>internal</legacyBold>. These classes are now only used internally within the project.
 								</para>
+							</listItem>
+							<listItem>
+								<para>Updated logging statements to use structured logging with named placeholders.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Renamed Channel_DeviceNotification to OnDeviceNotification.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Renamed Channel_ChannelResponse to OnChannelResponse.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Changed logging level for OnChannelResponse from LogDebug to LogTrace. This reduces the noise in logs.</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio: Renamed AntDevice_deviceResponse to OnDeviceResponse.</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio: Renamed AntDevice_SerialError to OnAntDeviceSerialError.</para>
 							</listItem>
 						</list>
 					</listItem>
@@ -40,7 +62,7 @@
 		</section>
 
 		<relatedTopics>
-			<link xlink:href="be2ad779-f723-47b4-a6ab-00691c896a8e" />
+			<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
 			<!-- One or more of the following:
            - A local link
            - An external link

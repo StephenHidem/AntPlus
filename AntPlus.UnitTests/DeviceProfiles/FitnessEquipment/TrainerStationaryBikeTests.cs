@@ -116,7 +116,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 dataPage,
-                500).Result).Returns(MessagingReturnCode.Pass);
+                It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
             var result = await trainer.CalibrationRequest(request);
@@ -262,7 +262,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 48, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(resistance / 0.5) },
-                500).Result).Returns(MessagingReturnCode.Pass);
+                It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
             var result = await trainer.SetBasicResistance(
@@ -283,7 +283,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 49, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, expPow[0], expPow[1] },
-                500).Result).Returns(MessagingReturnCode.Pass);
+                It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
             var result = await trainer.SetTargetPower(
@@ -305,7 +305,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 50, 0xFF, 0xFF, 0xFF, 0xFF, (byte)(windResistanceCoefficient / 0.01), (byte)(windSpeed + 127), (byte)(draftingFactor / 0.01) },
-                500).Result).Returns(MessagingReturnCode.Pass);
+                It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
             var result = await trainer.SetWindResistance(
@@ -329,7 +329,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 51, 0xFF, 0xFF, 0xFF, 0xFF, expGrade[0], expGrade[1], (byte)(rollingResistanceCoefficient / 0.00005) },
-                500).Result).Returns(MessagingReturnCode.Pass);
+                It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
             var result = await trainer.SetTrackResistance(
@@ -357,7 +357,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 new byte[8] { 55, expWeight[0], expWeight[1], 0xFF, (byte)((wheelDiameterOffset & 0x0F) | (expBikeWeight[0] & 0xF0)), expBikeWeight[1], (byte)(wheelDiameter / 0.01), (byte)(gearRatio / 0.03) },
-                500).Result).Returns(MessagingReturnCode.Pass);
+                It.IsAny<uint>()).Result).Returns(MessagingReturnCode.Pass);
 
             // Act
             var result = await trainer.SetUserConfiguration(

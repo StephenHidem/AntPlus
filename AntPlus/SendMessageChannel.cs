@@ -122,11 +122,10 @@ namespace SmallEarthTech.AntPlus
                     .ContinueWith(antecedent =>
                     {
                         int index = antecedent.Result;
-                        _logger.LogDebug("SendExtAcknowledgedDataAsync: Invoke. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
+                        _logger.LogDebug("SendExtAcknowledgedDataAsync: channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, data = {Data}", index, channelId.Id, BitConverter.ToString(data));
                         _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
                         .ContinueWith(innerAntecedent =>
                         {
-                            _logger.LogDebug("SendExtAcknowledgedDataAsync: Completed. Task ID = {TaskId}, channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", antecedent.Id, index, channelId.Id);
                             lock (_channelLock)
                             {
                                 // release the channel and notify this channel is available

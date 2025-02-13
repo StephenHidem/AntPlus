@@ -233,21 +233,12 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         }
 
         /// <summary>Requests the PIN page. Do this first before performing any other operations on the geocache.</summary>
-        /// <param name="timeout">Request _timeout in milliseconds. The default is 16000 milliseconds.</param>
         /// <returns>Status of the request.</returns>
-        public async Task<MessagingReturnCode> RequestPinPage(uint timeout = 16000)
+        public async Task<MessagingReturnCode> RequestPinPage()
         {
-            // clear any previous state
-            TrackableId = string.Empty;
-            ProgrammingPIN = default;
-            TotalPagesProgrammed = default;
-            NextStageLatitude = NextStageLongitude = default;
-            hintPages.Clear();
-            Hint = string.Empty;
-            NumberOfVisits = default;
-            LastVisitTimestamp = default;
-            _logger.LogDebug("RequestPinPage");
-            return await RequestDataPage(DataPage.PIN, timeout);
+            _logger.LogDebug(nameof(RequestPinPage));
+            ClearGeocacheState();
+            return await RequestDataPage(DataPage.PIN);
         }
 
         /// <summary>Requests the authentication token from the geocache.</summary>
@@ -255,14 +246,14 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestAuthentication(uint gpsSerialNumber)
         {
-            _logger.LogDebug($"{nameof(RequestAuthentication)}");
+            _logger.LogDebug(nameof(RequestAuthentication));
             authRequested = true;
             Random random = new Random();
             byte[] nonce = new byte[2];
             random.NextBytes(nonce);
             byte[] msg = { (byte)DataPage.AuthenticationPage, 0xFF };
             msg = msg.Concat(nonce).Concat(BitConverter.GetBytes(gpsSerialNumber)).ToArray();
-            return await SendExtAcknowledgedMessage(msg, 16000);
+            return await SendExtAcknowledgedMessage(msg);
         }
 
         /// <summary>Updates the logged visits count and last visit timestamp.</summary>
@@ -270,18 +261,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> UpdateLoggedVisits()
         {
-            _logger.LogDebug($"{nameof(UpdateLoggedVisits)}");
+            _logger.LogDebug(nameof(UpdateLoggedVisits));
             // check that a logged visits page has been programmed
             if (loggedVisitsPage == null || NumberOfVisits == null)
             {
-                throw new InvalidOperationException("The geocache has not been programmed with a logged visits pages. Program the geocache; this will set a logged visits page.");
+                throw new InvalidOperationException("The geocache has not been programmed with a logged visits page. Program the geocache; this will set a logged visits page.");
             }
             NumberOfVisits++;
             LastVisitTimestamp = DateTime.UtcNow;
             uint timestamp = (uint)(DateTime.UtcNow - new DateTime(1989, 12, 31)).TotalSeconds;
             return await SendExtAcknowledgedMessage(new byte[] { (byte)loggedVisitsPage, (byte)DataId.LoggedVisits }.
                 Concat(BitConverter.GetBytes(timestamp)).
-                Concat(BitConverter.GetBytes((ushort)NumberOfVisits)).ToArray(), 16000);
+                Concat(BitConverter.GetBytes((ushort)NumberOfVisits)).ToArray());
         }
 
         /// <summary>Programs the geocache.</summary>
@@ -291,13 +282,84 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <param name="longitude">The longitude in decimal degrees.</param>
         /// <param name="hint">The next stage hint or message.</param>
         /// <returns>Status of the request.</returns>
-        public async Task<MessagingReturnCode> ProgramGeocache(string id, uint? pin, double? latitude, double? longitude, string hint)
+        public async Task<MessagingReturnCode> ProgramGeocache(string id, uint pin, double? latitude, double? longitude, string? hint)
         {
-            _logger.LogDebug($"{nameof(ProgramGeocache)}");
+            _logger.LogDebug(nameof(ProgramGeocache));
             programmingGeocache = true;
-            byte page = 1;  // initial page number for optional pages
+            List<byte[]> messages = new List<byte[]>();
 
-            // clear any previous state
+            // get the previous total number of pages programmed
+            int previousPagesProgrammed = TotalPagesProgrammed ?? 0;
+
+            // clear previous Geocache state
+            ClearGeocacheState();
+
+            // add ID page to messages
+            messages.Add(new byte[] { (byte)DataPage.TrackableId }.Concat(FormatId(id)).ToArray());
+
+            // add logged visits page to 0 visits and no timestamp to messages
+            byte page = 2;  // initial page number for optional pages
+            messages.Add(new byte[] { page++, (byte)DataId.LoggedVisits, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00 });
+
+            // add optional latitude page to messages
+            if (latitude != null)
+            {
+                messages.Add(new byte[] { page++, (byte)DataId.Latitude }.
+                            Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles((double)latitude))).
+                            Concat(new byte[] { 0xFF, 0xFF }).ToArray());
+            }
+
+            // add optional longitude page to messages
+            if (longitude != null)
+            {
+                messages.Add(new byte[] { page++, (byte)DataId.Longitude }.
+                        Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles((double)longitude))).
+                        Concat(new byte[] { 0xFF, 0xFF }).ToArray());
+            }
+
+            // add optional hint pages to messages
+            if (!string.IsNullOrEmpty(hint))
+            {
+                // get hint and pad with null terminator
+                byte[] hnt = Encoding.UTF8.GetBytes(hint!.PadRight(hint.Length + 6 - (hint.Length % 6), '\0'));
+                while (hnt.Length > 0 && page < 32)
+                {
+                    messages.Add(new byte[] { page++, (byte)DataId.Hint }.Concat(hnt.Take(6)).ToArray());
+                    hnt = hnt.Skip(6).ToArray();
+                }
+            }
+
+            // add PIN page to messages
+            messages.Add(new byte[] { (byte)DataPage.PIN, 0xFF }.
+                    Concat(BitConverter.GetBytes((uint)pin)).
+                    Concat(new byte[] { page }).        // set the total number of pages programmed
+                    Concat(new byte[] { 0xFF }).
+                    ToArray());
+
+            // add messages to clear previously programmed pages
+            for (int i = page; i <= previousPagesProgrammed; i++)
+            {
+                messages.Add(new byte[] { (byte)i, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            }
+
+            // send pages to geocache
+            MessagingReturnCode returnCode = MessagingReturnCode.Pass;
+            foreach (byte[] msg in messages)
+            {
+                returnCode = await SendExtAcknowledgedMessage(msg);
+                if (returnCode != MessagingReturnCode.Pass)
+                {
+                    _logger.LogWarning("Failed to program data page {Page} with error {MessagingReturnCode}", msg[0], returnCode);
+                    break;
+                }
+            }
+
+            programmingGeocache = false;
+            return returnCode;
+        }
+
+        private void ClearGeocacheState()
+        {
             TrackableId = string.Empty;
             ProgrammingPIN = default;
             TotalPagesProgrammed = default;
@@ -306,77 +368,39 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             Hint = string.Empty;
             NumberOfVisits = default;
             LastVisitTimestamp = default;
+        }
 
-            // set ID to empty string if null
-            id ??= string.Empty;
+        /// <summary>
+        /// Erases the geocache.
+        /// </summary>
+        /// <returns>Status of the request.</returns>
+        public async Task<MessagingReturnCode> EraseGeocache()
+        {
+            _logger.LogDebug(nameof(EraseGeocache));
+            programmingGeocache = true;
 
-            // assemble list of messages to send; simplifies error handling
-            List<byte[]> messages = new List<byte[]>
+            // clear previous Geocache state
+            ClearGeocacheState();
+
+            // set trackable ID page to zero
+            MessagingReturnCode returnCode = await SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.TrackableId, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            if (returnCode != MessagingReturnCode.Pass)
             {
-                // ID page
-                new byte[] { (byte)DataPage.TrackableId }.Concat(FormatId(id)).ToArray(),
-            };
-
-            // program optional pages and PIN if PIN is not null
-            if (pin != null)
-            {
-                page = 2;   // optional pages begin at page 2
-
-                // initialize logged visits page to 0 visits and no timestamp
-                messages.Add(new byte[] { page++, (byte)DataId.LoggedVisits, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00 });
-
-                // optional latitude page
-                if (latitude != null)
-                {
-                    messages.Add(new byte[] { page++, (byte)DataId.Latitude }.
-                                Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles((double)latitude))).
-                                Concat(new byte[] { 0xFF, 0xFF }).ToArray());
-                }
-
-                // optional longitude page
-                if (longitude != null)
-                {
-                    messages.Add(new byte[] { page++, (byte)DataId.Longitude }.
-                            Concat(BitConverter.GetBytes(Utils.DegreesToSemicircles((double)longitude))).
-                            Concat(new byte[] { 0xFF, 0xFF }).ToArray());
-                }
-
-                // optional hint pages - get hint and pad with null terminator
-                if (hint?.Length > 0)
-                {
-                    byte[] hnt = Encoding.UTF8.GetBytes(hint.PadRight(hint.Length + 6 - (hint.Length % 6), '\0'));
-                    while (hnt.Length > 0 && page < 32)
-                    {
-                        messages.Add(new byte[] { page++, (byte)DataId.Hint }.Concat(hnt.Take(6)).ToArray());
-                        hnt = hnt.Skip(6).ToArray();
-                    }
-                }
-
-                // finally, program PIN page and total pages programmed
-                messages.Add(new byte[] { (byte)DataPage.PIN, 0xFF }.
-                        Concat(BitConverter.GetBytes((uint)pin)).
-                        Concat(new byte[] { page }).
-                        Concat(new byte[] { 0xFF }).
-                        ToArray());
+                _logger.LogWarning("Failed to erase trackable ID page with error {MessagingReturnCode}", returnCode);
+                programmingGeocache = false;
+                return returnCode;
             }
 
-            // clear remaining unused programmable pages
-            while (page < 32)
+            // erase all data pages
+            for (byte i = 1; i < 32; i++)
             {
-                messages.Add(new byte[] { page++, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
-            }
-
-            // send pages to geocache
-            MessagingReturnCode returnCode = MessagingReturnCode.Pass;
-            foreach (byte[] msg in messages)
-            {
-                returnCode = await SendExtAcknowledgedMessage(msg, 16000);
+                returnCode = await SendExtAcknowledgedMessage(new byte[] { i, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
                 if (returnCode != MessagingReturnCode.Pass)
                 {
+                    _logger.LogWarning("Failed to erase data page {Page} with error {MessagingReturnCode}", i, returnCode);
                     break;
                 }
             }
-
             programmingGeocache = false;
             return returnCode;
         }

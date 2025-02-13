@@ -1,0 +1,236 @@
+﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntRadioInterface;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace SmallEarthTech.AntPlus
+{
+    public partial class AntDeviceCollection
+    {
+        private class SendMessageChannel : IAntChannel
+        {
+            private readonly IAntChannel[] _channels;
+            private readonly ILogger<AntDeviceCollection> _logger;
+            private readonly bool[] _busyFlags;
+            private readonly object _channelLock = new object();
+
+            public byte ChannelNumber => throw new NotImplementedException();
+
+            public event EventHandler<AntResponse>? ChannelResponse { add { } remove { } }
+
+            public SendMessageChannel(IAntChannel[] channels, ILogger<AntDeviceCollection> logger)
+            {
+                _channels = channels;
+                _logger = logger;
+                _busyFlags = new bool[channels.Length];
+            }
+
+            public bool AssignChannel(ChannelType channelTypeByte, byte networkNumber, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool AssignChannelExt(ChannelType channelTypeByte, byte networkNumber, ChannelTypeExtended extAssignByte, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool CloseChannel(uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool ConfigFrequencyAgility(byte freq1, byte freq2, byte freq3, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool IncludeExcludeListAddChannel(ChannelId channelId, byte listIndex, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool IncludeExcludeListConfigure(byte listSize, bool isExclusionList, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool OpenChannel(uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public ChannelId RequestChannelID(uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public ChannelStatus RequestStatus(uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public MessagingReturnCode SendAcknowledgedData(byte[] data, uint ackWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<MessagingReturnCode> SendAcknowledgedDataAsync(byte[] data, uint ackWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SendBroadcastData(byte[] data)
+            {
+                throw new NotImplementedException();
+            }
+
+            public MessagingReturnCode SendBurstTransfer(byte[] data, uint completeWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<MessagingReturnCode> SendBurstTransferAsync(byte[] data, uint completeWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public MessagingReturnCode SendExtAcknowledgedData(ChannelId channelId, byte[] data, uint ackWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            /// <summary>
+            /// Sends the extended acknowledged data asynchronously.
+            /// </summary>
+            /// <param name="channelId">ANT device channel ID</param>
+            /// <param name="data">Message to send</param>
+            /// <param name="ackWaitTime">Time to wait for an acknowledgment in milliseconds</param>
+            /// <returns>
+            /// The messaging return code.
+            /// </returns>
+            public Task<MessagingReturnCode> SendExtAcknowledgedDataAsync(ChannelId channelId, byte[] data, uint ackWaitTime)
+            {
+                TaskCompletionSource<MessagingReturnCode> tcs = new TaskCompletionSource<MessagingReturnCode>();
+                GetAvailableChannelIndexAsync()
+                    .ContinueWith(antecedent =>
+                    {
+                        int index = antecedent.Result;
+                        _logger.LogDebug("SendExtAcknowledgedDataAsync: channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, data = {Data}", index, channelId.Id, BitConverter.ToString(data));
+                        _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
+                        .ContinueWith(innerAntecedent =>
+                        {
+                            lock (_channelLock)
+                            {
+                                // release the channel and notify this channel is available
+                                _busyFlags[index] = false;
+                                Monitor.Pulse(_channelLock);
+                            }
+                            tcs.SetResult(innerAntecedent.Result);
+                        });
+                    });
+                return tcs.Task;
+            }
+
+            /// <summary>
+            /// Gets the available channel index.
+            /// </summary>
+            /// <remarks>
+            /// Returns the index of the first available channel. If no channel is available, the calling thread will wait
+            /// </remarks>
+            /// <returns>
+            /// The index of the available channel.
+            /// </returns>
+            private Task<int> GetAvailableChannelIndexAsync()
+            {
+                return Task.Run(() =>
+                {
+                    int i;
+                    lock (_channelLock)
+                    {
+                        // find an available channel
+                        while ((i = Array.FindIndex(_busyFlags, flag => !flag)) == -1)
+                        {
+                            _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, all channels are busy", Task.CurrentId);
+                            Monitor.Wait(_channelLock);
+                        }
+                        _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", Task.CurrentId, _busyFlags, i);
+                        _busyFlags[i] = true;
+                    }
+                    return i;
+                });
+            }
+
+            public bool SendExtBroadcastData(ChannelId channelId, byte[] data)
+            {
+                throw new NotImplementedException();
+            }
+
+            public MessagingReturnCode SendExtBurstTransfer(ChannelId channelId, byte[] data, uint completeWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<MessagingReturnCode> SendExtBurstTransferAsync(ChannelId channelId, byte[] data, uint completeWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetChannelFreq(byte RFFreqOffset, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetChannelID(ChannelId channelId, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetChannelID_UsingSerial(ChannelId channelId, uint waitResponseTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetChannelPeriod(ushort messagePeriod, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetChannelSearchTimeout(byte searchTimeout, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetChannelTransmitPower(TransmitPower transmitPower, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetLowPrioritySearchTimeout(byte lowPriorityTimeout, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetProximitySearch(byte thresholdBin, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool SetSearchThresholdRSSI(byte thresholdRSSI, uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool UnassignChannel(uint responseWaitTime)
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
+}

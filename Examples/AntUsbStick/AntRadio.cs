@@ -39,19 +39,19 @@ namespace SmallEarthTech.AntUsbStick
         {
             _logger = logger;
             _antDevice = new ANT_Device();
-            _antDevice.deviceResponse += AntDevice_deviceResponse;
-            _antDevice.serialError += AntDevice_SerialError;
+            _antDevice.deviceResponse += OnDeviceResponse;
+            _antDevice.serialError += OnAntDeviceSerialError;
             _logger.LogDebug("Created AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
         }
 
-        private void AntDevice_SerialError(ANT_Device sender, ANT_Device.serialErrorCode error, bool isCritical)
+        private void OnAntDeviceSerialError(ANT_Device sender, ANT_Device.serialErrorCode error, bool isCritical)
         {
-            _logger.LogDebug($"Sender: {sender} Error: {error} Critical: {isCritical}");
+            _logger.LogDebug("OnAntDeviceSerialError: Sender: {Sender} Error: {Error} Critical: {IsCritical}", sender, error, isCritical);
         }
 
-        private void AntDevice_deviceResponse(ANT_Response response)
+        private void OnDeviceResponse(ANT_Response response)
         {
-            _logger.LogDebug("RadioResponse: {Channel}, {ResponseId}, {Data}", response.antChannel, (MessageId)response.responseID, BitConverter.ToString(response.messageContents));
+            _logger.LogDebug("OnDeviceResponse: {Channel}, {ResponseId}, {Data}", response.antChannel, (MessageId)response.responseID, BitConverter.ToString(response.messageContents));
             RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 
@@ -102,8 +102,8 @@ namespace SmallEarthTech.AntUsbStick
             if (_antDevice != null)
             {
                 _logger.LogDebug("Disposed AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
-                _antDevice.deviceResponse -= AntDevice_deviceResponse;
-                _antDevice.serialError -= AntDevice_SerialError;
+                _antDevice.deviceResponse -= OnDeviceResponse;
+                _antDevice.serialError -= OnAntDeviceSerialError;
                 _antDevice.Dispose();
                 _antDevice = null;
             }
@@ -115,7 +115,8 @@ namespace SmallEarthTech.AntUsbStick
         /// <inheritdoc/>
         public Task<DeviceCapabilities> GetDeviceCapabilities(bool forceNewCopy = false, uint responseWaitTime = 1500)
         {
-            return Task.FromResult(new UsbDeviceCapabilities(_antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime)) as DeviceCapabilities);
+            ANT_DeviceCapabilities deviceCapabilities = _antDevice.getDeviceCapabilities(forceNewCopy, responseWaitTime);
+            return Task.FromResult<DeviceCapabilities>(new UsbDeviceCapabilities(deviceCapabilities));
         }
 
         /// <inheritdoc/>

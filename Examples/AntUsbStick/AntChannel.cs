@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
 {
-    /// <summary>This class contains the implementation of IAntChannel.</summary>
+    /// <summary>This class implements the IAntChannel interface.</summary>
     public class AntChannel : IAntChannel
     {
         private readonly ILogger _logger;
@@ -21,20 +21,20 @@ namespace SmallEarthTech.AntUsbStick
         {
             _logger = logger;
             _antChannel = channel;
-            channel.channelResponse += Channel_ChannelResponse;
-            channel.DeviceNotification += Channel_DeviceNotification;
+            channel.channelResponse += OnChannelResponse;
+            channel.DeviceNotification += OnDeviceNotification;
             _logger.LogDebug("Created AntChannel #{Channel}", ChannelNumber);
         }
 
-        private void Channel_DeviceNotification(ANT_Device.DeviceNotificationCode notification, object notificationInfo)
+        private void OnDeviceNotification(ANT_Device.DeviceNotificationCode notification, object notificationInfo)
         {
-            _logger.LogDebug($"Notification: {notification} Info: {notificationInfo}");
+            _logger.LogDebug("Notification: {Notification} Info: {NotificationInfo}", notification, notificationInfo);
         }
 
-        private void Channel_ChannelResponse(ANT_Response response)
+        private void OnChannelResponse(ANT_Response response)
         {
             AntResponse antResponse = new UsbAntResponse(response);
-            _logger.LogDebug("Channel response. Channel # = {ChannelNumber}, Response ID = {ResponseID}, Payload = {Payload}", ChannelNumber, (MessageId)antResponse.ResponseId, BitConverter.ToString(antResponse.Payload ?? new byte[] { 0 }));
+            _logger.LogTrace("OnChannelResponse: Channel # = {ChannelNumber}, Response ID = {ResponseID}, Payload = {Payload}", ChannelNumber, (MessageId)antResponse.ResponseId, BitConverter.ToString(antResponse.Payload ?? new byte[] { 0 }));
             ChannelResponse?.Invoke(this, antResponse);
         }
 
@@ -255,8 +255,8 @@ namespace SmallEarthTech.AntUsbStick
             if (_antChannel != null)
             {
                 _logger.LogDebug("Disposed AntChannel #{Channel}", ChannelNumber);
-                _antChannel.channelResponse -= Channel_ChannelResponse;
-                _antChannel.DeviceNotification -= Channel_DeviceNotification;
+                _antChannel.channelResponse -= OnChannelResponse;
+                _antChannel.DeviceNotification -= OnDeviceNotification;
                 _antChannel.Dispose();
                 _antChannel = null;
             }

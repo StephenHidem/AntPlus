@@ -1,6 +1,7 @@
 ﻿using SmallEarthTech.AntPlus;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace AntPlus.UnitTests
@@ -17,7 +18,6 @@ namespace AntPlus.UnitTests
             {
                 new byte[8] { 0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44 },   // command status
                 new byte[8] { 0x50, 0xFF, 0xFF, 0x01, 0x0F, 0x00, 0x85, 0x83 },   // manufacturer ID
-                new byte[8] { 0x51, 0xFF, 0xFF, 0x01, 0x01, 0x00, 0x00, 0x00 },   // product info
                 new byte[8] { 0x52, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x55, 0x93 },   // battery status
                 new byte[8] { 0x53, 0xFF, 0x0D, 0x1B, 0x11, 0x92, 0x06, 0x09 },   // time and date
                 new byte[8] { 0x54, 0xFF, 0x01, 0x03, 0x6B, 0x0A, 0xEA, 0x19 },   // subfield data
@@ -40,14 +40,12 @@ namespace AntPlus.UnitTests
             Assert.IsTrue(commonDataPage.ManufacturerInfo.ManufacturerId == 15);
             Assert.IsTrue(commonDataPage.ManufacturerInfo.HardwareRevision == 1);
             Assert.IsTrue(commonDataPage.ManufacturerInfo.ModelNumber == 0x8385);
-            Assert.IsTrue(commonDataPage.ProductInfo.SoftwareRevision == Version.Parse("0.100"));
-            Assert.IsTrue(commonDataPage.ProductInfo.SerialNumber == 1);
             Assert.IsTrue(commonDataPage.BatteryStatus.Status == BatteryStatus.New);
             Assert.IsTrue(commonDataPage.BatteryStatus.BatteryVoltage == 3.33203125);
             Assert.IsTrue(commonDataPage.BatteryStatus.NumberOfBatteries == 1);
             Assert.IsTrue(commonDataPage.BatteryStatus.Identifier == 0);
             Assert.IsTrue(commonDataPage.BatteryStatus.CumulativeOperatingTime == TimeSpan.Zero);
-            Assert.IsTrue(commonDataPage.TimeAndDate == DateTime.Parse("06/18/2009 17:27:13"));
+            Assert.IsTrue(commonDataPage.TimeAndDate == DateTime.Parse("06/18/2009 17:27:13", DateTimeFormatInfo.InvariantInfo));
             Assert.IsTrue(commonDataPage.SubfieldData.Subpage1 == CommonDataPages.SubfieldDataPage.SubPage.Temperature);
             Assert.IsTrue(commonDataPage.SubfieldData.ComputedDataField1 == 26.67);
             Assert.IsTrue(commonDataPage.SubfieldData.Subpage2 == CommonDataPages.SubfieldDataPage.SubPage.Humidity);
@@ -59,6 +57,26 @@ namespace AntPlus.UnitTests
             Assert.IsTrue(commonDataPage.ErrorDescription.SystemComponentIndex == 0xF);
             Assert.IsTrue(commonDataPage.ErrorDescription.ProfileSpecificErrorCode == 0xFF);
             Assert.IsTrue(commonDataPage.ErrorDescription.ManufacturerSpecificErrorCode == 0x11223344);
+        }
+
+        [TestMethod]
+        [DataRow(new byte[] { 0x51, 0xFF, 0xFF, 12, 5, 6, 7, 8 }, "1.200", (uint)0x08070605)]
+        [DataRow(new byte[] { 0x51, 0xFF, 34, 12, 8, 7, 6, 5 }, "1.234", (uint)0x05060708)]
+        public void ParseCommonDataPage_ProductInfo_PropertiesCorrect(byte[] dataPage, string version, uint serialNumber)
+        {
+            // Arrange
+            CommonDataPages commonDataPage = new(null);
+
+            // Act
+            var currentCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
+            commonDataPage.ParseCommonDataPage(
+                    dataPage);
+            CultureInfo.CurrentCulture = currentCulture;
+
+            // Assert
+            Assert.IsTrue(commonDataPage.ProductInfo.SerialNumber == serialNumber);
+            Assert.IsTrue(commonDataPage.ProductInfo.SoftwareRevision == Version.Parse(version));
         }
 
         [TestMethod]

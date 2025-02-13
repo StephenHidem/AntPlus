@@ -144,6 +144,10 @@
 		</section>
 
 		<relatedTopics>
+			<externalLink>
+				<linkText>AntPlus Source Code Repository</linkText>
+				<linkUri>https://github.com/StephenHidem/AntPlus</linkUri>
+			</externalLink>
 			<link xlink:href="ec2cfcb5-62f1-4593-8295-b6b7cadab615" />
 			<link xlink:href="fc7d6894-c2f6-45d3-8edb-8c82ab0bb422" />
 			<link xlink:href="825ed94a-e668-4d28-85ff-53cbb962a355" />

@@ -5,7 +5,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<AssemblyVersion>3.0.0.0</AssemblyVersion>
+	<AssemblyVersion>3.1.0.0</AssemblyVersion>
 	<AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
 	<Version>$(AssemblyVersion)</Version>
 	<Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
@@ -13,8 +13,10 @@
 	<Authors>Stephen Hidem</Authors>
 	<Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
-	<PackageProjectUrl>https://github.com/StephenHidem/AntPlus</PackageProjectUrl>
+	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageTags>ant; ant+; antplus; antusbstick; smallearthtech</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -22,7 +24,7 @@
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PackageId>$(AssemblyName)</PackageId>
 	<PackageIcon>PackageLogo.png</PackageIcon>
-    <PackageReleaseNotes>Implemented changes to IAntChannel and IAntRadio.</PackageReleaseNotes>
+    <PackageReleaseNotes>UsbAntDeviceCapabilities and UsbAntResponse are only used internally. The class definitions have changed from public to internal.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -34,7 +36,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="ec2cfcb5-62f1-4593-8295-b6b7cadab615" revisionNumber="1">
+<topic id="01235973-8fca-4be5-9fb3-13e8fe5b03b3" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,32 +17,53 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>
-				This class library provides a concrete implementation of the AntRadioInterface. The underlying hardware implementation is
-				based on the ANT libraries provided by Garmin/Dynastream.
-			</para>
-			<para>
-				The AntRadio class consists of a number of partial classes that implement IAntRadio, IAntConfiguration, IAntControl,
-				IAntUsbRadio, ICrypto, and IFitSettings.
-			</para>
-			<para>
-				The AntChannel class implements IAntChannel. The AntChannel class employs locks to prevent overwriting the channel
-				ID and data waiting to be sent to an ANT device.
-			</para>
-			<para>
-				The abstract classes AntResponse and DeviceCapabilities are implemented internally to support the class library.
-				UsbAntDeviceCapabilities and UsbAntResponse are the concrete implementations of the abstract classes.
-			</para>
-    </introduction>
+			<para>Release Date: February 12, 2025</para>
+		</introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
+		<section address="AntUsbStick_3_1_0_0">
+			<content>
+				<para>Changes in this release:</para>
+				<list class="bullet">
+					<listItem>
+						<para>
+							<legacyBold>Internal Changes:</legacyBold>
+						</para>
+						<list class="bullet">
+							<listItem>
+								<para>
+									<legacyBold>UsbAntDeviceCapabilities</legacyBold> and <legacyBold>UsbAntResponse</legacyBold> classes have been changed from <legacyBold>public</legacyBold> to <legacyBold>internal</legacyBold>. These classes are now only used internally within the project.
+								</para>
+							</listItem>
+							<listItem>
+								<para>Updated logging statements to use structured logging with named placeholders.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Renamed Channel_DeviceNotification to OnDeviceNotification.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Renamed Channel_ChannelResponse to OnChannelResponse.</para>
+							</listItem>
+							<listItem>
+								<para>AntChannel: Changed logging level for OnChannelResponse from LogDebug to LogTrace. This reduces the noise in logs.</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio: Renamed AntDevice_deviceResponse to OnDeviceResponse.</para>
+							</listItem>
+							<listItem>
+								<para>AntRadio: Renamed AntDevice_SerialError to OnAntDeviceSerialError.</para>
+							</listItem>
+						</list>
+					</listItem>
+				</list>
+			</content>
+		</section>
 
 		<relatedTopics>
-      <link xlink:href="2c4b4d97-d5ec-44ef-846e-d8849c278fad"/>
-			<codeEntityReference>N:SmallEarthTech.AntUsbStick</codeEntityReference>
-      <!-- One or more of the following:
+			<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
+			<!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference

@@ -12,14 +12,18 @@
     <Description>Useful ANT+ extensions for hosting in DI containers. Simple and easy to use! Includes support for .NET MAUI and Windows apps.</Description>
     <PackageTags>ant; ant+; antplus; smallearthtech</PackageTags>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Added extension method to add services to IServiceCollection.</PackageReleaseNotes>
+	<PackageReleaseNotes>Fixed potential race condition sending multiple messages to multiple ANT devices managed by the AntCollection class.</PackageReleaseNotes>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<AssemblyVersion>1.1.0.0</AssemblyVersion>
+	<AssemblyVersion>1.1.1.0</AssemblyVersion>
 	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
+	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

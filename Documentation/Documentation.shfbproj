@@ -72,7 +72,7 @@
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.UnknownDevice" isDocumented="False">Contains the unknown ANT+ device classes and members.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntRadioInterface" isDocumented="True">The ANT+ radio interface namespace.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance" isDocumented="False">Contains the stride based speed and sensor classes and members.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="SmallEarthTech.AntUsbStick" isDocumented="True">This namespace supports the concrete implementation of the ANT radio interface.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="SmallEarthTech.AntUsbStick" isDocumented="True">This namespace supports the concrete implementations of the ANT radio interface and ANT channel interface.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus (Group)" isGroup="True" isDocumented="True">This group is the global namespace for ANT+ devices.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus.DeviceProfiles" isDocumented="True">This namespace contains supported ANT+ device profiles.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus.Extensions.Hosting" isDocumented="True">The ANT+ Hosting Extensions namespace.</NamespaceSummaryItem>
@@ -128,6 +128,7 @@
     <None Include="Content\VersionHistory\AntPlus\v3.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v4.0.0.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v4.0.1.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v5.0.0.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.0.0.aml" />
@@ -150,9 +151,11 @@
     <None Include="Content\VersionHistory\AntUsbStick\AntUsbStickVersionHistory.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v2.1.0.0.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v3.0.0.0.aml" />
+    <None Include="Content\VersionHistory\AntUsbStick\v3.1.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\HostingExtensionsVersionHistory.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.1.0.0.aml" />
+    <None Include="Content\VersionHistory\HostingExtensions\v1.1.1.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

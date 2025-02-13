@@ -127,7 +127,6 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Requests the data page.</summary>
         /// <typeparam name="T">The data page enumeration of the derived ANT device class.</typeparam>
         /// <param name="page">The requested page.</param>
-        /// <param name="ackWaitTime">Time in milliseconds to wait for the device acknowledgment. The default is 500ms.</param>
         /// <param name="descriptor1">The descriptor1. The default is 0xFF.</param>
         /// <param name="descriptor2">The descriptor2. The default is 0xFF.</param>
         /// <param name="transmissionResponse">The transmission response. The default is to send 4 messages.</param>
@@ -135,13 +134,13 @@ namespace SmallEarthTech.AntPlus
         /// <param name="slaveSerialNumber">The slave serial number. The default is 0xFFFF.</param>
         /// <returns>Status of the request.</returns>
         /// <exception cref="System.ArgumentException">Invalid data page requested.</exception>
-        public async Task<MessagingReturnCode> RequestDataPage<T>(T page, uint ackWaitTime = 500, byte descriptor1 = 0xFF, byte descriptor2 = 0xFF, byte transmissionResponse = 4, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF) where T : Enum
+        public async Task<MessagingReturnCode> RequestDataPage<T>(T page, byte descriptor1 = 0xFF, byte descriptor2 = 0xFF, byte transmissionResponse = 4, CommandType commandType = CommandType.DataPage, ushort slaveSerialNumber = 0xFFFF) where T : Enum
         {
             if (Enum.IsDefined(typeof(T), page))
             {
                 byte[] msg = new byte[] { (byte)CommonDataPage.RequestDataPage, 0, 0, descriptor1, descriptor2, transmissionResponse, Convert.ToByte(page), (byte)commandType };
                 BitConverter.GetBytes(slaveSerialNumber).CopyTo(msg, 1);
-                return await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, msg, ackWaitTime);
+                return await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, msg, (uint)_deviceTimeout);
             }
             else
             {
@@ -153,16 +152,10 @@ namespace SmallEarthTech.AntPlus
 
         /// <summary>Sends an acknowledged message to the ANT device.</summary>
         /// <param name="message">The message.</param>
-        /// <param name="ackWaitTime">Time in milliseconds to wait for the device acknowledgment. The default is 500ms.</param>
         /// <returns>Status of the request.</returns>
-        public async Task<MessagingReturnCode> SendExtAcknowledgedMessage(byte[] message, uint ackWaitTime = 500)
+        public async Task<MessagingReturnCode> SendExtAcknowledgedMessage(byte[] message)
         {
-            int retries = 3;
-            MessagingReturnCode ret;
-            do
-            {
-                ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, ackWaitTime);
-            } while (ret != MessagingReturnCode.Pass && --retries > 0);
+            MessagingReturnCode ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, (uint)_deviceTimeout);
 
             if (ret != MessagingReturnCode.Pass)
             {

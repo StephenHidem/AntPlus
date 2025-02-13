@@ -8,7 +8,7 @@ namespace SmallEarthTech.AntUsbStick
 {
     /// <summary>This class provides the USB implementation of AntResponse.</summary>
     [DataContract(Name = "AntResponse", Namespace = "http://www.smallearthtech.com")]
-    public class UsbAntResponse : AntResponse
+    internal class UsbAntResponse : AntResponse
     {
         internal UsbAntResponse(ANT_Response response)
         {

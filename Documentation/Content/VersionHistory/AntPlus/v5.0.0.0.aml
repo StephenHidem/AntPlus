@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="ec2cfcb5-62f1-4593-8295-b6b7cadab615" revisionNumber="1">
+<topic id="73712ef4-127a-4e35-b2ef-dd212b42b2cc" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,32 +17,57 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>
-				This class library provides a concrete implementation of the AntRadioInterface. The underlying hardware implementation is
-				based on the ANT libraries provided by Garmin/Dynastream.
-			</para>
-			<para>
-				The AntRadio class consists of a number of partial classes that implement IAntRadio, IAntConfiguration, IAntControl,
-				IAntUsbRadio, ICrypto, and IFitSettings.
-			</para>
-			<para>
-				The AntChannel class implements IAntChannel. The AntChannel class employs locks to prevent overwriting the channel
-				ID and data waiting to be sent to an ANT device.
-			</para>
-			<para>
-				The abstract classes AntResponse and DeviceCapabilities are implemented internally to support the class library.
-				UsbAntDeviceCapabilities and UsbAntResponse are the concrete implementations of the abstract classes.
-			</para>
-    </introduction>
+			<para>Release Date: February 12, 2025</para>
+		</introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-
-		<relatedTopics>
-      <link xlink:href="2c4b4d97-d5ec-44ef-846e-d8849c278fad"/>
-			<codeEntityReference>N:SmallEarthTech.AntUsbStick</codeEntityReference>
-      <!-- One or more of the following:
+    <section address="Section1">
+      <title>Breaking Changes</title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+					The AntDeviceCollection constructor no longer initiates ANT device scanning. Call the new method StartScanning
+					after instantiating the AntDeviceCollection.
+				</para>
+      </content>
+      <!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible.
+      <sections>
+          <section address="SubSection1">
+              <title>Sub-section 1</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+          <section address="SubSection2">
+              <title>Sub-section 2</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+      </sections> -->
+    </section>
+		<section address="Section2">
+			<title>Improvements</title>
+			<content>
+				<para>
+					StartScanning method: this method initializes the ANT radio for continuous scan mode. This is an
+					asynchronous, awaitable task.
+				</para>
+				<para>
+					A new internal class used is for sending messages to ANT devices - SendMessageChannel. It is a
+					thread-safe class that uses all available channels to send messages. It is used by the AntDevice
+					class to send messages to ANT devices. Throughput is much improved when sending messages to multiple
+					ANT devices simultaneously.
+				</para>
+			</content>
+		</section>
+    <relatedTopics>
+			<link xlink:href="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" />
+			<!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference

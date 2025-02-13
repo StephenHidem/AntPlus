@@ -12,13 +12,14 @@ namespace MauiAntGrpcClient.ViewModels
         [NotifyCanExecuteChangedFor(nameof(LogVisitCommand))]
         [NotifyCanExecuteChangedFor(nameof(RequestAuthenticationCommand))]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
+        [NotifyCanExecuteChangedFor(nameof(EraseGeocacheCommand))]
         private bool isBusy;
 
         [ObservableProperty]
         private Geocache? geocache;
 
         [ObservableProperty]
-        private uint? pin;
+        private uint pin;
         [ObservableProperty]
         private string trackableId = string.Empty;
         [ObservableProperty]
@@ -79,5 +80,14 @@ namespace MauiAntGrpcClient.ViewModels
             IsBusy = false;
         }
         private bool CanProgramGeocache() => Geocache != null && !Geocache.Offline && !IsBusy;
+
+        [RelayCommand(CanExecute = nameof(CanEraseGeocache))]
+        private async Task EraseGeocache()
+        {
+            IsBusy = true;
+            _ = await Geocache!.EraseGeocache();
+            IsBusy = false;
+        }
+        private bool CanEraseGeocache() => Geocache != null && !Geocache.Offline && !IsBusy;
     }
 }

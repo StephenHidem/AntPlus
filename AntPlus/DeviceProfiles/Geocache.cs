@@ -236,7 +236,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestPinPage()
         {
-            _logger.LogDebug($"{nameof(RequestPinPage)}");
+            _logger.LogDebug(nameof(RequestPinPage));
             ClearGeocacheState();
             return await RequestDataPage(DataPage.PIN);
         }
@@ -246,7 +246,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestAuthentication(uint gpsSerialNumber)
         {
-            _logger.LogDebug($"{nameof(RequestAuthentication)}");
+            _logger.LogDebug(nameof(RequestAuthentication));
             authRequested = true;
             Random random = new Random();
             byte[] nonce = new byte[2];
@@ -261,7 +261,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> UpdateLoggedVisits()
         {
-            _logger.LogDebug($"{nameof(UpdateLoggedVisits)}");
+            _logger.LogDebug(nameof(UpdateLoggedVisits));
             // check that a logged visits page has been programmed
             if (loggedVisitsPage == null || NumberOfVisits == null)
             {
@@ -284,7 +284,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> ProgramGeocache(string id, uint pin, double? latitude, double? longitude, string? hint)
         {
-            _logger.LogDebug($"{nameof(ProgramGeocache)}");
+            _logger.LogDebug(nameof(ProgramGeocache));
             programmingGeocache = true;
             List<byte[]> messages = new List<byte[]>();
 
@@ -346,7 +346,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             MessagingReturnCode returnCode = MessagingReturnCode.Pass;
             foreach (byte[] msg in messages)
             {
-                _logger.LogDebug($"Data page number = {msg[0]}");
                 returnCode = await SendExtAcknowledgedMessage(msg);
                 if (returnCode != MessagingReturnCode.Pass)
                 {
@@ -377,7 +376,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> EraseGeocache()
         {
-            _logger.LogDebug($"{nameof(EraseGeocache)}");
+            _logger.LogDebug(nameof(EraseGeocache));
             programmingGeocache = true;
 
             // clear previous Geocache state

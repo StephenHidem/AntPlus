@@ -17,7 +17,7 @@ namespace AntGrpcService.Services
 
         public override Task<PropertiesReply> GetProperties(Empty request, ServerCallContext context)
         {
-            _logger.LogDebug($"{nameof(GetProperties)}");
+            _logger.LogDebug(nameof(GetProperties));
             SmallEarthTech.AntUsbStick.AntRadio usbAntRadio = (SmallEarthTech.AntUsbStick.AntRadio)_antRadio;
             AntResponse rsp = usbAntRadio.RequestMessageAndResponse(SmallEarthTech.AntRadioInterface.RequestMessageID.Version, 500);
             return Task.FromResult(new PropertiesReply
@@ -30,7 +30,7 @@ namespace AntGrpcService.Services
 
         public override async Task<InitScanModeReply> InitializeContinuousScanMode(Empty request, ServerCallContext context)
         {
-            _logger.LogDebug($"{nameof(InitializeContinuousScanMode)}");
+            _logger.LogDebug(nameof(InitializeContinuousScanMode));
             AntChannels = await _antRadio.InitializeContinuousScanMode();
 
             return new InitScanModeReply

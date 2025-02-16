@@ -12,9 +12,9 @@
             <RadioButton x:Name="cdp" Content="Common Data Pages" Style="{StaticResource TabbedRadioButton}"/>
         </HorizontalStackLayout>
 
-        <ScrollView Grid.Row="1" IsVisible="{Binding Source={x:Reference sdm}, Path=IsChecked}">
+        <ScrollView Grid.Row="1" IsVisible="{Binding IsChecked, Source={x:Reference sdm}, x:DataType=RadioButton}">
             <StackLayout>
-                <Frame>
+                <Border>
                     <StackLayout>
                         <Label Text="{Binding StrideSpeedDistanceMonitor.InstantaneousCadence, StringFormat='Cadence: {0}'}"/>
                         <Label Text="{Binding StrideSpeedDistanceMonitor.InstantaneousSpeed, StringFormat='Speed: {0}'}"/>
@@ -28,9 +28,9 @@
                         <Label Text="{Binding StrideSpeedDistanceMonitor.Status.Battery, StringFormat='Battery: {0}'}"/>
                         <Label Text="{Binding StrideSpeedDistanceMonitor.Status.State, StringFormat='State: {0}'}"/>
                     </StackLayout>
-                </Frame>
+                </Border>
 
-                <Frame>
+                <Border>
                     <Grid ColumnDefinitions="Auto, *">
                         <Button Text="Request Summaries" Command="{Binding RequestSummaryCommand}"/>
                         <StackLayout Grid.Column="1" Margin="8">
@@ -39,9 +39,9 @@
                             <Label Text="{Binding StrideSpeedDistanceMonitor.DistanceSummary, StringFormat='Distance: {0}'}"/>
                         </StackLayout>
                     </Grid>
-                </Frame>
+                </Border>
 
-                <Frame>
+                <Border>
                     <Grid ColumnSpacing="8" ColumnDefinitions="Auto, *">
                         <Button Text="Request Capabilities" Command="{Binding RequestCapabilitiesCommand}"/>
                         <StackLayout Grid.Column="1">
@@ -49,11 +49,11 @@
                             <Label Text="{Binding StrideSpeedDistanceMonitor.Capabilities}"/>
                         </StackLayout>
                     </Grid>
-                </Frame>
+                </Border>
             </StackLayout>
         </ScrollView>
 
-        <views:CommonDataPagesView CommonDataPages="{Binding StrideSpeedDistanceMonitor.CommonDataPages}" Grid.Row="1" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+        <views:CommonDataPagesView CommonDataPages="{Binding StrideSpeedDistanceMonitor.CommonDataPages}" Grid.Row="1" IsVisible="{Binding IsChecked, Source={x:Reference cdp}, x:DataType=RadioButton}"/>
 
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding StrideSpeedDistanceMonitor.Offline}" Grid.RowSpan="2"/>
     </Grid>

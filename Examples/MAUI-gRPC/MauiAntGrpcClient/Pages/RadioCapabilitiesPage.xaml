@@ -6,15 +6,15 @@
              x:DataType="viewmodels:RadioCapabilitiesViewModel"
              Title="RadioCapabilitiesPage">
     <Grid Margin="10" RowDefinitions="Auto, *">
-        <Frame>
+        <Border>
             <VerticalStackLayout>
                 <Label Text="Capabilities" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Label Text="{Binding Capabilities.MaxANTChannels, StringFormat='Max. ANT channel - {0}'}" />
                 <Label Text="{Binding Capabilities.MaxNetworks, StringFormat='Max. Networks - {0}'}"/>
                 <Label Text="{Binding Capabilities.MaxDataChannels, StringFormat='Max. Data Channels - {0}'}" />
             </VerticalStackLayout>
-        </Frame>
-        <Frame Grid.Row="1">
+        </Border>
+        <Border Grid.Row="1">
             <StackLayout>
                 <Label Text="Flags" FontAttributes="Bold" TextDecorations="Underline"/>
                 <CollectionView ItemsSource="{Binding Flags}" VerticalOptions="StartAndExpand">
@@ -25,6 +25,6 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </StackLayout>
-        </Frame>
+        </Border>
     </Grid>
 </ContentPage>

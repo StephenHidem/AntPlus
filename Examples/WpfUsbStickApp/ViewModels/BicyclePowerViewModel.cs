@@ -45,7 +45,7 @@ namespace WpfUsbStickApp.ViewModels
         private async Task GetCustomCalParameters() => await Sensor.RequestCustomParameters();
 
         [RelayCommand]
-        private async Task SetCustomCalParameters() => await Sensor.SetCustomParameters(new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 });
+        private async Task SetCustomCalParameters() => await Sensor.SetCustomParameters([0x11, 0x22, 0x33, 0x44, 0x55, 0x66]);
 
         [RelayCommand]
         private async Task GetParameters(SubPage subpage) => await Sensor.GetParameters(subpage);

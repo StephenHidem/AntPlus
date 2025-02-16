@@ -20,12 +20,12 @@
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference bike}, Path=IsChecked}">
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference bike}, x:DataType=RadioButton}">
                     <ContentView Content="{Binding TorqueSensorView}"/>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference bike}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference bike}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <Label Text="Standard Power" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding Sensor.PedalPower, StringFormat='Pedal Power (%): {0}'}"/>
@@ -34,8 +34,8 @@
                             <Label Text="{Binding Sensor.InstantaneousPower, StringFormat='Instantaneous Power (Watts): {0}'}"/>
                             <Label Text="{Binding Sensor.AveragePower, StringFormat='Average Power (Watts): {0:F3}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Torque Effectivenes and Pedal Smoothness" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding Sensor.CombinedPedalSmoothness, StringFormat='Combined Pedal Smoothness: {0}'}"/>
@@ -44,11 +44,11 @@
                             <Label Text="{Binding Sensor.RightPedalSmoothness, StringFormat='Right Pedal Smoothness: {0}'}"/>
                             <Label Text="{Binding Sensor.RightTorqueEffectiveness, StringFormat='Right Torque Effectiveness: {0}'}"/>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference cal}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference cal}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <Label Text="Status" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding Sensor.CalibrationStatus, StringFormat='Calibration Status: {0}'}"/>
@@ -58,8 +58,8 @@
                             <Button Text="Manual Calibration Request" HorizontalOptions="Start" Command="{Binding ManualCalRequestCommand}" Margin="0, 8, 0, 8"/>
                             <Button Text="Toggle Auto Zero Configuration" HorizontalOptions="Start" Command="{Binding SetAutoZeroConfigCommand}" />
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Measurement Output Data" FontAttributes="Bold" TextDecorations="Underline"/>
                             <CollectionView ItemsSource="{Binding Sensor.Measurements}">
@@ -74,22 +74,22 @@
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Custom Calibration Parameters" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="16" RowSpacing="8" Margin="8">
                                 <Button Text="Get Parameters" Command="{Binding GetCustomCalParametersCommand}"/>
                                 <Label Text="{Binding Sensor.CustomCalibrationParameters, StringFormat='Parameters: {0}'}" Grid.Column="1" VerticalOptions="Center"/>
-                                <Button Text="Set Parameters" Command="{Binding SetCustomCalParametersCommand}" CommandParameter="{Binding Source={x:Reference CustomCalParms}, Path=Text}" Grid.Row="1"/>
+                                <Button Text="Set Parameters" Command="{Binding SetCustomCalParametersCommand}" CommandParameter="{Binding Text, Source={x:Reference CustomCalParms}, x:DataType=Entry}" Grid.Row="1"/>
                                 <Entry Placeholder="Enter 6 hae bytes" x:Name="CustomCalParms" Grid.Column="1" Grid.Row="1"/>
                             </Grid>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference parm}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference parm}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <Label Text="Crank Settings" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding Sensor.Crank.CrankLength, StringFormat='Crank Length: {0}'}"/>
@@ -99,22 +99,22 @@
                             <Label Text="{Binding Sensor.Crank.CustomCalibration, StringFormat='Custom Calibration: {0}'}"/>
                             <Label Text="{Binding Sensor.Crank.AutoCrankLength, StringFormat='Auto Crank Length: {0}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Crank Control" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="*, *" ColumnSpacing="16" RowSpacing="8" Margin="8">
                                 <Button Text="Get Crank Settings" Command="{Binding GetParametersCommand}"
                             CommandParameter="{x:Static bp:SubPage.CrankParameters}"/>
                                 <Button Text="Set Crank Length" Grid.Row="1" Command="{Binding SetCrankLengthCommand}"
-                            CommandParameter="{Binding Source={x:Reference CrankLength}, Path=Text}"/>
+                            CommandParameter="{Binding Text, Source={x:Reference CrankLength}, x:DataType=Entry}"/>
                                 <Entry x:Name="CrankLength" Placeholder="Crank length from 110mm to 236.6mm" Grid.Row="1" Grid.Column="1"/>
                             </Grid>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
 
-                <views:CommonDataPagesView CommonDataPages="{Binding Sensor.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <views:CommonDataPagesView CommonDataPages="{Binding Sensor.CommonDataPages}" IsVisible="{Binding IsChecked, Source={x:Reference cdp}, x:DataType=RadioButton}"/>
             </VerticalStackLayout>
         </ScrollView>
         

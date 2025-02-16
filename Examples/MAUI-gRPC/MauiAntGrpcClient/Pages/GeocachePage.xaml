@@ -22,8 +22,8 @@
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference geo}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference geo}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <Label Text="Data Pages" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding Geocache.TrackableId, StringFormat='Trackable ID: {0}'}"/>
@@ -37,18 +37,18 @@
                             <Button Text="Request PIN" Command="{Binding RequestPINCommand}" Margin="0, 8, 0, 8"/>
                             <Button Text="Log Visit" Command="{Binding LogVisitCommand}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Authentication" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding Geocache.AuthenticationToken, StringFormat='Authentication Token: {0}', Converter={StaticResource ByteArrayToString}}"/>
                             <Button Text="Request Authentication" Command="{Binding RequestAuthenticationCommand}"/>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
 
-                <views:ProgramGeocacheView ProgramGeocache="{Binding .}" IsVisible="{Binding Source={x:Reference prg}, Path=IsChecked}"/>
-                <views:CommonDataPagesView CommonDataPages="{Binding Geocache.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <views:ProgramGeocacheView ProgramGeocache="{Binding .}" IsVisible="{Binding IsChecked, Source={x:Reference prg}, x:DataType=RadioButton}"/>
+                <views:CommonDataPagesView CommonDataPages="{Binding Geocache.CommonDataPages}" IsVisible="{Binding IsChecked, Source={x:Reference cdp}, x:DataType=RadioButton}"/>
             </VerticalStackLayout>
         </ScrollView>
 

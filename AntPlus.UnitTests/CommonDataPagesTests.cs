@@ -3,27 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Xunit;
 
 namespace AntPlus.UnitTests
 {
-    [TestClass]
     public class CommonDataPagesTests
     {
-        [TestMethod]
+        [Fact]
         public void ParseCommonDataPage_SupportedPages_PropertiesCorrect()
         {
             // Arrange
             CommonDataPages commonDataPage = new(null);
-            List<byte[]> commonDataPages = new()
-            {
-                new byte[8] { 0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44 },   // command status
-                new byte[8] { 0x50, 0xFF, 0xFF, 0x01, 0x0F, 0x00, 0x85, 0x83 },   // manufacturer ID
-                new byte[8] { 0x52, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x55, 0x93 },   // battery status
-                new byte[8] { 0x53, 0xFF, 0x0D, 0x1B, 0x11, 0x92, 0x06, 0x09 },   // time and date
-                new byte[8] { 0x54, 0xFF, 0x01, 0x03, 0x6B, 0x0A, 0xEA, 0x19 },   // subfield data
-                new byte[8] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x81 },    // memory level
-                new byte[8] { 0x57, 0xFF, 0x4F, 0xFF, 0x44, 0x33, 0x22, 0x11 },   // error description
-            };
+            List<byte[]> commonDataPages =
+                [
+                    [0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44],   // command status
+                    [0x50, 0xFF, 0xFF, 0x01, 0x0F, 0x00, 0x85, 0x83],   // manufacturer ID
+                    [0x52, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x55, 0x93],   // battery status
+                    [0x53, 0xFF, 0x0D, 0x1B, 0x11, 0x92, 0x06, 0x09],   // time and date
+                    [0x54, 0xFF, 0x01, 0x03, 0x6B, 0x0A, 0xEA, 0x19],   // subfield data
+                    [0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x81],    // memory level
+                    [0x57, 0xFF, 0x4F, 0xFF, 0x44, 0x33, 0x22, 0x11],   // error description
+                ];
 
             // Act
             foreach (var dataPage in commonDataPages)
@@ -33,35 +33,35 @@ namespace AntPlus.UnitTests
             }
 
             // Assert
-            Assert.IsTrue(commonDataPage.CommandStatus.LastCommandReceived == 0xFF);
-            Assert.IsTrue(commonDataPage.CommandStatus.SequenceNumber == 254);
-            Assert.IsTrue(commonDataPage.CommandStatus.Status == CommonDataPages.CommandResult.Pending);
-            Assert.IsTrue(commonDataPage.CommandStatus.ResponseData == 0x44332211);
-            Assert.IsTrue(commonDataPage.ManufacturerInfo.ManufacturerId == 15);
-            Assert.IsTrue(commonDataPage.ManufacturerInfo.HardwareRevision == 1);
-            Assert.IsTrue(commonDataPage.ManufacturerInfo.ModelNumber == 0x8385);
-            Assert.IsTrue(commonDataPage.BatteryStatus.Status == BatteryStatus.New);
-            Assert.IsTrue(commonDataPage.BatteryStatus.BatteryVoltage == 3.33203125);
-            Assert.IsTrue(commonDataPage.BatteryStatus.NumberOfBatteries == 1);
-            Assert.IsTrue(commonDataPage.BatteryStatus.Identifier == 0);
-            Assert.IsTrue(commonDataPage.BatteryStatus.CumulativeOperatingTime == TimeSpan.Zero);
-            Assert.IsTrue(commonDataPage.TimeAndDate == DateTime.Parse("06/18/2009 17:27:13", DateTimeFormatInfo.InvariantInfo));
-            Assert.IsTrue(commonDataPage.SubfieldData.Subpage1 == CommonDataPages.SubfieldDataPage.SubPage.Temperature);
-            Assert.IsTrue(commonDataPage.SubfieldData.ComputedDataField1 == 26.67);
-            Assert.IsTrue(commonDataPage.SubfieldData.Subpage2 == CommonDataPages.SubfieldDataPage.SubPage.Humidity);
-            Assert.IsTrue(commonDataPage.SubfieldData.ComputedDataField2 == 66.34);
-            Assert.IsTrue(commonDataPage.MemoryLevel.PercentUsed == 55.0);
-            Assert.IsTrue(commonDataPage.MemoryLevel.TotalSize == 3276.8);
-            Assert.IsTrue(commonDataPage.MemoryLevel.TotalSizeUnit == CommonDataPages.MemorySizeUnit.KiloBytes);
-            Assert.IsTrue(commonDataPage.ErrorDescription.ErrorLevel == CommonDataPages.ErrorLevel.Warning);
-            Assert.IsTrue(commonDataPage.ErrorDescription.SystemComponentIndex == 0xF);
-            Assert.IsTrue(commonDataPage.ErrorDescription.ProfileSpecificErrorCode == 0xFF);
-            Assert.IsTrue(commonDataPage.ErrorDescription.ManufacturerSpecificErrorCode == 0x11223344);
+            Assert.Equal(0xFF, commonDataPage.CommandStatus.LastCommandReceived);
+            Assert.Equal(254, commonDataPage.CommandStatus.SequenceNumber);
+            Assert.Equal(CommonDataPages.CommandResult.Pending, commonDataPage.CommandStatus.Status);
+            Assert.Equal<uint>(0x44332211, commonDataPage.CommandStatus.ResponseData);
+            Assert.Equal(15, commonDataPage.ManufacturerInfo.ManufacturerId);
+            Assert.Equal(1, commonDataPage.ManufacturerInfo.HardwareRevision);
+            Assert.Equal(0x8385, commonDataPage.ManufacturerInfo.ModelNumber);
+            Assert.Equal(BatteryStatus.New, commonDataPage.BatteryStatus.Status);
+            Assert.Equal(3.33203125, commonDataPage.BatteryStatus.BatteryVoltage);
+            Assert.Equal(1, commonDataPage.BatteryStatus.NumberOfBatteries);
+            Assert.Equal(0, commonDataPage.BatteryStatus.Identifier);
+            Assert.True(commonDataPage.BatteryStatus.CumulativeOperatingTime == TimeSpan.Zero);
+            Assert.True(commonDataPage.TimeAndDate == DateTime.Parse("06/18/2009 17:27:13", DateTimeFormatInfo.InvariantInfo));
+            Assert.Equal(CommonDataPages.SubfieldDataPage.SubPage.Temperature, commonDataPage.SubfieldData.Subpage1);
+            Assert.Equal(26.67, commonDataPage.SubfieldData.ComputedDataField1);
+            Assert.Equal(CommonDataPages.SubfieldDataPage.SubPage.Humidity, commonDataPage.SubfieldData.Subpage2);
+            Assert.Equal(66.34, commonDataPage.SubfieldData.ComputedDataField2);
+            Assert.Equal(55.0, commonDataPage.MemoryLevel.PercentUsed);
+            Assert.Equal(3276.8, commonDataPage.MemoryLevel.TotalSize);
+            Assert.Equal(CommonDataPages.MemorySizeUnit.KiloBytes, commonDataPage.MemoryLevel.TotalSizeUnit);
+            Assert.Equal(CommonDataPages.ErrorLevel.Warning, commonDataPage.ErrorDescription.ErrorLevel);
+            Assert.Equal(0xF, commonDataPage.ErrorDescription.SystemComponentIndex);
+            Assert.Equal(0xFF, commonDataPage.ErrorDescription.ProfileSpecificErrorCode);
+            Assert.Equal<uint>(0x11223344, commonDataPage.ErrorDescription.ManufacturerSpecificErrorCode);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 0x51, 0xFF, 0xFF, 12, 5, 6, 7, 8 }, "1.200", (uint)0x08070605)]
-        [DataRow(new byte[] { 0x51, 0xFF, 34, 12, 8, 7, 6, 5 }, "1.234", (uint)0x05060708)]
+        [Theory]
+        [InlineData(new byte[] { 0x51, 0xFF, 0xFF, 12, 5, 6, 7, 8 }, "1.200", (uint)0x08070605)]
+        [InlineData(new byte[] { 0x51, 0xFF, 34, 12, 8, 7, 6, 5 }, "1.234", (uint)0x05060708)]
         public void ParseCommonDataPage_ProductInfo_PropertiesCorrect(byte[] dataPage, string version, uint serialNumber)
         {
             // Arrange
@@ -70,16 +70,15 @@ namespace AntPlus.UnitTests
             // Act
             var currentCulture = CultureInfo.CurrentCulture;
             CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
-            commonDataPage.ParseCommonDataPage(
-                    dataPage);
+            commonDataPage.ParseCommonDataPage(dataPage);
             CultureInfo.CurrentCulture = currentCulture;
 
             // Assert
-            Assert.IsTrue(commonDataPage.ProductInfo.SerialNumber == serialNumber);
-            Assert.IsTrue(commonDataPage.ProductInfo.SoftwareRevision == Version.Parse(version));
+            Assert.Equal(serialNumber, commonDataPage.ProductInfo.SerialNumber);
+            Assert.True(commonDataPage.ProductInfo.SoftwareRevision == Version.Parse(version));
         }
 
-        [TestMethod]
+        [Fact]
         public void FormatGenericCommandPage_CheckPageReturned_ReturnPageEqualsExpectedValue()
         {
             // Arrange
@@ -96,10 +95,10 @@ namespace AntPlus.UnitTests
                 command);
 
             // Assert
-            Assert.IsTrue(result.SequenceEqual(new byte[] { (byte)CommonDataPage.GenericCommandPage, 0x22, 0x11, 0x44, 0x33, 5, 0x77, 0x66 }));
+            Assert.True(result.SequenceEqual(new byte[] { (byte)CommonDataPage.GenericCommandPage, 0x22, 0x11, 0x44, 0x33, 5, 0x77, 0x66 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FormatOpenChannelCommandPage_CheckPageReturned_ReturnPageEqualsExpectedValue()
         {
             // Arrange
@@ -116,10 +115,10 @@ namespace AntPlus.UnitTests
                 channelPeriod);
 
             // Assert
-            Assert.IsTrue(result.SequenceEqual(new byte[] { (byte)CommonDataPage.OpenChannelCommand, 0x44, 0x33, 0x22, 120, 57, BitConverter.GetBytes(channelPeriod)[0], BitConverter.GetBytes(channelPeriod)[1] }));
+            Assert.True(result.SequenceEqual(new byte[] { (byte)CommonDataPage.OpenChannelCommand, 0x44, 0x33, 0x22, 120, 57, BitConverter.GetBytes(channelPeriod)[0], BitConverter.GetBytes(channelPeriod)[1] }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FormatModeSettingsPage_CheckPageReturned_ReturnPageEqualsExpectedValue()
         {
             // Arrange
@@ -132,7 +131,7 @@ namespace AntPlus.UnitTests
                 subSportMode);
 
             // Assert
-            Assert.IsTrue(result.SequenceEqual(new byte[] { (byte)CommonDataPage.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode }));
+            Assert.True(result.SequenceEqual(new byte[] { (byte)CommonDataPage.ModeSettingsPage, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, (byte)subSportMode, (byte)sportMode }));
         }
     }
 }

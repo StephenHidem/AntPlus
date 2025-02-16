@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace AntPlus.UnitTests
 {
-    [TestClass]
     public class SendMessageChannelTests
     {
         private readonly Mock<IAntChannel> _mockChannel;
@@ -22,7 +22,7 @@ namespace AntPlus.UnitTests
             _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType, new[] { _mockChannel.Object, _mockChannel.Object, _mockChannel.Object }, Mock.Of<ILogger<AntDeviceCollection>>())!;
         }
 
-        [TestMethod]
+        [Fact]
         public void AllMethods_ThrowNotImplementedException()
         {
             var methods = new (string MethodName, object[] Parameters)[]
@@ -31,21 +31,21 @@ namespace AntPlus.UnitTests
                 ("AssignChannelExt", new object[] { ChannelType.BaseSlaveReceive, (byte)0, ChannelTypeExtended.AdvFastStart, (uint)500 }),
                 ("CloseChannel", new object[] { (uint)500 }),
                 ("ConfigFrequencyAgility", new object[] { (byte)0, (byte)0, (byte)0, (uint)500 }),
-                ("Dispose", new object[] { }),
+                ("Dispose", Array.Empty<object>()),
                 ("IncludeExcludeListAddChannel", new object[] { new ChannelId(0), (byte)0, (uint)500 }),
                 ("IncludeExcludeListConfigure", new object[] { (byte)0, true, (uint)500 }),
                 ("OpenChannel", new object[] { (uint)500 }),
                 ("RequestChannelID", new object[] { (uint)500 }),
                 ("RequestStatus", new object[] { (uint)500 }),
-                ("SendAcknowledgedData", new object[] { new byte[0], (uint)500 }),
-                ("SendAcknowledgedDataAsync", new object[] { new byte[0], (uint)500 }),
-                ("SendBroadcastData", new object[] { new byte[0] }),
-                ("SendBurstTransfer", new object[] { new byte[0], (uint)500 }),
-                ("SendBurstTransferAsync", new object[] { new byte[0], (uint)500 }),
-                ("SendExtAcknowledgedData", new object[] { new ChannelId(0), new byte[0], (uint)500 }),
-                ("SendExtBroadcastData", new object[] { new ChannelId(0), new byte[0] }),
-                ("SendExtBurstTransfer", new object[] { new ChannelId(0), new byte[0], (uint)500 }),
-                ("SendExtBurstTransferAsync", new object[] { new ChannelId(0), new byte[0], (uint)500 }),
+                ("SendAcknowledgedData", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendAcknowledgedDataAsync", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendBroadcastData", new object[] { Array.Empty<byte>() }),
+                ("SendBurstTransfer", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendBurstTransferAsync", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendExtAcknowledgedData", new object[] { new ChannelId(0), Array.Empty<byte>(), (uint)500 }),
+                ("SendExtBroadcastData", new object[] { new ChannelId(0), Array.Empty<byte>() }),
+                ("SendExtBurstTransfer", new object[] { new ChannelId(0), Array.Empty<byte>(), (uint)500 }),
+                ("SendExtBurstTransferAsync", new object[] { new ChannelId(0), Array.Empty<byte>(), (uint)500 }),
                 ("SetChannelFreq", new object[] { (byte)0, (uint)500 }),
                 ("SetChannelID", new object[] { new ChannelId(0), (uint)500 }),
                 ("SetChannelID_UsingSerial", new object[] { new ChannelId(0), (uint)500 }),
@@ -58,27 +58,27 @@ namespace AntPlus.UnitTests
                 ("UnassignChannel", new object[] { (uint)500 })
             };
 
-            foreach (var method in methods)
+            foreach (var (MethodName, Parameters) in methods)
             {
-                var methodInfo = _sendMessageChannel.GetType().GetMethod(method.MethodName);
-                Assert.IsNotNull(methodInfo);
+                var methodInfo = _sendMessageChannel.GetType().GetMethod(MethodName);
+                Assert.NotNull(methodInfo);
 
-                var exception = Assert.ThrowsException<TargetInvocationException>(() => methodInfo.Invoke(_sendMessageChannel, method.Parameters));
-                Assert.IsInstanceOfType(exception.InnerException, typeof(NotImplementedException));
+                var exception = Assert.Throws<TargetInvocationException>(() => methodInfo.Invoke(_sendMessageChannel, Parameters));
+                Assert.IsType<NotImplementedException>(exception.InnerException);
             }
 
             var propertyInfo = _sendMessageChannel.GetType().GetProperty("ChannelNumber");
-            Assert.IsNotNull(propertyInfo);
+            Assert.NotNull(propertyInfo);
 
-            var propertyException = Assert.ThrowsException<TargetInvocationException>(() => propertyInfo.GetGetMethod()!.Invoke(_sendMessageChannel, null));
-            Assert.IsInstanceOfType(propertyException.InnerException, typeof(NotImplementedException));
+            var propertyException = Assert.Throws<TargetInvocationException>(() => propertyInfo.GetGetMethod()!.Invoke(_sendMessageChannel, null));
+            Assert.IsType<NotImplementedException>(propertyException.InnerException);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SendExtAcknowledgedDataAsync_InvokesMethodMultipleTimesAndReturnsPass()
         {
             var channelId = new ChannelId(0);
-            var data = new byte[0];
+            var data = Array.Empty<byte>();
             var ackWaitTime = 500U;
             var messagingReturnCode = MessagingReturnCode.Pass;
 
@@ -86,13 +86,13 @@ namespace AntPlus.UnitTests
                         .ReturnsAsync(messagingReturnCode);
 
             var methodInfo = _sendMessageChannel.GetType().GetMethod("SendExtAcknowledgedDataAsync");
-            Assert.IsNotNull(methodInfo);
+            Assert.NotNull(methodInfo);
 
             // Act
             var tasks = new List<Task<MessagingReturnCode>>();
             for (int i = 0; i < 16; i++)
             {
-                tasks.Add((Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, new object[] { channelId, data, ackWaitTime })!);
+                tasks.Add((Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, [channelId, data, ackWaitTime])!);
             }
 
             var results = await Task.WhenAll(tasks);
@@ -100,7 +100,7 @@ namespace AntPlus.UnitTests
             // Assert
             foreach (var result in results)
             {
-                Assert.AreEqual(messagingReturnCode, result);
+                Assert.Equal(messagingReturnCode, result);
             }
             _mockChannel.Verify(c => c.SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime), Times.Exactly(tasks.Count));
         }

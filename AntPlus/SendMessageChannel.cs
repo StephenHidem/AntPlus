@@ -165,10 +165,10 @@ namespace SmallEarthTech.AntPlus
                         // find an available channel
                         while ((i = Array.FindIndex(_busyFlags, flag => !flag)) == -1)
                         {
-                            _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, all channels are busy", Task.CurrentId);
+                            _logger.LogDebug("GetAvailableChannelIndexAsync: All channels are busy");
                             Monitor.Wait(_channelLock);
                         }
-                        _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", Task.CurrentId, _busyFlags, i);
+                        _logger.LogDebug("GetAvailableChannelIndexAsync: _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", _busyFlags, i);
                         _busyFlags[i] = true;
                     }
                     return i;

@@ -2,7 +2,7 @@
 using CommunityToolkit.Maui;
 using MauiAntGrpcClient.Pages;
 using MauiAntGrpcClient.ViewModels;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntPlus.Extensions.Hosting;
@@ -14,6 +14,13 @@ namespace MauiAntGrpcClient
     {
         public static MauiApp CreateMauiApp()
         {
+            // Initialize Serilog early, without access to configuration or services
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Debug(outputTemplate:
+                    "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}) {Message:lj}{NewLine}{Exception}") // + file or centralized logging
+                .MinimumLevel.Debug()
+                .CreateLogger();
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -29,8 +36,8 @@ namespace MauiAntGrpcClient
                 .RegisterAppServices();
 
 #if DEBUG
-            builder.Logging.AddDebug();
-            builder.Logging.SetMinimumLevel(LogLevel.Debug);
+            //builder.Logging.AddDebug();
+            builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 #endif
 
             return builder.Build();

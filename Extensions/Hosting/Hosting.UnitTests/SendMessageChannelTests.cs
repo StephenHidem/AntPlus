@@ -27,21 +27,21 @@ namespace Hosting.UnitTests
                 ("AssignChannelExt", new object[] { ChannelType.BaseSlaveReceive, (byte)0, ChannelTypeExtended.AdvFastStart, (uint)500 }),
                 ("CloseChannel", new object[] { (uint)500 }),
                 ("ConfigFrequencyAgility", new object[] { (byte)0, (byte)0, (byte)0, (uint)500 }),
-                ("Dispose", new object[] { }),
+                ("Dispose", Array.Empty<object>()),
                 ("IncludeExcludeListAddChannel", new object[] { new ChannelId(0), (byte)0, (uint)500 }),
                 ("IncludeExcludeListConfigure", new object[] { (byte)0, true, (uint)500 }),
                 ("OpenChannel", new object[] { (uint)500 }),
                 ("RequestChannelID", new object[] { (uint)500 }),
                 ("RequestStatus", new object[] { (uint)500 }),
-                ("SendAcknowledgedData", new object[] { new byte[0], (uint)500 }),
-                ("SendAcknowledgedDataAsync", new object[] { new byte[0], (uint)500 }),
-                ("SendBroadcastData", new object[] { new byte[0] }),
-                ("SendBurstTransfer", new object[] { new byte[0], (uint)500 }),
-                ("SendBurstTransferAsync", new object[] { new byte[0], (uint)500 }),
-                ("SendExtAcknowledgedData", new object[] { new ChannelId(0), new byte[0], (uint)500 }),
-                ("SendExtBroadcastData", new object[] { new ChannelId(0), new byte[0] }),
-                ("SendExtBurstTransfer", new object[] { new ChannelId(0), new byte[0], (uint)500 }),
-                ("SendExtBurstTransferAsync", new object[] { new ChannelId(0), new byte[0], (uint)500 }),
+                ("SendAcknowledgedData", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendAcknowledgedDataAsync", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendBroadcastData", new object[] { Array.Empty<byte>() }),
+                ("SendBurstTransfer", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendBurstTransferAsync", new object[] { Array.Empty<byte>(), (uint)500 }),
+                ("SendExtAcknowledgedData", new object[] { new ChannelId(0), Array.Empty<byte>(), (uint)500 }),
+                ("SendExtBroadcastData", new object[] { new ChannelId(0), Array.Empty<byte>() }),
+                ("SendExtBurstTransfer", new object[] { new ChannelId(0), Array.Empty<byte>(), (uint)500 }),
+                ("SendExtBurstTransferAsync", new object[] { new ChannelId(0), Array.Empty<byte>(), (uint)500 }),
                 ("SetChannelFreq", new object[] { (byte)0, (uint)500 }),
                 ("SetChannelID", new object[] { new ChannelId(0), (uint)500 }),
                 ("SetChannelID_UsingSerial", new object[] { new ChannelId(0), (uint)500 }),
@@ -74,7 +74,7 @@ namespace Hosting.UnitTests
         public async Task SendExtAcknowledgedDataAsync_InvokesMethodMultipleTimesAndReturnsPass()
         {
             var channelId = new ChannelId(0);
-            var data = new byte[0];
+            var data = Array.Empty<byte>();
             var ackWaitTime = 500U;
             var messagingReturnCode = MessagingReturnCode.Pass;
 
@@ -88,7 +88,7 @@ namespace Hosting.UnitTests
             var tasks = new List<Task<MessagingReturnCode>>();
             for (int i = 0; i < 16; i++)
             {
-                tasks.Add((Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, new object[] { channelId, data, ackWaitTime })!);
+                tasks.Add((Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, [channelId, data, ackWaitTime])!);
             }
 
             var results = await Task.WhenAll(tasks);

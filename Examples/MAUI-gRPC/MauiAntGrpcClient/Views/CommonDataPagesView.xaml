@@ -7,24 +7,24 @@
              x:Class="MauiAntGrpcClient.Views.CommonDataPagesView">
     <ScrollView>
         <VerticalStackLayout BindingContext="{x:Reference this}">
-            <Frame>
+            <Border>
                 <StackLayout>
                     <Label Text="Manufacturer" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding CommonDataPages.ManufacturerInfo.ManufacturerId, StringFormat='Manufacter ID: {0}'}"/>
                     <Label Text="{Binding CommonDataPages.ManufacturerInfo.ModelNumber, StringFormat='Model Number: {0}'}"/>
                     <Label Text="{Binding CommonDataPages.ManufacturerInfo.HardwareRevision, StringFormat='Hardware Revision: {0}'}"/>
                 </StackLayout>
-            </Frame>
+            </Border>
 
-            <Frame>
+            <Border>
                 <StackLayout>
                     <Label Text="Product Info" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding CommonDataPages.ProductInfo.SoftwareRevision, StringFormat='Software Revision: {0}'}"/>
                     <Label Text="{Binding CommonDataPages.ProductInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
                 </StackLayout>
-            </Frame>
+            </Border>
 
-            <Frame>
+            <Border>
                 <StackLayout>
                     <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
                     <Label Text="{Binding CommonDataPages.BatteryStatus.NumberOfBatteries, StringFormat='Number of Batteries: {0}'}"/>
@@ -33,7 +33,7 @@
                     <Label Text="{Binding CommonDataPages.BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0:F3}'}"/>
                     <Label Text="{Binding CommonDataPages.BatteryStatus.CumulativeOperatingTime, StringFormat='Operating Time: {0}'}"/>
                 </StackLayout>
-            </Frame>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentView>

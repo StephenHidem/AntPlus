@@ -2,20 +2,19 @@
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntRadioInterface;
+using Xunit;
 
 namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 {
-    [TestClass]
     public class BikeCadenceSensorTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
 
-        private BikeCadenceSensor _sensor;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<BikeCadenceSensor>> mockLogger;
+        private readonly BikeCadenceSensor _sensor;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<BikeCadenceSensor>> mockLogger;
 
-        [TestInitialize]
-        public void Initialize()
+        public BikeCadenceSensorTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -26,18 +25,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             _sensor.Parse(dataPage);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_Cadence_ExpectedCadence()
         {
             // Arrange
-            byte[] dataPage = new byte[8] { 0, 1, 2, 3, 0x00, 0x04, 0x02, 0x00 };
+            byte[] dataPage = [0, 1, 2, 3, 0x00, 0x04, 0x02, 0x00];
 
             // Act
             _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(_sensor.InstantaneousCadence == 120);
+            Assert.Equal(120, _sensor.InstantaneousCadence);
         }
     }
 }

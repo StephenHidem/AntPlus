@@ -31,7 +31,7 @@ namespace MauiAntGrpcClient.ViewModels
         [ObservableProperty]
         private string? hostVersion;
         [ObservableProperty]
-        public AntCollection? antDevices;
+        private AntCollection? antDevices;
 
         public HomePageViewModel(IAntRadio antRadioService, AntCollection antCollection)
         {
@@ -73,73 +73,73 @@ namespace MauiAntGrpcClient.ViewModels
         }
 
         [RelayCommand]
-        private static async Task ShowDetails(AntDevice antDevice)
+        private static async Task ShowDetails(AntDevice selectedDevice)
         {
-            switch (antDevice)
+            switch (selectedDevice)
             {
                 case Tracker:
                     await Shell.Current.GoToAsync("AssetTracker", new Dictionary<string, object> {
-                    { "Sensor", (Tracker)antDevice },
+                    { "Sensor", (Tracker)selectedDevice },
                 });
                     break;
                 case StandardPowerSensor:
                     await Shell.Current.GoToAsync("BicyclePower", new Dictionary<string, object> {
-                    { "Sensor", (BicyclePower)antDevice },
+                    { "Sensor", (BicyclePower)selectedDevice },
                 });
                     break;
                 case CrankTorqueFrequencySensor:
                     await Shell.Current.GoToAsync("CrankTorqueFrequency", new Dictionary<string, object> {
-                    { "Sensor", (CrankTorqueFrequencySensor)antDevice },
+                    { "Sensor", (CrankTorqueFrequencySensor)selectedDevice },
                 });
                     break;
                 case BikeSpeedSensor:
                     await Shell.Current.GoToAsync("BikeSpeed", new Dictionary<string, object> {
-                    { "Sensor", (BikeSpeedSensor)antDevice }
+                    { "Sensor", (BikeSpeedSensor)selectedDevice }
                 });
                     break;
                 case CombinedSpeedAndCadenceSensor:
                     await Shell.Current.GoToAsync("SpeedAndCadence", new Dictionary<string, object> {
-                    { "Sensor", (CombinedSpeedAndCadenceSensor)antDevice }
+                    { "Sensor", (CombinedSpeedAndCadenceSensor)selectedDevice }
                 });
                     break;
                 case BikeCadenceSensor:
                     await Shell.Current.GoToAsync("BikeCadence", new Dictionary<string, object> {
-                    { "Sensor", (BikeCadenceSensor)antDevice }
+                    { "Sensor", (BikeCadenceSensor)selectedDevice }
                 });
                     break;
                 case FitnessEquipment:
                     await Shell.Current.GoToAsync("FitnessEquipment", new Dictionary<string, object> {
-                    { "Sensor", (FitnessEquipment)antDevice }
+                    { "Sensor", (FitnessEquipment)selectedDevice }
                 });
                     break;
                 case Geocache:
                     await Shell.Current.GoToAsync("Geocache", new Dictionary<string, object> {
-                    { "Sensor", (Geocache)antDevice }
+                    { "Sensor", (Geocache)selectedDevice }
                 });
                     break;
                 case HeartRate:
                     await Shell.Current.GoToAsync("HeartRate", new Dictionary<string, object> {
-                    { "Sensor", (HeartRate)antDevice }
+                    { "Sensor", (HeartRate)selectedDevice }
                 });
                     break;
                 case MuscleOxygen:
                     await Shell.Current.GoToAsync("MuscleOxygen", new Dictionary<string, object> {
-                    { "Sensor", (MuscleOxygen)antDevice }
+                    { "Sensor", (MuscleOxygen)selectedDevice }
                 });
                     break;
                 case StrideBasedSpeedAndDistance:
                     await Shell.Current.GoToAsync("StrideBasedMonitor", new Dictionary<string, object> {
-                    { "Sensor", (StrideBasedSpeedAndDistance)antDevice }
+                    { "Sensor", (StrideBasedSpeedAndDistance)selectedDevice }
                 });
                     break;
                 case BikeRadar:
                     await Shell.Current.GoToAsync("BikeRadar", new Dictionary<string, object> {
-                    { "Sensor", (BikeRadar)antDevice }
+                    { "Sensor", (BikeRadar)selectedDevice }
                 });
                     break;
                 case UnknownDevice:
                     await Shell.Current.GoToAsync("UnknownDevice", new Dictionary<string, object> {
-                    { "Sensor", (UnknownDevice)antDevice }
+                    { "Sensor", (UnknownDevice)selectedDevice }
                 });
                     break;
                 default:

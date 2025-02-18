@@ -14,14 +14,14 @@
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference main}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference main}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <ContentView Content="{Binding SpecificEquipmentView}"/>
                             <Label Text="{Binding FitnessEquipment.State, StringFormat='Equipment State: {0}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="General Data" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding FitnessEquipment.GeneralData.EquipmentType, StringFormat='Equipment Type: {0}'}"/>
@@ -31,26 +31,26 @@
                             <Label Text="{Binding FitnessEquipment.GeneralData.InstantaneousHeartRate, StringFormat='Heart Rate: {0}'}"/>
                             <Label Text="{Binding LapSplitTime, StringFormat='Lap Split Time: {0:hh\\:mm\\:ss\\.ff}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="General Settings" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding FitnessEquipment.GeneralSettings.CycleLength, StringFormat='Cycle Length: {0}'}"/>
                             <Label Text="{Binding FitnessEquipment.GeneralSettings.Incline, StringFormat='Incline: {0}'}"/>
                             <Label Text="{Binding FitnessEquipment.GeneralSettings.ResistanceLevel, StringFormat='Resistance Level: {0}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="General Metabolic" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding FitnessEquipment.GeneralMetabolic.AccumulatedCalories, StringFormat='Accumulated Calories: {0}'}"/>
                             <Label Text="{Binding FitnessEquipment.GeneralMetabolic.CaloricBurnRate, StringFormat='Caloric Burn Rate: {0:F1}'}"/>
                             <Label Text="{Binding FitnessEquipment.GeneralMetabolic.InstantaneousMET, StringFormat='Instantaneous MET: {0:F2}'}"/>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
 
-                <views:CapsAndSettingsView CapsAndSettings="{Binding .}" IsVisible="{Binding Source={x:Reference caps}, Path=IsChecked}"/>
+                <views:CapsAndSettingsView CapsAndSettings="{Binding .}" IsVisible="{Binding IsChecked, Source={x:Reference caps}, x:DataType=RadioButton}"/>
             </VerticalStackLayout>
         </ScrollView>
 

@@ -14,8 +14,8 @@
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference hr}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference hr}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <Label Text="Heart Rate" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding HeartRate.HeartRateData.ComputedHeartRate, StringFormat='Heart Rate: {0}'}"/>
@@ -24,32 +24,32 @@
                             <Label Text="{Binding HeartRate.CumulativeOperatingTime, StringFormat='Cumulative Operating Time: {0}'}"/>
                             <Label Text="{Binding HeartRate.EventType, StringFormat='Heartbeat Event Type: {0}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Manufacturer Info" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding HeartRate.ManufacturerInfo.ManufacturingIdLsb, StringFormat='Man ID LSB: {0}'}"/>
                             <Label Text="{Binding HeartRate.ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Product Info" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding HeartRate.ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
                             <Label Text="{Binding HeartRate.ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
                             <Label Text="{Binding HeartRate.ProductInfo.ModelNumber, StringFormat='Model Number: {0}'}"/>
                         </StackLayout>
-                    </Frame>
-                    <Frame>
+                    </Border>
+                    <Border>
                         <StackLayout>
                             <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Label Text="{Binding HeartRate.BatteryStatus.BatteryLevel, StringFormat='Battery Level: {0}'}"/>
                             <Label Text="{Binding HeartRate.BatteryStatus.BatteryStatus, StringFormat='Battery Status: {0}'}"/>
                             <Label Text="{Binding HeartRate.BatteryStatus.BatteryVoltage, StringFormat='Battery Voltage: {0:F1}'}"/>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
-                <views:HeartRateCapabilitiesView HeartRateCapabilities="{Binding .}" IsVisible="{Binding Source={x:Reference cap}, Path=IsChecked}"/>
+                <views:HeartRateCapabilitiesView HeartRateCapabilities="{Binding .}" IsVisible="{Binding IsChecked, Source={x:Reference cap}, x:DataType=RadioButton}"/>
             </VerticalStackLayout>
         </ScrollView>
 

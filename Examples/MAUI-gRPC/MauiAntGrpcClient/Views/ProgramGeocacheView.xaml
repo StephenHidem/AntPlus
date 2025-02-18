@@ -5,7 +5,7 @@
              x:Name="this"
              x:DataType="views:ProgramGeocacheView"
              x:Class="MauiAntGrpcClient.Views.ProgramGeocacheView">
-    <Frame>
+    <Border>
         <VerticalStackLayout BindingContext="{x:Reference this}">
             <Grid RowDefinitions="*, *, *, *" ColumnDefinitions="Auto, *">
                 <Label Text="Trackable ID:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
@@ -22,5 +22,5 @@
             <Button Text="Program Geocache" Command="{Binding ProgramGeocache.ProgramGeocacheCommand}"/>
             <Button Text="Erase Geocache" Command="{Binding ProgramGeocache.EraseGeocacheCommand}" Margin="0, 8, 0, 8"/>
         </VerticalStackLayout>
-    </Frame>
+    </Border>
 </ContentView>

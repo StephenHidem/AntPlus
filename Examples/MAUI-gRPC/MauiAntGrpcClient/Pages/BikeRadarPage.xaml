@@ -14,8 +14,8 @@
         </HorizontalStackLayout>
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>
-                <VerticalStackLayout IsVisible="{Binding Source={x:Reference radar}, Path=IsChecked}">
-                    <Frame>
+                <VerticalStackLayout IsVisible="{Binding IsChecked, Source={x:Reference radar}, x:DataType=RadioButton}">
+                    <Border>
                         <StackLayout>
                             <Label Text="Bike Radar State and Targets" FontAttributes="Bold" TextDecorations="Underline"/>
                             <Grid Margin="10">
@@ -33,21 +33,21 @@
                             <CollectionView ItemsSource="{Binding BikeRadar.RadarTargets}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate x:DataType="bikeradar:BikeRadar+RadarTarget">
-                                        <Frame>
+                                        <Border>
                                             <VerticalStackLayout>
                                                 <Label Text="{Binding ThreatLevel, StringFormat='Threat Level: {0}'}"/>
                                                 <Label Text="{Binding ThreatSide, StringFormat='Threat Side: {0}'}"/>
                                                 <Label Text="{Binding Range, StringFormat='Range: {0:F3}'}"/>
                                                 <Label Text="{Binding ClosingSpeed, StringFormat='Closing Speed: {0:F2}'}"/>
                                             </VerticalStackLayout>
-                                        </Frame>
+                                        </Border>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </VerticalStackLayout>
-                <views:CommonDataPagesView CommonDataPages="{Binding BikeRadar.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <views:CommonDataPagesView CommonDataPages="{Binding BikeRadar.CommonDataPages}" IsVisible="{Binding IsChecked, Source={x:Reference cdp}, x:DataType=RadioButton}"/>
             </VerticalStackLayout>
         </ScrollView>
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding BikeRadar.Offline}"/>

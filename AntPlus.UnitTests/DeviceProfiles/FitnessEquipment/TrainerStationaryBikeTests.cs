@@ -4,21 +4,20 @@ using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading.Tasks;
+using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.TrainerStationaryBike;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
-    [TestClass]
     public class TrainerStationaryBikeTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<TrainerStationaryBike>> mockLogger;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<TrainerStationaryBike>> mockLogger;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public TrainerStationaryBikeTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -34,28 +33,28 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 mockLogger.Object, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 25, 1, 128, 0, 0, 0x55, 0x0A, 0 };
+            byte[] dataPage = [25, 1, 128, 0, 0, 0x55, 0x0A, 0];
 
             // Act
             trainer.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(trainer.InstantaneousCadence == 128);
-            Assert.IsTrue(trainer.InstantaneousPower == 2645);
+            Assert.Equal(128, trainer.InstantaneousCadence);
+            Assert.Equal(2645, trainer.InstantaneousPower);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_AveragePower_RolloverCorrect()
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 25, 1, 0, 0xFF, 0xFF, 0, 0, 0 };
+            byte[] dataPage = [25, 1, 0, 0xFF, 0xFF, 0, 0, 0];
             trainer.Parse(
                 dataPage);
             dataPage[1] = 2; dataPage[3] = 19; dataPage[4] = 0;
@@ -65,14 +64,14 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.IsTrue(trainer.AveragePower == 20.0);
+            Assert.Equal(20.0, trainer.AveragePower);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0x00, 0 }, TrainerStatusField.None)]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0x10, 0 }, TrainerStatusField.BikePowerCalRequired)]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0x20, 0 }, TrainerStatusField.ResistanceCalRequired)]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0x40, 0 }, TrainerStatusField.UserConfigRequired)]
+        [Theory]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0x00, 0 }, TrainerStatusField.None)]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0x10, 0 }, TrainerStatusField.BikePowerCalRequired)]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0x20, 0 }, TrainerStatusField.ResistanceCalRequired)]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0x40, 0 }, TrainerStatusField.UserConfigRequired)]
         public void Parse_TrainerStatus_Matches(byte[] dataPage, TrainerStatusField trainerStatus)
         {
             // Arrange
@@ -83,14 +82,14 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(trainerStatus, trainer.TrainerStatus);
+            Assert.Equal(trainerStatus, trainer.TrainerStatus);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x00 }, TargetPowerLimit.AtTargetPower)]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x01 }, TargetPowerLimit.TooLow)]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x02 }, TargetPowerLimit.TooHigh)]
-        [DataRow(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x03 }, TargetPowerLimit.Undetermined)]
+        [Theory]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x00 }, TargetPowerLimit.AtTargetPower)]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x01 }, TargetPowerLimit.TooLow)]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x02 }, TargetPowerLimit.TooHigh)]
+        [InlineData(new byte[] { 25, 1, 0, 0, 0, 0, 0, 0x03 }, TargetPowerLimit.Undetermined)]
         public void Parse_Flags_Matches(byte[] dataPage, TargetPowerLimit targetPowerLimit)
         {
             // Arrange
@@ -101,18 +100,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(targetPowerLimit, trainer.TargetPower);
+            Assert.Equal(targetPowerLimit, trainer.TargetPower);
         }
 
-        [TestMethod]
-        [DataRow(CalibrationRequestResponse.SpinDown)]
-        [DataRow(CalibrationRequestResponse.ZeroOffset)]
-        [DataRow(CalibrationRequestResponse.SpinDown | CalibrationRequestResponse.ZeroOffset)]
+        [Theory]
+        [InlineData(CalibrationRequestResponse.SpinDown)]
+        [InlineData(CalibrationRequestResponse.ZeroOffset)]
+        [InlineData(CalibrationRequestResponse.SpinDown | CalibrationRequestResponse.ZeroOffset)]
         public async Task Parse_CalibrationResponse_Success(CalibrationRequestResponse request)
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 0x01, (byte)request, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = [0x01, (byte)request, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
             mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(
                 mockChannelId,
                 dataPage,
@@ -123,137 +122,137 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.IsTrue(trainer.CalibrationStatus.HasFlag(CalibrationResult.Success));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
+            Assert.True(trainer.CalibrationStatus.HasFlag(CalibrationResult.Success));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
         }
 
-        [TestMethod]
-        [DataRow(-25.0, 0)]
-        [DataRow(0.00, 50)]
-        [DataRow(101.5, 253)]
+        [Theory]
+        [InlineData(-25.0, 0)]
+        [InlineData(0.00, 50)]
+        [InlineData(101.5, 253)]
         public void Parse_CalibrationResponse_Temperature(double expected, int data)
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 0x01, 0xC0, 0x00, (byte)data, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = [0x01, 0xC0, 0x00, (byte)data, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(expected, trainer.Temperature);
-            Assert.IsTrue(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
+            Assert.Equal(expected, trainer.Temperature);
+            Assert.True(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_CalibrationResponse_ZeroOffset()
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 0x01, 0xC0, 0x00, 0xFF, 0x00, 0x80, 0xFF, 0xFF };
+            byte[] dataPage = [0x01, 0xC0, 0x00, 0xFF, 0x00, 0x80, 0xFF, 0xFF];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(32768, trainer.ZeroOffset);
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
-            Assert.IsTrue(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
+            Assert.Equal(32768, trainer.ZeroOffset);
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
+            Assert.True(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_CalibrationResponse_SpinDownTime()
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 0x01, 0xC0, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x80 };
+            byte[] dataPage = [0x01, 0xC0, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x80];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(32768, trainer.SpinDownTime);
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
-            Assert.IsFalse(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
-            Assert.IsTrue(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
+            Assert.Equal(32768, trainer.SpinDownTime);
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.TemperatureValid));
+            Assert.False(trainer.CalibrationStatus.HasFlag(CalibrationResult.ZeroOffsetValid));
+            Assert.True(trainer.CalibrationStatus.HasFlag(CalibrationResult.SpinDownValid));
         }
 
-        [TestMethod]
-        [DataRow(TemperatureCondition.NotApplicable, SpeedCondition.NotApplicable)]
-        [DataRow(TemperatureCondition.Low, SpeedCondition.NotApplicable)]
-        [DataRow(TemperatureCondition.Ok, SpeedCondition.NotApplicable)]
-        [DataRow(TemperatureCondition.High, SpeedCondition.NotApplicable)]
-        [DataRow(TemperatureCondition.NotApplicable, SpeedCondition.Low)]
-        [DataRow(TemperatureCondition.NotApplicable, SpeedCondition.Ok)]
+        [Theory]
+        [InlineData(TemperatureCondition.NotApplicable, SpeedCondition.NotApplicable)]
+        [InlineData(TemperatureCondition.Low, SpeedCondition.NotApplicable)]
+        [InlineData(TemperatureCondition.Ok, SpeedCondition.NotApplicable)]
+        [InlineData(TemperatureCondition.High, SpeedCondition.NotApplicable)]
+        [InlineData(TemperatureCondition.NotApplicable, SpeedCondition.Low)]
+        [InlineData(TemperatureCondition.NotApplicable, SpeedCondition.Ok)]
         public void Parse_CalibrationProgress_Conditions(TemperatureCondition tc, SpeedCondition sc)
         {
             // Arrange
             var trainer = CreateTrainer();
             byte conditions = (byte)((int)tc | (int)sc);
-            byte[] dataPage = new byte[] { 0x02, 0xC0, conditions, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = [0x02, 0xC0, conditions, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(tc, trainer.TemperatureStatus);
-            Assert.AreEqual(sc, trainer.SpeedStatus);
+            Assert.Equal(tc, trainer.TemperatureStatus);
+            Assert.Equal(sc, trainer.SpeedStatus);
         }
 
-        [TestMethod]
-        [DataRow(-25.0, 0)]
-        [DataRow(0.00, 50)]
-        [DataRow(101.5, 253)]
+        [Theory]
+        [InlineData(-25.0, 0)]
+        [InlineData(0.00, 50)]
+        [InlineData(101.5, 253)]
         public void Parse_CalibrationProgress_CurrentTemperature(double expected, int data)
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 0x02, 0xC0, 0x00, (byte)data, 0xFF, 0xFF, 0xFF, 0xFF };
+            byte[] dataPage = [0x02, 0xC0, 0x00, (byte)data, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(expected, trainer.CurrentTemperature);
+            Assert.Equal(expected, trainer.CurrentTemperature);
         }
 
-        [TestMethod]
-        [DataRow(0.001, 1)]
-        [DataRow(65.534, 65534)]
+        [Theory]
+        [InlineData(0.001, 1)]
+        [InlineData(65.534, 65534)]
         public void Parse_CalibrationProgress_TargetSpeed(double expected, int data)
         {
             // Arrange
             var trainer = CreateTrainer();
             byte[] val = BitConverter.GetBytes(data);
-            byte[] dataPage = new byte[] { 0x02, 0xC0, 0x00, 0xFF, val[0], val[1], 0xFF, 0xFF };
+            byte[] dataPage = [0x02, 0xC0, 0x00, 0xFF, val[0], val[1], 0xFF, 0xFF];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(expected, trainer.TargetSpeed);
+            Assert.Equal(expected, trainer.TargetSpeed);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_CalibrationProgress_TargetSpinDownTime()
         {
             // Arrange
             var trainer = CreateTrainer();
-            byte[] dataPage = new byte[] { 0x02, 0xC0, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x80 };
+            byte[] dataPage = [0x02, 0xC0, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x80];
 
             // Act
             trainer.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(32768, trainer.TargetSpinDownTime);
+            Assert.Equal(32768, trainer.TargetSpinDownTime);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SetBasicResistance_Message_Matches()
         {
             // Arrange
@@ -269,11 +268,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 resistance);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SetTargetPower_Message_Matches()
         {
             // Arrange
@@ -290,11 +289,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 power);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SetWindResistance_Message_Matches()
         {
             // Arrange
@@ -314,11 +313,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 draftingFactor);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SetTrackResistance_Message_Matches()
         {
             // Arrange
@@ -337,11 +336,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 rollingResistanceCoefficient);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SetUserConfiguration_Message_Matches()
         {
             // Arrange
@@ -368,7 +367,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 gearRatio);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
     }

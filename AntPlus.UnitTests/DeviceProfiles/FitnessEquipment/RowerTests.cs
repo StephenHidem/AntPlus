@@ -2,21 +2,20 @@
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
+using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Rower;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
-    [TestClass]
     public class RowerTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Rower>> mockLogger;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<Rower>> mockLogger;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public RowerTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -32,28 +31,28 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 mockLogger.Object, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
             var rower = CreateRower();
-            byte[] dataPage = new byte[] { 22, 0xFF, 0xFF, 0, 128, 0, 0x80, 0 };
+            byte[] dataPage = [22, 0xFF, 0xFF, 0, 128, 0, 0x80, 0];
 
             // Act
             rower.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(rower.Cadence == 128);
-            Assert.IsTrue(rower.InstantaneousPower == 32768);
+            Assert.Equal(128, rower.Cadence);
+            Assert.Equal(32768, rower.InstantaneousPower);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_StrokeCount_Matches()
         {
             // Arrange
             var rower = CreateRower();
-            byte[] dataPage = new byte[] { 22, 0xFF, 0xFF, 255, 0, 0, 0, 0 };
+            byte[] dataPage = [22, 0xFF, 0xFF, 255, 0, 0, 0, 0];
             rower.Parse(
                 dataPage);
             dataPage[3] = 19;
@@ -63,12 +62,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.IsTrue(rower.StrokeCount == 20);
+            Assert.Equal(20, rower.StrokeCount);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 22, 0xFF, 0xFF, 0, 0, 0, 0, 0x00 }, CapabilityFlags.None)]
-        [DataRow(new byte[] { 22, 0xFF, 0xFF, 0, 0, 0, 0, 0x01 }, CapabilityFlags.TxStrokeCount)]
+        [Theory]
+        [InlineData(new byte[] { 22, 0xFF, 0xFF, 0, 0, 0, 0, 0x00 }, CapabilityFlags.None)]
+        [InlineData(new byte[] { 22, 0xFF, 0xFF, 0, 0, 0, 0, 0x01 }, CapabilityFlags.TxStrokeCount)]
         public void Parse_Capabilities_MatchesExpectedValue(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
@@ -79,7 +78,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(capabilities, rower.Capabilities);
+            Assert.Equal(capabilities, rower.Capabilities);
         }
     }
 }

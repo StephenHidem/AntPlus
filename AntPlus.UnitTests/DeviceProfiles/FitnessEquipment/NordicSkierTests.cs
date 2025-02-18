@@ -2,21 +2,20 @@
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
+using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.NordicSkier;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
-    [TestClass]
     public class NordicSkierTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<NordicSkier>> mockLogger;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<NordicSkier>> mockLogger;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public NordicSkierTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -32,28 +31,28 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 mockLogger.Object, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
             var skier = CreateNordicSkier();
-            byte[] dataPage = new byte[] { 24, 0xFF, 0xFF, 0, 128, 0, 0x80, 0 };
+            byte[] dataPage = [24, 0xFF, 0xFF, 0, 128, 0, 0x80, 0];
 
             // Act
             skier.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(skier.Cadence == 128);
-            Assert.IsTrue(skier.InstantaneousPower == 32768);
+            Assert.Equal(128, skier.Cadence);
+            Assert.Equal(32768, skier.InstantaneousPower);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_StrideCount_Matches()
         {
             // Arrange
             var skier = CreateNordicSkier();
-            byte[] dataPage = new byte[] { 24, 0xFF, 0xFF, 255, 0, 0, 0, 0 };
+            byte[] dataPage = [24, 0xFF, 0xFF, 255, 0, 0, 0, 0];
             skier.Parse(
                 dataPage);
             dataPage[3] = 19;
@@ -63,12 +62,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.IsTrue(skier.StrideCount == 20);
+            Assert.Equal(20, skier.StrideCount);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 24, 0xFF, 0xFF, 0, 0, 0, 0, 0x00 }, CapabilityFlags.None)]
-        [DataRow(new byte[] { 24, 0xFF, 0xFF, 0, 0, 0, 0, 0x01 }, CapabilityFlags.TxStrideCount)]
+        [Theory]
+        [InlineData(new byte[] { 24, 0xFF, 0xFF, 0, 0, 0, 0, 0x00 }, CapabilityFlags.None)]
+        [InlineData(new byte[] { 24, 0xFF, 0xFF, 0, 0, 0, 0, 0x01 }, CapabilityFlags.TxStrideCount)]
         public void Parse_Capabilities_MatchesExpectedValue(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
@@ -79,7 +78,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(capabilities, skier.Capabilities);
+            Assert.Equal(capabilities, skier.Capabilities);
         }
     }
 }

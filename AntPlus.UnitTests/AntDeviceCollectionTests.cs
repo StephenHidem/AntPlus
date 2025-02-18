@@ -11,21 +11,20 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace AntPlus.UnitTests
 {
-    [TestClass]
     public class AntDeviceCollectionTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
 
-        private Mock<IAntRadio> mockAntRadio;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger> mockLogger;
-        private Mock<ILoggerFactory> mockLoggerFactory;
+        private readonly Mock<IAntRadio> mockAntRadio;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger> mockLogger;
+        private readonly Mock<ILoggerFactory> mockLoggerFactory;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public AntDeviceCollectionTests()
         {
             mockRepository = new MockRepository(MockBehavior.Loose);
 
@@ -47,7 +46,7 @@ namespace AntPlus.UnitTests
             return adc;
         }
 
-        [TestMethod]
+        [Fact]
         public async Task MultithreadedAdd_Collection_ExpectedCount()
         {
             // Arrange
@@ -69,14 +68,14 @@ namespace AntPlus.UnitTests
 
             // Act
             semaphore.Release(numberOfDevices);
-            Task.WaitAll(tasks);
+            await Task.WhenAll(tasks);
 
             // Assert
-            Assert.AreEqual(numberOfDevices, antDeviceCollection.Count);
+            Assert.Equal(numberOfDevices, antDeviceCollection.Count);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public async Task MultithreadedRemove_Collection_ExpectedCount()
         {
             // Arrange
@@ -99,28 +98,28 @@ namespace AntPlus.UnitTests
 
             // Act
             semaphore.Release(numberOfDevices);
-            Task.WaitAll(tasks);
+            await Task.WhenAll(tasks);
 
             // Assert
-            Assert.AreEqual(0, antDeviceCollection.Count);
+            Assert.Empty(antDeviceCollection);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
-        [DataRow(HeartRate.DeviceClass, typeof(HeartRate))]
-        [DataRow(BicyclePower.DeviceClass, typeof(StandardPowerSensor))]
-        [DataRow(BikeSpeedSensor.DeviceClass, typeof(BikeSpeedSensor))]
-        [DataRow(BikeCadenceSensor.DeviceClass, typeof(BikeCadenceSensor))]
-        [DataRow(CombinedSpeedAndCadenceSensor.DeviceClass, typeof(CombinedSpeedAndCadenceSensor))]
-        [DataRow(FitnessEquipment.DeviceClass, typeof(UnknownDevice))]
-        [DataRow(MuscleOxygen.DeviceClass, typeof(MuscleOxygen))]
-        [DataRow(Geocache.DeviceClass, typeof(Geocache))]
-        [DataRow(Tracker.DeviceClass, typeof(Tracker))]
-        [DataRow(StrideBasedSpeedAndDistance.DeviceClass, typeof(StrideBasedSpeedAndDistance))]
+        [Theory]
+        [InlineData(HeartRate.DeviceClass, typeof(HeartRate))]
+        [InlineData(BicyclePower.DeviceClass, typeof(StandardPowerSensor))]
+        [InlineData(BikeSpeedSensor.DeviceClass, typeof(BikeSpeedSensor))]
+        [InlineData(BikeCadenceSensor.DeviceClass, typeof(BikeCadenceSensor))]
+        [InlineData(CombinedSpeedAndCadenceSensor.DeviceClass, typeof(CombinedSpeedAndCadenceSensor))]
+        [InlineData(FitnessEquipment.DeviceClass, typeof(UnknownDevice))]
+        [InlineData(MuscleOxygen.DeviceClass, typeof(MuscleOxygen))]
+        [InlineData(Geocache.DeviceClass, typeof(Geocache))]
+        [InlineData(Tracker.DeviceClass, typeof(Tracker))]
+        [InlineData(StrideBasedSpeedAndDistance.DeviceClass, typeof(StrideBasedSpeedAndDistance))]
         public async Task ChannelResponseEvent_Collection_ExpectedDeviceInCollection(byte deviceClass, Type deviceType)
         {
             // Arrange
-            byte[] id = new byte[4] { 1, 0, deviceClass, 0 };
+            byte[] id = [1, 0, deviceClass, 0];
             ChannelId cid = new(BitConverter.ToUInt32(id));
             mockAntChannel.SetupAdd(m => m.ChannelResponse += It.IsAny<EventHandler<AntResponse>>());
             mockAntChannel.SetupRemove(m => m.ChannelResponse -= It.IsAny<EventHandler<AntResponse>>());
@@ -131,8 +130,8 @@ namespace AntPlus.UnitTests
             // Act
             mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, mockResponse);
 
-            Assert.AreEqual(1, antDeviceCollection.Count);
-            Assert.AreEqual(deviceType, antDeviceCollection[0].GetType());
+            Assert.Single(antDeviceCollection);
+            Assert.Equal(deviceType, antDeviceCollection[0].GetType());
         }
 
         class MockResponse : AntResponse
@@ -144,7 +143,7 @@ namespace AntPlus.UnitTests
             }
         }
 
-        //[TestMethod]
+        //[Fact]
         //public async Task DeviceOffline_RemovesDeviceFromCollection()
         //{
         //    // Arrange
@@ -158,10 +157,10 @@ namespace AntPlus.UnitTests
         //    //Thread.Sleep(100);
 
         //    // Assert
-        //    Assert.AreEqual(0, antDeviceCollection.Count);
+        //    Assert.Equal(0, antDeviceCollection.Count);
         //}
 
-        [TestMethod]
+        [Fact]
         public async Task MessageHandler_NullChannelId_LogsCritical()
         {
             // Arrange
@@ -183,7 +182,7 @@ namespace AntPlus.UnitTests
                 Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task MessageHandler_NullPayload_LogsCritical()
         {
             // Arrange
@@ -205,7 +204,7 @@ namespace AntPlus.UnitTests
                 Times.Once);
         }
 
-        //[TestMethod]
+        //[Fact]
         //public void CreateAntDevice_ValidChannelId_CreatesCorrectDevice()
         //{
         //    // Arrange

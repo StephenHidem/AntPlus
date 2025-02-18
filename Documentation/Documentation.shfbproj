@@ -129,6 +129,7 @@
     <None Include="Content\VersionHistory\AntPlus\v4.0.0.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v4.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v5.0.0.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v5.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.0.0.aml" />
@@ -156,6 +157,7 @@
     <None Include="Content\VersionHistory\HostingExtensions\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.1.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.1.1.0.aml" />
+    <None Include="Content\VersionHistory\HostingExtensions\v1.1.2.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

@@ -8,36 +8,36 @@
     <Grid Margin="10">
         <ScrollView>
             <StackLayout>
-                <Frame>
+                <Border>
                     <StackLayout>
                         <Label Text="Cadence Sensor" FontAttributes="Bold" TextDecorations="Underline"/>
                         <Label Text="{Binding BikeCadenceSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence: {0:F3}'}"/>
                         <Label Text="{Binding BikeCadenceSensor.CumulativeOperatingTime, StringFormat='Operating Time: {0}'}"/>
                         <Label Text="{Binding BikeCadenceSensor.Stopped, StringFormat='Stopped: {0}'}"/>
                     </StackLayout>
-                </Frame>
-                <Frame>
+                </Border>
+                <Border>
                     <StackLayout>
                         <Label Text="Manufacturer Info" FontAttributes="Bold" TextDecorations="Underline"/>
                         <Label Text="{Binding BikeCadenceSensor.ManufacturerInfo.ManufacturingId, StringFormat='Manufacturer Id: {0}'}"/>
                         <Label Text="{Binding BikeCadenceSensor.ManufacturerInfo.SerialNumber, StringFormat='Serial Number: {0}'}"/>
                     </StackLayout>
-                </Frame>
-                <Frame>
+                </Border>
+                <Border>
                     <StackLayout>
                         <Label Text="Product Info" FontAttributes="Bold" TextDecorations="Underline"/>
                         <Label Text="{Binding BikeCadenceSensor.ProductInfo.HardwareVersion, StringFormat='Hardware Version: {0}'}"/>
                         <Label Text="{Binding BikeCadenceSensor.ProductInfo.ModelNumber, StringFormat='Model #: {0}'}"/>
                         <Label Text="{Binding BikeCadenceSensor.ProductInfo.SoftwareVersion, StringFormat='Software Version: {0}'}"/>
                     </StackLayout>
-                </Frame>
-                <Frame>
+                </Border>
+                <Border>
                     <StackLayout>
                         <Label Text="Battery Status" FontAttributes="Bold" TextDecorations="Underline"/>
                         <Label Text="{Binding BikeCadenceSensor.BatteryStatus.BatteryStatus, StringFormat='Status: {0}'}"/>
                         <Label Text="{Binding BikeCadenceSensor.BatteryStatus.BatteryVoltage, StringFormat='Voltage: {0}'}"/>
                     </StackLayout>
-                </Frame>
+                </Border>
             </StackLayout>
         </ScrollView>
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding BikeCadenceSensor.Offline}"/>

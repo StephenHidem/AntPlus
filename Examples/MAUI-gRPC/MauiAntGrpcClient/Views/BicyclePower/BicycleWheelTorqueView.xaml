@@ -6,7 +6,7 @@
              x:DataType="bp:StandardWheelTorqueSensor"
              x:Class="MauiAntGrpcClient.Views.BicyclePower.BicycleWheelTorqueView">
     <VerticalStackLayout>
-        <Frame>
+        <Border>
             <StackLayout>
                 <Label Text="Wheel Torque" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Label Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
@@ -16,6 +16,6 @@
                 <Label Text="{Binding AverageSpeed, StringFormat='Average Speed (km/h): {0:F3}'}"/>
                 <Label Text="{Binding AccumulatedDistance, StringFormat='Accumulated Distance (m): {0:F3}'}"/>
             </StackLayout>
-        </Frame>
+        </Border>
     </VerticalStackLayout>
 </ContentView>

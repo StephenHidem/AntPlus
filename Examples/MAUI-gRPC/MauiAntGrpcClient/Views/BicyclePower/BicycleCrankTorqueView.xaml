@@ -6,7 +6,7 @@
              x:DataType="bp:StandardCrankTorqueSensor"
              x:Class="MauiAntGrpcClient.Views.BicyclePower.BicycleCrankTorqueView">
     <VerticalStackLayout>
-        <Frame>
+        <Border>
             <StackLayout>
                 <Label Text="Crank Torque" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Label Text="{Binding AverageAngularVelocity, StringFormat='Average Angular Velocity (rad/s): {0:F3}'}"/>
@@ -15,6 +15,6 @@
                 <Label Text="{Binding InstantaneousCadence, StringFormat='Instantaneous Cadence (RPM): {0}'}"/>
                 <Label Text="{Binding AverageCadence, StringFormat='Average Cadence (RPM): {0}'}"/>
             </StackLayout>
-        </Frame>
+        </Border>
     </VerticalStackLayout>
 </ContentView>

@@ -2,20 +2,19 @@
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntRadioInterface;
+using Xunit;
 
 namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 {
-    [TestClass]
     public class CombinedSpeedAndCadenceSensorTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
 
-        private CombinedSpeedAndCadenceSensor _sensor;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<CombinedSpeedAndCadenceSensor>> mockLogger;
+        private readonly CombinedSpeedAndCadenceSensor _sensor;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<CombinedSpeedAndCadenceSensor>> mockLogger;
 
-        [TestInitialize]
-        public void Initialize()
+        public CombinedSpeedAndCadenceSensorTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -26,20 +25,20 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             _sensor.Parse(dataPage);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SpeedCadenceDistance_ExpectedSpeedCadenceDistance()
         {
             // Arrange
-            byte[] dataPage = new byte[8] { 0x00, 0x04, 0x02, 0x00, 0x00, 0x04, 0x05, 0x00 };
+            byte[] dataPage = [0x00, 0x04, 0x02, 0x00, 0x00, 0x04, 0x05, 0x00];
 
             // Act
             _sensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(_sensor.InstantaneousCadence == 120);
-            Assert.IsTrue(_sensor.InstantaneousSpeed == 11);
-            Assert.IsTrue(_sensor.AccumulatedDistance == 11);
+            Assert.Equal(120, _sensor.InstantaneousCadence);
+            Assert.Equal(11, _sensor.InstantaneousSpeed);
+            Assert.Equal(11, _sensor.AccumulatedDistance);
         }
     }
 }

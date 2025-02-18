@@ -2,21 +2,20 @@
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
+using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.Climber;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
-    [TestClass]
     public class ClimberTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<Climber>> mockLogger;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<Climber>> mockLogger;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public ClimberTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -32,24 +31,24 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 mockLogger.Object, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
             var climber = CreateClimber();
-            byte[] dataPage = new byte[] { 23, 0, 0, 0, 128, 0, 0x80, 0 };
+            byte[] dataPage = [23, 0, 0, 0, 128, 0, 0x80, 0];
 
             // Act
             climber.Parse(dataPage);
 
             // Assert
-            Assert.IsTrue(climber.Cadence == 128);
-            Assert.IsTrue(climber.InstantaneousPower == 32768);
+            Assert.Equal(128, climber.Cadence);
+            Assert.Equal(32768, climber.InstantaneousPower);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 23, 0, 0, 0, 0, 0, 0, 0xFF }, CapabilityFlags.TxStrides)]
-        [DataRow(new byte[] { 23, 0, 0, 0, 0, 0, 0, 0xFE }, CapabilityFlags.None)]
+        [Theory]
+        [InlineData(new byte[] { 23, 0, 0, 0, 0, 0, 0, 0xFF }, CapabilityFlags.TxStrides)]
+        [InlineData(new byte[] { 23, 0, 0, 0, 0, 0, 0, 0xFE }, CapabilityFlags.None)]
         public void Parse_Capabilities_Matches(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
@@ -60,15 +59,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.AreEqual(capabilities, climber.Capabilities);
+            Assert.Equal(capabilities, climber.Capabilities);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_StrideCyclesRollover_MatchesExpectedValue()
         {
             // Arrange
             var climber = CreateClimber();
-            byte[] dataPage = new byte[] { 23, 0xFF, 0xFF, 255, 0, 0, 0, 0 };
+            byte[] dataPage = [23, 0xFF, 0xFF, 255, 0, 0, 0, 0];
             climber.Parse(
                 dataPage);
             dataPage[3] = 19;
@@ -78,7 +77,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 dataPage);
 
             // Assert
-            Assert.IsTrue(climber.StrideCycles == 20);
+            Assert.Equal(20, climber.StrideCycles);
         }
     }
 }

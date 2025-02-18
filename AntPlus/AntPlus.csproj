@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>5.0.0.0</AssemblyVersion>
+	<AssemblyVersion>5.0.1.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -24,8 +24,7 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Breaking changes:
-The AntDeviceCollection constructor no longer initiates ANT device scanning. Call the new method StartScanning after instantiating the AntDeviceCollection.</PackageReleaseNotes>
+	<PackageReleaseNotes>Bugfix: Issue #39. Clears msssage in ANT radio hardware when SendExtAcknowledgedDataAsync timesout.</PackageReleaseNotes>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -85,10 +84,10 @@ The AntDeviceCollection constructor no longer initiates ANT device scanning. Cal
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>

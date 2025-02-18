@@ -19,9 +19,11 @@
                 <Setter Property="Text" Value="OFFLINE"/>
             </Style>
 
-            <Style TargetType="Frame">
-                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Style TargetType="Border">
                 <Setter Property="Margin" Value="8"/>
+                <Setter Property="Padding" Value="8, 4, 8, 4"/>
+                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource BlackBrush}, Dark={StaticResource WhiteBrush}}"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 8"/>
             </Style>
 
             <Style TargetType="RadioButton" x:Key="TabbedRadioButton">
@@ -44,7 +46,7 @@
                                     </VisualStateGroup>
                                 </VisualStateGroupList>
                             </VisualStateManager.VisualStateGroups>
-                            <Label x:Name="TextLabel" Text="{TemplateBinding Content}"/>
+                            <Label x:Name="TextLabel" Text="{TemplateBinding Content, x:DataType=RadioButton}"/>
                             <BoxView x:Name="Indicator" Grid.Row="1"/>
                         </Grid>
                     </ControlTemplate>

@@ -6,14 +6,14 @@
              x:Class="MauiAntGrpcClient.Pages.BikeSpeedAndCadencePage"
              Title="BikeSpeedAndCadencePage">
     <Grid Margin="10">
-        <Frame>
+        <Border>
             <StackLayout>
                 <Label Text="Sensor Data" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Label Text="{Binding CombinedSpeedAndCadenceSensor.InstantaneousCadence, StringFormat='Instantaneous Cadence: {0:F3}'}"/>
                 <Label Text="{Binding CombinedSpeedAndCadenceSensor.InstantaneousSpeed, StringFormat='Instantaneous Speed: {0:F3}'}"/>
                 <Label Text="{Binding CombinedSpeedAndCadenceSensor.AccumulatedDistance, StringFormat='Accumulated Distance: {0:F3}'}"/>
             </StackLayout>
-        </Frame>
+        </Border>
         <Label Style="{StaticResource OfflineStyle}" IsVisible="{Binding CombinedSpeedAndCadenceSensor.Offline}"/>
     </Grid>
 </ContentPage>

@@ -85,12 +85,20 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     .ContinueWith(antecedent =>
                     {
                         int index = antecedent.Result;
-                        _logger.LogDebug("SendExtAcknowledgedDataAsync: channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, data = {Data}", index, channelId.Id, BitConverter.ToString(data));
+                        _logger.LogDebug("SendExtAcknowledgedDataAsync: Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, data = {Data}", index, channelId.Id, BitConverter.ToString(data));
                         _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
                         .ContinueWith(innerAntecedent =>
                         {
+                            _logger.LogDebug("SendExtAcknowledgedDataAsync: Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, result = {Result}", index, channelId.Id, innerAntecedent.Result);
                             lock (_channelLock)
                             {
+                                // unassign then assign the channel to reset the channel if the result is timeout
+                                if (innerAntecedent.Result == MessagingReturnCode.Timeout)
+                                {
+                                    _channels[index].UnassignChannel(ackWaitTime);
+                                    _channels[index].AssignChannel(ChannelType.BaseSlaveReceive, 0, ackWaitTime);
+                                }
+
                                 // release the channel and notify this channel is available
                                 _busyFlags[index] = false;
                                 Monitor.Pulse(_channelLock);
@@ -120,10 +128,10 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                         // find an available channel
                         while ((i = Array.FindIndex(_busyFlags, flag => !flag)) == -1)
                         {
-                            _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, all channels are busy", Task.CurrentId);
+                            _logger.LogDebug("GetAvailableChannelIndexAsync: All channels are busy");
                             Monitor.Wait(_channelLock);
                         }
-                        _logger.LogDebug("GetAvailableChannelIndexAsync: Task ID = {TaskId}, _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", Task.CurrentId, _busyFlags, i);
+                        _logger.LogDebug("GetAvailableChannelIndexAsync: _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", _busyFlags, i);
                         _busyFlags[i] = true;
                     }
                     return i;

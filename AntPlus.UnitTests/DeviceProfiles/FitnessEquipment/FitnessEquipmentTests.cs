@@ -3,21 +3,20 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment;
 
 namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
-    [TestClass]
     public class FitnessEquipmentTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
 
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<NullLoggerFactory> mockLogger;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<NullLoggerFactory> mockLogger;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public FitnessEquipmentTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -27,37 +26,37 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
         private SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment CreateFitnessEquipment(FitnessEquipmentType equipmentType = FitnessEquipmentType.Treadmill)
         {
-            byte[] dataPage = new byte[8] { (byte)DataPage.GeneralFEData, (byte)equipmentType, 0, 0, 0, 0, 0, 0 };
+            byte[] dataPage = [(byte)DataPage.GeneralFEData, (byte)equipmentType, 0, 0, 0, 0, 0, 0];
             return GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000);
         }
 
-        [TestMethod]
-        [DataRow(0x00, FEState.Unknown)]
-        [DataRow(0x10, FEState.AsleepOrOff)]
-        [DataRow(0x20, FEState.Ready)]
-        [DataRow(0x30, FEState.InUse)]
-        [DataRow(0x40, FEState.FinishedOrPaused)]
+        [Theory]
+        [InlineData(0x00, FEState.Unknown)]
+        [InlineData(0x10, FEState.AsleepOrOff)]
+        [InlineData(0x20, FEState.Ready)]
+        [InlineData(0x30, FEState.InUse)]
+        [InlineData(0x40, FEState.FinishedOrPaused)]
         public void Parse_FEState_ExpectedFEState(int state, FEState expState)
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
-            byte[] dataPage = { 16, 0, 0, 0, 0, 0, 0, (byte)state };
+            byte[] dataPage = [16, 0, 0, 0, 0, 0, 0, (byte)state];
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expState, fitnessEquipment.State);
+            Assert.Equal(expState, fitnessEquipment.State);
         }
 
-        [TestMethod]
-        [DataRow(FitnessEquipmentType.Treadmill)]
-        [DataRow(FitnessEquipmentType.Elliptical)]
-        [DataRow(FitnessEquipmentType.Rower)]
-        [DataRow(FitnessEquipmentType.Climber)]
-        [DataRow(FitnessEquipmentType.NordicSkier)]
-        [DataRow(FitnessEquipmentType.TrainerStationaryBike)]
+        [Theory]
+        [InlineData(FitnessEquipmentType.Treadmill)]
+        [InlineData(FitnessEquipmentType.Elliptical)]
+        [InlineData(FitnessEquipmentType.Rower)]
+        [InlineData(FitnessEquipmentType.Climber)]
+        [InlineData(FitnessEquipmentType.NordicSkier)]
+        [InlineData(FitnessEquipmentType.TrainerStationaryBike)]
         public void GetEquipment_GeneralDataPage_ExpectedEquipment(FitnessEquipmentType equipmentType)
         {
             // Arrange and Act
@@ -67,22 +66,22 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             switch (equipmentType)
             {
                 case FitnessEquipmentType.Treadmill:
-                    Assert.IsInstanceOfType<Treadmill>(fitnessEquipment);
+                    Assert.IsType<Treadmill>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Elliptical:
-                    Assert.IsInstanceOfType<Elliptical>(fitnessEquipment);
+                    Assert.IsType<Elliptical>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Rower:
-                    Assert.IsInstanceOfType<Rower>(fitnessEquipment);
+                    Assert.IsType<Rower>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Climber:
-                    Assert.IsInstanceOfType<Climber>(fitnessEquipment);
+                    Assert.IsType<Climber>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.NordicSkier:
-                    Assert.IsInstanceOfType<NordicSkier>(fitnessEquipment);
+                    Assert.IsType<NordicSkier>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.TrainerStationaryBike:
-                    Assert.IsInstanceOfType<TrainerStationaryBike>(fitnessEquipment);
+                    Assert.IsType<TrainerStationaryBike>(fitnessEquipment);
                     break;
                 default:
                     Assert.Fail();
@@ -90,18 +89,18 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             }
         }
 
-        [TestMethod]
-        [DataRow(DataPage.TreadmillData, FitnessEquipmentType.Treadmill)]
-        [DataRow(DataPage.EllipticalData, FitnessEquipmentType.Elliptical)]
-        [DataRow(DataPage.RowerData, FitnessEquipmentType.Rower)]
-        [DataRow(DataPage.ClimberData, FitnessEquipmentType.Climber)]
-        [DataRow(DataPage.NordicSkierData, FitnessEquipmentType.NordicSkier)]
-        [DataRow(DataPage.TrainerStationaryBikeData, FitnessEquipmentType.TrainerStationaryBike)]
-        [DataRow(DataPage.TrainerTorqueData, FitnessEquipmentType.TrainerStationaryBike)]
+        [Theory]
+        [InlineData(DataPage.TreadmillData, FitnessEquipmentType.Treadmill)]
+        [InlineData(DataPage.EllipticalData, FitnessEquipmentType.Elliptical)]
+        [InlineData(DataPage.RowerData, FitnessEquipmentType.Rower)]
+        [InlineData(DataPage.ClimberData, FitnessEquipmentType.Climber)]
+        [InlineData(DataPage.NordicSkierData, FitnessEquipmentType.NordicSkier)]
+        [InlineData(DataPage.TrainerStationaryBikeData, FitnessEquipmentType.TrainerStationaryBike)]
+        [InlineData(DataPage.TrainerTorqueData, FitnessEquipmentType.TrainerStationaryBike)]
         public void GetEquipment_SpecificPage_ExpectedEquipment(DataPage pageNumber, FitnessEquipmentType equipmentType)
         {
             // Arrange
-            byte[] dataPage = new byte[8] { (byte)pageNumber, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] dataPage = [(byte)pageNumber, 0, 0, 0, 0, 0, 0, 0];
 
             // Act
             var fitnessEquipment = GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000);
@@ -110,22 +109,22 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             switch (equipmentType)
             {
                 case FitnessEquipmentType.Treadmill:
-                    Assert.IsInstanceOfType<Treadmill>(fitnessEquipment);
+                    Assert.IsType<Treadmill>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Elliptical:
-                    Assert.IsInstanceOfType<Elliptical>(fitnessEquipment);
+                    Assert.IsType<Elliptical>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Rower:
-                    Assert.IsInstanceOfType<Rower>(fitnessEquipment);
+                    Assert.IsType<Rower>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.Climber:
-                    Assert.IsInstanceOfType<Climber>(fitnessEquipment);
+                    Assert.IsType<Climber>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.NordicSkier:
-                    Assert.IsInstanceOfType<NordicSkier>(fitnessEquipment);
+                    Assert.IsType<NordicSkier>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.TrainerStationaryBike:
-                    Assert.IsInstanceOfType<TrainerStationaryBike>(fitnessEquipment);
+                    Assert.IsType<TrainerStationaryBike>(fitnessEquipment);
                     break;
                 default:
                     Assert.Fail();
@@ -133,49 +132,49 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_GeneralDataPage_DataValid()
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
-            fitnessEquipment.Parse(new byte[] { 16, 0, 0, 0, 0, 0, 0, 0x34 });
-            byte[] dataPage = { 16, 0, 128, 64, 0x00, 0x80, 70, 0x34 };
+            fitnessEquipment.Parse([16, 0, 0, 0, 0, 0, 0, 0x34]);
+            byte[] dataPage = [16, 0, 128, 64, 0x00, 0x80, 70, 0x34];
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(fitnessEquipment.GeneralData.DistanceTraveled == 64);
-            Assert.IsTrue(fitnessEquipment.GeneralData.ElapsedTime == TimeSpan.FromSeconds(128 / 4));
-            Assert.IsTrue(fitnessEquipment.GeneralData.InstantaneousSpeed == 32.768);
-            Assert.IsTrue(fitnessEquipment.GeneralData.InstantaneousHeartRate == 70);
+            Assert.Equal(64, fitnessEquipment.GeneralData.DistanceTraveled);
+            Assert.True(fitnessEquipment.GeneralData.ElapsedTime == TimeSpan.FromSeconds(128 / 4));
+            Assert.Equal(32.768, fitnessEquipment.GeneralData.InstantaneousSpeed);
+            Assert.Equal(70, fitnessEquipment.GeneralData.InstantaneousHeartRate);
         }
 
-        [TestMethod]
-        [DataRow(0x00, HRDataSource.Invalid, false, false)]
-        [DataRow(0x01, HRDataSource.HeartRateMonitor, false, false)]
-        [DataRow(0x02, HRDataSource.EMHeartRateMonitor, false, false)]
-        [DataRow(0x03, HRDataSource.HandContactSensors, false, false)]
-        [DataRow(0x04, HRDataSource.Invalid, true, false)]
-        [DataRow(0x08, HRDataSource.Invalid, false, true)]
+        [Theory]
+        [InlineData(0x00, HRDataSource.Invalid, false, false)]
+        [InlineData(0x01, HRDataSource.HeartRateMonitor, false, false)]
+        [InlineData(0x02, HRDataSource.EMHeartRateMonitor, false, false)]
+        [InlineData(0x03, HRDataSource.HandContactSensors, false, false)]
+        [InlineData(0x04, HRDataSource.Invalid, true, false)]
+        [InlineData(0x08, HRDataSource.Invalid, false, true)]
         public void Parse_GeneralDataPage_ExpectedCapabilities(int caps, HRDataSource hrSrc, bool expDistanceTravelEn, bool expVirtualSpeedFlag)
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
-            byte[] dataPage = { 16, 0, 0, 0, 0, 0, 0, (byte)caps };
+            byte[] dataPage = [16, 0, 0, 0, 0, 0, 0, (byte)caps];
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(hrSrc, fitnessEquipment.GeneralData.HeartRateSource);
-            Assert.AreEqual(expDistanceTravelEn, fitnessEquipment.GeneralData.DistanceTraveledEnabled);
-            Assert.AreEqual(expVirtualSpeedFlag, fitnessEquipment.GeneralData.VirtualSpeedFlag);
+            Assert.Equal(hrSrc, fitnessEquipment.GeneralData.HeartRateSource);
+            Assert.Equal(expDistanceTravelEn, fitnessEquipment.GeneralData.DistanceTraveledEnabled);
+            Assert.Equal(expVirtualSpeedFlag, fitnessEquipment.GeneralData.VirtualSpeedFlag);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_GeneralSettings_Expected()
         {
             // Arrange
@@ -184,19 +183,19 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             double incline = 50.0;
             double resistance = 25.5;
             byte[] inclineVal = BitConverter.GetBytes((ushort)(incline / 0.01));
-            byte[] dataPage = new byte[8] { 17, 0xFF, 0xFF, (byte)(cycleLen / 0.01), inclineVal[0], inclineVal[1], (byte)(resistance / 0.5), 0 };
+            byte[] dataPage = [17, 0xFF, 0xFF, (byte)(cycleLen / 0.01), inclineVal[0], inclineVal[1], (byte)(resistance / 0.5), 0];
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(fitnessEquipment.GeneralSettings.CycleLength == cycleLen);
-            Assert.IsTrue(fitnessEquipment.GeneralSettings.Incline == incline);
-            Assert.IsTrue(fitnessEquipment.GeneralSettings.ResistanceLevel == resistance);
+            Assert.Equal(cycleLen, fitnessEquipment.GeneralSettings.CycleLength);
+            Assert.Equal(incline, fitnessEquipment.GeneralSettings.Incline);
+            Assert.Equal(resistance, fitnessEquipment.GeneralSettings.ResistanceLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_GeneralMetabolicData_Expected()
         {
             // Arrange
@@ -206,37 +205,37 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             byte calories = 128;
             byte[] metabolic = BitConverter.GetBytes((ushort)(metabolicEquivalents / 0.01));
             byte[] cbrVal = BitConverter.GetBytes((ushort)(calBurnRate / 0.1));
-            byte[] dataPage = new byte[8] { 18, 0xFF, metabolic[0], metabolic[1], cbrVal[0], cbrVal[1], calories, 0 };
+            byte[] dataPage = [18, 0xFF, metabolic[0], metabolic[1], cbrVal[0], cbrVal[1], calories, 0];
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(fitnessEquipment.GeneralMetabolic.InstantaneousMET == metabolicEquivalents);
-            Assert.IsTrue(fitnessEquipment.GeneralMetabolic.CaloricBurnRate == calBurnRate);
-            Assert.IsTrue(fitnessEquipment.GeneralMetabolic.AccumulatedCalories == 0);
+            Assert.Equal(metabolicEquivalents, fitnessEquipment.GeneralMetabolic.InstantaneousMET);
+            Assert.Equal(calBurnRate, fitnessEquipment.GeneralMetabolic.CaloricBurnRate);
+            Assert.Equal(0, fitnessEquipment.GeneralMetabolic.AccumulatedCalories);
         }
 
-        [TestMethod]
-        [DataRow(SupportedTrainingModes.Simulation)]
-        [DataRow(SupportedTrainingModes.BasicResistance)]
-        [DataRow(SupportedTrainingModes.TargetPower)]
+        [Theory]
+        [InlineData(SupportedTrainingModes.Simulation)]
+        [InlineData(SupportedTrainingModes.BasicResistance)]
+        [InlineData(SupportedTrainingModes.TargetPower)]
         public void Parse_FECapabilities_Expected(SupportedTrainingModes trainingModes)
         {
             // Arrange
             var fitnessEquipment = CreateFitnessEquipment();
             ushort maxResistance = 32768;
             byte[] maxResVal = BitConverter.GetBytes(maxResistance);
-            byte[] dataPage = new byte[8] { 54, 0xFF, 0xFF, 0xFF, 0xFF, maxResVal[0], maxResVal[1], (byte)trainingModes };
+            byte[] dataPage = [54, 0xFF, 0xFF, 0xFF, 0xFF, maxResVal[0], maxResVal[1], (byte)trainingModes];
 
             // Act
             fitnessEquipment.Parse(
                 dataPage);
 
             // Assert
-            Assert.IsTrue(fitnessEquipment.MaxTrainerResistance == maxResistance);
-            Assert.IsTrue(fitnessEquipment.TrainingModes == trainingModes);
+            Assert.Equal(fitnessEquipment.MaxTrainerResistance, maxResistance);
+            Assert.Equal(fitnessEquipment.TrainingModes, trainingModes);
         }
     }
 }

@@ -15,10 +15,10 @@
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout>
-                <CollectionView ItemsSource="{Binding Tracker.Assets}" IsVisible="{Binding Source={x:Reference ast}, Path=IsChecked}">
+                <CollectionView ItemsSource="{Binding Tracker.Assets}" IsVisible="{Binding IsChecked, Source={x:Reference ast}, x:DataType=RadioButton}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="tracker:Asset">
-                            <Frame>
+                            <Border>
                                 <VerticalStackLayout>
                                     <Label Text="{Binding Index, StringFormat='Index: {0}'}"/>
                                     <Label Text="{Binding Name, StringFormat='Name: {0}'}"/>
@@ -31,11 +31,11 @@
                                     <Label Text="{Binding Status, StringFormat='Status: {0}'}"/>
                                     <Label Text="{Binding Type, StringFormat='Type: {0}'}"/>
                                 </VerticalStackLayout>
-                            </Frame>
+                            </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <views:CommonDataPagesView CommonDataPages="{Binding Tracker.CommonDataPages}" IsVisible="{Binding Source={x:Reference cdp}, Path=IsChecked}"/>
+                <views:CommonDataPagesView CommonDataPages="{Binding Tracker.CommonDataPages}" IsVisible="{Binding IsChecked, Source={x:Reference cdp}, x:DataType=RadioButton}"/>
             </VerticalStackLayout>
         </ScrollView>
 

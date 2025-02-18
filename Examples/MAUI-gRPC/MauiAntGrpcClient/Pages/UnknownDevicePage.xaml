@@ -13,7 +13,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid Margin="10">
-        <Frame>
+        <Border>
             <CollectionView ItemsSource="{Binding UnknownDevice.DataPages}">
                 <CollectionView.Header>
                     <Label Text="Data Pages" FontAttributes="Bold" TextDecorations="Underline"/>
@@ -24,7 +24,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </Frame>
+        </Border>
         <Label IsVisible="{Binding UnknownDevice.Offline}" Style="{StaticResource OfflineStyle}"/>
     </Grid>
 </ContentPage>

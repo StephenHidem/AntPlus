@@ -3,20 +3,20 @@ using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles;
 using SmallEarthTech.AntRadioInterface;
 using System;
+using System.Threading.Tasks;
+using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.MuscleOxygen;
 
 namespace AntPlus.UnitTests.DeviceProfiles
 {
-    [TestClass]
     public class MuscleOxygenTests
     {
         readonly ChannelId cid = new(0);
-        private MockRepository mockRepository;
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger<MuscleOxygen>> mockLogger;
+        private readonly MockRepository mockRepository;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger<MuscleOxygen>> mockLogger;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public MuscleOxygenTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -24,9 +24,9 @@ namespace AntPlus.UnitTests.DeviceProfiles
             mockLogger = mockRepository.Create<ILogger<MuscleOxygen>>(MockBehavior.Loose);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0, 0, 0 }, false)]
-        [DataRow(new byte[] { 1, 2, 1, 0, 0, 0, 0, 0 }, true)]
+        [Theory]
+        [InlineData(new byte[] { 1, 1, 0, 0, 0, 0, 0, 0 }, false)]
+        [InlineData(new byte[] { 1, 2, 1, 0, 0, 0, 0, 0 }, true)]
         public void Parse_Notifications_Match(byte[] dataPage, bool expected)
         {
             // Arrange
@@ -37,16 +37,16 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 dataPage);
 
             // Assert
-            Assert.AreEqual(expected, muscleOxygen.UtcTimeRequired);
+            Assert.Equal(expected, muscleOxygen.UtcTimeRequired);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0, 0, 0 }, false, MeasurementInterval.None)]
-        [DataRow(new byte[] { 1, 2, 0, 1, 0, 0, 0, 0 }, true, MeasurementInterval.None)]
-        [DataRow(new byte[] { 1, 3, 0, 2, 0, 0, 0, 0 }, false, MeasurementInterval.QuarterSecond)]
-        [DataRow(new byte[] { 1, 4, 0, 4, 0, 0, 0, 0 }, false, MeasurementInterval.HalfSecond)]
-        [DataRow(new byte[] { 1, 5, 0, 6, 0, 0, 0, 0 }, false, MeasurementInterval.OneSecond)]
-        [DataRow(new byte[] { 1, 6, 0, 8, 0, 0, 0, 0 }, false, MeasurementInterval.TwoSecond)]
+        [Theory]
+        [InlineData(new byte[] { 1, 1, 0, 0, 0, 0, 0, 0 }, false, MeasurementInterval.None)]
+        [InlineData(new byte[] { 1, 2, 0, 1, 0, 0, 0, 0 }, true, MeasurementInterval.None)]
+        [InlineData(new byte[] { 1, 3, 0, 2, 0, 0, 0, 0 }, false, MeasurementInterval.QuarterSecond)]
+        [InlineData(new byte[] { 1, 4, 0, 4, 0, 0, 0, 0 }, false, MeasurementInterval.HalfSecond)]
+        [InlineData(new byte[] { 1, 5, 0, 6, 0, 0, 0, 0 }, false, MeasurementInterval.OneSecond)]
+        [InlineData(new byte[] { 1, 6, 0, 8, 0, 0, 0, 0 }, false, MeasurementInterval.TwoSecond)]
         public void Parse_Capabilities_Match(byte[] dataPage, bool antFs, MeasurementInterval interval)
         {
             // Arrange
@@ -57,14 +57,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 dataPage);
 
             // Assert
-            Assert.AreEqual(antFs, muscleOxygen.SupportsAntFs);
-            Assert.AreEqual(interval, muscleOxygen.Interval);
+            Assert.Equal(antFs, muscleOxygen.SupportsAntFs);
+            Assert.Equal(interval, muscleOxygen.Interval);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0xFF, 0x0F, 0, 0 }, double.NaN, MeasurementStatus.Invalid)]
-        [DataRow(new byte[] { 1, 2, 0, 0, 0xFE, 0x0F, 0, 0 }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
-        [DataRow(new byte[] { 1, 3, 0, 0, 0xD0, 0x07, 0, 0 }, 20.0, MeasurementStatus.Valid)]
+        [Theory]
+        [InlineData(new byte[] { 1, 1, 0, 0, 0xFF, 0x0F, 0, 0 }, double.NaN, MeasurementStatus.Invalid)]
+        [InlineData(new byte[] { 1, 2, 0, 0, 0xFE, 0x0F, 0, 0 }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
+        [InlineData(new byte[] { 1, 3, 0, 0, 0xD0, 0x07, 0, 0 }, 20.0, MeasurementStatus.Valid)]
         public void Parse_TotalHemoglobinConcentration_Match(byte[] dataPage, double concentration, MeasurementStatus status)
         {
             // Arrange
@@ -75,14 +75,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 dataPage);
 
             // Assert
-            Assert.AreEqual(concentration, muscleOxygen.TotalHemoglobinConcentration.Concentration);
-            Assert.AreEqual(status, muscleOxygen.TotalHemoglobinConcentration.Status);
+            Assert.Equal(concentration, muscleOxygen.TotalHemoglobinConcentration.Concentration);
+            Assert.Equal(status, muscleOxygen.TotalHemoglobinConcentration.Status);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0xF0, 0x3F, 0 }, double.NaN, MeasurementStatus.Invalid)]
-        [DataRow(new byte[] { 1, 2, 0, 0, 0, 0xE0, 0x3F, 0 }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
-        [DataRow(new byte[] { 1, 3, 0, 0, 0, 0x80, 0x0C, 0 }, 20.0, MeasurementStatus.Valid)]
+        [Theory]
+        [InlineData(new byte[] { 1, 1, 0, 0, 0, 0xF0, 0x3F, 0 }, double.NaN, MeasurementStatus.Invalid)]
+        [InlineData(new byte[] { 1, 2, 0, 0, 0, 0xE0, 0x3F, 0 }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
+        [InlineData(new byte[] { 1, 3, 0, 0, 0, 0x80, 0x0C, 0 }, 20.0, MeasurementStatus.Valid)]
         public void Parse_PreviousSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasurementStatus status)
         {
             // Arrange
@@ -93,14 +93,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 dataPage);
 
             // Assert
-            Assert.AreEqual(concentration, muscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated);
-            Assert.AreEqual(status, muscleOxygen.PreviousSaturatedHemoglobin.Status);
+            Assert.Equal(concentration, muscleOxygen.PreviousSaturatedHemoglobin.PercentSaturated);
+            Assert.Equal(status, muscleOxygen.PreviousSaturatedHemoglobin.Status);
         }
 
-        [TestMethod]
-        [DataRow(new byte[] { 1, 1, 0, 0, 0, 0, 0xC0, 0xFF }, double.NaN, MeasurementStatus.Invalid)]
-        [DataRow(new byte[] { 1, 2, 0, 0, 0, 0, 0x80, 0xFF }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
-        [DataRow(new byte[] { 1, 3, 0, 0, 0, 0, 0x00, 0x32 }, 20.0, MeasurementStatus.Valid)]
+        [Theory]
+        [InlineData(new byte[] { 1, 1, 0, 0, 0, 0, 0xC0, 0xFF }, double.NaN, MeasurementStatus.Invalid)]
+        [InlineData(new byte[] { 1, 2, 0, 0, 0, 0, 0x80, 0xFF }, double.NaN, MeasurementStatus.AmbientLightTooHigh)]
+        [InlineData(new byte[] { 1, 3, 0, 0, 0, 0, 0x00, 0x32 }, 20.0, MeasurementStatus.Valid)]
         public void Parse_CurrentSaturatedHemoglobin_Match(byte[] dataPage, double concentration, MeasurementStatus status)
         {
             // Arrange
@@ -111,16 +111,16 @@ namespace AntPlus.UnitTests.DeviceProfiles
                 dataPage);
 
             // Assert
-            Assert.AreEqual(concentration, muscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated);
-            Assert.AreEqual(status, muscleOxygen.CurrentSaturatedHemoglobin.Status);
+            Assert.Equal(concentration, muscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated);
+            Assert.Equal(status, muscleOxygen.CurrentSaturatedHemoglobin.Status);
         }
 
-        [TestMethod]
-        [DataRow(CommandId.SetTime)]
-        [DataRow(CommandId.StartSession)]
-        [DataRow(CommandId.StopSession)]
-        [DataRow(CommandId.Lap)]
-        public void SendCommand_PageSent_PageMatches(CommandId command)
+        [Theory]
+        [InlineData(CommandId.SetTime)]
+        [InlineData(CommandId.StartSession)]
+        [InlineData(CommandId.StopSession)]
+        [InlineData(CommandId.Lap)]
+        public async Task SendCommand_PageSent_PageMatches(CommandId command)
         {
             // Arrange
             TimeSpan localTimeOffset = new(6, 0, 0);
@@ -134,13 +134,13 @@ namespace AntPlus.UnitTests.DeviceProfiles
             var muscleOxygen = new MuscleOxygen(cid, mockAntChannel.Object, mockLogger.Object, null);
 
             // Act
-            var result = muscleOxygen.SendCommand(
+            var result = await muscleOxygen.SendCommand(
                 command,
                 localTimeOffset,
-                currentTimeStamp).Result;
+                currentTimeStamp);
 
             // Assert
-            Assert.IsTrue(result == MessagingReturnCode.Pass);
+            Assert.Equal(MessagingReturnCode.Pass, result);
         }
     }
 }

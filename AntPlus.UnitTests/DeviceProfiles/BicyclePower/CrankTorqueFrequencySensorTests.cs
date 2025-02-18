@@ -4,21 +4,20 @@ using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
-    [TestClass]
     public class CrankTorqueFrequencySensorTests
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
 
         private readonly ChannelId mockChannelId = new(0);
-        private Mock<IAntChannel> mockAntChannel;
-        private Mock<ILogger> mockLogger;
-        private Mock<ILoggerFactory> mockLoggerFactory;
+        private readonly Mock<IAntChannel> mockAntChannel;
+        private readonly Mock<ILogger> mockLogger;
+        private readonly Mock<ILoggerFactory> mockLoggerFactory;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public CrankTorqueFrequencySensorTests()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
 
@@ -30,61 +29,61 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
         private CrankTorqueFrequencySensor CreateCrankTorqueFrequencySensor()
         {
-            byte[] page = new byte[8] { (byte)BicyclePower.DataPage.CrankTorqueFrequency, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] page = [(byte)BicyclePower.DataPage.CrankTorqueFrequency, 0, 0, 0, 0, 0, 0, 0];
             return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLoggerFactory.Object, 2000) as CrankTorqueFrequencySensor;
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCalibrationMessage_ZeroOffset_ExpectedOffset()
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = new byte[8] { 0x01, 0x10, 0x01, 0xFF, 0xFF, 0xFF, 0x11, 0x22 };
+            byte[] dataPage = [0x01, 0x10, 0x01, 0xFF, 0xFF, 0xFF, 0x11, 0x22];
 
             // Act
             crankTorqueFrequencySensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(4386, crankTorqueFrequencySensor.Offset);
+            Assert.Equal(4386, crankTorqueFrequencySensor.Offset);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_Cadence_ExpectedCadence()
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = new byte[8] { 0x20, 0x01, 0, 0, 0x07, 0xD0, 0, 0x01 };
+            byte[] dataPage = [0x20, 0x01, 0, 0, 0x07, 0xD0, 0, 0x01];
 
             // Act
             crankTorqueFrequencySensor.Parse(
-                new byte[8] { 0x20, 0, 0, 0, 0, 0, 0, 0 });
+                [0x20, 0, 0, 0, 0, 0, 0, 0]);
             crankTorqueFrequencySensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(60.0, crankTorqueFrequencySensor.Cadence, 0.0005);
+            Assert.Equal(60.0, crankTorqueFrequencySensor.Cadence, 0.0005);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_TorqueAndPower_ExpectedTorqueAndPower()
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = new byte[8] { 0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01 };
+            byte[] dataPage = [0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01];
 
             // Act
             crankTorqueFrequencySensor.Parse(
-                new byte[8] { 0x20, 0, 0, 0, 0, 0, 0, 0 });
+                [0x20, 0, 0, 0, 0, 0, 0, 0]);
             crankTorqueFrequencySensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.AreEqual(0.1, crankTorqueFrequencySensor.Torque, 0.0005);
-            Assert.AreEqual(0.628, crankTorqueFrequencySensor.Power, 0.0005);
+            Assert.Equal(0.1, crankTorqueFrequencySensor.Torque, 0.0005);
+            Assert.Equal(0.628, crankTorqueFrequencySensor.Power, 0.0005);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SaveSlopeToFlash_Message_MessageFormatCorrect()
         {
             // Arrange
@@ -99,23 +98,23 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 slope);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
-        [DataRow(9.9)]
-        [DataRow(50.1)]
+        [Theory]
+        [InlineData(9.9)]
+        [InlineData(50.1)]
         public async Task SaveSlopeToFlash_Message_SlopeOutOfRangeException(double slope)
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
 
             // Act and Assert
-            await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(async () => await crankTorqueFrequencySensor.SaveSlopeToFlash(slope));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await crankTorqueFrequencySensor.SaveSlopeToFlash(slope));
         }
 
-        [TestMethod]
+        [Fact]
         public async Task SaveSerialNumberToFlash_Message_MessageFormatCorrect()
         {
             // Arrange
@@ -130,16 +129,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 serialNumber);
 
             // Assert
-            Assert.AreEqual(MessagingReturnCode.Pass, result);
+            Assert.Equal(MessagingReturnCode.Pass, result);
             mockRepository.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_UnknownDataPage_LogsWarning()
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = new byte[8] { 0xFF, 0, 0, 0, 0, 0, 0, 0 };
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
 
             // Act
             crankTorqueFrequencySensor.Parse(dataPage);
@@ -155,29 +154,29 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCTFMessage_SameUpdateEventCountAndTorqueTicks_NoCalculations()
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = new byte[8] { 0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01 };
+            byte[] dataPage = [0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01];
 
             // Act
             crankTorqueFrequencySensor.Parse(dataPage);
             crankTorqueFrequencySensor.Parse(dataPage);
 
             // Assert
-            Assert.AreEqual(60, crankTorqueFrequencySensor.Cadence);
-            Assert.AreEqual(0.1, crankTorqueFrequencySensor.Torque);
-            Assert.AreEqual(0.628, crankTorqueFrequencySensor.Power, 0.001);
+            Assert.Equal(60, crankTorqueFrequencySensor.Cadence);
+            Assert.Equal(0.1, crankTorqueFrequencySensor.Torque);
+            Assert.Equal(0.628, crankTorqueFrequencySensor.Power, 0.001);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCalibrationMessage_UnknownCTFDefinedId_NoAction()
         {
             // Arrange
             var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = new byte[8] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 };
+            byte[] dataPage = [0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22];
 
             // Act
             crankTorqueFrequencySensor.Parse(dataPage);

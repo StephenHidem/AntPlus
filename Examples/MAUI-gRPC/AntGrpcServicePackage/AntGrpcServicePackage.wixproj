@@ -24,4 +24,5 @@
   <ItemGroup>
     <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />
   </ItemGroup>
+	<Target Name="CollectSuggestedVisualStudioComponentIds" />
 </Project>

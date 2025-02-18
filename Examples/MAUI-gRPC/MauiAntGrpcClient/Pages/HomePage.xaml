@@ -13,7 +13,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid Margin="16" RowDefinitions="Auto, *">
-        <Frame>
+        <Border>
             <StackLayout>
                 <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}"/>
                 <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill" Margin="0,0,0,4"/>
@@ -26,30 +26,38 @@
                     <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="1" HeightRequest="32" WidthRequest="32" Command="{Binding ShowRadioCapabilitiesCommand}"/>
                 </Grid>
             </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1">
+        </Border>
+        <Border Grid.Row="1">
             <StackLayout>
                 <Label Text="ANT Devices"/>
                 <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill" Margin="0,0,0,4"/>
-                <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" SelectionMode="Single" VerticalOptions="StartAndExpand">
+                <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" SelectionMode="Single"
+                                SelectionChanged="AntDevices_SelectionChanged"
+                                VerticalOptions="StartAndExpand">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="ant:AntDevice">
-                            <Grid Padding="8" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *, Auto">
-                                <Image Margin="0,0,10,0" Grid.RowSpan="2" Source="{Binding ., Converter={StaticResource StreamToImage}}" Aspect="AspectFill" HeightRequest="40" WidthRequest="40"/>
-                                <Label Grid.Column="1" Text="{Binding .}"/>
-                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=ChannelId.DeviceNumber, StringFormat='Device Number - {0}'}"/>
-                                <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="2" Grid.RowSpan="2" HeightRequest="32" WidthRequest="32" Command="{Binding Path=ShowDetailsCommand, Source={x:RelativeSource AncestorType={x:Type viewmodels:HomePageViewModel}}}" CommandParameter="{Binding}"/>
-                            </Grid>
+                            <Border>
+                                <Grid Padding="8" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *, Auto">
+                                    <Image Margin="0,0,10,0" Grid.RowSpan="2" Source="{Binding ., Converter={StaticResource StreamToImage}}" Aspect="AspectFill" HeightRequest="40" WidthRequest="40"/>
+                                    <Label Grid.Column="1" Text="{Binding .}"/>
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding ChannelId.DeviceNumber, StringFormat='Device Number - {0}'}"/>
+                                    <Image Source="more_arrow.png" Aspect="AspectFill" Background="Transparent"
+                                       Grid.Column="2" Grid.RowSpan="2" HeightRequest="32" WidthRequest="32"/>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </StackLayout>
-        </Frame>
-        <Frame BackgroundColor="AliceBlue" VerticalOptions="Center" HorizontalOptions="Center" Padding="8" IsVisible="{Binding IsBusy}" Grid.RowSpan="2">
+        </Border>
+        <Border BackgroundColor="AliceBlue" VerticalOptions="Center" HorizontalOptions="Center" Padding="8" IsVisible="{Binding IsBusy}" Grid.RowSpan="2">
             <VerticalStackLayout Spacing="10">
                 <Label Text="Searching for ANT radio server"/>
                 <ActivityIndicator IsRunning="{Binding IsBusy}"/>
             </VerticalStackLayout>
-        </Frame>
+        </Border>
     </Grid>
 </ContentPage>

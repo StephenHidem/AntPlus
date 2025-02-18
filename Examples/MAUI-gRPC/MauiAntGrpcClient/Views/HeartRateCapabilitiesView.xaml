@@ -8,15 +8,15 @@
              x:Class="MauiAntGrpcClient.Views.HeartRateCapabilitiesView">
 
     <VerticalStackLayout BindingContext="{x:Reference this}">
-        <Frame>
+        <Border>
             <StackLayout>
                 <Label Text="Capabilities" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Label Text="{Binding HeartRateCapabilities.HeartRate.Capabilities.Supported, StringFormat='Capabilities Supported: {0}'}"/>
                 <Label Text="{Binding HeartRateCapabilities.HeartRate.Capabilities.Enabled, StringFormat='Capabilities Enabled: {0}'}"/>
             </StackLayout>
-        </Frame>
+        </Border>
 
-        <Frame>
+        <Border>
             <StackLayout>
                 <Label Text="Gym Mode" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="24">
@@ -27,9 +27,9 @@
                     <Button Grid.Column="1" Text="Set Gym Mode" Command="{Binding HeartRateCapabilities.SetGymModeCommand}"/>
                 </Grid>
             </StackLayout>
-        </Frame>
+        </Border>
 
-        <Frame>
+        <Border>
             <StackLayout RadioButtonGroup.GroupName="SportMode" RadioButtonGroup.SelectedValue="{Binding HeartRateCapabilities.ModeRequested}">
                 <Label Text="Sport Mode" FontAttributes="Bold" TextDecorations="Underline"/>
                 <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="24">
@@ -42,6 +42,6 @@
                     <Button Grid.Column="1" VerticalOptions="Center" Text="Set Sport Mode" Command="{Binding HeartRateCapabilities.SetSportModeCommand}"/>
                 </Grid>
             </StackLayout>
-        </Frame>
+        </Border>
     </VerticalStackLayout>
 </ContentView>

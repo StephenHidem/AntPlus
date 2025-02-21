@@ -48,7 +48,7 @@ jobs:
       - name: Generate help files
         run: |
           SHFB.exe $env:Documentation_Project
-      
+
   # Single deploy job since we're just deploying
   deploy:
     needs: {build_docs]

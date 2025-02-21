@@ -35,9 +35,9 @@ jobs:
 
       - name: Install SHFB and framework packages
         run: |
+          dir
           dotnet add package EWSoftware.SHFB --version 2024.12.21
           dotnet add package EWSoftware.SHFB.NET --version 9.0.0
-          dit
           
       - name: Build project
         run: msbuild $env:Solution_Name /r /t:Compile /p:Configuration=Release

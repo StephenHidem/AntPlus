@@ -43,8 +43,8 @@ jobs:
       - name: Install SHFB and framework packages
         run: |
           dir
-          dotnet tool install --global EWSoftware.SHFB --version 2024.12.21
-          dotnet tool install --global EWSoftware.SHFB.NET --version 9.0.0
+          dotnet add $env.Documentation_Project package EWSoftware.SHFB --version 2024.12.21
+          dotnet add $env.Documentation_Project package EWSoftware.SHFB.NET --version 9.0.0
           
       - name: Build project
         run: msbuild $env:Solution_Name /r /t:Compile /p:Configuration=Release

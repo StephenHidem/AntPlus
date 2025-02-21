@@ -46,11 +46,10 @@ jobs:
         run: msbuild $env:Solution_Name /r /t:Compile /p:Configuration=Release
         
       - name: Generate help files
-        run: SHFB.exe $env:Documentation_Project
+        #run: SHFB.exe $env:Documentation_Project
 
   # Single deploy job since we're just deploying
   deploy:
-    needs: {build_docs]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

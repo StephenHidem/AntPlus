@@ -45,7 +45,7 @@ jobs:
       - name: Build project
         run: msbuild $env:Solution_Name /r /t:Compile /p:Configuration=Release
         
-      - name: Generate help files
+      #- name: Generate help files
         #run: SHFB.exe $env:Documentation_Project
 
   # Single deploy job since we're just deploying

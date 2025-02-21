@@ -2,10 +2,6 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["master"]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -41,6 +37,7 @@ jobs:
         run: |
           dotnet add package EWSoftware.SHFB --version 2024.12.21
           dotnet add package EWSoftware.SHFB.NET --version 9.0.0
+          dit
           
       - name: Build project
         run: msbuild $env:Solution_Name /r /t:Compile /p:Configuration=Release

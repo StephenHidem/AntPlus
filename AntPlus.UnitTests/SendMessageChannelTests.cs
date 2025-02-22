@@ -19,7 +19,9 @@ namespace AntPlus.UnitTests
         {
             _mockChannel = new Mock<IAntChannel>();
             Type sendMessageChannelType = typeof(AntDeviceCollection).GetNestedType("SendMessageChannel", BindingFlags.NonPublic)!;
-            _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType, new[] { _mockChannel.Object, _mockChannel.Object, _mockChannel.Object }, Mock.Of<ILogger<AntDeviceCollection>>())!;
+            _sendMessageChannel = Activator.CreateInstance(sendMessageChannelType,
+                new[] { _mockChannel.Object },
+                Mock.Of<ILogger<AntDeviceCollection>>())!;
         }
 
         [Fact]
@@ -79,11 +81,12 @@ namespace AntPlus.UnitTests
         {
             var channelId = new ChannelId(0);
             var data = Array.Empty<byte>();
-            var ackWaitTime = 500U;
             var messagingReturnCode = MessagingReturnCode.Pass;
 
-            _mockChannel.Setup(c => c.SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime))
+            _mockChannel.Setup(c => c.SendExtAcknowledgedDataAsync(channelId, data, It.IsAny<uint>()))
                         .ReturnsAsync(messagingReturnCode);
+            _mockChannel.Setup(c => c.UnassignChannel(It.IsAny<uint>())).Returns(true);
+            _mockChannel.Setup(c => c.AssignChannel(ChannelType.BaseSlaveReceive, 0, It.IsAny<uint>())).Returns(true);
 
             var methodInfo = _sendMessageChannel.GetType().GetMethod("SendExtAcknowledgedDataAsync");
             Assert.NotNull(methodInfo);
@@ -92,7 +95,7 @@ namespace AntPlus.UnitTests
             var tasks = new List<Task<MessagingReturnCode>>();
             for (int i = 0; i < 16; i++)
             {
-                tasks.Add((Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, [channelId, data, ackWaitTime])!);
+                tasks.Add((Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, [channelId, data, It.IsAny<uint>()])!);
             }
 
             var results = await Task.WhenAll(tasks);
@@ -102,8 +105,32 @@ namespace AntPlus.UnitTests
             {
                 Assert.Equal(messagingReturnCode, result);
             }
-            _mockChannel.Verify(c => c.SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime), Times.Exactly(tasks.Count));
+            _mockChannel.Verify(c => c.SendExtAcknowledgedDataAsync(channelId, data, It.IsAny<uint>()), Times.Exactly(tasks.Count));
+            _mockChannel.Verify(c => c.UnassignChannel(It.IsAny<uint>()), Times.Never);
+            _mockChannel.Verify(c => c.AssignChannel(ChannelType.BaseSlaveReceive, 0, It.IsAny<uint>()), Times.Never);
         }
 
+        [Fact]
+        public async Task SendExtAcknowledgedDataAsync_InvokesMethodAndReturnsTimeout()
+        {
+            var channelId = new ChannelId(0);
+            var data = Array.Empty<byte>();
+            var messagingReturnCode = MessagingReturnCode.Timeout;
+            _mockChannel.Setup(c => c.SendExtAcknowledgedDataAsync(channelId, data, It.IsAny<uint>()))
+                        .ReturnsAsync(messagingReturnCode);
+            _mockChannel.Setup(c => c.UnassignChannel(It.IsAny<uint>())).Returns(true);
+            _mockChannel.Setup(c => c.AssignChannel(ChannelType.BaseSlaveReceive, 0, It.IsAny<uint>())).Returns(true);
+
+            var methodInfo = _sendMessageChannel.GetType().GetMethod("SendExtAcknowledgedDataAsync");
+            Assert.NotNull(methodInfo);
+
+            // Act
+            var result = await (Task<MessagingReturnCode>)methodInfo.Invoke(_sendMessageChannel, [channelId, data, It.IsAny<uint>()])!;
+
+            // Assert
+            Assert.Equal(messagingReturnCode, result);
+            _mockChannel.Verify(c => c.UnassignChannel(It.IsAny<uint>()), Times.Once);
+            _mockChannel.Verify(c => c.AssignChannel(ChannelType.BaseSlaveReceive, 0, It.IsAny<uint>()), Times.Once);
+        }
     }
 }

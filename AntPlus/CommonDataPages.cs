@@ -322,7 +322,7 @@ namespace SmallEarthTech.AntPlus
                         retVal = value * 0.01;
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(page), page, "Invalid sub-page.");
+                        throw new ArgumentOutOfRangeException(nameof(page), page, "Invalid subpage.");
                 }
                 return retVal;
             }

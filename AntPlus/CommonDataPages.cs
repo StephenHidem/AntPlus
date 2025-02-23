@@ -304,25 +304,25 @@ namespace SmallEarthTech.AntPlus
                         retVal = (ushort)value * 0.01;
                         break;
                     case SubPage.Humidity:
-                        retVal = value / 100.0;
+                        retVal = (ushort)value * 0.01;
                         break;
                     case SubPage.WindSpeed:
                         retVal = (ushort)value * 0.01;
                         break;
                     case SubPage.WindDirection:
-                        retVal = value / 20.0;
+                        retVal = (ushort)value * 0.05;
                         break;
                     case SubPage.ChargingCycles:
                         retVal = (ushort)value;
                         break;
                     case SubPage.MinimumOperatingTemperature:
-                        retVal = value / 100.0;
+                        retVal = value * 0.01;
                         break;
                     case SubPage.MaximumOperatingTemperature:
-                        retVal = value / 100.0;
+                        retVal = value * 0.01;
                         break;
                     default:
-                        break;
+                        throw new ArgumentOutOfRangeException(nameof(page), page, "Invalid sub-page.");
                 }
                 return retVal;
             }
@@ -423,7 +423,15 @@ namespace SmallEarthTech.AntPlus
                     TimeAndDate = new DateTime(2000 + dataPage[7], dataPage[6], dataPage[5] & 0x1F, dataPage[4], dataPage[3], dataPage[2], DateTimeKind.Utc);
                     break;
                 case CommonDataPage.SubfieldData:
-                    SubfieldData = new SubfieldDataPage(dataPage);
+                    try
+                    {
+                        SubfieldData = new SubfieldDataPage(dataPage);
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        _logger.LogWarning("{Func}: {Message}", nameof(ParseCommonDataPage), ex.Message);
+                        throw;
+                    }
                     break;
                 case CommonDataPage.MemoryLevel:
                     MemoryLevel = new MemoryLevelPage(dataPage);

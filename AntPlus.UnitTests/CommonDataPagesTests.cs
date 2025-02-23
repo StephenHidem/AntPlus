@@ -108,7 +108,7 @@ namespace AntPlus.UnitTests
         [InlineData(new byte[] { 0x54, 0xFF, 0x05, 0x06, 0x6B, 0x0A, 0xEA, 0x19 },
             CommonDataPages.SubfieldDataPage.SubPage.WindDirection,
             CommonDataPages.SubfieldDataPage.SubPage.ChargingCycles,
-            26.67, 66.34)]
+            133.35, 6634.0)]
         [InlineData(new byte[] { 0x54, 0xFF, 0x07, 0x08, 0x6B, 0x0A, 0xEA, 0x19 },
             CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
             CommonDataPages.SubfieldDataPage.SubPage.MaximumOperatingTemperature,
@@ -122,9 +122,9 @@ namespace AntPlus.UnitTests
             _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
             Assert.Equal(subPage1, _commonDataPages.SubfieldData.Subpage1);
-            Assert.Equal(subPage1Value, _commonDataPages.SubfieldData.ComputedDataField1);
+            Assert.Equal(subPage1Value, _commonDataPages.SubfieldData.ComputedDataField1, 0.01);
             Assert.Equal(subPage2, _commonDataPages.SubfieldData.Subpage2);
-            Assert.Equal(subPage2Value, _commonDataPages.SubfieldData.ComputedDataField2);
+            Assert.Equal(subPage2Value, _commonDataPages.SubfieldData.ComputedDataField2, 0.01);
         }
 
         [Theory]

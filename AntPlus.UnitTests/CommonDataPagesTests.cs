@@ -41,6 +41,21 @@ namespace AntPlus.UnitTests
             // Act
             _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.Equal(0xFF, _commonDataPages.ManufacturerInfo.ComponentId);
+            Assert.Equal(1, _commonDataPages.ManufacturerInfo.HardwareRevision);
+            Assert.Equal(15, _commonDataPages.ManufacturerInfo.ManufacturerId);
+            Assert.Equal(0x8385, _commonDataPages.ManufacturerInfo.ModelNumber);
+        }
+
+        [Fact]
+        public void ParseMultiComponentManufacturerInfoPage_PropertiesCorrect()
+        {
+            // Arrange
+            byte[] dataPage = [0x4E, 0xFF, 0x22, 0x01, 0x0F, 0x00, 0x85, 0x83];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(0x22, _commonDataPages.ManufacturerInfo.ComponentId);
             Assert.Equal(1, _commonDataPages.ManufacturerInfo.HardwareRevision);
             Assert.Equal(15, _commonDataPages.ManufacturerInfo.ManufacturerId);
             Assert.Equal(0x8385, _commonDataPages.ManufacturerInfo.ModelNumber);
@@ -58,8 +73,22 @@ namespace AntPlus.UnitTests
             CultureInfo.CurrentCulture = currentCulture;
 
             // Assert
+            Assert.Equal(0xFF, _commonDataPages.ProductInfo.ComponentId);
             Assert.Equal(serialNumber, _commonDataPages.ProductInfo.SerialNumber);
             Assert.True(_commonDataPages.ProductInfo.SoftwareRevision == Version.Parse(version));
+        }
+
+        [Fact]
+        public void ParseMultiComponentProductInfoPage_PropertiesCorrect()
+        {
+            // Arrange
+            byte[] dataPage = [0x4F, 0x22, 0xFF, 12, 5, 6, 7, 8];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(0x22, _commonDataPages.ProductInfo.ComponentId);
+            Assert.Equal((uint)0x08070605, _commonDataPages.ProductInfo.SerialNumber);
+            Assert.True(_commonDataPages.ProductInfo.SoftwareRevision == Version.Parse("1.200"));
         }
 
         [Theory]

@@ -180,6 +180,11 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Manufacturer info page.</summary>
         public readonly struct ManufacturerInfoPage
         {
+            /// <summary>
+            /// Gets the component identifier. Bits 0 – 3: Number of components. Bits 4 – 7: Component identifier.
+            /// A value of 0xFF indicates that the component identifier is not used.
+            /// </summary>
+            public byte ComponentId { get; }
             /// <summary>Gets the hardware revision.</summary>
             public byte HardwareRevision { get; }
             /// <summary>Gets the manufacturer identifier.</summary>
@@ -189,6 +194,7 @@ namespace SmallEarthTech.AntPlus
 
             internal ManufacturerInfoPage(byte[] dataPage)
             {
+                ComponentId = dataPage[2];
                 HardwareRevision = dataPage[3];
                 ManufacturerId = BitConverter.ToUInt16(dataPage, 4);
                 ModelNumber = BitConverter.ToUInt16(dataPage, 6);
@@ -197,6 +203,11 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Product info page.</summary>
         public readonly struct ProductInfoPage
         {
+            /// <summary>
+            /// Gets the component identifier. Bits 0 – 3: Number of components. Bits 4 – 7: Component identifier.
+            /// A value of 0xFF indicates that the component identifier is not used.
+            /// </summary>
+            public byte ComponentId { get; }
             /// <summary>Gets the software revision.</summary>
             public Version SoftwareRevision { get; }
             /// <summary>Gets the serial number.</summary>
@@ -204,6 +215,7 @@ namespace SmallEarthTech.AntPlus
 
             internal ProductInfoPage(byte[] dataPage)
             {
+                ComponentId = dataPage[1];
                 // SW revision is in the form of X.Y regardless of current culture
                 if (dataPage[2] != 0xFF)
                 {
@@ -407,12 +419,10 @@ namespace SmallEarthTech.AntPlus
                     CommandStatus = new CommandStatusPage(dataPage);
                     break;
                 case CommonDataPage.MultiComponentManufacturerInfo:
-                    break;
-                case CommonDataPage.MultiComponentProductInfo:
-                    break;
                 case CommonDataPage.ManufacturerInfo:
                     ManufacturerInfo = new ManufacturerInfoPage(dataPage);
                     break;
+                case CommonDataPage.MultiComponentProductInfo:
                 case CommonDataPage.ProductInfo:
                     ProductInfo = new ProductInfoPage(dataPage);
                     break;

@@ -231,7 +231,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
         //    // Assert
         //    Assert.Fail();
-        //    mockRepository.VerifyAll();
+        //    _mockRepository.VerifyAll();
         //}
 
         //[Fact]
@@ -245,7 +245,7 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
         //    // Assert
         //    Assert.Fail();
-        //    mockRepository.VerifyAll();
+        //    _mockRepository.VerifyAll();
         //}
     }
 }

@@ -143,23 +143,6 @@ namespace AntPlus.UnitTests
             }
         }
 
-        //[Fact]
-        //public async Task DeviceOffline_RemovesDeviceFromCollection()
-        //{
-        //    // Arrange
-        //    var antDeviceCollection = CreateAntDeviceCollection();
-        //    await antDeviceCollection.StartScanning();
-        //    Mock<AntDevice> antDevice = new(new ChannelId(1), mockAntChannel.Object, Mock.Of<ILogger>(), 50);
-        //    antDeviceCollection.Add(antDevice.Object);
-
-        //    // Act
-        //    antDevice.Raise(d => d.DeviceWentOffline += null, EventArgs.Empty);
-        //    //Thread.Sleep(100);
-
-        //    // Assert
-        //    Assert.Equal(0, antDeviceCollection.Count);
-        //}
-
         [Fact]
         public async Task MessageHandler_NullChannelId_LogsCritical()
         {
@@ -203,21 +186,5 @@ namespace AntPlus.UnitTests
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
                 Times.Once);
         }
-
-        //[Fact]
-        //public void CreateAntDevice_ValidChannelId_CreatesCorrectDevice()
-        //{
-        //    // Arrange
-        //    var antDeviceCollection = CreateAntDeviceCollection();
-        //    var channelId = new ChannelId(1) { DeviceType = HeartRate.DeviceClass };
-        //    var dataPage = new byte[8];
-
-        //    // Act
-        //    var device = antDeviceCollection.CreateAntDevice(channelId, dataPage);
-
-        //    // Assert
-        //    Assert.IsInstanceOfType(device, typeof(HeartRate));
-        //}
-
     }
 }

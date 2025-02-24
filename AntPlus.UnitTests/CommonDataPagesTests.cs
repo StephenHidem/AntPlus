@@ -113,6 +113,14 @@ namespace AntPlus.UnitTests
             CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
             CommonDataPages.SubfieldDataPage.SubPage.MaximumOperatingTemperature,
             26.67, 66.34)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x01, 0x07, 0x00, 0x80, 0x00, 0x80 },
+            CommonDataPages.SubfieldDataPage.SubPage.Temperature,
+            CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
+            -327.68, -327.68)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x07, 0x08, 0x6B, 0x0A, 0x00, 0x80 },
+            CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
+            CommonDataPages.SubfieldDataPage.SubPage.MaximumOperatingTemperature,
+            26.67, -327.68)]
         public void ParseSubfieldDataPage_PropertiesCorrect(byte[] dataPage,
             CommonDataPages.SubfieldDataPage.SubPage subPage1,
             CommonDataPages.SubfieldDataPage.SubPage subPage2,

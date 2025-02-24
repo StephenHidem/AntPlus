@@ -429,8 +429,7 @@ namespace SmallEarthTech.AntPlus
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
-                        _logger.LogWarning("{Func}: {Message}", nameof(ParseCommonDataPage), ex.Message);
-                        throw;
+                        _logger.LogError(ex, "{Func}: Invalid subfield data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
                     }
                     break;
                 case CommonDataPage.MemoryLevel:

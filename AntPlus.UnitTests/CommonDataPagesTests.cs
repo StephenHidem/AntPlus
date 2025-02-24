@@ -128,6 +128,24 @@ namespace AntPlus.UnitTests
         }
 
         [Theory]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x01, 0x09, 0x6B, 0x0A, 0xEA, 0x19 })]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x09, 0x01, 0x6B, 0x0A, 0xEA, 0x19 })]
+        public void ParseSubfieldDataPage_InvalidSubPage_LogsError(byte[] dataPage)
+        {
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid subfield data page")),
+                    It.Is<ArgumentOutOfRangeException>(ex => ex.Message.Contains("Invalid subpage")),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Theory]
         [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x01 }, CommonDataPages.MemorySizeUnit.KiloBits)]
         [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x02 }, CommonDataPages.MemorySizeUnit.MegaBits)]
         [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x03 }, CommonDataPages.MemorySizeUnit.TeraBits)]

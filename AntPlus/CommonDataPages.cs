@@ -446,12 +446,13 @@ namespace SmallEarthTech.AntPlus
                     MemoryLevel = new MemoryLevelPage(dataPage);
                     break;
                 case CommonDataPage.PairedDevices:
+                    _logger.LogWarning("{Func}: Paired devices data page not implemented. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
                     break;
                 case CommonDataPage.ErrorDescription:
                     ErrorDescription = new ErrorDescriptionPage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    _logger.LogWarning("{Func}: Unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
                     break;
             }
         }

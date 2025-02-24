@@ -199,6 +199,24 @@ namespace AntPlus.UnitTests
             Assert.Equal(sizeUnit, _commonDataPages.MemoryLevel.TotalSizeUnit);
         }
 
+        [Fact]
+        public void ParsePairedDevicesPage_LogsWarning()
+        {
+            // Arrange
+            byte[] dataPage = [0x56, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Paired devices data page not implemented")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
         [Theory]
         [InlineData(new byte[] { 0x57, 0xFF, 0x4F, 0xFF, 0x44, 0x33, 0x22, 0x11 }, CommonDataPages.ErrorLevel.Warning)]
         [InlineData(new byte[] { 0x57, 0xFF, 0x8F, 0xFF, 0x44, 0x33, 0x22, 0x11 }, CommonDataPages.ErrorLevel.Critical)]
@@ -211,6 +229,24 @@ namespace AntPlus.UnitTests
             Assert.Equal(0xF, _commonDataPages.ErrorDescription.SystemComponentIndex);
             Assert.Equal(0xFF, _commonDataPages.ErrorDescription.ProfileSpecificErrorCode);
             Assert.Equal<uint>(0x11223344, _commonDataPages.ErrorDescription.ManufacturerSpecificErrorCode);
+        }
+
+        [Fact]
+        public void ParseUnknownDataPage_LogsWarning()
+        {
+            // Arrange
+            byte[] dataPage = [0x58, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
         }
 
         [Fact]

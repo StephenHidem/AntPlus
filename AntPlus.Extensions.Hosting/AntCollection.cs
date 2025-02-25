@@ -45,7 +45,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             _antRadio = antRadio;
             _logger = logger;
             _timeout = options.Value;
-            _logger.LogInformation("Created AntCollection");
         }
 
         /// <summary>
@@ -54,6 +53,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <returns>Task of type void</returns>
         public async Task StartScanning()
         {
+            _logger.LogInformation("StartScanning");
             _channels = await _antRadio.InitializeContinuousScanMode();
             _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
@@ -120,7 +120,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             lock (CollectionLock)
             {
                 bool result = base.Remove(item);
-                _logger.LogDebug("{Device} remove. Result = {Result}", item, result);
+                _logger.LogDebug("{Device} removed. Result = {Result}", item, result);
                 return result;
             }
         }
@@ -165,7 +165,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             if (_channels != null)
             {
-                _logger.LogDebug("AntCollection: Dispose");
+                _logger.LogInformation("Dispose");
                 _channels[0].ChannelResponse -= MessageHandler;
                 foreach (IAntChannel item in _channels)
                 {

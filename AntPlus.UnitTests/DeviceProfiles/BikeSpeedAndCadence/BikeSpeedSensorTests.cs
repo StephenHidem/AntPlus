@@ -8,19 +8,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 {
     public class BikeSpeedSensorTests
     {
-        private readonly MockRepository mockRepository;
-
         private readonly BikeSpeedSensor _sensor;
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<ILogger<BikeSpeedSensor>> mockLogger;
 
         public BikeSpeedSensorTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<BikeSpeedSensor>>(MockBehavior.Loose);
-            _sensor = new BikeSpeedSensor(new ChannelId(0), mockAntChannel.Object, mockLogger.Object, null);
+            _sensor = new BikeSpeedSensor(new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<ILogger<BikeSpeedSensor>>(), It.IsAny<int>());
             byte[] dataPage = new byte[8];
             _sensor.Parse(dataPage);
         }

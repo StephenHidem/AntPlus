@@ -180,6 +180,11 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Manufacturer info page.</summary>
         public readonly struct ManufacturerInfoPage
         {
+            /// <summary>
+            /// Gets the component identifier. Bits 0 – 3: Number of components. Bits 4 – 7: Component identifier.
+            /// A value of 0xFF indicates that the component identifier is not used.
+            /// </summary>
+            public byte ComponentId { get; }
             /// <summary>Gets the hardware revision.</summary>
             public byte HardwareRevision { get; }
             /// <summary>Gets the manufacturer identifier.</summary>
@@ -189,6 +194,7 @@ namespace SmallEarthTech.AntPlus
 
             internal ManufacturerInfoPage(byte[] dataPage)
             {
+                ComponentId = dataPage[2];
                 HardwareRevision = dataPage[3];
                 ManufacturerId = BitConverter.ToUInt16(dataPage, 4);
                 ModelNumber = BitConverter.ToUInt16(dataPage, 6);
@@ -197,6 +203,11 @@ namespace SmallEarthTech.AntPlus
         /// <summary>Product info page.</summary>
         public readonly struct ProductInfoPage
         {
+            /// <summary>
+            /// Gets the component identifier. Bits 0 – 3: Number of components. Bits 4 – 7: Component identifier.
+            /// A value of 0xFF indicates that the component identifier is not used.
+            /// </summary>
+            public byte ComponentId { get; }
             /// <summary>Gets the software revision.</summary>
             public Version SoftwareRevision { get; }
             /// <summary>Gets the serial number.</summary>
@@ -204,6 +215,7 @@ namespace SmallEarthTech.AntPlus
 
             internal ProductInfoPage(byte[] dataPage)
             {
+                ComponentId = dataPage[1];
                 // SW revision is in the form of X.Y regardless of current culture
                 if (dataPage[2] != 0xFF)
                 {
@@ -304,25 +316,25 @@ namespace SmallEarthTech.AntPlus
                         retVal = (ushort)value * 0.01;
                         break;
                     case SubPage.Humidity:
-                        retVal = value / 100.0;
+                        retVal = (ushort)value * 0.01;
                         break;
                     case SubPage.WindSpeed:
                         retVal = (ushort)value * 0.01;
                         break;
                     case SubPage.WindDirection:
-                        retVal = value / 20.0;
+                        retVal = (ushort)value * 0.05;
                         break;
                     case SubPage.ChargingCycles:
                         retVal = (ushort)value;
                         break;
                     case SubPage.MinimumOperatingTemperature:
-                        retVal = value / 100.0;
+                        retVal = value * 0.01;
                         break;
                     case SubPage.MaximumOperatingTemperature:
-                        retVal = value / 100.0;
+                        retVal = value * 0.01;
                         break;
                     default:
-                        break;
+                        throw new ArgumentOutOfRangeException(nameof(page), page, "Invalid subpage.");
                 }
                 return retVal;
             }
@@ -407,12 +419,10 @@ namespace SmallEarthTech.AntPlus
                     CommandStatus = new CommandStatusPage(dataPage);
                     break;
                 case CommonDataPage.MultiComponentManufacturerInfo:
-                    break;
-                case CommonDataPage.MultiComponentProductInfo:
-                    break;
                 case CommonDataPage.ManufacturerInfo:
                     ManufacturerInfo = new ManufacturerInfoPage(dataPage);
                     break;
+                case CommonDataPage.MultiComponentProductInfo:
                 case CommonDataPage.ProductInfo:
                     ProductInfo = new ProductInfoPage(dataPage);
                     break;
@@ -423,18 +433,26 @@ namespace SmallEarthTech.AntPlus
                     TimeAndDate = new DateTime(2000 + dataPage[7], dataPage[6], dataPage[5] & 0x1F, dataPage[4], dataPage[3], dataPage[2], DateTimeKind.Utc);
                     break;
                 case CommonDataPage.SubfieldData:
-                    SubfieldData = new SubfieldDataPage(dataPage);
+                    try
+                    {
+                        SubfieldData = new SubfieldDataPage(dataPage);
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        _logger.LogError(ex, "{Func}: Invalid subfield data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    }
                     break;
                 case CommonDataPage.MemoryLevel:
                     MemoryLevel = new MemoryLevelPage(dataPage);
                     break;
                 case CommonDataPage.PairedDevices:
+                    _logger.LogWarning("{Func}: Paired devices data page not implemented. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
                     break;
                 case CommonDataPage.ErrorDescription:
                     ErrorDescription = new ErrorDescriptionPage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    _logger.LogWarning("{Func}: Unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
                     break;
             }
         }

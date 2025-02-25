@@ -30,14 +30,10 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
     public class AbstractCommonSpeedCadenceTests
     {
         private readonly AbstractCommonSpeedCadence _sensor;
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<ILogger> mockLogger;
 
         public AbstractCommonSpeedCadenceTests()
         {
-            mockAntChannel = new Mock<IAntChannel>();
-            mockLogger = new Mock<ILogger>();
-            _sensor = new(new ChannelId(1), mockAntChannel.Object, mockLogger.Object);
+            _sensor = new(new ChannelId(1), Mock.Of<IAntChannel>(), Mock.Of<ILogger>());
             byte[] dataPage = new byte[8];
             dataPage[0] = 0x80;         // initial page change toggle
             _sensor.Parse(dataPage);
@@ -51,8 +47,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = [1, 0x88, 0x13, 0x00, 4, 5, 6, 7];
 
             // Act
-            _sensor.Parse(
-                dataPage);
+            _sensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(cot, _sensor.CumulativeOperatingTime);
@@ -67,8 +62,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = [2, manId, 0x00, 0x80, 4, 5, 6, 7];
 
             // Act
-            _sensor.Parse(
-                dataPage);
+            _sensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(manId, _sensor.ManufacturerInfo.ManufacturingId);
@@ -83,8 +77,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = [3, hw, sw, model, 4, 5, 6, 7];
 
             // Act
-            _sensor.Parse(
-                dataPage);
+            _sensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(hw, _sensor.ProductInfo.HardwareVersion);
@@ -101,8 +94,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = [4, 0xFF, 128, 0x33, 4, 5, 6, 7];
 
             // Act
-            _sensor.Parse(
-                dataPage);
+            _sensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(battVolt, _sensor.BatteryStatus.BatteryVoltage);
@@ -118,8 +110,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
             byte[] dataPage = [5, (byte)flag, 0xFF, 0xFF, 4, 5, 6, 7];
 
             // Act
-            _sensor.Parse(
-                dataPage);
+            _sensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(expState, _sensor.Stopped);

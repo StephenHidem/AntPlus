@@ -1,6 +1,7 @@
-﻿using SmallEarthTech.AntPlus;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using SmallEarthTech.AntPlus;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Xunit;
@@ -9,73 +10,243 @@ namespace AntPlus.UnitTests
 {
     public class CommonDataPagesTests
     {
+        private readonly Mock<ILogger> _mockLogger;
+        private readonly CommonDataPages _commonDataPages;
+
+        public CommonDataPagesTests()
+        {
+            _mockLogger = new Mock<ILogger>();
+            _commonDataPages = new(_mockLogger.Object);
+        }
+
         [Fact]
-        public void ParseCommonDataPage_SupportedPages_PropertiesCorrect()
+        public void ParseCommandStatusPage_PropertiesCorrect()
         {
             // Arrange
-            CommonDataPages commonDataPage = new(null);
-            List<byte[]> commonDataPages =
-                [
-                    [0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44],   // command status
-                    [0x50, 0xFF, 0xFF, 0x01, 0x0F, 0x00, 0x85, 0x83],   // manufacturer ID
-                    [0x52, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x55, 0x93],   // battery status
-                    [0x53, 0xFF, 0x0D, 0x1B, 0x11, 0x92, 0x06, 0x09],   // time and date
-                    [0x54, 0xFF, 0x01, 0x03, 0x6B, 0x0A, 0xEA, 0x19],   // subfield data
-                    [0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x81],    // memory level
-                    [0x57, 0xFF, 0x4F, 0xFF, 0x44, 0x33, 0x22, 0x11],   // error description
-                ];
-
+            byte[] dataPage = [0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44];
             // Act
-            foreach (var dataPage in commonDataPages)
-            {
-                commonDataPage.ParseCommonDataPage(
-                        dataPage);
-            }
-
+            _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
-            Assert.Equal(0xFF, commonDataPage.CommandStatus.LastCommandReceived);
-            Assert.Equal(254, commonDataPage.CommandStatus.SequenceNumber);
-            Assert.Equal(CommonDataPages.CommandResult.Pending, commonDataPage.CommandStatus.Status);
-            Assert.Equal<uint>(0x44332211, commonDataPage.CommandStatus.ResponseData);
-            Assert.Equal(15, commonDataPage.ManufacturerInfo.ManufacturerId);
-            Assert.Equal(1, commonDataPage.ManufacturerInfo.HardwareRevision);
-            Assert.Equal(0x8385, commonDataPage.ManufacturerInfo.ModelNumber);
-            Assert.Equal(BatteryStatus.New, commonDataPage.BatteryStatus.Status);
-            Assert.Equal(3.33203125, commonDataPage.BatteryStatus.BatteryVoltage);
-            Assert.Equal(1, commonDataPage.BatteryStatus.NumberOfBatteries);
-            Assert.Equal(0, commonDataPage.BatteryStatus.Identifier);
-            Assert.True(commonDataPage.BatteryStatus.CumulativeOperatingTime == TimeSpan.Zero);
-            Assert.True(commonDataPage.TimeAndDate == DateTime.Parse("06/18/2009 17:27:13", DateTimeFormatInfo.InvariantInfo));
-            Assert.Equal(CommonDataPages.SubfieldDataPage.SubPage.Temperature, commonDataPage.SubfieldData.Subpage1);
-            Assert.Equal(26.67, commonDataPage.SubfieldData.ComputedDataField1);
-            Assert.Equal(CommonDataPages.SubfieldDataPage.SubPage.Humidity, commonDataPage.SubfieldData.Subpage2);
-            Assert.Equal(66.34, commonDataPage.SubfieldData.ComputedDataField2);
-            Assert.Equal(55.0, commonDataPage.MemoryLevel.PercentUsed);
-            Assert.Equal(3276.8, commonDataPage.MemoryLevel.TotalSize);
-            Assert.Equal(CommonDataPages.MemorySizeUnit.KiloBytes, commonDataPage.MemoryLevel.TotalSizeUnit);
-            Assert.Equal(CommonDataPages.ErrorLevel.Warning, commonDataPage.ErrorDescription.ErrorLevel);
-            Assert.Equal(0xF, commonDataPage.ErrorDescription.SystemComponentIndex);
-            Assert.Equal(0xFF, commonDataPage.ErrorDescription.ProfileSpecificErrorCode);
-            Assert.Equal<uint>(0x11223344, commonDataPage.ErrorDescription.ManufacturerSpecificErrorCode);
+            Assert.Equal(0xFF, _commonDataPages.CommandStatus.LastCommandReceived);
+            Assert.Equal(254, _commonDataPages.CommandStatus.SequenceNumber);
+            Assert.Equal(CommonDataPages.CommandResult.Pending, _commonDataPages.CommandStatus.Status);
+            Assert.Equal<uint>(0x44332211, _commonDataPages.CommandStatus.ResponseData);
+        }
+
+        [Fact]
+        public void ParseManufacturerInfoPage_PropertiesCorrect()
+        {
+            // Arrange
+            byte[] dataPage = [0x50, 0xFF, 0xFF, 0x01, 0x0F, 0x00, 0x85, 0x83];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(0xFF, _commonDataPages.ManufacturerInfo.ComponentId);
+            Assert.Equal(1, _commonDataPages.ManufacturerInfo.HardwareRevision);
+            Assert.Equal(15, _commonDataPages.ManufacturerInfo.ManufacturerId);
+            Assert.Equal(0x8385, _commonDataPages.ManufacturerInfo.ModelNumber);
+        }
+
+        [Fact]
+        public void ParseMultiComponentManufacturerInfoPage_PropertiesCorrect()
+        {
+            // Arrange
+            byte[] dataPage = [0x4E, 0xFF, 0x22, 0x01, 0x0F, 0x00, 0x85, 0x83];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(0x22, _commonDataPages.ManufacturerInfo.ComponentId);
+            Assert.Equal(1, _commonDataPages.ManufacturerInfo.HardwareRevision);
+            Assert.Equal(15, _commonDataPages.ManufacturerInfo.ManufacturerId);
+            Assert.Equal(0x8385, _commonDataPages.ManufacturerInfo.ModelNumber);
         }
 
         [Theory]
         [InlineData(new byte[] { 0x51, 0xFF, 0xFF, 12, 5, 6, 7, 8 }, "1.200", (uint)0x08070605)]
         [InlineData(new byte[] { 0x51, 0xFF, 34, 12, 8, 7, 6, 5 }, "1.234", (uint)0x05060708)]
-        public void ParseCommonDataPage_ProductInfo_PropertiesCorrect(byte[] dataPage, string version, uint serialNumber)
+        public void ParseProductInfoPage_PropertiesCorrect(byte[] dataPage, string version, uint serialNumber)
         {
-            // Arrange
-            CommonDataPages commonDataPage = new(null);
-
             // Act
             var currentCulture = CultureInfo.CurrentCulture;
             CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
-            commonDataPage.ParseCommonDataPage(dataPage);
+            _commonDataPages.ParseCommonDataPage(dataPage);
             CultureInfo.CurrentCulture = currentCulture;
 
             // Assert
-            Assert.Equal(serialNumber, commonDataPage.ProductInfo.SerialNumber);
-            Assert.True(commonDataPage.ProductInfo.SoftwareRevision == Version.Parse(version));
+            Assert.Equal(0xFF, _commonDataPages.ProductInfo.ComponentId);
+            Assert.Equal(serialNumber, _commonDataPages.ProductInfo.SerialNumber);
+            Assert.True(_commonDataPages.ProductInfo.SoftwareRevision == Version.Parse(version));
+        }
+
+        [Fact]
+        public void ParseMultiComponentProductInfoPage_PropertiesCorrect()
+        {
+            // Arrange
+            byte[] dataPage = [0x4F, 0x22, 0xFF, 12, 5, 6, 7, 8];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(0x22, _commonDataPages.ProductInfo.ComponentId);
+            Assert.Equal((uint)0x08070605, _commonDataPages.ProductInfo.SerialNumber);
+            Assert.True(_commonDataPages.ProductInfo.SoftwareRevision == Version.Parse("1.200"));
+        }
+
+        [Theory]
+        // invalid battery status, cumulative operating time resolution is 2 seconds
+        [InlineData(new byte[] { 0x52, 0xFF, 0xFF, 50, 0x00, 0x00, 0xFF, 0xFF },
+            BatteryStatus.Invalid, 15.996, 1, 0, 100)]
+        // new battery status, 3.5 volt, 2 batteries, battery 0, cumulative operating time resolution is 16 seconds
+        [InlineData(new byte[] { 0x52, 0xFF, 0x02, 13, 0x00, 0x00, 128, 0x13 },
+            BatteryStatus.New, 3.5, 2, 0, 208)]
+        // low battery status, 2.5 volt, 2 batteries, battery 1, cumulative operating time resolution is 16 seconds
+        [InlineData(new byte[] { 0x52, 0xFF, 0x12, 0x00, 0x01, 0x00, 128, 0x42 },
+            BatteryStatus.Low, 2.5, 2, 1, 4096)]
+        public void ParseBatteryStatusPage_PropertiesCorrect(byte[] dataPage,
+            BatteryStatus batteryStatus, double voltage, byte count, byte id, uint operatingTimeInSeconds)
+        {
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(batteryStatus, _commonDataPages.BatteryStatus.Status);
+            Assert.Equal(voltage, _commonDataPages.BatteryStatus.BatteryVoltage, 0.001);
+            Assert.Equal(count, _commonDataPages.BatteryStatus.NumberOfBatteries);
+            Assert.Equal(id, _commonDataPages.BatteryStatus.Identifier);
+            Assert.Equal(TimeSpan.FromSeconds(operatingTimeInSeconds), _commonDataPages.BatteryStatus.CumulativeOperatingTime);
+        }
+
+        [Fact]
+        public void ParseTimeAndDatePage_PropertiesCorrect()
+        {
+            // Arrange
+            byte[] dataPage = [0x53, 0xFF, 0x0D, 0x1B, 0x11, 0x92, 0x06, 0x09];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(DateTime.Parse("06/18/2009 17:27:13", DateTimeFormatInfo.InvariantInfo), _commonDataPages.TimeAndDate);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x01, 0x02, 0x6B, 0x0A, 0xEA, 0x19 },
+            CommonDataPages.SubfieldDataPage.SubPage.Temperature,
+            CommonDataPages.SubfieldDataPage.SubPage.BarometricPressure,
+            26.67, 66.34)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x03, 0x04, 0x6B, 0x0A, 0xEA, 0x19 },
+            CommonDataPages.SubfieldDataPage.SubPage.Humidity,
+            CommonDataPages.SubfieldDataPage.SubPage.WindSpeed,
+            26.67, 66.34)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x05, 0x06, 0x6B, 0x0A, 0xEA, 0x19 },
+            CommonDataPages.SubfieldDataPage.SubPage.WindDirection,
+            CommonDataPages.SubfieldDataPage.SubPage.ChargingCycles,
+            133.35, 6634.0)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x07, 0x08, 0x6B, 0x0A, 0xEA, 0x19 },
+            CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
+            CommonDataPages.SubfieldDataPage.SubPage.MaximumOperatingTemperature,
+            26.67, 66.34)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x01, 0x07, 0x00, 0x80, 0x00, 0x80 },
+            CommonDataPages.SubfieldDataPage.SubPage.Temperature,
+            CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
+            -327.68, -327.68)]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x07, 0x08, 0x6B, 0x0A, 0x00, 0x80 },
+            CommonDataPages.SubfieldDataPage.SubPage.MinimumOperatingTemperature,
+            CommonDataPages.SubfieldDataPage.SubPage.MaximumOperatingTemperature,
+            26.67, -327.68)]
+        public void ParseSubfieldDataPage_PropertiesCorrect(byte[] dataPage,
+            CommonDataPages.SubfieldDataPage.SubPage subPage1,
+            CommonDataPages.SubfieldDataPage.SubPage subPage2,
+            double subPage1Value, double subPage2Value)
+        {
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(subPage1, _commonDataPages.SubfieldData.Subpage1);
+            Assert.Equal(subPage1Value, _commonDataPages.SubfieldData.ComputedDataField1, 0.01);
+            Assert.Equal(subPage2, _commonDataPages.SubfieldData.Subpage2);
+            Assert.Equal(subPage2Value, _commonDataPages.SubfieldData.ComputedDataField2, 0.01);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x01, 0x09, 0x6B, 0x0A, 0xEA, 0x19 })]
+        [InlineData(new byte[] { 0x54, 0xFF, 0x09, 0x01, 0x6B, 0x0A, 0xEA, 0x19 })]
+        public void ParseSubfieldDataPage_InvalidSubPage_LogsError(byte[] dataPage)
+        {
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid subfield data page")),
+                    It.Is<ArgumentOutOfRangeException>(ex => ex.Message.Contains("Invalid subpage")),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x01 }, CommonDataPages.MemorySizeUnit.KiloBits)]
+        [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x02 }, CommonDataPages.MemorySizeUnit.MegaBits)]
+        [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x03 }, CommonDataPages.MemorySizeUnit.TeraBits)]
+        [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x81 }, CommonDataPages.MemorySizeUnit.KiloBytes)]
+        [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x82 }, CommonDataPages.MemorySizeUnit.MegaBytes)]
+        [InlineData(new byte[] { 0x55, 0xFF, 0xFF, 0xFF, 110, 0x00, 0x80, 0x83 }, CommonDataPages.MemorySizeUnit.TeraBytes)]
+        public void ParseMemoryLevelPage_PropertiesCorrect(byte[] dataPage, CommonDataPages.MemorySizeUnit sizeUnit)
+        {
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(55.0, _commonDataPages.MemoryLevel.PercentUsed, 0.5);
+            Assert.Equal(3276.8, _commonDataPages.MemoryLevel.TotalSize, 0.1);
+            Assert.Equal(sizeUnit, _commonDataPages.MemoryLevel.TotalSizeUnit);
+        }
+
+        [Fact]
+        public void ParsePairedDevicesPage_LogsWarning()
+        {
+            // Arrange
+            byte[] dataPage = [0x56, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Paired devices data page not implemented")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0x57, 0xFF, 0x4F, 0xFF, 0x44, 0x33, 0x22, 0x11 }, CommonDataPages.ErrorLevel.Warning)]
+        [InlineData(new byte[] { 0x57, 0xFF, 0x8F, 0xFF, 0x44, 0x33, 0x22, 0x11 }, CommonDataPages.ErrorLevel.Critical)]
+        public void ParseErrorDescriptionPage_PropertiesCorrect(byte[] dataPage, CommonDataPages.ErrorLevel errorLevel)
+        {
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            Assert.Equal(errorLevel, _commonDataPages.ErrorDescription.ErrorLevel);
+            Assert.Equal(0xF, _commonDataPages.ErrorDescription.SystemComponentIndex);
+            Assert.Equal(0xFF, _commonDataPages.ErrorDescription.ProfileSpecificErrorCode);
+            Assert.Equal<uint>(0x11223344, _commonDataPages.ErrorDescription.ManufacturerSpecificErrorCode);
+        }
+
+        [Fact]
+        public void ParseUnknownDataPage_LogsWarning()
+        {
+            // Arrange
+            byte[] dataPage = [0x58, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
+            // Act
+            _commonDataPages.ParseCommonDataPage(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
         }
 
         [Fact]

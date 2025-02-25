@@ -10,24 +10,20 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
     public class FitnessEquipmentTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
+        private readonly ChannelId cid = new(0);
+        private readonly Mock<IAntChannel> _mockAntChannel;
+        private readonly Mock<NullLoggerFactory> _mockLogger;
 
         public FitnessEquipmentTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
+            _mockAntChannel = new();
+            _mockLogger = new();
         }
 
         private SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment.FitnessEquipment CreateFitnessEquipment(FitnessEquipmentType equipmentType = FitnessEquipmentType.Treadmill)
         {
             byte[] dataPage = [(byte)DataPage.GeneralFEData, (byte)equipmentType, 0, 0, 0, 0, 0, 0];
-            return GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000);
+            return GetFitnessEquipment(dataPage, cid, _mockAntChannel.Object, _mockLogger.Object, 2000);
         }
 
         [Theory]
@@ -103,7 +99,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             byte[] dataPage = [(byte)pageNumber, 0, 0, 0, 0, 0, 0, 0];
 
             // Act
-            var fitnessEquipment = GetFitnessEquipment(dataPage, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000);
+            var fitnessEquipment = GetFitnessEquipment(dataPage, cid, _mockAntChannel.Object, _mockLogger.Object, 2000);
 
             // Assert
             switch (equipmentType)

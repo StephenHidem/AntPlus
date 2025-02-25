@@ -9,32 +9,19 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class StandardWheelTorqueSensorTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
+        private readonly StandardPowerSensor _standardPowerSensor;
 
         public StandardWheelTorqueSensorTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
-        }
-
-        private StandardPowerSensor CreateStandardWheelTorqueSensor()
-        {
             byte[] page = [(byte)BicyclePower.DataPage.WheelTorque, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as StandardPowerSensor;
+            _standardPowerSensor = BicyclePower.GetBicyclePowerSensor(page, new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<NullLoggerFactory>(), It.IsAny<int>()) as StandardPowerSensor;
         }
 
         [Fact]
         public void Parse_WheelTorque_ExpectedTorqueValues()
         {
             // Arrange
-            var sensor = CreateStandardWheelTorqueSensor();
-            var wheelTorqueSensor = sensor.TorqueSensor as StandardWheelTorqueSensor;
+            var wheelTorqueSensor = _standardPowerSensor.TorqueSensor as StandardWheelTorqueSensor;
 
             double expAvgSpeed = 15;
             double expAvgPower = 178;
@@ -44,8 +31,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             byte[] dataPage = [(byte)BicyclePower.DataPage.WheelTorque, 1, 1, 60, 0x39, 0x04, 0xDE, 0x01];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(expDistance, wheelTorqueSensor.AccumulatedDistance, 0.001);
@@ -53,7 +39,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             Assert.Equal(expAvgAngVel, wheelTorqueSensor.AverageAngularVelocity, 0.001);
             Assert.Equal(expAvgTorq, wheelTorqueSensor.AverageTorque, 0.001);
             Assert.Equal(expAvgPower, wheelTorqueSensor.AveragePower, 0.5);
-            mockRepository.VerifyAll();
         }
     }
 }

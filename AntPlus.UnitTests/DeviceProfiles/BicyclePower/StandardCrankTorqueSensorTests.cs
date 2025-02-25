@@ -10,24 +10,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class StandardCrankTorqueSensorTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
-
+        private readonly StandardPowerSensor _standardPowerSensor;
         public StandardCrankTorqueSensorTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
-        }
-
-        private StandardPowerSensor CreateStandardCrankTorqueSensor()
-        {
             byte[] page = [(byte)BicyclePower.DataPage.CrankTorque, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as StandardPowerSensor;
+            _standardPowerSensor = BicyclePower.GetBicyclePowerSensor(page, new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<NullLoggerFactory>(), 2000) as StandardPowerSensor;
         }
 
         [Theory]
@@ -36,16 +23,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CyclingDynamics_ExpectedAngle(int start, int end, double startAngle, double endAngle)
         {
             // Arrange
-            var sensor = CreateStandardCrankTorqueSensor();
-            var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
+            var crankTorqueSensor = _standardPowerSensor.TorqueSensor as StandardCrankTorqueSensor;
             byte[] dataPage = [(byte)BicyclePower.DataPage.RightForceAngle, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
             dataPage[0] = (byte)BicyclePower.DataPage.LeftForceAngle;
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(startAngle, crankTorqueSensor.RightForceAngle.StartAngle);
@@ -62,16 +46,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CyclingDynamics_ExpectedPeakAngle(int start, int end, double startAngle, double endAngle)
         {
             // Arrange
-            var sensor = CreateStandardCrankTorqueSensor();
-            var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
+            var crankTorqueSensor = _standardPowerSensor.TorqueSensor as StandardCrankTorqueSensor;
             byte[] dataPage = [(byte)BicyclePower.DataPage.RightForceAngle, 0xFF, 0xFF, 0xFF, (byte)start, (byte)end, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
             dataPage[0] = (byte)BicyclePower.DataPage.LeftForceAngle;
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(startAngle, crankTorqueSensor.RightForceAngle.StartPeakAngle);
@@ -88,13 +69,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CyclingDynamicsPedalPosition_ExpectedRiderPosition(int pos, Position expPos)
         {
             // Arrange
-            var sensor = CreateStandardCrankTorqueSensor();
-            var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
+            var crankTorqueSensor = _standardPowerSensor.TorqueSensor as StandardCrankTorqueSensor;
             byte[] dataPage = [(byte)BicyclePower.DataPage.PedalPosition, 0xFF, (byte)pos, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(expPos, crankTorqueSensor.PedalPosition.RiderPosition);
@@ -104,13 +83,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CyclingDynamicsPedalPosition_ExpectedCadencePCO()
         {
             // Arrange
-            var sensor = CreateStandardCrankTorqueSensor();
-            var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
+            var crankTorqueSensor = _standardPowerSensor.TorqueSensor as StandardCrankTorqueSensor;
             byte[] dataPage = [(byte)BicyclePower.DataPage.PedalPosition, 0xFF, 0xFF, 128, 64, 0xE0, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(128, crankTorqueSensor.PedalPosition.AverageCadence);
@@ -125,13 +102,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CyclingDynamicsTorqueBarycenter_Expected(int val, double expBarycenterTorque)
         {
             // Arrange
-            var sensor = CreateStandardCrankTorqueSensor();
-            var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
+            var crankTorqueSensor = _standardPowerSensor.TorqueSensor as StandardCrankTorqueSensor;
             byte[] dataPage = [(byte)BicyclePower.DataPage.TorqueBarycenter, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(expBarycenterTorque, crankTorqueSensor.TorqueBarycenterAngle);
@@ -141,8 +116,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CrankTorqueSensorMessage_ExpectedValues()
         {
             // Arrange
-            var sensor = CreateStandardCrankTorqueSensor();
-            var crankTorqueSensor = sensor.TorqueSensor as StandardCrankTorqueSensor;
+            var crankTorqueSensor = _standardPowerSensor.TorqueSensor as StandardCrankTorqueSensor;
 
             double expAvgCad = 60;
             double expAvgAngVel = 2 * Math.PI;
@@ -151,8 +125,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             byte[] dataPage = [(byte)BicyclePower.DataPage.CrankTorque, 1, 1, 60, 0x00, 0x08, 0x9C, 0x05];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
             Assert.Equal(expAvgCad, crankTorqueSensor.AverageCadence, 0.1);

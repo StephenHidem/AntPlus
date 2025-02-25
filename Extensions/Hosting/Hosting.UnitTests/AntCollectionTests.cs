@@ -9,7 +9,6 @@ namespace Hosting.UnitTests
 {
     public class AntCollectionTests
     {
-        private readonly Mock<IServiceProvider> _mockServiceProvider;
         private readonly Mock<IAntRadio> _mockAntRadio;
         private readonly Mock<ILogger<AntCollection>> _mockLogger;
         private readonly Mock<IOptions<TimeoutOptions>> _mockOptions;
@@ -18,14 +17,13 @@ namespace Hosting.UnitTests
 
         public AntCollectionTests()
         {
-            _mockServiceProvider = new Mock<IServiceProvider>();
             _mockAntRadio = new Mock<IAntRadio>();
             _mockLogger = new Mock<ILogger<AntCollection>>();
             _mockOptions = new Mock<IOptions<TimeoutOptions>>();
             _timeoutOptions = new TimeoutOptions { Timeout = 2000, MissedMessages = 8 };
             _mockOptions.Setup(o => o.Value).Returns(_timeoutOptions);
 
-            _antCollection = new AntCollection(_mockServiceProvider.Object, _mockAntRadio.Object, _mockLogger.Object, _mockOptions.Object);
+            _antCollection = new AntCollection(Mock.Of<IServiceProvider>(), _mockAntRadio.Object, _mockLogger.Object, _mockOptions.Object);
         }
 
         [Fact]
@@ -37,7 +35,7 @@ namespace Hosting.UnitTests
             {
                 mockChannels[i] = new Mock<IAntChannel>();
             }
-            _mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync(mockChannels.Select(m => m.Object).ToArray());
+            _mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync([.. mockChannels.Select(m => m.Object)]);
 
             // Act
             await _antCollection.StartScanning();
@@ -84,7 +82,7 @@ namespace Hosting.UnitTests
             {
                 mockChannels[i] = new Mock<IAntChannel>();
             }
-            _mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync(mockChannels.Select(m => m.Object).ToArray());
+            _mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync([.. mockChannels.Select(m => m.Object)]);
             await _antCollection.StartScanning();
 
             // Act

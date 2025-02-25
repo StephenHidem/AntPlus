@@ -9,102 +9,76 @@ namespace AntPlus.UnitTests.DeviceProfiles
 {
     public class StrideBasedSpeedAndDistanceTests
     {
-        private readonly MockRepository mockRepository;
-
-        readonly ChannelId cid = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<ILogger<StrideBasedSpeedAndDistance>> mockLogger;
+        private readonly StrideBasedSpeedAndDistance _strideBasedSpeedAndDistance;
 
         public StrideBasedSpeedAndDistanceTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<StrideBasedSpeedAndDistance>>(MockBehavior.Loose);
-        }
-
-        private StrideBasedSpeedAndDistance CreateStrideBasedSpeedAndDistance()
-        {
-            return new StrideBasedSpeedAndDistance(
-                cid,
-                mockAntChannel.Object,
-                mockLogger.Object, null);
+            _strideBasedSpeedAndDistance = new(new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<ILogger<StrideBasedSpeedAndDistance>>(), It.IsAny<int>());
         }
 
         [Fact]
         public void Parse_FirstDefaultPage_AccumulatedValueIsZero()
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
             byte[] dataPage = [1, 100, 200, 50, 0x81, 128, 254, 48];
 
             // Act
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(0, strideBasedSpeedAndDistance.AccumulatedTime);
-            Assert.Equal(0, strideBasedSpeedAndDistance.AccumulatedDistance);
-            Assert.Equal(1.5, strideBasedSpeedAndDistance.InstantaneousSpeed);
-            Assert.Equal(0, strideBasedSpeedAndDistance.AccumulatedStrideCount);
-            Assert.Equal(1.5, strideBasedSpeedAndDistance.UpdateLatency);
-            mockRepository.VerifyAll();
+            Assert.Equal(0, _strideBasedSpeedAndDistance.AccumulatedTime);
+            Assert.Equal(0, _strideBasedSpeedAndDistance.AccumulatedDistance);
+            Assert.Equal(1.5, _strideBasedSpeedAndDistance.InstantaneousSpeed);
+            Assert.Equal(0, _strideBasedSpeedAndDistance.AccumulatedStrideCount);
+            Assert.Equal(1.5, _strideBasedSpeedAndDistance.UpdateLatency);
         }
 
         [Fact]
         public void Parse_CheckRolloverDefaultPage_AccumulatedValueUpdated()
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
             byte[] dataPage = [1, 100, 200, 50, 0x81, 128, 254, 48];
-            strideBasedSpeedAndDistance.Parse(dataPage); // initialize with first default page
+            _strideBasedSpeedAndDistance.Parse(dataPage); // initialize with first default page
 
             // Act
             dataPage = [1, 100, 100, 25, 0x81, 128, 4, 48];
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(156.5, strideBasedSpeedAndDistance.AccumulatedTime);
-            Assert.Equal(231.5, strideBasedSpeedAndDistance.AccumulatedDistance);
-            Assert.Equal(1.5, strideBasedSpeedAndDistance.InstantaneousSpeed);
-            Assert.Equal(6, strideBasedSpeedAndDistance.AccumulatedStrideCount);
-            Assert.Equal(1.5, strideBasedSpeedAndDistance.UpdateLatency);
-            mockRepository.VerifyAll();
+            Assert.Equal(156.5, _strideBasedSpeedAndDistance.AccumulatedTime);
+            Assert.Equal(231.5, _strideBasedSpeedAndDistance.AccumulatedDistance);
+            Assert.Equal(1.5, _strideBasedSpeedAndDistance.InstantaneousSpeed);
+            Assert.Equal(6, _strideBasedSpeedAndDistance.AccumulatedStrideCount);
+            Assert.Equal(1.5, _strideBasedSpeedAndDistance.UpdateLatency);
         }
 
         [Fact]
         public void Parse_BaseSupplementaryPage_Matches()
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
             byte[] dataPage = [2, 0xFF, 0xFF, 60, 0x81, 128, 0xFF, 0x00];
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(1.5, strideBasedSpeedAndDistance.InstantaneousSpeed);
-            Assert.Equal(60.5, strideBasedSpeedAndDistance.InstantaneousCadence);
-            mockRepository.VerifyAll();
+            Assert.Equal(1.5, _strideBasedSpeedAndDistance.InstantaneousSpeed);
+            Assert.Equal(60.5, _strideBasedSpeedAndDistance.InstantaneousCadence);
         }
 
         [Fact]
         public void Parse_CaloriesSupplementaryPage_Matches()
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
             byte[] dataPage = [3, 0xFF, 0xFF, 0, 0, 0, 128, 0];
-            strideBasedSpeedAndDistance.Parse(dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
             dataPage[6] += 20;  // increment accumulated calories
-            strideBasedSpeedAndDistance.Parse(dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(20, strideBasedSpeedAndDistance.AccumulatedCalories);
-            mockRepository.VerifyAll();
+            Assert.Equal(20, _strideBasedSpeedAndDistance.AccumulatedCalories);
         }
 
         [Theory]
@@ -118,30 +92,26 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_Capabilities_Matches(byte[] dataPage, CapabilitiesFlags capabilities)
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
-            strideBasedSpeedAndDistance.Parse(dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(capabilities, strideBasedSpeedAndDistance.Capabilities);
-            mockRepository.VerifyAll();
+            Assert.Equal(capabilities, _strideBasedSpeedAndDistance.Capabilities);
         }
 
         [Fact]
         public void Parse_DistanceAndStridesSummary_Matches()
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
             byte[] dataPage = [0x10, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77];
 
             // Act
-            strideBasedSpeedAndDistance.Parse(dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(7824981.265625, strideBasedSpeedAndDistance.DistanceSummary);
-            Assert.Equal((double)3351057, strideBasedSpeedAndDistance.StrideCountSummary);
-            mockRepository.VerifyAll();
+            Assert.Equal(7824981.265625, _strideBasedSpeedAndDistance.DistanceSummary);
+            Assert.Equal((double)3351057, _strideBasedSpeedAndDistance.StrideCountSummary);
         }
 
         [Theory]
@@ -152,15 +122,12 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_SupplementaryPages_SDMLocationMatches(byte[] dataPage, SDMLocation location)
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(location, strideBasedSpeedAndDistance.Status.Location);
-            mockRepository.VerifyAll();
+            Assert.Equal(location, _strideBasedSpeedAndDistance.Status.Location);
         }
 
         [Theory]
@@ -171,15 +138,12 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_SupplementaryPages_BatteryStatusMatches(byte[] dataPage, BatteryStatus batteryStatus)
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(batteryStatus, strideBasedSpeedAndDistance.Status.Battery);
-            mockRepository.VerifyAll();
+            Assert.Equal(batteryStatus, _strideBasedSpeedAndDistance.Status.Battery);
         }
 
         [Theory]
@@ -190,15 +154,12 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_SupplementaryPages_HealthMatches(byte[] dataPage, HealthStatus healthStatus)
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(healthStatus, strideBasedSpeedAndDistance.Status.Health);
-            mockRepository.VerifyAll();
+            Assert.Equal(healthStatus, _strideBasedSpeedAndDistance.Status.Health);
         }
 
         [Theory]
@@ -209,43 +170,12 @@ namespace AntPlus.UnitTests.DeviceProfiles
         public void Parse_SupplementaryPages_UseStateMatches(byte[] dataPage, UseState useState)
         {
             // Arrange
-            var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
 
             // Act
-            strideBasedSpeedAndDistance.Parse(
-                dataPage);
+            _strideBasedSpeedAndDistance.Parse(dataPage);
 
             // Assert
-            Assert.Equal(useState, strideBasedSpeedAndDistance.Status.State);
-            mockRepository.VerifyAll();
+            Assert.Equal(useState, _strideBasedSpeedAndDistance.Status.State);
         }
-
-        //[Fact]
-        //public void RequestSummaryPage_StateUnderTest_ExpectedBehavior()
-        //{
-        //    // Arrange
-        //    var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
-
-        //    // Act
-        //    strideBasedSpeedAndDistance.RequestSummaryPage();
-
-        //    // Assert
-        //    Assert.Fail();
-        //    _mockRepository.VerifyAll();
-        //}
-
-        //[Fact]
-        //public void RequestBroadcastCapabilities_StateUnderTest_ExpectedBehavior()
-        //{
-        //    // Arrange
-        //    var strideBasedSpeedAndDistance = CreateStrideBasedSpeedAndDistance();
-
-        //    // Act
-        //    strideBasedSpeedAndDistance.RequestBroadcastCapabilities();
-
-        //    // Assert
-        //    Assert.Fail();
-        //    _mockRepository.VerifyAll();
-        //}
     }
 }

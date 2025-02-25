@@ -8,24 +8,19 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class BicyclePowerTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
+        private readonly Mock<IAntChannel> _mockAntChannel;
+        private readonly Mock<NullLoggerFactory> _mockLogger;
 
         public BicyclePowerTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
+            _mockAntChannel = new Mock<IAntChannel> { CallBase = true };
+            _mockLogger = new Mock<NullLoggerFactory> { CallBase = true };
         }
 
-        private BicyclePower CreateBicyclePower(BicyclePower.DataPage dataPage)
+        private BicyclePower CreateBicyclePower(BicyclePower.DataPage dataPageIdentifier)
         {
-            byte[] page = [(byte)dataPage, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000);
+            byte[] page = [(byte)dataPageIdentifier, 0, 0, 0, 0, 0, 0, 0];
+            return BicyclePower.GetBicyclePowerSensor(page, new ChannelId(0), _mockAntChannel.Object, _mockLogger.Object, It.IsAny<int>());
         }
 
         [Theory]

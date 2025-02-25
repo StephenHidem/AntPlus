@@ -9,24 +9,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class StandardPowerSensorTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
+        private readonly StandardPowerSensor _standardPowerSensor;
 
         public StandardPowerSensorTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<NullLoggerFactory>(MockBehavior.Loose);
-        }
-
-        private StandardPowerSensor CreateStandardPowerSensor()
-        {
             byte[] page = [(byte)BicyclePower.DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as StandardPowerSensor;
+            _standardPowerSensor = BicyclePower.GetBicyclePowerSensor(page, new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<NullLoggerFactory>(), 2000) as StandardPowerSensor;
         }
 
         [Theory]
@@ -36,67 +24,54 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_PedalPower_ExpectedPedalPower(int value, int percent, PedalDifferentiation pedalDifferentiation)
         {
             // Arrange
-            var standardPowerSensor = CreateStandardPowerSensor();
             byte[] dataPage = [16, 1, (byte)value, 0, 0, 0, 0, 0];
 
             // Act
-            standardPowerSensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(percent, standardPowerSensor.PedalPower);
-            Assert.Equal(pedalDifferentiation, standardPowerSensor.PedalContribution);
-            mockRepository.VerifyAll();
+            Assert.Equal(percent, _standardPowerSensor.PedalPower);
+            Assert.Equal(pedalDifferentiation, _standardPowerSensor.PedalContribution);
         }
 
         [Fact]
         public void Parse_InstantaneousCadence_ExpectedCadence()
         {
             // Arrange
-            var standardPowerSensor = CreateStandardPowerSensor();
             byte[] dataPage = [16, 1, 0, 128, 0, 0, 0, 0];
 
             // Act
-            standardPowerSensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(128, standardPowerSensor.InstantaneousCadence);
-            mockRepository.VerifyAll();
+            Assert.Equal(128, _standardPowerSensor.InstantaneousCadence);
         }
 
         [Fact]
         public void Parse_InstantaneousPower_ExpectedPower()
         {
             // Arrange
-            var standardPowerSensor = CreateStandardPowerSensor();
             byte[] dataPage = [16, 1, 0, 0, 0, 0, 0x11, 0x22];
 
             // Act
-            standardPowerSensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(8721, standardPowerSensor.InstantaneousPower);
-            mockRepository.VerifyAll();
+            Assert.Equal(8721, _standardPowerSensor.InstantaneousPower);
         }
 
         [Fact]
         public void Parse_AveragePower_ExpectedAvgPower()
         {
             // Arrange
-            var standardPowerSensor = CreateStandardPowerSensor();
             byte[] dataPage = [16, 1, 0, 0, 0x11, 0x22, 0, 0];
 
             // Act
-            standardPowerSensor.Parse(
-                [16, 0, 0, 0, 0, 0, 0, 0]);
-            standardPowerSensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse([16, 0, 0, 0, 0, 0, 0, 0]);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(8721, standardPowerSensor.AveragePower);
-            mockRepository.VerifyAll();
+            Assert.Equal(8721, _standardPowerSensor.AveragePower);
         }
     }
 }

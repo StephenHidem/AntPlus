@@ -124,15 +124,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             return await SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
-        /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
-        /// maximum of 6 bytes.</summary>
-        /// <param name="customParameters">The custom parameters. Defined by the manufacturer.</param>
+        /// <summary>Sets the custom calibration parameters. This is manufacturer specified.
+        /// 6 bytes must be passed in the call.</summary>
+        /// <param name="customParameters">The custom parameters. Defined by the manufacturer. 6 bytes in length.</param>
         /// <returns>Status of the request.</returns>
         /// <exception cref="System.ArgumentException">Custom parameters must be 6 bytes in length.</exception>
         public async Task<MessagingReturnCode> SetCustomParameters(byte[] customParameters)
         {
             if (customParameters.Length != 6)
             {
+                _logger.LogError("Custom parameters must be 6 bytes in length.");
                 throw new ArgumentException("Custom parameters must be 6 bytes in length.");
             }
             CalibrationStatus = CalibrationResponse.InProgress;

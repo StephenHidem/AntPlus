@@ -321,7 +321,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             // valid range is 0 to 100 percent
             if (threshold < 0 || threshold > 100)
             {
-                throw new ArgumentOutOfRangeException("Parameter threshold range is 0 to 100 percent.");
+                _logger.LogError("Parameter threshold is invalid. Threshold = {Threshold}", threshold);
+                throw new ArgumentOutOfRangeException("Parameter threshold is invalid.");
             }
             byte peak = (byte)(threshold / 0.5);
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };

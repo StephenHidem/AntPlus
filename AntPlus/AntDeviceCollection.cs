@@ -62,7 +62,7 @@ namespace SmallEarthTech.AntPlus
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             _timeout = antDeviceTimeout;
-            _logger.LogInformation("Created AntDeviceCollection: antDeviceTimeout = {0}", antDeviceTimeout);
+            _logger.LogInformation("Created AntDeviceCollection: antDeviceTimeout = {DeviceTimeout}", antDeviceTimeout);
         }
 
         /// <summary>

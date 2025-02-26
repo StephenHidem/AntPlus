@@ -122,7 +122,7 @@ namespace SmallEarthTech.AntPlus
                     .ContinueWith(antecedent =>
                     {
                         int index = antecedent.Result;
-                        _logger.LogDebug("SendExtAcknowledgedDataAsync: Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, data = {Data}", index, channelId.Id, BitConverter.ToString(data));
+                        _logger.LogDebug("SendExtAcknowledgedDataAsync: Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", index, channelId.Id);
                         _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
                         .ContinueWith(innerAntecedent =>
                         {
@@ -132,6 +132,7 @@ namespace SmallEarthTech.AntPlus
                                 // unassign then assign the channel to reset the channel if the result is timeout
                                 if (innerAntecedent.Result == MessagingReturnCode.Timeout)
                                 {
+                                    _logger.LogWarning("SendExtAcknowledgedDataAsync: Timeout. Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}", index, channelId.Id);
                                     _channels[index].UnassignChannel(ackWaitTime);
                                     _channels[index].AssignChannel(ChannelType.BaseSlaveReceive, 0, ackWaitTime);
                                 }
@@ -168,7 +169,6 @@ namespace SmallEarthTech.AntPlus
                             _logger.LogDebug("GetAvailableChannelIndexAsync: All channels are busy");
                             Monitor.Wait(_channelLock);
                         }
-                        _logger.LogDebug("GetAvailableChannelIndexAsync: _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", _busyFlags, i);
                         _busyFlags[i] = true;
                     }
                     return i;

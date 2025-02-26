@@ -265,6 +265,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             // check that a logged visits page has been programmed
             if (loggedVisitsPage == null || NumberOfVisits == null)
             {
+                _logger.LogError("The geocache has not been programmed with a logged visits page.");
                 throw new InvalidOperationException("The geocache has not been programmed with a logged visits page. Program the geocache; this will set a logged visits page.");
             }
             NumberOfVisits++;

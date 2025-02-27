@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -388,7 +389,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     }
                     else
                     {
-                        _logger.LogWarning("Unknown data page = {Page}", dataPage[0]);
+                        _logger.UnknownDataPage(dataPage);
                     }
                     break;
             }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -13,6 +14,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// </summary>
     public partial class CrankTorqueFrequencySensor : BicyclePower
     {
+        public const int CalEventId = 3001;
+        public const int CtfEventId = 3002;
+        public const int AckCtfIdEventId = 3003;
+
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(CrankTorqueFrequencySensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.CrankTorqueFrequency.png");
         /// <inheritdoc/>
@@ -83,7 +88,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCTFMessage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("Unknown data page. Page = {Page}", dataPage[0]);
+                    _logger.UnknownDataPage(dataPage);
                     break;
             }
         }
@@ -146,18 +151,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                                 _logger.LogInformation("Serial number saved to flash.");
                                 break;
                             default:
-                                _logger.LogWarning("Unknown CTF acknowledged ID = {CTFDefinedID}", dataPage[3]);
+                                _logger.UnknownDataPage(dataPage, AckCtfIdEventId);
                                 break;
                         }
                         break;
                     default:
-                        _logger.LogWarning("Unknown CTF ID = {CTFDefinedID}", dataPage[2]);
+                        _logger.UnknownDataPage(dataPage, CtfEventId);
                         break;
                 }
             }
             else
             {
-                _logger.LogWarning("Unknown calibration data page = {CalID}", dataPage[1]);
+                _logger.UnknownDataPage(dataPage, CalEventId);
             }
         }
 

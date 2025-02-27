@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -452,7 +453,7 @@ namespace SmallEarthTech.AntPlus
                     ErrorDescription = new ErrorDescriptionPage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("{Func}: Unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    _logger.UnknownDataPage(dataPage);
                     break;
             }
         }

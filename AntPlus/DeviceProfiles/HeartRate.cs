@@ -389,7 +389,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     }
                     else
                     {
-                        _logger.UnknownDataPage(dataPage);
+                        _logger.LogUnknownDataPage(dataPage);
                     }
                     break;
             }

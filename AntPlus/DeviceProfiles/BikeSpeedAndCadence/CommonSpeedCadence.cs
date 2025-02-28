@@ -181,7 +181,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     Stopped = dataPage[1] == 0x01;
                     break;
                 default:
-                    _logger.UnknownDataPage(dataPage);
+                    _logger.LogUnknownDataPage(dataPage);
                     break;
             }
         }

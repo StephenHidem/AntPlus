@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -53,7 +54,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <returns>Task of type void</returns>
         public async Task StartScanning()
         {
-            _logger.LogInformation("StartScanning");
+            _logger.LogMethodEntry();
             _channels = await _antRadio.InitializeContinuousScanMode();
             _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
@@ -100,15 +101,14 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             device.DeviceWentOffline -= DeviceOffline;
             _ = Remove(device);
         }
-
         /// <summary>Adds the specified <see cref="AntDevice"/> to the end of the collection.</summary>
         /// <param name="item">The <see cref="AntDevice"/>.</param>
         public new void Add(AntDevice item)
         {
             lock (CollectionLock)
             {
+                _logger.LogAntCollectionChange(item);
                 base.Add(item);
-                _logger.LogDebug("{Device} added.", item);
             }
         }
 
@@ -119,9 +119,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             lock (CollectionLock)
             {
-                bool result = base.Remove(item);
-                _logger.LogDebug("{Device} removed. Result = {Result}", item, result);
-                return result;
+                _logger.LogAntCollectionChange(item);
+                return base.Remove(item);
             }
         }
 

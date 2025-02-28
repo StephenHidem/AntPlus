@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
@@ -176,7 +177,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                                 else { LastVisitTimestamp = null; }
                                 break;
                             default:
-                                _logger.LogWarning("Unknown DataId = {DataId}", dataPage[1]);
+                                _logger.LogUnknownDataPage<DataId>(dataPage[1], dataPage);
                                 break;
                         }
                     }
@@ -236,7 +237,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestPinPage()
         {
-            _logger.LogDebug(nameof(RequestPinPage));
+            _logger.LogMethodEntry();
             ClearGeocacheState();
             return await RequestDataPage(DataPage.PIN);
         }
@@ -246,7 +247,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestAuthentication(uint gpsSerialNumber)
         {
-            _logger.LogDebug(nameof(RequestAuthentication));
+            _logger.LogMethodEntry();
             authRequested = true;
             Random random = new Random();
             byte[] nonce = new byte[2];
@@ -261,12 +262,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> UpdateLoggedVisits()
         {
-            _logger.LogDebug(nameof(UpdateLoggedVisits));
+            _logger.LogMethodEntry();
             // check that a logged visits page has been programmed
             if (loggedVisitsPage == null || NumberOfVisits == null)
             {
-                _logger.LogError("The geocache has not been programmed with a logged visits page.");
-                throw new InvalidOperationException("The geocache has not been programmed with a logged visits page. Program the geocache; this will set a logged visits page.");
+                throw new InvalidOperationException("The geocache has not been programmed with a logged visits page. Program the geocache to set a logged visits page.");
             }
             NumberOfVisits++;
             LastVisitTimestamp = DateTime.UtcNow;
@@ -285,7 +285,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> ProgramGeocache(string id, uint pin, double? latitude, double? longitude, string? hint)
         {
-            _logger.LogDebug(nameof(ProgramGeocache));
+            _logger.LogMethodEntry();
             programmingGeocache = true;
             List<byte[]> messages = new List<byte[]>();
 
@@ -350,7 +350,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                 returnCode = await SendExtAcknowledgedMessage(msg);
                 if (returnCode != MessagingReturnCode.Pass)
                 {
-                    _logger.LogWarning("Failed to program data page {Page} with error {MessagingReturnCode}", msg[0], returnCode);
                     break;
                 }
             }
@@ -377,7 +376,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> EraseGeocache()
         {
-            _logger.LogDebug(nameof(EraseGeocache));
+            _logger.LogMethodEntry();
             programmingGeocache = true;
 
             // clear previous Geocache state
@@ -387,7 +386,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
             MessagingReturnCode returnCode = await SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.TrackableId, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
             if (returnCode != MessagingReturnCode.Pass)
             {
-                _logger.LogWarning("Failed to erase trackable ID page with error {MessagingReturnCode}", returnCode);
                 programmingGeocache = false;
                 return returnCode;
             }
@@ -398,7 +396,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                 returnCode = await SendExtAcknowledgedMessage(new byte[] { i, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
                 if (returnCode != MessagingReturnCode.Pass)
                 {
-                    _logger.LogWarning("Failed to erase data page {Page} with error {MessagingReturnCode}", i, returnCode);
                     break;
                 }
             }

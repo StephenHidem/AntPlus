@@ -14,10 +14,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
     /// </summary>
     public partial class CrankTorqueFrequencySensor : BicyclePower
     {
-        public const int CalEventId = 3001;
-        public const int CtfEventId = 3002;
-        public const int AckCtfIdEventId = 3003;
-
         /// <inheritdoc/>
         public override Stream DeviceImageStream => typeof(CrankTorqueFrequencySensor).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.CrankTorqueFrequency.png");
         /// <inheritdoc/>
@@ -88,7 +84,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCTFMessage(dataPage);
                     break;
                 default:
-                    _logger.UnknownDataPage(dataPage);
+                    _logger.LogUnknownDataPage(dataPage);
                     break;
             }
         }
@@ -133,7 +129,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private void ParseCalibrationMessage(byte[] dataPage)
         {
             // check if this is CTF calibration message
-            if (dataPage[1] == 0x10)
+            if ((CalibrationResponseId)dataPage[1] == CalibrationResponseId.CTFDefinedMsg)
             {
                 switch ((CTFDefinedId)dataPage[2])
                 {
@@ -151,18 +147,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                                 _logger.LogInformation("Serial number saved to flash.");
                                 break;
                             default:
-                                _logger.UnknownDataPage(dataPage, AckCtfIdEventId);
+                                _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[3], dataPage);
                                 break;
                         }
                         break;
                     default:
-                        _logger.UnknownDataPage(dataPage, CtfEventId);
+                        _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[2], dataPage);
                         break;
                 }
             }
             else
             {
-                _logger.UnknownDataPage(dataPage, CalEventId);
+                _logger.LogUnknownDataPage<CalibrationResponseId>(dataPage[1], dataPage);
             }
         }
 

@@ -350,7 +350,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     TrainingModes = (SupportedTrainingModes)dataPage[7];
                     break;
                 default:
-                    _logger.UnknownDataPage(dataPage);
+                    _logger.LogUnknownDataPage(dataPage);
                     handledPage = false;
                     break;
             }
@@ -507,7 +507,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.TrainerTorqueData:
                     return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                 default:
-                    loggerFactory.CreateLogger<FitnessEquipment>().UnknownDataPage(dataPage);
+                    loggerFactory.CreateLogger<FitnessEquipment>().LogUnknownDataPage(dataPage);
                     break;
             }
             return null;

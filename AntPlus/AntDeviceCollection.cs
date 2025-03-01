@@ -24,7 +24,7 @@ namespace SmallEarthTech.AntPlus
     /// as this scales the timeout duration based on the broadcast transmission rate of the particular ANT device.
     /// The timeout/missed messages will be applied globally to ANT devices created by this collection.
     /// </remarks>
-    public partial class AntDeviceCollection : ObservableCollection<AntDevice>, IDisposable
+    public partial class AntDeviceCollection : ObservableCollection<AntDevice>
     {
         /// <summary>
         /// The collection lock.

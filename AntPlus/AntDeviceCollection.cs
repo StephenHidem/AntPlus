@@ -96,10 +96,7 @@ namespace SmallEarthTech.AntPlus
             }
             else
             {
-                _logger.LogCritical("ChannelId or Payload is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
-                    e.ChannelNumber,
-                    (MessageId)e.ResponseId,
-                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+                _logger.LogAntResponse(LogLevel.Warning, e);
             }
         }
 

@@ -34,7 +34,6 @@ namespace SmallEarthTech.AntUsbStick
         private void OnChannelResponse(ANT_Response response)
         {
             AntResponse antResponse = new UsbAntResponse(response);
-            _logger.LogTrace("OnChannelResponse: Channel # = {ChannelNumber}, Response ID = {ResponseID}, Payload = {Payload}", ChannelNumber, (MessageId)antResponse.ResponseId, BitConverter.ToString(antResponse.Payload ?? new byte[] { 0 }));
             ChannelResponse?.Invoke(this, antResponse);
         }
 

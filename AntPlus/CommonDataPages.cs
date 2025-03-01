@@ -445,7 +445,7 @@ namespace SmallEarthTech.AntPlus
                     MemoryLevel = new MemoryLevelPage(dataPage);
                     break;
                 case CommonDataPage.PairedDevices:
-                    _logger.LogWarning("{Func}: Paired devices data page not implemented. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    _logger.LogIgnoredDataPage<CommonDataPage>(dataPage);
                     break;
                 case CommonDataPage.ErrorDescription:
                     ErrorDescription = new ErrorDescriptionPage(dataPage);

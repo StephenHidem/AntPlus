@@ -113,7 +113,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">The received data page.</param>
         public virtual void Parse(byte[] dataPage)
         {
-            _logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
+            _logger.LogDataPage(LogLevel.Trace, dataPage);
             _ = _timeoutTimer?.Change(_deviceTimeout, Timeout.Infinite);
         }
 

@@ -68,6 +68,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <param name="e">The ANT response.</param>
         private void MessageHandler(object? sender, AntResponse e)
         {
+            _logger.LogAntResponse(LogLevel.Trace, e);
             if (e.ChannelId != null && e.Payload != null)
             {
                 // see if the device is in the collection
@@ -88,10 +89,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             }
             else
             {
-                _logger.LogCritical("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
-                    e.ChannelNumber,
-                    (MessageId)e.ResponseId,
-                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+                _logger.LogAntResponse(LogLevel.Warning, e);
             }
         }
 
@@ -162,9 +160,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// </summary>
         public void Dispose()
         {
+            _logger.LogMethodEntry();
             if (_channels != null)
             {
-                _logger.LogInformation("Dispose");
                 _channels[0].ChannelResponse -= MessageHandler;
                 foreach (IAntChannel item in _channels)
                 {

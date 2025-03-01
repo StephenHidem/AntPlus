@@ -141,10 +141,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                         switch ((CTFDefinedId)dataPage[3])
                         {
                             case CTFDefinedId.Slope:
-                                _logger.LogInformation("Slope saved to flash.");
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
                                 break;
                             case CTFDefinedId.SerialNumber:
-                                _logger.LogInformation("Serial number saved to flash.");
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
                                 break;
                             default:
                                 _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[3], dataPage);

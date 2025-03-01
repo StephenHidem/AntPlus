@@ -326,7 +326,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             {
                 // handle general pages
                 case DataPage.GeneralFEData:
-                    HandleFEState(dataPage[7]);
+                    HandleFEState(dataPage);
                     GeneralData.Parse(dataPage);
 
                     // check for lap toggle
@@ -337,11 +337,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     }
                     break;
                 case DataPage.GeneralSettings:
-                    HandleFEState(dataPage[7]);
+                    HandleFEState(dataPage);
                     GeneralSettings.Parse(dataPage);
                     break;
                 case DataPage.GeneralMetabolicData:
-                    HandleFEState(dataPage[7]);
+                    HandleFEState(dataPage);
                     GeneralMetabolic.Parse(dataPage);
                     break;
                 // handle specific FE pages
@@ -357,10 +357,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         }
 
         /// <summary>Handles the state of the fitness equipment.</summary>
-        /// <param name="state">The state.</param>
-        protected void HandleFEState(byte state)
+        /// <param name="dataPage">The data page being parsed.</param>
+        protected void HandleFEState(byte[] dataPage)
         {
-            var st = (state & 0x70) >> 4;
+            var st = (dataPage[7] & 0x70) >> 4;
             // check for valid state
             if (Enum.IsDefined(typeof(FEState), st))
             {
@@ -372,7 +372,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                _logger.LogWarning("Invalid state. Received {State}", st);
+                _logger.LogUnknownDataPage<FEState>(dataPage[7], dataPage);
             }
         }
 
@@ -488,7 +488,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                         case FitnessEquipmentType.TrainerStationaryBike:
                             return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                         default:
-                            loggerFactory.CreateLogger<FitnessEquipment>().LogError("Unknown equipment type = {EquipmentType}", dataPage[1]);
+                            loggerFactory.CreateLogger<FitnessEquipment>().LogUnknownDataPage<FitnessEquipmentType>(dataPage[1], dataPage);
                             break;
                     }
                     break;

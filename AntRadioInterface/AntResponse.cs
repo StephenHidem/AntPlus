@@ -66,7 +66,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// The MessageID of the response
         /// </summary>
         [DataMember]
-        public byte ResponseId { get; protected set; }
+        public MessageId ResponseId { get; protected set; }
 
         /// <summary>
         /// Gets the channel identifier.

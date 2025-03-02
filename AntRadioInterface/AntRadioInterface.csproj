@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>3.0.0.0</AssemblyVersion>
+	<AssemblyVersion>4.0.0.0</AssemblyVersion>
 	<TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -23,10 +23,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>1. IAntChannel - Added asynchronous methods to SendAcknowledged and SendExtAcknowledged messages.
-2. IAntRadio - Added Version property to interface declaration.
-
-    </PackageReleaseNotes>
+    <PackageReleaseNotes>Breaking change: Changed to AntResponse ResponseId property type from byte to MessageId.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>

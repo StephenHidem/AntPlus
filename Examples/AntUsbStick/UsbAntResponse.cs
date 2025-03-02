@@ -15,9 +15,9 @@ namespace SmallEarthTech.AntUsbStick
             Sender = response.sender;
             ChannelNumber = response.antChannel;
             TimeReceived = response.timeReceived;
-            ResponseId = response.responseID;
+            ResponseId = (MessageId)response.responseID;
 
-            switch ((MessageId)ResponseId)
+            switch (ResponseId)
             {
                 case MessageId.ChannelEventOrResponse:
                     Payload = response.messageContents;

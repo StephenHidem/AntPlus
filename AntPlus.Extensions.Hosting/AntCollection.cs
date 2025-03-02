@@ -91,6 +91,20 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     e.ChannelNumber,
                     (MessageId)e.ResponseId,
                     e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+
+                // if the ant response payload is not null and the second byte is 0x01 and the third byte is 0x07 then open Rx scan mode
+                if (e.Payload != null && e.Payload.Length > 2 && e.Payload[1] == 0x01 && e.Payload[2] == 0x07)
+                {
+                    // _antRadio is an IAntControl interface
+                    if (_antRadio is IAntControl antControl)
+                    {
+                        _ = antControl.OpenRxScanMode();
+                    }
+                    else
+                    {
+                        // TODO: Log error
+                    }
+                }
             }
         }
 

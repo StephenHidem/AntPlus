@@ -48,7 +48,7 @@ namespace AntGrpcService.Services
                     ChannelNumber = channelResponse.ChannelNumber,
                     ThresholdConfigurationValue = channelResponse.ThresholdConfigurationValue,
                     Payload = ByteString.CopyFrom(channelResponse.Payload),
-                    ResponseId = channelResponse.ResponseId,
+                    ResponseId = (uint)channelResponse.ResponseId,
                     Rssi = channelResponse.Rssi,
                     Timestamp = channelResponse.Timestamp
                 });

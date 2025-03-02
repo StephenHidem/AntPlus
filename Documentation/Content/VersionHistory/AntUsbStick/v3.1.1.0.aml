@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="55b5d927-4d00-4e63-9f70-4f35a796c423" revisionNumber="1">
+<topic id="59808fa5-1390-4c46-8696-d3e7e4a379a5" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,46 +17,18 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-			<para>Version 1.0.1.0 was released on September 24, 2023.</para>
-		</introduction>
+      <para>Release Date: March 2, 2025</para>
+    </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
+      <title>Patches</title>
       <content>
-				<list class="bullet">
-					<listItem>
-						<para>
-							<link xlink:href="a5a81f24-5ac3-49e4-8a8a-37566ebd5286" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="3bf26a39-5daa-482c-9718-d2bed1141b6c" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="c8d04cf3-0a23-44ea-a795-7a0e14dba774" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="df9ea172-ed2e-4ee8-b2e6-c0df91b731a1"/>
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="38e3def3-5430-46eb-948e-04ca886e28ac"/>
-						</para>
-					</listItem>
-				</list>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>Incorporate change to AntResponse ResponseId property type.</para>
       </content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
@@ -77,7 +49,7 @@
     </section>
 
     <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+			<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
 			<!-- One or more of the following:
            - A local link
            - An external link

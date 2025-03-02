@@ -142,7 +142,7 @@ namespace AntGrpcService.Services
             return new AntResponseReply
             {
                 ChannelNumber = antResponse.ChannelNumber,
-                ResponseId = antResponse.ResponseId,
+                ResponseId = (uint)antResponse.ResponseId,
                 ChannelId = antResponse.ChannelId!.Id,
                 Payload = ByteString.CopyFrom(antResponse.Payload),
                 Rssi = antResponse.Rssi,

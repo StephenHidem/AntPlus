@@ -79,6 +79,7 @@ namespace SmallEarthTech.AntPlus
 
         private void MessageHandler(object sender, AntResponse e)
         {
+            _logger.LogAntResponse(LogLevel.Trace, e);
             if (e.ChannelId != null && e.Payload != null)
             {
                 // see if the device is in the collection

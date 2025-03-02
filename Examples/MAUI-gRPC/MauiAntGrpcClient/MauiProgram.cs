@@ -37,7 +37,7 @@ namespace MauiAntGrpcClient
 
 #if DEBUG
             //builder.Logging.AddDebug();
-            builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
+            builder.Logging.AddSerilog(dispose: true);
 #endif
 
             return builder.Build();

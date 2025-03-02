@@ -113,7 +113,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logAntCollectionChange(logger, methodName, antDevice, antDevice.ChannelId.DeviceNumber);
         }
 
-        [LoggerMessage(EventId = 1006, Level = LogLevel.Debug, Message = "{MethodName}: {AntDevice}, Device# {DeviceNumber}")]
+        [LoggerMessage(EventId = 1006, Level = LogLevel.Debug, Message = "{MethodName}: {AntDevice} Device# {DeviceNumber}")]
         private static partial void s_logAntCollectionChange(ILogger logger, string methodName, AntDevice antDevice, uint deviceNumber);
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         public static void LogAntResponse(this ILogger logger, LogLevel level, AntResponse antResponse, [CallerMemberName] string methodName = "")
         {
             string payload = antResponse.Payload != null ? BitConverter.ToString(antResponse.Payload) : "Null";
-            s_logAntResponse(logger, level, methodName, antResponse.ChannelNumber, (MessageId)antResponse.ResponseId, payload);
+            s_logAntResponse(logger, level, methodName, antResponse.ChannelNumber, antResponse.ResponseId, payload);
         }
 
         [LoggerMessage(EventId = 1007, Message = "{MethodName}: Channel# {Channel}, Response ID = {ResponseId}, Payload = {Payload}")]
@@ -176,7 +176,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logDataPage(logger, level, methodName, Enum.GetName(typeof(TEnum), value), BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1009, Message = "{MethodName}: Data page type {Page}, Data page = {DataPage}")]
+        [LoggerMessage(EventId = 1010, Message = "{MethodName}: Data page type {Page}, Data page = {DataPage}")]
         private static partial void s_logDataPage(ILogger logger, LogLevel level, string methodName, string? page, string dataPage);
     }
 }

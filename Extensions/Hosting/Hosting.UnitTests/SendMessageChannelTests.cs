@@ -76,7 +76,7 @@ namespace Hosting.UnitTests
         public async Task SendExtAcknowledgedDataAsync_InvokesMethodMultipleTimesAndReturnsPass()
         {
             var channelId = new ChannelId(0);
-            var data = Array.Empty<byte>();
+            var data = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 };
             var messagingReturnCode = MessagingReturnCode.Pass;
 
             _mockChannel.Setup(c => c.SendExtAcknowledgedDataAsync(channelId, data, It.IsAny<uint>()))
@@ -110,7 +110,7 @@ namespace Hosting.UnitTests
         public async Task SendExtAcknowledgedDataAsync_InvokesMethodAndReturnsTimeout()
         {
             var channelId = new ChannelId(0);
-            var data = Array.Empty<byte>();
+            var data = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 };
             var messagingReturnCode = MessagingReturnCode.Timeout;
             _mockChannel.Setup(c => c.SendExtAcknowledgedDataAsync(channelId, data, It.IsAny<uint>()))
                         .ReturnsAsync(messagingReturnCode);

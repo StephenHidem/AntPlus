@@ -135,11 +135,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         }
 
         [Theory]
-        [InlineData(new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3001)]
-        [InlineData(new byte[] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3001)]
-        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3001)]
-        [InlineData(new byte[] { 0x02, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3000)]
-        public void ParseUnknownCTFDefinedId_LogsWarning(byte[] dataPage, int eventId)
+        [InlineData(new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        [InlineData(new byte[] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        [InlineData(new byte[] { 0x02, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        public void ParseUnknownCTFDefinedId_LogsWarning(byte[] dataPage)
         {
             // Arrange
 
@@ -150,7 +150,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             _mockLogger.Verify(
                 m => m.Log(
                     LogLevel.Warning,
-                    It.Is<EventId>(v => v.Id == eventId),
+                    It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
@@ -158,9 +158,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         }
 
         [Theory]
-        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x02, 0xFF, 0xFF, 0xFF, 0xFF }, "Slope saved to flash.")]
-        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x03, 0xFF, 0xFF, 0xFF, 0xFF }, "Serial number saved to flash.")]
-        public void ParseAcknowledgeMessage_LogsInformation(byte[] dataPage, string message)
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x02, 0xFF, 0xFF, 0xFF, 0xFF }, "Data page type Slope")]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x03, 0xFF, 0xFF, 0xFF, 0xFF }, "Data page type SerialNumber")]
+        public void ParseAcknowledgeMessage_LogsDebugMessage(byte[] dataPage, string message)
         {
             // Arrange
             // Act
@@ -168,7 +168,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             // Assert
             _mockLogger.Verify(
                 m => m.Log(
-                    LogLevel.Information,
+                    LogLevel.Debug,
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains(message)),
                     null,

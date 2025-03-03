@@ -16,6 +16,7 @@ namespace AntPlus.UnitTests
         public CommonDataPagesTests()
         {
             _mockLogger = new Mock<ILogger>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
             _commonDataPages = new(_mockLogger.Object);
         }
 
@@ -174,10 +175,10 @@ namespace AntPlus.UnitTests
             // Assert
             _mockLogger.Verify(
                 x => x.Log(
-                    LogLevel.Error,
+                    LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid subfield data page")),
-                    It.Is<ArgumentOutOfRangeException>(ex => ex.Message.Contains("Invalid subpage")),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("is not defined in SubPage")),
+                    null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
@@ -211,7 +212,7 @@ namespace AntPlus.UnitTests
                 x => x.Log(
                     LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Paired devices data page not implemented")),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Ignoring page type PairedDevices")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);

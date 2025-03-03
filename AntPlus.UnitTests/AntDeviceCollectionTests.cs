@@ -31,6 +31,7 @@ namespace AntPlus.UnitTests
             _mockAntRadio = _mockRepository.Create<IAntRadio>();
             _mockAntChannel = _mockRepository.Create<IAntChannel>();
             _mockLogger = _mockRepository.Create<ILogger>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
             var mockLoggerFactory = _mockRepository.Create<ILoggerFactory>();
             mockLoggerFactory.Setup(m => m.CreateLogger(It.IsAny<string>())).Returns(_mockLogger.Object);
 
@@ -113,7 +114,7 @@ namespace AntPlus.UnitTests
             ChannelId cid = new(BitConverter.ToUInt32(id));
             _mockAntChannel.SetupAdd(m => m.ChannelResponse += It.IsAny<EventHandler<AntResponse>>());
             _mockAntChannel.SetupRemove(m => m.ChannelResponse -= It.IsAny<EventHandler<AntResponse>>());
-            var mockResponse = new MockResponse(cid, new byte[8]);
+            var mockResponse = new MockResponse(MessageId.BroadcastData, cid, new byte[8]);
             await _antDevices.StartScanning();
 
             // Act
@@ -125,19 +126,20 @@ namespace AntPlus.UnitTests
 
         class MockResponse : AntResponse
         {
-            public MockResponse(ChannelId channelId, byte[] payload)
+            public MockResponse(MessageId responseId, ChannelId channelId, byte[] payload)
             {
+                ResponseId = responseId;
                 ChannelId = channelId;
                 Payload = payload;
             }
         }
 
         [Fact]
-        public async Task MessageHandler_NullChannelId_LogsCritical()
+        public async Task MessageHandler_NullChannelId_LogsWarning()
         {
             // Arrange
             await _antDevices.StartScanning();
-            var response = new MockResponse(null, new byte[8]);
+            var response = new MockResponse(MessageId.BroadcastData, null, new byte[8]);
 
             // Act
             _mockAntChannel.Raise(m => m.ChannelResponse += null, _mockAntChannel.Object, response);
@@ -145,20 +147,20 @@ namespace AntPlus.UnitTests
             // Assert
             _mockLogger.Verify(
                 x => x.Log(
-                    LogLevel.Critical,
+                    LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("ChannelId or Payload is null")),
-                    It.IsAny<Exception>(),
-                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unhandled ANT response.")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
 
         [Fact]
-        public async Task MessageHandler_NullPayload_LogsCritical()
+        public async Task MessageHandler_NullPayload_LogsWarning()
         {
             // Arrange
             await _antDevices.StartScanning();
-            var response = new MockResponse(new ChannelId(1), null);
+            var response = new MockResponse(MessageId.BroadcastData, new ChannelId(1), null);
 
             // Act
             _mockAntChannel.Raise(m => m.ChannelResponse += null, _mockAntChannel.Object, response);
@@ -166,11 +168,11 @@ namespace AntPlus.UnitTests
             // Assert
             _mockLogger.Verify(
                 x => x.Log(
-                    LogLevel.Critical,
+                    LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("ChannelId or Payload is null")),
-                    It.IsAny<Exception>(),
-                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unhandled ANT response.")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
     }

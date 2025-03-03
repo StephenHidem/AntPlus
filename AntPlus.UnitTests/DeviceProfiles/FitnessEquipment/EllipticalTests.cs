@@ -9,78 +9,55 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
     public class EllipticalTests
     {
-        private readonly MockRepository mockRepository;
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<ILogger<Elliptical>> mockLogger;
-
+        private readonly Elliptical _elliptical;
 
         public EllipticalTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger<Elliptical>>(MockBehavior.Loose);
-        }
-
-        private Elliptical CreateElliptical()
-        {
-            return new Elliptical(
-                mockChannelId,
-                mockAntChannel.Object,
-                mockLogger.Object, null);
+            _elliptical = new(new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<ILogger<Elliptical>>(), It.IsAny<int>());
         }
 
         [Fact]
         public void Parse_InstantaneousCadenceAndPower_Matches()
         {
             // Arrange
-            var elliptical = CreateElliptical();
             byte[] dataPage = [20, 0xFF, 0, 0, 128, 0, 0x80, 0];
 
             // Act
-            elliptical.Parse(
-                dataPage);
+            _elliptical.Parse(dataPage);
 
             // Assert
-            Assert.Equal(128, elliptical.Cadence);
-            Assert.Equal(32768, elliptical.InstantaneousPower);
+            Assert.Equal(128, _elliptical.Cadence);
+            Assert.Equal(32768, _elliptical.InstantaneousPower);
         }
 
         [Fact]
         public void Parse_PositiveVerticalDistance_Matches()
         {
             // Arrange
-            var elliptical = CreateElliptical();
             byte[] dataPage = [20, 0xFF, 255, 0, 0, 0, 0, 0];
-            elliptical.Parse(
-                dataPage);
+            _elliptical.Parse(dataPage);
             dataPage[2] = 19;
 
             // Act
-            elliptical.Parse(
-                dataPage);
+            _elliptical.Parse(dataPage);
 
             // Assert
-            Assert.Equal(2.0, elliptical.PosVerticalDistance);
+            Assert.Equal(2.0, _elliptical.PosVerticalDistance);
         }
 
         [Fact]
         public void Parse_StrideCount_Matches()
         {
             // Arrange
-            var elliptical = CreateElliptical();
             byte[] dataPage = [20, 0xFF, 0, 255, 0, 0, 0, 0];
-            elliptical.Parse(
-                dataPage);
+            _elliptical.Parse(dataPage);
             dataPage[3] = 19;
 
             // Act
-            elliptical.Parse(
-                dataPage);
+            _elliptical.Parse(dataPage);
 
             // Assert
-            Assert.Equal(20, elliptical.StrideCount);
+            Assert.Equal(20, _elliptical.StrideCount);
         }
 
         [Theory]
@@ -91,14 +68,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         public void Parse_Capabilities_MatchesExpectedValue(byte[] dataPage, CapabilityFlags capabilities)
         {
             // Arrange
-            var elliptical = CreateElliptical();
 
             // Act
-            elliptical.Parse(
-                dataPage);
+            _elliptical.Parse(dataPage);
 
             // Assert
-            Assert.Equal(capabilities, elliptical.Capabilities);
+            Assert.Equal(capabilities, _elliptical.Capabilities);
         }
     }
 }

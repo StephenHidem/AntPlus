@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -80,11 +81,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCalibrationMessage(dataPage);
                     break;
                 case DataPage.CrankTorqueFrequency:
-                    if (CalibrationStatus == CalibrationResponse.InProgress) CalibrationStatus = CalibrationResponse.Succeeded;
                     ParseCTFMessage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("Unknown data page. Page = {Page}", dataPage[0]);
+                    _logger.LogUnknownDataPage(dataPage);
                     break;
             }
         }
@@ -128,26 +128,37 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         private void ParseCalibrationMessage(byte[] dataPage)
         {
-            switch ((CTFDefinedId)dataPage[2])
+            // check if this is CTF calibration message
+            if ((CalibrationResponseId)dataPage[1] == CalibrationResponseId.CTFDefinedMsg)
             {
-                case CTFDefinedId.ZeroOffset:
-                    Offset = BitConverter.ToUInt16(dataPage.Skip(6).Reverse().ToArray(), 0);
-                    break;
-                case CTFDefinedId.Ack:
-                    CalibrationStatus = CalibrationResponse.Succeeded;
-                    switch ((CTFDefinedId)dataPage[3])
-                    {
-                        case CTFDefinedId.Slope:
-                            break;
-                        case CTFDefinedId.SerialNumber:
-                            break;
-                        default:
-                            _logger.LogWarning("Unexpected CTF acknowledged ID = {ID}", dataPage[3]);
-                            break;
-                    }
-                    break;
-                default:
-                    break;
+                switch ((CTFDefinedId)dataPage[2])
+                {
+                    case CTFDefinedId.ZeroOffset:
+                        Offset = BitConverter.ToUInt16(dataPage.Skip(6).Reverse().ToArray(), 0);
+                        break;
+                    case CTFDefinedId.Ack:
+                        CalibrationStatus = CalibrationResponse.Succeeded;
+                        switch ((CTFDefinedId)dataPage[3])
+                        {
+                            case CTFDefinedId.Slope:
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
+                                break;
+                            case CTFDefinedId.SerialNumber:
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
+                                break;
+                            default:
+                                _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[3], dataPage);
+                                break;
+                        }
+                        break;
+                    default:
+                        _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[2], dataPage);
+                        break;
+                }
+            }
+            else
+            {
+                _logger.LogUnknownDataPage<CalibrationResponseId>(dataPage[1], dataPage);
             }
         }
 

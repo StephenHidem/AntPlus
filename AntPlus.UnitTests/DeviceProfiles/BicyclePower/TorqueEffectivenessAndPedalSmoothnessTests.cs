@@ -8,24 +8,12 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class TorqueEffectivenessAndPedalSmoothnessTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
+        private readonly StandardPowerSensor _standardPowerSensor;
 
         public TorqueEffectivenessAndPedalSmoothnessTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Loose);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<NullLoggerFactory>();
-        }
-
-        private StandardPowerSensor CreateStandardPowerSensor()
-        {
             byte[] page = [(byte)BicyclePower.DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as StandardPowerSensor;
+            _standardPowerSensor = BicyclePower.GetBicyclePowerSensor(page, new ChannelId(0), Mock.Of<IAntChannel>(), Mock.Of<NullLoggerFactory>(), It.IsAny<int>()) as StandardPowerSensor;
         }
 
         [Theory]
@@ -35,16 +23,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_TorqueEffectivenessAndPedalSmoothness_ExpectedTorqueEffectiveness(int value, double expPct)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, (byte)value, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
+            _standardPowerSensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.Equal(expPct, sensor.LeftTorqueEffectiveness);
-            Assert.Equal(expPct, sensor.RightTorqueEffectiveness);
+            Assert.Equal(expPct, _standardPowerSensor.LeftTorqueEffectiveness);
+            Assert.Equal(expPct, _standardPowerSensor.RightTorqueEffectiveness);
         }
 
         [Theory]
@@ -55,17 +42,16 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_TorqueEffectivenessAndPedalSmoothness_ExpectedPedalSmoothness(int left, int right, double expLeftPct, double expRightPct, bool expCombined)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.TorqueEffectivenessAndPedalSmoothness, 0xFF, 0xFF, 0xFF, (byte)left, (byte)right, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
+            _standardPowerSensor.Parse(
                 dataPage);
 
             // Assert
-            Assert.Equal(expLeftPct, sensor.LeftPedalSmoothness);
-            Assert.Equal(expRightPct, sensor.RightPedalSmoothness);
-            Assert.Equal(expCombined, sensor.CombinedPedalSmoothness);
+            Assert.Equal(expLeftPct, _standardPowerSensor.LeftPedalSmoothness);
+            Assert.Equal(expRightPct, _standardPowerSensor.RightPedalSmoothness);
+            Assert.Equal(expCombined, _standardPowerSensor.CombinedPedalSmoothness);
         }
     }
 }

@@ -10,24 +10,17 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class ParametersTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<NullLoggerFactory> mockLogger;
+        private readonly MockRepository _mockRepository;
+        private readonly ChannelId _channelId = new(0);
+        private readonly Mock<IAntChannel> _mockAntChannel;
+        private readonly StandardPowerSensor _standardPowerSensor;
 
         public ParametersTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Loose);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<NullLoggerFactory>();
-        }
-
-        private StandardPowerSensor CreateStandardPowerSensor()
-        {
+            _mockRepository = new MockRepository(MockBehavior.Loose);
+            _mockAntChannel = _mockRepository.Create<IAntChannel>();
             byte[] page = [(byte)BicyclePower.DataPage.PowerOnly, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLogger.Object, 2000) as StandardPowerSensor;
+            _standardPowerSensor = BicyclePower.GetBicyclePowerSensor(page, _channelId, _mockAntChannel.Object, Mock.Of<NullLoggerFactory>(), 2000) as StandardPowerSensor;
         }
 
         [Theory]
@@ -38,15 +31,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CrankParameters_ExpectedCrankLength(int val, double expCrankLen)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, (byte)val, 0, 0, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expCrankLen, sensor.Crank.CrankLength);
+            Assert.Equal(expCrankLen, _standardPowerSensor.Crank.CrankLength);
         }
 
         [Theory]
@@ -57,15 +48,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CrankParameters_ExpectedCrankStatus(int val, StandardPowerSensor.CrankParameters.CrankLengthStatus expCrankStatus)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expCrankStatus, sensor.Crank.CrankStatus);
+            Assert.Equal(expCrankStatus, _standardPowerSensor.Crank.CrankStatus);
         }
 
         [Theory]
@@ -76,15 +65,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CrankParameters_ExpectedSensorMismatchStatus(int val, StandardPowerSensor.CrankParameters.SensorMisMatchStatus expSensorSWStatus)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expSensorSWStatus, sensor.Crank.MismatchStatus);
+            Assert.Equal(expSensorSWStatus, _standardPowerSensor.Crank.MismatchStatus);
         }
 
         [Theory]
@@ -95,15 +82,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CrankParameters_ExpectedSensorAvailabilityStatus(int val, StandardPowerSensor.CrankParameters.SensorAvailabilityStatus expSensorAvailability)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expSensorAvailability, sensor.Crank.AvailabilityStatus);
+            Assert.Equal(expSensorAvailability, _standardPowerSensor.Crank.AvailabilityStatus);
         }
 
         [Theory]
@@ -114,15 +99,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_CrankParameters_ExpectedCustomCalStatus(int val, StandardPowerSensor.CrankParameters.CustomCalibrationStatus expCustomCal)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.CrankParameters, 0xFF, 0xFF, 0, (byte)val, 0, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expCustomCal, sensor.Crank.CustomCalibration);
+            Assert.Equal(expCustomCal, _standardPowerSensor.Crank.CustomCalibration);
         }
 
         [Theory]
@@ -132,30 +115,26 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_PowerPhaseParameters_ExpectedPeakTorqueThreshold(int val, double expPeak)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, (byte)val, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expPeak, sensor.PeakTorqueThreshold);
+            Assert.Equal(expPeak, _standardPowerSensor.PeakTorqueThreshold);
         }
 
         [Fact]
         public void Parse_RiderPositionConfigurationParameters_ExpectedRiderPositionOffset()
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.RiderPositionConfiguration, 128, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(128, sensor.RiderPositionTimeOffset);
+            Assert.Equal(128, _standardPowerSensor.RiderPositionTimeOffset);
         }
 
         [Theory]
@@ -175,15 +154,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_AdvCap1Parameters_ExpectedMask(int mask, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities expMask)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expMask, sensor.AdvancedCapabilities1.Mask);
+            Assert.Equal(expMask, _standardPowerSensor.AdvancedCapabilities1.Mask);
         }
 
         [Theory]
@@ -203,15 +180,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_AdvCap1Parameters_ExpectedValue(int value, StandardPowerSensor.AdvCapabilities1.InteroperableCapabilities expValue)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expValue, sensor.AdvancedCapabilities1.Value);
+            Assert.Equal(expValue, _standardPowerSensor.AdvancedCapabilities1.Value);
         }
 
         [Theory]
@@ -233,15 +208,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_AdvCap2Parameters_ExpectedMask(int mask, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities expMask)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, (byte)mask, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expMask, sensor.AdvancedCapabilities2.Mask);
+            Assert.Equal(expMask, _standardPowerSensor.AdvancedCapabilities2.Mask);
         }
 
         [Theory]
@@ -263,15 +236,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_AdvCap2Parameters_ExpectedValue(int value, StandardPowerSensor.AdvCapabilities2.InteroperableCapabilities expValue)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities2, 0xFF, 0xFF, 0xFF, 0xFF, (byte)value, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expValue, sensor.AdvancedCapabilities2.Value);
+            Assert.Equal(expValue, _standardPowerSensor.AdvancedCapabilities2.Value);
         }
 
         [Theory]
@@ -282,15 +253,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void Parse_AdvCap1Parameters_ExpectedProperties(int value, StandardPowerSensor.AdvCapabilities1.InteropProp expProp)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [(byte)BicyclePower.DataPage.GetSetParameters, (byte)SubPage.AdvancedCapabilities1, (byte)value, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
 
             // Act
-            sensor.Parse(
-                dataPage);
+            _standardPowerSensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(expProp, sensor.AdvancedCapabilities1.InteroperableProperties);
+            Assert.Equal(expProp, _standardPowerSensor.AdvancedCapabilities1.InteroperableProperties);
         }
 
         [Theory]
@@ -302,7 +271,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public async Task GetParameters_RequestedSubpage_ExpectedDataPage(SubPage page)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte[] dataPage = [
                 (byte)CommonDataPage.RequestDataPage,
                 0xFF,
@@ -313,16 +281,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 (byte)BicyclePower.DataPage.GetSetParameters,
                 (byte)SmallEarthTech.AntPlus.CommandType.DataPage
             ];
-            mockAntChannel.Setup(ac =>
-                ac.SendExtAcknowledgedDataAsync(mockChannelId, dataPage, It.IsAny<uint>()).Result).
-                Returns(MessagingReturnCode.Pass);
+            _mockAntChannel.Setup(ac =>
+                ac.SendExtAcknowledgedDataAsync(_channelId, dataPage, It.IsAny<uint>())).
+                ReturnsAsync(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.GetParameters(
-                page);
+            await _standardPowerSensor.GetParameters(page);
 
             // Assert
-            mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
 
         [Theory]
@@ -331,7 +298,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public async Task SetCrankLength_Message_ExpectedDataPage(double length)
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte expVal = (byte)((length - 110) / 0.5);
             byte[] dataPage = [
                 (byte)BicyclePower.DataPage.GetSetParameters,
@@ -343,23 +309,21 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 0x00,
                 0xFF
             ];
-            mockAntChannel.Setup(ac =>
-                ac.SendExtAcknowledgedDataAsync(mockChannelId, dataPage, It.IsAny<uint>()).Result).
-                Returns(MessagingReturnCode.Pass);
+            _mockAntChannel.Setup(ac =>
+                ac.SendExtAcknowledgedDataAsync(_channelId, dataPage, It.IsAny<uint>())).
+                ReturnsAsync(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.SetCrankLength(
-                length);
+            await _standardPowerSensor.SetCrankLength(length);
 
             // Assert
-            mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
 
         [Fact]
         public async Task SetTransitionTimeOffset_Message_ExpectedDataPage()
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             byte offset = 128;
             byte[] dataPage = [
                 (byte)BicyclePower.DataPage.GetSetParameters,
@@ -371,23 +335,21 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 0xFF,
                 0xFF
             ];
-            mockAntChannel.Setup(ac =>
-                ac.SendExtAcknowledgedDataAsync(mockChannelId, dataPage, It.IsAny<uint>()).Result).
-                Returns(MessagingReturnCode.Pass);
+            _mockAntChannel.Setup(ac =>
+                ac.SendExtAcknowledgedDataAsync(_channelId, dataPage, It.IsAny<uint>())).
+                ReturnsAsync(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.SetTransitionTimeOffset(
-                offset);
+            await _standardPowerSensor.SetTransitionTimeOffset(offset);
 
             // Assert
-            mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
 
         [Fact]
         public async Task SetPeakTorqueThreshold_Message_ExpectedDataPage()
         {
             // Arrange
-            var sensor = CreateStandardPowerSensor();
             double threshold = 50;
             byte[] dataPage = [
                 (byte)BicyclePower.DataPage.GetSetParameters,
@@ -399,16 +361,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 0xFF,
                 0xFF
             ];
-            mockAntChannel.Setup(ac =>
-                ac.SendExtAcknowledgedDataAsync(mockChannelId, dataPage, It.IsAny<uint>()).Result).
-                Returns(MessagingReturnCode.Pass);
+            _mockAntChannel.Setup(ac =>
+                ac.SendExtAcknowledgedDataAsync(_channelId, dataPage, It.IsAny<uint>())).
+                ReturnsAsync(MessagingReturnCode.Pass);
 
             // Act
-            await sensor.SetPeakTorqueThreshold(
-                threshold);
+            await _standardPowerSensor.SetPeakTorqueThreshold(threshold);
 
             // Assert
-            mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
     }
 }

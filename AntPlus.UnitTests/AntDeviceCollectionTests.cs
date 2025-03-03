@@ -17,52 +17,45 @@ namespace AntPlus.UnitTests
 {
     public class AntDeviceCollectionTests
     {
-        private readonly MockRepository mockRepository;
+        private readonly MockRepository _mockRepository;
+        private readonly Mock<IAntRadio> _mockAntRadio;
+        private readonly Mock<IAntChannel> _mockAntChannel;
+        private readonly Mock<ILogger> _mockLogger;
 
-        private readonly Mock<IAntRadio> mockAntRadio;
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<ILogger> mockLogger;
-        private readonly Mock<ILoggerFactory> mockLoggerFactory;
+        private readonly AntDeviceCollection _antDevices;
 
         public AntDeviceCollectionTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Loose);
+            _mockRepository = new MockRepository(MockBehavior.Default);
 
-            mockAntRadio = mockRepository.Create<IAntRadio>();
-            mockAntChannel = mockRepository.Create<IAntChannel>();
-            mockLogger = mockRepository.Create<ILogger>();
-            mockLoggerFactory = mockRepository.Create<ILoggerFactory>();
-            mockLoggerFactory.Setup(m => m.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
-        }
+            _mockAntRadio = _mockRepository.Create<IAntRadio>();
+            _mockAntChannel = _mockRepository.Create<IAntChannel>();
+            _mockLogger = _mockRepository.Create<ILogger>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
+            var mockLoggerFactory = _mockRepository.Create<ILoggerFactory>();
+            mockLoggerFactory.Setup(m => m.CreateLogger(It.IsAny<string>())).Returns(_mockLogger.Object);
 
-        private AntDeviceCollection CreateAntDeviceCollection()
-        {
             var mockChannels = new Mock<IAntChannel>[8];
-            Array.Fill(mockChannels, mockAntChannel);
-            mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync(mockChannels.Select(m => m.Object).ToArray());
-            AntDeviceCollection adc = new(
-                mockAntRadio.Object,
-                mockLoggerFactory.Object);
-            return adc;
+            Array.Fill(mockChannels, _mockAntChannel);
+            _mockAntRadio.Setup(r => r.InitializeContinuousScanMode()).ReturnsAsync([.. mockChannels.Select(m => m.Object)]);
+            _antDevices = new(_mockAntRadio.Object, mockLoggerFactory.Object);
         }
 
         [Fact]
-        public async Task MultithreadedAdd_Collection_ExpectedCount()
+        public async Task MultithreadedAdd_ExpectedCount()
         {
             // Arrange
-            var antDeviceCollection = CreateAntDeviceCollection();
-            await antDeviceCollection.StartScanning();
+            await _antDevices.StartScanning();
             int numberOfDevices = 16;
             using SemaphoreSlim semaphore = new(0, numberOfDevices);
             Task[] tasks = new Task[numberOfDevices];
             for (int i = 0; i < numberOfDevices; i++)
             {
-                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500);
+                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), _mockAntChannel.Object, _mockLogger.Object, (int)500);
                 tasks[i] = Task.Run(() =>
                 {
                     semaphore.Wait();
-                    antDeviceCollection.Add(
-                        antDevice.Object);
+                    _antDevices.Add(antDevice.Object);
                 });
             }
 
@@ -71,28 +64,26 @@ namespace AntPlus.UnitTests
             await Task.WhenAll(tasks);
 
             // Assert
-            Assert.Equal(numberOfDevices, antDeviceCollection.Count);
-            mockRepository.VerifyAll();
+            Assert.Equal(numberOfDevices, _antDevices.Count);
+            _mockRepository.VerifyAll();
         }
 
         [Fact]
-        public async Task MultithreadedRemove_Collection_ExpectedCount()
+        public async Task MultithreadedRemove_ExpectedCount()
         {
             // Arrange
-            var antDeviceCollection = CreateAntDeviceCollection();
-            await antDeviceCollection.StartScanning();
+            await _antDevices.StartScanning();
             int numberOfDevices = 16;
             using SemaphoreSlim semaphore = new(0, numberOfDevices);
             Task[] tasks = new Task[numberOfDevices];
             for (int i = 0; i < numberOfDevices; i++)
             {
-                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), mockAntChannel.Object, mockLogger.Object, (int)500);
-                antDeviceCollection.Add(antDevice.Object);
+                Mock<AntDevice> antDevice = new(new ChannelId((uint)i), _mockAntChannel.Object, _mockLogger.Object, (int)500);
+                _antDevices.Add(antDevice.Object);
                 tasks[i] = Task.Run(() =>
                 {
                     semaphore.Wait();
-                    _ = antDeviceCollection.Remove(
-                        antDevice.Object);
+                    _ = _antDevices.Remove(antDevice.Object);
                 });
             }
 
@@ -101,8 +92,8 @@ namespace AntPlus.UnitTests
             await Task.WhenAll(tasks);
 
             // Assert
-            Assert.Empty(antDeviceCollection);
-            mockRepository.VerifyAll();
+            Assert.Empty(_antDevices);
+            _mockRepository.VerifyAll();
         }
 
         [Theory]
@@ -121,103 +112,68 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] id = [1, 0, deviceClass, 0];
             ChannelId cid = new(BitConverter.ToUInt32(id));
-            mockAntChannel.SetupAdd(m => m.ChannelResponse += It.IsAny<EventHandler<AntResponse>>());
-            mockAntChannel.SetupRemove(m => m.ChannelResponse -= It.IsAny<EventHandler<AntResponse>>());
-            var mockResponse = new MockResponse(cid, new byte[8]);
-            var antDeviceCollection = CreateAntDeviceCollection();
-            await antDeviceCollection.StartScanning();
+            _mockAntChannel.SetupAdd(m => m.ChannelResponse += It.IsAny<EventHandler<AntResponse>>());
+            _mockAntChannel.SetupRemove(m => m.ChannelResponse -= It.IsAny<EventHandler<AntResponse>>());
+            var mockResponse = new MockResponse(MessageId.BroadcastData, cid, new byte[8]);
+            await _antDevices.StartScanning();
 
             // Act
-            mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, mockResponse);
+            _mockAntChannel.Raise(m => m.ChannelResponse += null, _mockAntChannel.Object, mockResponse);
 
-            Assert.Single(antDeviceCollection);
-            Assert.Equal(deviceType, antDeviceCollection[0].GetType());
+            Assert.Single(_antDevices);
+            Assert.Equal(deviceType, _antDevices[0].GetType());
         }
 
         class MockResponse : AntResponse
         {
-            public MockResponse(ChannelId channelId, byte[] payload)
+            public MockResponse(MessageId responseId, ChannelId channelId, byte[] payload)
             {
+                ResponseId = responseId;
                 ChannelId = channelId;
                 Payload = payload;
             }
         }
 
-        //[Fact]
-        //public async Task DeviceOffline_RemovesDeviceFromCollection()
-        //{
-        //    // Arrange
-        //    var antDeviceCollection = CreateAntDeviceCollection();
-        //    await antDeviceCollection.StartScanning();
-        //    Mock<AntDevice> antDevice = new(new ChannelId(1), mockAntChannel.Object, Mock.Of<ILogger>(), 50);
-        //    antDeviceCollection.Add(antDevice.Object);
-
-        //    // Act
-        //    antDevice.Raise(d => d.DeviceWentOffline += null, EventArgs.Empty);
-        //    //Thread.Sleep(100);
-
-        //    // Assert
-        //    Assert.Equal(0, antDeviceCollection.Count);
-        //}
-
         [Fact]
-        public async Task MessageHandler_NullChannelId_LogsCritical()
+        public async Task MessageHandler_NullChannelId_LogsWarning()
         {
             // Arrange
-            var antDeviceCollection = CreateAntDeviceCollection();
-            await antDeviceCollection.StartScanning();
-            var response = new MockResponse(null, new byte[8]);
+            await _antDevices.StartScanning();
+            var response = new MockResponse(MessageId.BroadcastData, null, new byte[8]);
 
             // Act
-            mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, response);
+            _mockAntChannel.Raise(m => m.ChannelResponse += null, _mockAntChannel.Object, response);
 
             // Assert
-            mockLogger.Verify(
+            _mockLogger.Verify(
                 x => x.Log(
-                    LogLevel.Critical,
+                    LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("ChannelId or Payload is null")),
-                    It.IsAny<Exception>(),
-                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unhandled ANT response.")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
 
         [Fact]
-        public async Task MessageHandler_NullPayload_LogsCritical()
+        public async Task MessageHandler_NullPayload_LogsWarning()
         {
             // Arrange
-            var antDeviceCollection = CreateAntDeviceCollection();
-            await antDeviceCollection.StartScanning();
-            var response = new MockResponse(new ChannelId(1), null);
+            await _antDevices.StartScanning();
+            var response = new MockResponse(MessageId.BroadcastData, new ChannelId(1), null);
 
             // Act
-            mockAntChannel.Raise(m => m.ChannelResponse += null, mockAntChannel.Object, response);
+            _mockAntChannel.Raise(m => m.ChannelResponse += null, _mockAntChannel.Object, response);
 
             // Assert
-            mockLogger.Verify(
+            _mockLogger.Verify(
                 x => x.Log(
-                    LogLevel.Critical,
+                    LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("ChannelId or Payload is null")),
-                    It.IsAny<Exception>(),
-                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unhandled ANT response.")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
-
-        //[Fact]
-        //public void CreateAntDevice_ValidChannelId_CreatesCorrectDevice()
-        //{
-        //    // Arrange
-        //    var antDeviceCollection = CreateAntDeviceCollection();
-        //    var channelId = new ChannelId(1) { DeviceType = HeartRate.DeviceClass };
-        //    var dataPage = new byte[8];
-
-        //    // Act
-        //    var device = antDeviceCollection.CreateAntDevice(channelId, dataPage);
-
-        //    // Assert
-        //    Assert.IsInstanceOfType(device, typeof(HeartRate));
-        //}
-
     }
 }

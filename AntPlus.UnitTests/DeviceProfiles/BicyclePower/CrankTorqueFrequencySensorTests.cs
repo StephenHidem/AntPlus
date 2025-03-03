@@ -10,141 +10,104 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 {
     public class CrankTorqueFrequencySensorTests
     {
-        private readonly MockRepository mockRepository;
-
-        private readonly ChannelId mockChannelId = new(0);
-        private readonly Mock<IAntChannel> mockAntChannel;
-        private readonly Mock<ILogger> mockLogger;
-        private readonly Mock<ILoggerFactory> mockLoggerFactory;
+        private readonly CrankTorqueFrequencySensor _crankTorqueFrequencySensor;
+        private readonly MockRepository _mockRepository;
+        private readonly Mock<IAntChannel> _mockAntChannel;
+        private readonly Mock<ILogger<CrankTorqueFrequencySensor>> _mockLogger;
 
         public CrankTorqueFrequencySensorTests()
         {
-            mockRepository = new MockRepository(MockBehavior.Strict);
-
-            mockAntChannel = mockRepository.Create<IAntChannel>(MockBehavior.Loose);
-            mockLogger = mockRepository.Create<ILogger>(MockBehavior.Loose);
-            mockLoggerFactory = mockRepository.Create<ILoggerFactory>();
-            mockLoggerFactory.Setup(m => m.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
-        }
-
-        private CrankTorqueFrequencySensor CreateCrankTorqueFrequencySensor()
-        {
-            byte[] page = [(byte)BicyclePower.DataPage.CrankTorqueFrequency, 0, 0, 0, 0, 0, 0, 0];
-            return BicyclePower.GetBicyclePowerSensor(page, mockChannelId, mockAntChannel.Object, mockLoggerFactory.Object, 2000) as CrankTorqueFrequencySensor;
+            _mockRepository = new MockRepository(MockBehavior.Default);
+            _mockAntChannel = _mockRepository.Create<IAntChannel>();
+            _mockLogger = _mockRepository.Create<ILogger<CrankTorqueFrequencySensor>>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
+            _crankTorqueFrequencySensor = new CrankTorqueFrequencySensor(new ChannelId(0), _mockAntChannel.Object, _mockLogger.Object, 2000);
         }
 
         [Fact]
-        public void ParseCalibrationMessage_ZeroOffset_ExpectedOffset()
+        public void ParseZeroOffsetPage_ExpectedOffset()
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = [0x01, 0x10, 0x01, 0xFF, 0xFF, 0xFF, 0x11, 0x22];
 
             // Act
-            crankTorqueFrequencySensor.Parse(
-                dataPage);
+            _crankTorqueFrequencySensor.Parse([0x01, 0x10, 0x01, 0xFF, 0xFF, 0xFF, 0x11, 0x22]);
 
             // Assert
-            Assert.Equal(4386, crankTorqueFrequencySensor.Offset);
+            Assert.Equal(4386, _crankTorqueFrequencySensor.Offset);
         }
 
         [Fact]
-        public void Parse_Cadence_ExpectedCadence()
+        public void ParseMainDataPage_ExpectedValues()
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = [0x20, 0x01, 0, 0, 0x07, 0xD0, 0, 0x01];
-
-            // Act
-            crankTorqueFrequencySensor.Parse(
-                [0x20, 0, 0, 0, 0, 0, 0, 0]);
-            crankTorqueFrequencySensor.Parse(
-                dataPage);
-
-            // Assert
-            Assert.Equal(60.0, crankTorqueFrequencySensor.Cadence, 0.0005);
-        }
-
-        [Fact]
-        public void Parse_TorqueAndPower_ExpectedTorqueAndPower()
-        {
-            // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             byte[] dataPage = [0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01];
-
+            _crankTorqueFrequencySensor.Parse([0x20, 0, 0, 0, 0, 0, 0, 0]);
+            _crankTorqueFrequencySensor.CalibrationStatus = CalibrationResponse.InProgress;
             // Act
-            crankTorqueFrequencySensor.Parse(
-                [0x20, 0, 0, 0, 0, 0, 0, 0]);
-            crankTorqueFrequencySensor.Parse(
-                dataPage);
-
+            _crankTorqueFrequencySensor.Parse(dataPage);
             // Assert
-            Assert.Equal(0.1, crankTorqueFrequencySensor.Torque, 0.0005);
-            Assert.Equal(0.628, crankTorqueFrequencySensor.Power, 0.0005);
+            Assert.Equal(CalibrationResponse.Succeeded, _crankTorqueFrequencySensor.CalibrationStatus);
+            Assert.Equal(10.0, _crankTorqueFrequencySensor.Slope);
+            Assert.Equal(60.0, _crankTorqueFrequencySensor.Cadence, 0.0005);
+            Assert.Equal(0.1, _crankTorqueFrequencySensor.Torque, 0.0005);
+            Assert.Equal(0.628, _crankTorqueFrequencySensor.Power, 0.0005);
         }
 
         [Fact]
-        public async Task SaveSlopeToFlash_Message_MessageFormatCorrect()
+        public async Task SaveSlopeToFlash_MessageFormatCorrect()
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             double slope = 34.5;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0x10, 0x02, 0xFF, 0xFF, 0xFF, 0x01, 0x59 },
-                It.IsAny<uint>()).Result)
-                .Returns(MessagingReturnCode.Pass);
+            _mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(It.IsAny<ChannelId>(), new byte[] { 0x01, 0x10, 0x02, 0xFF, 0xFF, 0xFF, 0x01, 0x59 },
+                It.IsAny<uint>()))
+                .ReturnsAsync(MessagingReturnCode.Pass);
 
             // Act
-            var result = await crankTorqueFrequencySensor.SaveSlopeToFlash(
-                slope);
+            var result = await _crankTorqueFrequencySensor.SaveSlopeToFlash(slope);
 
             // Assert
             Assert.Equal(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
 
         [Theory]
         [InlineData(9.9)]
         [InlineData(50.1)]
-        public async Task SaveSlopeToFlash_Message_SlopeOutOfRangeException(double slope)
+        public async Task SaveSlopeToFlash_SlopeOutOfRangeException(double slope)
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-
             // Act and Assert
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await crankTorqueFrequencySensor.SaveSlopeToFlash(slope));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>
+                await _crankTorqueFrequencySensor.SaveSlopeToFlash(slope));
         }
 
         [Fact]
-        public async Task SaveSerialNumberToFlash_Message_MessageFormatCorrect()
+        public async Task SaveSerialNumberToFlash_MessageFormatCorrect()
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             ushort serialNumber = 12345;
-            mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(mockChannelId, new byte[] { 0x01, 0x10, 0x03, 0xFF, 0xFF, 0xFF, 0x30, 0x39 },
+            _mockAntChannel.Setup(ac => ac.SendExtAcknowledgedDataAsync(It.IsAny<ChannelId>(), new byte[] { 0x01, 0x10, 0x03, 0xFF, 0xFF, 0xFF, 0x30, 0x39 },
                 It.IsAny<uint>()).Result)
                 .Returns(MessagingReturnCode.Pass);
 
             // Act
-            var result = await crankTorqueFrequencySensor.SaveSerialNumberToFlash(
-                serialNumber);
+            var result = await _crankTorqueFrequencySensor.SaveSerialNumberToFlash(serialNumber);
 
             // Assert
             Assert.Equal(MessagingReturnCode.Pass, result);
-            mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
 
         [Fact]
-        public void Parse_UnknownDataPage_LogsWarning()
+        public void ParseUnknownDataPage_LogsWarning()
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
 
             // Act
-            crankTorqueFrequencySensor.Parse(dataPage);
+            _crankTorqueFrequencySensor.Parse([0xFF, 0, 0, 0, 0, 0, 0, 0]);
 
             // Assert
-            mockLogger.Verify(
+            _mockLogger.Verify(
                 m => m.Log(
                     LogLevel.Warning,
                     It.IsAny<EventId>(),
@@ -158,31 +121,59 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         public void ParseCTFMessage_SameUpdateEventCountAndTorqueTicks_NoCalculations()
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
             byte[] dataPage = [0x20, 0x01, 0x00, 0x64, 0x07, 0xD0, 0, 0x01];
+            _crankTorqueFrequencySensor.Parse([0x20, 0, 0, 0, 0, 0, 0, 0]);
 
             // Act
-            crankTorqueFrequencySensor.Parse(dataPage);
-            crankTorqueFrequencySensor.Parse(dataPage);
+            _crankTorqueFrequencySensor.Parse(dataPage);
+            _crankTorqueFrequencySensor.Parse(dataPage);
 
             // Assert
-            Assert.Equal(60, crankTorqueFrequencySensor.Cadence);
-            Assert.Equal(0.1, crankTorqueFrequencySensor.Torque);
-            Assert.Equal(0.628, crankTorqueFrequencySensor.Power, 0.001);
+            Assert.Equal(60, _crankTorqueFrequencySensor.Cadence);
+            Assert.Equal(0.1, _crankTorqueFrequencySensor.Torque);
+            Assert.Equal(0.628, _crankTorqueFrequencySensor.Power, 0.001);
         }
 
-        [Fact]
-        public void ParseCalibrationMessage_UnknownCTFDefinedId_NoAction()
+        [Theory]
+        [InlineData(new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        [InlineData(new byte[] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        [InlineData(new byte[] { 0x02, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
+        public void ParseUnknownCTFDefinedId_LogsWarning(byte[] dataPage)
         {
             // Arrange
-            var crankTorqueFrequencySensor = CreateCrankTorqueFrequencySensor();
-            byte[] dataPage = [0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22];
 
             // Act
-            crankTorqueFrequencySensor.Parse(dataPage);
+            _crankTorqueFrequencySensor.Parse(dataPage);
 
             // Assert
-            // No exception should be thrown
+            _mockLogger.Verify(
+                m => m.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Theory]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x02, 0xFF, 0xFF, 0xFF, 0xFF }, "Data page type Slope")]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x03, 0xFF, 0xFF, 0xFF, 0xFF }, "Data page type SerialNumber")]
+        public void ParseAcknowledgeMessage_LogsDebugMessage(byte[] dataPage, string message)
+        {
+            // Arrange
+            // Act
+            _crankTorqueFrequencySensor.Parse(dataPage);
+            // Assert
+            _mockLogger.Verify(
+                m => m.Log(
+                    LogLevel.Debug,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains(message)),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
         }
     }
 }

@@ -278,7 +278,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <returns>Status of the request.</returns>
         public async Task<MessagingReturnCode> RequestSummaryPage()
         {
-            _logger.LogInformation(nameof(RequestSummaryPage));
             return await RequestDataPage(DataPage.DistanceAndStridesSummary);
         }
 
@@ -296,7 +295,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </remarks>
         public async Task<MessagingReturnCode> RequestBroadcastCapabilities()
         {
-            _logger.LogInformation(nameof(RequestBroadcastCapabilities));
             return await RequestDataPage(DataPage.Capabilities);
         }
     }

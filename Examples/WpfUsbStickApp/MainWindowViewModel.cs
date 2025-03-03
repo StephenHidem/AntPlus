@@ -31,12 +31,16 @@ namespace WpfUsbStickApp
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Debug(outputTemplate:
                     "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}) {Message:lj}{NewLine}{Exception}") // + file or centralized logging
-                .MinimumLevel.Debug()
                 .CreateLogger();
 
             // dependency services
             _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
-                UseSerilog().
+                UseSerilog((context, loggerConfiguration) =>
+                {
+                    loggerConfiguration.WriteTo.Debug(outputTemplate:
+                        "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}) {Message:lj}{NewLine}{Exception}");
+                    loggerConfiguration.ReadFrom.Configuration(context.Configuration);
+                }).
                 UseAntPlus().   // this adds all the required dependencies to use the ANT+ class library
                 ConfigureServices(services =>
                 {

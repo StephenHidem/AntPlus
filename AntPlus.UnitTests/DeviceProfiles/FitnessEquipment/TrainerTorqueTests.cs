@@ -5,13 +5,13 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 {
     public class TrainerTorqueTests
     {
-        private readonly TrainerTorque trainerTorque;
+        private readonly TrainerTorque _trainerTorque;
 
         public TrainerTorqueTests()
         {
             // zero out class so next event is used
-            trainerTorque = new TrainerTorque();
-            trainerTorque.Parse(new byte[8]);
+            _trainerTorque = new TrainerTorque();
+            _trainerTorque.Parse(new byte[8]);
         }
 
         [Fact]
@@ -21,15 +21,14 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
             byte[] dataPage = [26, 1, 5, 0x11, 0x22, 0x33, 0x44, 0];
 
             // Act
-            trainerTorque.Parse(
-                dataPage);
+            _trainerTorque.Parse(dataPage);
 
             // Assert
-            Assert.Equal(1.860, trainerTorque.AverageSpeed, 0.001);
-            Assert.Equal(1.476, trainerTorque.AverageAngularVelocity, 0.001);
-            Assert.Equal(545.594, trainerTorque.AverageTorque, 0.001);
-            Assert.Equal(805.032, trainerTorque.AveragePower, 0.001);
-            Assert.Equal(11, trainerTorque.AccumulatedDistance);
+            Assert.Equal(1.860, _trainerTorque.AverageSpeed, 0.001);
+            Assert.Equal(1.476, _trainerTorque.AverageAngularVelocity, 0.001);
+            Assert.Equal(545.594, _trainerTorque.AverageTorque, 0.001);
+            Assert.Equal(805.032, _trainerTorque.AveragePower, 0.001);
+            Assert.Equal(11, _trainerTorque.AccumulatedDistance);
         }
     }
 }

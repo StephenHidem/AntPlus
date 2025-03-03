@@ -5,6 +5,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -34,7 +35,7 @@ namespace SmallEarthTech.AntPlus
         /// <code>BindingOperations.EnableCollectionSynchronization(App.AntDevices, App.AntDevices.CollectionLock);</code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object CollectionLock = new object();
+        public object CollectionLock = new();
 
         private readonly IAntRadio _antRadio;
         private readonly ILoggerFactory _loggerFactory;
@@ -62,7 +63,6 @@ namespace SmallEarthTech.AntPlus
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             _timeout = antDeviceTimeout;
-            _logger.LogInformation("Created AntDeviceCollection: antDeviceTimeout = {0}", antDeviceTimeout);
         }
 
         /// <summary>
@@ -71,34 +71,65 @@ namespace SmallEarthTech.AntPlus
         /// <returns>Task of type void</returns>
         public async Task StartScanning()
         {
+            _logger.LogMethodEntry();
             _channels = await _antRadio.InitializeContinuousScanMode();
             _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
         }
 
-        private void MessageHandler(object sender, AntResponse e)
+        private void MessageHandler(object? sender, AntResponse e)
         {
-            if (e.ChannelId != null && e.Payload != null)
-            {
-                // see if the device is in the collection
-                AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
+            _logger.LogAntResponse(LogLevel.Trace, e);
 
-                // create the device if not in the collection
-                if (device == null)
-                {
-                    // create the device and add it to the collection
-                    device = CreateAntDevice(e.ChannelId, e.Payload);
-                    Add(device);
-                    device.DeviceWentOffline += DeviceOffline;
-                }
-                device.Parse(e.Payload);    // dispatch the message to the device for processing
-            }
-            else
+            // check for a valid payload
+            if (e.Payload == null || e.Payload.Length < 3)
             {
-                _logger.LogCritical("ChannelId or Payload is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
-                    e.ChannelNumber,
-                    (MessageId)e.ResponseId,
-                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+                _logger.LogUnhandledAntResponse(e);
+                return;
+            }
+
+            // switch on the response id
+            switch (e.ResponseId)
+            {
+                case MessageId.ChannelEventOrResponse:
+                    // check for a RF event on channel 0, channel closed event
+                    if (e.Payload[0] != 0 || e.Payload[1] != 1 || (EventMsgId)e.Payload[2] != EventMsgId.ChannelClosed)
+                    {
+                        _logger.LogUnhandledAntResponse(e);
+                        return;
+                    }
+
+                    // re-open the channel in scan mode
+                    _ = ((IAntControl)_antRadio).OpenRxScanMode();
+                    break;
+                case MessageId.BroadcastData:
+                case MessageId.ExtBroadcastData:
+                    // check for a valid channel id and payload length
+                    if (e.ChannelId == null || e.Payload.Length != 8)
+                    {
+                        _logger.LogUnhandledAntResponse(e);
+                        return;
+                    }
+
+                    // see if the device is in the collection
+                    AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId!.Id);
+
+                    // create the device if not in the collection
+                    if (device == null)
+                    {
+                        // create an ANT device from the AntResponse parameter
+                        device = CreateAntDevice(e);
+
+                        Add(device);
+                        device.DeviceWentOffline += DeviceOffline;
+                    }
+
+                    // dispatch the message to the device
+                    device.Parse(e.Payload!);
+                    break;
+                default:
+                    _logger.LogUnhandledAntResponse(e);
+                    break;
             }
         }
 
@@ -115,8 +146,8 @@ namespace SmallEarthTech.AntPlus
         {
             lock (CollectionLock)
             {
+                _logger.LogAntCollectionChange(item);
                 base.Add(item);
-                _logger.LogDebug("{Device} added.", item);
             }
         }
 
@@ -127,27 +158,26 @@ namespace SmallEarthTech.AntPlus
         {
             lock (CollectionLock)
             {
-                bool result = base.Remove(item);
-                _logger.LogDebug("{Device} remove. Result = {Result}", item, result);
-                return result;
+                _logger.LogAntCollectionChange(item);
+                return base.Remove(item);
             }
         }
 
-        private AntDevice CreateAntDevice(ChannelId channelId, byte[] dataPage)
+        private AntDevice CreateAntDevice(AntResponse response)
         {
-            return channelId.DeviceType switch
+            return response.ChannelId!.DeviceType switch
             {
-                BicyclePower.DeviceClass => BicyclePower.GetBicyclePowerSensor(dataPage, channelId, _sendMessageChannel!, _loggerFactory, _timeout),
-                BikeSpeedSensor.DeviceClass => new BikeSpeedSensor(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<BikeSpeedSensor>(), _timeout),
-                BikeCadenceSensor.DeviceClass => new BikeCadenceSensor(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<BikeCadenceSensor>(), _timeout),
-                CombinedSpeedAndCadenceSensor.DeviceClass => new CombinedSpeedAndCadenceSensor(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), _timeout),
-                FitnessEquipment.DeviceClass => FitnessEquipment.GetFitnessEquipment(dataPage, channelId, _sendMessageChannel!, _loggerFactory, _timeout) ?? (AntDevice)new UnknownDevice(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
-                MuscleOxygen.DeviceClass => new MuscleOxygen(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<MuscleOxygen>(), _timeout),
-                Geocache.DeviceClass => new Geocache(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<Geocache>(), _timeout),
-                Tracker.DeviceClass => new Tracker(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<Tracker>(), _timeout),
-                StrideBasedSpeedAndDistance.DeviceClass => new StrideBasedSpeedAndDistance(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), _timeout),
-                HeartRate.DeviceClass => new HeartRate(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<HeartRate>(), _timeout),
-                _ => new UnknownDevice(channelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
+                BicyclePower.DeviceClass => BicyclePower.GetBicyclePowerSensor(response.Payload!, response.ChannelId, _sendMessageChannel!, _loggerFactory, _timeout),
+                BikeSpeedSensor.DeviceClass => new BikeSpeedSensor(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<BikeSpeedSensor>(), _timeout),
+                BikeCadenceSensor.DeviceClass => new BikeCadenceSensor(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<BikeCadenceSensor>(), _timeout),
+                CombinedSpeedAndCadenceSensor.DeviceClass => new CombinedSpeedAndCadenceSensor(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<CombinedSpeedAndCadenceSensor>(), _timeout),
+                FitnessEquipment.DeviceClass => FitnessEquipment.GetFitnessEquipment(response.Payload!, response.ChannelId, _sendMessageChannel!, _loggerFactory, _timeout) ?? (AntDevice)new UnknownDevice(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
+                MuscleOxygen.DeviceClass => new MuscleOxygen(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<MuscleOxygen>(), _timeout),
+                Geocache.DeviceClass => new Geocache(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<Geocache>(), _timeout),
+                Tracker.DeviceClass => new Tracker(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<Tracker>(), _timeout),
+                StrideBasedSpeedAndDistance.DeviceClass => new StrideBasedSpeedAndDistance(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<StrideBasedSpeedAndDistance>(), _timeout),
+                HeartRate.DeviceClass => new HeartRate(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<HeartRate>(), _timeout),
+                _ => new UnknownDevice(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
             };
         }
     }

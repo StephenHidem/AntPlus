@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -45,7 +46,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             _antRadio = antRadio;
             _logger = logger;
             _timeout = options.Value;
-            _logger.LogInformation("Created AntCollection");
         }
 
         /// <summary>
@@ -54,6 +54,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <returns>Task of type void</returns>
         public async Task StartScanning()
         {
+            _logger.LogMethodEntry();
             _channels = await _antRadio.InitializeContinuousScanMode();
             _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
@@ -67,30 +68,57 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <param name="e">The ANT response.</param>
         private void MessageHandler(object? sender, AntResponse e)
         {
-            if (e.ChannelId != null && e.Payload != null)
+            _logger.LogAntResponse(LogLevel.Trace, e);
+
+            // check for a valid payload
+            if (e.Payload == null || e.Payload.Length < 3)
             {
-                // see if the device is in the collection
-                AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
-
-                // create the device if not in the collection
-                if (device == null)
-                {
-                    // create an ANT device from the AntResponse parameter
-                    device = CreateAntDevice(e);
-
-                    Add(device);
-                    device.DeviceWentOffline += DeviceOffline;
-                }
-
-                // dispatch the message to the device
-                device.Parse(e.Payload);
+                _logger.LogUnhandledAntResponse(e);
+                return;
             }
-            else
+
+            // switch on the response id
+            switch (e.ResponseId)
             {
-                _logger.LogCritical("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
-                    e.ChannelNumber,
-                    (MessageId)e.ResponseId,
-                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+                case MessageId.ChannelEventOrResponse:
+                    // check for a RF event on channel 0, channel closed event
+                    if (e.Payload[0] != 0 || e.Payload[1] != 1 || (EventMsgId)e.Payload[2] != EventMsgId.ChannelClosed)
+                    {
+                        _logger.LogUnhandledAntResponse(e);
+                        return;
+                    }
+
+                    // re-open the channel in scan mode
+                    _ = ((IAntControl)_antRadio).OpenRxScanMode();
+                    break;
+                case MessageId.BroadcastData:
+                case MessageId.ExtBroadcastData:
+                    // check for a valid channel id and payload length
+                    if (e.ChannelId == null || e.Payload.Length != 8)
+                    {
+                        _logger.LogUnhandledAntResponse(e);
+                        return;
+                    }
+
+                    // see if the device is in the collection
+                    AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId!.Id);
+
+                    // create the device if not in the collection
+                    if (device == null)
+                    {
+                        // create an ANT device from the AntResponse parameter
+                        device = CreateAntDevice(e);
+
+                        Add(device);
+                        device.DeviceWentOffline += DeviceOffline;
+                    }
+
+                    // dispatch the message to the device
+                    device.Parse(e.Payload!);
+                    break;
+                default:
+                    _logger.LogUnhandledAntResponse(e);
+                    break;
             }
         }
 
@@ -107,8 +135,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             lock (CollectionLock)
             {
+                _logger.LogAntCollectionChange(item);
                 base.Add(item);
-                _logger.LogDebug("{Device} added.", item);
             }
         }
 
@@ -119,9 +147,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             lock (CollectionLock)
             {
-                bool result = base.Remove(item);
-                _logger.LogDebug("{Device} remove. Result = {Result}", item, result);
-                return result;
+                _logger.LogAntCollectionChange(item);
+                return base.Remove(item);
             }
         }
 
@@ -163,9 +190,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// </summary>
         public void Dispose()
         {
+            _logger.LogMethodEntry();
             if (_channels != null)
             {
-                _logger.LogDebug("AntCollection: Dispose");
                 _channels[0].ChannelResponse -= MessageHandler;
                 foreach (IAntChannel item in _channels)
                 {

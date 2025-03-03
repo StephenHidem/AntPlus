@@ -16,11 +16,13 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Bugfix: Issue #39. Clears msssage in ANT radio hardware when SendExtAcknowledgedDataAsync timesout.</PackageReleaseNotes>
+	<PackageReleaseNotes>
+        1. Updated ANT+ logging with ANT+ logging extensions. 2. The scanning channel is re-opened if a close RF event is received.
+    </PackageReleaseNotes>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<AssemblyVersion>1.1.2.0</AssemblyVersion>
+	<AssemblyVersion>1.2.0.0</AssemblyVersion>
 	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>

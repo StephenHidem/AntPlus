@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -120,7 +121,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     }
                     else
                     {
-                        _logger.LogWarning("Unexpected Cycling Dynamics message. A StandardCrankTorqueSensor is not present.");
+                        _logger.LogIgnoredDataPage<DataPage>(dataPage);
                     }
                     break;
                 default:

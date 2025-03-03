@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -74,7 +75,7 @@ namespace SmallEarthTech.AntPlus
             _logger = logger;
             _deviceTimeout = timeout;
             _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
-            _logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
+            _logger.LogAntDeviceState(this, _deviceTimeout);
         }
 
         /// <summary>
@@ -98,14 +99,13 @@ namespace SmallEarthTech.AntPlus
                 _deviceTimeout = (int)timeoutOptions.Timeout;
             }
             _timeoutTimer = new Timer(TimeoutCallback, null, _deviceTimeout, Timeout.Infinite);
-            _logger.LogInformation("Created {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
+            _logger.LogAntDeviceState(this, _deviceTimeout);
         }
 
         private void TimeoutCallback(object state)
         {
-            _logger.LogDebug("TimeoutCallback {AntDevice}: deviceTimeout = {Timeout}ms", ToString(), _deviceTimeout);
-            Dispose();
             Offline = true;
+            Dispose();
             DeviceWentOffline?.Invoke(this, new EventArgs());
         }
 
@@ -113,7 +113,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">The received data page.</param>
         public virtual void Parse(byte[] dataPage)
         {
-            _logger.LogTrace("Device Number = {DeviceNumber}, Page = {Page}", ChannelId.DeviceNumber, BitConverter.ToString(dataPage));
+            _logger.LogDataPage(LogLevel.Trace, dataPage);
             _ = _timeoutTimer?.Change(_deviceTimeout, Timeout.Infinite);
         }
 
@@ -144,9 +144,7 @@ namespace SmallEarthTech.AntPlus
             }
             else
             {
-                ArgumentException ex = new ArgumentException("Invalid data page requested.", nameof(page));
-                _logger.LogError(ex, "AntDevice {AntDevice}", ToString());
-                throw ex;
+                throw new ArgumentException("Invalid data page requested.", nameof(page));
             }
         }
 
@@ -156,18 +154,13 @@ namespace SmallEarthTech.AntPlus
         public async Task<MessagingReturnCode> SendExtAcknowledgedMessage(byte[] message)
         {
             MessagingReturnCode ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, (uint)_deviceTimeout);
-
-            if (ret != MessagingReturnCode.Pass)
-            {
-                _logger.LogWarning("{AntDevice}: {Func} failed with error {Error}.", ToString(), "SendExtAcknowledgedDataAsync", ret);
-            }
             return ret;
         }
 
         /// <inheritdoc/>
         public void Dispose()
         {
-            _logger.LogDebug("Disposed {AntDevice}", ToString());
+            _logger.LogAntDeviceState(this, _deviceTimeout);
             _timeoutTimer?.Dispose();
             _timeoutTimer = null;
         }

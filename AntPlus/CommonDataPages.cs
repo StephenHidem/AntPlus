@@ -297,8 +297,11 @@ namespace SmallEarthTech.AntPlus
             /// <summary>Gets the computed data field 2. Returns NaN if this is not a valid subpage.</summary>
             public double ComputedDataField2 { get; }
 
+            private readonly byte[] dp;
+
             internal SubfieldDataPage(byte[] dataPage, ILogger logger)
             {
+                dp = dataPage;
                 Subpage1 = (SubPage)dataPage[2];
                 Subpage2 = (SubPage)dataPage[3];
                 ComputedDataField1 = double.NaN;
@@ -339,7 +342,7 @@ namespace SmallEarthTech.AntPlus
                     case SubPage.Invalid:
                         break;
                     default:
-                        logger.LogUnknownDataPage<SubPage>((byte)page, Array.Empty<byte>());
+                        logger.LogUnknownDataPage<SubPage>((byte)page, dp);
                         break;
                 }
                 return retVal;

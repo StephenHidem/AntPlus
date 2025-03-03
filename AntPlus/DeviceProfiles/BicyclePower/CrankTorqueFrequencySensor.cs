@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.IO;
@@ -83,7 +84,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCTFMessage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("Unknown data page. Page = {Page}", dataPage[0]);
+                    _logger.LogUnknownDataPage(dataPage);
                     break;
             }
         }
@@ -128,7 +129,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         private void ParseCalibrationMessage(byte[] dataPage)
         {
             // check if this is CTF calibration message
-            if (dataPage[1] == 0x10)
+            if ((CalibrationResponseId)dataPage[1] == CalibrationResponseId.CTFDefinedMsg)
             {
                 switch ((CTFDefinedId)dataPage[2])
                 {
@@ -140,24 +141,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                         switch ((CTFDefinedId)dataPage[3])
                         {
                             case CTFDefinedId.Slope:
-                                _logger.LogInformation("Slope saved to flash.");
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
                                 break;
                             case CTFDefinedId.SerialNumber:
-                                _logger.LogInformation("Serial number saved to flash.");
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
                                 break;
                             default:
-                                _logger.LogWarning("Unknown CTF acknowledged ID = {CTFDefinedID}", dataPage[3]);
+                                _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[3], dataPage);
                                 break;
                         }
                         break;
                     default:
-                        _logger.LogWarning("Unknown CTF ID = {CTFDefinedID}", dataPage[2]);
+                        _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[2], dataPage);
                         break;
                 }
             }
             else
             {
-                _logger.LogWarning("Unknown calibration data page = {CalID}", dataPage[1]);
+                _logger.LogUnknownDataPage<CalibrationResponseId>(dataPage[1], dataPage);
             }
         }
 

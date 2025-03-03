@@ -19,7 +19,7 @@ namespace AntGrpcShared.ClientServices
             ChannelNumber = (byte)response.ChannelNumber;
             ThresholdConfigurationValue = (sbyte)response.ThresholdConfigurationValue;
             Payload = response.Payload.ToByteArray();
-            ResponseId = (byte)response.ResponseId;
+            ResponseId = (MessageId)response.ResponseId;
             Rssi = (sbyte)response.Rssi;
             Timestamp = (ushort)response.Timestamp;
         }
@@ -34,7 +34,7 @@ namespace AntGrpcShared.ClientServices
             ChannelNumber = (byte)reply.ChannelNumber;
             ThresholdConfigurationValue = (sbyte)reply.ThresholdConfigurationValue;
             Payload = reply.Payload.ToByteArray();
-            ResponseId = (byte)reply.ResponseId;
+            ResponseId = (MessageId)reply.ResponseId;
             Rssi = (sbyte)reply.Rssi;
             Timestamp = (ushort)reply.Timestamp;
         }

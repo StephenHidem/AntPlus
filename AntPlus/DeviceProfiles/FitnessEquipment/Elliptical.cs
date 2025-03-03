@@ -68,7 +68,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
             if ((DataPage)dataPage[0] == DataPage.EllipticalData)
             {
-                HandleFEState(dataPage[7]);
+                HandleFEState(dataPage);
                 if (isFirstDataMessage)
                 {
                     isFirstDataMessage = false;

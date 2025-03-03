@@ -5,6 +5,7 @@ using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -62,7 +63,6 @@ namespace SmallEarthTech.AntPlus
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<AntDeviceCollection>();
             _timeout = antDeviceTimeout;
-            _logger.LogInformation("Created AntDeviceCollection: antDeviceTimeout = {0}", antDeviceTimeout);
         }
 
         /// <summary>
@@ -71,6 +71,7 @@ namespace SmallEarthTech.AntPlus
         /// <returns>Task of type void</returns>
         public async Task StartScanning()
         {
+            _logger.LogMethodEntry();
             _channels = await _antRadio.InitializeContinuousScanMode();
             _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
@@ -78,6 +79,7 @@ namespace SmallEarthTech.AntPlus
 
         private void MessageHandler(object sender, AntResponse e)
         {
+            _logger.LogAntResponse(LogLevel.Trace, e);
             if (e.ChannelId != null && e.Payload != null)
             {
                 // see if the device is in the collection
@@ -95,10 +97,7 @@ namespace SmallEarthTech.AntPlus
             }
             else
             {
-                _logger.LogCritical("ChannelId or Payload is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
-                    e.ChannelNumber,
-                    (MessageId)e.ResponseId,
-                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+                _logger.LogUnhandledAntResponse(e);
             }
         }
 
@@ -115,8 +114,8 @@ namespace SmallEarthTech.AntPlus
         {
             lock (CollectionLock)
             {
+                _logger.LogAntCollectionChange(item);
                 base.Add(item);
-                _logger.LogDebug("{Device} added.", item);
             }
         }
 
@@ -127,9 +126,8 @@ namespace SmallEarthTech.AntPlus
         {
             lock (CollectionLock)
             {
-                bool result = base.Remove(item);
-                _logger.LogDebug("{Device} remove. Result = {Result}", item, result);
-                return result;
+                _logger.LogAntCollectionChange(item);
+                return base.Remove(item);
             }
         }
 

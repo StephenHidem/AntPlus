@@ -89,7 +89,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             }
             else
             {
-                _logger.LogAntResponse(LogLevel.Warning, e);
+                _logger.LogUnhandledAntResponse(e);
             }
         }
 

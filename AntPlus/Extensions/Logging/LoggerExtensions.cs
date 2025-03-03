@@ -117,11 +117,11 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         private static partial void s_logAntCollectionChange(ILogger logger, string methodName, AntDevice antDevice, uint deviceNumber);
 
         /// <summary>
-        /// Logs an ANT response.
+        /// Logs an ANT response. Null payloads are logged as "Null".
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="level">Log level.</param>
-        /// <param name="antResponse">AntResponse received.</param>
+        /// <param name="antResponse">The AntResponse received.</param>
         /// <param name="methodName">The caller member name.</param>
         public static void LogAntResponse(this ILogger logger, LogLevel level, AntResponse antResponse, [CallerMemberName] string methodName = "")
         {
@@ -131,6 +131,21 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
 
         [LoggerMessage(EventId = 1007, Message = "{MethodName}: Channel# {Channel}, Response ID = {ResponseId}, Payload = {Payload}")]
         private static partial void s_logAntResponse(ILogger logger, LogLevel level, string methodName, byte channel, MessageId responseId, string payload);
+
+        /// <summary>
+        /// Logs an unhandled ANT response. Null payloads are logged as "Null".
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="antResponse">The AntResponse received.</param>
+        /// <param name="methodName">The caller member name.</param>
+        public static void LogUnhandledAntResponse(this ILogger logger, AntResponse antResponse, [CallerMemberName] string methodName = "")
+        {
+            string payload = antResponse.Payload != null ? BitConverter.ToString(antResponse.Payload) : "Null";
+            s_logUnhandledAntResponse(logger, methodName, antResponse.ChannelNumber, antResponse.ResponseId, payload);
+        }
+
+        [LoggerMessage(EventId = 1011, Level = LogLevel.Warning, Message = "{MethodName}: Unhandled ANT response. Channel# {Channel}, Response ID = {ResponseId}, Payload = {Payload}")]
+        private static partial void s_logUnhandledAntResponse(ILogger logger, string methodName, byte channel, MessageId responseId, string payload);
 
         /// <summary>
         /// Logs a warning message indicating an ignored or unexpected page.

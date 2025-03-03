@@ -97,7 +97,7 @@ namespace SmallEarthTech.AntPlus
             }
             else
             {
-                _logger.LogAntResponse(LogLevel.Warning, e);
+                _logger.LogUnhandledAntResponse(e);
             }
         }
 

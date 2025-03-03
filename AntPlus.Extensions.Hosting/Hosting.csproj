@@ -16,7 +16,9 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Updated logging ANT+ logging extensions.</PackageReleaseNotes>
+	<PackageReleaseNotes>
+        1. Updated ANT+ logging with ANT+ logging extensions. 2. The scanning channel is re-opened if a close RF event is received.
+    </PackageReleaseNotes>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>5.0.1.0</AssemblyVersion>
+	<AssemblyVersion>5.1.0.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -24,7 +24,9 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageReleaseNotes>Bugfix: Issue #39. Clears msssage in ANT radio hardware when SendExtAcknowledgedDataAsync timesout.</PackageReleaseNotes>
+	<PackageReleaseNotes>
+        1. Updated ANT+ logging with ANT+ logging extensions. 2. The scanning channel is re-opened if a close RF event is received.
+    </PackageReleaseNotes>
   </PropertyGroup>
 
     <PropertyGroup>

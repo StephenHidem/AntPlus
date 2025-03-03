@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -45,7 +46,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             _antRadio = antRadio;
             _logger = logger;
             _timeout = options.Value;
-            _logger.LogInformation("Created AntCollection");
         }
 
         /// <summary>
@@ -54,6 +54,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <returns>Task of type void</returns>
         public async Task StartScanning()
         {
+            _logger.LogMethodEntry();
             _channels = await _antRadio.InitializeContinuousScanMode();
             _sendMessageChannel = new SendMessageChannel(_channels.Skip(1).ToArray(), _logger);
             _channels[0].ChannelResponse += MessageHandler;
@@ -67,6 +68,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// <param name="e">The ANT response.</param>
         private void MessageHandler(object? sender, AntResponse e)
         {
+            _logger.LogAntResponse(LogLevel.Trace, e);
             if (e.ChannelId != null && e.Payload != null)
             {
                 // see if the device is in the collection
@@ -87,10 +89,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             }
             else
             {
-                _logger.LogCritical("ChannelId is null. Channel # = {ChannelNum}, Response ID = {Response}, Payload = {Payload}.",
-                    e.ChannelNumber,
-                    (MessageId)e.ResponseId,
-                    e.Payload != null ? BitConverter.ToString(e.Payload) : "Null");
+                _logger.LogUnhandledAntResponse(e);
             }
         }
 
@@ -100,15 +99,14 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
             device.DeviceWentOffline -= DeviceOffline;
             _ = Remove(device);
         }
-
         /// <summary>Adds the specified <see cref="AntDevice"/> to the end of the collection.</summary>
         /// <param name="item">The <see cref="AntDevice"/>.</param>
         public new void Add(AntDevice item)
         {
             lock (CollectionLock)
             {
+                _logger.LogAntCollectionChange(item);
                 base.Add(item);
-                _logger.LogDebug("{Device} added.", item);
             }
         }
 
@@ -119,9 +117,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         {
             lock (CollectionLock)
             {
-                bool result = base.Remove(item);
-                _logger.LogDebug("{Device} remove. Result = {Result}", item, result);
-                return result;
+                _logger.LogAntCollectionChange(item);
+                return base.Remove(item);
             }
         }
 
@@ -163,9 +160,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// </summary>
         public void Dispose()
         {
+            _logger.LogMethodEntry();
             if (_channels != null)
             {
-                _logger.LogDebug("AntCollection: Dispose");
                 _channels[0].ChannelResponse -= MessageHandler;
                 foreach (IAntChannel item in _channels)
                 {

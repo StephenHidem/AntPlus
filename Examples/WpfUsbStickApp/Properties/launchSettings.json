@@ -5,11 +5,11 @@
     },
     "LogLevel Trace": {
       "commandName": "Project",
-      "commandLineArgs": "--Logging:LogLevel:Default=Trace"
+      "commandLineArgs": "--Serilog:MinimumLevel:Default=Verbose"
     },
     "LogLevel Debug": {
       "commandName": "Project",
-      "commandLineArgs": "--Logging:LogLevel:Default=Debug"
+      "commandLineArgs": "--Serilog:MinimumLevel:Default=Debug"
     }
   }
 }

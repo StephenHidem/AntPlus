@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -296,15 +297,17 @@ namespace SmallEarthTech.AntPlus
             /// <summary>Gets the computed data field 2. Returns NaN if this is not a valid subpage.</summary>
             public double ComputedDataField2 { get; }
 
-            internal SubfieldDataPage(byte[] dataPage)
+            internal SubfieldDataPage(byte[] dataPage, ILogger logger)
             {
                 Subpage1 = (SubPage)dataPage[2];
                 Subpage2 = (SubPage)dataPage[3];
-                ComputedDataField1 = ParseSubfieldData(Subpage1, BitConverter.ToInt16(dataPage, 4));
-                ComputedDataField2 = ParseSubfieldData(Subpage2, BitConverter.ToInt16(dataPage, 6));
+                ComputedDataField1 = double.NaN;
+                ComputedDataField2 = double.NaN;
+                ComputedDataField1 = ParseSubfieldData(Subpage1, BitConverter.ToInt16(dataPage, 4), logger);
+                ComputedDataField2 = ParseSubfieldData(Subpage2, BitConverter.ToInt16(dataPage, 6), logger);
             }
 
-            private static double ParseSubfieldData(SubPage page, short value)
+            private double ParseSubfieldData(SubPage page, short value, ILogger logger)
             {
                 double retVal = double.NaN;
                 switch (page)
@@ -333,8 +336,11 @@ namespace SmallEarthTech.AntPlus
                     case SubPage.MaximumOperatingTemperature:
                         retVal = value * 0.01;
                         break;
+                    case SubPage.Invalid:
+                        break;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(page), page, "Invalid subpage.");
+                        logger.LogUnknownDataPage<SubPage>((byte)page, Array.Empty<byte>());
+                        break;
                 }
                 return retVal;
             }
@@ -433,26 +439,19 @@ namespace SmallEarthTech.AntPlus
                     TimeAndDate = new DateTime(2000 + dataPage[7], dataPage[6], dataPage[5] & 0x1F, dataPage[4], dataPage[3], dataPage[2], DateTimeKind.Utc);
                     break;
                 case CommonDataPage.SubfieldData:
-                    try
-                    {
-                        SubfieldData = new SubfieldDataPage(dataPage);
-                    }
-                    catch (ArgumentOutOfRangeException ex)
-                    {
-                        _logger.LogError(ex, "{Func}: Invalid subfield data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
-                    }
+                    SubfieldData = new SubfieldDataPage(dataPage, _logger);
                     break;
                 case CommonDataPage.MemoryLevel:
                     MemoryLevel = new MemoryLevelPage(dataPage);
                     break;
                 case CommonDataPage.PairedDevices:
-                    _logger.LogWarning("{Func}: Paired devices data page not implemented. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    _logger.LogIgnoredDataPage<CommonDataPage>(dataPage);
                     break;
                 case CommonDataPage.ErrorDescription:
                     ErrorDescription = new ErrorDescriptionPage(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("{Func}: Unknown data page. Page = {Page}", nameof(ParseCommonDataPage), BitConverter.ToString(dataPage));
+                    _logger.LogUnknownDataPage(dataPage);
                     break;
             }
         }

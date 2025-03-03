@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -79,7 +79,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
 
         private void ParseCalibrationPage(byte[] page)
         {
-            _logger.LogDebug("CalibrationResponseId: {Id}", (CalibrationResponseId)page[1]);
             switch ((CalibrationResponseId)page[1])
             {
                 case CalibrationResponseId.AutoZeroSupport:
@@ -102,7 +101,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     CustomCalibrationParameters = page.Skip(2).ToArray();
                     break;
                 default:
-                    _logger.LogWarning("Unknown CalibrationResponseId = {CalibrationResponseId}.", page[1]);
+                    _logger.LogUnknownDataPage<CalibrationResponseId>(page[1], page);
                     break;
             }
         }
@@ -124,16 +123,16 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             return await SendExtAcknowledgedMessage(new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibration, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
-        /// <summary>Sets the custom calibration parameters. This is manufacturer specified limited to a
-        /// maximum of 6 bytes.</summary>
-        /// <param name="customParameters">The custom parameters. Defined by the manufacturer.</param>
+        /// <summary>Sets the custom calibration parameters. This is manufacturer specified.
+        /// 6 bytes must be passed in the call.</summary>
+        /// <param name="customParameters">The custom parameters. Defined by the manufacturer. 6 bytes in length.</param>
         /// <returns>Status of the request.</returns>
         /// <exception cref="System.ArgumentException">Custom parameters must be 6 bytes in length.</exception>
         public async Task<MessagingReturnCode> SetCustomParameters(byte[] customParameters)
         {
             if (customParameters.Length != 6)
             {
-                throw new ArgumentException("Custom parameters must be 6 bytes in length.");
+                throw new ArgumentException("Custom parameters must be 6 bytes in length.", nameof(customParameters));
             }
             CalibrationStatus = CalibrationResponse.InProgress;
             byte[] msg = new byte[] { (byte)DataPage.Calibration, (byte)CalibrationRequestId.CustomCalibrationUpdate };

@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading.Tasks;
@@ -253,7 +253,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
                     break;
                 default:
-                    _logger.LogWarning("Unknown SubPage - {SubPage}.", dataPage[1]);
+                    _logger.LogUnknownDataPage<SubPage>(dataPage[1], dataPage);
                     break;
             }
         }
@@ -321,7 +321,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             // valid range is 0 to 100 percent
             if (threshold < 0 || threshold > 100)
             {
-                throw new ArgumentOutOfRangeException("Parameter threshold range is 0 to 100 percent.");
+                throw new ArgumentOutOfRangeException("Parameter threshold is invalid.", nameof(threshold));
             }
             byte peak = (byte)(threshold / 0.5);
             byte[] msg = new byte[] { (byte)DataPage.GetSetParameters, (byte)SubPage.PowerPhaseConfiguration, peak, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };

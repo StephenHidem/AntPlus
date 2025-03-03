@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Linq;
@@ -180,7 +181,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
                     Stopped = dataPage[1] == 0x01;
                     break;
                 default:
-                    _logger.LogWarning("{Func}: unknown data page. Page = {Page}", nameof(Parse), BitConverter.ToString(dataPage));
+                    _logger.LogUnknownDataPage(dataPage);
                     break;
             }
         }

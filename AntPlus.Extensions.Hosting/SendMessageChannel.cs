@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading;
@@ -85,11 +86,11 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     .ContinueWith(antecedent =>
                     {
                         int index = antecedent.Result;
-                        _logger.LogDebug("SendExtAcknowledgedDataAsync: Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, data = {Data}", index, channelId.Id, BitConverter.ToString(data));
+                        _logger.LogSendAcknowledgedMessage(index, channelId.Id, data, null);
                         _channels[index].SendExtAcknowledgedDataAsync(channelId, data, ackWaitTime)
                         .ContinueWith(innerAntecedent =>
                         {
-                            _logger.LogDebug("SendExtAcknowledgedDataAsync: Channel index = {ChannelIndex}, channel ID = 0x{ChannelId:X8}, result = {Result}", index, channelId.Id, innerAntecedent.Result);
+                            _logger.LogSendAcknowledgedMessage(index, channelId.Id, data, innerAntecedent.Result);
                             lock (_channelLock)
                             {
                                 // unassign then assign the channel to reset the channel if the result is timeout
@@ -128,10 +129,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                         // find an available channel
                         while ((i = Array.FindIndex(_busyFlags, flag => !flag)) == -1)
                         {
-                            _logger.LogDebug("GetAvailableChannelIndexAsync: All channels are busy");
                             Monitor.Wait(_channelLock);
                         }
-                        _logger.LogDebug("GetAvailableChannelIndexAsync: _busyFlags = {BusyFlags}, channel index = {ChannelIndex}", _busyFlags, i);
                         _busyFlags[i] = true;
                     }
                     return i;

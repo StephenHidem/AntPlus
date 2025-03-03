@@ -20,6 +20,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             _mockRepository = new MockRepository(MockBehavior.Default);
             _mockAntChannel = _mockRepository.Create<IAntChannel>();
             _mockLogger = _mockRepository.Create<ILogger<CrankTorqueFrequencySensor>>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
             _crankTorqueFrequencySensor = new CrankTorqueFrequencySensor(new ChannelId(0), _mockAntChannel.Object, _mockLogger.Object, 2000);
         }
 
@@ -134,10 +135,11 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         }
 
         [Theory]
-        [InlineData(new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, "Unknown calibration data page")]
-        [InlineData(new byte[] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, "Unknown CTF ID")]
-        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, "Unknown CTF acknowledged ID")]
-        public void ParseUnknownCTFDefinedId_LogsWarning(byte[] dataPage, string message)
+        [InlineData(new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3001)]
+        [InlineData(new byte[] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3001)]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3001)]
+        [InlineData(new byte[] { 0x02, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 }, 3000)]
+        public void ParseUnknownCTFDefinedId_LogsWarning(byte[] dataPage, int eventId)
         {
             // Arrange
 
@@ -148,8 +150,8 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
             _mockLogger.Verify(
                 m => m.Log(
                     LogLevel.Warning,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains(message)),
+                    It.Is<EventId>(v => v.Id == eventId),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);

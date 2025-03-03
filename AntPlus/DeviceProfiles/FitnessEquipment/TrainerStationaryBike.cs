@@ -221,7 +221,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     }
                     break;
                 case DataPage.TrainerStationaryBikeData:
-                    HandleFEState(dataPage[7]);
+                    HandleFEState(dataPage);
                     InstantaneousCadence = dataPage[2];
                     InstantaneousPower = BitConverter.ToUInt16(dataPage, 5) & 0x0FFF;
                     TrainerStatus = (TrainerStatusField)(dataPage[6] & 0x70);
@@ -245,7 +245,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     }
                     break;
                 case DataPage.TrainerTorqueData:
-                    HandleFEState(dataPage[7]);
+                    HandleFEState(dataPage);
                     TrainerTorque.Parse(dataPage);
                     break;
                 default:

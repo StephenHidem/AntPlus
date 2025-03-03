@@ -61,7 +61,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
             if ((DataPage)dataPage[0] == DataPage.RowerData)
             {
-                HandleFEState(dataPage[7]);
+                HandleFEState(dataPage);
                 if (isFirstDataMessage)
                 {
                     isFirstDataMessage = false;

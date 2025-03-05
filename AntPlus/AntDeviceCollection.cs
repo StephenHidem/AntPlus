@@ -100,7 +100,15 @@ namespace SmallEarthTech.AntPlus
                     }
 
                     // re-open the channel in scan mode
-                    _ = ((IAntControl)_antRadio).OpenRxScanMode();
+                    if (_antRadio is IAntControl antControl)
+                    {
+                        _logger.LogError("Re-opening channel 0 in scan mode.");
+                        _ = antControl.OpenRxScanMode();
+                    }
+                    else
+                    {
+                        _logger.LogCritical("IAntControl not implemented. Can't re-open channel 0.");
+                    }
                     break;
                 case MessageId.BroadcastData:
                 case MessageId.ExtBroadcastData:
@@ -112,7 +120,7 @@ namespace SmallEarthTech.AntPlus
                     }
 
                     // see if the device is in the collection
-                    AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId!.Id);
+                    AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
 
                     // create the device if not in the collection
                     if (device == null)

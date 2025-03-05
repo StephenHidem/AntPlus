@@ -1,0 +1,151 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "AntConfigurationGrpcService";
+
+package AntRadioPackage;
+
+import "google/protobuf/wrappers.proto";
+
+// AdvancedBurstConfigFlags
+enum AdvancedBurstConfigFlags {
+    // enum type unspecified
+    ADVANCED_BURST_CONFIG_TYPE_UNSPECIFIED = 0X00;
+    // frequency hop enable
+    FREQUENCY_HOP_ENABLE = 0X00000001;
+}
+
+// EventBufferConfig
+enum EventBufferConfig {
+    // buffer low priority events
+    BUFFER_LOW_PRIORITY_EVENTS = 0x00;
+    // buffer all events
+    BUFFER_ALL_EVENTS = 0x01;
+}
+
+// TransmitPower
+enum TransmitPower {
+    // minus 20 dB
+    MINUS_20DB = 0x00;
+    // minus 10 dB
+    MINUS_10DB = 0x01;
+    // minus 5 dB
+    MINUS_5DB = 0x02;
+    // 0 dB
+    TX_0DB = 0x03;
+}
+
+// IAntConfiguration service
+service gRPCAntConfiguration {
+    // Configures the advanced bursting
+    rpc ConfigureAdvancedBursting(ConfigureAdvancedBurstingRequest) returns (google.protobuf.BoolValue);
+    
+    // Configures the extended advanced bursting
+    rpc ConfigureAdvancedBurstingExt(ConfigureAdvancedBurstingExtRequest) returns (google.protobuf.BoolValue);
+    
+    // Configures the advanced burst splitting
+    rpc ConfigureAdvancedBurstSplitting(google.protobuf.BoolValue) returns (google.protobuf.BoolValue);
+    
+    // Configures the event buffer
+    rpc ConfigureEventBuffer(ConfigureEventBufferRequest) returns (google.protobuf.BoolValue);
+    
+    // Configures the event filter
+    rpc ConfigureEventFilter(ConfigureEventFilterRequest) returns (google.protobuf.BoolValue);
+    
+    // Configures the high duty search
+    rpc ConfigureHighDutySearch(ConfigureHighDutySearchRequest) returns (google.protobuf.BoolValue);
+    
+    // Configures the user NVM
+    rpc ConfigureUserNvm(ConfigureUserNvmRequest) returns (google.protobuf.BoolValue);
+    
+    // Crystal enable
+    rpc CrystalEnable(CrystalEnableRequest) returns (google.protobuf.BoolValue);
+    
+    // Enables the LED
+    rpc EnableLED(EnableLEDRequest) returns (google.protobuf.BoolValue);
+    
+    // Enables Rx extended messages
+    rpc EnableRxExtendedMessages(EnableRxExtendedMessagesRequest) returns (google.protobuf.BoolValue);
+    
+    // Sets the library configuration
+    rpc SetLibConfig(SetLibConfigRequest) returns (google.protobuf.BoolValue);
+    
+    // Sets the network key
+    rpc SetNetworkKey(SetNetworkKeyRequest) returns (google.protobuf.BoolValue);
+    
+    // Sets the transmit power for all channels
+    rpc SetTransmitPowerForAllChannels(SetTransmitPowerForAllChannelsRequest) returns (google.protobuf.BoolValue);
+}
+
+// Request and Response messages
+message ConfigureAdvancedBurstingRequest {
+    bool enable = 1;
+    uint32 maxPacketLength = 2;
+    AdvancedBurstConfigFlags requiredFields = 3;
+    AdvancedBurstConfigFlags optionalFields = 4;
+    uint32 responseWaitTime = 5;
+}
+
+message ConfigureAdvancedBurstingExtRequest {
+    bool enable = 1;
+    uint32 maxPacketLength = 2;
+    AdvancedBurstConfigFlags requiredFields = 3;
+    AdvancedBurstConfigFlags optionalFields = 4;
+    uint32 stallCount = 5;
+    uint32 retryCount = 6;
+    uint32 responseWaitTime = 7;
+}
+
+message ConfigureEventBufferRequest {
+    EventBufferConfig config = 1;
+    uint32 size = 2;
+    uint32 time = 3;
+    uint32 responseWaitTime = 4;
+}
+
+message ConfigureEventFilterRequest {
+    uint32 eventFilter = 1;
+    uint32 responseWaitTime = 2;
+}
+
+message ConfigureHighDutySearchRequest {
+    bool enable = 1;
+    uint32 suppressionCycles = 2;
+    uint32 responseWaitTime = 3;
+}
+
+message ConfigureUserNvmRequest {
+    uint32 address = 1;
+    bytes data = 2;
+    uint32 size = 3;
+    uint32 responseWaitTime = 4;
+}
+
+message CrystalEnableRequest {
+    uint32 responseWaitTime = 1;
+}
+
+message EnableLEDRequest {
+    bool isEnabled = 1;
+    uint32 responseWaitTime = 2;
+}
+
+message EnableRxExtendedMessagesRequest {
+    bool isEnabled = 1;
+    uint32 responseWaitTime = 2;
+}
+
+message SetLibConfigRequest {
+    int32 libConfigFlags = 1;   // LibConfigFlags conversion must be done in the client and server
+    uint32 responseWaitTime = 2;
+}
+
+message SetNetworkKeyRequest {
+    uint32 netNumber = 1;
+    bytes networkKey = 2;
+    uint32 responseWaitTime = 3;
+}
+
+message SetTransmitPowerForAllChannelsRequest {
+    TransmitPower transmitPower = 1;
+    uint32 responseWaitTime = 2;
+}

@@ -1,0 +1,56 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "AntControlGrpcService";
+
+package AntRadioPackage;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+// The ANT radio control gRPC service.
+service gRPCAntControl {
+	// Opens channel 0 in continuous scan mode.
+	rpc OpenRxScanMode (OpenRxScanModeRequest) returns (google.protobuf.BoolValue);
+	// Requests a specific message from the ANT radio.
+	rpc RequestMessage (RequestMessageRequest) returns (google.protobuf.Empty);
+	// Resets the ANT radio.
+	rpc ResetSystem (ResetSystemRequest) returns (google.protobuf.BoolValue);
+}
+
+// Message ID of request. Note: Where desired, raw byte values can be cast to the enum type. IE: <c>(RequestMessageID)0x4E</c> will compile.
+enum RequestMessageID {
+	// Undefined message ID.
+	REQUEST_MESSAGE_ID_UNDEFINED = 0;
+    // The version number.
+    REQUEST_MESSAGE_ID_VERSION = 0x3E;
+    // The channel identifier.
+    REQUEST_MESSAGE_ID_CHANNEL_ID = 0x51;
+    // The channel status.
+    REQUEST_MESSAGE_ID_CHANNEL_STATUS = 0x52;
+    // The ANT radio capabilities.
+    REQUEST_MESSAGE_ID_CAPABILITIES = 0x54;
+    // The serial number.
+    REQUEST_MESSAGE_ID_SERIAL_NUMBER = 0x61;
+    // The user NVM.
+    REQUEST_MESSAGE_ID_USER_NVM = 0x7C;
+}
+
+// Request to open channel 0 in continuous scan mode.
+message OpenRxScanModeRequest {
+	// The response wait time in milliseconds.
+	uint32 response_wait_time = 1;
+}
+
+// Request to request a specific message from the ANT radio.
+message RequestMessageRequest {
+	// The message identifier.
+	RequestMessageID message_id = 1;
+	// The channel number.
+	uint32 channel_number = 2;
+}
+
+// Request to reset the ANT radio.
+message ResetSystemRequest {
+	// The response wait time in milliseconds.
+	uint32 response_wait_time = 1;
+}

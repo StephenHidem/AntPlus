@@ -1,4 +1,6 @@
-﻿using AntRadioGrpcService;
+﻿using AntConfigurationGrpcService;
+using AntControlGrpcService;
+using AntRadioGrpcService;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
@@ -15,7 +17,7 @@ namespace AntGrpcShared.ClientServices
     /// <summary>
     /// Service for interacting with ANT radio using gRPC.
     /// </summary>
-    public class AntRadioService : IAntRadio
+    public partial class AntRadioService : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
@@ -97,6 +99,8 @@ namespace AntGrpcShared.ClientServices
                     UriBuilder uriBuilder = new UriBuilder("http", ServerIPAddress.ToString(), gRPCPort);
                     _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
+                    _control = new gRPCAntControl.gRPCAntControlClient(_grpcChannel);
+                    _config = new gRPCAntConfiguration.gRPCAntConfigurationClient(_grpcChannel);
                     PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
                     ProductDescription = reply.ProductDescription;
                     SerialNumber = reply.SerialNumber;

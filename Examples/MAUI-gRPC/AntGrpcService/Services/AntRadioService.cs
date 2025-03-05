@@ -98,7 +98,7 @@ namespace AntGrpcService.Services
 
         public override Task<AntResponseReply> RequestMessageAndResponse(RequestMessageAndResponseRequest request, ServerCallContext context)
         {
-            AntResponse result = _antRadio.RequestMessageAndResponse((SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime, (byte)request.ChannelNumber); ;
+            AntResponse result = _antRadio.RequestMessageAndResponse((SmallEarthTech.AntRadioInterface.RequestMessageID)request.MsgId, request.WaitResponseTime, (byte)request.ChannelNumber);
             return Task.FromResult(FromAntResponse(result));
         }
 

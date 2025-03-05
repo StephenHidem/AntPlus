@@ -15,7 +15,6 @@ namespace SmallEarthTech.AntRadioInterface
     /// <summary>
     /// Event groups for configuring Event Buffering
     /// </summary>
-    [Flags]
     public enum EventBufferConfig : byte
     {
         /// <summary>The buffer low priority events</summary>
@@ -30,8 +29,8 @@ namespace SmallEarthTech.AntRadioInterface
     [Flags]
     public enum LibConfigFlags
     {
-        /// <summary>The radio configuration always</summary>
-        RadioConfigAlways = 0x01,
+        /// <summary>The disable extended RX messages</summary>
+        DisableExtendedRxMessages = 0x00,
         /// <summary>The message out inc time stamp</summary>
         MesgOutIncTimeStamp = 0x20,
         /// <summary>The message out inc RSSI</summary>

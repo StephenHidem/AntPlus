@@ -19,6 +19,7 @@
     <None Remove="ant_channel.proto" />
     <None Remove="ant_configuration.proto" />
     <None Remove="ant_control.proto" />
+    <None Remove="ant_crypto.proto" />
     <None Remove="ant_radio.proto" />
   </ItemGroup>
 
@@ -40,6 +41,7 @@
     <Protobuf Include="ant_channel.proto" GrpcServices="Both" />
     <Protobuf Include="ant_configuration.proto" />
     <Protobuf Include="ant_control.proto" />
+    <Protobuf Include="ant_crypto.proto" />
     <Protobuf Include="ant_radio.proto" />
   </ItemGroup>
 

@@ -5,14 +5,9 @@ using SmallEarthTech.AntRadioInterface;
 
 namespace AntGrpcService.Services
 {
-    public class AntControlService : gRPCAntControl.gRPCAntControlBase
+    public class AntControlService(IAntRadio antRadio) : gRPCAntControl.gRPCAntControlBase
     {
-        private readonly IAntControl _antRadio;
-
-        public AntControlService(IAntRadio antRadio)
-        {
-            _antRadio = (IAntControl)antRadio;
-        }
+        private readonly IAntControl _antRadio = (IAntControl)antRadio;
 
         public override Task<BoolValue> OpenRxScanMode(OpenRxScanModeRequest request, ServerCallContext context)
         {

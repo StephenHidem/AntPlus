@@ -11,6 +11,10 @@
 	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+   <LangVersion>9.0</LangVersion>
+</PropertyGroup>
+
   <ItemGroup>
     <None Remove="ant_channel.proto" />
     <None Remove="ant_configuration.proto" />

@@ -75,11 +75,11 @@ namespace AntGrpcShared.ClientServices
         /// <exception cref="OperationCanceledException">Thrown when the CancellationTokenSource is canceled.</exception>
         public async Task FindAntRadioServerAsync()
         {
-            IPEndPoint multicastEndPoint = new IPEndPoint(grpAddress, multicastPort);
+            IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);
             byte[] req = Encoding.ASCII.GetBytes("MauiAntGrpcClient discovery request");
 
             // initiate receive
-            using UdpClient udpClient = new UdpClient(0);
+            using UdpClient udpClient = new(0);
             Task<UdpReceiveResult> receiveTask = udpClient.ReceiveAsync();
 
             // loop every 2 seconds sending a message to the any listening servers
@@ -96,7 +96,7 @@ namespace AntGrpcShared.ClientServices
                     string msg = Encoding.ASCII.GetString(result.Buffer);
                     _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
 
-                    UriBuilder uriBuilder = new UriBuilder("http", ServerIPAddress.ToString(), gRPCPort);
+                    UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
                     _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
                     _control = new gRPCAntControl.gRPCAntControlClient(_grpcChannel);

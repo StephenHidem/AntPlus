@@ -10,7 +10,7 @@ namespace MauiAntGrpcClient.ViewModels
         private bool _shutdown;
 
         [ObservableProperty]
-        private BikeRadar? bikeRadar;
+        public partial BikeRadar? BikeRadar { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

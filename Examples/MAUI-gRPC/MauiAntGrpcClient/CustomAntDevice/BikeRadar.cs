@@ -60,19 +60,19 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public partial class RadarTarget : ObservableObject
         {
             [ObservableProperty]
-            private ThreatLevel threatLevel;
+            public partial ThreatLevel ThreatLevel { get; set; }
             [ObservableProperty]
-            private ThreatSide threatSide;
+            public partial ThreatSide ThreatSide { get; set; }
             [ObservableProperty]
-            private double range;
+            public partial double Range { get; set; }
             [ObservableProperty]
-            private double closingSpeed;
+            public partial double ClosingSpeed { get; set; }
         }
 
         [ObservableProperty]
-        private DeviceState state;
+        public partial DeviceState State { get; set; }
         [ObservableProperty]
-        private bool clearTargets;
+        public partial bool ClearTargets { get; set; }
         public List<RadarTarget> RadarTargets { get; } = [];
         public CommonDataPages CommonDataPages { get; }
         #endregion

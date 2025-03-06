@@ -8,7 +8,7 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class SDMViewModel : ObservableObject
     {
         [ObservableProperty]
-        private StrideBasedSpeedAndDistance? strideSpeedDistanceMonitor;
+        public partial StrideBasedSpeedAndDistance? StrideSpeedDistanceMonitor { get; set; }
 
         [RelayCommand]
         private async Task RequestSummary() => _ = await StrideSpeedDistanceMonitor!.RequestSummaryPage();

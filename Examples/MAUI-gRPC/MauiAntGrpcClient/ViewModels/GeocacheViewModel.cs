@@ -13,21 +13,25 @@ namespace MauiAntGrpcClient.ViewModels
         [NotifyCanExecuteChangedFor(nameof(RequestAuthenticationCommand))]
         [NotifyCanExecuteChangedFor(nameof(ProgramGeocacheCommand))]
         [NotifyCanExecuteChangedFor(nameof(EraseGeocacheCommand))]
-        private bool isBusy;
+        public partial bool IsBusy { get; set; }
 
         [ObservableProperty]
-        private Geocache? geocache;
+        public partial Geocache? Geocache { get; set; }
 
         [ObservableProperty]
-        private uint pin;
+        public partial uint Pin { get; set; }
+
         [ObservableProperty]
-        private string trackableId = string.Empty;
+        public partial string TrackableId { get; set; } = string.Empty;
+
         [ObservableProperty]
-        private double? latitude;
+        public partial double? Latitude { get; set; }
+
         [ObservableProperty]
-        private double? longitude;
+        public partial double? Longitude { get; set; }
+
         [ObservableProperty]
-        private string hint = string.Empty;
+        public partial string Hint { get; set; } = string.Empty;
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

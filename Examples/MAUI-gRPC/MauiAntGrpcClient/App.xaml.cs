@@ -11,14 +11,12 @@ namespace MauiAntGrpcClient
         {
             _cts = cancellationTokenSource;
             InitializeComponent();
-
-            MainPage = new AppShell();
         }
 
         // This is the simplest way to handle cross-platform application lifecycle event handling
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = base.CreateWindow(activationState);
+            Window window = new(new AppShell());
             window.Destroying += (s, e) =>
             {
                 Debug.WriteLine("App: destroying window.");

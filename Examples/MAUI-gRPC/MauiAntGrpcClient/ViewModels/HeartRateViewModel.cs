@@ -10,26 +10,32 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class HeartRateViewModel : ObservableObject, IQueryAttributable
     {
         [ObservableProperty]
-        private HeartRate? heartRate;
+        public partial HeartRate? HeartRate { get; set; }
 
         [ObservableProperty]
-        private SportMode modeRequested;
+        public partial SportMode ModeRequested { get; set; }
+
         [ObservableProperty]
-        private bool applyFeature;
+        public partial bool ApplyFeature { get; set; }
+
         [ObservableProperty]
-        private bool enableGymMode;
+        public partial bool EnableGymMode { get; set; }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor("SetGymModeCommand")]
-        private bool isGymModeSupported;
+        public partial bool IsGymModeSupported { get; set; }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor("SetSportModeCommand")]
-        private bool isRunningSupported;
+        public partial bool IsRunningSupported { get; set; }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor("SetSportModeCommand")]
-        private bool isCyclingSupported;
+        public partial bool IsCyclingSupported { get; set; }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor("SetSportModeCommand")]
-        private bool isSwimmingSupported;
+        public partial bool IsSwimmingSupported { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

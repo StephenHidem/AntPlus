@@ -5,14 +5,9 @@ using SmallEarthTech.AntRadioInterface;
 
 namespace AntGrpcService.Services
 {
-    public class AntConfigurationService : gRPCAntConfiguration.gRPCAntConfigurationBase
+    public class AntConfigurationService(IAntRadio antRadio) : gRPCAntConfiguration.gRPCAntConfigurationBase
     {
-        private readonly IAntConfiguration _config;
-
-        public AntConfigurationService(IAntRadio antRadio)
-        {
-            _config = (IAntConfiguration)antRadio;
-        }
+        private readonly IAntConfiguration _config = (IAntConfiguration)antRadio;
 
         // implement gRCPAntConfiguration.gRPCAntConfigurationBase methods
         override public Task<BoolValue> ConfigureAdvancedBursting(ConfigureAdvancedBurstingRequest request, ServerCallContext context)

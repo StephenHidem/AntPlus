@@ -9,7 +9,7 @@ namespace MauiAntGrpcClient.ViewModels
     {
         private readonly ILogger<UnknownDeviceViewModel> _logger;
         [ObservableProperty]
-        private UnknownDevice unknownDevice = null!;
+        public partial UnknownDevice UnknownDevice { get; set; } = null!;
 
         public UnknownDeviceViewModel(ILogger<UnknownDeviceViewModel> logger)
         {

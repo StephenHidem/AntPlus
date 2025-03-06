@@ -20,6 +20,8 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+		<LangVersion>preview</LangVersion>
 
 		<!-- Display name -->
 		<ApplicationTitle>MauiAntGrpcClient</ApplicationTitle>

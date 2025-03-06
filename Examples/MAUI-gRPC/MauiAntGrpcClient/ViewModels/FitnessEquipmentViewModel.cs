@@ -9,31 +9,37 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class FitnessEquipmentViewModel : ObservableObject, IQueryAttributable
     {
         [ObservableProperty]
-        private FitnessEquipment? fitnessEquipment;
+        public partial FitnessEquipment? FitnessEquipment { get; set; }
         [ObservableProperty]
-        private ContentView? specificEquipmentView;
+        public partial ContentView? SpecificEquipmentView { get; set; }
 
         [ObservableProperty]
-        private double userWeight;
+        public partial double UserWeight { get; set; }
+
         [ObservableProperty]
-        private byte wheelDiameterOffset;
+        public partial byte WheelDiameterOffset { get; set; }
+
         [ObservableProperty]
-        private double bikeWeight;
+        public partial double BikeWeight { get; set; }
+
         [ObservableProperty]
-        private double wheelDiameter;
+        public partial double WheelDiameter { get; set; }
+
         [ObservableProperty]
-        private double gearRatio;
+        public partial double GearRatio { get; set; }
+
         [ObservableProperty]
-        private TimeSpan lapSplitTime;
+        public partial TimeSpan LapSplitTime { get; set; }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
             nameof(SetBasicResistanceCommand),
             nameof(SetTargetPowerCommand),
             nameof(SetWindResistanceCommand),
             nameof(SetTrackResistanceCommand))]
-        private SupportedTrainingModes supportedTrainingModes;
+        public partial SupportedTrainingModes SupportedTrainingModes { get; set; }
         [ObservableProperty]
-        private string[]? capabilities;
+        public partial string[]? Capabilities { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

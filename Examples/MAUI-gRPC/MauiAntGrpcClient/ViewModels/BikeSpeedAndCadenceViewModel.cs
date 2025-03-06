@@ -7,6 +7,6 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class BikeSpeedAndCadenceViewModel : ObservableObject
     {
         [ObservableProperty]
-        private CombinedSpeedAndCadenceSensor? combinedSpeedAndCadenceSensor;
+        public partial CombinedSpeedAndCadenceSensor? CombinedSpeedAndCadenceSensor { get; set; }
     }
 }

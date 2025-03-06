@@ -9,7 +9,7 @@ namespace MauiAntGrpcClient.ViewModels
         private readonly ILogger<AssetTrackerViewModel> _logger = logger;
 
         [ObservableProperty]
-        private Tracker? tracker;
+        public partial Tracker? Tracker { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

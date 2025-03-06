@@ -1,0 +1,99 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "AntCryptoGrpcService";
+
+package AntRadioPackage;
+
+import "google/protobuf/wrappers.proto";
+
+// Service definition for ICrypto
+service gRPCAntCrypto {
+    // Crypto key NVM operation
+    rpc CryptoKeyNVMOp(CryptoKeyNVMOpRequest) returns (google.protobuf.BoolValue);
+    // Loads the crypto key from NVM
+    rpc LoadCryptoKeyFromNVM(LoadCryptoKeyFromNVMRequest) returns (google.protobuf.BoolValue);
+    // Sets the crypto identifier
+    rpc SetCryptoID(SetCryptoIDRequest) returns (google.protobuf.BoolValue);
+    // Sets the crypto information
+    rpc SetCryptoInfo(SetCryptoInfoRequest) returns (google.protobuf.BoolValue);
+    // Sets the crypto key
+    rpc SetCryptoKey(SetCryptoKeyRequest) returns (google.protobuf.BoolValue);
+    // Sets the crypto RNG seed
+    rpc SetCryptoRNGSeed(SetCryptoRNGSeedRequest) returns (google.protobuf.BoolValue);
+    // Sets the crypto user information
+    rpc SetCryptoUserInfo(SetCryptoUserInfoRequest) returns (google.protobuf.BoolValue);
+    // Stores the crypto key to NVM
+    rpc StoreCryptoKeyToNVM(StoreCryptoKeyToNVMRequest) returns (google.protobuf.BoolValue);
+}
+
+// Encryption non-volatile memory operations.
+enum EncryptionNVMOp {
+    // Load key from NVM
+    LOAD_KEY_FROM_NVM = 0x00;
+    // Store key to NVM
+    STORE_KEY_TO_NVM = 0x01;
+}
+
+// Encryption information.
+enum EncryptionInfo {
+    // Encryption identifier
+    ENCRYPTION_ID = 0x00;
+    // User information string
+    USER_INFO_STRING = 0x01;
+    // Random number seed
+    RANDOM_NUMBER_SEED = 0x02;
+}
+
+// Request message for CryptoKeyNVMOp
+message CryptoKeyNVMOpRequest {
+    EncryptionNVMOp memoryOperation = 1; // The memory operation
+    int32 nonVolatileKeyIndex = 2; // Index of the non volatile key
+    bytes operationData = 3; // The operation data
+    uint32 responseWaitTime = 4; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for LoadCryptoKeyFromNVM
+message LoadCryptoKeyFromNVMRequest {
+    int32 nonVolatileKeyIndex = 1; // Index of the non volatile key
+    int32 volatileKeyIndex = 2; // Index of the volatile key
+    uint32 responseWaitTime = 3; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for SetCryptoID
+message SetCryptoIDRequest {
+    bytes encryptionID = 1; // The encryption identifier
+    uint32 responseWaitTime = 2; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for SetCryptoInfo
+message SetCryptoInfoRequest {
+    EncryptionInfo encryptionParameter = 1; // The encryption parameter
+    bytes parameterData = 2; // The parameter data
+    uint32 responseWaitTime = 3; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for SetCryptoKey
+message SetCryptoKeyRequest {
+    int32 volatileKeyIndex = 1; // Index of the volatile key
+    bytes encryptionKey = 2; // The encryption key
+    uint32 responseWaitTime = 3; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for SetCryptoRNGSeed
+message SetCryptoRNGSeedRequest {
+    bytes cryptoRNGSeed = 1; // The crypto RNG seed
+    uint32 responseWaitTime = 2; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for SetCryptoUserInfo
+message SetCryptoUserInfoRequest {
+    bytes userInfoString = 1; // The user information string
+    uint32 responseWaitTime = 2; // The response wait time in milliseconds. The default is 0ms.
+}
+
+// Request message for StoreCryptoKeyToNVM
+message StoreCryptoKeyToNVMRequest {
+    int32 nonVolatileKeyIndex = 1; // Index of the non volatile key
+    bytes encryptionKey = 2; // The encryption key
+    uint32 responseWaitTime = 3; // The response wait time in milliseconds. The default is 0ms.
+}

@@ -1,5 +1,6 @@
 ﻿using AntConfigurationGrpcService;
 using AntControlGrpcService;
+using AntCryptoGrpcService;
 using AntRadioGrpcService;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
@@ -101,6 +102,7 @@ namespace AntGrpcShared.ClientServices
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
                     _control = new gRPCAntControl.gRPCAntControlClient(_grpcChannel);
                     _config = new gRPCAntConfiguration.gRPCAntConfigurationClient(_grpcChannel);
+                    _crypto = new gRPCAntCrypto.gRPCAntCryptoClient(_grpcChannel);
                     PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
                     ProductDescription = reply.ProductDescription;
                     SerialNumber = reply.SerialNumber;

@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<AssemblyVersion>5.1.0.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <Version>$(AssemblyVersion)</Version>
+    <VersionPrefix>5.1.0</VersionPrefix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>

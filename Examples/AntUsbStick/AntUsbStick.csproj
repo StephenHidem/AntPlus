@@ -53,16 +53,16 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<None Update="ANT_NET.dll" Pack="true" PackagePath="build\">
+		<None Update="win-x86\native\ANT_NET.dll" Pack="true" PackagePath="build\">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="ANT_WrappedLib.dll" Pack="true" PackagePath="build\">
+		<None Update="win-x86\native\ANT_WrappedLib.dll" Pack="true" PackagePath="build\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="DSI_CP210xManufacturing_3_1.dll" Pack="true" PackagePath="build\">
+		<None Update="win-x86\native\DSI_CP210xManufacturing_3_1.dll" Pack="true" PackagePath="build\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="DSI_SiUSBXp_3_1.dll" Pack="true" PackagePath="build\">
+		<None Update="win-x86\native\DSI_SiUSBXp_3_1.dll" Pack="true" PackagePath="build\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="PackageLogo.png">

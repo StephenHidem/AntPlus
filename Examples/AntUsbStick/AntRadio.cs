@@ -41,7 +41,6 @@ namespace SmallEarthTech.AntUsbStick
         /// <param name="logger">The logger</param>
         public AntRadio(ILogger<AntRadio> logger)
         {
-            var result = SetDllDirectory(".\\win-x86\\native");
             _logger = logger;
             _antDevice = new ANT_Device();
             _antDevice.deviceResponse += OnDeviceResponse;

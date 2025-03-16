@@ -34,13 +34,13 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
-    <PackageReference Include="SmallEarthTech.AntUsbStick" Version="3.1.2" />
     <PackageReference Include="System.ObjectModel" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\AntPlus.Extensions.Hosting\Hosting.csproj" />
     <ProjectReference Include="..\..\AntPlus\AntPlus.csproj" />
+    <ProjectReference Include="..\AntUsbStick\AntUsbStick.csproj" />
   </ItemGroup>
 
   <ItemGroup>

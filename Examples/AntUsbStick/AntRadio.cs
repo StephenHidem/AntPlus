@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,9 +10,6 @@ namespace SmallEarthTech.AntUsbStick
     /// <summary>This class implements the IAntRadio interface.</summary>
     public partial class AntRadio : IAntRadio, IDisposable
     {
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool SetDllDirectory(string NewDirectory);
-
         private readonly ILogger<AntRadio> _logger;
         private ANT_Device _antDevice;
         private IAntChannel[] _channels = new IAntChannel[0];

@@ -1,40 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<AssemblyVersion>3.1.1.0</AssemblyVersion>
-	<AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
-	<Version>$(AssemblyVersion)</Version>
-	<Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
-	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<Authors>Stephen Hidem</Authors>
-	<Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
-	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
-	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
-	<PublishRepositoryUrl>true</PublishRepositoryUrl>
-	<EmbedUntrackedSources>true</EmbedUntrackedSources>
-	<PackageReadmeFile>readme.md</PackageReadmeFile>
-	<PackageTags>ant; ant+; antplus; antusbstick; smallearthtech</PackageTags>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<IncludeSymbols>True</IncludeSymbols>
-	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<PackageId>$(AssemblyName)</PackageId>
-	<PackageIcon>PackageLogo.png</PackageIcon>
+    <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
+    <Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
+    <VersionPrefix>3.1.2</VersionPrefix>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Stephen Hidem</Authors>
+    <Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
+    <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
+    <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageTags>ant; ant+; antplus; antusbstick; smallearthtech</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageId>$(AssemblyName)</PackageId>
+    <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReleaseNotes>Incorporate change to AntResponse ResponseId property type.</PackageReleaseNotes>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Prefer32Bit>False</Prefer32Bit>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Prefer32Bit>False</Prefer32Bit>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+	  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
@@ -42,41 +40,43 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\AntRadioInterface\AntRadioInterface.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="ANT_NET">
       <HintPath>ANT_NET.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-	<ItemGroup>
-		<None Update="ANT_NET.dll" Pack="true" PackagePath="lib\netstandard2.0\">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
-		<None Update="ANT_WrappedLib.dll" Pack="true" PackagePath="build\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="DSI_CP210xManufacturing_3_1.dll" Pack="true" PackagePath="build\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="DSI_SiUSBXp_3_1.dll" Pack="true" PackagePath="build\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="PackageLogo.png">
-		  <PackagePath>\</PackagePath>
-		  <Pack>True</Pack>
-		</None>
-		<None Update="readme.md">
-		  <PackagePath>\</PackagePath>
-		  <Pack>True</Pack>
-		</None>
-		<None Include="$(PackageId).targets" Pack="true" PackagePath="build\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
+  <ItemGroup>
+    <None Update="ANT_NET.dll" Pack="true" PackagePath="lib\netstandard2.0\">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ANT_NET.xml" Pack="true" PackagePath="lib\netstandard2.0\">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ANT_NET.pdb" Pack="true" PackagePath="lib\netstandard2.0\">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ANT_WrappedLib.dll" Pack="true" PackagePath="build\win-x86\native\">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DSI_CP210xManufacturing_3_1.dll" Pack="true" PackagePath="build\win-x86\native\">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DSI_SiUSBXp_3_1.dll" Pack="true" PackagePath="build\win-x86\native\">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PackageLogo.png">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Update="readme.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="$(PackageId).targets" Pack="true" PackagePath="build\">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

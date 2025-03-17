@@ -1,4 +1,7 @@
-﻿using AntRadioGrpcService;
+﻿using AntConfigurationGrpcService;
+using AntControlGrpcService;
+using AntCryptoGrpcService;
+using AntRadioGrpcService;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
@@ -15,7 +18,7 @@ namespace AntGrpcShared.ClientServices
     /// <summary>
     /// Service for interacting with ANT radio using gRPC.
     /// </summary>
-    public class AntRadioService : IAntRadio
+    public partial class AntRadioService : IAntRadio
     {
         private readonly IPAddress grpAddress = IPAddress.Parse("239.55.43.6");
         private const int multicastPort = 55437;        // multicast port
@@ -73,11 +76,11 @@ namespace AntGrpcShared.ClientServices
         /// <exception cref="OperationCanceledException">Thrown when the CancellationTokenSource is canceled.</exception>
         public async Task FindAntRadioServerAsync()
         {
-            IPEndPoint multicastEndPoint = new IPEndPoint(grpAddress, multicastPort);
+            IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);
             byte[] req = Encoding.ASCII.GetBytes("MauiAntGrpcClient discovery request");
 
             // initiate receive
-            using UdpClient udpClient = new UdpClient(0);
+            using UdpClient udpClient = new(0);
             Task<UdpReceiveResult> receiveTask = udpClient.ReceiveAsync();
 
             // loop every 2 seconds sending a message to the any listening servers
@@ -94,9 +97,12 @@ namespace AntGrpcShared.ClientServices
                     string msg = Encoding.ASCII.GetString(result.Buffer);
                     _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
 
-                    UriBuilder uriBuilder = new UriBuilder("http", ServerIPAddress.ToString(), gRPCPort);
+                    UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
                     _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
+                    _control = new gRPCAntControl.gRPCAntControlClient(_grpcChannel);
+                    _config = new gRPCAntConfiguration.gRPCAntConfigurationClient(_grpcChannel);
+                    _crypto = new gRPCAntCrypto.gRPCAntCryptoClient(_grpcChannel);
                     PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
                     ProductDescription = reply.ProductDescription;
                     SerialNumber = reply.SerialNumber;

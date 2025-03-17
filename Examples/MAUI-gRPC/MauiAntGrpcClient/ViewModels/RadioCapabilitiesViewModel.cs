@@ -6,10 +6,10 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class RadioCapabilitiesViewModel : ObservableObject
     {
         [ObservableProperty]
-        private DeviceCapabilities? capabilities;
+        public partial DeviceCapabilities? Capabilities { get; set; }
 
         [ObservableProperty]
-        private List<string> flags = [];
+        public partial List<string> Flags { get; set; } = [];
 
         public RadioCapabilitiesViewModel(IAntRadio radioService)
         {
@@ -17,7 +17,7 @@ namespace MauiAntGrpcClient.ViewModels
             {
                 Capabilities = await radioService.GetDeviceCapabilities();
                 Flags = Capabilities.GetType().GetProperties().
-                    Where(t => t.PropertyType == typeof(bool) && (bool)t.GetValue(capabilities)!).
+                    Where(t => t.PropertyType == typeof(bool) && (bool)t.GetValue(Capabilities)!).
                     ToList().
                     ConvertAll<string>(e => e.Name);
                 Flags.Sort();

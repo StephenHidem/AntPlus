@@ -10,13 +10,15 @@ namespace MauiAntGrpcClient.ViewModels
         private bool started = false;
 
         [ObservableProperty]
-        private MuscleOxygen? muscleOxygen;
-        [ObservableProperty]
-        private int hours;
-        [ObservableProperty]
-        private int minutes;
+        public partial MuscleOxygen? MuscleOxygen { get; set; }
 
-        public static int[] HoursSource => Enumerable.Range(-15, 31).ToArray();
+        [ObservableProperty]
+        public partial int Hours { get; set; }
+
+        [ObservableProperty]
+        public partial int Minutes { get; set; }
+
+        public static int[] HoursSource => [.. Enumerable.Range(-15, 31)];
         public static int[] MinutesSource => [0, 15, 30, 45];
 
         [RelayCommand]

@@ -6,6 +6,18 @@
 version: 2
 updates:
   - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/AntPlus" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/AntRadioInterface" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/AntPlus.Extensions.Hosting" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/Examples/AntUsbStick" # Location of package manifests
     schedule:
       interval: "weekly"

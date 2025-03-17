@@ -9,13 +9,13 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class BicyclePowerViewModel : ObservableObject, IQueryAttributable
     {
         [ObservableProperty]
-        private StandardPowerSensor? sensor;
+        public partial StandardPowerSensor? Sensor { get; set; }
 
         [ObservableProperty]
-        private bool autoCrankLength;
+        public partial bool AutoCrankLength { get; set; }
 
         [ObservableProperty]
-        private ContentView? torqueSensorView;
+        public partial ContentView? TorqueSensorView { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

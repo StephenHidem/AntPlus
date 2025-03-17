@@ -11,19 +11,26 @@
 	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+   <LangVersion>9.0</LangVersion>
+</PropertyGroup>
+
   <ItemGroup>
     <None Remove="ant_channel.proto" />
+    <None Remove="ant_configuration.proto" />
+    <None Remove="ant_control.proto" />
+    <None Remove="ant_crypto.proto" />
     <None Remove="ant_radio.proto" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.29.3" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.69.0">
+    <PackageReference Include="Google.Protobuf" Version="3.30.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.70.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.71.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +39,9 @@
 
   <ItemGroup>
     <Protobuf Include="ant_channel.proto" GrpcServices="Both" />
+    <Protobuf Include="ant_configuration.proto" />
+    <Protobuf Include="ant_control.proto" />
+    <Protobuf Include="ant_crypto.proto" />
     <Protobuf Include="ant_radio.proto" />
   </ItemGroup>
 

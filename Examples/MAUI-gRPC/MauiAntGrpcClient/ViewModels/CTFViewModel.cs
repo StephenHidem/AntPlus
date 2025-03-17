@@ -7,7 +7,7 @@ namespace MauiAntGrpcClient.ViewModels
     public partial class CTFViewModel : ObservableObject, IQueryAttributable
     {
         [ObservableProperty]
-        private CrankTorqueFrequencySensor? sensor;
+        public partial CrankTorqueFrequencySensor? Sensor { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {

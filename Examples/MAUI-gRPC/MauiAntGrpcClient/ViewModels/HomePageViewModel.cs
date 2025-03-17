@@ -21,17 +21,22 @@ namespace MauiAntGrpcClient.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ShowRadioCapabilitiesCommand))]
-        private bool isBusy;
+        public partial bool IsBusy { get; set; }
+
         [ObservableProperty]
-        private IPAddress? serverIPAddress;
+        public partial IPAddress? ServerIPAddress { get; set; }
+
         [ObservableProperty]
-        private string? productDescription;
+        public partial string? ProductDescription { get; set; }
+
         [ObservableProperty]
-        private uint? serialNumber;
+        public partial uint? SerialNumber { get; set; }
+
         [ObservableProperty]
-        private string? hostVersion;
+        public partial string? HostVersion { get; set; }
+
         [ObservableProperty]
-        private AntCollection? antDevices;
+        public partial AntCollection? AntDevices { get; set; }
 
         public HomePageViewModel(IAntRadio antRadioService, AntCollection antCollection)
         {

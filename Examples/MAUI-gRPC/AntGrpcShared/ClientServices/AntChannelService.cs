@@ -22,7 +22,6 @@ namespace AntGrpcShared.ClientServices
     {
         private readonly ILogger _logger;
         private readonly byte _channelNumber;
-        private readonly GrpcChannel _grpcChannel;
         private readonly gRPCAntChannel.gRPCAntChannelClient _client;
 
         /// <inheritdoc/>
@@ -41,8 +40,7 @@ namespace AntGrpcShared.ClientServices
         {
             _logger = logger;
             _channelNumber = channelNumber;
-            _grpcChannel = grpcChannel;
-            _client = new gRPCAntChannel.gRPCAntChannelClient(_grpcChannel);
+            _client = new gRPCAntChannel.gRPCAntChannelClient(grpcChannel);
         }
 
         /// <summary>

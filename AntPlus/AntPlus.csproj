@@ -62,7 +62,7 @@
     <None Remove="Images\Geocache.png" />
     <None Remove="Images\HeartRate.png" />
     <None Remove="Images\MuscleOxygen.png" />
-    <None Remove="Images\SDM.PNG" />
+    <None Remove="Images\SDM.png" />
     <None Remove="Images\SpeedAndCadence.png" />
     <None Remove="Images\Unknown.png" />
   </ItemGroup>

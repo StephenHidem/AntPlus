@@ -194,7 +194,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <summary>Gets the common data pages.</summary>
         public CommonDataPages CommonDataPages { get; private set; }
         /// <inheritdoc/>
-        public override Stream DeviceImageStream => typeof(StrideBasedSpeedAndDistance).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.SDM.png");
+        public override Stream DeviceImageStream => typeof(StrideBasedSpeedAndDistance).Assembly.GetManifestResourceStream("SmallEarthTech.AntPlus.Images.StrideBasedSpeedDistance.png");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StrideBasedSpeedAndDistance"/> class.

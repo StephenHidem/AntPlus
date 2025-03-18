@@ -62,7 +62,6 @@
     <None Remove="Images\Geocache.png" />
     <None Remove="Images\HeartRate.png" />
     <None Remove="Images\MuscleOxygen.png" />
-    <None Remove="Images\SDM.png" />
     <None Remove="Images\SpeedAndCadence.png" />
     <None Remove="Images\Unknown.png" />
   </ItemGroup>
@@ -79,7 +78,7 @@
 	<EmbeddedResource Include="Images\Geocache.png" />
     <EmbeddedResource Include="Images\HeartRate.png" />
     <EmbeddedResource Include="Images\MuscleOxygen.png" />
-    <EmbeddedResource Include="Images\SDM.png" />
+    <EmbeddedResource Include="Images\StrideBasedSpeedDistance.png" />
     <EmbeddedResource Include="Images\SpeedAndCadence.png" />
     <EmbeddedResource Include="Images\Unknown.png" />
   </ItemGroup>

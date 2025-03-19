@@ -5,6 +5,8 @@
     <Nullable>disable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

@@ -23,8 +23,12 @@
     <PackageId>$(AssemblyName)</PackageId>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReleaseNotes>Incorporate change to AntResponse ResponseId property type.</PackageReleaseNotes>
+    <Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Prefer32Bit>False</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|AnyCPU'">
     <Prefer32Bit>False</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

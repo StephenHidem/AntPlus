@@ -25,6 +25,7 @@
 	<VersionPrefix>1.2.0</VersionPrefix>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
+	<Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

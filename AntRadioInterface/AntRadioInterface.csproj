@@ -23,6 +23,7 @@
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageReleaseNotes>Breaking change: Changed to AntResponse ResponseId property type from byte to MessageId.</PackageReleaseNotes>
+    <Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -35,6 +36,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|AnyCPU'" />
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
 

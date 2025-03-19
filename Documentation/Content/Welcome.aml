@@ -90,7 +90,7 @@
 				<para>
 					Introducing the Ant+ Hosting Extensions. It's also available as a NuGet package. The hosting extensions make it easy to add ANT+ and supporting classes
 					to dependency injection containers. The extensions support MAUI and other Windows applications that employ dependency injection. A nice benefit
-					leveraging DI is that it enables adding ANT device profiles that the ANT+ class library does not support.
+					of leveraging DI is that it enables adding ANT device profiles that the ANT+ class library does not support.
 				</para>
 			</content>
 		</section>
@@ -130,16 +130,6 @@
 						</para>
 					</listItem>
 				</list>
-			</content>
-		</section>
-
-		<section>
-			<title>Known Issues</title>
-			<content>
-				<para>
-					Launching SimulANT+ may close ANT radio acquired by any of the example applications. Restarting the example application restores
-					operation. Working on root cause and mitigation.
-				</para>
 			</content>
 		</section>
 

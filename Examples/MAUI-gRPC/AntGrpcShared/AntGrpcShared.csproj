@@ -9,6 +9,7 @@
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<AssemblyVersion>2.1.0.0</AssemblyVersion>
 	<Version>$(VersionPrefix)$(AssemblyVersion)</Version>
+	<Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>

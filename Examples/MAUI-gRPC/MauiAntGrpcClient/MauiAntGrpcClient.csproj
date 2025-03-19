@@ -40,13 +40,22 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<Configurations>Debug;Release;CITest</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
 	  <ApplicationVersion>1</ApplicationVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CITest|net9.0-android|AnyCPU'">
+	  <ApplicationVersion>1</ApplicationVersion>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.20348.0|AnyCPU'">
+	  <ApplicationVersion>1</ApplicationVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CITest|net9.0-windows10.0.20348.0|AnyCPU'">
 	  <ApplicationVersion>1</ApplicationVersion>
 	</PropertyGroup>
 

@@ -190,4 +190,7 @@
     </PostBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'CITest' ">
+    <OutputPath>bin\CITest\</OutputPath>
+  </PropertyGroup>
 </Project>

@@ -10,6 +10,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<Authors>Stephen Hidem</Authors>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
+	<Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

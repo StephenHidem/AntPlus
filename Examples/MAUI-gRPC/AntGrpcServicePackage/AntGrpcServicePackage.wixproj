@@ -1,11 +1,22 @@
 ﻿<Project Sdk="WixToolset.Sdk/5.0.0">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <Configurations>Debug;Release;CITest</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|x86'">
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <Configurations>Debug;Release;CITest</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|x64'">
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|ARM64'">
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -24,5 +35,5 @@
   <ItemGroup>
     <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />
   </ItemGroup>
-	<Target Name="CollectSuggestedVisualStudioComponentIds" />
+  <Target Name="CollectSuggestedVisualStudioComponentIds" />
 </Project>

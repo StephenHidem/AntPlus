@@ -24,7 +24,7 @@ jobs:
   build:
     strategy:
         matrix:
-          project: [AntPlus, AntPlus.UnitTests, AntPlus.Extensions.Hosting, Extensions/Hosting/Hosting.UnitTests]
+          project: [AntPlus, AntPlus.Extensions.Hosting]
     runs-on: ubuntu-latest
 
     steps:

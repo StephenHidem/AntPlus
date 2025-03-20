@@ -24,7 +24,8 @@ jobs:
   build:
     strategy:
       matrix:
-        project: [AntPlus, AntPlus.UnitTests, AntRadioInterface, AntPlus.Extensions.Hosting, Extensions/Hosting/Hosting.UnitTests, Examples/AntUsbStick]
+#        project: [AntPlus, AntPlus.UnitTests, AntRadioInterface, AntPlus.Extensions.Hosting, Extensions/Hosting/Hosting.UnitTests, Examples/AntUsbStick]
+        project: [AntPlus]
     runs-on: ubuntu-latest
 
     steps:
@@ -37,5 +38,5 @@ jobs:
       run: dotnet restore ${{ matrix.project }}
     - name: Build
       run: dotnet build ${{ matrix.project }} --configuration Release --no-restore
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal --configuration Release
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --configuration Release

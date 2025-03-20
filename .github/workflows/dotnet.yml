@@ -22,6 +22,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        project: [AntPlus, AntPlus.UnitTests, AntRadioInterface, AntPlus.Extensions.Hosting, Extensions/Hosting/Hosting.UnitTests, Examples/AntUsbStick]
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +34,7 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ matrix.project }} --no-cache
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test

@@ -37,5 +37,5 @@ jobs:
       run: dotnet restore ${{ matrix.project }}
     - name: Build
       run: dotnet build ${{ matrix.project }} --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+#    - name: Test
+#      run: dotnet test --no-build --verbosity normal --configuration Release

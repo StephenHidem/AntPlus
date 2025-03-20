@@ -34,7 +34,7 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore ${{ matrix.project }} --no-cache
+      run: dotnet restore ${{ matrix.project }}
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test

@@ -20,13 +20,13 @@
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
-	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
         1. Updated ANT+ logging with ANT+ logging extensions. 2. The scanning channel is re-opened if a close RF event is received.
     </PackageReleaseNotes>
-	<Configurations>Debug;Release;CITest</Configurations>
+	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -39,10 +39,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;1573</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|AnyCPU'">
     <NoWarn>1701;1702;1573</NoWarn>
   </PropertyGroup>
 

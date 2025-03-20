@@ -22,9 +22,6 @@ on:
 
 jobs:
   build:
-    strategy:
-        matrix:
-          project: [AntRadioInterface, AntPlus, AntPlus.Extensions.Hosting, Examples/AntUsbStick]
     runs-on: ubuntu-latest
 
     steps:
@@ -34,8 +31,8 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore ${{ matrix.project }}
+      run: dotnet restore
     - name: Build
-      run: dotnet build ${{ matrix.project }} --configuration CITest --no-restore
+      run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration CITest
+      run: dotnet test --no-build --verbosity normal --configuration Release

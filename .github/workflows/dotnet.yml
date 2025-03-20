@@ -24,7 +24,7 @@ jobs:
   build:
     strategy:
         matrix:
-          project: [AntPlus, AntPlus.Extensions.Hosting]
+          project: [AntRadioInterface, AntPlus, AntPlus.Extensions.Hosting, Examples/AntUsbStick]
     runs-on: ubuntu-latest
 
     steps:

@@ -93,7 +93,7 @@ jobs:
       run: |
         echo 'Building C# project'
         # dotnet restore
-        dotnet build --configuration Debug
+        dotnet build --configuration Release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

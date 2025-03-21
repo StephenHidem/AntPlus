@@ -22,9 +22,6 @@ on:
 
 jobs:
   build:
-    strategy:
-        matrix:
-          project: [AntPlus, AntPlus.Extensions.Hosting]
     runs-on: ubuntu-latest
 
     steps:
@@ -33,9 +30,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-    - name: Restore dependencies
-      run: dotnet restore ${{ matrix.project }}
+# Skip restoring dependencies as we are using the new SDK-style project format
+#    - name: Restore dependencies
+#      run: dotnet restore ${{ matrix.project }}
     - name: Build
-      run: dotnet build ${{ matrix.project }} --configuration CITest --no-restore
+      run: dotnet build --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration CITest
+      run: dotnet test --no-build --verbosity minimal --configuration Release

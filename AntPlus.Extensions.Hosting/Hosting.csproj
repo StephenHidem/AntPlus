@@ -11,7 +11,7 @@
     <Copyright>© $(Authors) 2024. All rights reserved.</Copyright>
     <Description>Useful ANT+ extensions for hosting in DI containers. Simple and easy to use! Includes support for .NET MAUI and Windows apps.</Description>
     <PackageTags>ant; ant+; antplus; smallearthtech</PackageTags>
-	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild Condition="$(Configuration) == 'Release'">True</GeneratePackageOnBuild>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<PackageIcon>PackageLogo.png</PackageIcon>
@@ -25,7 +25,7 @@
 	<VersionPrefix>1.2.0</VersionPrefix>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
-	<Configurations>Debug;Release;CITest</Configurations>
+	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

@@ -7,7 +7,7 @@
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
     <Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
     <VersionPrefix>3.1.2</VersionPrefix>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild Condition="$(Configuration) == 'Release'">True</GeneratePackageOnBuild>
     <Authors>Stephen Hidem</Authors>
     <Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
@@ -23,12 +23,9 @@
     <PackageId>$(AssemblyName)</PackageId>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReleaseNotes>Incorporate change to AntResponse ResponseId property type.</PackageReleaseNotes>
-    <Configurations>Debug;Release;CITest</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Prefer32Bit>False</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CITest|AnyCPU'">
     <Prefer32Bit>False</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

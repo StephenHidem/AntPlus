@@ -22,10 +22,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-#        project: [AntPlus, AntPlus.UnitTests, AntRadioInterface, AntPlus.Extensions.Hosting, Extensions/Hosting/Hosting.UnitTests, Examples/AntUsbStick]
-        project: [AntPlus]
     runs-on: ubuntu-latest
 
     steps:
@@ -34,9 +30,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+# Skip restoring dependencies as we are using the new SDK-style project format
 #    - name: Restore dependencies
 #      run: dotnet restore ${{ matrix.project }}
     - name: Build
       run: dotnet build --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+      run: dotnet test --no-build --verbosity minimal --configuration Release

@@ -19,7 +19,7 @@
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild Condition="$(Configuration) == 'Release'">True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageReleaseNotes>Breaking change: Changed to AntResponse ResponseId property type from byte to MessageId.</PackageReleaseNotes>

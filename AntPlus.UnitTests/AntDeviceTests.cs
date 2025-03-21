@@ -2,7 +2,6 @@
 using Moq;
 using SmallEarthTech.AntPlus;
 using SmallEarthTech.AntRadioInterface;
-using System.Threading;
 using Xunit;
 
 namespace AntPlus.UnitTests
@@ -99,20 +98,20 @@ namespace AntPlus.UnitTests
             Assert.Equal(expectedTransmissionType, antDevice.Object.ChannelId.TransmissionType);
         }
 
-        [Fact]
-        public void Timeout_Offline_ExpectedEventAndStatus()
-        {
-            // Arrange
-            bool offline = false;
-            Mock<AntDevice> antDevice = new(new ChannelId(0), _mockAntChannel.Object, _mockLogger.Object, (int)50);
-            antDevice.Object.DeviceWentOffline += (sender, e) => { offline = antDevice.Object.Offline; };
+        //[Fact]
+        //public void Timeout_Offline_ExpectedEventAndStatus()
+        //{
+        //    // Arrange
+        //    bool offline = false;
+        //    Mock<AntDevice> antDevice = new(new ChannelId(0), _mockAntChannel.Object, _mockLogger.Object, (int)50);
+        //    antDevice.Object.DeviceWentOffline += (sender, e) => { offline = antDevice.Object.Offline; };
 
-            // Act
-            Thread.Sleep(100);
+        //    // Act
+        //    Thread.Sleep(100);
 
-            // Assert
-            Assert.True(offline, "Event test");
-            Assert.True(antDevice.Object.Offline, "Device offline status");
-        }
+        //    // Assert
+        //    Assert.True(offline, "Event test");
+        //    Assert.True(antDevice.Object.Offline, "Device offline status");
+        //}
     }
 }

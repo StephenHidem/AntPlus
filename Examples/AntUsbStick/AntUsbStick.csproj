@@ -76,7 +76,7 @@
       <PackagePath>\</PackagePath>
       <Pack>True</Pack>
     </None>
-    <None Include="$(PackageId).targets" Pack="true" PackagePath="build\">
+    <None Include="build\$(PackageId).targets" Pack="true" PackagePath="build\">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>

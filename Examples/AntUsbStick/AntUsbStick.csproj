@@ -22,7 +22,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageId>$(AssemblyName)</PackageId>
     <PackageIcon>PackageLogo.png</PackageIcon>
-    <PackageReleaseNotes>Incorporate change to AntResponse ResponseId property type.</PackageReleaseNotes>
+    <PackageReleaseNotes>Refactored package folder structure to conform to conventions.</PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

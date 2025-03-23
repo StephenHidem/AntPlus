@@ -13,8 +13,18 @@ name: "CodeQL ANT+ Libraries"
 
 on:
   push:
+    paths:
+      - "AntPlus/**"
+      - "AntRadioInterface/*"
+      - "Examples/AntUsbStick/*"
+      - "AntPlus.Extensions.Hosting/*"
     branches: [ "master", "*" ]
   pull_request:
+    paths:
+      - "AntPlus/**"
+      - "AntRadioInterface/*"
+      - "Examples/AntUsbStick/*"
+      - "AntPlus.Extensions.Hosting/*"
     branches: [ "master", "*" ]
   schedule:
     - cron: '34 0 * * 1'

@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: .NET Test and Publish
 
 on:
   push:
@@ -34,15 +34,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-# Skip restoring dependencies as we are using the new SDK-style project format
-#    - name: Restore dependencies
-#      run: dotnet restore ${{ matrix.project }}
-    - name: Build
+    - name: Build NuGet Packages
       run: dotnet build --configuration Release
     - name: Test
       run: dotnet test --no-build --verbosity minimal --configuration Release
-    #- name: Publish
-    #  run: dotnet nuget add source https://nuget.pkg.github.com/StephenHidem/index.json --name github --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
-    - name: Push
-      run: dotnet nuget push **/*.nupkg --source https://nuget.pkg.github.com/StephenHidem/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+    - name: Publish NuGet Packages
+      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
       

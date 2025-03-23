@@ -7,7 +7,7 @@
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
     <Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
     <VersionPrefix>3.1.2</VersionPrefix>
-	<GeneratePackageOnBuild Condition="$(Configuration) == 'Release'">True</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
     <Authors>Stephen Hidem</Authors>
     <Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
@@ -76,7 +76,7 @@
       <PackagePath>\</PackagePath>
       <Pack>True</Pack>
     </None>
-    <None Include="$(PackageId).targets" Pack="true" PackagePath="build\">
+    <None Include="build\$(PackageId).targets" Pack="true" PackagePath="build\">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>

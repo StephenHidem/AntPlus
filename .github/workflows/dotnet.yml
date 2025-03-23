@@ -28,6 +28,9 @@ jobs:
       security-events: write
       packages: write
 
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -42,7 +45,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity minimal --configuration Release
     - name: Publish
-      run: dotnet nuget add source https://nuget.pkg.github.com/StephenHidem/index.json --name github --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
+      run: dotnet nuget add source https://nuget.pkg.github.com/StephenHidem/index.json --name github --username ${{ github.actor }} --password ${{ env.GITHUB_TOKEN }}
     - name: Push
-      run: dotnet nuget push **/*.nupkg --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      run: dotnet nuget push **/*.nupkg --source "github" --api-key ${{ env.GITHUB_TOKEN }} --skip-duplicate
       

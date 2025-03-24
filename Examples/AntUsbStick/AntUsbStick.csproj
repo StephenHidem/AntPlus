@@ -7,7 +7,7 @@
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
     <Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
     <VersionPrefix>3.1.3</VersionPrefix>
-    <VersionSuffix>rc1</VersionSuffix>
+    <VersionSuffix>rc2</VersionSuffix>
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
     <Authors>Stephen Hidem</Authors>
     <Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
@@ -51,13 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Update="ANT_NET.dll" Pack="true" PackagePath="lib\netstandard2.0\">
+    <None Include="ANT_NET.dll" Pack="true" PackagePath="lib\netstandard2.0\">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="ANT_NET.xml" Pack="true" PackagePath="lib\netstandard2.0\">
+    <None Include="ANT_NET.xml" Pack="true" PackagePath="lib\netstandard2.0\">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="ANT_NET.pdb" Pack="true" PackagePath="lib\netstandard2.0\">
+    <None Include="ANT_NET.pdb" Pack="true" PackagePath="lib\netstandard2.0\">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="ANT_WrappedLib.dll" Pack="true" PackagePath="build\win-x86\native\">

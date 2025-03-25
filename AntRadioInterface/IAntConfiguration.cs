@@ -17,9 +17,9 @@ namespace SmallEarthTech.AntRadioInterface
     /// </summary>
     public enum EventBufferConfig : byte
     {
-        /// <summary>The buffer low priority events</summary>
+        /// <summary>Buffer low priority events - EVENT_TX, EVENT_RX_FAIL, and EVENT_CHANNEL COLLISION only</summary>
         BufferLowPriorityEvents = 0x00,
-        /// <summary>The buffer all events</summary>
+        /// <summary>Buffer all events</summary>
         BufferAllEvents = 0x01
     };
 
@@ -29,13 +29,13 @@ namespace SmallEarthTech.AntRadioInterface
     [Flags]
     public enum LibConfigFlags
     {
-        /// <summary>The disable extended RX messages</summary>
+        /// <summary>Disable extended RX messages</summary>
         DisableExtendedRxMessages = 0x00,
-        /// <summary>The message out inc time stamp</summary>
+        /// <summary>Enables Rx timestamp output</summary>
         MesgOutIncTimeStamp = 0x20,
-        /// <summary>The message out inc RSSI</summary>
+        /// <summary>Enables RSSI output</summary>
         MesgOutIncRssi = 0x40,
-        /// <summary>The message out inc device identifier</summary>
+        /// <summary>Enables Channel ID output</summary>
         MesgOutIncDeviceId = 0x80,
     }
 

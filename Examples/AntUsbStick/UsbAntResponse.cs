@@ -51,7 +51,7 @@ namespace SmallEarthTech.AntUsbStick
                                 Rssi = (sbyte)extendedInfo.ElementAt(1);
                                 ThresholdConfigurationValue = (sbyte)extendedInfo.ElementAt(2);
                             }
-                            extendedInfo = extendedInfo.Skip(4);
+                            extendedInfo = extendedInfo.Skip(3);
                         }
                         if (flags.HasFlag(FlagByte.RxTimestamp) && extendedInfo.Count() >= 2)
                         {

@@ -17,12 +17,13 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-        1. Updated ANT+ logging with ANT+ logging extensions. 2. The scanning channel is re-opened if a close RF event is received.
+        Verify the AntRadio implementation supports IAntControl when channel 0 is unexpectedly closed in continuous scan mode.
     </PackageReleaseNotes>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<VersionPrefix>1.2.0</VersionPrefix>
+	<VersionPrefix>1.2.1</VersionPrefix>
+    <VersionSuffix>rc1</VersionSuffix>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
 	<Configurations>Debug;Release</Configurations>

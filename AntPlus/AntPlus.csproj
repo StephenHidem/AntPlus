@@ -5,7 +5,8 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <VersionPrefix>5.1.0</VersionPrefix>
+    <VersionPrefix>5.1.1</VersionPrefix>
+    <VersionSuffix>rc1</VersionSuffix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>
@@ -24,7 +25,7 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-        1. Updated ANT+ logging with ANT+ logging extensions. 2. The scanning channel is re-opened if a close RF event is received.
+        Fixed problem with StrideBasedSpeedDistance DeviceImage.
     </PackageReleaseNotes>
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>

@@ -7,7 +7,8 @@
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
     <Authors>Stephen Hidem</Authors>
     <Title>ANT+ Radio Interface Class Library</Title>
-    <VersionPrefix>4.0.0</VersionPrefix>
+    <VersionPrefix>4.1.0</VersionPrefix>
+    <VersionSuffix>rc1</VersionSuffix>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>
@@ -22,7 +23,7 @@
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Breaking change: Changed to AntResponse ResponseId property type from byte to MessageId.</PackageReleaseNotes>
+    <PackageReleaseNotes>Removed Flags attribute from EventBufferConfig. Fixed LibConfigFlags definition.</PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 

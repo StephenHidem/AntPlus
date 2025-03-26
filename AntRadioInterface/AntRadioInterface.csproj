@@ -8,7 +8,6 @@
     <Authors>Stephen Hidem</Authors>
     <Title>ANT+ Radio Interface Class Library</Title>
     <VersionPrefix>4.1.0</VersionPrefix>
-    <VersionSuffix>rc1</VersionSuffix>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>

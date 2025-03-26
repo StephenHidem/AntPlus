@@ -35,9 +35,7 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Build NuGet Packages
-      run: |
-        echo "GITHUB_ACTIONS is: $GITHUB_ACTIONS"
-        dotnet build --configuration Release
+      run: dotnet build --configuration Release
     - name: Test
       run: dotnet test --no-build --verbosity minimal --configuration Release
     - name: Publish NuGet Packages

@@ -1,64 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" revisionNumber="1">
-  <developerConceptualDocument
+<topic id="f68a7258-6432-4d9f-8669-610681ea1f99" revisionNumber="1">
+	<developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-    <!--
+		<!--
     <summary>
       <para>Optional summary abstract</para>
     </summary>
     -->
 
-    <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section
            titles.  Specify a numeric value as the inner text to limit it to
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
+			<!-- <autoOutline /> -->
 
-      <para>Version 2.0.1.0 was released on January 3, 2024.</para>
-    </introduction>
+			<para>Release Date: March 28, 2025</para>
+		</introduction>
 
-    <!-- Add one or more top-level section elements.  These are collapsible.
+		<!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-    <section address="Section1">
-      <content>
-				<list class="bullet">
-					<listItem>
-						<para>
-							<link xlink:href="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="ea422e45-03fe-4b1d-bc19-280e03ea4729" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="01235973-8fca-4be5-9fb3-13e8fe5b03b3" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="59808fa5-1390-4c46-8696-d3e7e4a379a5" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="eddb9b97-fd16-47e3-9c18-64883ca4ef55" />
-						</para>
-					</listItem>
-				</list>
-      </content>
-      <!-- If a section contains a sections element, its content creates
+		<section address="Section1">
+			<title>Fixes and Changes</title>
+			<content>
+				<!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+				<para>
+					Fixed problem with StrideBasedSpeedDistance DeviceImage causing build errors.
+				</para>
+				<para>
+					Verify the AntRadio implementation supports IAntControl when channel 0 is unexpectedly closed in continuous scan mode.
+					Logs an error message and reopens the channel, else logs a critical error message that the channel can't be re-opened.
+				</para>
+			</content>
+			<!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
           <section address="SubSection1">
@@ -74,10 +52,10 @@
               </content>
           </section>
       </sections> -->
-    </section>
+		</section>
 
-    <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+		<relatedTopics>
+			<link xlink:href="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" />
 			<!-- One or more of the following:
            - A local link
            - An external link
@@ -113,6 +91,6 @@
       <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
       <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
       -->
-    </relatedTopics>
-  </developerConceptualDocument>
+		</relatedTopics>
+	</developerConceptualDocument>
 </topic>

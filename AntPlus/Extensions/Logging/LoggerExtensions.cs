@@ -26,6 +26,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
+        /// <param name="methodName">Optional: The caller member name.</param>
         public static void LogUnknownDataPage(this ILogger logger, byte[] dataPage, [CallerMemberName] string methodName = "")
         {
             s_unknownDataPage(logger, methodName, dataPage[0], BitConverter.ToString(dataPage));
@@ -41,6 +42,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// <param name="logger">The logger instance.</param>
         /// <param name="value">The value in the data page that is not defined in the enumeration.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
+        /// <param name="methodName">Optional: The caller member name.</param>
         public static void LogUnknownDataPage<TEnum>(this ILogger logger, byte value, byte[] dataPage, [CallerMemberName] string methodName = "") where TEnum : Enum
         {
             s_unknownDataPageEnum(logger, methodName, dataPage[0], value, typeof(TEnum).Name, BitConverter.ToString(dataPage));
@@ -55,7 +57,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// <param name="logger">The logger instance.</param>
         /// <param name="channelIndex">The channel index.</param>
         /// <param name="channelId">The channel ID of the ANT device.</param>
+        /// <param name="dataPage">The data page as a byte array.</param>
         /// <param name="result">A <see cref="MessagingReturnCode"/>. Set to null if not available.</param>
+        /// <param name="methodName">Optional: The caller member name.</param>
         public static void LogSendAcknowledgedMessage(this ILogger logger, int channelIndex, uint channelId, byte[] dataPage, MessagingReturnCode? result, [CallerMemberName] string methodName = "")
         {
             if (result.HasValue)

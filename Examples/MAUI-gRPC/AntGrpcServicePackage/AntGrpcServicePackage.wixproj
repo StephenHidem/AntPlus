@@ -1,22 +1,22 @@
 ﻿<Project Sdk="WixToolset.Sdk/6.0.0">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Firewall.wixext" Version="6.0.0" />

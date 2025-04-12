@@ -1,4 +1,4 @@
-﻿<Project Sdk="WixToolset.Sdk/5.0.0">
+﻿<Project Sdk="WixToolset.Sdk/6.0.0">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
     <Configurations>Debug;Release</Configurations>
@@ -10,7 +10,7 @@
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
+    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
@@ -19,8 +19,8 @@
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)obj\$(Platform)\$(Configuration)\publish\AntGrpcService\</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Firewall.wixext" Version="5.0.2" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.Firewall.wixext" Version="6.0.0" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />

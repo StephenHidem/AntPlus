@@ -278,13 +278,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private FEState state;
         /// <summary>Gets the general data.</summary>
         [ObservableProperty]
-        private GeneralDataPage generalData = new GeneralDataPage();
+        private GeneralDataPage generalData = new();
         /// <summary>Gets the general settings.</summary>
         [ObservableProperty]
-        private GeneralSettingsPage generalSettings = new GeneralSettingsPage();
+        private GeneralSettingsPage generalSettings = new();
         /// <summary>Gets the general metabolic reports.</summary>
         [ObservableProperty]
-        private GeneralMetabolicPage generalMetabolic = new GeneralMetabolicPage();
+        private GeneralMetabolicPage generalMetabolic = new();
         /// <summary>Gets the maximum trainer resistance.</summary>
         [ObservableProperty]
         private ushort maxTrainerResistance;
@@ -350,7 +350,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     TrainingModes = (SupportedTrainingModes)dataPage[7];
                     break;
                 default:
-                    _logger.LogUnknownDataPage(dataPage);
                     handledPage = false;
                     break;
             }

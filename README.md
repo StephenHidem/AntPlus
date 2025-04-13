@@ -1,3 +1,4 @@
+[![ANT+ .NET Test](https://github.com/StephenHidem/AntPlus/actions/workflows/dotnet.yml/badge.svg)](https://github.com/StephenHidem/AntPlus/actions/workflows/dotnet.yml)
 # Small Earth Technology ANT+ Class Library
 Welcome to the Small Earth Technology ANT+ class library and examples. My goal is to provide a frictionless
 as possible implementation to enable applications to interface and acquire data from a variety of ANT+

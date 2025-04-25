@@ -18,7 +18,7 @@ discussions and downloading releases--require [adherence to the
 Maintenance Fee](./OSMFEULA.txt).
 
 In short, if you use this project to generate revenue, the [Maintenance
-Fee is required](./OSMFEULA.txt).
+Fee is required](./OSMFEULA.txt). Note that a portion of the fee sponsors other open source projects that this project uses.
 
 To pay the Maintenance Fee, [become a Sponsor](https://github.com/sponsors/StephenHidem).
 ## Prerequisites

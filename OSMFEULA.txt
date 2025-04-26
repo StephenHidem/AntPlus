@@ -1,7 +1,7 @@
 End User License Agreement
 
 This Open Source Maintenance Fee Agreement ("Agreement") is a legal agreement
-between you ("User") and AntPlue ("Project") for the use of AntPlus,
+between you ("User") and AntPlus ("Project") for the use of AntPlus,
 AntRadioInterface, AntUsbStick and AntPlus.Extensions.Hosting ("Software"),
 an open source software project licensed under the MIT license ("OSI License"),
 an OSI-approved open source license. Project offers a Binary Release of the

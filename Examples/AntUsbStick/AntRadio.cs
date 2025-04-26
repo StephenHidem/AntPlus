@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
@@ -12,7 +13,7 @@ namespace SmallEarthTech.AntUsbStick
     {
         private readonly ILogger<AntRadio> _logger;
         private ANT_Device _antDevice;
-        private IAntChannel[] _channels = new IAntChannel[0];
+        private IAntChannel[] _channels;
         private readonly object _lock = new object();
 
         /// <inheritdoc/>
@@ -46,7 +47,18 @@ namespace SmallEarthTech.AntUsbStick
 
         private void OnAntDeviceSerialError(ANT_Device sender, ANT_Device.serialErrorCode error, bool isCritical)
         {
-            _logger.LogDebug("OnAntDeviceSerialError: Sender: {Sender} Error: {Error} Critical: {IsCritical}", sender, error, isCritical);
+            _logger.LogError("OnAntDeviceSerialError: Sender: {Sender} Error: {Error} Critical: {IsCritical}", sender, error, isCritical);
+
+            // if the error is critical, close the device and reinitialize
+            if (isCritical)
+            {
+                Dispose();
+                Thread.Sleep(5000); // wait for the device to close
+                _antDevice = new ANT_Device();
+                _antDevice.deviceResponse += OnDeviceResponse;
+                _antDevice.serialError += OnAntDeviceSerialError;
+                _logger.LogWarning("Reinitialized AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+            }
         }
 
         private void OnDeviceResponse(ANT_Response response)
@@ -69,7 +81,7 @@ namespace SmallEarthTech.AntUsbStick
             lock (_lock)
             {
                 // test if channels have not been allocated (first time initialization)
-                if (_channels.Length == 0)
+                if (_channels == null)
                 {
                     // allocate channels for this radio
                     _logger.LogInformation("Allocating channels for continuous scan mode.");
@@ -106,6 +118,7 @@ namespace SmallEarthTech.AntUsbStick
                 _antDevice.serialError -= OnAntDeviceSerialError;
                 _antDevice.Dispose();
                 _antDevice = null;
+                _channels = null;
             }
         }
 

@@ -13,11 +13,14 @@
 			The TimeoutOptions class will also be added to the DI container and the configuration is bound by the container.
 		</p></div><h2 class="quickLinkHeader"><span class="icon toggleSection" tabindex="0"><i class="fa fa-angle-down"></i></span>Setting TimeoutOptions</h2><div id="IDEABSection"><p>
 					The global timeout setting can come from a variety of sources such as the command line or appsettings.json.
-					Two options are available - <strong>MissedMessages</strong> and <strong>Timeout</strong> Timeout is in milliseconds and MissedMessages is the
+					Two options are available - <strong>MissedMessages</strong> and <strong>Timeout</strong>. Timeout is in milliseconds and MissedMessages is the
 					number of messages missed before signalling the ANT device is considered offline. If no timeout setting
 					is specified the timeout will default to 8 missed messages. Timeouts can be disabled by setting <strong>Timeout=-1</strong>. This is
 					equivalent to Timeout.Infinite.
-				</p><article class="message is-info"><div class="message-header"><p><span class="icon"><i class="fa fa-info-circle"></i></span>  Note</p></div><div class="message-body"><p>Prefer MissedMessages as this will scale the timeout based on the broadcast rate of specific ANT devices.</p></div></article><p>Setting the option from the command line: <strong>--TimeoutOptions:MissedMessages=8</strong>.</p><p>Setting the option from appsetings.json:</p><div class="codeSnippet"><div class="codeHeader"><span class="codeHeaderTitle"> </span><button class="button is-small is-light copyCode" title="Copy"><span class="icon is-small"><i class="fa fa-copy"></i></span><span>Copy</span></button></div><div class="codePanel hljs"><pre xml:space="preserve"><code class="language-plaintext">{
+				</p><article class="message is-warning"><div class="message-header"><p><span class="icon"><i class="fa fa-warning"></i></span>  Disabling Timeouts</p></div><div class="message-body"><p>
+						Disabling timeouts is <strong>NOT</strong> recommended. It can lead to unintended consequences such as sending a
+						message to a device that is no longer present. This can cause a radio channel to be blocked indefinitely.
+					</p></div></article><article class="message is-info"><div class="message-header"><p><span class="icon"><i class="fa fa-info-circle"></i></span>  Note</p></div><div class="message-body"><p>Prefer MissedMessages as this will scale the timeout based on the broadcast rate of specific ANT devices.</p></div></article><p>Setting the option from the command line: <strong>--TimeoutOptions:MissedMessages=8</strong>.</p><p>Setting the option from appsetings.json:</p><div class="codeSnippet"><div class="codeHeader"><span class="codeHeaderTitle"> </span><button class="button is-small is-light copyCode" title="Copy"><span class="icon is-small"><i class="fa fa-copy"></i></span><span>Copy</span></button></div><div class="codePanel hljs"><pre xml:space="preserve"><code class="language-plaintext">{
   "TimeoutOptions": {
     "MissedMessages": 8,
     "Timeout": null
@@ -31,7 +34,7 @@
 				</p><article class="message is-info"><div class="message-header"><p><span class="icon"><i class="fa fa-info-circle"></i></span>  Note</p></div><div class="message-body"><p>You only need to implement this interface for device classes with multiple implementations.</p></div></article><p>
 					Support for ANT+ devices not supported by the ANT+ Class Library can be added to the DI container and
 					device types that support multiple implementations will implement this interface and add it to the DI container.
-				  It is added to the DI contain with the AddKeyedSingleton() method with the device class value specified
+				  It is added to the DI container with the AddKeyedSingleton() method with the device class value specified
 					as the key. For example - <span class="code">AddKeyedSingleton&lt;ISelectImplementation, SelectBicyclePowerImplementation&gt;(BicyclePower.DeviceClass);</span></p><p>Here's the SelectBicyclePowerImplementation class -</p><div class="codeSnippet"><div class="codeHeader"><span class="codeHeaderTitle">C#</span><button class="button is-small is-light copyCode" title="Copy"><span class="icon is-small"><i class="fa fa-copy"></i></span><span>Copy</span></button></div><div class="codePanel hljs"><pre xml:space="preserve"><code class="language-c#">/// &lt;summary&gt;
 /// Selects the bicycle power implementation type.
 /// &lt;/summary&gt;

@@ -5,12 +5,11 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <VersionPrefix>5.1.2</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageTags>ant; ant+; antplus; smallearthtech</PackageTags>
@@ -24,7 +23,7 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-        Fixed issue #64 - FE specific data pages are incorrectly logged as unknown data pages.
+        Added OSMF software license.
     </PackageReleaseNotes>
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
@@ -32,6 +31,8 @@
     <PropertyGroup>
        <LangVersion>9.0</LangVersion>
        <Nullable>enable</Nullable>
+       <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
+       <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -82,6 +83,13 @@
     <EmbeddedResource Include="Images\StrideBasedSpeedDistance.png" />
     <EmbeddedResource Include="Images\SpeedAndCadence.png" />
     <EmbeddedResource Include="Images\Unknown.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\OSMFEULA.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

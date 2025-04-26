@@ -1,7 +1,8 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
 	xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
-	xmlns:fire="http://wixtoolset.org/schemas/v4/wxs/firewall">
-	<Package Name="ANT gRPC Service" Manufacturer="Small Earth Technology" Version="1.0.0.0" UpgradeCode="8ddabed2-98f7-40ea-ae02-f623979fccac" Compressed="true">
+	xmlns:fire="http://wixtoolset.org/schemas/v4/wxs/firewall"
+	xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+	<Package Name="ANT gRPC Service" Manufacturer="Small Earth Technology" Version="2.0.0.0" UpgradeCode="8ddabed2-98f7-40ea-ae02-f623979fccac" Compressed="true">
 		<MediaTemplate EmbedCab="yes"/>
 		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
 		
@@ -42,8 +43,13 @@
 							  DisplayName="ANT gRPC Service"
 							  Description="ANT gRPC service"
 							  Start="auto"
-							  ErrorControl="normal" Arguments="--urls http://*:[PORTNUMBER]"
-							  />
+							  ErrorControl="normal" Arguments="--urls http://*:[PORTNUMBER]">
+					
+					<util:ServiceConfig
+								FirstFailureActionType="restart" RestartServiceDelayInSeconds="60"
+								SecondFailureActionType="none"
+								ThirdFailureActionType="none"/>
+				</ServiceInstall>
 
 				<ServiceControl Id="StartService"
 							  Start="install"

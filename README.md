@@ -31,5 +31,7 @@ device profiles, SDK's, and useful software tools.
 You can get them from DigiKey for around $45 for two.
 - OPTIONAL: Only needed if you intend to modify the libraries I've provided in the AntUsbStick project.
 Download the [ANT PC SDK zip file](https://www.thisisant.com/resources/ant-windows-library-package-with-source-code/), unblock, and install.
+- OPTIONAL: To build the documentation, install the Sandcastle Help File Builder (SHFB) from the [Sandcastle Help File Builder project.](https://github.com/EWSoftware/SHFB)
+- OPTIONAL: To build the AntGrpcServicePackage installer, install the [WIX toolset and Visual Studio integration.](https://www.firegiant.com/wixtoolset/)
 ## Project Documentation
 * [ANT+ Class Library Help](http://stephenhidem.github.io/AntPlus)

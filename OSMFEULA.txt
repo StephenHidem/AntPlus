@@ -1,13 +1,14 @@
 End User License Agreement
 
 This Open Source Maintenance Fee Agreement ("Agreement") is a legal agreement
-between you ("User") and AntPlue ("Project") for the use of
-AntPlus, AntRadioInterface, AntUsbStick and AntPlus.Extensions.Hosting ("Software"), an open source software project licensed under
-the MIT license ("OSI License"), an OSI-approved open source license.
-Project offers a Binary Release of the Software to Users in exchange for a
-maintenance fee ("Fee"). "Binary Release" refers to pre-compiled executable
-versions of the Software provided by Project. By accessing or using the
-Binary Release, User agrees to be bound by the terms of this Agreement.
+between you ("User") and AntPlue ("Project") for the use of AntPlus,
+AntRadioInterface, AntUsbStick and AntPlus.Extensions.Hosting ("Software"),
+an open source software project licensed under the MIT license ("OSI License"),
+an OSI-approved open source license. Project offers a Binary Release of the
+Software to Users in exchange for a maintenance fee ("Fee"). "Binary Release"
+refers to pre-compiled executable versions of the Software provided by Project.
+By accessing or using the Binary Release, User agrees to be bound by the terms
+of this Agreement.
 
 1. Applicability
 

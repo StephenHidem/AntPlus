@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4" visible="True" title="Welcome to the Small Earth Technology ANT+ Class Library">
+  <Topic id="5e5a5e1c-a0e6-4ef0-a8f5-12f9394450c4" visible="True" isSelected="true" title="Welcome to the Small Earth Technology ANT+ Class Libraries">
     <HelpKeywords>
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
@@ -34,7 +34,7 @@
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />
     </HelpKeywords>
-    <Topic id="55b5d927-4d00-4e63-9f70-4f35a796c423" visible="True" title="AntRadioInterface Version History">
+    <Topic id="55b5d927-4d00-4e63-9f70-4f35a796c423" visible="True" isExpanded="true" title="AntRadioInterface Version History">
       <Topic id="a5a81f24-5ac3-49e4-8a8a-37566ebd5286" visible="True" title="Version 2.0.0.0" />
       <Topic id="3bf26a39-5daa-482c-9718-d2bed1141b6c" visible="True" title="Version 2.0.1.0" />
       <Topic id="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" visible="True" title="Version 2.0.2.0" />
@@ -42,6 +42,7 @@
       <Topic id="df9ea172-ed2e-4ee8-b2e6-c0df91b731a1" visible="True" title="Version 3.0.0.0" />
       <Topic id="38e3def3-5430-46eb-948e-04ca886e28ac" visible="True" title="Version 4.0.0.0" />
       <Topic id="b55fead0-b428-4538-bf04-40a73f762418" visible="True" title="Version 4.1.0.0" />
+      <Topic id="27d29b6f-1582-4740-8f63-1927ec961db1" visible="True" title="Version 5.0.0.0" />
     </Topic>
     <Topic id="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" visible="True" isExpanded="true" title="AntPlus Version History">
       <Topic id="b3754de5-1d8d-422e-9071-12d290d4b14d" visible="True" title="Version 2.0.0.0" />
@@ -55,23 +56,26 @@
       <Topic id="42c82c98-5ad0-453d-a7ae-50ca9a9f19b6" visible="True" title="Version 5.0.1.0" />
       <Topic id="feed7e23-c9c3-44df-804e-54b6bdab7962" visible="True" title="Version 5.1.0.0" />
       <Topic id="f68a7258-6432-4d9f-8669-610681ea1f99" visible="True" title="Version 5.1.1.0" />
-      <Topic id="724ada0f-d2e9-49df-b466-96568945f5c9" visible="True" isSelected="true" title="Version 5.1.2.0" />
+      <Topic id="724ada0f-d2e9-49df-b466-96568945f5c9" visible="True" title="Version 5.1.2.0" />
+      <Topic id="d3c019fb-0c05-409e-9283-c72089d4df8c" visible="True" title="Version 6.0.0.0" />
     </Topic>
-    <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" title="AntUsbStick Version History">
+    <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" isExpanded="true" title="AntUsbStick Version History">
       <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" title="Version 2.0.2.0" />
       <Topic id="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" visible="True" title="Version 2.1.0.0" />
       <Topic id="ea422e45-03fe-4b1d-bc19-280e03ea4729" visible="True" title="Version 3.0.0.0" />
       <Topic id="01235973-8fca-4be5-9fb3-13e8fe5b03b3" visible="True" title="Version 3.1.0.0" />
       <Topic id="59808fa5-1390-4c46-8696-d3e7e4a379a5" visible="True" title="Version 3.1.1.0" />
       <Topic id="eddb9b97-fd16-47e3-9c18-64883ca4ef55" visible="True" title="Version 3.1.3.0" />
+      <Topic id="501a56d8-5811-4359-98d3-8b00850aed6c" visible="True" title="Version 4.0.0.0" />
     </Topic>
-    <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" title="Hosting Extensions Version History">
+    <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" isExpanded="true" title="Hosting Extensions Version History">
       <Topic id="0677519c-d5ba-4c5d-b400-f10dc75a33a7" visible="True" title="Version 1.0.0.0" />
       <Topic id="5c5fc223-4f8c-4a17-bb09-8f0d1d3f2cac" visible="True" title="Version 1.1.0.0" />
       <Topic id="69e0beb6-59b3-441e-95d7-3c51cc27aba3" visible="True" title="Version 1.1.1.0" />
       <Topic id="7c3d10ad-f151-48e5-bfa9-2e2a7600179e" visible="True" title="Version 1.1.2.0" />
       <Topic id="eadb0249-dd5f-41e4-9aa6-5ef53cba5db8" visible="True" title="Version 1.2.0.0" />
       <Topic id="18cab791-ab95-4072-9b0e-ec3f1541cb53" visible="True" title="Version 1.2.1.0" />
+      <Topic id="a98c0e89-8f08-4426-afef-0020f5678fec" visible="True" title="Version 2.0.0.0" />
     </Topic>
   </Topic>
 </Topics>

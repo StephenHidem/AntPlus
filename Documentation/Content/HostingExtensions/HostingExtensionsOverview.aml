@@ -67,12 +67,18 @@
 			<content>
 				<para>
 					The global timeout setting can come from a variety of sources such as the command line or appsettings.json.
-					Two options are available - <system>MissedMessages</system> and <system>Timeout</system> Timeout is in milliseconds and MissedMessages is the
+					Two options are available - <system>MissedMessages</system> and <system>Timeout</system>. Timeout is in milliseconds and MissedMessages is the
 					number of messages missed before signalling the ANT device is considered offline. If no timeout setting
 					is specified the timeout will default to 8 missed messages. Timeouts can be disabled by setting <system>Timeout=-1</system>. This is
 					equivalent to Timeout.Infinite.
 				</para>
-			  <alert class="note">
+				<alert class="warning" title="Disabling Timeouts">
+					<para>
+						Disabling timeouts is <system>NOT</system> recommended. It can lead to unintended consequences such as sending a
+						message to a device that is no longer present. This can cause a radio channel to be blocked indefinitely.
+					</para>
+				</alert>
+				<alert class="note">
 					<para>Prefer MissedMessages as this will scale the timeout based on the broadcast rate of specific ANT devices.</para>
 				</alert>
 				<para>Setting the option from the command line: <system>--TimeoutOptions:MissedMessages=8</system>.</para>
@@ -96,7 +102,7 @@
 				<para>
 					Support for ANT+ devices not supported by the ANT+ Class Library can be added to the DI container and
 					device types that support multiple implementations will implement this interface and add it to the DI container.
-				  It is added to the DI contain with the AddKeyedSingleton() method with the device class value specified
+				  It is added to the DI container with the AddKeyedSingleton() method with the device class value specified
 					as the key. For example - <codeInline>AddKeyedSingleton&lt;ISelectImplementation, SelectBicyclePowerImplementation&gt;(BicyclePower.DeviceClass);</codeInline>
 				</para>
 				<para>Here's the SelectBicyclePowerImplementation class -</para>

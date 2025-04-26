@@ -91,7 +91,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                     // re-open the channel in scan mode
                     if (_antRadio is IAntControl antControl)
                     {
-                        _logger.LogError("Re-opening channel 0 in scan mode.");
+                        _logger.LogWarning("Re-opening channel 0 in scan mode.");
                         _ = antControl.OpenRxScanMode();
                     }
                     else

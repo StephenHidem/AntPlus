@@ -70,6 +70,14 @@ namespace WpfUsbStickApp
             // create the device collection and start scanning for broadcasting ANT devices
             AntDevices = _host.Services.GetRequiredService<AntCollection>();
             _ = AntDevices.StartScanning();
+            radio.RadioResponse += (sender, e) =>
+            {
+                // handle radio response
+                if (e.ResponseId == MessageId.StartupMessage)
+                {
+                    _ = AntDevices.StartScanning();
+                }
+            };
         }
     }
 }

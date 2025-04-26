@@ -31,12 +31,18 @@ namespace SmallEarthTech.AntRadioInterface
         AcknowledgedData = 0x4F,
         /// <summary>The burst data</summary>
         BurstData = 0x50,
+        /// <summary>ANT radio capabilities</summary>
+        RadioCapabilities = 0x54,
         /// <summary>The extended broadcast data</summary>
         ExtBroadcastData = 0x5D,
         /// <summary>The extended acknowledged data</summary>
         ExtAcknowledgedData = 0x5E,
         /// <summary>The extended burst data</summary>
-        ExtBurstData = 0x5F
+        ExtBurstData = 0x5F,
+        /// <summary>The startup message</summary>
+        StartupMessage = 0x6F,
+        /// <summary>The serial error message</summary>
+        SerialErrorMessage = 0xAE
     }
 
     /// <summary>

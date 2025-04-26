@@ -7,13 +7,12 @@
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
     <Authors>Stephen Hidem</Authors>
     <Title>ANT+ Radio Interface Class Library</Title>
-    <VersionPrefix>4.1.0</VersionPrefix>
+    <VersionPrefix>5.0.0</VersionPrefix>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>
     <RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
     <Description>The AntRadioInterface defines an interface to interact with an ANT radio to send and receive from an ANT device. Use this package to create a concrete implementation of an ANT radio.</Description>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -22,13 +21,19 @@
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Removed Flags attribute from EventBufferConfig. Fixed LibConfigFlags definition.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+1. Added OSMF sofware license.
+2. Added`RadioCapabilities` (0x54),`StartupMessage` (0x6F) and `SerialErrorMessage` (0xAE).
+to MessageId enum.
+    </PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>
    <LangVersion>8.0</LangVersion>
    <Nullable>enable</Nullable>
+   <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+   <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
 </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -41,6 +46,13 @@
 
   <ItemGroup>
     <Compile Remove="IAntResponse.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\OSMFEULA.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

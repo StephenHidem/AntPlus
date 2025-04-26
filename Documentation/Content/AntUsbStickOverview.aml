@@ -31,10 +31,21 @@
 			</para>
 			<para>
 				The abstract classes AntResponse and DeviceCapabilities are implemented internally to support the class library.
-				UsbAntDeviceCapabilities and UsbAntResponse are the concrete implementations of the abstract classes.
+				UsbAntResponse and UsbAntDeviceCapabilities are the concrete implementations of the abstract classes.
 			</para>
     </introduction>
 
+		<section>
+			<title>Handling Power Events</title>
+			<content>
+				<para>
+					The AntUsbStick configuration is reset when the power is removed from the device and then restored. This typically
+					occurs when the PC goes to sleep or the lid is closed. The client application must re-initialize the AntUsbStick
+					configuration when power is restored if the client resumes execution.
+				</para>
+			</content>
+		
+		</section>
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->

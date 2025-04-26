@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" revisionNumber="1">
+<topic id="a98c0e89-8f08-4426-afef-0020f5678fec" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,54 +17,25 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>ANT+ Hosting Extensions Version History</para>
+      <para>Release Date: April 26, 2025</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
+      <title>Changes</title>
       <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
 				<list class="bullet">
 					<listItem>
 						<para>
-							<link xlink:href="0677519c-d5ba-4c5d-b400-f10dc75a33a7" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="5c5fc223-4f8c-4a17-bb09-8f0d1d3f2cac" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="69e0beb6-59b3-441e-95d7-3c51cc27aba3" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="7c3d10ad-f151-48e5-bfa9-2e2a7600179e" />						
-						</para>					
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="eadb0249-dd5f-41e4-9aa6-5ef53cba5db8" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="18cab791-ab95-4072-9b0e-ec3f1541cb53" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="a98c0e89-8f08-4426-afef-0020f5678fec" />
+							Added Open Source Maintenance Fee license.
 						</para>
 					</listItem>
 				</list>
-        <!-- Uncomment this to create a sub-section outline
-        <autoOutline /> -->
-      </content>
+			</content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
@@ -84,7 +55,7 @@
     </section>
 
     <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+			<link xlink:href="be2ad779-f723-47b4-a6ab-00691c896a8e" />
 			<!-- One or more of the following:
            - A local link
            - An external link

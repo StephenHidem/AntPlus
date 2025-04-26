@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmallEarthTech.AntUsbStick
@@ -52,6 +53,7 @@ namespace SmallEarthTech.AntUsbStick
             if (isCritical)
             {
                 Dispose();
+                Thread.Sleep(5000); // wait for the device to close
                 _antDevice = new ANT_Device();
                 _antDevice.deviceResponse += OnDeviceResponse;
                 _antDevice.serialError += OnAntDeviceSerialError;

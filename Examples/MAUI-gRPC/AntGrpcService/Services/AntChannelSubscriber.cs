@@ -10,7 +10,7 @@ namespace AntGrpcService.Services
         private readonly IAntChannel _antChannel;
 
         /// <inheritdoc/>
-        public event EventHandler<AntResponse>? OnAntResponse;
+        public event EventHandler<AntResponse>? OnAntChannelResponse;
 
         /// <summary>
         /// Saves the ANT channel associated with this subscriber and connects to the channel response event.
@@ -19,7 +19,7 @@ namespace AntGrpcService.Services
         public AntChannelSubscriber(IAntChannel antChannel)
         {
             _antChannel = antChannel;
-            _antChannel.ChannelResponse += SendChannelResponse;
+            _antChannel.ChannelResponse += ForwardChannelResponse;
         }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace AntGrpcService.Services
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SendChannelResponse(object? sender, AntResponse e)
+        private void ForwardChannelResponse(object? sender, AntResponse e)
         {
-            OnAntResponse?.Invoke(this, e);
+            OnAntChannelResponse?.Invoke(this, e);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace AntGrpcService.Services
         /// </summary>
         public void Dispose()
         {
-            _antChannel.ChannelResponse -= SendChannelResponse;
+            _antChannel.ChannelResponse -= ForwardChannelResponse;
         }
     }
 }

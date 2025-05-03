@@ -20,7 +20,7 @@ namespace AntGrpcShared.ClientServices
     /// </summary>  
     public class AntChannelService : IAntChannel
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<AntChannelService> _logger;
         private readonly byte _channelNumber;
         private readonly gRPCAntChannel.gRPCAntChannelClient _client;
 
@@ -36,7 +36,7 @@ namespace AntGrpcShared.ClientServices
         /// <param name="logger">The logger instance.</param>  
         /// <param name="channelNumber">The channel number.</param>  
         /// <param name="grpcChannel">The gRPC channel.</param>  
-        public AntChannelService(ILogger logger, byte channelNumber, GrpcChannel grpcChannel)
+        public AntChannelService(ILogger<AntChannelService> logger, byte channelNumber, GrpcChannel grpcChannel)
         {
             _logger = logger;
             _channelNumber = channelNumber;
@@ -56,6 +56,10 @@ namespace AntGrpcShared.ClientServices
                 {
                     ChannelResponse?.Invoke(this, new GrpcAntResponse(update));
                 }
+            }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
+            {
+                _logger.LogInformation("RpcException: unavailable");
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Cancelled)
             {

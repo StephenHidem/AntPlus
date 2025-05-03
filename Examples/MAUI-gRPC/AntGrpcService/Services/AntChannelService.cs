@@ -16,19 +16,19 @@ namespace AntGrpcService.Services
     {
         public override async Task Subscribe(SubscribeRequest request, IServerStreamWriter<ChannelResponseUpdate> responseStream, ServerCallContext context)
         {
-            logger.LogInformation("Subscriber entered. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
+            logger.LogInformation("Channel subscriber entered. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
             using IAntChannelSubscriber subscriber = subscriberFactory.CreateAntChannelSubscriber(antRadio.GetChannel((int)request.ChannelNumber));
 
             // create a response handler delegate and add it to subscriber
             async void handler(object? sender, AntResponse args) => await WriteUpdateAsync(responseStream, args);
-            subscriber.OnAntResponse += handler;
+            subscriber.OnAntChannelResponse += handler;
 
             await AwaitCancellation(context.CancellationToken);
 
             // remove our response handler from the subscriber
-            subscriber.OnAntResponse -= handler;
+            subscriber.OnAntChannelResponse -= handler;
 
-            logger.LogInformation("Subscriber exited. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
+            logger.LogInformation("Channel subscriber exited. Channel number = {ChannelNumber}, Peer = {Peer}", request.ChannelNumber, context.Peer);
         }
 
         /// <summary>

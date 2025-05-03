@@ -3,6 +3,7 @@ using AntControlGrpcService;
 using AntCryptoGrpcService;
 using AntRadioGrpcService;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
@@ -24,6 +25,7 @@ namespace AntGrpcShared.ClientServices
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 5073;              // gRPC port
 
+        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AntRadioService> _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly GrpcChannelOptions _grpcChannelOptions;
@@ -51,16 +53,22 @@ namespace AntGrpcShared.ClientServices
         public event EventHandler<AntResponse>? RadioResponse;
 
         /// <summary>
+        /// Event triggered when an RPC exception is received.
+        /// </summary>
+        public event EventHandler<RpcException>? RpcExceptionReceived;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AntRadioService"/> class.
         /// </summary>
-        /// <param name="logger">The logger instance.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
         /// <param name="cancellationTokenSource">The cancellation token source.</param>
         /// <param name="grpcChannelOptions">Optional gRPC channel configuration options.</param>
         public AntRadioService(
-            ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource,
-            GrpcChannelOptions? grpcChannelOptions = null)
+            ILoggerFactory loggerFactory, CancellationTokenSource cancellationTokenSource,
+            GrpcChannelOptions? grpcChannelOptions = default)
         {
-            _logger = logger;
+            _loggerFactory = loggerFactory;
+            _logger = _loggerFactory.CreateLogger<AntRadioService>();
             _cancellationTokenSource = cancellationTokenSource;
             _grpcChannelOptions = grpcChannelOptions ?? new GrpcChannelOptions();
         }
@@ -97,12 +105,18 @@ namespace AntGrpcShared.ClientServices
                     string msg = Encoding.ASCII.GetString(result.Buffer);
                     _logger.LogInformation("ANT radio endpoint {ServerAddress}, message {Msg}", ServerIPAddress, msg);
 
+                    // create a gRPC channel to the server
                     UriBuilder uriBuilder = new("http", ServerIPAddress.ToString(), gRPCPort);
                     _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
                     _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
                     _control = new gRPCAntControl.gRPCAntControlClient(_grpcChannel);
                     _config = new gRPCAntConfiguration.gRPCAntConfigurationClient(_grpcChannel);
                     _crypto = new gRPCAntCrypto.gRPCAntCryptoClient(_grpcChannel);
+
+                    // subscribe to radio response updates
+                    HandleRadioResponseUpdates(_cancellationTokenSource.Token);
+
+                    // get properties from server
                     PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
                     ProductDescription = reply.ProductDescription;
                     SerialNumber = reply.SerialNumber;
@@ -116,6 +130,36 @@ namespace AntGrpcShared.ClientServices
             }
         }
 
+        /// <summary>
+        /// Handles radio response updates.
+        /// </summary>
+        /// <param name="cancellationToken">Cancels subscription to ChannelResponseUpdate.</param>
+        private async void HandleRadioResponseUpdates(CancellationToken cancellationToken)
+        {
+            using var response = _client!.Subscribe(new Empty(), cancellationToken: cancellationToken);
+            try
+            {
+                await foreach (AntResponseReply? update in response.ResponseStream.ReadAllAsync(cancellationToken))
+                {
+                    _logger.LogDebug("OnDeviceResponse: {Channel}, {ResponseId}, {Data}", update.ChannelNumber, (MessageId)update.ResponseId, BitConverter.ToString(update.Payload.ToByteArray()));
+                    RadioResponse?.Invoke(this, new GrpcAntResponse(update));
+                }
+            }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
+            {
+                _logger.LogInformation("RpcException: unavailable");
+                RpcExceptionReceived?.Invoke(this, ex);
+            }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.Cancelled)
+            {
+                _logger.LogInformation("RpcException: operation cancelled");
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("OperationCanceledException");
+            }
+        }
+
         /// <inheritdoc/>
         public void CancelTransfers(int cancelWaitTime)
         {
@@ -126,7 +170,7 @@ namespace AntGrpcShared.ClientServices
         public IAntChannel GetChannel(int num)
         {
             _ = _client!.GetChannel(new GetChannelRequest { ChannelNumber = (byte)num });
-            return new AntChannelService(_logger, (byte)num, _grpcChannel!);
+            return new AntChannelService(_loggerFactory.CreateLogger<AntChannelService>(), (byte)num, _grpcChannel!);
         }
 
         /// <inheritdoc/>
@@ -148,7 +192,7 @@ namespace AntGrpcShared.ClientServices
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             for (byte i = 0; i < reply.NumChannels; i++)
             {
-                channels[i] = new AntChannelService(_logger, i, _grpcChannel);
+                channels[i] = new AntChannelService(_loggerFactory.CreateLogger<AntChannelService>(), i, _grpcChannel);
             }
             channels[0].HandleChannelResponseUpdates(_cancellationTokenSource.Token);
             return channels;

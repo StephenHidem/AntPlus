@@ -20,6 +20,7 @@ LoggerProviderOptions.RegisterProviderOptions<
 builder.Host.UseWindowsService();
 
 // Add services to the container.
+builder.Services.AddSingleton<IAntRadioSubscriberFactory, AntRadioSubscriberFactory>();
 builder.Services.AddSingleton<IAntChannelSubscriberFactory, AntChannelSubscriberFactory>();
 builder.Services.AddGrpc();
 builder.Services.AddSingleton<IAntRadio, AntRadio>();

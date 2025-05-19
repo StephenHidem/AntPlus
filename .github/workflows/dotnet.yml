@@ -10,6 +10,8 @@ on:
       - "AntRadioInterface/*"
       - "Examples/AntUsbStick/*"
       - "AntPlus.Extensions.Hosting/*"
+      - "/AntPlus.UnitTests/*"
+      - "/Extensions/Hosting/Hosting.UnitTests/*"
     branches: [ "master" ]
   pull_request:
     paths:
@@ -17,6 +19,8 @@ on:
       - "AntRadioInterface/*"
       - "Examples/AntUsbStick/*"
       - "AntPlus.Extensions.Hosting/*"
+      - "/AntPlus.UnitTests/*"
+      - "/Extensions/Hosting/Hosting.UnitTests/*"
     branches: [ "master" ]
 
 jobs:

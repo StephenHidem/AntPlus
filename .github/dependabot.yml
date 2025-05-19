@@ -11,5 +11,7 @@ updates:
       - "/AntRadioInterface"
       - "/AntPlus.Extensions.Hosting"
       - "/Examples/AntUsbStick"
+      - "/AntPlus.UnitTests"
+      - "/Extensions/Hosting/Hosting.UnitTests"
     schedule:
       interval: "weekly"

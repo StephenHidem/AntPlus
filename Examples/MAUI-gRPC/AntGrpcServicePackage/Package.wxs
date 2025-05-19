@@ -44,6 +44,9 @@
 							  Description="ANT gRPC service"
 							  Start="auto"
 							  ErrorControl="normal" Arguments="--urls http://*:[PORTNUMBER]">
+
+					<ServiceConfig
+								DelayedAutoStart="yes" OnInstall="yes" OnReinstall="yes"/>
 					
 					<util:ServiceConfig
 								FirstFailureActionType="restart" RestartServiceDelayInSeconds="60"

@@ -7,11 +7,6 @@ version: 2
 updates:
   - package-ecosystem: "nuget" # See documentation for possible values
     directories:
-      - "/AntPlus"
-      - "/AntRadioInterface"
-      - "/AntPlus.Extensions.Hosting"
-      - "/Examples/AntUsbStick"
-      - "/AntPlus.UnitTests"
-      - "/Extensions/Hosting/Hosting.UnitTests"
+      - "**/*"
     schedule:
       interval: "weekly"

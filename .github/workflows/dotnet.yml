@@ -10,8 +10,8 @@ on:
       - "AntRadioInterface/*"
       - "Examples/AntUsbStick/*"
       - "AntPlus.Extensions.Hosting/*"
-      - "/AntPlus.UnitTests/*"
-      - "/Extensions/Hosting/Hosting.UnitTests/*"
+      - "AntPlus.UnitTests/*"
+      - "Extensions/Hosting/Hosting.UnitTests/*"
     branches: [ "master" ]
   pull_request:
     paths:
@@ -19,10 +19,11 @@ on:
       - "AntRadioInterface/*"
       - "Examples/AntUsbStick/*"
       - "AntPlus.Extensions.Hosting/*"
-      - "/AntPlus.UnitTests/*"
-      - "/Extensions/Hosting/Hosting.UnitTests/*"
+      - "AntPlus.UnitTests/*"
+      - "Extensions/Hosting/Hosting.UnitTests/*"
     branches: [ "master" ]
-
+  workflow_dispatch:
+    
 jobs:
   build:
     runs-on: ubuntu-latest

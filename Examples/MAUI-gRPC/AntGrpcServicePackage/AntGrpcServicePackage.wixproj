@@ -19,9 +19,9 @@
     <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Firewall.wixext" Version="6.0.0" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0" />
-    <PackageReference Include="WixToolset.Util.wixext" Version="6.0.0" />
+    <PackageReference Include="WixToolset.Firewall.wixext" Version="6.0.1" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.1" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />

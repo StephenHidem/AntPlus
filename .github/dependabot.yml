@@ -13,6 +13,10 @@ updates:
       - "/Examples/AntUsbStick"
       - "/AntPlus.UnitTests"
       - "/Extensions/Hosting/Hosting.UnitTests"
+      - "/Examples/WpfUsbStickApp"
+      - "/Examples/MAUI-gRPC/AntGrpcShared"
+      - "/Examples/MAUI-gRPC/AntGrpcService"
+      - "/Examples/MAUI-gRPC/MauiAntGrpcClient"
     schedule:
       interval: "weekly"
     groups:

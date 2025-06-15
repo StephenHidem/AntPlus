@@ -17,11 +17,11 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-        Added OSMF software license.
+        Updated NuGet packages.
     </PackageReleaseNotes>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<VersionPrefix>2.0.0</VersionPrefix>
+	<VersionPrefix>2.0.1</VersionPrefix>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
 	<Configurations>Debug;Release</Configurations>

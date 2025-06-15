@@ -6,7 +6,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
     <Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
-    <VersionPrefix>4.0.0</VersionPrefix>
+    <VersionPrefix>4.0.1</VersionPrefix>
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
     <Authors>Stephen Hidem</Authors>
     <Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
@@ -21,8 +21,9 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageId>$(AssemblyName)</PackageId>
     <PackageIcon>PackageLogo.png</PackageIcon>
-    <PackageReleaseNotes>1. Added OSMF sofware license.
-2. Handle PC power events that close the ANT USB stick. The AntUsbStick re-initializes on wake up.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+        Updated NuGet packages.
+    </PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
     <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

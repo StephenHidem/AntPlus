@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="c4caecfe-e2ea-4c87-b602-75d6b57aa70b" revisionNumber="1">
+<topic id="a6de64ac-a3c0-4220-a961-cef056a7732d" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,87 +17,25 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>Version 1.0.0.0 was released on May 13, 2023.</para>
+      <para>Release Date: June 16, 2025</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
-			<content>
+      <title>Changes</title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
 				<list class="bullet">
 					<listItem>
 						<para>
-							<link xlink:href="b3754de5-1d8d-422e-9071-12d290d4b14d" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="607e34e9-cdf4-4f9a-85c6-78f830e1aff8" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="892f97e4-a593-403f-bcfe-1b546a86ed2d" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="988b09e9-af30-438d-ad2d-0b86a818f97d" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="5784e268-84d1-466a-aa3a-e0fb8085a4ff" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="44f85400-6285-4dbe-8f65-d28b68108fc1" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="10a23545-666c-497d-a851-14eb7ac619e8" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="73712ef4-127a-4e35-b2ef-dd212b42b2cc" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="42c82c98-5ad0-453d-a7ae-50ca9a9f19b6" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="feed7e23-c9c3-44df-804e-54b6bdab7962" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="f68a7258-6432-4d9f-8669-610681ea1f99" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="724ada0f-d2e9-49df-b466-96568945f5c9" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="d3c019fb-0c05-409e-9283-c72089d4df8c" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="e9279c3f-026c-438f-bf72-b85905f30e31" />
+							Updated NuGet packages to latest version.
 						</para>
 					</listItem>
 				</list>
-      </content>
+			</content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
@@ -117,7 +55,7 @@
     </section>
 
     <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
+			<link xlink:href="be2ad779-f723-47b4-a6ab-00691c896a8e" />
 			<!-- One or more of the following:
            - A local link
            - An external link

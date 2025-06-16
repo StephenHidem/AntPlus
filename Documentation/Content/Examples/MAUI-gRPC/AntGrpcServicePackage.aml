@@ -24,9 +24,9 @@
 				Enter the following command from the developer command line -
 				<command>dotnet tool install --global wix</command>
 			</para>
-			<alert class="note" title="Release June 9, 2024 Update">
+			<alert class="note" title="Toolset Update">
 				<para>
-					The package has been updated to use WiX Toolset v5.0.0. No more .xsl transforms to remove items from the installer; it's defined in the package.wxs file.
+					The package has been updated to use WiX Toolset v6.0.x.
 					You can update your WiX toolset installation from the developer command line -
           <command>dotnet tool update --global wix</command>
 				</para>

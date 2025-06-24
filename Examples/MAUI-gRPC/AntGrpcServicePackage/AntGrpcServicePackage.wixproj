@@ -1,22 +1,28 @@
 ﻿<Project Sdk="WixToolset.Sdk/6.0.0">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <DefineConstants>PublishOutputPath=$(IntermediateOutputPath)</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Firewall.wixext" Version="6.0.1" />
@@ -24,7 +30,7 @@
     <PackageReference Include="WixToolset.Util.wixext" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />
+    <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" />
   </ItemGroup>
   <Target Name="CollectSuggestedVisualStudioComponentIds" />
 </Project>

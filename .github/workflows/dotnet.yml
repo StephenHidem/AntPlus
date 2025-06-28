@@ -40,7 +40,7 @@ jobs:
     - name: Install dependencies
       run: |
         dotnet restore AntPlus
-        detnet restore AntRadioInterface
+        dotnet restore AntRadioInterface
         dotnet restore "AntPlus.Extensions.Hosting/Hosting.csproj"
         dotnet restore "AntPlus.UnitTests/AntPlus.UnitTests.csproj"
         dotnet restore "Examples/AntUsbStick/AntUsbStick.csproj"

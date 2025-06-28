@@ -41,10 +41,10 @@ jobs:
       run: |
         dotnet restore AntPlus
         detnet restore AntRadioInterface
-        dotnet restore AntPlus.Extensions.Hosting
-        dotnet restore AntPlus.UnitTests
-        dotnet restore Examples/AntUsbStick
-        dotnet restore Extensions/Hosting/Hosting.UnitTests
+        dotnet restore AntPlus.Extensions.Hosting/Hosting.caproj
+        dotnet restore AntPlus.UnitTests/AntPlus.UnitTests.csproj
+        dotnet restore Examples/AntUsbStick/AntUsbStick.csproj
+        dotnet restore Extensions/Hosting/Hosting.UnitTests/Hosting.UnitTests.csproj
     - name: Build
       run: dotnet build --no-restore --configuration Release  -p:GeneratePackageOnBuild=false
     - name: Test

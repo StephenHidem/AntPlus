@@ -13,6 +13,10 @@
 	<AssemblyVersion>2.0.1.0</AssemblyVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />

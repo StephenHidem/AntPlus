@@ -12,6 +12,10 @@
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="CustomAntDevice\BikeRadar.png" />

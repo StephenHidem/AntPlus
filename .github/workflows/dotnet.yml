@@ -37,8 +37,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+    - name: Install dependencies
+      run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release  -p:GeneratePackageOnBuild=false
+      run: dotnet build --no-restore --configuration Release  -p:GeneratePackageOnBuild=false
     - name: Test
       run: dotnet test --no-build --verbosity minimal --configuration Release
       

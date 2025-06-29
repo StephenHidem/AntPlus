@@ -20,12 +20,13 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild Condition="'$(Configuration)'=='Github'">True</GeneratePackageOnBuild>
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
         Updated NuGet packages.
     </PackageReleaseNotes>
-	<Configurations>Debug;Release</Configurations>
+	<Configurations>Debug;Release;Github</Configurations>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -44,6 +45,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1573</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Github|AnyCPU'">
     <NoWarn>1701;1702;1573</NoWarn>
   </PropertyGroup>
 	

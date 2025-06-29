@@ -9,7 +9,7 @@
 	<Authors>Stephen Hidem</Authors>
 	<Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
 	<Version>2.0.0</Version>
-	<Configurations>Debug;Release</Configurations>
+	<Configurations>Debug;Release;Github</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>

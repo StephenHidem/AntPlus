@@ -2,7 +2,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DefineConstants>
     </DefineConstants>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;Github</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>

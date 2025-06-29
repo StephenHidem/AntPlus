@@ -51,10 +51,6 @@
 	  <ApplicationVersion>1</ApplicationVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CITest|net9.0-windows10.0.20348.0|AnyCPU'">
-	  <ApplicationVersion>1</ApplicationVersion>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
 	  <ApplicationVersion>1</ApplicationVersion>
 	</PropertyGroup>

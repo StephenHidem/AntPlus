@@ -41,12 +41,12 @@ jobs:
       run: |
         dotnet restore AntPlus
         dotnet restore AntRadioInterface
-        dotnet restore "AntPlus.Extensions.Hosting/Hosting.csproj"
-        dotnet restore "AntPlus.UnitTests/AntPlus.UnitTests.csproj"
-        dotnet restore "Examples/AntUsbStick/AntUsbStick.csproj"
-        dotnet restore "Extensions/Hosting/Hosting.UnitTests/Hosting.UnitTests.csproj"
+        dotnet restore AntPlus.Extensions.Hosting
+        dotnet restore AntPlus.UnitTests
+        dotnet restore Examples/AntUsbStick
+        dotnet restore Extensions/Hosting/Hosting.UnitTests
     - name: Build
-      run: dotnet build --no-restore --configuration Release  -p:GeneratePackageOnBuild=false
+      run: dotnet build --no-restore --configuration Github  -p:GeneratePackageOnBuild=false
     - name: Test
-      run: dotnet test --no-build --verbosity minimal --configuration Release
+      run: dotnet test --no-build --verbosity minimal --configuration Github
       

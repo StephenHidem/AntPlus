@@ -21,7 +21,15 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+    - name: Install dependencies
+      run: |
+        dotnet restore AntPlus
+        dotnet restore AntRadioInterface
+        dotnet restore AntPlus.Extensions.Hosting
+        dotnet restore AntPlus.UnitTests
+        dotnet restore Examples/AntUsbStick
+        dotnet restore Extensions/Hosting/Hosting.UnitTests
     - name: Build NuGet Packages
-      run: dotnet build --configuration Release
+      run: dotnet build --no-restore --configuration Github
     - name: Publish NuGet Packages
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate

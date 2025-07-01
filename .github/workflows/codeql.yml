@@ -18,14 +18,14 @@ on:
       - "AntRadioInterface/*"
       - "Examples/AntUsbStick/*"
       - "AntPlus.Extensions.Hosting/*"
-    branches: [ "master", "*" ]
+    branches: [ "master" ]
   pull_request:
     paths:
       - "AntPlus/**"
       - "AntRadioInterface/*"
       - "Examples/AntUsbStick/*"
       - "AntPlus.Extensions.Hosting/*"
-    branches: [ "master", "*" ]
+    branches: [ "master" ]
   schedule:
     - cron: '34 0 * * 1'
 
@@ -103,7 +103,7 @@ jobs:
       run: |
         echo 'Building C# project'
         # dotnet restore
-        dotnet build --configuration Release -p:GeneratePackageOnBuild=false
+        dotnet build --configuration Github -p:GeneratePackageOnBuild=false
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

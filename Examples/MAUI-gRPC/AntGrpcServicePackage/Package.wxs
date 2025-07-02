@@ -16,7 +16,7 @@
 	
 			<Component Id="ServiceExecutable">
 				<File Id="AntGrpcService" Source="!(bindpath.AntGrpcService)\AntGrpcService.exe" />
-				<File	Id="AntGrpcServiceConfig" Source="!(bindpath.AntGrpcService)\appsettings.json" />
+				<File Id="AntGrpcServiceConfig" Source="!(bindpath.AntGrpcService)\appsettings.json" />
 				
 				<ServiceInstall Id="ServiceInstaller"
 							  Type="ownProcess"

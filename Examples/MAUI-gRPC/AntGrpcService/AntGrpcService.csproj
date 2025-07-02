@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+	<PublishProfile>AntGrpcServiceProfile</PublishProfile>
 	<RuntimeIdentifier>win-x86</RuntimeIdentifier>
 	<AssemblyVersion>2.0.1.0</AssemblyVersion>
   </PropertyGroup>

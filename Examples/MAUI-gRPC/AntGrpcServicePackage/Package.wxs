@@ -6,10 +6,6 @@
 		<MediaTemplate EmbedCab="yes"/>
 		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
 		
-		<Component Id="appsettingsComponent" Guid="{903035D1-B527-4CD1-9084-449C9FDD179A}">
-			<File Id="appsettings" Source="$(var.AntGrpcService.TargetDir)publish\appsettings.json" />
-		</Component>
-		
 		<DirectoryRef Id="INSTALLFOLDER">
 			<Component Id="FirewallScope" Guid="{63B9DA19-1F7E-42F1-BEDE-8B8FDFE24EE8}">
 				<fire:FirewallException Id="FE_AntGrpcService1"
@@ -19,8 +15,9 @@
 			</Component>
 	
 			<Component Id="ServiceExecutable">
-				<File Id="AntGrpcService" Source="$(var.AntGrpcService.TargetDir)publish\AntGrpcService.exe" />
-
+				<File Id="AntGrpcService" Source="!(bindpath.AntGrpcService)\AntGrpcService.exe" />
+				<File	Id="AntGrpcServiceConfig" Source="!(bindpath.AntGrpcService)\appsettings.json" />
+				
 				<ServiceInstall Id="ServiceInstaller"
 							  Type="ownProcess"
 							  Name="ANT gRPC Service"
@@ -51,7 +48,6 @@
 		<Feature Id="Main">
 			<ComponentRef Id="FirewallScope" />
 			<ComponentRef Id="ServiceExecutable"/>
-			<ComponentRef Id="appsettingsComponent"/>
 		</Feature>
 
 		<Property Id="PORTNUMBER" Value="5073"/>

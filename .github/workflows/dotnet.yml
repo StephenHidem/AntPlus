@@ -4,29 +4,11 @@
 name: ANT+ .NET Test
 
 on:
-  push:
-    paths:
-      - "AntPlus/**"
-      - "AntRadioInterface/*"
-      - "Examples/AntUsbStick/*"
-      - "AntPlus.Extensions.Hosting/*"
-      - "AntPlus.UnitTests/*"
-      - "Extensions/Hosting/Hosting.UnitTests/*"
-    branches: [ "master" ]
-  pull_request:
-    paths:
-      - "AntPlus/**"
-      - "AntRadioInterface/*"
-      - "Examples/AntUsbStick/*"
-      - "AntPlus.Extensions.Hosting/*"
-      - "AntPlus.UnitTests/*"
-      - "Extensions/Hosting/Hosting.UnitTests/*"
-    branches: [ "master" ]
   workflow_dispatch:
     
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       # required for all workflows
       security-events: write
@@ -45,8 +27,11 @@ jobs:
         dotnet restore AntPlus.UnitTests
         dotnet restore Examples/AntUsbStick
         dotnet restore Extensions/Hosting/Hosting.UnitTests
+        dotnet restore Documentation/Documentation.shfbproj
     - name: Build
       run: dotnet build --no-restore --configuration Github  -p:GeneratePackageOnBuild=false
     - name: Test
       run: dotnet test --no-build --verbosity minimal --configuration Github
+    - name: Build Documentation
+      run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release
       

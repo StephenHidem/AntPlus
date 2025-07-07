@@ -85,6 +85,8 @@
         <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
       </Filter>
     </ApiFilter>
+    <ComponentPath>./packages</ComponentPath>
+    <SHFBROOT Condition=" '$(SHFBROOT)' == '' ">$(MSBuildThisFileDirectory)../packages/EWSoftware.SHFB.2025.3.22.0/Tools/</SHFBROOT>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -190,6 +192,14 @@
       <ImageId>SmallEarthTech</ImageId>
       <AlternateText>Small Earth Tech</AlternateText>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EWSoftware.SHFB">
+      <Version>2025.3.22</Version>
+    </PackageReference>
+    <PackageReference Include="EWSoftware.SHFB.NET">
+      <Version>9.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="'$(MSBuildRestoreSessionId)' != ''" />

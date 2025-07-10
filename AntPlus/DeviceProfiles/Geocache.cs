@@ -14,9 +14,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
     /// <summary>
     /// This class supports geocaches. This is specified in ANT+ Managed Network Document – Geocache Device Profile.
     /// </summary>
-    /// <remarks>
-    /// Latitude and longitude coordinates are transmitted as 
-    /// </remarks>
     /// <seealso cref="AntDevice" />
     public partial class Geocache : AntDevice
     {

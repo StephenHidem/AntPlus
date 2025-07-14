@@ -85,7 +85,8 @@
         <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
       </Filter>
     </ApiFilter>
-		<ComponentPath>./packages</ComponentPath>
+    <ComponentPath>./packages</ComponentPath>
+    <SHFBROOT Condition=" '$(SHFBROOT)' == '' ">$(MSBuildThisFileDirectory)../packages/EWSoftware.SHFB.2025.3.22.0/Tools/</SHFBROOT>
     <FooterText>Documentation built {%40BuildDate:MM/dd/yyyy H:mm:ss}.</FooterText>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
@@ -194,11 +195,11 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EWSoftware.SHFB">
+      <Version>2025.3.22</Version>
+    </PackageReference>
     <PackageReference Include="EWSoftware.SHFB.NET">
       <Version>9.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="SmallEarthTech.SHFB">
-      <Version>2025.7.9-alpha6</Version>
     </PackageReference>
   </ItemGroup>
   <!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->

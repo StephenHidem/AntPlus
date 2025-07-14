@@ -11,7 +11,7 @@ jobs:
     # environment:
     #   name: github-pages
     #   url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-24.04
+    runs-on: windows-latest
     permissions:
       # required for all workflows
       security-events: write
@@ -48,7 +48,7 @@ jobs:
     # - name: Publish NuGet Packages
     #   run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
     - name: Build Documentation
-      run: msbuild Documentation/Documentation.shfbproj -t:Build -p:Configuration=Release
+      run: dotnet msbuild -t:Build -p:Configuration=Release Documentation/Documentation.shfbproj
     # - name: Setup Pages
     #   uses: actions/configure-pages@v5
     # - name: Upload artifact

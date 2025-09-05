@@ -57,6 +57,16 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <CopyrightText>&amp;#169%3b 2022 Stephen Hidem.</CopyrightText>
     <PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
+        <configuration useGAC="false">
+  <assemblyBinding />
+  <ignoreIfUnresolved>
+    <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+    <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+    <assemblyIdentity name="CommunityToolkit.Mvvm" />
+  </ignoreIfUnresolved>
+</configuration>
+      </PlugInConfig>
     </PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
@@ -211,7 +221,8 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>type nul &gt; ..\docs\.nojekyll</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -140,6 +140,7 @@
     <None Include="Content\VersionHistory\AntPlus\v5.1.2.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.0.0.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.0.1.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v6.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.1.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v2.0.0.0.aml" />
@@ -170,6 +171,7 @@
     <None Include="Content\VersionHistory\AntUsbStick\v3.1.3.0.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v4.0.0.0.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v4.0.1.0.aml" />
+    <None Include="Content\VersionHistory\AntUsbStick\v4.0.2.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\HostingExtensionsVersionHistory.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v1.1.0.0.aml" />
@@ -179,6 +181,7 @@
     <None Include="Content\VersionHistory\HostingExtensions\v1.2.1.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v2.0.0.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v2.0.1.0.aml" />
+    <None Include="Content\VersionHistory\HostingExtensions\v2.0.2.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <VersionPrefix>6.0.1</VersionPrefix>
+    <VersionPrefix>6.0.2</VersionPrefix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>

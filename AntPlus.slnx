@@ -1,0 +1,77 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Github" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Examples/">
+    <Project Path="Examples/AntMulticastServer/AntMulticastServer.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+      <Build Solution="*|Any CPU" Project="false" />
+    </Project>
+    <Project Path="Examples/AntUsbStick/AntUsbStick.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+    </Project>
+    <Project Path="Examples/WpfUsbStickApp/WpfUsbStickApp.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+      <Build Solution="Github|Any CPU" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Examples/MAUI-gRPC/">
+    <Project Path="Examples/MAUI-gRPC/AntGrpcService/AntGrpcService.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+      <Build Solution="Github|Any CPU" Project="false" />
+    </Project>
+    <Project Path="Examples/MAUI-gRPC/AntGrpcServicePackage/AntGrpcServicePackage.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0">
+      <BuildType Solution="Github|*" Project="Release" />
+      <Platform Solution="*|Any CPU" Project="x86" />
+      <Build Solution="Github|Any CPU" Project="false" />
+    </Project>
+    <Project Path="Examples/MAUI-gRPC/AntGrpcShared/AntGrpcShared.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+      <Build Solution="Github|Any CPU" Project="false" />
+    </Project>
+    <Project Path="Examples/MAUI-gRPC/MauiAntGrpcClient/MauiAntGrpcClient.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+      <Build Solution="Github|Any CPU" Project="false" />
+      <Deploy Solution="*|ARM64" />
+      <Deploy Solution="*|x64" />
+      <Deploy Solution="*|x86" />
+      <Deploy Solution="Debug|Any CPU" />
+      <Deploy Solution="Release|Any CPU" />
+    </Project>
+  </Folder>
+  <Folder Name="/Extensions/">
+    <Project Path="AntPlus.Extensions.Hosting/Hosting.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+    </Project>
+    <Project Path="Extensions/Hosting/Hosting.UnitTests/Hosting.UnitTests.csproj">
+      <BuildType Solution="Github|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="LICENSE.txt" />
+    <File Path="OSMFEULA.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="AntPlus.UnitTests/AntPlus.UnitTests.csproj">
+    <BuildType Solution="Github|*" Project="Release" />
+  </Project>
+  <Project Path="AntPlus/AntPlus.csproj">
+    <BuildType Solution="Github|*" Project="Release" />
+  </Project>
+  <Project Path="AntRadioInterface/AntRadioInterface.csproj">
+    <BuildType Solution="Github|*" Project="Release" />
+  </Project>
+  <Project Path="Documentation/Documentation.shfbproj" Type="7cf6df6d-3b04-46f8-a40b-537d21bca0b4" Id="50199f4b-cdec-4c32-979f-2dfa639a34c3">
+    <BuildDependency Project="AntPlus/AntPlus.csproj" />
+    <BuildDependency Project="AntRadioInterface/AntRadioInterface.csproj" />
+    <BuildType Solution="Github|*" Project="Release" />
+    <Platform Project="AnyCPU" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+</Solution>

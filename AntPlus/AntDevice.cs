@@ -118,7 +118,7 @@ namespace SmallEarthTech.AntPlus
         }
 
         /// <inheritdoc/>
-        /// <remarks>Overridden to provide the short class name versus the full namespace name.</remarks>
+        /// <returns>Overridden to return the short class name versus the full namespace name.</returns>
         public override string ToString()
         {
             return GetType().Name;

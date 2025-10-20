@@ -117,7 +117,9 @@ namespace SmallEarthTech.AntPlus
             _ = _timeoutTimer?.Change(_deviceTimeout, Timeout.Infinite);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string representation of the current derived AntDevice.
+        /// </summary>
         /// <returns>Overridden to return the short class name versus the full namespace name.</returns>
         public override string ToString()
         {
@@ -157,7 +159,11 @@ namespace SmallEarthTech.AntPlus
             return ret;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Releases the resources used by the current instance of the class.
+        /// </summary>
+        /// <remarks>This method disposes of the internal timer and logs the device state.  After calling
+        /// this method, the instance should not be used further.</remarks>
         public void Dispose()
         {
             _logger.LogAntDeviceState(this, _deviceTimeout);

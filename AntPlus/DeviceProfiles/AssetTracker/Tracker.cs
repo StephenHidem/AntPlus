@@ -8,7 +8,7 @@ using System.Linq;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 {
     /// <summary>
-    /// This class serves as an asset tracker.
+    /// This class supports asset trackers.
     /// </summary>
     public partial class Tracker : AntDevice
     {

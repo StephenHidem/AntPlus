@@ -7,7 +7,7 @@
     /// <remarks>
     /// The application host builder retrieves configuration options from various sources such as the command line or
     /// appsettings.json. If the configuration can't find TimeoutOptions, the collection will default to <see cref="MissedMessages"/>.
-    /// If both <see cref="Timeout"/> and <see cref="MissedMessages"/> are defined. Timeout is ignored and MissedMessages is used.
+    /// If both <see cref="Timeout"/> and <see cref="MissedMessages"/> are defined, Timeout is ignored and MissedMessages is used.
     /// Prefer MissedMessages as this will scale the ANT device timeout based on the specific data broadcast rate of an ANT device.
     /// Asset trackers broadcast 16 times a second and Geocaches broadcast once every 2 seconds. Other devices typically
     /// broadcast 4 times a second.

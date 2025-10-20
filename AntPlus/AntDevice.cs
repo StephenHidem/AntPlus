@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -17,7 +18,7 @@ namespace SmallEarthTech.AntPlus
     /// An important consideration is an appropriate timeout to determine if a device has gone offline - battery 
     /// has died, device has been turned off, device is out of range of receiver, ane/or the RF environment the
     /// device and receiver are operating in. Most devices broadcast at 4Hz, with the notable exception of
-    /// <see cref="Geocache"/>.
+    /// <see cref="Geocache"/> and <see cref="Tracker">Asset Tracker</see>.
     /// 
     /// A reasonable rule of thumb is to set the timeout at 8 messages times the channel period per second; typically
     /// 2 seconds. Consult the device profile documentation at https://www.thisisant.com for a device and consult the channel

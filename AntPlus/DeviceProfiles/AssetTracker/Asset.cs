@@ -5,7 +5,7 @@ using System.Text;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
 {
     /// <summary>
-    /// This class represents an asset.
+    /// This class represents an asset being tracked by an <see cref="Tracker">Asset Tracker</see>.
     /// </summary>
     public partial class Asset : ObservableObject
     {

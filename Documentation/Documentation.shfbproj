@@ -59,13 +59,13 @@
     <PlugInConfigurations>
       <PlugInConfig id="Assembly Binding Redirection" enabled="True">
         <configuration useGAC="false">
-  <assemblyBinding />
-  <ignoreIfUnresolved>
-    <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
-    <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
-    <assemblyIdentity name="CommunityToolkit.Mvvm" />
-  </ignoreIfUnresolved>
-</configuration>
+          <assemblyBinding />
+          <ignoreIfUnresolved>
+            <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+            <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+            <assemblyIdentity name="CommunityToolkit.Mvvm" />
+          </ignoreIfUnresolved>
+        </configuration>
       </PlugInConfig>
     </PlugInConfigurations>
     <NamespaceSummaries>
@@ -209,10 +209,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EWSoftware.SHFB">
-      <Version>2025.7.9</Version>
+      <Version>2025.9.30-debug</Version>
     </PackageReference>
     <PackageReference Include="EWSoftware.SHFB.NET">
-      <Version>9.0.0</Version>
+      <Version>10.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->

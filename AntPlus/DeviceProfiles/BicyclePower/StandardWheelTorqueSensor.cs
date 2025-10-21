@@ -46,7 +46,10 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
+        /// <returns>A string that represents the object, specifically "Bike Power (Wheel Torque)".</returns>
         public override string ToString()
         {
             return "Bike Power (Wheel Torque)";

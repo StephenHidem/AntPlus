@@ -108,7 +108,12 @@ namespace SmallEarthTech.AntUsbStick
             return Task.FromResult(_channels);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Releases all resources used by the current instance of the class.
+        /// </summary>
+        /// <remarks>This method disposes of the underlying ANT device and its associated resources. It
+        /// also unsubscribes from event handlers to prevent memory leaks. After calling this method, the instance
+        /// should not be used, as its state becomes undefined.</remarks>
         public void Dispose()
         {
             if (_antDevice != null)

@@ -248,7 +248,12 @@ namespace SmallEarthTech.AntUsbStick
             return _antChannel.unassignChannel(responseWaitTime);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Releases all resources used by the current instance of the class.
+        /// </summary>
+        /// <remarks>This method disposes of the associated ANT channel, unsubscribes from its events, 
+        /// and releases any unmanaged resources. After calling this method, the instance  should no longer be
+        /// used.</remarks>
         public void Dispose()
         {
             if (_antChannel != null)

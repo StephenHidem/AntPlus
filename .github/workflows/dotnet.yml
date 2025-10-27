@@ -11,7 +11,7 @@ jobs:
     # environment:
     #   name: github-pages
     #   url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       # required for all workflows
       security-events: write
@@ -40,7 +40,7 @@ jobs:
         dotnet restore AntPlus.UnitTests
         dotnet restore Examples/AntUsbStick
         dotnet restore Extensions/Hosting/Hosting.UnitTests
-        dotnet restore Documentation/Documentation.shfbproj
+    #    dotnet restore Documentation/Documentation.shfbproj
     - name: Build NuGet Packages
       run: dotnet build --no-restore --configuration Github
     # - name: Run Unit Tests
@@ -48,7 +48,7 @@ jobs:
     # - name: Publish NuGet Packages
     #   run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
     - name: Build Documentation
-      run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release
+      run: dotnet build Documentation/Documentation.shfbproj --configuration Release -p:AlwaysLoadProject=true
     # - name: Setup Pages
     #   uses: actions/configure-pages@v5
     # - name: Upload artifact

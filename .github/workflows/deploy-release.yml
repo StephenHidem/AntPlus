@@ -39,6 +39,10 @@ jobs:
     - name: Run Unit Tests
       run: dotnet test --no-build --verbosity minimal --configuration Github
 
+    # Publish NuGet Packages
+    - name: Publish NuGet Packages
+      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+
     # Build Documentation and Upload Artifacts
     - name: Build Documentation
       run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release -p:AlwaysLoadProject=true
@@ -64,10 +68,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    # Publish NuGet Packages
-    - name: Publish NuGet Packages
-      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
-
     # Deploy Documentation to GitHub Pages
     - name: Deploy to GitHub Pages
       id: deployment

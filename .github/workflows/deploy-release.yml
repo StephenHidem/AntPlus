@@ -45,7 +45,7 @@ jobs:
 
     # Build Documentation and Upload Artifacts
     - name: Build Documentation
-      run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release -p:AlwaysLoadProject=true
+      run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release -p:AlwaysLoadProject=True
     - name: Setup Pages
       uses: actions/configure-pages@v5
     - name: Upload artifact

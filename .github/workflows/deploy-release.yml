@@ -11,6 +11,12 @@ on:
     
 jobs:
   build:
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      actions: write
+
     runs-on: ubuntu-latest
 
     steps:

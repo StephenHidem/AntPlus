@@ -98,6 +98,8 @@
     <FooterText>Documentation built {%40BuildDate:MM/dd/yyyy H:mm:ss}.</FooterText>
     <ComponentConfigurations>
     </ComponentConfigurations>
+    <WorkingPath>
+    </WorkingPath>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -209,7 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SmallEarthTech.SHFB">
-      <Version>2025.11.1-alpha</Version>
+      <Version>2025.11.1-alpha.1</Version>
     </PackageReference>
     <PackageReference Include="EWSoftware.SHFB.NET">
       <Version>10.0.0</Version>

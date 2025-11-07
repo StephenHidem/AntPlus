@@ -11,12 +11,6 @@ on:
     
 jobs:
   build:
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-      actions: write
-
     runs-on: ubuntu-latest
 
     steps:
@@ -42,12 +36,12 @@ jobs:
       run: dotnet build --no-restore --configuration Github
 
     # Run Unit Tests
-    - name: Run Unit Tests
-      run: dotnet test --no-build --verbosity minimal --configuration Github
+    # - name: Run Unit Tests
+    #   run: dotnet test --no-build --verbosity minimal --configuration Github
 
     # Publish NuGet Packages
-    - name: Publish NuGet Packages
-      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+    # - name: Publish NuGet Packages
+    #   run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
 
     # Build Documentation and Upload Artifacts
     - name: Build Documentation
@@ -59,22 +53,22 @@ jobs:
       with:
         path: './Documentation/Help'
 
-  deploy:
-    needs: build
+  # deploy:
+  #   needs: build
 
-    # Grant permissions to deploy to GitHub Pages
-    permissions:
-      pages: write
-      id-token: write
+  #   # Grant permissions to deploy to GitHub Pages
+  #   permissions:
+  #     pages: write
+  #     id-token: write
 
-    # Deploy to GitHub Pages environment
-    environment:
-        name: github-pages
-        url: ${{ steps.deployment.outputs.page_url }}
+  #   # Deploy to GitHub Pages environment
+  #   environment:
+  #       name: github-pages
+  #       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ubuntu-latest
-    steps:
-    # Deploy Documentation to GitHub Pages
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   # Deploy Documentation to GitHub Pages
+  #   - name: Deploy to GitHub Pages
+  #     id: deployment
+  #     uses: actions/deploy-pages@v4

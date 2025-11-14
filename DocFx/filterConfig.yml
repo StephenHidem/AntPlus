@@ -1,0 +1,8 @@
+### YamlMime:ManagedReference
+apiRules:
+- exclude:
+    uidRegex: ^CommunityToolkit\.Mvvm\.ComponentModel\.ObservableObject$
+    type: Type
+- exclude:
+    uidRegex: ^System\.Collections\.ObjectModel$
+    type: Namespace

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "..",
+          "files": [
+            "AntRadioInterface/AntRadioInterface.csproj",
+            "AntPlus/AntPlus.csproj",
+            "AntPlus.Extensions.Hosting/Hosting.csproj",
+            "Examples/AntUsbStick/AntUsbStick.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "filter": "filterConfig.yml",
+      "namespaceLayout": "nested",
+      "memberLayout": "separatePages",
+      "categoryLayout": "nested"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern",
+      "docfx-plus"
+    ],
+    "globalMetadata": {
+      "_appName": "ANT Plus",
+      "_appTitle": "ANT+",
+      "_disableContribution": true,
+      "_enableSearch": true,
+      "pdf": false
+    }
+  }
+}

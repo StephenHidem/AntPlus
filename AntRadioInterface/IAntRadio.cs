@@ -24,15 +24,15 @@ namespace SmallEarthTech.AntRadioInterface
     };
 
     /// <summary>
-    /// Transmit Power offSets
+    /// Transmit power offsets.
     /// </summary>
     public enum TransmitPower : byte
     {
-        /// <summary>The minus 20 dB</summary>
+        /// <summary>-20 dB</summary>
         Minus20DB = 0x00,
-        /// <summary>The minus 10 dB</summary>
+        /// <summary>-10 dB</summary>
         Minus10DB = 0x01,
-        /// <summary>The minus 5 dB</summary>
+        /// <summary>-5 dB</summary>
         Minus5DB = 0x02,
         /// <summary>0 dB</summary>
         Tx0DB = 0x03
@@ -128,7 +128,8 @@ namespace SmallEarthTech.AntRadioInterface
         /// </returns>
         /// <example>
         /// Implementors typically would perform the following setup -
-        /// <code>public Task&lt;IAntChannel[]&gt; InitializeContinuousScanMode()
+        /// <code>
+        /// public Task&lt;IAntChannel[]&gt; InitializeContinuousScanMode()
         /// {
         ///     // multiple clients may attempt to initialize
         ///     lock (_lock)
@@ -159,7 +160,9 @@ namespace SmallEarthTech.AntRadioInterface
         ///     }
         ///
         ///     return Task.FromResult(_channels);
-        /// }</code></example>
+        /// }
+        /// </code>
+        /// </example>
         Task<IAntChannel[]> InitializeContinuousScanMode();
 
         /// <summary>Cancels the transfers.</summary>

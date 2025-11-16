@@ -351,3 +351,4 @@ MigrationBackup/
 
 # Sandcastle Help File Builder default output folder
 [Hh]elp
+/DocFx

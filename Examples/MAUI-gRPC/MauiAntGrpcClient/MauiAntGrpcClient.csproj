@@ -13,7 +13,6 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-		<WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>MauiAntGrpcClient</RootNamespace>
 		<UseMaui>true</UseMaui>

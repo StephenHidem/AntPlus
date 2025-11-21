@@ -21,7 +21,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
 
     # Restore Dependencies
     - name: Restore Dependencies
@@ -48,7 +48,7 @@ jobs:
 
     # Build Documentation and Upload Artifacts
     - name: Build Documentation
-      run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release -p:AlwaysLoadProject=True
+      run: dotnet build Documentation/Documentation.shfbproj --no-restore --configuration Release
     - name: Setup Pages
       uses: actions/configure-pages@v5
     - name: Upload artifact

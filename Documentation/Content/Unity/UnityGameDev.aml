@@ -4,33 +4,35 @@
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-    <!--
+		<!--
     <summary>
       <para>Optional summary abstract</para>
     </summary>
     -->
 
-    <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section
            titles.  Specify a numeric value as the inner text to limit it to
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
+			<!-- <autoOutline /> -->
 
-      <para>
+			<para>
 				I've created a Unity example project to demonstrate integrating elements of the ANT+ class library and extensions.
 				The repository is located at
 				<externalLink>
-				  <linkText>Unity ANT gRPC.</linkText>
-				  <linkUri>https://github.com/StephenHidem/Unity-ANT-gRPC</linkUri>
-			  </externalLink>
+					<linkText>Unity ANT gRPC.</linkText>
+					<linkUri>https://github.com/StephenHidem/Unity-ANT-gRPC</linkUri>
+				</externalLink>
 				The README contains important information!
 			</para>
-			<para><legacyBold>A warm shout out to the good folks who created NuGetForUnity and YetAnotherHttpHandler! Their efforts are deeply appreciated.</legacyBold></para>
-    </introduction>
+			<para>
+				<legacyBold>A warm shout out to the good folks who created NuGetForUnity and YetAnotherHttpHandler! Their efforts are deeply appreciated.</legacyBold>
+			</para>
+		</introduction>
 
-    <!-- Optional additional procedure or section with procedure -->
-    <!--<section address="Section1">
+		<!-- Optional additional procedure or section with procedure -->
+		<!--<section address="Section1">
       <title>Optional section title</title>
       <content>
         <procedure>
@@ -47,13 +49,15 @@
               </content>
             </step>
           </steps>
-          --><!-- <conclusion>Optional conclusion</conclusion> --><!--
+          -->
+		<!-- <conclusion>Optional conclusion</conclusion> -->
+		<!--
         </procedure>
       </content>
     </section>-->
 
-    <relatedTopics>
-      <!-- One or more of the following:
+		<relatedTopics>
+			<!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference
@@ -84,6 +88,6 @@
       <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
       <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
       -->
-    </relatedTopics>
-  </developerConceptualDocument>
+		</relatedTopics>
+	</developerConceptualDocument>
 </topic>

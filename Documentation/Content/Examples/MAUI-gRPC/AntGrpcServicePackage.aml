@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" revisionNumber="1">
-  <developerConceptualDocument
-    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
+	<developerConceptualDocument
+	  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+	  xmlns:xlink="http://www.w3.org/1999/xlink">
 
-    <!--
+		<!--
     <summary>
       <para>Optional summary abstract</para>
     </summary>
     -->
 
-    <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section
            titles.  Specify a numeric value as the inner text to limit it to
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
+			<!-- <autoOutline /> -->
 
-      <para>
+			<para>
 				The AntGrpcServicePackage installs the AntGrpcService on the local Windows PC and creates a firewall exception allowing network
 				traffic between the service and any clients on the network. Wix is used to create the MSI file. You must install the
 				Wix toolset to build this project.
@@ -28,16 +28,16 @@
 				<para>
 					The package has been updated to use WiX Toolset v6.0.x.
 					You can update your WiX toolset installation from the developer command line -
-          <command>dotnet tool update --global wix</command>
+					<command>dotnet tool update --global wix</command>
 				</para>
 			</alert>
-    </introduction>
+		</introduction>
 
-    <!-- Add one or more top-level section elements.  These are collapsible.
+		<!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
 
-    <relatedTopics>
+		<relatedTopics>
 			<link xlink:href="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" />
 			<!-- One or more of the following:
            - A local link
@@ -74,6 +74,6 @@
       <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
       <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
       -->
-    </relatedTopics>
-  </developerConceptualDocument>
+		</relatedTopics>
+	</developerConceptualDocument>
 </topic>

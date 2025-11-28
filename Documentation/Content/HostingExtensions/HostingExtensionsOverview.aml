@@ -1,51 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="825ed94a-e668-4d28-85ff-53cbb962a355" revisionNumber="1">
-  <developerConceptualDocument
-    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
+	<developerConceptualDocument
+	  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+	  xmlns:xlink="http://www.w3.org/1999/xlink">
 
-    <!--
+		<!--
     <summary>
       <para>Optional summary abstract</para>
     </summary>
     -->
 
-    <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
+		<introduction>
+			<!-- Uncomment this to generate an outline of the section and sub-section
            titles.  Specify a numeric value as the inner text to limit it to
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
+			<!-- <autoOutline /> -->
 
-      <para>
+			<para>
 				The ANT+ Hosting Extensions simplify integrating the ANT+ Class Library into applications that use
 				dependency injection (DI) to compose the host application. MAUI applications use this pattern extensively
 				and other Windows applications can employ various host builders for DI.
 			</para>
-    </introduction>
+		</introduction>
 
-    <!-- Add one or more top-level section elements.  These are collapsible.
+		<!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
-    <section address="Section1">
-      <title>HostExtension Class</title>
-      <content>
-        <!-- Uncomment this to create a sub-section outline
+		<section address="Section1">
+			<title>HostExtension Class</title>
+			<content>
+				<!-- Uncomment this to create a sub-section outline
         <autoOutline /> -->
-        <para>
-			This class provides two extension methods to add the ANT+ classes to the host builder. UseAntPlus() is overloaded
-			to work with IHostBuilder implementations and MauiAppBuilder implementations.
-			Their purpose is identical; inject all the ANT+ devices and support infrastructure into the DI container.
-		</para>
-		<para>
-			An additional extension method, AddAntPlusServices(), is provided to add the ANT+ classes to an IServiceCollection when UseAntPlus()
-			is not suitable.
-		</para>
-		<para>
-			The TimeoutOptions class will also be added to the DI container and the configuration is bound by the container.
-		</para>
-      </content>
-      <!-- If a section contains a sections element, its content creates
+				<para>
+					This class provides two extension methods to add the ANT+ classes to the host builder. UseAntPlus() is overloaded
+					to work with IHostBuilder implementations and MauiAppBuilder implementations.
+					Their purpose is identical; inject all the ANT+ devices and support infrastructure into the DI container.
+				</para>
+				<para>
+					An additional extension method, AddAntPlusServices(), is provided to add the ANT+ classes to an IServiceCollection when UseAntPlus()
+					is not suitable.
+				</para>
+				<para>
+					The TimeoutOptions class will also be added to the DI container and the configuration is bound by the container.
+				</para>
+			</content>
+			<!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
           <section address="SubSection1">
@@ -61,7 +61,7 @@
               </content>
           </section>
       </sections> -->
-    </section>
+		</section>
 		<section>
 			<title>Setting TimeoutOptions</title>
 			<content>
@@ -81,7 +81,9 @@
 				<alert class="note">
 					<para>Prefer MissedMessages as this will scale the timeout based on the broadcast rate of specific ANT devices.</para>
 				</alert>
-				<para>Setting the option from the command line: <system>--TimeoutOptions:MissedMessages=8</system>.</para>
+				<para>
+					Setting the option from the command line: <system>--TimeoutOptions:MissedMessages=8</system>.
+				</para>
 				<para>Setting the option from appsetings.json:</para>
 				<code language="none" source="..\..\AntPlus\Examples\WpfUsbStickApp\appsettings.json"/>
 			</content>
@@ -93,16 +95,16 @@
 					This is a simple interface that defines a single method - SelectImplementationType(). The purpose of
 					this method is to provide a mechanism for selecting one specific implementation from multiple implementations
 					of the same device class. Examples of this are bicycle power and fitness equipment sensors. A data page is
-          decoded and a specific implementation type is returned or null if the implementation could not be
+					decoded and a specific implementation type is returned or null if the implementation could not be
 					determined from the data page.
 				</para>
-	      <alert class="note">
+				<alert class="note">
 					<para>You only need to implement this interface for device classes with multiple implementations.</para>
 				</alert>
 				<para>
 					Support for ANT+ devices not supported by the ANT+ Class Library can be added to the DI container and
 					device types that support multiple implementations will implement this interface and add it to the DI container.
-				  It is added to the DI container with the AddKeyedSingleton() method with the device class value specified
+					It is added to the DI container with the AddKeyedSingleton() method with the device class value specified
 					as the key. For example - <codeInline>AddKeyedSingleton&lt;ISelectImplementation, SelectBicyclePowerImplementation&gt;(BicyclePower.DeviceClass);</codeInline>
 				</para>
 				<para>Here's the SelectBicyclePowerImplementation class -</para>
@@ -122,7 +124,7 @@
 		</section>
 		<relatedTopics>
 			<link xlink:href="0e424769-d4c6-4a98-9384-a810421ad5e1"/>
-      <!-- One or more of the following:
+			<!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference
@@ -157,6 +159,6 @@
       <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
       <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
       -->
-    </relatedTopics>
-  </developerConceptualDocument>
+		</relatedTopics>
+	</developerConceptualDocument>
 </topic>

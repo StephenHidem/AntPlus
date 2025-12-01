@@ -38,6 +38,9 @@ public new CommonDataPages CommonDataPages { get; }
 public BikeRadar(AntChannel channel) : base(channel)
 {
     CommonDataPages = new CommonDataPages(this);
+    .
+    .
+    .
 }
 ```
 ## AntDeviceCollection
@@ -46,6 +49,6 @@ mode and direct all messages received from the ANT radio to a private handler. T
 the collection or create a new ANT device and add it to the collection. The message is then passed to the ANT device parser
 for handling by the device.
 >[!NOTE]
-> Prefer AntCollection and the hosting extensions if your application uses dependency injection. See [HostingExtensions](HostingExtensionsOverview.md) for details.
+> Prefer AntCollection and the hosting extensions if your application uses dependency injection. See the [Hosting Extensions Overview](HostingExtensionsOverview.md) for details.
 
 [!code-csharp[](../../Examples/MAUI-gRPC/MauiAntGrpcClient/CustomAntDevice/BikeRadar.cs#Ctor)]

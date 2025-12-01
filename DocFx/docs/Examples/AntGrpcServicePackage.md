@@ -1,0 +1,2 @@
+# ANT GRPC Service Package Example
+This example demonstrates how to create a GRPC service that interacts with ANT+ devices using the AntRadioInterface and AntPlus class libraries. The service allows clients to connect to ANT+ devices and retrieve data such as heart rate, speed, and cadence.

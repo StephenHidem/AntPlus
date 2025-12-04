@@ -1,2 +1,2 @@
-# ANT GRPC Shared Example
-This example demonstrates how to create a shared library for a GRPC service that interacts with ANT+ devices using the AntRadioInterface and AntPlus class libraries. The shared library contains common code that can be used by multiple GRPC services to connect to ANT+ devices and retrieve data such as heart rate, speed, and cadence.
+# ANT gRPC Shared Example
+This example demonstrates how to create a shared library for a gRPC service that interacts with ANT+ devices using the AntRadioInterface and AntPlus class libraries. The shared library contains common code that can be used by multiple gRPC services to connect to ANT+ devices and retrieve data such as heart rate, speed, and cadence.

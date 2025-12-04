@@ -3,4 +3,4 @@ I've created a Unity example project to demonstrate integrating elements of the 
 The repository is located at [Unity ANT gRPC](https://github.com/StephenHidem/Unity-ANT-gRPC).
 The README contains important information!
 
-A warm shout out to the good folks who created NuGetForUnity and YetAnotherHttpHandler! Their efforts are deeply appreciated.
+*A warm shout out to the good folks who created NuGetForUnity and YetAnotherHttpHandler! Their efforts are deeply appreciated.*

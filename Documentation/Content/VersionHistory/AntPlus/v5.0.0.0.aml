@@ -58,7 +58,7 @@
 					asynchronous, awaitable task.
 				</para>
 				<para>
-					A new internal class used is for sending messages to ANT devices - SendMessageChannel. It is a
+					A new internal class for sending messages to ANT devices - SendMessageChannel. It is a
 					thread-safe class that uses all available channels to send messages. It is used by the AntDevice
 					class to send messages to ANT devices. Throughput is much improved when sending messages to multiple
 					ANT devices simultaneously.

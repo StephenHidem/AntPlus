@@ -47,6 +47,7 @@
     "globalMetadata": {
       "_appName": "Small Earth Technology ANT+ Class Libraries",
       "_appFaviconPath": "images/Help.png",
+      "_appFooter": "© 2022 Stephen Hidem.",
       "_appLogoPath": "images/SmallEarthTech.png",
       "_disableContribution": true,
       "_enableSearch": true,

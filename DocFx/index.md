@@ -3,6 +3,7 @@ _layout: landing
 ---
 
 # Welcome to the Small Earth Technology ANT+ Class Libraries.
+<br/>
 <p align="center">
     <img src="images/SmallEarthTech.png" width="200"/>
     <br/>
@@ -59,4 +60,3 @@ See the [Examples Overview](docs/Examples/ExamplesOverview.md) for more informat
 
 ## Other Resources
 - [AntPlus Source Code Repository](https://github.com/StephenHidem/AntPlus)
-- [Version History](docs/VersionHistory/VersionHistory.md)

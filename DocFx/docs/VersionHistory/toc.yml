@@ -1,5 +1,4 @@
-- title: Version History
-  href: VersionHistory.md
+- href: VersionHistory.md
   items:
   - name: AntPlus Library Version History
     href: AntPlus/toc.yml

@@ -2,5 +2,7 @@
   href: docs/
 - name: Examples
   href: docs/Examples/
+- name: Version History
+  href: docs/VersionHistory/
 - name: API
   href: api/

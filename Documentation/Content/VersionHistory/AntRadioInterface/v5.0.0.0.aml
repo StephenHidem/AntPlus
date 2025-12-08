@@ -36,7 +36,7 @@
 					</listItem>
 					<listItem>
 						<para>
-							Added`RadioCapabilities` (0x54),`StartupMessage` (0x6F) and `SerialErrorMessage` (0xAE).
+							Added `RadioCapabilities` (0x54),`StartupMessage` (0x6F) and `SerialErrorMessage` (0xAE).
 							to MessageId enum.
 						</para>
 					</listItem>

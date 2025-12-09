@@ -34,6 +34,7 @@ to MessageId enum.
    <Nullable>enable</Nullable>
    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
    <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
+   <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
 </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

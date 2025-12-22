@@ -57,15 +57,8 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <CopyrightText>&amp;#169%3b 2022 Stephen Hidem.</CopyrightText>
     <PlugInConfigurations>
-      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
-        <configuration useGAC="false">
-          <assemblyBinding />
-          <ignoreIfUnresolved>
-            <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
-            <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
-            <assemblyIdentity name="CommunityToolkit.Mvvm" />
-          </ignoreIfUnresolved>
-        </configuration>
+      <PlugInConfig id="Table of Contents Exclusion" enabled="True">
+        <configuration />
       </PlugInConfig>
     </PlugInConfigurations>
     <NamespaceSummaries>
@@ -91,9 +84,9 @@
     </NamespaceSummaries>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, PublicCompilerGenerated, NonBrowsable</VisibleItems>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="CommunityToolkit.Mvvm.ComponentModel" isExposed="True" xmlns="">
-        <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
-      </Filter>
+      <Filter entryType="Namespace" fullName="CommunityToolkit.Mvvm.ComponentModel" isExposed="True">
+  <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
+</Filter>
     </ApiFilter>
     <FooterText>Documentation built {%40BuildDate:MM/dd/yyyy H:mm:ss}.</FooterText>
     <ComponentConfigurations>

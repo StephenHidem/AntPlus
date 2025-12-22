@@ -60,7 +60,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\small_earth_icon.svg" Color="Black" />
+		<MauiIcon Include="Resources\AppIcon\small_earth_tech.png" />
 
 		<!-- Splash Screen -->
 
@@ -75,8 +75,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AppIcon\small_earth_tech.png" />
 	  <None Remove="Resources\Images\more_arrow.svg" />
-	  <None Remove="Resources\Splash\small_earth_tech.svg" />
+	  <None Remove="Resources\Splash\small_earth_tech.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -84,7 +85,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiSplashScreen Include="Resources\Splash\small_earth_tech.svg" Color="Black" />
+	  <MauiSplashScreen Include="Resources\Splash\small_earth_tech.png" Color="Black" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -192,6 +193,10 @@
 	  <MauiXaml Update="Views\ProgramGeocacheView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\small_earth_icon.svg" Color="Black" />
 	</ItemGroup>
 
 </Project>

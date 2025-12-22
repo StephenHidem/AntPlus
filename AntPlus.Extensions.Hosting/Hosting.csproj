@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Maui.Core" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Maui.Core" Version="10.0.20" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

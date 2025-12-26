@@ -85,7 +85,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiSplashScreen Include="Resources\Splash\small_earth_tech.png" Color="Black" />
+	  <MauiSplashScreen Include="Resources\Splash\small_earth_tech.png" Color="Black" BaseSize="256,256" Resize="true" />
 	</ItemGroup>
 
 	<ItemGroup>

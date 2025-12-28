@@ -40,6 +40,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
+		<WindowsPackageType>None</WindowsPackageType>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
@@ -197,6 +198,10 @@
 
 	<ItemGroup>
 	  <None Update="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\small_earth_icon.svg" Color="Black" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Properties\" />
 	</ItemGroup>
 
 </Project>

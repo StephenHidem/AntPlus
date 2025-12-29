@@ -8,6 +8,7 @@ using System.Linq;
 namespace SmallEarthTech.AntPlus
 {
     /// <summary>Supported common data pages.</summary>
+    /// <tocexclude />
     public enum CommonDataPage
     {
         /// <summary>Request data page</summary>
@@ -42,6 +43,7 @@ namespace SmallEarthTech.AntPlus
         ErrorDescription = 0x57
     }
     /// <summary>Data page command type.</summary>
+    /// <tocexclude />
     public enum CommandType
     {
         /// <summary>Unknown command</summary>
@@ -56,6 +58,7 @@ namespace SmallEarthTech.AntPlus
         DataPageSet
     }
     /// <summary>Battery status description.</summary>
+    /// <tocexclude />
     public enum BatteryStatus
     {
         /// <summary>Unknown</summary>
@@ -78,6 +81,7 @@ namespace SmallEarthTech.AntPlus
     /// <summary>
     /// Use this enumeration to set the desired sport mode.
     /// </summary>
+    /// <tocexclude />
     public enum SportMode
     {
         /// <summary>Default behavior</summary>
@@ -90,6 +94,7 @@ namespace SmallEarthTech.AntPlus
         Swimming = 5,
     }
     /// <summary>Currently the sub sport mode is only used by heart rate monitors.</summary>
+    /// <tocexclude />
     public enum SubSportMode
     {
         /// <summary>Generic. Use default.</summary>
@@ -112,6 +117,7 @@ namespace SmallEarthTech.AntPlus
         private readonly ILogger _logger;
 
         /// <summary>Command result.</summary>
+        /// <tocexclude />
         public enum CommandResult
         {
             /// <summary>Pass.</summary>
@@ -126,6 +132,7 @@ namespace SmallEarthTech.AntPlus
             Pending
         }
         /// <summary>Memory size unit used.</summary>
+        /// <tocexclude />
         public enum MemorySizeUnit
         {
             /// <summary>In bits.</summary>
@@ -146,6 +153,7 @@ namespace SmallEarthTech.AntPlus
             TeraBytes = 0x83
         }
         /// <summary>Severity of error.</summary>
+        /// <tocexclude />
         public enum ErrorLevel
         {
             /// <summary>Unknown.</summary>
@@ -159,6 +167,7 @@ namespace SmallEarthTech.AntPlus
         }
 
         /// <summary>The command status page.</summary>
+        /// <tocexclude />
         public readonly struct CommandStatusPage
         {
             /// <summary>Gets the last command received.</summary>
@@ -179,6 +188,7 @@ namespace SmallEarthTech.AntPlus
             }
         }
         /// <summary>Manufacturer info page.</summary>
+        /// <tocexclude />
         public readonly struct ManufacturerInfoPage
         {
             /// <summary>
@@ -202,6 +212,7 @@ namespace SmallEarthTech.AntPlus
             }
         }
         /// <summary>Product info page.</summary>
+        /// <tocexclude />
         public readonly struct ProductInfoPage
         {
             /// <summary>
@@ -232,6 +243,7 @@ namespace SmallEarthTech.AntPlus
             }
         }
         /// <summary>Battery status page.</summary>
+        /// <tocexclude />
         public readonly struct BatteryStatusPage
         {
             /// <summary>Gets the number of batteries.</summary>
@@ -263,9 +275,11 @@ namespace SmallEarthTech.AntPlus
             }
         }
         /// <summary>Subfield data page.</summary>
+        /// <tocexclude />
         public readonly struct SubfieldDataPage
         {
             /// <summary>The subfield data page type.</summary>
+            /// <tocexclude />
             public enum SubPage
             {
                 /// <summary>The temperature in degrees Celsius.</summary>
@@ -349,6 +363,7 @@ namespace SmallEarthTech.AntPlus
             }
         }
         /// <summary>The memory usage page.</summary>
+        /// <tocexclude />
         public readonly struct MemoryLevelPage
         {
             /// <summary>Gets the percent of memory used.</summary>
@@ -366,6 +381,7 @@ namespace SmallEarthTech.AntPlus
             }
         }
         /// <summary>Error description structure.</summary>
+        /// <tocexclude />
         public readonly struct ErrorDescriptionPage
         {
             /// <summary>Gets the index of the system component.</summary>

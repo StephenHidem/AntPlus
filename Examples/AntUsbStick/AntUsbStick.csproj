@@ -6,7 +6,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <AssemblyName>SmallEarthTech.$(MSBuildProjectName)</AssemblyName>
     <Title>Garmin/Dynastream ANT+ USB Stick Class Library</Title>
-    <VersionPrefix>4.0.2</VersionPrefix>
+    <VersionPrefix>4.1.0</VersionPrefix>
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
     <Authors>Stephen Hidem</Authors>
     <Description>Provides an interface to ANT+ USB sticks available from Garmin/Dynastream. This class is used in the example projects located at the project URL.</Description>
@@ -22,8 +22,10 @@
     <PackageId>$(AssemblyName)</PackageId>
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReleaseNotes>
-        Updated NuGet packages.
-    </PackageReleaseNotes>
+		1. Removed obsolete methods.
+		2. Updated NuGet dependencies.
+		3. Updated documentation.
+	</PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
     <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

@@ -17,11 +17,11 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-        Updated NuGet packages.
+        Updated NuGet dependencies.
     </PackageReleaseNotes>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<VersionPrefix>2.0.2</VersionPrefix>
+	<VersionPrefix>2.0.3</VersionPrefix>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
 	<Configurations>Debug;Release</Configurations>

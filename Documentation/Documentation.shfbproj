@@ -85,8 +85,8 @@
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, PublicCompilerGenerated, NonBrowsable</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="CommunityToolkit.Mvvm.ComponentModel" isExposed="True">
-  <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
-</Filter>
+        <Filter entryType="Class" fullName="CommunityToolkit.Mvvm.ComponentModel.ObservableObject" filterName="ObservableObject" isExposed="False" />
+      </Filter>
     </ApiFilter>
     <FooterText>Documentation built {%40BuildDate:MM/dd/yyyy H:mm:ss}.</FooterText>
     <ComponentConfigurations>
@@ -126,6 +126,10 @@
     <Folder Include="media" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\VersionHistory\HostingExtensions\v2.0.3.0.aml" />
+    <None Include="Content\VersionHistory\AntUsbStick\v4.1.0.0.aml" />
+    <None Include="Content\VersionHistory\AntRadioInterface\v5.0.1.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v6.0.3.0.aml" />
     <None Include="Content\AntPlusOverview.aml" />
     <None Include="Content\AntRadioInterfaceOverview.aml" />
     <None Include="Content\AntUsbStickOverview.aml" />

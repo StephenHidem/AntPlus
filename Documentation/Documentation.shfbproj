@@ -60,7 +60,14 @@
       <PlugInConfig id="Table of Contents Exclusion" enabled="True">
         <configuration />
       </PlugInConfig>
-    </PlugInConfigurations>
+<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false">
+  <assemblyBinding />
+  <ignoreIfUnresolved>
+    <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+    <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+    <assemblyIdentity name="CommunityToolkit.Mvvm" />
+  </ignoreIfUnresolved>
+</configuration></PlugInConfig></PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
       <NamespaceSummaryItem name="SmallEarthTech.AntPlus" isDocumented="True">This is the global namespace for ANT+ devices.</NamespaceSummaryItem>

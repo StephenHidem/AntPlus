@@ -84,6 +84,33 @@ namespace AntGrpcShared.ClientServices
         /// <exception cref="OperationCanceledException">Thrown when the CancellationTokenSource is canceled.</exception>
         public async Task FindAntRadioServerAsync()
         {
+#if USE_TAILNET
+            // use Tailnet fully qualified domain name and gRPCPort to connect to server
+            string tailnetFqdn = "hidem-laptop.tail7aec11.ts.net";
+            UriBuilder uriBuilder = new("http", tailnetFqdn, gRPCPort);
+            try {
+                _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
+                _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);
+                _control = new gRPCAntControl.gRPCAntControlClient(_grpcChannel);
+                _config = new gRPCAntConfiguration.gRPCAntConfigurationClient(_grpcChannel);
+                _crypto = new gRPCAntCrypto.gRPCAntCryptoClient(_grpcChannel);
+
+                // subscribe to radio response updates
+                HandleRadioResponseUpdates(_cancellationTokenSource.Token);
+
+                // get properties from server
+                PropertiesReply reply = await _client.GetPropertiesAsync(new Empty());
+                ProductDescription = reply.ProductDescription;
+                SerialNumber = reply.SerialNumber;
+                Version = reply.Version;
+                ServerIPAddress = IPAddress.None;
+            }
+            catch (RpcException ex)
+            {
+                _logger.LogError("FindAntRadioServerAsync: RpcException {Status}, {Message}", ex.Status, ex.Message);
+                //throw;
+            }
+#else
             IPEndPoint multicastEndPoint = new(grpAddress, multicastPort);
             byte[] req = Encoding.ASCII.GetBytes("MauiAntGrpcClient discovery request");
 
@@ -128,6 +155,7 @@ namespace AntGrpcShared.ClientServices
                     _logger.LogInformation("FindAntRadioServerAsync: Timeout. Retry.");
                 }
             }
+#endif
         }
 
         /// <summary>

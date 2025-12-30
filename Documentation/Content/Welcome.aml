@@ -54,7 +54,7 @@
 						<list class ="bullet">
 							<listItem>
 								<para>
-									<application>Visual Studio 2022 Community Edition</application> or higher must be installed.
+									<application>Visual Studio 2022 Community Edition</application> or later must be installed.
 								</para>
 							</listItem>
 							<listItem>

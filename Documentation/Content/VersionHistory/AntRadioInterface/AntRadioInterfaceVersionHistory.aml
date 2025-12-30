@@ -25,48 +25,53 @@
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
       <content>
-				<list class="bullet">
-					<listItem>
-						<para>
-							<link xlink:href="a5a81f24-5ac3-49e4-8a8a-37566ebd5286" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="3bf26a39-5daa-482c-9718-d2bed1141b6c" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="c8d04cf3-0a23-44ea-a795-7a0e14dba774" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="df9ea172-ed2e-4ee8-b2e6-c0df91b731a1"/>
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="38e3def3-5430-46eb-948e-04ca886e28ac"/>
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="b55fead0-b428-4538-bf04-40a73f762418"/>
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="27d29b6f-1582-4740-8f63-1927ec961db1"/>
-						</para>
-					</listItem>
-				</list>
+		<list class="bullet">
+			<listItem>
+				<para>
+					<link xlink:href="a5a81f24-5ac3-49e4-8a8a-37566ebd5286" />
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="3bf26a39-5daa-482c-9718-d2bed1141b6c" />
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="0fc4ab24-c15f-4d96-b9e8-8e1fcf238eff" />
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="c8d04cf3-0a23-44ea-a795-7a0e14dba774" />
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="df9ea172-ed2e-4ee8-b2e6-c0df91b731a1"/>
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="38e3def3-5430-46eb-948e-04ca886e28ac"/>
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="b55fead0-b428-4538-bf04-40a73f762418"/>
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="27d29b6f-1582-4740-8f63-1927ec961db1"/>
+				</para>
+			</listItem>
+			<listItem>
+				<para>
+					<link xlink:href="65a5d5bf-28d7-4450-91d9-b6fefe9d775c"/>
+				</para>
+			</listItem>
+		</list>
       </content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.

@@ -7,7 +7,7 @@
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
     <Authors>Stephen Hidem</Authors>
     <Title>ANT+ Radio Interface Class Library</Title>
-    <VersionPrefix>5.0.0</VersionPrefix>
+    <VersionPrefix>5.0.1</VersionPrefix>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>
@@ -22,10 +22,9 @@
     <PackageIcon>PackageLogo.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageReleaseNotes>
-1. Added OSMF sofware license.
-2. Added`RadioCapabilities` (0x54),`StartupMessage` (0x6F) and `SerialErrorMessage` (0xAE).
-to MessageId enum.
-    </PackageReleaseNotes>
+		1. Updated NuGet dependencies.
+		2. Improved documentation.
+	</PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 

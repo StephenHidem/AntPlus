@@ -87,7 +87,7 @@ namespace AntGrpcShared.ClientServices
 #if USE_TAILNET
             // use Tailnet fully qualified domain name and gRPCPort to connect to server
             string tailnetFqdn = "hidem-laptop.tail7aec11.ts.net";
-            UriBuilder uriBuilder = new("http", tailnetFqdn, gRPCPort);
+            UriBuilder uriBuilder = new("https", tailnetFqdn);
             try {
                 _grpcChannel = GrpcChannel.ForAddress(uriBuilder.Uri, _grpcChannelOptions);
                 _client = new gRPCAntRadio.gRPCAntRadioClient(_grpcChannel);

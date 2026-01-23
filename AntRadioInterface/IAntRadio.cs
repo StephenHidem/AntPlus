@@ -128,7 +128,7 @@ namespace SmallEarthTech.AntRadioInterface
         /// </returns>
         /// <example>
         /// Implementors typically would perform the following setup -
-        /// <code>
+        /// <code language="cs">
         /// public Task&lt;IAntChannel[]&gt; InitializeContinuousScanMode()
         /// {
         ///     // multiple clients may attempt to initialize

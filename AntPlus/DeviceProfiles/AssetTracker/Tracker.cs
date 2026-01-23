@@ -45,7 +45,9 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <remarks>
         /// An application should use the collection lock to ensure thread safe access to the
         /// collection. For example, the code behind for a WPF window should include -
-        /// <code>BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.CollectionLock);</code>
+        /// <code language="cs">
+        /// BindingOperations.EnableCollectionSynchronization(assetTracker.Assets, assetTracker.CollectionLock);
+        /// </code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
         public object CollectionLock = new object();

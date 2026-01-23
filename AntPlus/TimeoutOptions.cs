@@ -13,7 +13,7 @@
     /// broadcast 4 times a second.
     /// <para>
     /// For example, your appsettings.json file would have this entry -
-    /// <code>
+    /// <code language="json">
     /// {
     ///   "TimeoutOptions": {
     ///     "MissedMessages": 8,

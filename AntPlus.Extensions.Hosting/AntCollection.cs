@@ -21,7 +21,9 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// The collection lock typically used by WPF applications to synchronize UI updates when devices are added or
         /// removed from the collection. For example, in the code behind for a window that is using this collection
         /// would include the following line in its constructor -
-        /// <code>BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);</code>
+        /// <code language="cs">
+        /// BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);
+        /// </code>
         /// </summary>
         public object CollectionLock = new object();
 

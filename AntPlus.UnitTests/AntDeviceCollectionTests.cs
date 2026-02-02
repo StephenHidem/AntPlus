@@ -56,7 +56,7 @@ namespace AntPlus.UnitTests
                 {
                     semaphore.Wait();
                     _antDevices.Add(antDevice.Object);
-                });
+                }, TestContext.Current.CancellationToken);
             }
 
             // Act
@@ -84,7 +84,7 @@ namespace AntPlus.UnitTests
                 {
                     semaphore.Wait();
                     _ = _antDevices.Remove(antDevice.Object);
-                });
+                }, TestContext.Current.CancellationToken);
             }
 
             // Act

@@ -71,7 +71,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <summary>Gets the type of the asset.</summary>
         [ObservableProperty]
         private AssetType type;
-        /// <summary>Gets the color of the asset. This is an 8 bit RGB value.</summary>
+        /// <summary>Gets the color of the asset. This is an 8 bit 3-3-2 RGB value.</summary>
         [ObservableProperty]
         private byte color;
         /// <summary>Gets the distance.</summary>

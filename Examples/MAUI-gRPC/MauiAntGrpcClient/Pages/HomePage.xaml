@@ -15,8 +15,7 @@
     <Grid Margin="16" RowDefinitions="Auto, *">
         <Border>
             <StackLayout>
-                <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}"/>
-                <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill" Margin="0,0,0,4"/>
+                <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}" FontAttributes="Bold" FontSize="Title"/>
                 <Grid Padding="8" ColumnDefinitions="*, Auto">
                     <StackLayout>
                         <Label Text="{Binding ProductDescription, StringFormat='Description - {0}'}"/>
@@ -28,12 +27,12 @@
             </StackLayout>
         </Border>
         <Border Grid.Row="1">
-            <StackLayout>
-                <Label Text="ANT Devices"/>
-                <BoxView BackgroundColor="Black" HeightRequest="2" HorizontalOptions="Fill" Margin="0,0,0,4"/>
+            <Grid RowDefinitions="Auto,*">
+                <Label Text="ANT Devices" FontAttributes="Bold" FontSize="Title" Grid.Row="0"/>
                 <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" SelectionMode="Single"
                                 SelectionChanged="AntDevices_SelectionChanged"
-                                VerticalOptions="StartAndExpand">
+                                VerticalScrollBarVisibility="Never"
+                                Grid.Row="1" Margin="8,8">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
                     </CollectionView.ItemsLayout>
@@ -51,7 +50,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </StackLayout>
+            </Grid>
         </Border>
         <Border BackgroundColor="AliceBlue" VerticalOptions="Center" HorizontalOptions="Center" Padding="8" IsVisible="{Binding IsBusy}" Grid.RowSpan="2">
             <VerticalStackLayout Spacing="10">

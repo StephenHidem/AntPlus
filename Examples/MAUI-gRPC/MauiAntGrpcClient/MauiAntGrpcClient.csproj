@@ -90,9 +90,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="14.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="14.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.33.5" />
+		<PackageReference Include="Google.Protobuf" Version="3.34.0" />
 		<PackageReference Include="Grpc.Net.Client" Version="2.76.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.41" />
@@ -107,7 +107,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\AntPlus.Extensions.Hosting\Hosting.csproj" />
 	  <ProjectReference Include="..\..\..\AntPlus\AntPlus.csproj" />
-	  <ProjectReference Include="..\..\..\AntRadioInterface\AntRadioInterface.csproj" />
 	  <ProjectReference Include="..\AntGrpcShared\AntGrpcShared.csproj" />
 	</ItemGroup>
 

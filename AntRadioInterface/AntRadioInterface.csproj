@@ -7,7 +7,7 @@
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
     <Authors>Stephen Hidem</Authors>
     <Title>ANT+ Radio Interface Class Library</Title>
-    <VersionPrefix>5.0.1</VersionPrefix>
+    <VersionPrefix>5.0.2</VersionPrefix>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>
@@ -23,7 +23,6 @@
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageReleaseNotes>
 		1. Updated NuGet dependencies.
-		2. Improved documentation.
 	</PackageReleaseNotes>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
@@ -56,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.103">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.201">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

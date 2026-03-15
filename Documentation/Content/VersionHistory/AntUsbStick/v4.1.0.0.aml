@@ -39,7 +39,6 @@
 				</para>
 			</listItem>
 		</list>
-        <para>Add one or more sections with content</para>
       </content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.

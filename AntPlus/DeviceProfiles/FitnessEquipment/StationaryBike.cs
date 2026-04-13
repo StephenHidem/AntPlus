@@ -8,11 +8,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
     public partial class StationaryBike : FitnessEquipment
     {
         /// <summary>Gets the instantaneous pedaling cadence in revolutions per minute.</summary>
-        /// <value>The instantaneous cadence.</value>
+        /// <value>The instantaneous cadence. 255 (0xFF) indicates invalid.</value>
         [ObservableProperty]
         private byte cadence;
         /// <summary>Gets the instantaneous power in watts.</summary>
-        /// <value>The instantaneous power.</value>
+        /// <value>The instantaneous power. 65535 (0xFFFF) indicates invalid.</value>
         [ObservableProperty]
         private int instantaneousPower;
 
@@ -42,6 +42,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
             if ((DataPage)dataPage[0] == DataPage.StationaryBikeData)
             {
+                HandleFEState(dataPage);
                 Cadence = dataPage[4];
                 InstantaneousPower = BitConverter.ToInt16(dataPage, 5);
             }

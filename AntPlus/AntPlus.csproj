@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <VersionPrefix>6.0.4</VersionPrefix>
+    <VersionPrefix>6.1.0</VersionPrefix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>
@@ -23,16 +23,19 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-		1. Updated NuGet dependencies.
+		1. New device profile: Legacy Stationary Bike added to Fitness Equipment category.
+		2. Refactor: HandleFEState handles lap toggle.
+		3. Bug fix: Treadmill now correctly handles fitness equipment state.
+		4. Updated NuGet dependencies.
 	</PackageReleaseNotes>
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
     <PropertyGroup>
-       <LangVersion>9.0</LangVersion>
-       <Nullable>enable</Nullable>
-       <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
-       <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <LangVersion>9.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

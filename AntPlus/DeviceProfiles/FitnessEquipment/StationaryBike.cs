@@ -5,6 +5,9 @@ using System;
 
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
+    /// <summary>
+    /// This class supports the ANT+ Legacy Stationary Bike device profile. It extends the FitnessEquipment base class to provide specific properties and parsing logic for stationary bike data pages, including cadence and instantaneous power.
+    /// </summary>
     public partial class StationaryBike : FitnessEquipment
     {
         /// <summary>Gets the instantaneous pedaling cadence in revolutions per minute.</summary>

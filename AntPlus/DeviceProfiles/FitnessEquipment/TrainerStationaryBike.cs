@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 {
     /// <summary>
-    /// This class supports the stationary bike fitness equipment type.
+    /// This class supports the trainer/stationary bike fitness equipment type.
     /// </summary>
     public partial class TrainerStationaryBike : FitnessEquipment
     {

@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\VersionHistory\AntPlus\v6.0.4.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v6.1.0.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v5.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntUsbStick\v4.1.1.0.aml" />
     <None Include="Content\VersionHistory\HostingExtensions\v2.0.3.0.aml" />

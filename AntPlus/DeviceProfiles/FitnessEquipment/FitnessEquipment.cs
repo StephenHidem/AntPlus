@@ -49,6 +49,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             TreadmillData = 0x13,
             /// <summary>Elliptical data page</summary>
             EllipticalData = 0x14,
+            /// <summary> Legacy stationary bike dAta page</summary>
+            StationaryBikeData = 0x15,
             /// <summary>Rower data page</summary>
             RowerData = 0x16,
             /// <summary>Climber data page</summary>
@@ -82,6 +84,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             Treadmill = 0x13,
             /// <summary>Elliptical</summary>
             Elliptical = 0x14,
+            /// <summary>Legacy stationary bike</summary>
+            StationaryBike = 0x15,
             /// <summary>Rower</summary>
             Rower = 0x16,
             /// <summary>Climber</summary>
@@ -328,13 +332,6 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.GeneralFEData:
                     HandleFEState(dataPage);
                     GeneralData.Parse(dataPage);
-
-                    // check for lap toggle
-                    if (lapToggleState != ((dataPage[7] & 0x80) == 0x80))
-                    {
-                        lapToggleState = (dataPage[7] & 0x80) == 0x80;
-                        LapToggled?.Invoke(this, EventArgs.Empty);
-                    }
                     break;
                 case DataPage.GeneralSettings:
                     HandleFEState(dataPage);
@@ -344,7 +341,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     HandleFEState(dataPage);
                     GeneralMetabolic.Parse(dataPage);
                     break;
-                // handle specific FE pages
+                // handle on demand pages
                 case DataPage.FECapabilities:
                     MaxTrainerResistance = BitConverter.ToUInt16(dataPage, 5);
                     TrainingModes = (SupportedTrainingModes)dataPage[7];
@@ -355,10 +352,17 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
         }
 
-        /// <summary>Handles the state of the fitness equipment.</summary>
+        /// <summary>Handles the state of the fitness equipment including the lap toggle.</summary>
         /// <param name="dataPage">The data page being parsed.</param>
         protected void HandleFEState(byte[] dataPage)
         {
+            // check for lap toggle
+            if (lapToggleState != ((dataPage[7] & 0x80) == 0x80))
+            {
+                lapToggleState = (dataPage[7] & 0x80) == 0x80;
+                LapToggled?.Invoke(this, EventArgs.Empty);
+            }
+
             var st = (dataPage[7] & 0x70) >> 4;
             // check for valid state
             if (Enum.IsDefined(typeof(FEState), st))
@@ -478,6 +482,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                             return new Treadmill(channelId, antChannel, loggerFactory.CreateLogger<Treadmill>(), timeout);
                         case FitnessEquipmentType.Elliptical:
                             return new Elliptical(channelId, antChannel, loggerFactory.CreateLogger<Elliptical>(), timeout);
+                        case FitnessEquipmentType.StationaryBike:
+                            return new StationaryBike(channelId, antChannel, loggerFactory.CreateLogger<StationaryBike>(), timeout);
                         case FitnessEquipmentType.Rower:
                             return new Rower(channelId, antChannel, loggerFactory.CreateLogger<Rower>(), timeout);
                         case FitnessEquipmentType.Climber:
@@ -495,6 +501,8 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                     return new Treadmill(channelId, antChannel, loggerFactory.CreateLogger<Treadmill>(), timeout);
                 case DataPage.EllipticalData:
                     return new Elliptical(channelId, antChannel, loggerFactory.CreateLogger<Elliptical>(), timeout);
+                case DataPage.StationaryBikeData:
+                    return new StationaryBike(channelId, antChannel, loggerFactory.CreateLogger<StationaryBike>(), timeout);
                 case DataPage.RowerData:
                     return new Rower(channelId, antChannel, loggerFactory.CreateLogger<Rower>(), timeout);
                 case DataPage.ClimberData:

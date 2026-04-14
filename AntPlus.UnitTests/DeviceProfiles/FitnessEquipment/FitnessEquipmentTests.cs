@@ -47,10 +47,48 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         }
 
         [Theory]
+        [InlineData(FitnessEquipmentType.Treadmill, DataPage.GeneralFEData)]
+        [InlineData(FitnessEquipmentType.Treadmill, DataPage.GeneralMetabolicData)]
+        [InlineData(FitnessEquipmentType.Treadmill, DataPage.GeneralSettings)]
+        [InlineData(FitnessEquipmentType.Treadmill, DataPage.TreadmillData)]
+        [InlineData(FitnessEquipmentType.Elliptical, DataPage.EllipticalData)]
+        [InlineData(FitnessEquipmentType.Rower, DataPage.RowerData)]
+        [InlineData(FitnessEquipmentType.Climber, DataPage.ClimberData)]
+        [InlineData(FitnessEquipmentType.StationaryBike, DataPage.StationaryBikeData)]
+        [InlineData(FitnessEquipmentType.NordicSkier, DataPage.NordicSkierData)]
+        [InlineData(FitnessEquipmentType.TrainerStationaryBike, DataPage.TrainerStationaryBikeData)]
+        public void Parse_DataPage_LapToggledEventRaised(FitnessEquipmentType equipmentType, DataPage page)
+        {
+            // Arrange
+            var fitnessEquipment = CreateFitnessEquipment(equipmentType);
+            byte[] dataPage = [(byte)page, 0, 0, 0, 0, 0, 0, 0x80];
+            bool eventRaised = false;
+            bool lowHighToggle = false;
+            bool highLowToggle = false;
+            fitnessEquipment.LapToggled += (s, e) => eventRaised = true;
+
+            // Act
+            fitnessEquipment.Parse(
+                dataPage);
+            lowHighToggle = eventRaised;
+
+            eventRaised = false;
+            dataPage[7] = 0x00; // Toggle back to low
+            fitnessEquipment.Parse(
+                dataPage);
+            highLowToggle = eventRaised;
+
+            // Assert
+            Assert.True(lowHighToggle);
+            Assert.True(highLowToggle);
+        }
+
+        [Theory]
         [InlineData(FitnessEquipmentType.Treadmill)]
         [InlineData(FitnessEquipmentType.Elliptical)]
         [InlineData(FitnessEquipmentType.Rower)]
         [InlineData(FitnessEquipmentType.Climber)]
+        [InlineData(FitnessEquipmentType.StationaryBike)]
         [InlineData(FitnessEquipmentType.NordicSkier)]
         [InlineData(FitnessEquipmentType.TrainerStationaryBike)]
         public void GetEquipment_GeneralDataPage_ExpectedEquipment(FitnessEquipmentType equipmentType)
@@ -73,6 +111,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                 case FitnessEquipmentType.Climber:
                     Assert.IsType<Climber>(fitnessEquipment);
                     break;
+                case FitnessEquipmentType.StationaryBike:
+                    Assert.IsType<StationaryBike>(fitnessEquipment);
+                    break;
                 case FitnessEquipmentType.NordicSkier:
                     Assert.IsType<NordicSkier>(fitnessEquipment);
                     break;
@@ -90,6 +131,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
         [InlineData(DataPage.EllipticalData, FitnessEquipmentType.Elliptical)]
         [InlineData(DataPage.RowerData, FitnessEquipmentType.Rower)]
         [InlineData(DataPage.ClimberData, FitnessEquipmentType.Climber)]
+        [InlineData(DataPage.StationaryBikeData, FitnessEquipmentType.StationaryBike)]
         [InlineData(DataPage.NordicSkierData, FitnessEquipmentType.NordicSkier)]
         [InlineData(DataPage.TrainerStationaryBikeData, FitnessEquipmentType.TrainerStationaryBike)]
         [InlineData(DataPage.TrainerTorqueData, FitnessEquipmentType.TrainerStationaryBike)]
@@ -115,6 +157,9 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
                     break;
                 case FitnessEquipmentType.Climber:
                     Assert.IsType<Climber>(fitnessEquipment);
+                    break;
+                case FitnessEquipmentType.StationaryBike:
+                    Assert.IsType<StationaryBike>(fitnessEquipment);
                     break;
                 case FitnessEquipmentType.NordicSkier:
                     Assert.IsType<NordicSkier>(fitnessEquipment);

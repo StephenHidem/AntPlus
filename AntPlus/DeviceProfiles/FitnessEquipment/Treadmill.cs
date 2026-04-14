@@ -65,6 +65,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
 
             if ((DataPage)dataPage[0] == DataPage.TreadmillData)
             {
+                HandleFEState(dataPage);
                 if (isFirstDataMessage)
                 {
                     prevNeg = dataPage[5];

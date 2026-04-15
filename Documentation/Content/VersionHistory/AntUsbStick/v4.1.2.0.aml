@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" revisionNumber="1">
+<topic id="c180c7d6-8e94-472e-b6f6-cf4f31dd2570" revisionNumber="1">
   <developerConceptualDocument
     xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -17,77 +17,25 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
 
-      <para>Version 2.0.1.0 was released on January 3, 2024.</para>
+      <para>Release Date: April 14, 2026</para>
     </introduction>
 
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
          and specify a title so that it can be jumped to with a hyperlink. -->
     <section address="Section1">
+      <title>Changes</title>
       <content>
-				<list class="bullet">
-					<listItem>
-						<para>
-							<link xlink:href="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="c4f39db8-d602-4e2d-a75e-fc72afbc47c5" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="ea422e45-03fe-4b1d-bc19-280e03ea4729" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="01235973-8fca-4be5-9fb3-13e8fe5b03b3" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="59808fa5-1390-4c46-8696-d3e7e4a379a5" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="eddb9b97-fd16-47e3-9c18-64883ca4ef55" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="501a56d8-5811-4359-98d3-8b00850aed6c" />						
-						</para>					
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="0edbd450-f2c3-41cd-9e24-fc4505fc5823" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="896d67b1-6f79-4b99-82c8-1b17748ad9bd" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="e7c024a9-cea5-46d9-b130-7525cf879b21" />
-						</para>
-					</listItem>
-					<listItem>
-						<para>
-							<link xlink:href="9a0a79c5-37f2-4a2d-bf5a-b99df97604f0" />
-						</para>
-					</listItem>
-					<listItem>
-                        <para>
-                            <link xlink:href="c180c7d6-8e94-472e-b6f6-cf4f31dd2570" />
-						</para>
-					</listItem>
-				</list>
-      </content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+		  <list class="bullet">
+			  <listItem>
+				  <para>
+					  Updated NuGet dependencies to latest version.
+				  </para>
+			  </listItem>
+		  </list>
+	  </content>
       <!-- If a section contains a sections element, its content creates
            sub-sections.  These are not collapsible.
       <sections>
@@ -107,8 +55,8 @@
     </section>
 
     <relatedTopics>
-			<link xlink:href="4a8ae1c2-5d9b-4e27-bd18-34b479401b65" />
-			<!-- One or more of the following:
+		<link xlink:href="62db1666-31ce-45bd-9331-b6c3762dcffe" />
+		<!-- One or more of the following:
            - A local link
            - An external link
            - A code entity reference
@@ -130,7 +78,7 @@
       <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
 
       <externalLink>
-          <linkText>SHFB on GitHub</linkText>
+          <linkText>Sandcastle Help File Builder on GitHub</linkText>
           <linkAlternateText>Go to GitHub</linkAlternateText>
           <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
       </externalLink>

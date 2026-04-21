@@ -97,9 +97,9 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -107,7 +107,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.202">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.203">
 	<PrivateAssets>all</PrivateAssets>
 	<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>

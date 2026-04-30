@@ -22,7 +22,7 @@
                         <Label Text="{Binding SerialNumber, StringFormat='Serial Number - {0}'}"/>
                         <Label Text="{Binding HostVersion, StringFormat='Host Version - {0}'}"/>
                     </StackLayout>
-                    <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="Transparent" Grid.Column="1" HeightRequest="32" WidthRequest="32" Command="{Binding ShowRadioCapabilitiesCommand}"/>
+                    <ImageButton Source="more_arrow.png" Aspect="AspectFill" Background="White" CornerRadius="8" Grid.Column="1" HeightRequest="32" WidthRequest="32" Command="{Binding ShowRadioCapabilitiesCommand}"/>
                 </Grid>
             </StackLayout>
         </Border>

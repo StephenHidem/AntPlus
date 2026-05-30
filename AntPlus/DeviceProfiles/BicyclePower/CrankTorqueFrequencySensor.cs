@@ -84,7 +84,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     ParseCTFMessage(dataPage);
                     break;
                 default:
-                    _logger.LogUnknownDataPage(dataPage);
+                    OnUnknownDataPageReceived(dataPage);
                     break;
             }
         }
@@ -147,18 +147,18 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                                 _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
                                 break;
                             default:
-                                _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[3], dataPage);
+                                OnUnknownDataPageReceived<CTFDefinedId>(dataPage[3], dataPage);
                                 break;
                         }
                         break;
                     default:
-                        _logger.LogUnknownDataPage<CTFDefinedId>(dataPage[2], dataPage);
+                        OnUnknownDataPageReceived<CTFDefinedId>(dataPage[2], dataPage);
                         break;
                 }
             }
             else
             {
-                _logger.LogUnknownDataPage<CalibrationResponseId>(dataPage[1], dataPage);
+                OnUnknownDataPageReceived<CalibrationResponseId>(dataPage[1], dataPage);
             }
         }
 

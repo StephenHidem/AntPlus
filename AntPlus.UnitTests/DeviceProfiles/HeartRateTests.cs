@@ -16,11 +16,14 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
         private readonly ChannelId cid = new(0);
         private readonly Mock<IAntChannel> _mockAntChannel;
+        private Mock<ILogger<HeartRate>> _mockLogger;
 
         public HeartRateTests()
         {
+            _mockLogger = new Mock<ILogger<HeartRate>>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
             _mockAntChannel = new();
-            _heartRate = new(cid, _mockAntChannel.Object, Mock.Of<ILogger<HeartRate>>(), It.IsAny<int>());
+            _heartRate = new(cid, _mockAntChannel.Object, _mockLogger.Object, It.IsAny<int>());
         }
 
         [Fact]
@@ -216,6 +219,30 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.Equal(expEventType, _heartRate.EventType);
+        }
+
+        [Fact]
+        public void Parse_UnrecognizedDataPage_RaisedUnknownDataPageReceived()
+        {
+            // Arrange
+            _heartRate.Parse([0x0A, 0, 0, 0, 0xAA, 0x55, 0x33, 70]);
+            byte[] dataPage = [0x8A, 0, 0, 0, 0xAA, 0x55, 0x33, 70];
+            byte[] receivedData = null;
+            _heartRate.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _heartRate.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
         }
 
         [Fact]

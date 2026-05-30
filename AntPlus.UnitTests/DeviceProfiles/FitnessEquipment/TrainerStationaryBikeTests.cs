@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -225,6 +226,21 @@ namespace AntPlus.UnitTests.DeviceProfiles.FitnessEquipment
 
             // Assert
             Assert.Equal(32768, _trainer.TargetSpinDownTime);
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _trainer.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _trainer.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
         }
 
         [Fact]

@@ -2,8 +2,15 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower" Collapsed="true">
     <Position X="2.5" Y="3" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.BicyclePower.DataPage" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeviceProfiles\BicyclePower\BicyclePower.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAABAAAAAAQAAAAAAAAAAAQAAA=</HashCode>
+      <HashCode>AACAAAAAAAABAAAAAAAABAAAAAAQAAAAAAAAAAAQAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\BicyclePower.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -29,18 +36,6 @@
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Struct Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.ForceAngle" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardCrankTorqueSensor.PedalPositionPage" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAgEAEAAAAAIAAAAAAAwAAABgAAAAAAAA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\StandardCrankTorqueSensor.cs</FileName>
@@ -51,28 +46,6 @@
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Struct Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor.CrankParameters" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\Parameters.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor.AdvCapabilities1" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\Parameters.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor.AdvCapabilities2" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\Parameters.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Enum Name="SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower.StandardPowerSensor.PedalDifferentiation" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>DeviceProfiles\BicyclePower\StandardPowerSensor.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AACgAIAEAKBECACEAAGASAlBAANAAdACABQSkgSJCQA=</HashCode>
       <FileName>DeviceProfiles\BicyclePower\Calibration.cs</FileName>
@@ -95,7 +68,7 @@
   <Class Name="SmallEarthTech.AntPlus.AntDevice" Collapsed="true">
     <Position X="2.5" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACgAgAAACEAAAAGAAABIAAIAARAAAACAAQAAEAAAAA=</HashCode>
+      <HashCode>AACkIAAAACEAAAAEAAADIAAIIARAAAAABAQAAAgAAAA=</HashCode>
       <FileName>AntDevice.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

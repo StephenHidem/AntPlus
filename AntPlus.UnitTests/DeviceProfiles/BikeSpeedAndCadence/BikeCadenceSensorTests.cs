@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence;
 using SmallEarthTech.AntRadioInterface;
 using Xunit;
@@ -29,6 +30,21 @@ namespace AntPlus.UnitTests.DeviceProfiles.BikeSpeedAndCadence
 
             // Assert
             Assert.Equal(120, _sensor.InstantaneousCadence);
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _sensor.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _sensor.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
         }
     }
 }

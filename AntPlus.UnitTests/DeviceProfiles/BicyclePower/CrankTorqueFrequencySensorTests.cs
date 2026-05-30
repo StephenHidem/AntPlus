@@ -54,6 +54,29 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         }
 
         [Fact]
+        public void ParseUnknownDataPage_CallsOnUnknownDataPageReceived()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _crankTorqueFrequencySensor.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _crankTorqueFrequencySensor.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Fact]
         public async Task SaveSlopeToFlash_MessageFormatCorrect()
         {
             // Arrange

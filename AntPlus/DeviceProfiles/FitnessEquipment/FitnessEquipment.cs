@@ -375,7 +375,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                _logger.LogUnknownDataPage<FEState>(dataPage[7], dataPage);
+                OnUnknownDataPageReceived<FEState>(dataPage[7], dataPage);
             }
         }
 

@@ -211,7 +211,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     CurrentSaturatedHemoglobin = shg;
                     break;
                 default:
-                    CommonDataPages.ParseCommonDataPage(dataPage);
+                    // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                    {
+                        OnUnknownDataPageReceived(dataPage);
+                    }
                     break;
             }
         }

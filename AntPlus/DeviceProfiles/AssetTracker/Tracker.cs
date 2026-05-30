@@ -125,7 +125,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
                     Disconnected = true;
                     break;
                 default:
-                    CommonDataPages.ParseCommonDataPage(dataPage);
+                    // Handle common data pages and unknown data pages.
+                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                    {
+                        OnUnknownDataPageReceived(dataPage);
+                    }
                     break;
             }
         }

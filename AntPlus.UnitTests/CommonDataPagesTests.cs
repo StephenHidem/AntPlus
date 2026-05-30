@@ -26,8 +26,9 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] dataPage = [0x47, 0xFF, 0xFE, 0x04, 0x11, 0x22, 0x33, 0x44];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(0xFF, _commonDataPages.CommandStatus.LastCommandReceived);
             Assert.Equal(254, _commonDataPages.CommandStatus.SequenceNumber);
             Assert.Equal(CommonDataPages.CommandResult.Pending, _commonDataPages.CommandStatus.Status);
@@ -40,8 +41,9 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] dataPage = [0x50, 0xFF, 0xFF, 0x01, 0x0F, 0x00, 0x85, 0x83];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(0xFF, _commonDataPages.ManufacturerInfo.ComponentId);
             Assert.Equal(1, _commonDataPages.ManufacturerInfo.HardwareRevision);
             Assert.Equal(15, _commonDataPages.ManufacturerInfo.ManufacturerId);
@@ -54,8 +56,9 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] dataPage = [0x4E, 0xFF, 0x22, 0x01, 0x0F, 0x00, 0x85, 0x83];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(0x22, _commonDataPages.ManufacturerInfo.ComponentId);
             Assert.Equal(1, _commonDataPages.ManufacturerInfo.HardwareRevision);
             Assert.Equal(15, _commonDataPages.ManufacturerInfo.ManufacturerId);
@@ -70,10 +73,11 @@ namespace AntPlus.UnitTests
             // Act
             var currentCulture = CultureInfo.CurrentCulture;
             CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             CultureInfo.CurrentCulture = currentCulture;
 
             // Assert
+            Assert.True(result);
             Assert.Equal(0xFF, _commonDataPages.ProductInfo.ComponentId);
             Assert.Equal(serialNumber, _commonDataPages.ProductInfo.SerialNumber);
             Assert.True(_commonDataPages.ProductInfo.SoftwareRevision == Version.Parse(version));
@@ -85,8 +89,9 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] dataPage = [0x4F, 0x22, 0xFF, 12, 5, 6, 7, 8];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(0x22, _commonDataPages.ProductInfo.ComponentId);
             Assert.Equal((uint)0x08070605, _commonDataPages.ProductInfo.SerialNumber);
             Assert.True(_commonDataPages.ProductInfo.SoftwareRevision == Version.Parse("1.200"));
@@ -106,8 +111,9 @@ namespace AntPlus.UnitTests
             BatteryStatus batteryStatus, double voltage, byte count, byte id, uint operatingTimeInSeconds)
         {
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(batteryStatus, _commonDataPages.BatteryStatus.Status);
             Assert.Equal(voltage, _commonDataPages.BatteryStatus.BatteryVoltage, 0.001);
             Assert.Equal(count, _commonDataPages.BatteryStatus.NumberOfBatteries);
@@ -121,8 +127,9 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] dataPage = [0x53, 0xFF, 0x0D, 0x1B, 0x11, 0x92, 0x06, 0x09];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(DateTime.Parse("06/18/2009 17:27:13", DateTimeFormatInfo.InvariantInfo), _commonDataPages.TimeAndDate);
         }
 
@@ -157,8 +164,9 @@ namespace AntPlus.UnitTests
             double subPage1Value, double subPage2Value)
         {
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(subPage1, _commonDataPages.SubfieldData.Subpage1);
             Assert.Equal(subPage1Value, _commonDataPages.SubfieldData.ComputedDataField1, 0.01);
             Assert.Equal(subPage2, _commonDataPages.SubfieldData.Subpage2);
@@ -171,8 +179,9 @@ namespace AntPlus.UnitTests
         public void ParseSubfieldDataPage_InvalidSubPage_LogsError(byte[] dataPage)
         {
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             _mockLogger.Verify(
                 x => x.Log(
                     LogLevel.Warning,
@@ -193,8 +202,9 @@ namespace AntPlus.UnitTests
         public void ParseMemoryLevelPage_PropertiesCorrect(byte[] dataPage, CommonDataPages.MemorySizeUnit sizeUnit)
         {
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(55.0, _commonDataPages.MemoryLevel.PercentUsed, 0.5);
             Assert.Equal(3276.8, _commonDataPages.MemoryLevel.TotalSize, 0.1);
             Assert.Equal(sizeUnit, _commonDataPages.MemoryLevel.TotalSizeUnit);
@@ -206,8 +216,9 @@ namespace AntPlus.UnitTests
             // Arrange
             byte[] dataPage = [0x56, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             _mockLogger.Verify(
                 x => x.Log(
                     LogLevel.Warning,
@@ -224,8 +235,9 @@ namespace AntPlus.UnitTests
         public void ParseErrorDescriptionPage_PropertiesCorrect(byte[] dataPage, CommonDataPages.ErrorLevel errorLevel)
         {
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
+            Assert.True(result);
             Assert.Equal(errorLevel, _commonDataPages.ErrorDescription.ErrorLevel);
             Assert.Equal(0xF, _commonDataPages.ErrorDescription.SystemComponentIndex);
             Assert.Equal(0xFF, _commonDataPages.ErrorDescription.ProfileSpecificErrorCode);
@@ -233,21 +245,14 @@ namespace AntPlus.UnitTests
         }
 
         [Fact]
-        public void ParseUnknownDataPage_LogsWarning()
+        public void ParseUnknownDataPage_ReturnsFalse()
         {
             // Arrange
             byte[] dataPage = [0x58, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF];
             // Act
-            _commonDataPages.ParseCommonDataPage(dataPage);
+            bool result = _commonDataPages.ParseCommonDataPage(dataPage);
             // Assert
-            _mockLogger.Verify(
-                x => x.Log(
-                    LogLevel.Warning,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
-                    null,
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-                Times.Once);
+            Assert.False(result);
         }
 
         [Fact]

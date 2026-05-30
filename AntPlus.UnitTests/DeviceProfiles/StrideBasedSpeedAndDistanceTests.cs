@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using Xunit;
 using static SmallEarthTech.AntPlus.DeviceProfiles.StrideBasedSpeedAndDistance;
@@ -176,6 +177,21 @@ namespace AntPlus.UnitTests.DeviceProfiles
 
             // Assert
             Assert.Equal(useState, _strideBasedSpeedAndDistance.Status.State);
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _strideBasedSpeedAndDistance.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _strideBasedSpeedAndDistance.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
         }
     }
 }

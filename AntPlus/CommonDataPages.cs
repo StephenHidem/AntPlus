@@ -434,9 +434,12 @@ namespace SmallEarthTech.AntPlus
             _logger = logger;
         }
 
-        /// <summary>Parses the common data page.</summary>
+        /// <summary>
+        /// Parses common data pages.
+        /// </summary>
         /// <param name="dataPage">The data page.</param>
-        public void ParseCommonDataPage(byte[] dataPage)
+        /// <returns>Returns true if the data page was successfully parsed as a common data page, false otherwise.</returns>
+        public bool ParseCommonDataPage(byte[] dataPage)
         {
             switch ((CommonDataPage)dataPage[0])
             {
@@ -470,9 +473,9 @@ namespace SmallEarthTech.AntPlus
                     ErrorDescription = new ErrorDescriptionPage(dataPage);
                     break;
                 default:
-                    _logger.LogUnknownDataPage(dataPage);
-                    break;
+                    return false;
             }
+            return true;
         }
 
         /// <summary>Formats the generic command page.</summary>

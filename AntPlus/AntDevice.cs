@@ -60,6 +60,15 @@ namespace SmallEarthTech.AntPlus
         /// <value>The device image stream.</value>
         public abstract Stream? DeviceImageStream { get; }
 
+        /// <summary>
+        /// Occurs when an unrecognized data page is received and provides the raw page bytes to subscribers.
+        /// </summary>
+        /// <remarks>
+        /// Raised when a data page with an unrecognized identifier or format is encountered;
+        /// subscribers receive the raw bytes via the <c>EventHandler&lt;byte[]&gt;</c> argument.
+        /// </remarks>
+        public event EventHandler<byte[]>? UnknownDataPageReceived;
+
         /// <summary>Initializes a new instance of the <see cref="AntDevice" /> class.</summary>
         /// <param name="channelId">The channel identifier.</param>
         /// <param name="antChannel">Channel to send messages to.</param>
@@ -107,7 +116,7 @@ namespace SmallEarthTech.AntPlus
         {
             Offline = true;
             Dispose();
-            DeviceWentOffline?.Invoke(this, new EventArgs());
+            DeviceWentOffline?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>Parses the specified data page.</summary>
@@ -158,6 +167,28 @@ namespace SmallEarthTech.AntPlus
         {
             MessagingReturnCode ret = await _antChannel.SendExtAcknowledgedDataAsync(ChannelId, message, (uint)_deviceTimeout);
             return ret;
+        }
+
+        /// <summary>
+        /// Raises the <see cref="UnknownDataPageReceived"/> event with the provided raw data page bytes.
+        /// </summary>
+        /// <param name="dataPage">Raw bytes of the unrecognized data page.</param>
+        protected virtual void OnUnknownDataPageReceived(byte[] dataPage)
+        {
+            _logger.LogUnknownDataPage(dataPage);
+            UnknownDataPageReceived?.Invoke(this, dataPage);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="UnknownDataPageReceived"/> event with the provided raw data page bytes and includes the data page identifier in the log.
+        /// </summary>
+        /// <typeparam name="TEnum">The enumeration that was being parsed.</typeparam>
+        /// <param name="unknownDataPageId">The identifier of the unrecognized data page.</param>
+        /// <param name="dataPage">The raw bytes of the unrecognized data page.</param>
+        protected virtual void OnUnknownDataPageReceived<TEnum>(byte unknownDataPageId, byte[] dataPage) where TEnum : Enum
+        {
+            _logger.LogUnknownDataPage<TEnum>(unknownDataPageId, dataPage);
+            UnknownDataPageReceived?.Invoke(this, dataPage);
         }
 
         /// <summary>

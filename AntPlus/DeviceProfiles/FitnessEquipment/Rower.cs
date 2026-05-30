@@ -77,7 +77,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                CommonDataPages.ParseCommonDataPage(dataPage);
+                // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                {
+                    OnUnknownDataPageReceived(dataPage);
+                }
             }
         }
 

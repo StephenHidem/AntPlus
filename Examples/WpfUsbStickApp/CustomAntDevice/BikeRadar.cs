@@ -130,7 +130,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                     }
                     break;
                 default:
-                    CommonDataPages.ParseCommonDataPage(dataPage);
+                    // attempt to parse common data pages, if not successful raise unknown data page event
+                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                    {
+                        OnUnknownDataPageReceived(dataPage);
+                    }
                     break;
             }
         }

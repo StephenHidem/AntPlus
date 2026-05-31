@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -17,6 +19,7 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
         {
             _mockAntChannel = new Mock<IAntChannel> { CallBase = true };
             _mockLogger = new Mock<ILogger<Tracker>>();
+            _mockLogger.Setup(l => l.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
             _tracker = new Tracker(new ChannelId(0), _mockAntChannel.Object, _mockLogger.Object, It.IsAny<int>());
         }
 
@@ -161,6 +164,29 @@ namespace AntPlus.UnitTests.DeviceProfiles.AssetTracker
 
             // Assert
             Assert.True(_tracker.Disconnected);
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _tracker.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _tracker.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
         }
     }
 }

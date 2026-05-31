@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker;
 using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using Xunit;
@@ -72,6 +73,21 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
 
             // Assert
             Assert.Equal(8721, _standardPowerSensor.AveragePower);
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _standardPowerSensor.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _standardPowerSensor.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
         }
     }
 }

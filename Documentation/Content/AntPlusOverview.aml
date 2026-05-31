@@ -107,10 +107,44 @@
 			<title>AntDevice</title>
 			<content>
 				<para>
-					This abstract class provides properties and methods common to all ANT devices. The virtual Parse method handles resetting the
-					device timeout each time a message is received. The RequestDataPage method sends a data page request to the ANT device.
-					The SendExtAcknowledgedMessage method sends commands/requests to the ANT device.
+					This abstract class provides events, properties and methods common to all ANT devices. These are some of the key
+					features of this class that are used by the derived ANT device classes -
 				</para>
+				<list class="bullet">
+					<listItem>
+						<para>
+							The virtual <c>Parse</c> method handles resetting the device timeout each time a message is received. Derived
+							classes should override this method to parse messages received from the ANT device. Be sure to call the
+							base Parse method to reset the device timeout.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							The <c>RequestDataPage</c> method sends a data page request to the ANT device. The derived classes
+							typically provide a public method that calls this method with the appropriate data page number for the
+							request.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							The <c>SendExtAcknowledgedMessage</c> method sends commands/requests to the ANT device. The derived classes
+							typically provide public methods that call this method with the appropriate data page number and payload
+							for the command/request.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							The <c>DeviceOffline</c> event is raised when the ANT device timeout is reached. The timeout options are
+							configured in the AntDeviceCollection class.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
+							The <c>UnknownDataPageReceived</c> event is raised when a data page is received that is not defined in the
+							library. This allows applications to receive custom data pages or data pages that supported by the library.
+						</para>
+					</listItem>
+				</list>
 			</content>
 		</section>
 		<section>

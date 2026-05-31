@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Threading.Tasks;
@@ -102,6 +103,21 @@ namespace AntPlus.UnitTests.DeviceProfiles
             // Assert
             Assert.Equal(concentration, _muscleOxygen.CurrentSaturatedHemoglobin.PercentSaturated);
             Assert.Equal(status, _muscleOxygen.CurrentSaturatedHemoglobin.Status);
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _muscleOxygen.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _muscleOxygen.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
         }
 
         [Theory]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SmallEarthTech.AntPlus.DeviceProfiles;
+using SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower;
 using SmallEarthTech.AntRadioInterface;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,21 @@ namespace AntPlus.UnitTests.DeviceProfiles
             Assert.Equal(MessagingReturnCode.Pass, result);
             Assert.True(token.SequenceEqual(_geocache.AuthenticationToken),
                 string.Format("Expected {0}, Actual {1}", BitConverter.ToString(token), BitConverter.ToString(_geocache.AuthenticationToken)));
+        }
+
+        [Fact]
+        public void Parse_UnknownDataPage_RaisedUnknownDataPageEvent()
+        {
+            // Arrange
+            byte[] dataPage = [0xFF, 0, 0, 0, 0, 0, 0, 0];
+            byte[] receivedData = null;
+            _geocache.UnknownDataPageReceived += (s, d) => receivedData = d;
+
+            // Act
+            _geocache.Parse(dataPage);
+
+            // Assert
+            Assert.Equal(dataPage, receivedData);
         }
 
         [Fact]

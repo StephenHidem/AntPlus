@@ -125,7 +125,11 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     }
                     break;
                 default:
-                    CommonDataPages.ParseCommonDataPage(dataPage);
+                    // attempt to parse common data pages, otherwise log as unknown
+                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                    {
+                        OnUnknownDataPageReceived(dataPage);
+                    }
                     break;
             }
         }

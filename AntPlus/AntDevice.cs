@@ -66,6 +66,10 @@ namespace SmallEarthTech.AntPlus
         /// <remarks>
         /// Raised when a data page with an unrecognized identifier or format is encountered;
         /// subscribers receive the raw bytes via the <c>EventHandler&lt;byte[]&gt;</c> argument.
+        /// <para>
+        /// Unrecognized data pages may indicate new features implemented by the device manufacturer, and this event
+        /// allows consumers to process the data pages if the format is known.
+        /// </para>
         /// </remarks>
         public event EventHandler<byte[]>? UnknownDataPageReceived;
 

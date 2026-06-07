@@ -81,8 +81,6 @@ namespace SmallEarthTech.AntPlus
 
         private void MessageHandler(object? sender, AntResponse e)
         {
-            _logger.LogAntResponse(LogLevel.Trace, e);
-
             // check for a valid payload
             if (e.Payload == null || e.Payload.Length < 3)
             {

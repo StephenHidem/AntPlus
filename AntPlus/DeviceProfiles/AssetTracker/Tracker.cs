@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// </code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object CollectionLock = new object();
+        public object CollectionLock = new();
 
         /// <summary>Gets the collection of assets being tracked.</summary>
         public ObservableCollection<Asset> Assets { get; } = new ObservableCollection<Asset>();
@@ -89,48 +90,51 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.AssetTracker
         /// <remarks>The asset is removed from the <see cref="Assets"/> collection if the <see cref="Asset.AssetStatus.RemoveAsset"/> flag is set.</remarks>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            switch ((DataPage)dataPage[0])
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                case DataPage.AssetLocation1:
-                    Asset asset = GetAsset(dataPage);
-                    asset.ParseLocation1(dataPage);
-                    if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset))
-                    {
-                        lock (CollectionLock)
+                base.Parse(dataPage);
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.AssetLocation1:
+                        Asset asset = GetAsset(dataPage);
+                        asset.ParseLocation1(dataPage);
+                        if (asset.Status.HasFlag(Asset.AssetStatus.RemoveAsset))
                         {
-                            Assets.Remove(asset);
+                            lock (CollectionLock)
+                            {
+                                Assets.Remove(asset);
+                            }
                         }
-                    }
-                    break;
-                case DataPage.AssetLocation2:
-                    GetAsset(dataPage).ParseLocation2(dataPage);
-                    break;
-                case DataPage.NoAssets:
-                    if (Assets.Count > 0)
-                    {
-                        lock (CollectionLock)
+                        break;
+                    case DataPage.AssetLocation2:
+                        GetAsset(dataPage).ParseLocation2(dataPage);
+                        break;
+                    case DataPage.NoAssets:
+                        if (Assets.Count > 0)
                         {
-                            Assets.Clear();
+                            lock (CollectionLock)
+                            {
+                                Assets.Clear();
+                            }
                         }
-                    }
-                    break;
-                case DataPage.AssetId1:
-                    GetAsset(dataPage).ParseIdPage1(dataPage);
-                    break;
-                case DataPage.AssetId2:
-                    GetAsset(dataPage).ParseIdPage2(dataPage);
-                    break;
-                case DataPage.DisconnectCommand:
-                    Disconnected = true;
-                    break;
-                default:
-                    // Handle common data pages and unknown data pages.
-                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
-                    {
-                        OnUnknownDataPageReceived(dataPage);
-                    }
-                    break;
+                        break;
+                    case DataPage.AssetId1:
+                        GetAsset(dataPage).ParseIdPage1(dataPage);
+                        break;
+                    case DataPage.AssetId2:
+                        GetAsset(dataPage).ParseIdPage2(dataPage);
+                        break;
+                    case DataPage.DisconnectCommand:
+                        Disconnected = true;
+                        break;
+                    default:
+                        // Handle common data pages and unknown data pages.
+                        if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                        {
+                            OnUnknownDataPageReceived(dataPage);
+                        }
+                        break;
+                }
             }
         }
 

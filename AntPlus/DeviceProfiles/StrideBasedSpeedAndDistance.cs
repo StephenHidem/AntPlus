@@ -219,60 +219,63 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-
-            switch ((DataPage)dataPage[0])
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                case DataPage.Default:
-                    if (isFirstDefaultPage)
-                    {
-                        isFirstDefaultPage = false;
-                        prevTime = dataPage[2];
-                        prevDistance = dataPage[3];
-                        prevStrideCount = dataPage[6];
-                    }
-                    else
-                    {
-                        AccumulatedTime += Utils.CalculateDelta(dataPage[2], ref prevTime) + (dataPage[1] / 200.0);
-                        AccumulatedDistance += Utils.CalculateDelta(dataPage[3], ref prevDistance) + (dataPage[4] >> 4) / 16.0;
-                        AccumulatedStrideCount += Utils.CalculateDelta(dataPage[6], ref prevStrideCount);
-                    }
-                    InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
-                    UpdateLatency = dataPage[7] / 32.0;
-                    break;
-                case DataPage.BasePage:
-                    InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
-                    InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
-                    Status = new StatusFlags(dataPage[7]);
-                    break;
-                case DataPage.Calories:
-                    if (isFirstCalPage)
-                    {
-                        isFirstCalPage = false;
-                        prevCals = dataPage[6];
-                    }
-                    else
-                    {
-                        AccumulatedCalories += Utils.CalculateDelta(dataPage[6], ref prevCals);
-                    }
-                    InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
-                    InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
-                    Status = new StatusFlags(dataPage[7]);
-                    break;
-                case DataPage.DistanceAndStridesSummary:
-                    StrideCountSummary = BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF;
-                    DistanceSummary = BitConverter.ToUInt32(dataPage, 4) / 256.0;
-                    break;
-                case DataPage.Capabilities:
-                    Capabilities = (CapabilitiesFlags)dataPage[1];
-                    break;
-                default:
-                    // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
-                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
-                    {
-                        OnUnknownDataPageReceived(dataPage);
-                    }
-                    break;
+                base.Parse(dataPage);
+
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.Default:
+                        if (isFirstDefaultPage)
+                        {
+                            isFirstDefaultPage = false;
+                            prevTime = dataPage[2];
+                            prevDistance = dataPage[3];
+                            prevStrideCount = dataPage[6];
+                        }
+                        else
+                        {
+                            AccumulatedTime += Utils.CalculateDelta(dataPage[2], ref prevTime) + (dataPage[1] / 200.0);
+                            AccumulatedDistance += Utils.CalculateDelta(dataPage[3], ref prevDistance) + (dataPage[4] >> 4) / 16.0;
+                            AccumulatedStrideCount += Utils.CalculateDelta(dataPage[6], ref prevStrideCount);
+                        }
+                        InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
+                        UpdateLatency = dataPage[7] / 32.0;
+                        break;
+                    case DataPage.BasePage:
+                        InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
+                        InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
+                        Status = new StatusFlags(dataPage[7]);
+                        break;
+                    case DataPage.Calories:
+                        if (isFirstCalPage)
+                        {
+                            isFirstCalPage = false;
+                            prevCals = dataPage[6];
+                        }
+                        else
+                        {
+                            AccumulatedCalories += Utils.CalculateDelta(dataPage[6], ref prevCals);
+                        }
+                        InstantaneousCadence = dataPage[3] + (dataPage[4] >> 4) / 16.0;
+                        InstantaneousSpeed = (dataPage[4] & 0x0F) + (dataPage[5] / 256.0);
+                        Status = new StatusFlags(dataPage[7]);
+                        break;
+                    case DataPage.DistanceAndStridesSummary:
+                        StrideCountSummary = BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF;
+                        DistanceSummary = BitConverter.ToUInt32(dataPage, 4) / 256.0;
+                        break;
+                    case DataPage.Capabilities:
+                        Capabilities = (CapabilitiesFlags)dataPage[1];
+                        break;
+                    default:
+                        // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                        if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                        {
+                            OnUnknownDataPageReceived(dataPage);
+                        }
+                        break;
+                }
             }
         }
 

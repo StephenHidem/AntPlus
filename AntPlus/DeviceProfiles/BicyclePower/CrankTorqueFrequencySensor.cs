@@ -74,18 +74,21 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            switch ((DataPage)dataPage[0])
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                case DataPage.Calibration:
-                    ParseCalibrationMessage(dataPage);
-                    break;
-                case DataPage.CrankTorqueFrequency:
-                    ParseCTFMessage(dataPage);
-                    break;
-                default:
-                    OnUnknownDataPageReceived(dataPage);
-                    break;
+                base.Parse(dataPage);
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.Calibration:
+                        ParseCalibrationMessage(dataPage);
+                        break;
+                    case DataPage.CrankTorqueFrequency:
+                        ParseCTFMessage(dataPage);
+                        break;
+                    default:
+                        OnUnknownDataPageReceived(dataPage);
+                        break;
+                }
             }
         }
 

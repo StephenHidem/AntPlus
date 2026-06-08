@@ -306,92 +306,95 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            if (isFirstDataMessage)
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                isFirstDataMessage = false;
-                observedToggle = dataPage[0] & 0x80;
-                prevBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
-                prevBeatCount = dataPage[6];
-                lastDataPage = dataPage;
-                HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
-                return;
-            }
-
-            // ignore duplicate/unchanged data pages
-            if (lastDataPage.SequenceEqual(dataPage))
-            {
-                return;
-            }
-            lastDataPage = dataPage;
-
-            // this data is present in all data pages
-            // fire heart rate event if beat count has changed
-            int deltaHeartBeatCount = Utils.CalculateDelta(dataPage[6], ref prevBeatCount);
-            if (deltaHeartBeatCount > 0)
-            {
-                // calculate RR interval if delta beat count is 1
-                if (deltaHeartBeatCount == 1)
+                base.Parse(dataPage);
+                if (isFirstDataMessage)
                 {
-                    rrInterval = CalculateRRInterval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
+                    isFirstDataMessage = false;
+                    observedToggle = dataPage[0] & 0x80;
+                    prevBeatEventTime = BitConverter.ToUInt16(dataPage, 4);
+                    prevBeatCount = dataPage[6];
+                    lastDataPage = dataPage;
+                    HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
+                    return;
                 }
 
-                accumulatedHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
-                HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
-            }
+                // ignore duplicate/unchanged data pages
+                if (lastDataPage.SequenceEqual(dataPage))
+                {
+                    return;
+                }
+                lastDataPage = dataPage;
 
-            // handle data page toggle
-            if (!pageToggle)
-            {
-                pageToggle = (dataPage[0] & 0x80) != observedToggle;
-                if (!pageToggle) return;
-            }
+                // this data is present in all data pages
+                // fire heart rate event if beat count has changed
+                int deltaHeartBeatCount = Utils.CalculateDelta(dataPage[6], ref prevBeatCount);
+                if (deltaHeartBeatCount > 0)
+                {
+                    // calculate RR interval if delta beat count is 1
+                    if (deltaHeartBeatCount == 1)
+                    {
+                        rrInterval = CalculateRRInterval(prevBeatEventTime, BitConverter.ToUInt16(dataPage, 4));
+                    }
 
-            switch ((DataPage)(dataPage[0] & 0x7F))
-            {
-                case DataPage.Default:
-                    // this has been handled
-                    break;
-                case DataPage.CumulativeOperatingTime:
-                    CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
-                    break;
-                case DataPage.ManufacturerInfo:
-                    ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
-                    break;
-                case DataPage.ProductInfo:
-                    ProductInfo = new ProductInfoPage(dataPage);
-                    break;
-                case DataPage.PreviousHeartBeat:
-                    // fire event if beat count has changed
-                    if (deltaHeartBeatCount > 0)
-                    {
-                        PreviousHeartBeat = new PreviousHeartBeatPage(dataPage);
-                    }
-                    break;
-                case DataPage.SwimInterval:
-                    SwimInterval = new SwimIntervalPage(dataPage);
-                    break;
-                case DataPage.Capabilities:
-                    Capabilities = new CapabilitiesPage(dataPage);
-                    break;
-                case DataPage.BatteryStatus:
-                    BatteryStatus = new BatteryStatusPage(dataPage);
-                    break;
-                case DataPage.DeviceInformation:
-                    EventType = (HeartbeatEventType)(dataPage[1] & 0x03);
-                    break;
-                default:
-                    // range check manufacturer specific pages
-                    if ((dataPage[0] & 0x7F) >= 112 && (dataPage[0] & 0x7F) < 128)
-                    {
-                        // let application parse
-                        ManufacturerSpecific = new ManufacturerSpecificPage(dataPage);
-                    }
-                    else
-                    {
-                        OnUnknownDataPageReceived(dataPage);
-                    }
-                    break;
+                    accumulatedHeartBeatEventTime += Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 4), ref prevBeatEventTime);
+                    HeartRateData = new CommonHeartRateData(accumulatedHeartBeatEventTime, dataPage[7], rrInterval);
+                }
+
+                // handle data page toggle
+                if (!pageToggle)
+                {
+                    pageToggle = (dataPage[0] & 0x80) != observedToggle;
+                    if (!pageToggle) return;
+                }
+
+                switch ((DataPage)(dataPage[0] & 0x7F))
+                {
+                    case DataPage.Default:
+                        // this has been handled
+                        break;
+                    case DataPage.CumulativeOperatingTime:
+                        CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
+                        break;
+                    case DataPage.ManufacturerInfo:
+                        ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
+                        break;
+                    case DataPage.ProductInfo:
+                        ProductInfo = new ProductInfoPage(dataPage);
+                        break;
+                    case DataPage.PreviousHeartBeat:
+                        // fire event if beat count has changed
+                        if (deltaHeartBeatCount > 0)
+                        {
+                            PreviousHeartBeat = new PreviousHeartBeatPage(dataPage);
+                        }
+                        break;
+                    case DataPage.SwimInterval:
+                        SwimInterval = new SwimIntervalPage(dataPage);
+                        break;
+                    case DataPage.Capabilities:
+                        Capabilities = new CapabilitiesPage(dataPage);
+                        break;
+                    case DataPage.BatteryStatus:
+                        BatteryStatus = new BatteryStatusPage(dataPage);
+                        break;
+                    case DataPage.DeviceInformation:
+                        EventType = (HeartbeatEventType)(dataPage[1] & 0x03);
+                        break;
+                    default:
+                        // range check manufacturer specific pages
+                        if ((dataPage[0] & 0x7F) >= 112 && (dataPage[0] & 0x7F) < 128)
+                        {
+                            // let application parse
+                            ManufacturerSpecific = new ManufacturerSpecificPage(dataPage);
+                        }
+                        else
+                        {
+                            OnUnknownDataPageReceived(dataPage);
+                        }
+                        break;
+                }
             }
         }
 

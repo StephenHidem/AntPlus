@@ -54,31 +54,34 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            if (handledPage) return;
-
-            if ((DataPage)dataPage[0] == DataPage.ClimberData)
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                HandleFEState(dataPage);
-                if (isFirstDataMessage)
+                base.Parse(dataPage);
+                if (handledPage) return;
+
+                if ((DataPage)dataPage[0] == DataPage.ClimberData)
                 {
-                    isFirstDataMessage = false;
-                    prevStride = dataPage[3];
+                    HandleFEState(dataPage);
+                    if (isFirstDataMessage)
+                    {
+                        isFirstDataMessage = false;
+                        prevStride = dataPage[3];
+                    }
+                    else
+                    {
+                        StrideCycles += Utils.CalculateDelta(dataPage[3], ref prevStride);
+                    }
+                    Cadence = dataPage[4];
+                    InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
+                    Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
                 }
                 else
                 {
-                    StrideCycles += Utils.CalculateDelta(dataPage[3], ref prevStride);
-                }
-                Cadence = dataPage[4];
-                InstantaneousPower = BitConverter.ToUInt16(dataPage, 5);
-                Capabilities = (CapabilityFlags)(dataPage[7] & 0x01);
-            }
-            else
-            {
-                // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
-                if (!CommonDataPages.ParseCommonDataPage(dataPage))
-                {
-                    OnUnknownDataPageReceived(dataPage);
+                    // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                    {
+                        OnUnknownDataPageReceived(dataPage);
+                    }
                 }
             }
         }

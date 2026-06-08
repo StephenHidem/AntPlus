@@ -85,52 +85,55 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            switch ((DataPage)dataPage[0])
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                case DataPage.Calibration:
-                    ParseCalibrationPage(dataPage);
-                    break;
-                case DataPage.GetSetParameters:
-                    ParseParameters(dataPage);
-                    break;
-                case DataPage.MeasurementOutput:
-                    ParseMeasurementOutputData(dataPage);
-                    break;
-                case DataPage.PowerOnly:
-                    ParsePowerOnly(dataPage);
-                    break;
-                case DataPage.WheelTorque:
-                    TorqueSensor ??= new StandardWheelTorqueSensor(_logger);
-                    TorqueSensor.ParseTorque(dataPage);
-                    break;
-                case DataPage.CrankTorque:
-                    TorqueSensor ??= new StandardCrankTorqueSensor(_logger);
-                    TorqueSensor.ParseTorque(dataPage);
-                    break;
-                case DataPage.TorqueEffectivenessAndPedalSmoothness:
-                    ParseTEPS(dataPage);
-                    break;
-                case DataPage.TorqueBarycenter:
-                case DataPage.RightForceAngle:
-                case DataPage.LeftForceAngle:
-                case DataPage.PedalPosition:
-                    if (TorqueSensor is StandardCrankTorqueSensor sensor)
-                    {
-                        sensor.ParseCyclingDynamics(dataPage);
-                    }
-                    else
-                    {
-                        _logger.LogIgnoredDataPage<DataPage>(dataPage);
-                    }
-                    break;
-                default:
-                    // attempt to parse common data pages, otherwise log as unknown
-                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
-                    {
-                        OnUnknownDataPageReceived(dataPage);
-                    }
-                    break;
+                base.Parse(dataPage);
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.Calibration:
+                        ParseCalibrationPage(dataPage);
+                        break;
+                    case DataPage.GetSetParameters:
+                        ParseParameters(dataPage);
+                        break;
+                    case DataPage.MeasurementOutput:
+                        ParseMeasurementOutputData(dataPage);
+                        break;
+                    case DataPage.PowerOnly:
+                        ParsePowerOnly(dataPage);
+                        break;
+                    case DataPage.WheelTorque:
+                        TorqueSensor ??= new StandardWheelTorqueSensor(_logger);
+                        TorqueSensor.ParseTorque(dataPage);
+                        break;
+                    case DataPage.CrankTorque:
+                        TorqueSensor ??= new StandardCrankTorqueSensor(_logger);
+                        TorqueSensor.ParseTorque(dataPage);
+                        break;
+                    case DataPage.TorqueEffectivenessAndPedalSmoothness:
+                        ParseTEPS(dataPage);
+                        break;
+                    case DataPage.TorqueBarycenter:
+                    case DataPage.RightForceAngle:
+                    case DataPage.LeftForceAngle:
+                    case DataPage.PedalPosition:
+                        if (TorqueSensor is StandardCrankTorqueSensor sensor)
+                        {
+                            sensor.ParseCyclingDynamics(dataPage);
+                        }
+                        else
+                        {
+                            _logger.LogIgnoredDataPage<DataPage>(dataPage);
+                        }
+                        break;
+                    default:
+                        // attempt to parse common data pages, otherwise log as unknown
+                        if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                        {
+                            OnUnknownDataPageReceived(dataPage);
+                        }
+                        break;
+                }
             }
         }
 

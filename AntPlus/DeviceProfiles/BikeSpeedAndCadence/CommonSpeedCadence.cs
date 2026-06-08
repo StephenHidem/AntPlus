@@ -134,55 +134,58 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BikeSpeedAndCadence
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-
-            if (isFirstDataMessage)
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                isFirstDataMessage = false;
-                observedToggle = dataPage[0] & 0x80;
-                prevEventTime = BitConverter.ToUInt16(dataPage, 4);
-                prevRevCount = BitConverter.ToUInt16(dataPage, 6);
+                base.Parse(dataPage);
+
+                if (isFirstDataMessage)
+                {
+                    isFirstDataMessage = false;
+                    observedToggle = dataPage[0] & 0x80;
+                    prevEventTime = BitConverter.ToUInt16(dataPage, 4);
+                    prevRevCount = BitConverter.ToUInt16(dataPage, 6);
+                    lastDataPage = dataPage;
+                    return;
+                }
+
+                // ignore duplicate/unchanged data pages
+                if (lastDataPage.SequenceEqual(dataPage))
+                {
+                    return;
+                }
                 lastDataPage = dataPage;
-                return;
-            }
 
-            // ignore duplicate/unchanged data pages
-            if (lastDataPage.SequenceEqual(dataPage))
-            {
-                return;
-            }
-            lastDataPage = dataPage;
+                // handle data page toggle
+                if (!pageToggle)
+                {
+                    pageToggle = (dataPage[0] & 0x80) != observedToggle;
+                    if (!pageToggle) return;
+                }
 
-            // handle data page toggle
-            if (!pageToggle)
-            {
-                pageToggle = (dataPage[0] & 0x80) != observedToggle;
-                if (!pageToggle) return;
-            }
-
-            switch ((DataPage)(dataPage[0] & 0x7F))
-            {
-                case DataPage.Default:
-                    // the default page is handled by the derived classes
-                    break;
-                case DataPage.CumulativeOperatingTime:
-                    CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
-                    break;
-                case DataPage.ManufacturerInfo:
-                    ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
-                    break;
-                case DataPage.ProductInfo:
-                    ProductInfo = new ProductInfoPage(dataPage);
-                    break;
-                case DataPage.BatteryStatus:
-                    BatteryStatus = new BatteryStatusPage(dataPage);
-                    break;
-                case DataPage.Motion:
-                    Stopped = dataPage[1] == 0x01;
-                    break;
-                default:
-                    OnUnknownDataPageReceived(dataPage);
-                    break;
+                switch ((DataPage)(dataPage[0] & 0x7F))
+                {
+                    case DataPage.Default:
+                        // the default page is handled by the derived classes
+                        break;
+                    case DataPage.CumulativeOperatingTime:
+                        CumulativeOperatingTime = TimeSpan.FromSeconds((BitConverter.ToUInt32(dataPage, 1) & 0x00FFFFFF) * 2.0);
+                        break;
+                    case DataPage.ManufacturerInfo:
+                        ManufacturerInfo = new ManufacturerInfoPage(dataPage, ChannelId.DeviceNumber);
+                        break;
+                    case DataPage.ProductInfo:
+                        ProductInfo = new ProductInfoPage(dataPage);
+                        break;
+                    case DataPage.BatteryStatus:
+                        BatteryStatus = new BatteryStatusPage(dataPage);
+                        break;
+                    case DataPage.Motion:
+                        Stopped = dataPage[1] == 0x01;
+                        break;
+                    default:
+                        OnUnknownDataPageReceived(dataPage);
+                        break;
+                }
             }
         }
     }

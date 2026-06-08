@@ -138,85 +138,88 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         public override void Parse(byte[] dataPage)
         {
             int val;
-            TotalHemoglobin thg = new TotalHemoglobin();
-            SaturatedHemoglobin shg = new SaturatedHemoglobin();
+            TotalHemoglobin thg = new();
+            SaturatedHemoglobin shg = new();
 
-            base.Parse(dataPage);
-
-            switch ((DataPage)dataPage[0])
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                case DataPage.MuscleOxygenData:
-                    // return if the event count has not changed
-                    if (eventCount == dataPage[1])
-                    {
-                        return;
-                    }
-                    eventCount = dataPage[1];
-                    UtcTimeRequired = (dataPage[2] & 0x01) == 0x01;
-                    SupportsAntFs = (dataPage[3] & 0x01) == 0x01;
-                    Interval = (MeasurementInterval)((dataPage[3] >> 1) & 0x07);
+                base.Parse(dataPage);
 
-                    val = BitConverter.ToUInt16(dataPage, 4) & 0x0FFF;
-                    switch (val)
-                    {
-                        case 0xFFE:
-                            thg.Status = MeasurementStatus.AmbientLightTooHigh;
-                            thg.Concentration = double.NaN;
-                            break;
-                        case 0xFFF:
-                            thg.Status = MeasurementStatus.Invalid;
-                            thg.Concentration = double.NaN;
-                            break;
-                        default:
-                            thg.Status = MeasurementStatus.Valid;
-                            thg.Concentration = val * 0.01;
-                            break;
-                    }
-                    TotalHemoglobinConcentration = thg;
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.MuscleOxygenData:
+                        // return if the event count has not changed
+                        if (eventCount == dataPage[1])
+                        {
+                            return;
+                        }
+                        eventCount = dataPage[1];
+                        UtcTimeRequired = (dataPage[2] & 0x01) == 0x01;
+                        SupportsAntFs = (dataPage[3] & 0x01) == 0x01;
+                        Interval = (MeasurementInterval)((dataPage[3] >> 1) & 0x07);
 
-                    val = (BitConverter.ToUInt16(dataPage, 5) >> 4) & 0x3FF;
-                    switch (val)
-                    {
-                        case 0x3FE:
-                            shg.Status = MeasurementStatus.AmbientLightTooHigh;
-                            shg.PercentSaturated = double.NaN;
-                            break;
-                        case 0x3FF:
-                            shg.Status = MeasurementStatus.Invalid;
-                            shg.PercentSaturated = double.NaN;
-                            break;
-                        default:
-                            shg.Status = MeasurementStatus.Valid;
-                            shg.PercentSaturated = val * 0.1;
-                            break;
-                    }
-                    PreviousSaturatedHemoglobin = shg;
+                        val = BitConverter.ToUInt16(dataPage, 4) & 0x0FFF;
+                        switch (val)
+                        {
+                            case 0xFFE:
+                                thg.Status = MeasurementStatus.AmbientLightTooHigh;
+                                thg.Concentration = double.NaN;
+                                break;
+                            case 0xFFF:
+                                thg.Status = MeasurementStatus.Invalid;
+                                thg.Concentration = double.NaN;
+                                break;
+                            default:
+                                thg.Status = MeasurementStatus.Valid;
+                                thg.Concentration = val * 0.01;
+                                break;
+                        }
+                        TotalHemoglobinConcentration = thg;
 
-                    val = (BitConverter.ToUInt16(dataPage, 6) >> 6) & 0x03FF;
-                    switch (val)
-                    {
-                        case 0x3FE:
-                            shg.Status = MeasurementStatus.AmbientLightTooHigh;
-                            shg.PercentSaturated = double.NaN;
-                            break;
-                        case 0x3FF:
-                            shg.Status = MeasurementStatus.Invalid;
-                            shg.PercentSaturated = double.NaN;
-                            break;
-                        default:
-                            shg.Status = MeasurementStatus.Valid;
-                            shg.PercentSaturated = val * 0.1;
-                            break;
-                    }
-                    CurrentSaturatedHemoglobin = shg;
-                    break;
-                default:
-                    // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
-                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
-                    {
-                        OnUnknownDataPageReceived(dataPage);
-                    }
-                    break;
+                        val = (BitConverter.ToUInt16(dataPage, 5) >> 4) & 0x3FF;
+                        switch (val)
+                        {
+                            case 0x3FE:
+                                shg.Status = MeasurementStatus.AmbientLightTooHigh;
+                                shg.PercentSaturated = double.NaN;
+                                break;
+                            case 0x3FF:
+                                shg.Status = MeasurementStatus.Invalid;
+                                shg.PercentSaturated = double.NaN;
+                                break;
+                            default:
+                                shg.Status = MeasurementStatus.Valid;
+                                shg.PercentSaturated = val * 0.1;
+                                break;
+                        }
+                        PreviousSaturatedHemoglobin = shg;
+
+                        val = (BitConverter.ToUInt16(dataPage, 6) >> 6) & 0x03FF;
+                        switch (val)
+                        {
+                            case 0x3FE:
+                                shg.Status = MeasurementStatus.AmbientLightTooHigh;
+                                shg.PercentSaturated = double.NaN;
+                                break;
+                            case 0x3FF:
+                                shg.Status = MeasurementStatus.Invalid;
+                                shg.PercentSaturated = double.NaN;
+                                break;
+                            default:
+                                shg.Status = MeasurementStatus.Valid;
+                                shg.PercentSaturated = val * 0.1;
+                                break;
+                        }
+                        CurrentSaturatedHemoglobin = shg;
+                        break;
+                    default:
+                        // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                        if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                        {
+                            OnUnknownDataPageReceived(dataPage);
+                        }
+                        break;
+                }
             }
         }
 

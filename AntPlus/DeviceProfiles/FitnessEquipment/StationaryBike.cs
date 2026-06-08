@@ -40,21 +40,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="dataPage">A byte array containing the data page to parse.</param>
         override public void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            if (handledPage) return;
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
+            {
+                base.Parse(dataPage);
+                if (handledPage) return;
 
-            if ((DataPage)dataPage[0] == DataPage.StationaryBikeData)
-            {
-                HandleFEState(dataPage);
-                Cadence = dataPage[4];
-                InstantaneousPower = BitConverter.ToInt16(dataPage, 5);
-            }
-            else
-            {
-                // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
-                if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                if ((DataPage)dataPage[0] == DataPage.StationaryBikeData)
                 {
-                    OnUnknownDataPageReceived(dataPage);
+                    HandleFEState(dataPage);
+                    Cadence = dataPage[4];
+                    InstantaneousPower = BitConverter.ToInt16(dataPage, 5);
+                }
+                else
+                {
+                    // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                    {
+                        OnUnknownDataPageReceived(dataPage);
+                    }
                 }
             }
         }

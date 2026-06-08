@@ -101,13 +101,13 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
             if ((DataPage)dataPage[0] == DataPage.CrankTorqueFrequency)
             {
                 // return CTF sensor
-                CrankTorqueFrequencySensor sensor = new CrankTorqueFrequencySensor(channelId, antChannel, loggerFactory.CreateLogger<CrankTorqueFrequencySensor>(), timeout);
+                CrankTorqueFrequencySensor sensor = new(channelId, antChannel, loggerFactory.CreateLogger<CrankTorqueFrequencySensor>(), timeout);
                 sensor.Parse(dataPage);
                 return sensor;
             }
             else
             {
-                StandardPowerSensor sensor = new StandardPowerSensor(channelId, antChannel, loggerFactory.CreateLogger<StandardPowerSensor>(), timeout);
+                StandardPowerSensor sensor = new(channelId, antChannel, loggerFactory.CreateLogger<StandardPowerSensor>(), timeout);
                 sensor.Parse(dataPage);
                 return sensor;
             }

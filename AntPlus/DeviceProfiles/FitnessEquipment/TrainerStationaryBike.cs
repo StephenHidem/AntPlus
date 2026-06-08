@@ -129,7 +129,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         private TargetPowerLimit targetPower;
         /// <summary>Gets the trainer torque.</summary>
         [ObservableProperty]
-        private TrainerTorque trainerTorque = new TrainerTorque();
+        private TrainerTorque trainerTorque = new();
 
         /// <summary>Gets the result of the requested calibration.</summary>
         /// <value>The rhe result of calibration</value>
@@ -175,86 +175,89 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
         /// <param name="dataPage">The data page.</param>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-            if (handledPage) return;
-
-            switch ((DataPage)dataPage[0])
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                case DataPage.CalRequestResponse:
-                    CalibrationStatus = (dataPage[1] == (byte)_request) ? CalibrationResult.Success : 0;
+                base.Parse(dataPage);
+                if (handledPage) return;
 
-                    if (dataPage[3] != 0xFF)
-                    {
-                        CalibrationStatus |= CalibrationResult.TemperatureValid;
-                        Temperature = Math.Round(dataPage[3] * 0.5 - 25, 1);
-                    }
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.CalRequestResponse:
+                        CalibrationStatus = (dataPage[1] == (byte)_request) ? CalibrationResult.Success : 0;
 
-                    if (BitConverter.ToUInt16(dataPage, 4) != 0xFFFF)
-                    {
-                        CalibrationStatus |= CalibrationResult.ZeroOffsetValid;
-                        ZeroOffset = BitConverter.ToUInt16(dataPage, 4);
-                    }
+                        if (dataPage[3] != 0xFF)
+                        {
+                            CalibrationStatus |= CalibrationResult.TemperatureValid;
+                            Temperature = Math.Round(dataPage[3] * 0.5 - 25, 1);
+                        }
 
-                    if (BitConverter.ToUInt16(dataPage, 6) != 0xFFFF)
-                    {
-                        CalibrationStatus |= CalibrationResult.SpinDownValid;
-                        SpinDownTime = BitConverter.ToUInt16(dataPage, 6);
-                    }
-                    break;
-                case DataPage.CalProgress:
-                    TemperatureStatus = (TemperatureCondition)(dataPage[2] & 0x30);
-                    SpeedStatus = (SpeedCondition)(dataPage[2] & 0xC0);
+                        if (BitConverter.ToUInt16(dataPage, 4) != 0xFFFF)
+                        {
+                            CalibrationStatus |= CalibrationResult.ZeroOffsetValid;
+                            ZeroOffset = BitConverter.ToUInt16(dataPage, 4);
+                        }
 
-                    if (dataPage[3] != 0xFF)
-                    {
-                        CurrentTemperature = Math.Round(dataPage[3] * 0.5 - 25, 1);
-                    }
+                        if (BitConverter.ToUInt16(dataPage, 6) != 0xFFFF)
+                        {
+                            CalibrationStatus |= CalibrationResult.SpinDownValid;
+                            SpinDownTime = BitConverter.ToUInt16(dataPage, 6);
+                        }
+                        break;
+                    case DataPage.CalProgress:
+                        TemperatureStatus = (TemperatureCondition)(dataPage[2] & 0x30);
+                        SpeedStatus = (SpeedCondition)(dataPage[2] & 0xC0);
 
-                    if (BitConverter.ToUInt16(dataPage, 4) != 0xFFFF)
-                    {
-                        TargetSpeed = Math.Round(BitConverter.ToUInt16(dataPage, 4) * 0.001, 3);
-                    }
+                        if (dataPage[3] != 0xFF)
+                        {
+                            CurrentTemperature = Math.Round(dataPage[3] * 0.5 - 25, 1);
+                        }
 
-                    if (BitConverter.ToUInt16(dataPage, 6) != 0xFFFF)
-                    {
-                        TargetSpinDownTime = BitConverter.ToUInt16(dataPage, 6);
-                    }
-                    break;
-                case DataPage.TrainerStationaryBikeData:
-                    HandleFEState(dataPage);
-                    InstantaneousCadence = dataPage[2];
-                    InstantaneousPower = BitConverter.ToUInt16(dataPage, 5) & 0x0FFF;
-                    TrainerStatus = (TrainerStatusField)(dataPage[6] & 0x70);
-                    TargetPower = (TargetPowerLimit)(dataPage[7] & 0x0F);
+                        if (BitConverter.ToUInt16(dataPage, 4) != 0xFFFF)
+                        {
+                            TargetSpeed = Math.Round(BitConverter.ToUInt16(dataPage, 4) * 0.001, 3);
+                        }
 
-                    if (isFirstDataMessage)
-                    {
-                        // initialize if first data message
-                        isFirstDataMessage = false;
-                        lastEventCount = dataPage[1];
-                        lastPower = BitConverter.ToUInt16(dataPage, 3);
-                        return;
-                    }
+                        if (BitConverter.ToUInt16(dataPage, 6) != 0xFFFF)
+                        {
+                            TargetSpinDownTime = BitConverter.ToUInt16(dataPage, 6);
+                        }
+                        break;
+                    case DataPage.TrainerStationaryBikeData:
+                        HandleFEState(dataPage);
+                        InstantaneousCadence = dataPage[2];
+                        InstantaneousPower = BitConverter.ToUInt16(dataPage, 5) & 0x0FFF;
+                        TrainerStatus = (TrainerStatusField)(dataPage[6] & 0x70);
+                        TargetPower = (TargetPowerLimit)(dataPage[7] & 0x0F);
 
-                    if (dataPage[1] != lastEventCount)
-                    {
-                        // handle new events
-                        int deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
-                        int deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPower);
-                        AveragePower = deltaPower / deltaEventCount;
-                    }
-                    break;
-                case DataPage.TrainerTorqueData:
-                    HandleFEState(dataPage);
-                    TrainerTorque.Parse(dataPage);
-                    break;
-                default:
-                    // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
-                    if (!CommonDataPages.ParseCommonDataPage(dataPage))
-                    {
-                        OnUnknownDataPageReceived(dataPage);
-                    }
-                    break;
+                        if (isFirstDataMessage)
+                        {
+                            // initialize if first data message
+                            isFirstDataMessage = false;
+                            lastEventCount = dataPage[1];
+                            lastPower = BitConverter.ToUInt16(dataPage, 3);
+                            return;
+                        }
+
+                        if (dataPage[1] != lastEventCount)
+                        {
+                            // handle new events
+                            int deltaEventCount = Utils.CalculateDelta(dataPage[1], ref lastEventCount);
+                            int deltaPower = Utils.CalculateDelta(BitConverter.ToUInt16(dataPage, 3), ref lastPower);
+                            AveragePower = deltaPower / deltaEventCount;
+                        }
+                        break;
+                    case DataPage.TrainerTorqueData:
+                        HandleFEState(dataPage);
+                        TrainerTorque.Parse(dataPage);
+                        break;
+                    default:
+                        // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                        if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                        {
+                            OnUnknownDataPageReceived(dataPage);
+                        }
+                        break;
+                }
             }
         }
 

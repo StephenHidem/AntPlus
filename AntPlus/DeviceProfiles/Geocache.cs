@@ -119,78 +119,81 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
-
-            // don't parse if programming geocache
-            if (programmingGeocache)
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
             {
-                return;
-            }
+                base.Parse(dataPage);
 
-            switch ((DataPage)dataPage[0])
-            {
-                case DataPage.TrackableId:
-                    TrackableId = ParseId(dataPage);
-                    break;
-                case DataPage.PIN:
-                    uint pin = BitConverter.ToUInt32(dataPage, 2);
-                    if (pin != 0xFFFFFFFF)
-                    {
-                        ProgrammingPIN = pin;
-                    }
-                    if (dataPage[6] != 0xFF)
-                    {
-                        TotalPagesProgrammed = dataPage[6];
-                    }
-                    break;
-                case DataPage.AuthenticationPage:
-                    if (authRequested)
-                    {
-                        authRequested = false;
-                        AuthenticationToken = dataPage.Skip(1).ToArray();
-                    }
-                    break;
-                default:
-                    if (dataPage[0] >= 2 && dataPage[0] <= 31)
-                    {
-                        switch ((DataId)dataPage[1])
+                // don't parse if programming geocache
+                if (programmingGeocache)
+                {
+                    return;
+                }
+
+                switch ((DataPage)dataPage[0])
+                {
+                    case DataPage.TrackableId:
+                        TrackableId = ParseId(dataPage);
+                        break;
+                    case DataPage.PIN:
+                        uint pin = BitConverter.ToUInt32(dataPage, 2);
+                        if (pin != 0xFFFFFFFF)
                         {
-                            case DataId.Latitude:
-                                NextStageLatitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
-                                break;
-                            case DataId.Longitude:
-                                NextStageLongitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
-                                break;
-                            case DataId.Hint:
-                                ParseHint(dataPage);
-                                break;
-                            case DataId.LoggedVisits:
-                                loggedVisitsPage = dataPage[0];
-                                NumberOfVisits = BitConverter.ToUInt16(dataPage, 6);
-                                if (NumberOfVisits > 0)
-                                {
-                                    LastVisitTimestamp = new DateTime(1989, 12, 31) + TimeSpan.FromSeconds(BitConverter.ToUInt32(dataPage, 2));
-                                }
-                                else { LastVisitTimestamp = null; }
-                                break;
-                            default:
-                                OnUnknownDataPageReceived<DataId>(dataPage[1], dataPage);
-                                break;
+                            ProgrammingPIN = pin;
                         }
-                    }
-                    else
-                    {
-                        // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
-                        if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                        if (dataPage[6] != 0xFF)
                         {
-                            OnUnknownDataPageReceived(dataPage);
+                            TotalPagesProgrammed = dataPage[6];
                         }
-                    }
-                    break;
+                        break;
+                    case DataPage.AuthenticationPage:
+                        if (authRequested)
+                        {
+                            authRequested = false;
+                            AuthenticationToken = dataPage.Skip(1).ToArray();
+                        }
+                        break;
+                    default:
+                        if (dataPage[0] >= 2 && dataPage[0] <= 31)
+                        {
+                            switch ((DataId)dataPage[1])
+                            {
+                                case DataId.Latitude:
+                                    NextStageLatitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
+                                    break;
+                                case DataId.Longitude:
+                                    NextStageLongitude = Utils.SemicirclesToDegrees(BitConverter.ToInt32(dataPage, 2));
+                                    break;
+                                case DataId.Hint:
+                                    ParseHint(dataPage);
+                                    break;
+                                case DataId.LoggedVisits:
+                                    loggedVisitsPage = dataPage[0];
+                                    NumberOfVisits = BitConverter.ToUInt16(dataPage, 6);
+                                    if (NumberOfVisits > 0)
+                                    {
+                                        LastVisitTimestamp = new DateTime(1989, 12, 31) + TimeSpan.FromSeconds(BitConverter.ToUInt32(dataPage, 2));
+                                    }
+                                    else { LastVisitTimestamp = null; }
+                                    break;
+                                default:
+                                    OnUnknownDataPageReceived<DataId>(dataPage[1], dataPage);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            // Attempt to parse the data page as a common data page. If it fails, raise the unknown data page event.
+                            if (!CommonDataPages.ParseCommonDataPage(dataPage))
+                            {
+                                OnUnknownDataPageReceived(dataPage);
+                            }
+                        }
+                        break;
+                }
             }
         }
 
-        private readonly SortedList<byte, string> hintPages = new SortedList<byte, string>();
+        private readonly SortedList<byte, string> hintPages = new();
         private void ParseHint(byte[] dataPage)
         {
             if (!hintPages.ContainsKey(dataPage[0]))
@@ -202,7 +205,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
 
         private string ParseId(byte[] dataPage)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
 
             stringBuilder.Append((char)((dataPage[1] >> 2) + 0x20));
             stringBuilder.Append((char)((Utils.RotateLeft(BitConverter.ToUInt16(dataPage, 1), 4) & 0x3F) + 0x20));
@@ -250,7 +253,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         {
             _logger.LogMethodEntry();
             authRequested = true;
-            Random random = new Random();
+            Random random = new();
             byte[] nonce = new byte[2];
             random.NextBytes(nonce);
             byte[] msg = { (byte)DataPage.AuthenticationPage, 0xFF };
@@ -288,7 +291,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         {
             _logger.LogMethodEntry();
             programmingGeocache = true;
-            List<byte[]> messages = new List<byte[]>();
+            List<byte[]> messages = new();
 
             // get the previous total number of pages programmed
             int previousPagesProgrammed = TotalPagesProgrammed ?? 0;

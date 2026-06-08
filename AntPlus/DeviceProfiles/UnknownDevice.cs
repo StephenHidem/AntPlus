@@ -27,7 +27,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object CollectionLock = new object();
+        public object CollectionLock = new();
 
         /// <summary>
         /// Gets the collection of data pages received from the unknown device.
@@ -60,21 +60,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// <inheritdoc/>
         public override void Parse(byte[] dataPage)
         {
-            base.Parse(dataPage);
+            using (_logger.BeginScope("DeviceNumber={DeviceNumber}", ChannelId.DeviceNumber))
+            {
+                base.Parse(dataPage);
 
-            byte[] page = DataPages.FirstOrDefault(p => p[0] == dataPage[0]);
-            if (page == null)
-            {
-                lock (CollectionLock)
+                byte[] page = DataPages.FirstOrDefault(p => p[0] == dataPage[0]);
+                if (page == null)
                 {
-                    DataPages.Add(dataPage);
+                    lock (CollectionLock)
+                    {
+                        DataPages.Add(dataPage);
+                    }
                 }
-            }
-            else
-            {
-                if (!page.SequenceEqual(dataPage))
+                else
                 {
-                    DataPages[DataPages.IndexOf(page)] = dataPage;
+                    if (!page.SequenceEqual(dataPage))
+                    {
+                        DataPages[DataPages.IndexOf(page)] = dataPage;
+                    }
                 }
             }
         }

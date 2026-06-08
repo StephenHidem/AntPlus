@@ -14,7 +14,7 @@ namespace SmallEarthTech.AntPlus
             private readonly IAntChannel[] _channels;
             private readonly ILogger<AntDeviceCollection> _logger;
             private readonly bool[] _busyFlags;
-            private readonly object _channelLock = new object();
+            private readonly object _channelLock = new();
 
             public byte ChannelNumber => throw new NotImplementedException();
 

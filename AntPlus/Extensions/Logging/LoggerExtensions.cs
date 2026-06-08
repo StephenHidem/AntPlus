@@ -26,14 +26,13 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
-        /// <param name="methodName">Optional: The caller member name.</param>
-        public static void LogUnknownDataPage(this ILogger logger, byte[] dataPage, [CallerMemberName] string methodName = "")
+        public static void LogUnknownDataPage(this ILogger logger, byte[] dataPage)
         {
-            s_unknownDataPage(logger, methodName, dataPage[0], BitConverter.ToString(dataPage));
+            s_unknownDataPage(logger, dataPage[0], BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1000, Level = LogLevel.Warning, Message = "{MethodName}: Unknown data page# 0x{Page:X2}, Data page = {DataPage}")]
-        private static partial void s_unknownDataPage(ILogger logger, string methodName, byte page, string dataPage);
+        [LoggerMessage(EventId = 1000, Level = LogLevel.Warning, Message = "Unknown data page# 0x{Page:X2}, Data page = {DataPage}")]
+        private static partial void s_unknownDataPage(ILogger logger, byte page, string dataPage);
 
         /// <summary>
         /// Logs a warning message indicating an unknown data page deeper in the device parsing hierarchy.
@@ -172,14 +171,13 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// <param name="logger">The logger instance.</param>
         /// <param name="level">Log level.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
-        /// <param name="methodName">The caller member name.</param>
-        public static void LogDataPage(this ILogger logger, LogLevel level, byte[] dataPage, [CallerMemberName] string methodName = "")
+        public static void LogDataPage(this ILogger logger, LogLevel level, byte[] dataPage)
         {
-            s_logDataPage(logger, level, methodName, BitConverter.ToString(dataPage));
+            s_logDataPage(logger, level, BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1009, Message = "{MethodName}: Data page = {DataPage}")]
-        private static partial void s_logDataPage(ILogger logger, LogLevel level, string methodName, string dataPage);
+        [LoggerMessage(EventId = 1009, Message = "Data page = {DataPage}")]
+        private static partial void s_logDataPage(ILogger logger, LogLevel level, string dataPage);
 
         /// <summary>
         /// Logs a data page.

@@ -27,20 +27,13 @@ namespace WpfUsbStickApp
 
         public MainWindowViewModel()
         {
-            // Initialize Serilog early, without access to configuration or services
-            //Log.Logger = new LoggerConfiguration()
-            //    .Enrich.FromLogContext()
-            //    .WriteTo.Debug(outputTemplate:
-            //        "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Properties:j} ({SourceContext}) {Message:lj}{NewLine}{Exception}") // + file or centralized logging
-            //    .CreateLogger();
-
             // dependency services
             _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
                 UseSerilog((context, loggerConfiguration) =>
                 {
                     loggerConfiguration.Enrich.FromLogContext()
                     .WriteTo.Debug(outputTemplate:
-                        "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}){Scope:lj} {Message:lj}{NewLine}{Exception}")
+                        "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}){Scope} {Message:lj}{NewLine}{Exception}")
                     .ReadFrom.Configuration(context.Configuration);
                 }).
                 UseAntPlus().   // this adds all the required dependencies to use the ANT+ class library

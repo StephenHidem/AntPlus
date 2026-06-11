@@ -141,7 +141,7 @@
 					<listItem>
 						<para>
 							The <c>UnknownDataPageReceived</c> event is raised when a data page is received that is not defined in the
-							library. This allows applications to receive custom data pages or data pages that supported by the library.
+							library. This allows applications to receive data pages defined by the ANT device manufacturer.
 						</para>
 					</listItem>
 				</list>

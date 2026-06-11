@@ -68,6 +68,7 @@
       <Topic id="96dd3305-46d4-42b2-bfa0-0ccf90028989" visible="True" title="Version 6.0.4.0" />
       <Topic id="2b295d47-8d19-4efd-8ed5-775da9613fab" visible="True" title="Version 6.1.0.0" />
       <Topic id="dbfcdb2d-f917-448a-8dc5-317d3a1bc097" visible="True" title="Version 6.2.0.0" />
+      <Topic id="cd12ca7a-8fc6-4b73-bd1d-9fe87d1546af" visible="True" title="Version 6.2.1.0" />
     </Topic>
     <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" title="AntUsbStick Version History">
       <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" title="Version 2.0.2.0" />
@@ -83,6 +84,7 @@
       <Topic id="9a0a79c5-37f2-4a2d-bf5a-b99df97604f0" visible="True" title="Version 4.1.1.0" />
       <Topic id="c180c7d6-8e94-472e-b6f6-cf4f31dd2570" visible="True" title="Version 4.1.2.0" />
       <Topic id="05845fcc-1268-458b-a391-3d3fb1362115" visible="True" title="Version 4.1.3.0" />
+      <Topic id="3c22086e-c232-41f0-9c55-0357233ea0d6" visible="True" title="Version 4.1.4.0" />
     </Topic>
     <Topic id="be2ad779-f723-47b4-a6ab-00691c896a8e" visible="True" isExpanded="true" title="Hosting Extensions Version History">
       <Topic id="0677519c-d5ba-4c5d-b400-f10dc75a33a7" visible="True" title="Version 1.0.0.0" />
@@ -97,7 +99,8 @@
       <Topic id="e3907d72-92e2-49de-8c92-6969d124ef55" visible="True" title="Version 2.0.3.0" />
       <Topic id="3b4e306d-50ae-416e-8b47-8ca8f6caa2ae" visible="True" title="Version 2.0.4.0" />
       <Topic id="4a56e6e7-8563-43f6-8653-394ddb5bb534" visible="True" title="Version 2.0.5.0" />
-      <Topic id="86cba777-87f7-4203-a004-1e5abf8e6254" visible="True" isSelected="true" title="Version 2.0.6.0" />
+      <Topic id="86cba777-87f7-4203-a004-1e5abf8e6254" visible="True" title="Version 2.0.6.0" />
+      <Topic id="6563f49a-feba-411e-9893-472adb4eb220" visible="True" isSelected="true" title="Version 2.0.7.0" />
     </Topic>
   </Topic>
 </Topics>

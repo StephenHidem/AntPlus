@@ -37,7 +37,7 @@ namespace SmallEarthTech.AntPlus
         /// </code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object CollectionLock = new();
+        public readonly object CollectionLock = new();
 
         private readonly IAntRadio _antRadio;
         private readonly ILoggerFactory _loggerFactory;

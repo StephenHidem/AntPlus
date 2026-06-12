@@ -63,7 +63,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
         /// </code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object CollectionLock = new object();
+        public readonly object CollectionLock = new();
         /// <summary>Gets a value indicating whether automatic zero is supported.</summary>
         [ObservableProperty]
         private bool autoZeroSupported;

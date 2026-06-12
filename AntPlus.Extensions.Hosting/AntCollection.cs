@@ -25,7 +25,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         /// BindingOperations.EnableCollectionSynchronization(viewModel.AntDevices, viewModel.AntDevices.CollectionLock);
         /// </code>
         /// </summary>
-        public object CollectionLock = new object();
+        public readonly object CollectionLock = new object();
 
         private readonly IServiceProvider _services;
         private readonly IAntRadio _antRadio;

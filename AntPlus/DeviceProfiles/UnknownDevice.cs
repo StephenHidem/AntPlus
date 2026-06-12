@@ -27,7 +27,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
         /// </code>
         /// This ensures changes to the collection are thread safe and marshalled on the UI thread.
         /// </remarks>
-        public object CollectionLock = new();
+        public readonly object CollectionLock = new();
 
         /// <summary>
         /// Gets the collection of data pages received from the unknown device.

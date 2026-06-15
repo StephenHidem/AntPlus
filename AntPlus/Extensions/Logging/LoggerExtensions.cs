@@ -176,7 +176,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// <param name="methodName">The caller member name.</param>
         public static void LogDataPage<TEnum>(this ILogger logger, LogLevel level, int pageIndex, byte[] dataPage, [CallerMemberName] string methodName = "") where TEnum : Enum
         {
-            s_logDataPage(logger, level, methodName, Enum.GetName(typeof(TEnum), dataPage[pageIndex]), BitConverter.ToString(dataPage));
+            s_logDataPage(logger, level, methodName, Enum.ToObject(typeof(TEnum), dataPage[pageIndex])?.ToString(), BitConverter.ToString(dataPage));
         }
 
         [LoggerMessage(EventId = 1010, Message = "{MethodName}: Enum value = {EnumValue}, Data page = {DataPage}")]

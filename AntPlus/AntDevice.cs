@@ -127,7 +127,7 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">The received data page.</param>
         public virtual void Parse(byte[] dataPage)
         {
-            _logger.LogDataPage(LogLevel.Trace, dataPage);
+            _logger.LogDataPage(LogLevel.Trace, dataPage, ChannelId.DeviceNumber);
             _ = _timeoutTimer?.Change(_deviceTimeout, Timeout.Infinite);
         }
 
@@ -179,19 +179,19 @@ namespace SmallEarthTech.AntPlus
         /// <param name="dataPage">Raw bytes of the unrecognized data page.</param>
         protected virtual void OnUnknownDataPageReceived(byte[] dataPage)
         {
-            _logger.LogUnknownDataPage(dataPage);
+            _logger.LogUnknownDataPage(dataPage, ChannelId.DeviceNumber);
             UnknownDataPageReceived?.Invoke(this, dataPage);
         }
 
         /// <summary>
-        /// Raises the <see cref="UnknownDataPageReceived"/> event with the provided raw data page bytes and includes the data page identifier in the log.
+        /// Raises the <see cref="UnknownDataPageReceived"/> event with the provided raw data page bytes and includes the data page index in the log.
         /// </summary>
         /// <typeparam name="TEnum">The enumeration that was being parsed.</typeparam>
-        /// <param name="unknownDataPageId">The identifier of the unrecognized data page.</param>
+        /// <param name="pageIndex">The index into the data page containing the unrecognized value.</param>
         /// <param name="dataPage">The raw bytes of the unrecognized data page.</param>
-        protected virtual void OnUnknownDataPageReceived<TEnum>(byte unknownDataPageId, byte[] dataPage) where TEnum : Enum
+        protected virtual void OnUnknownDataPageReceived<TEnum>(int pageIndex, byte[] dataPage) where TEnum : Enum
         {
-            _logger.LogUnknownDataPage<TEnum>(unknownDataPageId, dataPage);
+            _logger.LogUnknownDataPage<TEnum>(pageIndex, dataPage, ChannelId.DeviceNumber);
             UnknownDataPageReceived?.Invoke(this, dataPage);
         }
 

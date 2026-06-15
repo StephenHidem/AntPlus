@@ -14,8 +14,8 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
     /// decorated with the <see cref="LoggerMessageAttribute"/> attribute.
     /// <para>
     /// LogUnknownDataPage and LogUnknownDataPage&lt;TEnum&gt; are used to log unknown data pages from an ANT device.
-    /// Use LogUnknownDataPage when the data page value at page index 0 is not supported by the derived AntDevice parser.
-    /// Use LogUnknownDataPage&lt;TEnum&gt; when a data page value at some other index is not supported by the derived
+    /// Use LogUnknownDataPage when the data page pageIndex at page index 0 is not supported by the derived AntDevice parser.
+    /// Use LogUnknownDataPage&lt;TEnum&gt; when a data page pageIndex at some other index is not supported by the derived
     /// AntDevice parser.
     /// </para>
     /// </remarks>
@@ -26,30 +26,30 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
-        /// <param name="methodName">Optional: The caller member name.</param>
-        public static void LogUnknownDataPage(this ILogger logger, byte[] dataPage, [CallerMemberName] string methodName = "")
+        /// <param name="deviceNumber">The device number.</param>
+        public static void LogUnknownDataPage(this ILogger logger, byte[] dataPage, uint deviceNumber)
         {
-            s_unknownDataPage(logger, methodName, dataPage[0], BitConverter.ToString(dataPage));
+            s_unknownDataPage(logger, deviceNumber, dataPage[0], BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1000, Level = LogLevel.Warning, Message = "{MethodName}: Unknown data page# 0x{Page:X2}, Data page = {DataPage}")]
-        private static partial void s_unknownDataPage(ILogger logger, string methodName, byte page, string dataPage);
+        [LoggerMessage(EventId = 1000, Level = LogLevel.Warning, Message = "DeviceNumber={DeviceNumber}: Unknown data page# 0x{Page:X2}, Data page = {DataPage}")]
+        private static partial void s_unknownDataPage(ILogger logger, uint deviceNumber, byte page, string dataPage);
 
         /// <summary>
         /// Logs a warning message indicating an unknown data page deeper in the device parsing hierarchy.
         /// </summary>
         /// <typeparam name="TEnum">The enumeration that was being parsed.</typeparam>
         /// <param name="logger">The logger instance.</param>
-        /// <param name="value">The value in the data page that is not defined in the enumeration.</param>
+        /// <param name="pageIndex">The index into the data page containing the unrecognized value.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
-        /// <param name="methodName">Optional: The caller member name.</param>
-        public static void LogUnknownDataPage<TEnum>(this ILogger logger, byte value, byte[] dataPage, [CallerMemberName] string methodName = "") where TEnum : Enum
+        /// <param name="deviceNumber">The device number.</param>
+        public static void LogUnknownDataPage<TEnum>(this ILogger logger, int pageIndex, byte[] dataPage, uint deviceNumber) where TEnum : Enum
         {
-            s_unknownDataPageEnum(logger, methodName, dataPage[0], value, typeof(TEnum).Name, BitConverter.ToString(dataPage));
+            s_unknownDataPageEnum(logger, deviceNumber, pageIndex, typeof(TEnum).Name, BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1001, Level = LogLevel.Warning, Message = "{MethodName}: Unknown data page# 0x{Page:X2}, 0x{Value:X2} is not defined in {Enum}, Data page = {DataPage}")]
-        private static partial void s_unknownDataPageEnum(ILogger logger, string methodName, byte page, byte value, string @enum, string dataPage);
+        [LoggerMessage(EventId = 1001, Level = LogLevel.Warning, Message = "DeviceNumber={DeviceNumber}: Enum value at index {Index} is not defined in {Enum}, Data page = {DataPage}")]
+        private static partial void s_unknownDataPageEnum(ILogger logger, uint deviceNumber, int index, string @enum, string dataPage);
 
         /// <summary>
         /// Logs a debug message about sending an acknowledged message.
@@ -96,7 +96,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="antDevice">The ANT device instance.</param>
-        /// <param name="timeout">The timeout value in milliseconds.</param>
+        /// <param name="timeout">The timeout pageIndex in milliseconds.</param>
         /// <param name="methodName">The caller member name.</param>
         public static void LogAntDeviceState(this ILogger logger, AntDevice antDevice, int timeout, [CallerMemberName] string methodName = "")
         {
@@ -119,22 +119,6 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
 
         [LoggerMessage(EventId = 1006, Level = LogLevel.Debug, Message = "{MethodName}: {AntDevice} Device# {DeviceNumber}")]
         private static partial void s_logAntCollectionChange(ILogger logger, string methodName, AntDevice antDevice, uint deviceNumber);
-
-        /// <summary>
-        /// Logs an ANT response. Null payloads are logged as "Null".
-        /// </summary>
-        /// <param name="logger">The logger instance.</param>
-        /// <param name="level">Log level.</param>
-        /// <param name="antResponse">The AntResponse received.</param>
-        /// <param name="methodName">The caller member name.</param>
-        public static void LogAntResponse(this ILogger logger, LogLevel level, AntResponse antResponse, [CallerMemberName] string methodName = "")
-        {
-            string payload = antResponse.Payload != null ? BitConverter.ToString(antResponse.Payload) : "Null";
-            s_logAntResponse(logger, level, methodName, antResponse.ChannelNumber, antResponse.ResponseId, payload);
-        }
-
-        [LoggerMessage(EventId = 1007, Message = "{MethodName}: Channel# {Channel}, Response ID = {ResponseId}, Payload = {Payload}")]
-        private static partial void s_logAntResponse(ILogger logger, LogLevel level, string methodName, byte channel, MessageId responseId, string payload);
 
         /// <summary>
         /// Logs an unhandled ANT response. Null payloads are logged as "Null".
@@ -172,14 +156,14 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// <param name="logger">The logger instance.</param>
         /// <param name="level">Log level.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
-        /// <param name="methodName">The caller member name.</param>
-        public static void LogDataPage(this ILogger logger, LogLevel level, byte[] dataPage, [CallerMemberName] string methodName = "")
+        /// <param name="deviceNumber">The device number.</param>
+        public static void LogDataPage(this ILogger logger, LogLevel level, byte[] dataPage, uint deviceNumber)
         {
-            s_logDataPage(logger, level, methodName, BitConverter.ToString(dataPage));
+            s_logDataPage(logger, level, deviceNumber, BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1009, Message = "{MethodName}: Data page = {DataPage}")]
-        private static partial void s_logDataPage(ILogger logger, LogLevel level, string methodName, string dataPage);
+        [LoggerMessage(EventId = 1009, Message = "DeviceNumber={DeviceNumber}: Data page = {DataPage}")]
+        private static partial void s_logDataPage(ILogger logger, LogLevel level, uint deviceNumber, string dataPage);
 
         /// <summary>
         /// Logs a data page.
@@ -187,15 +171,15 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
         /// <typeparam name="TEnum">Enumeration</typeparam>
         /// <param name="logger">The logger instance.</param>
         /// <param name="level">Log level.</param>
-        /// <param name="value">Value of the enumeration.</param>
+        /// <param name="pageIndex">Index into the data page that holds the value of the enumeration.</param>
         /// <param name="dataPage">The data page as a byte array.</param>
         /// <param name="methodName">The caller member name.</param>
-        public static void LogDataPage<TEnum>(this ILogger logger, LogLevel level, byte value, byte[] dataPage, [CallerMemberName] string methodName = "") where TEnum : Enum
+        public static void LogDataPage<TEnum>(this ILogger logger, LogLevel level, int pageIndex, byte[] dataPage, [CallerMemberName] string methodName = "") where TEnum : Enum
         {
-            s_logDataPage(logger, level, methodName, Enum.GetName(typeof(TEnum), value), BitConverter.ToString(dataPage));
+            s_logDataPage(logger, level, methodName, Enum.GetName(typeof(TEnum), dataPage[pageIndex]), BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1010, Message = "{MethodName}: Data page type {Page}, Data page = {DataPage}")]
-        private static partial void s_logDataPage(ILogger logger, LogLevel level, string methodName, string? page, string dataPage);
+        [LoggerMessage(EventId = 1010, Message = "{MethodName}: Enum value = {EnumValue}, Data page = {DataPage}")]
+        private static partial void s_logDataPage(ILogger logger, LogLevel level, string methodName, string? enumValue, string dataPage);
     }
 }

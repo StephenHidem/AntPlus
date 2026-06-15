@@ -103,7 +103,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     CustomCalibrationParameters = page.Skip(2).ToArray();
                     break;
                 default:
-                    OnUnknownDataPageReceived<CalibrationResponseId>(page[1], page);
+                    OnUnknownDataPageReceived<CalibrationResponseId>(1, page);
                     break;
             }
         }

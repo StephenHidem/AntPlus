@@ -253,7 +253,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                     AdvancedCapabilities2 = new AdvCapabilities2(dataPage);
                     break;
                 default:
-                    OnUnknownDataPageReceived<SubPage>(dataPage[1], dataPage);
+                    OnUnknownDataPageReceived<SubPage>(1, dataPage);
                     break;
             }
         }

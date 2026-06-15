@@ -375,7 +375,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
             }
             else
             {
-                OnUnknownDataPageReceived<FEState>(dataPage[7], dataPage);
+                OnUnknownDataPageReceived<FEState>(7, dataPage);
             }
         }
 
@@ -493,7 +493,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                         case FitnessEquipmentType.TrainerStationaryBike:
                             return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                         default:
-                            loggerFactory.CreateLogger<FitnessEquipment>().LogUnknownDataPage<FitnessEquipmentType>(dataPage[1], dataPage);
+                            loggerFactory.CreateLogger<FitnessEquipment>().LogUnknownDataPage<FitnessEquipmentType>(1, dataPage, channelId.DeviceNumber);
                             break;
                     }
                     break;
@@ -514,7 +514,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.FitnessEquipment
                 case DataPage.TrainerTorqueData:
                     return new TrainerStationaryBike(channelId, antChannel, loggerFactory.CreateLogger<TrainerStationaryBike>(), timeout);
                 default:
-                    loggerFactory.CreateLogger<FitnessEquipment>().LogUnknownDataPage(dataPage);
+                    loggerFactory.CreateLogger<FitnessEquipment>().LogUnknownDataPage(dataPage, channelId.DeviceNumber);
                     break;
             }
             return null;

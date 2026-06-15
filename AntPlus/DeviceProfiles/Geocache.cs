@@ -174,7 +174,7 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles
                                 else { LastVisitTimestamp = null; }
                                 break;
                             default:
-                                OnUnknownDataPageReceived<DataId>(dataPage[1], dataPage);
+                                OnUnknownDataPageReceived<DataId>(1, dataPage);
                                 break;
                         }
                     }

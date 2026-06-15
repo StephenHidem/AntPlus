@@ -356,7 +356,7 @@ namespace SmallEarthTech.AntPlus
                     case SubPage.Invalid:
                         break;
                     default:
-                        logger.LogUnknownDataPage<SubPage>((byte)page, dp);
+                        logger.LogUnknownDataPage<SubPage>((int)page, dp, 0);   // TODO: needs channel ID and device number
                         break;
                 }
                 return retVal;

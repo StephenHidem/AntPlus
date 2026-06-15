@@ -27,12 +27,6 @@ namespace WpfUsbStickApp
 
         public MainWindowViewModel()
         {
-            // Initialize Serilog early, without access to configuration or services
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Debug(outputTemplate:
-                    "[{Timestamp:HH:mm:ss.fff} {Level:u3}] ({SourceContext}) {Message:lj}{NewLine}{Exception}") // + file or centralized logging
-                .CreateLogger();
-
             // dependency services
             _host = Host.CreateDefaultBuilder(Environment.GetCommandLineArgs()).
                 UseSerilog((context, loggerConfiguration) =>

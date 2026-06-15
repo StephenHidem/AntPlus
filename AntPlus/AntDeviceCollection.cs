@@ -24,7 +24,7 @@ namespace SmallEarthTech.AntPlus
     /// as this scales the timeout duration based on the broadcast transmission rate of the particular ANT device.
     /// The timeout/missed messages will be applied globally to ANT devices created by this collection.
     /// </remarks>
-    public partial class AntDeviceCollection : ObservableCollection<AntDevice>
+    public sealed partial class AntDeviceCollection : ObservableCollection<AntDevice>, IDisposable
     {
         /// <summary>
         /// The collection lock.
@@ -81,8 +81,6 @@ namespace SmallEarthTech.AntPlus
 
         private void MessageHandler(object? sender, AntResponse e)
         {
-            _logger.LogAntResponse(LogLevel.Trace, e);
-
             // check for a valid payload
             if (e.Payload == null || e.Payload.Length < 3)
             {
@@ -189,6 +187,31 @@ namespace SmallEarthTech.AntPlus
                 HeartRate.DeviceClass => new HeartRate(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<HeartRate>(), _timeout),
                 _ => new UnknownDevice(response.ChannelId, _sendMessageChannel!, _loggerFactory.CreateLogger<UnknownDevice>(), _timeout),
             };
+        }
+
+        /// <summary>
+        /// Disposes the ANT device collection and all ANT devices in the collection. Also disposes ANT channels created by this collection.
+        /// </summary>
+        public void Dispose()
+        {
+            _logger.LogMethodEntry();
+
+            foreach (AntDevice device in this)
+            {
+                device.DeviceWentOffline -= DeviceOffline;
+                device.Dispose();
+            }
+            Clear();
+
+            if (_channels != null)
+            {
+                _channels[0].ChannelResponse -= MessageHandler;
+                foreach (IAntChannel item in _channels)
+                {
+                    item.Dispose();
+                }
+                _channels = null;
+            }
         }
     }
 }

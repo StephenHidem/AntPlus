@@ -6,6 +6,9 @@
 				The topics in this section describe the various changes made to the ANT+ project over the
 				life of the project.
 			</para>
+			<para>
+				Note: As of June 15, 2026, only major and minor versions will be added to the version history. Patch versions are not included. For a complete list of all versions, including patch versions, please refer to the project's GitHub repository at <link xlink:href="https://github.com/StephenHidem/AntPlus" />.
+			</para>
 		</introduction>
 		
 		<section>

@@ -139,6 +139,7 @@
     <None Include="Content\VersionHistory\AntPlus\v6.0.4.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.1.0.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.2.0.0.aml" />
+    <None Include="Content\VersionHistory\AntPlus\v7.0.0.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v5.0.2.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v5.0.3.0.aml" />
     <None Include="Content\VersionHistory\AntRadioInterface\v5.0.4.0.aml" />

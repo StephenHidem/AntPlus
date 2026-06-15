@@ -141,24 +141,24 @@ namespace SmallEarthTech.AntPlus.DeviceProfiles.BicyclePower
                         switch ((CTFDefinedId)dataPage[3])
                         {
                             case CTFDefinedId.Slope:
-                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, 3, dataPage);
                                 break;
                             case CTFDefinedId.SerialNumber:
-                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, dataPage[3], dataPage);
+                                _logger.LogDataPage<CTFDefinedId>(LogLevel.Debug, 3, dataPage);
                                 break;
                             default:
-                                OnUnknownDataPageReceived<CTFDefinedId>(dataPage[3], dataPage);
+                                OnUnknownDataPageReceived<CTFDefinedId>(3, dataPage);
                                 break;
                         }
                         break;
                     default:
-                        OnUnknownDataPageReceived<CTFDefinedId>(dataPage[2], dataPage);
+                        OnUnknownDataPageReceived<CTFDefinedId>(2, dataPage);
                         break;
                 }
             }
             else
             {
-                OnUnknownDataPageReceived<CalibrationResponseId>(dataPage[1], dataPage);
+                OnUnknownDataPageReceived<CalibrationResponseId>(1, dataPage);
             }
         }
 

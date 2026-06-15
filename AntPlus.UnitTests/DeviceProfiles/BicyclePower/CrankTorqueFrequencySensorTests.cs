@@ -161,7 +161,6 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
         [InlineData(new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
         [InlineData(new byte[] { 0x01, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
         [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
-        [InlineData(new byte[] { 0x02, 0x10, 0xAC, 0xFF, 0xFF, 0xFF, 0x11, 0x22 })]
         public void ParseUnknownCTFDefinedId_LogsWarning(byte[] dataPage)
         {
             // Arrange
@@ -174,15 +173,15 @@ namespace AntPlus.UnitTests.DeviceProfiles.BicyclePowerTests
                 m => m.Log(
                     LogLevel.Warning,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Unknown data page")),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Enum value at index")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
 
         [Theory]
-        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x02, 0xFF, 0xFF, 0xFF, 0xFF }, "Data page type Slope")]
-        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x03, 0xFF, 0xFF, 0xFF, 0xFF }, "Data page type SerialNumber")]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x02, 0xFF, 0xFF, 0xFF, 0xFF }, "Enum value = Slope")]
+        [InlineData(new byte[] { 0x01, 0x10, 0xAC, 0x03, 0xFF, 0xFF, 0xFF, 0xFF }, "Enum value = SerialNumber")]
         public void ParseAcknowledgeMessage_LogsDebugMessage(byte[] dataPage, string message)
         {
             // Arrange

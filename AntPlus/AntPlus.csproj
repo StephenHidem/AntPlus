@@ -23,9 +23,9 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-        1. Breaking change: AntDeviceCollection is now disposable and implements IDisposable. This allows for proper cleanup of resources when the collection is no longer needed. Make sure to dispose of AntDeviceCollection instances to avoid memory leaks.
-        2. Breaking change: Several public method signatures have been changed to include the DeviceNumber parameter. This change was made to provide more context when working with multiple devices. You will need to update your code to include the DeviceNumber parameter when calling these methods.
-        3. Updated NuGet dependencies.
+		1. Breaking change: AntDeviceCollection is now disposable and implements IDisposable. This allows for proper cleanup of resources when the collection is no longer needed. Make sure to dispose of AntDeviceCollection instances to avoid memory leaks.
+		2. Breaking change: Several public method signatures in LoggerExtensions have been changed to include the DeviceNumber parameter. This change was made to provide more context when working with multiple devices. You will need to update your code to include the DeviceNumber parameter when calling these methods.
+		3. Updated NuGet dependencies.
 	</PackageReleaseNotes>
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>

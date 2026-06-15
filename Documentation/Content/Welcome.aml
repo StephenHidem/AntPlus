@@ -150,6 +150,18 @@
 				<list class="bullet">
 					<listItem>
 						<para>
+							<application>BRAND NEW!</application> I've created a new solution that demonstrates using Docker and
+							Tailscale to create a secure network between an ANT+ server running on Windows, and a .NET MAUI application
+							that runs on Windows and Android connecting to the server. The project is located on GitHub at
+							<externalLink>
+								<linkText>MauiTailscaleGrpc</linkText>
+								<linkUri>https://github.com/StephenHidem/MauiTailscaleGrpc</linkUri>
+							</externalLink>
+							See the README for details on how to set it up and run it.
+						</para>
+					</listItem>
+					<listItem>
+						<para>
 							The <application>AntUsbStick</application> class library is derived from AntRadioInterface and implements a concrete implementation
 							that supports commercially available ANT USB sticks from Dynastream/Garmin. This project is essential to the other examples.
 							It's now available as a NuGet package.

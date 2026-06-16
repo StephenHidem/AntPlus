@@ -194,11 +194,19 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
         }
 
         /// <summary>
-        /// Release the ANT channels.
+        /// Release the ANT channels and devices.
         /// </summary>
         public void Dispose()
         {
             _logger.LogMethodEntry();
+            // 
+            foreach (AntDevice device in this)
+            {
+                device.DeviceWentOffline -= DeviceOffline;
+                device.Dispose();
+            }
+            Clear();
+
             if (_channels != null)
             {
                 _channels[0].ChannelResponse -= MessageHandler;

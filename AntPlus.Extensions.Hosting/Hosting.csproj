@@ -17,8 +17,7 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-		1. Removed ANT response logging due to noise.
-        2. Updated NuGet dependencies.
+		1. Dispose AntDevices when AntCollection is disposed.
     </PackageReleaseNotes>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>

@@ -126,6 +126,7 @@
     <Folder Include="Content\Examples\MAUI-gRPC\" />
     <Folder Include="Content\HostingExtensions" />
     <Folder Include="Content\Godot" />
+    <Folder Include="Content\Tailscale" />
     <Folder Include="Content\Unity" />
     <Folder Include="Content\VersionHistory" />
     <Folder Include="Content\VersionHistory\AntPlus" />
@@ -136,6 +137,7 @@
     <Folder Include="media" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Tailscale\UsingTailscale.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.0.4.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.1.0.0.aml" />
     <None Include="Content\VersionHistory\AntPlus\v6.2.0.0.aml" />

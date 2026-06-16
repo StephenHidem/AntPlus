@@ -12,21 +12,22 @@
     <Topic id="0e424769-d4c6-4a98-9384-a810421ad5e1" visible="True" title="How-To: Create and Add a Custom AntDevice to Host" />
   </Topic>
   <Topic id="27d74052-f564-4aaa-97a0-5f166ffd5ce3" visible="True" isExpanded="true" title="Examples Overview">
-    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" isExpanded="true" title="MAUI-gRPC Examples">
+    <Topic id="3ab7deee-1a9a-4d77-9fc4-14343f3bd1ca" visible="True" title="MAUI-gRPC Examples">
       <Topic id="721a6d97-52b3-4a6b-8835-4201a92c432c" visible="True" />
       <Topic id="a6c4cf8a-e10e-447e-8eea-a6b032ce2dac" visible="True" />
       <Topic id="bb933d2a-72e0-4b0f-ae9c-3425498b9ed4" visible="True" />
       <Topic id="305fe194-b246-4184-b949-35b56b817029" visible="True" />
     </Topic>
   </Topic>
-  <Topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" visible="True" title="Unity Game Development">
-    <HelpKeywords>
-      <HelpKeyword index="K" term="Unity" />
-    </HelpKeywords>
-  </Topic>
+  <Topic id="69215cf2-2394-44fe-8227-65527e4865e2" visible="True" isSelected="true" title="Use with Tailscale and Docker" />
   <Topic id="342d7748-ce61-4376-8c3e-baf56ee0e1f1" visible="True" title="Godot Game Development">
     <HelpKeywords>
       <HelpKeyword index="K" term="Godot" />
+    </HelpKeywords>
+  </Topic>
+  <Topic id="1784a740-17cd-4e34-91fb-2bbb3bb1ab69" visible="True" title="Unity Game Development">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Unity" />
     </HelpKeywords>
   </Topic>
   <Topic id="968e34d3-7df5-4f2d-9ea6-9f1d0096d26c" visible="True" apiParentMode="InsertAsChild" title="ANT+ Class Libraries API" />
@@ -68,7 +69,7 @@
       <Topic id="96dd3305-46d4-42b2-bfa0-0ccf90028989" visible="True" title="Version 6.0.4.0" />
       <Topic id="2b295d47-8d19-4efd-8ed5-775da9613fab" visible="True" title="Version 6.1.0.0" />
       <Topic id="dbfcdb2d-f917-448a-8dc5-317d3a1bc097" visible="True" title="Version 6.2.0.0" />
-      <Topic id="2e12df58-68ad-4ab7-8d71-073380c0e23b" visible="True" isSelected="true" title="Version 7.0.0.0" />
+      <Topic id="2e12df58-68ad-4ab7-8d71-073380c0e23b" visible="True" title="Version 7.0.0.0" />
     </Topic>
     <Topic id="62db1666-31ce-45bd-9331-b6c3762dcffe" visible="True" title="AntUsbStick Version History">
       <Topic id="91a9ea80-f3a3-427f-ae9d-a021d19f6f46" visible="True" title="Version 2.0.2.0" />

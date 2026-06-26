@@ -42,12 +42,12 @@ namespace SmallEarthTech.AntUsbStick
             _antDevice = new ANT_Device();
             _antDevice.deviceResponse += OnDeviceResponse;
             _antDevice.serialError += OnAntDeviceSerialError;
-            _logger.LogDebug("Created AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+            _logger.LogDebug(new EventId(1004, ".ctor"), "Created AntRadio #{SerialNumber}", SerialNumber);
         }
 
         private void OnAntDeviceSerialError(ANT_Device sender, ANT_Device.serialErrorCode error, bool isCritical)
         {
-            _logger.LogError("OnAntDeviceSerialError: Sender: {Sender} Error: {Error} Critical: {IsCritical}", sender, error, isCritical);
+            _logger.LogError(new EventId(1005, "OnAntDeviceSerialError"), "AntRadio #{SerialNumber}: Error={Error}, Critical={IsCritical}", SerialNumber, error, isCritical);
 
             // if the error is critical, close the device and reinitialize
             if (isCritical)
@@ -57,13 +57,13 @@ namespace SmallEarthTech.AntUsbStick
                 _antDevice = new ANT_Device();
                 _antDevice.deviceResponse += OnDeviceResponse;
                 _antDevice.serialError += OnAntDeviceSerialError;
-                _logger.LogWarning("Reinitialized AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+                _logger.LogWarning(new EventId(1006, "OnAntDeviceSerialError"), "Reinitialized AntRadio #{SerialNumber}", SerialNumber);
             }
         }
 
         private void OnDeviceResponse(ANT_Response response)
         {
-            _logger.LogDebug("OnDeviceResponse: {Channel}, {ResponseId}, {Data}", response.antChannel, (MessageId)response.responseID, BitConverter.ToString(response.messageContents));
+            _logger.LogDebug(new EventId(1007, "OnDeviceResponse"), "AntRadio #{SerialNumber}: Channel={Channel}, ResponseId={ResponseId}, Data={Data}", SerialNumber, response.antChannel, (MessageId)response.responseID, BitConverter.ToString(response.messageContents));
             RadioResponse?.Invoke(this, new UsbAntResponse(response));
         }
 
@@ -84,7 +84,7 @@ namespace SmallEarthTech.AntUsbStick
                 if (_channels == null)
                 {
                     // allocate channels for this radio
-                    _logger.LogInformation("Allocating channels for continuous scan mode.");
+                    _logger.LogInformation(new EventId(1008, "InitializeContinuousScanMode"), "AntRadio #{SerialNumber}: Configuring channels for continuous scan mode.", SerialNumber);
                     _channels = new IAntChannel[NumChannels];
 
                     // configure channel 0 for continuous scan mode
@@ -118,7 +118,7 @@ namespace SmallEarthTech.AntUsbStick
         {
             if (_antDevice != null)
             {
-                _logger.LogDebug("Disposed AntRadio #{DeviceNum}", _antDevice.getOpenedUSBDeviceNum());
+                _logger.LogDebug(new EventId(1009, "Dispose"), "Disposed AntRadio #{SerialNumber}", SerialNumber);
                 _antDevice.deviceResponse -= OnDeviceResponse;
                 _antDevice.serialError -= OnAntDeviceSerialError;
                 _antDevice.Dispose();

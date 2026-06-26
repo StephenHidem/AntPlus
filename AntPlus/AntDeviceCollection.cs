@@ -102,12 +102,12 @@ namespace SmallEarthTech.AntPlus
                     // re-open the channel in scan mode
                     if (_antRadio is IAntControl antControl)
                     {
-                        _logger.LogError("Re-opening channel 0 in scan mode.");
+                        _logger.LogError(new EventId(1012, "MessageHandler"), "AntRadio #{SerialNumber}: Re-opening channel 0 in scan mode.", _antRadio.SerialNumber);
                         _ = antControl.OpenRxScanMode();
                     }
                     else
                     {
-                        _logger.LogCritical("IAntControl not implemented. Can't re-open channel 0.");
+                        _logger.LogCritical(new EventId(1013, "MessageHandler"), "AntRadio #{SerialNumber}: IAntControl not implemented. Can't re-open channel 0.", _antRadio.SerialNumber);
                     }
                     break;
                 case MessageId.BroadcastData:

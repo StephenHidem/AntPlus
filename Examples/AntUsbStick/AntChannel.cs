@@ -23,12 +23,12 @@ namespace SmallEarthTech.AntUsbStick
             _antChannel = channel;
             channel.channelResponse += OnChannelResponse;
             channel.DeviceNotification += OnDeviceNotification;
-            _logger.LogDebug("Created AntChannel #{Channel}", ChannelNumber);
+            _logger.LogDebug(new EventId(1001, "ctor"), "Created AntChannel #{Channel}", ChannelNumber);
         }
 
         private void OnDeviceNotification(ANT_Device.DeviceNotificationCode notification, object notificationInfo)
         {
-            _logger.LogDebug("Notification: {Notification} Info: {NotificationInfo}", notification, notificationInfo);
+            _logger.LogDebug(new EventId(1002, "OnDeviceNotification"), "AntChannel #{Channel}: Notification={Notification}, Info={NotificationInfo}", ChannelNumber, notification, notificationInfo);
         }
 
         private void OnChannelResponse(ANT_Response response)
@@ -258,7 +258,7 @@ namespace SmallEarthTech.AntUsbStick
         {
             if (_antChannel != null)
             {
-                _logger.LogDebug("Disposed AntChannel #{Channel}", ChannelNumber);
+                _logger.LogDebug(new EventId(1003, "Dispose"), "Disposed AntChannel #{Channel}", ChannelNumber);
                 _antChannel.channelResponse -= OnChannelResponse;
                 _antChannel.DeviceNotification -= OnDeviceNotification;
                 _antChannel.Dispose();

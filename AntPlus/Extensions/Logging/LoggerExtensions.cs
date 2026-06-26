@@ -32,7 +32,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_unknownDataPage(logger, deviceNumber, dataPage[0], BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1000, Level = LogLevel.Warning, Message = "DeviceNumber={DeviceNumber}: Unknown data page# 0x{Page:X2}, Data page = {DataPage}")]
+        [LoggerMessage(EventId = 1000, EventName = "UnknownDataPage", Level = LogLevel.Warning, Message = "DeviceNumber={DeviceNumber}: Unknown data page# 0x{Page:X2}, Data page = {DataPage}")]
         private static partial void s_unknownDataPage(ILogger logger, uint deviceNumber, byte page, string dataPage);
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_unknownDataPageEnum(logger, deviceNumber, pageIndex, typeof(TEnum).Name, BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1001, Level = LogLevel.Warning, Message = "DeviceNumber={DeviceNumber}: Enum value at index {Index} is not defined in {Enum}, Data page = {DataPage}")]
+        [LoggerMessage(EventId = 1001, EventName = "UnknownDataPageEnum", Level = LogLevel.Warning, Message = "DeviceNumber={DeviceNumber}: Enum value at index {Index} is not defined in {Enum}, Data page = {DataPage}")]
         private static partial void s_unknownDataPageEnum(ILogger logger, uint deviceNumber, int index, string @enum, string dataPage);
 
         /// <summary>
@@ -72,10 +72,10 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             }
         }
 
-        [LoggerMessage(EventId = 1002, Level = LogLevel.Debug, Message = "{MethodName}: Channel index = {ChannelIndex}, Channel ID = 0x{ChannelId:X8}, Page# 0x{Page:X2}, Data page = {DataPage}")]
+        [LoggerMessage(EventId = 1002, EventName = "SendAcknowledgedMessage", Level = LogLevel.Debug, Message = "{MethodName}: Channel index = {ChannelIndex}, Channel ID = 0x{ChannelId:X8}, Page# 0x{Page:X2}, Data page = {DataPage}")]
         private static partial void s_sendAckMsg(ILogger logger, string methodName, int channelIndex, uint channelId, byte page, string dataPage);
 
-        [LoggerMessage(EventId = 1003, Level = LogLevel.Debug, Message = "{MethodName}: Channel index = {ChannelIndex}, Channel ID = 0x{ChannelId:X8}, Page# 0x{Page:X2}, Result = {Result}")]
+        [LoggerMessage(EventId = 1003, EventName = "SendAcknowledgedMessageResult", Level = LogLevel.Debug, Message = "{MethodName}: Channel index = {ChannelIndex}, Channel ID = 0x{ChannelId:X8}, Page# 0x{Page:X2}, Result = {Result}")]
         private static partial void s_sendAckMsgResult(ILogger logger, string methodName, int channelIndex, uint channelId, byte page, MessagingReturnCode result);
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logMethodEntry(logger, methodName);
         }
 
-        [LoggerMessage(EventId = 1004, Level = LogLevel.Debug, Message = "Entering {MethodName}")]
+        [LoggerMessage(EventId = 1004, EventName = "MethodEntry", Level = LogLevel.Debug, Message = "Entering {MethodName}")]
         private static partial void s_logMethodEntry(ILogger logger, string methodName);
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logAntDeviceState(logger, methodName, antDevice, antDevice.ChannelId.DeviceNumber, antDevice.Offline, timeout);
         }
 
-        [LoggerMessage(EventId = 1005, Level = LogLevel.Debug, Message = "{MethodName} {AntDevice} Device# {DeviceNumber}, Offline = {Offline}, Timeout = {Timeout}ms")]
+        [LoggerMessage(EventId = 1005, EventName = "AntDeviceState", Level = LogLevel.Debug, Message = "{MethodName} {AntDevice} Device# {DeviceNumber}, Offline = {Offline}, Timeout = {Timeout}ms")]
         private static partial void s_logAntDeviceState(ILogger logger, string methodName, AntDevice antDevice, uint deviceNumber, bool offline, int timeout);
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logAntCollectionChange(logger, methodName, antDevice, antDevice.ChannelId.DeviceNumber);
         }
 
-        [LoggerMessage(EventId = 1006, Level = LogLevel.Debug, Message = "{MethodName}: {AntDevice} Device# {DeviceNumber}")]
+        [LoggerMessage(EventId = 1006, EventName = "AntCollectionChange", Level = LogLevel.Debug, Message = "{MethodName}: {AntDevice} Device# {DeviceNumber}")]
         private static partial void s_logAntCollectionChange(ILogger logger, string methodName, AntDevice antDevice, uint deviceNumber);
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logUnhandledAntResponse(logger, methodName, antResponse.ChannelNumber, antResponse.ResponseId, payload);
         }
 
-        [LoggerMessage(EventId = 1011, Level = LogLevel.Warning, Message = "{MethodName}: Unhandled ANT response. Channel# {Channel}, Response ID = {ResponseId}, Payload = {Payload}")]
+        [LoggerMessage(EventId = 1011, EventName = "UnhandledAntResponse", Level = LogLevel.Warning, Message = "{MethodName}: Unhandled ANT response. Channel# {Channel}, Response ID = {ResponseId}, Payload = {Payload}")]
         private static partial void s_logUnhandledAntResponse(ILogger logger, string methodName, byte channel, MessageId responseId, string payload);
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logIgnoredPage(logger, methodName, Enum.GetName(typeof(TEnum), dataPage[0]), BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1008, Level = LogLevel.Warning, Message = "{MethodName}: Ignoring page type {Page}, Data page = {DataPage}. The page was unexpected or not implemented.")]
+        [LoggerMessage(EventId = 1008, EventName = "IgnoredDataPage", Level = LogLevel.Warning, Message = "{MethodName}: Ignoring page type {Page}, Data page = {DataPage}. The page was unexpected or not implemented.")]
         private static partial void s_logIgnoredPage(ILogger logger, string methodName, string? page, string dataPage);
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logDataPage(logger, level, deviceNumber, BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1009, Message = "DeviceNumber={DeviceNumber}: Data page = {DataPage}")]
+        [LoggerMessage(EventId = 1009, EventName = "DataPage", Message = "DeviceNumber={DeviceNumber}: Data page = {DataPage}")]
         private static partial void s_logDataPage(ILogger logger, LogLevel level, uint deviceNumber, string dataPage);
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace SmallEarthTech.AntPlus.Extensions.Logging
             s_logDataPage(logger, level, methodName, Enum.ToObject(typeof(TEnum), dataPage[pageIndex])?.ToString(), BitConverter.ToString(dataPage));
         }
 
-        [LoggerMessage(EventId = 1010, Message = "{MethodName}: Enum value = {EnumValue}, Data page = {DataPage}")]
+        [LoggerMessage(EventId = 1010, EventName = "DataPageEnum", Message = "{MethodName}: Enum value = {EnumValue}, Data page = {DataPage}")]
         private static partial void s_logDataPage(ILogger logger, LogLevel level, string methodName, string? enumValue, string dataPage);
     }
 }

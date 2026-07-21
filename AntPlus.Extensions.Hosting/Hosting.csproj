@@ -17,12 +17,11 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-		1. Improved logging messages for better debugging and monitoring of ANT+ device interactions.
-		2. Updated NuGet package dependencies.
+		1. Updated NuGet package dependencies.
 	</PackageReleaseNotes>
 	<IncludeSymbols>True</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<VersionPrefix>2.0.9</VersionPrefix>
+	<VersionPrefix>2.0.10</VersionPrefix>
 	<PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
 	<Configurations>Debug;Release</Configurations>

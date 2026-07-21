@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <VersionPrefix>7.0.1</VersionPrefix>
+    <VersionPrefix>7.0.2</VersionPrefix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>
@@ -23,7 +23,7 @@
 	<PackageIcon>PackageLogo.png</PackageIcon>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
-		1. Improved logging messages for better debugging and monitoring of ANT+ device interactions.
+		1. Updated NuGet package dependencies.
 	</PackageReleaseNotes>
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>

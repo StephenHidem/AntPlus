@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <RootNamespace>SmallEarthTech.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>SmallEarthTech.$(AssemblyName)</PackageId>
-    <VersionPrefix>7.0.2</VersionPrefix>
+    <VersionPrefix>7.0.3</VersionPrefix>
     <Title>ANT+ Class Library</Title>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
     <Authors>Stephen Hidem</Authors>
@@ -24,6 +24,7 @@
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<PackageReleaseNotes>
 		1. Updated NuGet package dependencies.
+		2. Ensure thread safety in ANT device collection handling.
 	</PackageReleaseNotes>
 	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>

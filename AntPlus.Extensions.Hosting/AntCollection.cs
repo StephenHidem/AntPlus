@@ -108,21 +108,24 @@ namespace SmallEarthTech.AntPlus.Extensions.Hosting
                         return;
                     }
 
-                    // see if the device is in the collection
-                    AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
-
-                    // create the device if not in the collection
-                    if (device == null)
+                    lock (CollectionLock)
                     {
-                        // create an ANT device from the AntResponse parameter
-                        device = CreateAntDevice(e);
+                        // see if the device is in the collection
+                        AntDevice device = this.FirstOrDefault(ant => ant.ChannelId.Id == e.ChannelId.Id);
 
-                        Add(device);
-                        device.DeviceWentOffline += DeviceOffline;
+                        // create the device if not in the collection
+                        if (device == null)
+                        {
+                            // create an ANT device from the AntResponse parameter
+                            device = CreateAntDevice(e);
+
+                            Add(device);
+                            device.DeviceWentOffline += DeviceOffline;
+                        }
+
+                        // dispatch the message to the device
+                        device.Parse(e.Payload!);
                     }
-
-                    // dispatch the message to the device
-                    device.Parse(e.Payload!);
                     break;
                 default:
                     _logger.LogUnhandledAntResponse(e);

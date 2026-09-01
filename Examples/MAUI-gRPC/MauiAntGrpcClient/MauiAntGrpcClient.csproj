@@ -91,7 +91,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-		<PackageReference Include="Google.Protobuf" Version="3.36.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.36.1" />
 		<PackageReference Include="Grpc.Net.Client" Version="2.83.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.11" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.100" />

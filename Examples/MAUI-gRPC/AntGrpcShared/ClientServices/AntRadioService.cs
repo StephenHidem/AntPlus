@@ -5,6 +5,7 @@ using AntRadioGrpcService;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Net.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SmallEarthTech.AntRadioInterface;
 using System;
@@ -25,7 +26,7 @@ namespace AntGrpcShared.ClientServices
         private const int multicastPort = 55437;        // multicast port
         private const int gRPCPort = 5073;              // gRPC port
 
-        private readonly ILoggerFactory _loggerFactory;
+        private readonly IServiceProvider _services;
         private readonly ILogger<AntRadioService> _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly GrpcChannelOptions _grpcChannelOptions;
@@ -60,15 +61,16 @@ namespace AntGrpcShared.ClientServices
         /// <summary>
         /// Initializes a new instance of the <see cref="AntRadioService"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory.</param>
+        /// <param name="services">The service provider.</param>
+        /// <param name="logger">The logger.</param>
         /// <param name="cancellationTokenSource">The cancellation token source.</param>
         /// <param name="grpcChannelOptions">Optional gRPC channel configuration options.</param>
         public AntRadioService(
-            ILoggerFactory loggerFactory, CancellationTokenSource cancellationTokenSource,
+            IServiceProvider services, ILogger<AntRadioService> logger, CancellationTokenSource cancellationTokenSource,
             GrpcChannelOptions? grpcChannelOptions = default)
         {
-            _loggerFactory = loggerFactory;
-            _logger = _loggerFactory.CreateLogger<AntRadioService>();
+            _services = services;
+            _logger = logger;
             _cancellationTokenSource = cancellationTokenSource;
             _grpcChannelOptions = grpcChannelOptions ?? new GrpcChannelOptions();
         }
@@ -170,7 +172,8 @@ namespace AntGrpcShared.ClientServices
         public IAntChannel GetChannel(int num)
         {
             _ = _client!.GetChannel(new GetChannelRequest { ChannelNumber = (byte)num });
-            return new AntChannelService(_loggerFactory.CreateLogger<AntChannelService>(), (byte)num, _grpcChannel!);
+            //return new AntChannelService(_loggerFactory.CreateLogger<AntChannelService>(), (byte)num, _grpcChannel!);
+            return ActivatorUtilities.CreateInstance<AntChannelService>(_services, (byte)num, _grpcChannel!);
         }
 
         /// <inheritdoc/>
@@ -192,7 +195,7 @@ namespace AntGrpcShared.ClientServices
             AntChannelService[] channels = new AntChannelService[reply.NumChannels];
             for (byte i = 0; i < reply.NumChannels; i++)
             {
-                channels[i] = new AntChannelService(_loggerFactory.CreateLogger<AntChannelService>(), i, _grpcChannel);
+                channels[i] = ActivatorUtilities.CreateInstance<AntChannelService>(_services, i, _grpcChannel);
             }
             channels[0].HandleChannelResponseUpdates(_cancellationTokenSource.Token);
             return channels;

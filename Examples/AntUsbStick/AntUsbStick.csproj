@@ -16,7 +16,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageTags>ant; ant+; antplus; antusbstick; smallearthtech</PackageTags>
+    <PackageTags>ant; ant+; antplus; antusbstick; smallearthtech; garmin; dynastream</PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageId>$(AssemblyName)</PackageId>

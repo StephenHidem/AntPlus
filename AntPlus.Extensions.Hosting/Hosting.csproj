@@ -10,7 +10,7 @@
     <Title>ANT+ Class Library Hosting Extensions</Title>
     <Copyright>© $(Authors) 2024. All rights reserved.</Copyright>
     <Description>Useful ANT+ extensions for hosting in DI containers. Simple and easy to use! Includes support for .NET MAUI and Windows apps.</Description>
-    <PackageTags>ant; ant+; antplus; smallearthtech</PackageTags>
+    <PackageTags>ant; ant+; antplus; smallearthtech; garmin; dynastream</PackageTags>
 	<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>

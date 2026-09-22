@@ -10,7 +10,7 @@
     <VersionPrefix>5.0.7</VersionPrefix>
     <Copyright>© $(Authors) 2023. All rights reserved.</Copyright>
     <PackageProjectUrl>https://stephenhidem.github.io/AntPlus</PackageProjectUrl>
-    <PackageTags>ant; ant+; antplus; dynastream; smallearthtech</PackageTags>
+    <PackageTags>ant; ant+; antplus; garmin; dynastream; smallearthtech</PackageTags>
     <RepositoryUrl>https://github.com/StephenHidem/AntPlus</RepositoryUrl>
     <Description>The AntRadioInterface defines an interface to interact with an ANT radio to send and receive from an ANT device. Use this package to create a concrete implementation of an ANT radio.</Description>
 	<IncludeSymbols>True</IncludeSymbols>

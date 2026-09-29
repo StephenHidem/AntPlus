@@ -13,11 +13,22 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         : default
 });
 
-LoggerProviderOptions.RegisterProviderOptions<
-    EventLogSettings, EventLogLoggerProvider>(builder.Services);
+// Register EventLog provider options and enable Windows service lifetime only on Windows
+if (OperatingSystem.IsWindows())
+{
+    LoggerProviderOptions.RegisterProviderOptions<
+        EventLogSettings, EventLogLoggerProvider>(builder.Services);
 
-// Set WindowsServiceLifetime
-builder.Host.UseWindowsService();
+    // Set WindowsServiceLifetime
+    builder.Host.UseWindowsService();
+
+    // Optionally add the EventLog logging provider so EventLogSettings apply
+    builder.Logging.AddEventLog();
+}
+else
+{
+    // Non-Windows: skip EventLog and Windows service configuration
+}
 
 // Add services to the container.
 builder.Services.AddSingleton<IAntRadioSubscriberFactory, AntRadioSubscriberFactory>();

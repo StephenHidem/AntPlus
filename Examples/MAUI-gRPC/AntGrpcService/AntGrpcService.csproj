@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	<PublishProfile>AntGrpcServiceProfile</PublishProfile>
-	<RuntimeIdentifier>win-x86</RuntimeIdentifier>
-	<AssemblyVersion>2.0.1.0</AssemblyVersion>
+	  <PublishProfile>AntGrpcServiceProfile</PublishProfile>
+	  <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+	  <AssemblyVersion>2.0.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.84.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.12" />
   </ItemGroup>
 

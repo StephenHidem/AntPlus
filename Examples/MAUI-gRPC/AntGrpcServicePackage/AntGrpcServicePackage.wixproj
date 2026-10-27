@@ -1,8 +1,8 @@
 ﻿<Project Sdk="WixToolset.Sdk/7.0.0">
-	<PropertyGroup>
-		<AcceptEula>wix7</AcceptEula>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+  <PropertyGroup>
+    <AcceptEula>wix7</AcceptEula>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DefineConstants>
     </DefineConstants>
     <Configurations>Debug;Release</Configurations>
@@ -28,9 +28,9 @@
     </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Firewall.wixext" Version="7.0.0" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.0" />
-    <PackageReference Include="WixToolset.Util.wixext" Version="7.0.0" />
+    <PackageReference Include="WixToolset.Firewall.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="7.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntGrpcService\AntGrpcService.csproj" Publish="true" />

@@ -15,16 +15,16 @@
             </VerticalStackLayout>
         </Border>
         <Border Grid.Row="1">
-            <StackLayout>
-                <Label Text="Flags" FontAttributes="Bold" TextDecorations="Underline"/>
-                <CollectionView ItemsSource="{Binding Flags}" VerticalOptions="StartAndExpand">
+            <Grid RowDefinitions="Auto, *">
+                <Label Grid.Row="0" Text="Flags" FontAttributes="Bold" TextDecorations="Underline"/>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding Flags}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
                             <Label Text="{Binding ., StringFormat='- {0}'}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </StackLayout>
+            </Grid>
         </Border>
     </Grid>
 </ContentPage>

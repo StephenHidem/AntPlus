@@ -15,7 +15,7 @@
     <Grid Margin="16" RowDefinitions="Auto, *">
         <Border>
             <StackLayout>
-                <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}" FontAttributes="Bold" FontSize="Title"/>
+                <Label Text="{Binding ServerIPAddress, StringFormat='ANT Radio Server - {0}'}" FontAttributes="Bold" FontSize="24"/>
                 <Grid Padding="8" ColumnDefinitions="*, Auto">
                     <StackLayout>
                         <Label Text="{Binding ProductDescription, StringFormat='Description - {0}'}"/>
@@ -28,7 +28,7 @@
         </Border>
         <Border Grid.Row="1">
             <Grid RowDefinitions="Auto,*">
-                <Label Text="ANT Devices" FontAttributes="Bold" FontSize="Title" Grid.Row="0"/>
+                <Label Text="ANT Devices" FontAttributes="Bold" FontSize="24" Grid.Row="0"/>
                 <CollectionView x:Name="antDevices" ItemsSource="{Binding AntDevices}" SelectionMode="Single"
                                 SelectionChanged="AntDevices_SelectionChanged"
                                 VerticalScrollBarVisibility="Never"

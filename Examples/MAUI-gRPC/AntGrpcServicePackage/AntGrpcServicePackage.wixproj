@@ -1,6 +1,7 @@
 ﻿<Project Sdk="WixToolset.Sdk/7.0.0">
   <PropertyGroup>
     <AcceptEula>wix7</AcceptEula>
+    <SuppressSpecificWarnings>1149</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DefineConstants>
